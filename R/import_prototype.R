@@ -43,7 +43,6 @@ import_prototype <- function(base_dir, species){
              trans = list(),
              dates = NA,
              nt = NA,
-             mask = NA,
              n = NA,
              states = NA,
              metadata = list())  #
@@ -57,8 +56,10 @@ import_prototype <- function(base_dir, species){
 
   bf$geom <- list(nrow = terra::nrow(r),
                   ncol = terra::ncol(r),
+                  res = terra::res(r),
+                  ext = terra::ext(r),
                   crs = terra::crs(r),
-                  ext = terra::ext(r))
+                  mask = NA)
 
   vals <-  terra::values(r[[1]])
   vals <- as.vector(!is.na(vals) & !is.nan(vals))
@@ -67,12 +68,12 @@ import_prototype <- function(base_dir, species){
                 byrow = TRUE)
   #image(mask, useRaster = TRUE)
   # plot(raster(mask))
-  bf$mask <- mask
+  bf$geom$mask <- mask
 
   # Convert the model raster into state spaces for each step
   # 1 col per week
-  # 1 row per modelled cell
-  states <- values(r)[vals]
+  # 1 row per modeled cell
+  states <- terra::values(r)[vals]
   states <- matrix(states, ncol = dim(r)[3], nrow = sum(vals))
   states <- Matrix(states, sparse = TRUE)
   bf$states <- states
@@ -93,12 +94,16 @@ import_prototype <- function(base_dir, species){
   tax <- auk::get_ebird_taxonomy()
   stopifnot(species %in% tax$species_code)
   sel <- which(tax$species_code == species)
-  bf$metadata <- list(species = tax$common_name[sel], scientific = tax$scientific_name[sel], code = species)
+  bf$metadata <- list(species = tax$common_name[sel],
+                      scientific = tax$scientific_name[sel],
+                      code = species)
 
   bf$dates <- get_dates(year = ebirdst_version, n = dim(r)[3])
 
   bf$nt <- dim(r)[3] - 1
-
+  pb <- progress::progress_bar$new(format = "loading [:bar]:percent",
+                                   total = bf$nt * 2)
+  pb$tick(0)
   for(i in 1:bf$nt){
     # i is looping through transitions
     # we are going to name based on the starting and ending state
@@ -112,13 +117,16 @@ import_prototype <- function(base_dir, species){
     file <- file.path(trans_dir, paste0("forward_", pad(i), ".Rds"))
     label <- paste0("T_", pad(i), "-",pad(i+1))
     bf$trans[[label]] <- Matrix(readRDS(file), sparse = TRUE)
+    pb$tick(1)
 
     # Read backward file for transition
     bfile <- gsub("forward", "backward", file)
     label <- paste0("T_", pad(i+1), "-",pad(i))
     bf$trans[[label]] <- Matrix(readRDS(bfile), sparse = TRUE)
+    pb$tick(1)
   }
-  class(bf) <- c("BridFlow", class(bf))
+  pb$terminate()
+  class(bf) <- c("BirdFlow", class(bf))
   return(bf)
 }
 

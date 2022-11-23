@@ -18,7 +18,6 @@ data frame with
 \item{interval}{The interval ID; it will range from 1 to n.}
 \item{date}{The date associated with the interval's midpoint}
 }
-}
 \description{
 Derived from st_week_dates() in the BirdFlowForescast shiny application. This
 is generalized to work with various interval lengths, but for now intervals

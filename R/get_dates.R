@@ -22,7 +22,7 @@
 #' \item{doy}{The day of year associated with the midpoint of each interval.}
 #' \item{interval}{The interval ID; it will range from 1 to n.}
 #' \item{date}{The date associated with the interval's midpoint}
-#' }
+#'
 #'
 #' @examples
 #' get_dates(2019)
@@ -40,16 +40,16 @@ get_dates <- function(year, n = 52) {
                       # with either value there's one 8 day week in
                       # the year.
 
-  days_in_year = 365 + ifelse(leap_year(year), 1, 0)
+  days_in_year = 365 + ifelse(lubridate::leap_year(year), 1, 0)
 
   p_time <- strptime(x = paste(round(srd_date_vec * days_in_year), year), "%j %Y")
 
-  dates <- ymd(paste(paste0(year),
+  dates <- lubridate::ymd(paste(paste0(year),
                           formatC(p_time$mon + 1, width = 2, format = "d", flag = "0"),
                           formatC(p_time$mday, width = 2, format = "d", flag = "0"),
                           sep = "."))
 
-  result <- data.frame(doy=yday(dates)+0.5, # add half a day = noon
+  result <- data.frame(doy=lubridate::yday(dates)+0.5, # add half a day = noon
                     interval=1:length(dates),
                     date=dates)
 
