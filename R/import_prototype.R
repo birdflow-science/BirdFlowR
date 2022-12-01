@@ -35,6 +35,7 @@ import_prototype <- function(base_dir, species){
                                         "-moll-", ebirdst_version,
                                         '-',crop_type,'-',
                                         tile_res,'.tif'))
+
   stopifnot(file.exists(model_raster_path))
 
   ##-----  Construct Object
@@ -57,7 +58,7 @@ import_prototype <- function(base_dir, species){
   bf$geom <- list(nrow = terra::nrow(r),
                   ncol = terra::ncol(r),
                   res = terra::res(r),
-                  ext = terra::ext(r),
+                  ext = as.vector(terra::ext(r)),
                   crs = terra::crs(r),
                   mask = NA)
 
@@ -69,6 +70,8 @@ import_prototype <- function(base_dir, species){
   #image(mask, useRaster = TRUE)
   # plot(raster(mask))
   bf$geom$mask <- mask
+
+  bf$n <- sum(mask)
 
   # Convert the model raster into state spaces for each step
   # 1 col per week

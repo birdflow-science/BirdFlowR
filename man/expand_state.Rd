@@ -4,7 +4,7 @@
 \alias{expand_state}
 \title{Convert a collapsed model state into an expanded state}
 \usage{
-expand_state(x, geom)
+expand_state(x, obj)
 }
 \arguments{
 \item{x}{Either a vector with one value per active cell in the model or a
@@ -12,12 +12,10 @@ matrix with a row for each active cell and a column for each state, or
 possible a higher dimension object.  In all cases the first dimension is
 for states in the model.}
 
-\item{geom}{The geometry component of a BirdFlow model. For convenience a
-full BirdFlow model can be passed as well. The \code{mask}, \code{nrow}, and
-\code{ncol} elements are used.}
+\item{obj}{A BirdFlow model or the \code{geom} component of one.}
 }
 \value{
-an expanded version of \code{x} with one additional dimension in which
+An expanded version of \code{x} with one additional dimension in which
 the first two dimensions represent rows and columns in space and
 replace the first dimension in the input.
 }
@@ -38,8 +36,6 @@ Additional dimensions can represent multiple timesteps and/or multiple
 individual birds, model runs etc.
 
 The location information in the collapsed state is not easily accessible as
-position in the vector is ordered based on row dominant unmasked cells in
-landscape. Since R uses column dominant order in matrices, to fill in the
-right order the first two dimensions must be reversed.  They are switched
-back to proper order after filling.
+position in the vector is ordered based on row-major ordered unmasked cells
+in the extent and R uses column-major order.
 }
