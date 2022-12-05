@@ -6,11 +6,12 @@
 \alias{y_to_row}
 \alias{row_to_y}
 \alias{col_to_x}
-\alias{i_to_rowcol}
+\alias{i_to_rc}
 \alias{i_to_row}
 \alias{i_to_col}
 \alias{i_to_x}
 \alias{i_to_y}
+\alias{i_to_xy}
 \alias{rc_to_i}
 \alias{xy_to_i}
 \title{Functions to convert among spacial references}
@@ -23,7 +24,7 @@ row_to_y(row, obj)
 
 col_to_x(col, obj)
 
-i_to_rowcol(i, obj)
+i_to_rc(i, obj)
 
 i_to_row(i, obj)
 
@@ -32,6 +33,8 @@ i_to_col(i, obj)
 i_to_x(i, obj)
 
 i_to_y(i, obj)
+
+i_to_xy(i, obj)
 
 rc_to_i(row, col, obj)
 
@@ -62,14 +65,17 @@ index that each \code{x} or \code{y} coordinate falls within.}
 \item{\code{row_to_y(row, obj)} and \code{col_to_x(col, obj)}}{return the y or x
 coordinate of the center each row or column. }
 
-\item{\code{i_to_rowcol(i, obj)}}{returns the row and column index in the full
-matrix corresponding to the index, \code{i} of the vector state.}
-
 \item{\code{i_to_row(i, obj)} and \code{i_to_col(i, obj)}}{return the row or column
 index corresponding to the vector state index, \code{i}.}
 
+\item{\code{i_to_rc(i, obj)}}{returns a two column matrix of the row and column
+index in the raster corresponding to the index, \code{i} of the vector state.}
+
 \item{\code{i_to_x(i, obj)} and \code{i_to_y(i, obj)}}{return the x or y coordinate
 from the vector state index, \code{i}.}
+
+\item{\code{i_to_xy(i, obj)}}{returns a two column matrix of the x and y
+coordinates corresponding to the index, \code{i} of the vector state space.}
 
 \item{\code{rc_to_i(row, col, obj)} and \code{xy_to_i(x, y, obj)}}{return the state
 space index corresponding to x and y coordinates or row and column indices.}
@@ -78,13 +84,14 @@ space index corresponding to x and y coordinates or row and column indices.}
 \description{
 These functions allow conversions among ways of referencing
 values in BirdFlow models and output. Specifically they convert among the
-spacial coordinates, row and col index in the full raster matrix, and index
-along the state vector.
+raster spacial coordinates, raster row and col indices, and index
+along the state space vector.
 }
 \seealso{
 \itemize{
 \item \link{expand_state} converts a state vector into it's matrix equivalent or
 a state matrix (representing multiple states) into an array equivalent.
-\item \link{rasterize_state} converts a state vector into a \link[terra:terra-package]{terra::terra}
+\item \link{rasterize_state} converts a state vector into a \code{SpatRast} - similar to
+those created by \link[terra:rast]{terra::rast}.
 }
 }

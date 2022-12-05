@@ -29,14 +29,17 @@
 #'  \item{`row_to_y(row, obj)` and `col_to_x(col, obj)`}{return the y or x
 #'  coordinate of the center each row or column. }
 #'
-#'  \item{`i_to_rowcol(i, obj)`}{returns the row and column index in the full
-#'  matrix corresponding to the index, `i` of the vector state.}
-#'
 #'  \item{`i_to_row(i, obj)` and `i_to_col(i, obj)`}{return the row or column
 #'  index corresponding to the vector state index, `i`.}
 #'
+#'  \item{`i_to_rc(i, obj)`}{returns a two column matrix of the row and column
+#'  index in the raster corresponding to the index, `i` of the vector state.}
+#'
 #'  \item{`i_to_x(i, obj)` and `i_to_y(i, obj)`}{return the x or y coordinate
 #'  from the vector state index, `i`.}
+#'
+#'  \item{`i_to_xy(i, obj)`}{returns a two column matrix of the x and y
+#'  coordinates corresponding to the index, `i` of the vector state space.}
 #'
 #'  \item{`rc_to_i(row, col, obj)` and `xy_to_i(x, y, obj)`}{return the state
 #'  space index corresponding to x and y coordinates or row and column indices.}
@@ -44,7 +47,8 @@
 #' @seealso
 #' * [expand_state] converts a state vector into it's matrix equivalent or
 #'   a state matrix (representing multiple states) into an array equivalent.
-#' * [rasterize_state] converts a state vector into a [terra::]
+#' * [rasterize_state] converts a state vector into a `SpatRast` - similar to
+#' those created by [terra::rast].
 #'
 #' @examples
 
@@ -62,8 +66,8 @@ x_to_col <- function(x, obj){
   xmax <- obj$ext[2]
   xres <- obj$res[1]
   stopifnot(all(x >= xmin), all(x <= xmax))
-  r <- floor((x - xmin + 1)/xres)
-  r[x == xmax] <- (xmax - xmin) * xres
+  r <- floor((x - xmin)/xres) + 1
+  r[x == xmax] <- obj$ncol
   return(r)
 }
 
@@ -77,9 +81,10 @@ y_to_row <- function(y, obj){
   ymin <- obj$ext[3]
   ymax <- obj$ext[4]
   yres <- obj$res[2]
-
+  stopifnot(all(y >= ymin), all(y <= ymax))
   r <- floor(1 + (ymax - y)/yres)
-  r[y == ymin] <- (ymax - ymin)/yres
+  r[y == ymin] <- obj$nrow
+  return(r)
 }
 
 #' @rdname index_conversions
@@ -104,7 +109,7 @@ col_to_x <- function(col, obj){
 
 #' @rdname index_conversions
 #' @export
-i_to_rowcol <- function(i, obj){
+i_to_rc <- function(i, obj){
   if("geom" %in% names(obj)) # allow passing full BirdFlow object
     obj <- obj$geom
   row <- row(obj$mask)
@@ -115,6 +120,7 @@ i_to_rowcol <- function(i, obj){
   colnames(m) <- c("row", "col")
   return(m)
 }
+
 #' @rdname index_conversions
 #' @export
 i_to_row <- function(i, obj){
@@ -151,6 +157,16 @@ i_to_y <- function(i, obj){
   y <- row_to_y(row, obj)
   return(y)
 }
+
+#' @rdname index_conversions
+#' @export
+i_to_xy <- function(i, obj){
+  m <- cbind(i_to_x(i, obj),
+             i_to_y(i, obj))
+  colnames(m) <- c("x", "y")
+  return(m)
+}
+
 #' @rdname index_conversions
 #' @export
 rc_to_i <- function(row, col, obj){
