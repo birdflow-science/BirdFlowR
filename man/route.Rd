@@ -9,11 +9,11 @@ route(x, x_coord, y_coord, n, row, col, start, end)
 \arguments{
 \item{x}{A BirdFlow model object}
 
-\item{x_coord, y_coord}{One or more x coordinates identifying starting
+\item{x_coord, y_coord}{One or more sets of coordinates identifying starting
 positions.}
 
 \item{n}{Optional, if provided each starting position will be duplicated this
-many times. Can be a single integer or a vector with one integer per starting
+many times. \code{n} can be a single integer or a vector with one integer per starting
 position.}
 
 \item{row, col}{One or more row and column indices to begin routing from. These

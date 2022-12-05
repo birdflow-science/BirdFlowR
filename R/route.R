@@ -4,10 +4,10 @@
 #' embedded in a BirdFlow model. The output is stochastic.
 #'
 #' @param x A BirdFlow model object
-#' @param x_coord,y_coord  One or more x coordinates identifying starting
+#' @param x_coord,y_coord  One or more sets of coordinates identifying starting
 #' positions.
 #' @param n Optional, if provided each starting position will be duplicated this
-#' many times. Can be a single integer or a vector with one integer per starting
+#' many times. `n` can be a single integer or a vector with one integer per starting
 #' position.
 #' @param row,col One or more row and column indices to begin routing from. These
 #' are an alternative to `x_coord` and `y_coord` and both sets of parameters
