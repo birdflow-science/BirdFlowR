@@ -2,25 +2,39 @@
 % Please edit documentation in R/lookup_transitions.R
 \name{lookup_transitions}
 \alias{lookup_transitions}
-\title{Lookup a series of transitions connecting two dates}
+\title{Lookup a series of transitions connecting two dates or timesteps}
 \usage{
-lookup_transitions(start, end, obj)
+lookup_transitions(start, end, direction, obj)
 }
 \arguments{
 \item{start, end}{The starting and ending points in time. In one of the
-following formats: character, a date in the form
-year-month-day e.g. "2022-11-25" for Nov. 25, 2022); numeric, a
-timestep; or  Date, a \code{\link[base::Dates]{Date}} object}
+following formats: character, a date in the form year-month-day e.g.
+"2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
+\code{\link[base::Dates]{Date}} object}
 
-\item{obj}{A BirdFlow object or the dates component of one.}
+\item{direction}{Either "forward" or "backward". Only used if \code{start} and
+\code{end} are timesteps (numeric). Otherwise the direction will be determined
+by the dates - forward if \code{start} and \code{end} are in chronological order, and
+backward if the \code{end} date is before the \code{start} date. If \code{start} and
+\code{end} are timesteps and \code{direction} is omitted than the direction will
+default to "forward" regardless of which timestep is larger - possibly
+passing over the year boundary from the last timestep to the first.}
+
+\item{obj}{A BirdFlow object or the \code{dates} component of one.}
 }
 \value{
 A character vector with the named transitions required to get between
 \code{start} and  \code{end}
 }
 \description{
-This function returns an ordered vector of transition names that connect
-start to end.  Currently time is linear and transitions can not cross forward
-from December into January.  If \code{start} is later in the year than \code{end}
-(regardless of what year) than the transitions will flow backwards in time.
+\code{lookup_transitions()} returns an ordered vector of transition names that connect
+start to end. If \code{start} and \code{end} are dates than their order determines
+whether the transitions flow forward or backward in time.  If they are
+timesteps than the \code{direction} argument should be used to indicate whether to
+project "forward" or "backward" in time possibly passing the year boundary.
+}
+\details{
+Transitions are named "T_[from]-[to]" where [from] and
+[to] are timesteps padded with zeros. Direction is important; "T_03-04"
+represents a transition backward in time.
 }

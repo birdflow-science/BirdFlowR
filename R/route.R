@@ -1,7 +1,7 @@
 #' Generate BirdFlow routes
 #'
 #' route() projects bird positions over time based on the probabilities
-#' embedded in a BirdFlow model. The output is stochastic.
+#' embedded in a BirdFlow model. The output is linear, stochastic routes.
 #'
 #' @param x A BirdFlow model object
 #' @param x_coord,y_coord  One or more sets of coordinates identifying starting
@@ -15,6 +15,8 @@
 #' @param start,end These define the time period to route over. They can be
 #' [Date][base::date] objects, integer timesteps, or a string with
 #' "year-month-day" e.g. "2022-11-28".
+#' @param direction either "forward" or "backwards", only used if `start` and
+#' `end` represent timesteps.
 #' @return This will likely change. Currently returns a list with:
 #' \item{points}{A data.frame with coordinates, date, and route id}
 #' \item{lines}{a [sf][sf::sf] object containing one line per route.}
@@ -24,7 +26,7 @@
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom magrittr %>%
 #' @examples
-route <- function(x, x_coord, y_coord, n, row, col, start, end){
+route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   # Convert x and y coordinates input into row and col
   if(!missing(x_coord)){
@@ -55,42 +57,41 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end){
     }
   }
 
-  transitions <- lookup_transitions(start, end, x)
+  # This is a sequence of transition codes to progress through
+  transitions <- lookup_transitions(start, end, direction, x)
 
   # Create initial state with one 1 per column
   # each column represents a single model state
   # There is a column for each initial position - for each value in row and col.
-  initial_state <- Matrix::Matrix(0, nrow = x$n, ncol = length(row))
+  initial_distr <- Matrix::Matrix(0, nrow = x$n_active, ncol = length(row))
   indices <- rc_to_i(row, col, x)
-  sel <- cbind(indices, 1:length(indices)) # 2 column matrix of start positions
-  initial_state[sel] <- 1
+  sel <- cbind(indices,  1:length(indices) ) # 2 column matrix of (row, col) start positions
+  initial_distr[sel] <- 1
 
   extract_positions <- function(x){
-    apply(x,MARGIN = 1,  function(x) which(as.logical(x)))
+    apply(x,MARGIN = 2,  function(x) which(as.logical(x)))
   }
 
-  state <- t(initial_state) # for multiplication need to make columns = state
-  # could get around this by storing a transposed
-  # tm on import and changing order on matrix multiplication
+  distr <- initial_distr
 
   # Trajectory will hold the route information in a matrix with
   #  dimensions: timesteps, routes
-  #  values: the index of the state in the state matrix
+  #  values: the index of the location in the distribution matrix
   trajectory <- matrix(nrow = length(transitions) + 1, ncol = length(row))
   dimnames(trajectory) <-  list(timestep = NULL, route = NULL)
-  trajectory[1, ] <- extract_positions(state)
+  trajectory[1, ] <- extract_positions(distr)
 
   # Projection
   for(i in seq_along(transitions)){
-    tm <- x$trans[[transitions[i]]] # transition matrix
-    state <- state %*% tm           # project
-    state <- t(sample_state(t(state)))  # probabalistic new state
-    trajectory[i+1, ] <- extract_positions(state) # save the state
+    tm <- get_transition( transitions[i], x)  # transition matrix
+    distr <- tm %*% distr           # project
+    distr <- sample_distr(distr)  # "one hot"
+    trajectory[i+1, ] <- extract_positions(distr) # save the location
   }
 
   format_trajectory <- function(trajectory, obj){
     # dimensions of trajectory are timestep and route
-    # values are the state space index of the location at the time and route
+    # values are the index i of the location at the time and route
     # Converting to a long format. With columns:
     #  x, y : coordinates of position
     #  timestep : integer timestep, corresponds to rows in the dates element of x
@@ -104,7 +105,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end){
     return( data.frame(x, y, route, timestep, date) )
   }
 
-  # Makes x and y vectors into lines
+  # Make x and y vectors into lines
   convert_to_lines <- function(x, y)
     sf::st_linestring(cbind(x, y), "XY")
 
@@ -117,6 +118,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end){
 
   points <- format_trajectory(trajectory, x)
   lines <- convert_route_to_sf(points)
+  st_crs(lines) <- st_crs(x$geom$crs)
 
   return(list(points = points, lines = lines))
 }

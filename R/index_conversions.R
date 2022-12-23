@@ -1,22 +1,21 @@
-
 #'@name index_conversions
 #'@rdname index_conversions
 #'
-#'@title Functions to convert among spacial references
+#'@title Functions to convert among spatial indices
 #'
-#'@description These functions allow conversions among ways of referencing
-#'  values in BirdFlow models and output. Specifically they convert among the
-#'  raster spacial coordinates, raster row and col indices, and index
-#'  along the state space vector.
+#'@description These functions allow conversions among different indices for
+#'  locations in BirdFlow models and output. Specifically they convert among the
+#'  raster spatial coordinates (x and y), raster row and col indices, and the
+#'  index `i` along a location vector.
 #'
 #'@param x,y The x and y coordinates associated with the BirdFlow model or data.
 #'  This will typically be an easting and northing in meters. A two column
-#'  matrix containing x and y columns can also be passed to`x` in which case `y`
-#'  should be omitted.
+#'  matrix containing x and y columns can also be passed to `x` in which case
+#'  `y` should be omitted.
 #'@param row,col The row and column index of a cell in the BirdFlow model and
-#'  associated raster data. Optionally, a two column
-#'  matrix containing row and column indices in columns 1 and 2 respectively
-#'  can be passed to `row` in which case `col` should be omitted.
+#'  associated raster data. Alternatively, a two column matrix containing row and
+#'  column indices in columns 1 and 2 respectively can be passed to `row` in
+#'  which case `col` should be omitted.
 #'@param i The index along a state vector that contains the data for
 #'  unmasked cells.
 #'@param obj Either a full BirdFlow model or the geom component of one.
@@ -45,13 +44,13 @@
 #'  space index corresponding to x and y coordinates or row and column indices.}
 #'  }
 #' @seealso
-#' * [expand_state] converts a state vector into it's matrix equivalent or
-#'   a state matrix (representing multiple states) into an array equivalent.
-#' * [rasterize_state] converts a state vector into a `SpatRast` - similar to
-#' those created by [terra::rast].
+#' * [expand_distr] converts a vector distribution into it's raster (matrix)
+#'   equivalent or a matrix (representing multiple distributions) into an array
+#'   equivalent.
+#' * [rasterize_distr] converts a vector distribution into a `SpatRast` -
+#'   similar to those created by [terra::rast].
 #'
 #' @examples
-
 NULL # required object for above roxygen2 page documentation
      # shared by functions below
 
@@ -92,7 +91,7 @@ y_to_row <- function(y, obj){
 row_to_y <- function(row, obj){
   if("geom" %in% names(obj)) # allows passing full BirdFlow object
     obj <- obj$geom
-  ymax <- obj$ext[4]
+  ymax <- as.numeric(obj$ext[4])
   yres <- obj$res[2]
   return( ymax - (row - 0.5) * yres )
 }
@@ -102,7 +101,7 @@ row_to_y <- function(row, obj){
 col_to_x <- function(col, obj){
   if("geom" %in% names(obj)) # allows passing full BirdFlow object
     obj <- obj$geom
-  xmin <- obj$ext[1]
+  xmin <- as.numeric(obj$ext[1])
   xres <- obj$res[1]
   return( (col - 0.5) * xres + xmin )
 }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/get_dates.R
 \name{get_dates}
 \alias{get_dates}
-\title{Function to calculate the midpoint in each interval (probaly week) in the
-data.}
+\title{internal function to calculate the date of each BirdFlow timestep.}
 \usage{
 get_dates(year, n = 52)
 }
@@ -13,21 +12,20 @@ get_dates(year, n = 52)
 \item{n}{the year is broken into this many even intervals.}
 }
 \value{
-data frame with
+a \code{data.frame} with
 \item{doy}{The day of year associated with the midpoint of each interval.}
 \item{interval}{The interval ID; it will range from 1 to n.}
 \item{date}{The date associated with the interval's midpoint}
 }
 \description{
-Derived from st_week_dates() in the BirdFlowForescast shiny application. This
-is generalized to work with various interval lengths, but for now intervals
-are weeks and n = 52.
+`get_dates() is mostly copied from st_week_dates() in the BirdFlowForescast
+Shiny application, but generalized to work with various interval lengths,
+but for now intervals are weeks and n = 52.
 }
 \details{
-By necessity one week ends up longer - 52 weeks = 264 days.
-
-This function returns a \link[base:data.frame]{base::data.frame} that describes
-the midpoint of each interval.
+By necessity one week ends up longer - 52 weeks = 264 days.  Ultimately, I'd
+like to retain the date information from the eBird status and trends data
+rather than regenerate it after fitting the model.
 }
 \examples{
 get_dates(2019)

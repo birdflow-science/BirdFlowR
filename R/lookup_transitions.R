@@ -1,23 +1,34 @@
 #'
-#' Lookup a series of transitions connecting two dates
+#' Lookup a series of transitions connecting two dates or timesteps
 #'
-#' This function returns an ordered vector of transition names that connect
-#' start to end.  Currently time is linear and transitions can not cross forward
-#' from December into January.  If `start` is later in the year than `end`
-#' (regardless of what year) than the transitions will flow backwards in time.
+#' `lookup_transitions()` returns an ordered vector of transition names that connect
+#' start to end. If `start` and `end` are dates than their order determines
+#' whether the transitions flow forward or backward in time.  If they are
+#' timesteps than the `direction` argument should be used to indicate whether to
+#' project "forward" or "backward" in time possibly passing the year boundary.
+#'
+#' @details Transitions are named "T_\[from\]-\[to\]" where \[from\] and
+#' \[to\] are timesteps padded with zeros. Direction is important; "T_03-04"
+#' represents a transition backward in time.
 #'
 #' @param start,end The starting and ending points in time. In one of the
-#'   following formats: character, a date in the form
-#'   year-month-day e.g. "2022-11-25" for Nov. 25, 2022); numeric, a
-#'   timestep; or  Date, a \code{\link[base::Dates]{Date}} object
-#' @param obj A BirdFlow object or the dates component of one.
+#'   following formats: character, a date in the form year-month-day e.g.
+#'   "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
+#'   \code{\link[base::Dates]{Date}} object
+#' @param direction Either "forward" or "backward". Only used if `start` and
+#'   `end` are timesteps (numeric). Otherwise the direction will be determined
+#'   by the dates - forward if `start` and `end` are in chronological order, and
+#'   backward if the `end` date is before the `start` date. If `start` and
+#'   `end` are timesteps and `direction` is omitted than the direction will
+#'   default to "forward" regardless of which timestep is larger - possibly
+#'   passing over the year boundary from the last timestep to the first.
+#' @param obj A BirdFlow object or the `dates` component of one.
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
 #' @export
 #'
-lookup_transitions <- function(start, end, obj){
-  # Currently all based on day of year and can't go forward across end of year
-  # (time is a single linear year)
+lookup_transitions <- function(start, end, direction, obj){
+
   if("dates" %in% names(obj) & !is.data.frame(obj)){
     obj <- obj$dates
   }
@@ -34,11 +45,14 @@ lookup_transitions <- function(start, end, obj){
     end_doy <- lubridate::yday(end)+0.5
     start <- which.min(abs(obj$doy - start_doy))
     end <-  which.min(abs(obj$doy - end_doy))
+    direction <- ifelse(end > start, "forward", "backward")
   }
 
   stopifnot(is.numeric(start), is.numeric(end),
             length(start) == 1, length(end) == 1)
 
+  if(missing(direction)) direction <- "forward"
+  stopifnot(direction %in% c("forward", "backward"))
   if(!start %in% 1:nrow(obj))
     stop("Start resolved to timestep", start, "which isn't a modeled timestep.")
   if(!end %in% 1:nrow(obj))
@@ -48,8 +62,22 @@ lookup_transitions <- function(start, end, obj){
 
   nc <- nchar(nrow(obj))
   pad <- function(x) stringr::str_pad(x, width = nc, pad = "0")
-  steps <- seq(start, end, by = ifelse(start < end, 1, -1))
 
+
+  # loops is a flag that indicates we pass over the year boundary from last
+  # timestep to first or from first to last
+  is_backward <- direction == "backward"
+  step <- ifelse(is_backward, -1, 1)
+  loops <- start == end | ( start < end & is_backward) |
+    start > end & !is_backward
+  if(loops){
+    last_ts <- nrow(dates)
+    edge1 <- ifelse(is_backward, 1, last_ts)
+    edge2 <- ifelse(is_backward, last_ts, 1)
+    steps <- c(seq(start, edge1, step), seq(edge2, end, step))
+  } else {
+    steps <- seq(start, end, by = step)
+  }
   return( paste0("T_", pad(steps[-length(steps)]), "-", pad(steps[-1]) ) )
 
 }

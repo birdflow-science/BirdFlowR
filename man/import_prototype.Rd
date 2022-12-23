@@ -16,6 +16,10 @@ a BirdFlow object
 }
 \description{
 This function imports the BirdfFlow model data from the prototype Shiny
-application. It is a stopgap until a cleaner workflow is developed to export
-models from python in a standard format that can be read by R.
+application. It was a stopgap.  Importing models will ussually be done
+with \link{import_birdflow}.
+}
+\details{
+Forward transition matrices are transposed on read so that
+all transitions can be implemented as M \%*\% d.
 }

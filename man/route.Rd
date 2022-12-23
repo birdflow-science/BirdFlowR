@@ -4,7 +4,7 @@
 \alias{route}
 \title{Generate BirdFlow routes}
 \usage{
-route(x, x_coord, y_coord, n, row, col, start, end)
+route(x, x_coord, y_coord, n, row, col, start, end, direction)
 }
 \arguments{
 \item{x}{A BirdFlow model object}
@@ -23,6 +23,9 @@ should not be used at the same time.}
 \item{start, end}{These define the time period to route over. They can be
 \link[base:date]{Date} objects, integer timesteps, or a string with
 "year-month-day" e.g. "2022-11-28".}
+
+\item{direction}{either "forward" or "backwards", only used if \code{start} and
+\code{end} represent timesteps.}
 }
 \value{
 This will likely change. Currently returns a list with:
@@ -31,5 +34,5 @@ This will likely change. Currently returns a list with:
 }
 \description{
 route() projects bird positions over time based on the probabilities
-embedded in a BirdFlow model. The output is stochastic.
+embedded in a BirdFlow model. The output is linear, stochastic routes.
 }

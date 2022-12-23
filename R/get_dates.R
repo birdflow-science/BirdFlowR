@@ -1,24 +1,17 @@
-# Time functions
-# Copied from Shiny App as is
-
-
-
-#' Function to calculate the midpoint in each interval (probaly week) in the
-#' data.
+#' internal function to calculate the date of each BirdFlow timestep.
 #'
-#' Derived from st_week_dates() in the BirdFlowForescast shiny application. This
-#' is generalized to work with various interval lengths, but for now intervals
-#' are weeks and n = 52.
+#' `get_dates() is mostly copied from st_week_dates() in the BirdFlowForescast
+#' Shiny application, but generalized to work with various interval lengths,
+#' but for now intervals are weeks and n = 52.
 #'
-#' By necessity one week ends up longer - 52 weeks = 264 days.
-#'
-#' This function returns a [base::data.frame] that describes
-#' the midpoint of each interval.
+#' By necessity one week ends up longer - 52 weeks = 264 days.  Ultimately, I'd
+#' like to retain the date information from the eBird status and trends data
+#' rather than regenerate it after fitting the model.
 #'
 #' @param year the year for which dates are calculated
 #' @param n the year is broken into this many even intervals.
 #'
-#' @return data frame with
+#' @return a `data.frame` with
 #' \item{doy}{The day of year associated with the midpoint of each interval.}
 #' \item{interval}{The interval ID; it will range from 1 to n.}
 #' \item{date}{The date associated with the interval's midpoint}
@@ -35,7 +28,7 @@ get_dates <- function(year, n = 52) {
   srd_date_vec <- round(srd_date_vec, digits = 4)
 
   days_in_year = 366  # this was from the original function
-                      # but wasn't decoared as a constant.
+                      # but wasn't declared as a constant.
                       # I'm not sure why it wasn't 365.25
                       # with either value there's one 8 day week in
                       # the year.

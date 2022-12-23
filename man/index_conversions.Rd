@@ -14,7 +14,7 @@
 \alias{i_to_xy}
 \alias{rc_to_i}
 \alias{xy_to_i}
-\title{Functions to convert among spacial references}
+\title{Functions to convert among spatial indices}
 \usage{
 x_to_col(x, obj)
 
@@ -43,15 +43,15 @@ xy_to_i(x, y, obj)
 \arguments{
 \item{x, y}{The x and y coordinates associated with the BirdFlow model or data.
 This will typically be an easting and northing in meters. A two column
-matrix containing x and y columns can also be passed to\code{x} in which case \code{y}
-should be omitted.}
+matrix containing x and y columns can also be passed to \code{x} in which case
+\code{y} should be omitted.}
 
 \item{obj}{Either a full BirdFlow model or the geom component of one.}
 
 \item{row, col}{The row and column index of a cell in the BirdFlow model and
-associated raster data. Optionally, a two column
-matrix containing row and column indices in columns 1 and 2 respectively
-can be passed to \code{row} in which case \code{col} should be omitted.}
+associated raster data. Alternatively, a two column matrix containing row and
+column indices in columns 1 and 2 respectively can be passed to \code{row} in
+which case \code{col} should be omitted.}
 
 \item{i}{The index along a state vector that contains the data for
 unmasked cells.}
@@ -82,16 +82,17 @@ space index corresponding to x and y coordinates or row and column indices.}
 }
 }
 \description{
-These functions allow conversions among ways of referencing
-values in BirdFlow models and output. Specifically they convert among the
-raster spacial coordinates, raster row and col indices, and index
-along the state space vector.
+These functions allow conversions among different indices for
+locations in BirdFlow models and output. Specifically they convert among the
+raster spatial coordinates (x and y), raster row and col indices, and the
+index \code{i} along a location vector.
 }
 \seealso{
 \itemize{
-\item \link{expand_state} converts a state vector into it's matrix equivalent or
-a state matrix (representing multiple states) into an array equivalent.
-\item \link{rasterize_state} converts a state vector into a \code{SpatRast} - similar to
-those created by \link[terra:rast]{terra::rast}.
+\item \link{expand_distr} converts a vector distribution into it's raster (matrix)
+equivalent or a matrix (representing multiple distributions) into an array
+equivalent.
+\item \link{rasterize_distr} converts a vector distribution into a \code{SpatRast} -
+similar to those created by \link[terra:rast]{terra::rast}.
 }
 }
