@@ -7,8 +7,25 @@
 get_distr(which, obj)
 }
 \arguments{
-\item{obj}{}
+\item{which}{indicates which distributions to return. Can be one or more
+integers indicating timesteps, or character dates in the format
+year-month-day e.g. "2019-02-25", or \code{\link[base::Dates]{Dates}}}
+
+\item{obj}{a BirdFlow model}
+}
+\value{
+either a vector with a distribution for a single timestep or
+a matrix with a column for each distribution.
 }
 \description{
-extract distributions from BirdFlow models
+This will return one or more distributions in their compact vector forms. If
+more than one they will be columns in a matrix. If the BirdFlow object has
+a \code{distr} component it will return those otherwise it will calculate
+the distributions from the \code{marginals} (not implemented yet).
+}
+\seealso{
+Distributions can be passed to \link{forecast} or converted to rasters with
+\link{expand_distr} or converted to \link[=SpatRaster]{terra::rast} with
+\link{rasterize_distr}.  \link{sample_distr} will convert one cell to 1 and the rest to
+0 probabilistically based on the densities in the distribution.
 }
