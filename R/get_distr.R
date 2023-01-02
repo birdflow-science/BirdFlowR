@@ -40,7 +40,7 @@ get_distr <- function(which, obj){
          paste(wrong, collapse = ", "))
   }
 
-  if(bf$metadata$has_distr){
+  if(obj$metadata$has_distr){
     return(obj$distr[, which])
   } else {
     stop("Getting distributions from marginals hasn't been implemented yet.")
