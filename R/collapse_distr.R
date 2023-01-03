@@ -1,5 +1,4 @@
-if(FALSE){
-
+if (FALSE) {
   # Example and test code, assumes BirdFlow object bf
   d <- get_distr(1, bf) # compacted form
   e <- expand_distr(d, bf) # expand
@@ -11,14 +10,13 @@ if(FALSE){
 
   # Convert to stars object
   library(stars)
-  r = st_as_stars(t(m), crs = bf$geom$crs)
-  r = st_set_dimensions(r, names = c("x", "y"))
-  r = st_set_dimensions(r, "x", offset = bf$geom$ext[1], delta = bf$geom$res[1])
-  r = st_set_dimensions(r, "y", offset = bf$geom$ext[4], delta = -bf$geom$res[2] )
+  r <- st_as_stars(t(m), crs = bf$geom$crs)
+  r <- st_set_dimensions(r, names = c("x", "y"))
+  r <- st_set_dimensions(r, "x", offset = bf$geom$ext[1], delta = bf$geom$res[1])
+  r <- st_set_dimensions(r, "y", offset = bf$geom$ext[4], delta = -bf$geom$res[2])
 
   f <- collapse_distr(e, bf)
   stopifnot(all(d == f))
-
 }
 
 #' Function to convert a raster bird distribution into its collapsed, vector
@@ -46,7 +44,7 @@ if(FALSE){
 #'  - [index_conversions] converts among indexes of the data in expanded and
 #'  collapsed formats, and Cartesian space.
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' # Requires BirdFlow object 'bf'
 #' d <- get_distr(1, bf) # compacted form
@@ -54,21 +52,23 @@ if(FALSE){
 #' f <- collapse_distr(e, bf)
 #' stopifnot(all(d == f))
 #' }
-collapse_distr <- function(x, obj){
- if("geom" %in% names(obj))
+collapse_distr <- function(x, obj) {
+  if ("geom" %in% names(obj)) {
     obj <- obj$geom
+  }
   x <- as.array(x)
   xdim <- dim(x)
   ndim <- length(xdim)
   perm <- 1:length(dim(x))
   perm[1:2] <- 2:1
   x <- aperm(x, perm = perm) # permute the array so first two dimensions are
-                             # row, col
+  # row, col
   a <- x[t(obj$mask)]
-  if(ndim ==2 ) # 2 d input, 1d output - result is vector
+  if (ndim == 2) { # 2 d input, 1d output - result is vector
     return(a)
+  }
 
   # 2d or higher output - format vector back into an array
-  new_dim <- c(sum(obj$mask), xdim[3:length(xdim)] )
+  new_dim <- c(sum(obj$mask), xdim[3:length(xdim)])
   a <- array(data = a, dim = new_dim)
 }

@@ -1,0 +1,16 @@
+# Basic .gitattributes for a R repo.
+# From: https://github.com/alexkaratarakis/gitattributes/blob/master/R.gitattributes
+# Modified slightly
+
+# Source files
+# ============
+*.Rdata binary
+*.RData binary
+*.rda   binary
+*.rdb   binary
+*.rds   binary
+*.Rd    text
+*.Rdx   binary
+*.Rmd	  text
+*.R  	  text
+*.Rproj text
