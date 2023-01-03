@@ -49,7 +49,7 @@ forecast <- function(x, distr, start, end, direction){
                   dim = c(  x$n_active, nd, length(transitions) + 1) )
       dimnames(fc) <- list(  i = NULL,
                              distribution = 1:nd,
-                             timestep = pasteo("t", timesteps)
+                             timestep = paste0("t", timesteps)
       )
       fc[ , , 1 ] <- distr
       for(i in seq_along(transitions)){
@@ -63,7 +63,7 @@ forecast <- function(x, distr, start, end, direction){
       dimnames(fc) <- list(i = NULL, timestep = paste0("t",timesteps))
       fc[ , 1] <- distr
       for(i in seq_along(transitions)){
-        tm <- BirdFlowR:::get_transition( transitions[i], x) # transition matrix
+        tm <- get_transition( transitions[i], x) # transition matrix
         distr <- tm %*% distr
         fc[ , i+1] <- distr # save the location
       }

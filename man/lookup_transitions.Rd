@@ -10,7 +10,7 @@ lookup_transitions(start, end, direction, obj)
 \item{start, end}{The starting and ending points in time. In one of the
 following formats: character, a date in the form year-month-day e.g.
 "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
-\code{\link[base::Dates]{Date}} object}
+\code{\link[base:Dates]{Date}} object.}
 
 \item{direction}{Either "forward" or "backward". Only used if \code{start} and
 \code{end} are timesteps (numeric). Otherwise the direction will be determined

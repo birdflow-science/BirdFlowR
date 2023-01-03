@@ -9,7 +9,7 @@ get_distr(which, obj, from_marginals = FALSE)
 \arguments{
 \item{which}{indicates which distributions to return. Can be one or more
 integers indicating timesteps; character dates in the format
-year-month-day e.g. "2019-02-25"; \code{\link[base::Dates]{Dates}}; or
+year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or
 \code{"all"} which will return distributions for all timesteps.}
 
 \item{obj}{a BirdFlow model}
@@ -36,7 +36,7 @@ marginal are very similar.
 }
 \seealso{
 Distributions can be passed to \link{forecast} or converted to rasters
-with \link{expand_distr} or converted to \link[=SpatRaster]{terra::rast} with
+with \link{expand_distr} or converted to \link[terra:rast]{SpatRaster} with
 \link{rasterize_distr}.  \link{sample_distr} will convert one cell to 1 and the rest
 to 0 probabilistically based on the densities in the distribution.
 }

@@ -23,7 +23,7 @@ print.BirdFlow <- function(x, ...){
   cat(pad("  resolution"), ": ", paste(x$geom$res, collapse = ", "),
       "  (x, y)\n", sep ="")
   cat(pad("  active cells"), ": ", sum(x$geom$m), "\n", sep = "")
-  cat(pad("  size"), ": " , format(object.size(x), unit =  "auto"),
+  cat(pad("  size"), ": " , format(utils::object.size(x), unit =  "auto"),
       "\n", sep = "")  # drop size before package release
   invisible(x)
 }

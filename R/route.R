@@ -25,6 +25,7 @@
 #' @importMethodsFrom Matrix t
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @examples
 route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
@@ -112,7 +113,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   # Create an sf object with lines for each route
   convert_route_to_sf <- function(x){
     x %>% dplyr::group_by(route) %>%
-      dplyr::summarize(geometry = sf::st_geometry(convert_to_lines(x, y)) ) %>%
+      dplyr::summarize(geometry = sf::st_geometry(convert_to_lines(.data$x, .data$y)) ) %>%
       as.data.frame() %>% sf::st_as_sf()
   }
 

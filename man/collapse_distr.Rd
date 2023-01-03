@@ -11,7 +11,7 @@ collapse_distr(x, obj)
 \item{x}{Either a matrix representing a single bird distribution or an array
 representing multiple distributions.}
 
-\item{obj}{A \link{BirdFlow} model or the \code{geom} component of one.}
+\item{obj}{A \code{BirdFlow} model or the \code{geom} component of one.}
 }
 \value{
 Either a vector representing a single distribution in its collapsed

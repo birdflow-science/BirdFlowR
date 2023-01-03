@@ -16,9 +16,6 @@
 #' \item{interval}{The interval ID; it will range from 1 to n.}
 #' \item{date}{The date associated with the interval's midpoint}
 #'
-#'
-#' @examples
-#' get_dates(2019)
 get_dates <- function(year, n = 52) {
 
   # proportional end points of each interval

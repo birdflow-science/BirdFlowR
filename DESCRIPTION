@@ -17,10 +17,14 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports:
+    dplyr,
     lubridate,
     Matrix,
+    magrittr,
     progress,
+    rhdf5,
+    rlang,
     sf,
-    terra,
-    rhdf5
+    stringr,
+    terra
 VignetteBuilder: knitr

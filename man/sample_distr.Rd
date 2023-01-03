@@ -35,10 +35,10 @@ s <- dnorm(seq(-2, 2, by = .25))
 s <- s / sum(s)
 
 # sample it once
-loc <- sample_state(s)
+loc <- sample_distr(s)
 
 # sample it 200 times
-locations <- sample_state(s, 200)
+locations <- sample_distr(s, 200)
 
 \dontrun{
 # Plot the probability of each location

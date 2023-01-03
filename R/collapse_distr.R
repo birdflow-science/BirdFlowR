@@ -33,7 +33,7 @@ if(FALSE){
 #'
 #' @param x Either a matrix representing a single bird distribution or an array
 #' representing multiple distributions.
-#' @param obj A [BirdFlow] model or the `geom` component of one.
+#' @param obj A `BirdFlow` model or the `geom` component of one.
 #'
 #' @return Either a vector representing a single distribution in its collapsed
 #' form or, if x represents multiple distributions,  a matrix with one

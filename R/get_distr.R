@@ -12,12 +12,12 @@
 #' marginal are very similar.
 #'
 #' @seealso Distributions can be passed to [forecast] or converted to rasters
-#'   with [expand_distr] or converted to [terra::rast][SpatRaster] with
+#'   with [expand_distr] or converted to [SpatRaster][terra::rast] with
 #'   [rasterize_distr].  [sample_distr] will convert one cell to 1 and the rest
 #'   to 0 probabilistically based on the densities in the distribution.
 #' @param which indicates which distributions to return. Can be one or more
 #'   integers indicating timesteps; character dates in the format
-#'   year-month-day e.g. "2019-02-25"; \code{\link[base::Dates]{Dates}}; or
+#'   year-month-day e.g. `"2019-02-25"`; [`Date`][base::Dates] objects; or
 #'   `"all"` which will return distributions for all timesteps.
 #' @param obj a BirdFlow model
 #' @param from_marginals if TRUE and `obj` has marginals the distribution will

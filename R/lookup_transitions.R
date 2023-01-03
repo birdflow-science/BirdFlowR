@@ -14,7 +14,7 @@
 #' @param start,end The starting and ending points in time. In one of the
 #'   following formats: character, a date in the form year-month-day e.g.
 #'   "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
-#'   \code{\link[base::Dates]{Date}} object
+#'   [`Date`][base::Dates] object.
 #' @param direction Either "forward" or "backward". Only used if `start` and
 #'   `end` are timesteps (numeric). Otherwise the direction will be determined
 #'   by the dates - forward if `start` and `end` are in chronological order, and
@@ -71,7 +71,7 @@ lookup_transitions <- function(start, end, direction, obj){
   loops <- start == end | ( start < end & is_backward) |
     start > end & !is_backward
   if(loops){
-    last_ts <- nrow(dates)
+    last_ts <- nrow(obj)
     edge1 <- ifelse(is_backward, 1, last_ts)
     edge2 <- ifelse(is_backward, last_ts, 1)
     steps <- c(seq(start, edge1, step), seq(edge2, end, step))
