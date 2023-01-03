@@ -118,7 +118,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   points <- format_trajectory(trajectory, x)
   lines <- convert_route_to_sf(points)
-  st_crs(lines) <- st_crs(x$geom$crs)
+  sf::st_crs(lines) <- sf::st_crs(x$geom$crs)
 
   return(list(points = points, lines = lines))
 }

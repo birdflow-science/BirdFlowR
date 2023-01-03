@@ -26,3 +26,10 @@ major order - starting at the top left and proceeding left to right along
 each row.  The collapsed form is used for projecting the flow model while the
 expanded form is used to export, import, and visualize the data.
 }
+\seealso{
+\itemize{
+\item \link{expand_distr} does the opposite of \code{collapse_distr}.
+\item \link{index_conversions} converts among indexes of the data in expanded and
+collapsed formats, and Cartesian space.
+}
+}
