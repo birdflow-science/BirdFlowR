@@ -1,0 +1,194 @@
+---
+title: "BirdFlowR introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{BirdFlowR introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "65%",
+  fig.width = 6,
+  fig.height = 5
+)
+```
+A brief introduction to core BirdFlowR functions. 
+
+## Install packages and load BirdFlow model
+
+Install packages
+```{r install, eval = FALSE }
+installed <- rownames(installed.packages())
+if(!"devtools" %in% installed)
+  install.packages("devtools")
+if(!"BirdFlowR" %in% installed)
+  devtools::install_github("birdflow-science/BirdFlowR")
+```
+
+Currently the example model isn't part of this or any other package so to run
+the code in this vignette you will need to download the model file and edit 
+the model_path line below to point to the local file.
+
+[Download](https://drive.google.com/file/d/1LSX32iI3FD69Z5YWaRlXQwD38VJd8Awt/edit)
+(634 MB from google drive)
+
+```{r setup}
+library(BirdFlowR)
+library(terra)
+
+model_path <- "../../Models/amewoo.Rds"  # This will need to be changed
+bf <- readRDS(model_path)
+
+```
+
+## Access basic information
+```{r access}
+dim(bf)
+nrow(bf)
+ncol(bf)
+
+n_active(bf)
+n_transitions(bf)
+n_timesteps(bf)
+
+print(bf)  
+```
+
+## Retrieve and plot distributions
+
+Use timestep, character dates, date objects, or "all" to specify which 
+distributions to retrieve.
+
+Retrieve the first distribution and compare its length to the number of active 
+cells.
+```{r single distribution}
+d <- get_distr(1, bf) # get first timestep distribution 
+length(d)  # 1 distribution so d is a vector
+n_active(bf)  # it's length is the same a the number of active cells in the model
+```
+
+Get 5 distributions, the result is a matrix in which each column is a 
+distribution with a row for each active cell. 
+```{r multiple distributions}
+d <- get_distr(26:30, bf) 
+dim(d)
+head(d, 3)
+```
+We can also specify distributions with dates, or use "all" to retrieve all the distributions. 
+```{r get_distr options}
+d <- get_distr("2022-12-15", bf) # from date
+d <- get_distr("all", bf)  # all distributions
+d <- get_distr(Sys.Date(), bf)  # corresponding to today
+```
+
+Use `rasterize_distr()` to plot; it converts a distribution to a SpatRaster 
+object as used in the terra package. The second argument is the BirdFlow model
+associated with the distribution.
+```{r plot distributions, fig.width=8, fig.height=4, out.width='100%'}
+d <- get_distr(c(1, 26), bf) # winter and summer
+r <- rasterize_distr(d, bf) # convert to SpatRaster 
+plot(r)
+```
+
+# Forecasting
+In this section we will sample a single starting location from the winter distribution and project it forward to generate a distribution of predicted breeding grounds for birds that wintered at the starting location.
+
+Set forecasting parameters
+```{r forecast parameters}
+start <- 1         # starting timestep (winter)
+end <- 26          # ending timestep (summer)
+```
+
+## Sample starting distribution
+`sample_distr()` will probabilistically assign a 1 to a single location per input distribution and set the remaining cells to 0.  
+```{r starting location}
+set.seed(0)
+d <- get_distr(start, bf)
+location <- sample_distr(d)
+```
+
+## Project forward from this location to summer
+Forecast returns the distribution over time as a matrix with
+one column per timestep. 
+
+The plot shows how the probability density spreads over time from the starting 
+location for a subset of the timesteps.  The last panel represents the summer distribution.
+```{r forecast, out.width='100%'}
+f <- forecast(bf, location, start, end, "forward")
+r <- rasterize_distr(f[, c(1, 9, 18, 26)], bf)
+plot(r)
+```
+Alternatively we can calculate the difference between the projected distribution and the distribution of the species as a whole at the same timestep.
+```{r probability over time}
+projected <- f[ , ncol(f)]  # last projected distribution
+diff <-  projected - get_distr(end, bf) 
+plot(rasterize_distr(diff, bf))
+```
+
+# Generate synthetic routes 
+In this section we sample locations from the American Woodcock winter 
+distribution and then generate routes to their summer grounds.
+
+Set route parameters
+```{r route parameters}
+n_positions <-  15 # number of starting positions
+n_each <- 1        # how many birds to start at each
+start <- 1         # starting timestep (winter)
+end <- 26          # ending timestep (summer)
+```
+
+## Generate starting locations 
+First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly resulting in a matrix in which each column has a single 1 representing the sampled location.
+```{r starting locations}
+d <- get_distr(start, bf)
+locations  <- sample_distr(d, n = n_positions)  
+```
+Collapse the locations down to a vector of the index of each
+non-zero value and then convert to x and y coordinates.
+```{r starting locations as row and column}
+ind <- apply(locations, 2, function(x) which( as.logical(x) ) )
+x <- i_to_x(ind, bf)
+y <- i_to_y(ind, bf)
+```
+Plot the starting (winter) distribution and sampled locations
+```{r plot starting distribution}
+winter <- rasterize_distr(d, bf)
+plot(winter)
+points(x, y)
+```
+
+## Generate routes
+`route()` will generate synthetic routes for each starting position.
+Currently `route()` returns a list with two items (this may change):
+
+* `points` a data.frame with a row for each timestep of each route
+* `lines` sf object containing a line for each route
+```{r route, fig.show='hide'}
+rts <- route(bf, x_coord = x, y_coord = y, start = start,
+             end = end, n = n_each)
+head(rts$points, 4)
+```
+
+## Plot routes 
+Plot the route lines over the summer distribution along with points at the starting and ending positions.
+```{r plot routes}
+d <- get_distr(end, bf)
+summer <- rasterize_distr(d, bf)
+
+line_col <- rgb(0, 0, 0, .2)
+pt_col <- rgb(0, 0, 0, .5 )
+
+plot(summer) 
+points( x, y, cex = .4, col = pt_col, pch = 16) # starting points
+plot(rts$lines, add = TRUE, col = line_col)  # routes
+end_pts <- rts$points[rts$points$timestep == end, ]  # end points
+points(x = end_pts$x, y = end_pts$y,
+       cex = 0.4, pch = 12, col = pt_col )
+
+title(main = bf$metadata$species)
+
+```

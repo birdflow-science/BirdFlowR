@@ -26,6 +26,15 @@ major order - starting at the top left and proceeding left to right along
 each row.  The collapsed form is used for projecting the flow model while the
 expanded form is used to export, import, and visualize the data.
 }
+\examples{
+\dontrun{
+# Requires BirdFlow object 'bf'
+d <- get_distr(1, bf) # compacted form
+e <- expand_distr(d, bf) # expand
+f <- collapse_distr(e, bf)
+stopifnot(all(d == f))
+}
+}
 \seealso{
 \itemize{
 \item \link{expand_distr} does the opposite of \code{collapse_distr}.
