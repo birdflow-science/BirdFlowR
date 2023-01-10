@@ -47,14 +47,24 @@ bf <- readRDS(model_path)
 
 ## Access basic information
 ```{r access}
+# Methods for base R functions:
 dim(bf)
 nrow(bf)
 ncol(bf)
 
+# New functions:
 n_active(bf)
 n_transitions(bf)
 n_timesteps(bf)
 
+# Methods for terra functions:
+a <- crs(bf) # well known text (long)
+crs(bf, proj = TRUE)  # proj4 string
+res(bf)
+xres(bf)
+yres(bf)
+
+# Print method for BirdFlow objects:
 print(bf)  
 ```
 
