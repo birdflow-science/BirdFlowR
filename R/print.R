@@ -10,8 +10,8 @@
 #' @return x is returned invisibly and unchanged
 #' @export
 print.BirdFlow <- function(x, ...){
-  if(!is.na(x$spmd$species)){
-    cat(x$spmd$species, " ", sep ="")
+  if(!is.na(x$species$common_name)){
+    cat(x$species$common_name, " ", sep ="")
   }
   cat("BirdFlow model\n")
 

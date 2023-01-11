@@ -10,13 +10,14 @@ find_threshold(x, p)
 \arguments{
 \item{x}{A vector of values}
 
-\item{p}{A proportion of x that we should retain}
+\item{p}{A proportion of x that we wish retain}
 }
 \value{
 A threshold in values of x such that dropping everything smaller than
-the threshold retains at least \code{p} proportion of the total of \code{x}
+the threshold retains at least proportion \code{p} of the total of \code{x}
 }
 \description{
 function to determine the threshold in values that preserves a given
 proportion of the value.
 }
+\keyword{internal}

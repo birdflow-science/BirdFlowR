@@ -121,14 +121,13 @@ import_birdflow <- function(hdf5, tiff, species){
   tax <- auk::get_ebird_taxonomy()
   stopifnot(species %in% tax$species_code)
   sel <- which(tax$species_code == species)
-  bf$metadata <- list(species = tax$common_name[sel],
-                      scientific = tax$scientific_name[sel],
-                      code = species)
+  bf$spmd$species_code == species
+  bf$spmd$common_name = tax$common_name[sel]
+  bf$spmd$scientific_name = tax$scientific_name[sel]
 
-  bf$metadata$model_date <- h5read(hdf5, "date")
+  bf$metadata$birdflow_model_date <- h5read(hdf5, "date")
 
-  # Add dates - evantually I would like to pass these through from
-  # ebird source data.
+  # Add dates - in pending workflow these will be in the hdf5
   bf$dates <- get_dates(year = 2019, n = dim(r)[3])
 
   # Save marginals into list

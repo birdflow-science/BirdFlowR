@@ -23,7 +23,7 @@ make_mask <- function(x){
   max <- apply(m, 1, max)
   mask <- as.logical(max)  # TRUE if cell has data at any timestep
   mask_mat <- matrix(mask, nrow = nrow(x), ncol = ncol(x), byrow = TRUE)
-  mask_rast <- rast(mask_mat, extent = ext(x), crs = crs(x))
+  mask_rast <- terra::rast(mask_mat, extent = ext(x), crs = crs(x))
 
   # Rows and columns corresponding to maximum extent of data
   r  <- which(apply(mask_mat, 1, any))

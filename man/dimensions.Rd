@@ -27,6 +27,8 @@
 
 n_timesteps(x)
 
+n_timesteps(x)
+
 n_transitions(x)
 
 n_active(x)
@@ -57,8 +59,10 @@ n_active(x)
 
 \code{dim()} number of rows and columns in the raster extent.
 
-\code{n_timesteps()} number of timesteps, which is the same as the number of
+\code{n_timesteps()} number of timesteps
 distributions.
+
+\code{n_distr()} number of distributions
 
 \code{n_transitions()} number of transitions, if the model is circular in
 time this will equal \code{n_timesteps()}.

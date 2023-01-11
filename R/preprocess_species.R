@@ -8,13 +8,13 @@
 #' a mask, spatial reference information, and species metadata to an HDF5 file.
 #'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
+#' @param out_dir output directory, files will be written here
 #' @param res the target resolution of the BirdFlow model in kilometers.
 #' @param p the proportion of the species distribution to be retained
 #' (within each timestep), must be greater than 0 and less than or equal to 1.
 #' In practice it should be above 0.9 and will probably be above 0.99. This
 #' controls how much (if any) of the tail of the distribution density is
 #' trimmed from the model.  1 indicates no trimming.
-#' @param out_dir output directory, files will be written here
 #' @param tiff if TRUE geoTIFF files will be exported
 #' @param overwrite if TRUE any pre-existing output files will be overwritten,
 #' otherwise the presence of pre-existing files is an error.
@@ -25,7 +25,7 @@
 #' @export
 #'
 #' @examples
-preprocess_species <- function(species, res = 80, p = 1, out_dir,
+preprocess_species <- function(species, out_dir, res = 80, p = 1,
                                tiff = FALSE,
                                overwrite = FALSE,
                                crs = birdflow_crs){
@@ -78,12 +78,15 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   }
   rm(exist, out_base)
 
+  verbose <- TRUE
+
   #----------------------------------------------------------------------------#
-  # format species metadata (spmd)                                          ####
+  # format species metadata (bf$species)                                          ####
   #----------------------------------------------------------------------------#
   er <- ebirdst::ebirdst_runs
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
-  cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n", sep ="")
+  if(verbose)
+    cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n", sep ="")
 
   # Reformat dates as strings
   date_to_char <- function(x){
@@ -92,7 +95,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
     return(x)
   }
   spmd <- lapply(spmd, date_to_char)
-  export$spmd <- spmd
+  export$species <- spmd
 
   # Add ebirdst verions to  metadata
   v <- ebirdst::ebirdst_version()
@@ -112,6 +115,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   #  ~\AppData\Roaming\R\data\R\ebirdst\2021\[species]
   # logical below attempts to supress messages if the data has already been
   # downloaded.
+
   if(file.exists(ebirdst::get_species_path(species))){
     sp_path <-  suppressMessages(ebirdst::ebirdst_download(species))
   } else {
@@ -123,6 +127,8 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   load_res <- levels[findInterval(res, breaks)]
 
   # load abundance data
+  if(verbose)
+    cat("Reading geoTIFFs\n")
   abunds <- ebirdst::load_raster("abundance", path = sp_path,resolution=load_res)
   abunds_lo <- ebirdst::load_raster("abundance", metric = "lower",
                            path = sp_path,resolution=load_res)
@@ -137,6 +143,9 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   abunds_lo <- terra::rast(abunds_lo)
   abunds_hi <- terra::rast(abunds_hi)
 
+  if(verbose)
+    cat("Cropping and reprojecting\n")
+
   # Make mask in original coordinate system
   # TRUE if a cell has non-zero data in any layer (timestep) and
   # will be cropped to extent of TRUE cells
@@ -149,7 +158,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   initial_res <- mean(res(mask))
   factor <- round(res_m / initial_res)
   reproject_res <- res_m / factor
-  mask<- project(mask, crs(mollweide_wkt), method = "near", origin = 0,
+  mask<- terra::project(mask, crs(crs), method = "near", origin = 0,
                  res = reproject_res)
   mask <- make_mask(mask)  # re-crop to data in new projection
 
@@ -167,32 +176,34 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
 
 
   # aggregate to target resolution
-  abunds_low_res <- aggregate(abunds,
+  if(verbose)
+    cat("Resampling to target resolution (", res, " km)\n", sep = "")
+  abunds_low_res <- terra::aggregate(abunds,
                               fact = factor,
                               fun = mean,
                               na.rm = TRUE)
 
-  abunds_se_low_res <- aggregate(abunds_se,
+  abunds_se_low_res <- terra::aggregate(abunds_se,
                                  fact = factor,
                                  fun = mean,
                                  na.rm = TRUE)
 
   # Renormalize
-  v <- values(abunds_low_res)
+  v <- terra::values(abunds_low_res)
   totals <- colSums(v, na.rm = TRUE)
-  v_se <- values(abunds_se_low_res)
+  v_se <- terra::values(abunds_se_low_res)
   for(i in seq_len(ncol(v))){
     v[  , i ] <- v[ , i ] / totals[ i ]
     v_se[ , i ] <- v_se[ , i ] / totals[ i ]
   }
-  values(abunds_low_res) <- v
-  values(abunds_se_low_res) <- v_se
+  terra::values(abunds_low_res) <- v
+  terra::values(abunds_se_low_res) <- v_se
 
   # Double check that there aren't extra cells along edges
   mask <- make_mask(abunds_low_res)
-  if(ncell(mask) != ncell(abunds_low_res)){
-    abunds_low_res <- crop(abunds_low_res, mask)
-    abunds_se_low_res <- crop(abunds_se_low_res, mask)
+  if(terra::ncell(mask) != terra::ncell(abunds_low_res)){
+    abunds_low_res <- terra::crop(abunds_low_res, mask)
+    abunds_se_low_res <- terra::crop(abunds_se_low_res, mask)
   }
 
   #----------------------------------------------------------------------------#
@@ -207,7 +218,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
     cat("Trimming tail of distribution. Retaining ",
         p * 100 , "% of the density.\n")
     # Force to zero the values that are below the threshold
-    v <- values(abunds_low_res)
+    v <- terra::values(abunds_low_res)
     thresholds <- apply(v, 2, find_threshold, p = p)
     for(i in seq_len(ncol(v))){
       d <- v[ , i]
@@ -218,18 +229,18 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
     # Renormalize
     #  divide SE by same totals as in abunds to keep them in sync
     totals <- colSums(v, na.rm = TRUE)
-    v_se <- values(abunds_se_low_res)
+    v_se <- terra::values(abunds_se_low_res)
     for(i in seq_len(ncol(v))){
       v[  , i ] <- v[ , i ] / totals[ i ]
       v_se[ , i ] <- v_se[ , i ] / totals[ i ]
     }
-    values(abunds_low_res) <- v
-    values(abunds_se_low_res) <- v_se
+    terra::values(abunds_low_res) <- v
+    terra::values(abunds_se_low_res) <- v_se
 
     # Because we've forced some values to zero can now remask and recrop
     new_mask <- make_mask(abunds_low_res)
-    cat("Trimming reduced extent from ", sum(values(mask)),  "/", ncell(mask),
-        " to ", sum(values(new_mask)) , "/", ncell(new_mask),
+    cat("Trimming reduced extent from ", sum(terra::values(mask)),  "/", ncell(mask),
+        " to ", sum(terra::values(new_mask)) , "/", ncell(new_mask),
         "(active cells/extent cells).", sep = "")
     mask <- new_mask
     abunds_low_res <- crop(abunds_low_res, mask)
@@ -245,8 +256,8 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
 
 
   # Generate distribution matrix (selected cells in columns)
-  m <- as.logical(values(mask))
-  distr <- values(abunds_low_res)[m, , drop = FALSE]
+  m <- as.logical(terra::values(mask))
+  distr <- terra::values(abunds_low_res)[m, , drop = FALSE]
   distr[is.na(distr)] <- 0
 
   # Append first column onto end so we have full cycle of transitions
@@ -254,6 +265,8 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
   colnames(distr) <- paste0("t", seq_len(ncol(distr)))
   dates <- c(dates, dates[1])   # updates dates to match
   export$distr <- distr
+  export$metadata$has_distr <- TRUE
+  export$metadata$n_timesteps <- ncol(distr) - 1 # in distr last is a repeat of 1st
 
   #----------------------------------------------------------------------------#
   #  Define geom  and metadata                                              ####
@@ -267,7 +280,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
                ext = as.vector(ext(mask)),
                crs = crs(mask),
                mask = NA)
-  m <- values(mask)
+  m <- terra::values(mask)
   m <- matrix(m, nrow = nrow(mask), ncol = ncol(mask), byrow = TRUE)
   geom$mask <- m
   export$geom <- geom
@@ -292,6 +305,12 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
 
 
   if(tiff){
+    if(verbose){
+      cat("Writing geoTIFFs\n\t")
+      cat(paste(names(paths)[-1], ": ",
+                unlist(paths)[-1], sep = "", collapse = "\t\n"),
+          "\n", sep = "")
+    }
     terra::writeRaster(abunds_low_res, paths$abunds)
     terra::writeRaster(abunds_se, paths$se)
     #### QUANTILES too!
@@ -300,6 +319,7 @@ preprocess_species <- function(species, res = 80, p = 1, out_dir,
 
 
   ##### Write HDF5
-
+  if(verbose)
+    cat("Writing hdf5: ", paths$hdf5, "\n")
   invisible(export)
 }

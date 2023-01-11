@@ -3,21 +3,17 @@
 #' @return An empty BirdFlow object
 new_BirdFlow <- function(){
   structure(list(geom = list(nrow = NA_real_,
-                                   ncol = NA_real_,
-                                   res = rep(NA_real_, 2),
-                                   ext = rep(NA_real_, 4),
-                                   crs = NA_character_,
-                                   mask = NA),
-
+                             ncol = NA_real_,
+                             res = rep(NA_real_, 2),
+                             ext = rep(NA_real_, 4),
+                             crs = NA_character_,
+                             mask = NA),
                  trans = NA,
                  marginals = NA,
                  dates = NA,
-                 n_trans = NA,
-                 n_active = NA,
-                 n_timesteps = NA,
                  distr = NA,
-                 spmd = list(
-                   species_code = NA,
+                 species = list(
+                   code = NA,
                    scientific_name = NA,
                    common_name = NA,
                    resident = NA,
@@ -41,14 +37,19 @@ new_BirdFlow <- function(){
                    resident_start = NA,
                    resident_end = NA
                  ),
-                 metadata = list( ebird_version_year = NA,
-                                  ebird_release_year = NA,
-                                  ebird_access_end_date = NA,
-                                  birdflow_preprocess_date = NA,
-                                  birflow_model_date = NA,
-                                  has_marginals = FALSE,
-                                  has_trans = FALSE,
-                                  has_distr = FALSE) ),
+                 metadata = list(
+                   has_marginals = FALSE,
+                   has_trans = FALSE,
+                   has_distr = FALSE,
+                   n_trans = NA,
+                   n_active = NA,
+                   n_timesteps = NA,
+                   ebird_version_year = NA,
+                   ebird_release_year = NA,
+                   ebird_access_end_date = NA,
+                   birdflow_preprocess_date = NA,
+                   birdflow_model_date = NA
+                  ) ),
             class = "BirdFlow")
 
 

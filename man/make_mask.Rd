@@ -26,3 +26,4 @@ data in \code{x}. It's used in Birdflow to preprocess data.
 \code{get_data_mask} is currently a public function but may be made private in
 future versions of the package.
 }
+\keyword{internal}

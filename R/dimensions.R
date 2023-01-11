@@ -39,25 +39,33 @@ dim.BirdFlow <- function(x){
 
 #' @rdname dimensions
 #' @export
-#' @return `n_timesteps()` number of timesteps, which is the same as the number of
+#' @return `n_timesteps()` number of timesteps
 #'  distributions.
 n_timesteps <- function(x){
-  x$n_timesteps
+  x$metadata$n_timesteps
 }
+
+#' @rdname dimensions
+#' @export
+#' @return `n_distr()` number of distributions
+n_timesteps <- function(x){
+  ncol(x$distr)
+}
+
 
 #' @rdname dimensions
 #' @export
 #' @return `n_transitions()` number of transitions, if the model is circular in
 #' time this will equal `n_timesteps()`.
 n_transitions <- function(x){
-  x$n_trans
+  x$metadata$n_trans
 }
 
 #' @rdname dimensions
 #' @export
 #' @return `n_active()` number of active cells (locations).
 n_active <- function(x){
-  x$n_active
+  x$metadata$n_active
 }
 
 
@@ -86,7 +94,7 @@ ext.BirdFlow <- function(x){
 setMethod(ext, "BirdFlow", ext.BirdFlow)
 
 res.BirdFlow <- function(x){
-  bf$geom$res
+  x$geom$res
 }
 #' @rdname dimensions
 #' @return `res()` two numbers, the cell width and height (x and y resolution).
@@ -94,7 +102,7 @@ res.BirdFlow <- function(x){
 setMethod(res, "BirdFlow", res.BirdFlow)
 
 xres.BirdFlow <- function(x){
-  bf$geom$res[1]
+  x$geom$res[1]
 }
 #' @rdname dimensions
 #' @return `xres()` the width of the cells (x resolution).
@@ -102,7 +110,7 @@ xres.BirdFlow <- function(x){
 setMethod(xres, "BirdFlow", xres.BirdFlow)
 
 yres.BirdFlow <- function(x){
-  bf$geom$res[2]
+  x$geom$res[2]
 }
 #' @rdname dimensions
 #' @return `yres()` the height of the cells (y resolution).
