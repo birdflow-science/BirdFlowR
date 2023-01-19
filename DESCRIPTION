@@ -14,7 +14,8 @@ Suggests:
     auk,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    ebirdst
 Config/testthat/edition: 3
 Imports:
     dplyr,

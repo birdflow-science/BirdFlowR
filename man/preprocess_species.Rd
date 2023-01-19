@@ -2,44 +2,74 @@
 % Please edit documentation in R/preprocess_species.R
 \name{preprocess_species}
 \alias{preprocess_species}
-\title{download and format eBird Status and Trends data for BirdFlow model fitting}
+\title{prepare eBird Status and Trends data for BirdFlow model fitting}
 \usage{
 preprocess_species(
   species,
   out_dir,
-  res = 80,
-  p = 1,
-  tiff = FALSE,
-  overwrite = FALSE,
-  crs = birdflow_crs
+  res,
+  hdf5 = TRUE,
+  tiff = TRUE,
+  overwrite = TRUE,
+  crs,
+  max_params = 8.1e+08,
+  p = 1
 )
 }
 \arguments{
 \item{species}{a species in any format accepted by \code{\link[ebirdst:get_species]{ebirdst::get_species()}}}
 
-\item{out_dir}{output directory, files will be written here}
+\item{out_dir}{output directory, files will be written here. Required unless
+both \code{tiff} and \code{hdf5} are TRUE.  File names created here will
+incorporate the species code, resolution, and eBird version year.}
 
-\item{res}{the target resolution of the BirdFlow model in kilometers.}
+\item{res}{the target resolution of the BirdFlow model in kilometers if
+omitted a resolution will be chosen that results slightly less than
+\code{max_params} parameters.}
 
-\item{p}{the proportion of the species distribution to be retained
-(within each timestep), must be greater than 0 and less than or equal to 1.
-In practice it should be above 0.9 and will probably be above 0.99. This
-controls how much (if any) of the tail of the distribution density is
-trimmed from the model.  1 indicates no trimming.}
+\item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
 
-\item{tiff}{if TRUE geoTIFF files will be exported}
+\item{tiff}{if TRUE (default) geoTIFF files will be exported.}
 
-\item{overwrite}{if TRUE any pre-existing output files will be overwritten,
-otherwise the presence of pre-existing files is an error.}
+\item{overwrite}{if TRUE (default) any pre-existing output files will
+be overwritten. If FALSE pre-existing files will result in an error.}
 
-\item{crs}{coordinate reference system to use.  Defaults to \link{birdflow_crs}.}
+\item{crs}{coordinate reference system (CRS) to use.  Defaults to the custom
+projection eBird has assigned to this species - see
+\code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
+\code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
+
+\item{max_params}{the maximum number of fitted parameters that the BirdFlow
+model should contain. If \code{res} is omitted a resolution will be chosen that
+yields this many fitted parameters. The default value represents the number
+of parameters that could efficiently be fit in early BirdFlow models
+(around 4000 active cells and 51 transitions).}
+
+\item{p}{Set to values less than 1 to trim the tail off of the distributions.
+\code{p} is the proportion of the species distribution to be retained (within each
+timestep). In practice it should be between 0.95 (or even 0.99) and 1.
+The default of 1 indicates no trimming. This parameter (and functionality)
+may be dropped as eBird status and trends data has already been
+trimmed. The heuristic to determine resolution does not factor in
+trimming.}
 }
 \value{
-this function invisibly returns a list of the objects that are
-written to the hdf5 file.
+returns a BirdFlow model object that lacks
+marginals, but is otherwise complete.
 }
 \description{
-This uses the \pkg{ebirdst} package to download crop and resample abundance
-data for the given species. It then writes the abundance data along with
-a mask, spatial reference information, and species metadata to an HDF5 file.
+This uses the \pkg{ebirdst} package to download, crop, and resample abundance
+data for a given species. It writes a template BirdFlow object to an hdf5
+file containing all the components except the marginals.
+}
+\examples{
+\dontrun{
+ dir <- tempdir()
+ bf <- preprocess_species("amewoo", dir )
+
+ plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
+ unlink(dir)
+
+}
+
 }

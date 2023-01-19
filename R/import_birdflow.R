@@ -83,7 +83,7 @@ import_birdflow <- function(hdf5, tiff, species){
                 nrow = nrow(r), ncol = ncol(r),
                 byrow = TRUE)
   bf$geom$mask <- mask
-  bf$n_active <- sum(mask)
+  bf$metadata$n_active <- sum(mask)
 
   #----------------------------------------------------------------------------#
   #   Process HDF5
@@ -121,9 +121,9 @@ import_birdflow <- function(hdf5, tiff, species){
   tax <- auk::get_ebird_taxonomy()
   stopifnot(species %in% tax$species_code)
   sel <- which(tax$species_code == species)
-  bf$spmd$species_code == species
-  bf$spmd$common_name = tax$common_name[sel]
-  bf$spmd$scientific_name = tax$scientific_name[sel]
+  bf$species$species_code == species
+  bf$species$common_name = tax$common_name[sel]
+  bf$species$scientific_name = tax$scientific_name[sel]
 
   bf$metadata$birdflow_model_date <- h5read(hdf5, "date")
 
@@ -150,12 +150,13 @@ import_birdflow <- function(hdf5, tiff, species){
   bf$metadata$has_marginals <- TRUE
   bf$metadata$has_transitions <- FALSE
   bf$metadata$has_distr <- TRUE
-  bf$n_trans <- nt
+  bf$metadata$n_transitions <- nt
 
   # Save distributions
   bf$distr <- h5read(hdf5, "densities")
-  bf$n_timesteps <- ncol(bf$distr)
-  dimnames(bf$distr) <- list(i = NULL, timestep = paste0("t", 1:bf$n_timesteps))
+  bf$metadata$n_timesteps <- ncol(bf$distr)
+  dimnames(bf$distr) <- list(i = NULL,
+                             timestep = paste0("t", 1:bf$metadata$n_timesteps))
 
   # Save marginal index - allows looking up a marginal, and direction from
   # a transition code
@@ -166,12 +167,12 @@ import_birdflow <- function(hdf5, tiff, species){
   #    transition : transition code e.g. ("T_01-02", is directional)
   #    marginal : marginal code e.g. "M_01-02", lacks directionality, smaller
   #               number always first
-  circular <- bf$n_trans == bf$n_timesteps
+  circular <- n_transitions(bf) == n_timesteps(bf)
   if(circular){
-    index <- data.frame(from = 1:bf$n_timesteps, to = c(2:bf$n_timesteps, 1),
+    index <- data.frame(from = 1:n_timesteps(bf), to = c(2:n_timesteps(bf), 1),
                         direction = "forward")
   } else {
-    index <- data.frame(from = 1:(bf$n_timesteps - 1), to = 2:bf$n_timesteps,
+    index <- data.frame(from = 1:(n_timesteps(bf) - 1), to = 2:n_timesteps(bf),
                         direction = "forward")
   }
   index <- rbind(index, data.frame(from = index$to, to = index$from,

@@ -33,12 +33,11 @@
 #' this function. The internal function [transition_from_marginal] does the
 #' calculations.
 #' @export
-#' @examples
 get_transition <- function(x, obj){
 
-   if(obj$metadata$has_trans){
-    return(obj$trans[[x]])
-  }
+   if(obj$metadata$has_transitions){
+     return(obj$transition[[x]])
+   }
 
   if(obj$metadata$has_marginals){
     ind <- obj$marginals$index
