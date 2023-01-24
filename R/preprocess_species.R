@@ -19,33 +19,44 @@
 #' projection eBird has assigned to this species - see
 #' [ebirdst::load_fac_map_parameters()]). It will be interpreted by
 #' [terra::crs()] to generate a well known text representation of the CRS.
+#' @param clip a polygon or the path to a file containing a polygon. It must
+#' have a CRS and should either be a [SpatVector()][terra::SpatVector] object or
+#' or produce one when called with [vect(clip)][terra::vect()]
 #' @param max_params the maximum number of fitted parameters that the BirdFlow
 #'  model should contain. If `res` is omitted a resolution will be chosen that
 #'  yields this many fitted parameters. The default value represents the number
 #'  of parameters that could efficiently be fit in early BirdFlow models
 #'  (around 4000 active cells and 51 transitions).
-#' @param p Set to values less than 1 to trim the tail off of the distributions.
-#' `p` is the proportion of the species distribution to be retained (within each
-#' timestep). In practice it should be between 0.95 (or even 0.99) and 1.
-#' The default of 1 indicates no trimming. This parameter (and functionality)
-#' may be dropped as eBird status and trends data has already been
-#' trimmed. The heuristic to determine resolution does not factor in
-#' trimming.
-#' @importFrom ebirdst get_species
 #' @return returns a BirdFlow model object that lacks
 #' marginals, but is otherwise complete.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#'  dir <- tempdir()
-#'  bf <- preprocess_species("amewoo", dir )
 #'
+#'  bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
 #'  plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
-#'  unlink(dir)
+#'
+#' Create clip polgyon as an sf object
+#' Use the extent rectangle but with western edge moved in
+#' The clip can be anything that terra::vect will process into a polygon
+#' e <- ext(bf)
+#' e[1] <- -1500000
+#' coords <- matrix(c(e[1], e[3],
+#'                    e[1], e[4],
+#'                    e[2], e[4],
+#'                    e[2], e[3],
+#'                    e[1], e[3]), ncol = 2, byrow = TRUE)
+#' sfc <- st_sfc(st_polygon(list(coords)), crs = crs(bf))
+#' clip <- st_sf(data.frame(id = 1, geom = sfc))
+#'
+#' bfc <- preprocess_species("amewoo", tiff = FALSE,
+#'                          hdf5 = FALSE, clip = clip ) # clipped bird flow
+#'
+#'  plot(rasterize_distr(get_distr(c(1), bfc), bfc))
+#'
 #'
 #' }
-#'
 preprocess_species <- function(species,
                                out_dir,
                                res,
@@ -53,11 +64,11 @@ preprocess_species <- function(species,
                                tiff = TRUE,
                                overwrite = TRUE,
                                crs,
-                               max_params = 8.1e+8,
-                               p = 1){
+                               clip,
+                               max_params = 8.1e+8
+){
 
   # Validate inputs
-  stopifnot(length(p) == 1, p > 0, p <= 1)
   if(length(species) != 1)
     stop("Can only preprpocess one species at a time")
   stopifnot( is.logical( tiff ),
@@ -70,7 +81,7 @@ preprocess_species <- function(species,
   # but "yebsap" for looking up species information
   if(species == "example_data"){
     cat("The example datset does not represet a complete species range so\n",
-    "should only used for demonstrating package functions.\n", sep ="")
+        "should only used for demonstrating package functions.\n", sep ="")
     download_species <- "example_data"
     species <- "yebsap"
     if(!missing(res) && res < 27)
@@ -94,8 +105,9 @@ preprocess_species <- function(species,
   export$trans <- NULL
   export$marginals <- NULL
 
+
   #----------------------------------------------------------------------------#
-  # format species metadata (bf$species)                                          ####
+  # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
   er <- ebirdst::ebirdst_runs
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
@@ -105,7 +117,7 @@ preprocess_species <- function(species,
 
   # Reformat dates as strings
   date_to_char <- function(x){
-    if(class(x) == "Date")
+    if(inherits(x, "Date"))
       x <- as.character(x)
     return(x)
   }
@@ -159,6 +171,23 @@ preprocess_species <- function(species,
     sp_path <-  ebirdst::ebirdst_download(download_species)
   }
 
+  # Load map parameters and set crs
+  mp  <- ebirdst::load_fac_map_parameters(path = sp_path)
+  if(missing(crs)){
+    crs <- terra::crs(mp$custom_projection)
+  } else {
+    crs <- terra::crs(crs)
+  }
+
+  # Format and reproject clip
+  if(!missing(clip)){
+    if(!inherits(clip, "SpatVector")){
+      clip <- terra::vect(clip)
+    }
+    clip <- terra::project(clip, crs)
+  }
+
+
   #----------------------------------------------------------------------------#
   # Determine BirdFlow model resolution                                                    ####
   #   If the res argument isn't supplied the heuristic here attempts to set a
@@ -181,8 +210,29 @@ preprocess_species <- function(species,
       abunds <- terra::rast(ebirdst::load_raster("abundance",
                                                  path = sp_path,
                                                  resolution="lr"))
+
+
       mask <- make_mask(x = abunds)
+      if(!missing(clip)){
+        clip2 <- terra::project(clip, terra::crs(mask))
+        mask <- terra::mask(mask, clip2)
+        mask[is.na(mask)] <- FALSE
+
+        if(verbose){
+          # Calculate percent of density lost
+          # will print after printing the resolved resolution
+          sa <- sum(abunds)
+          csa <- mask(sa, clip2)
+          tot_density <- sum(terra::values(sa), na.rm = TRUE)
+          clipped_density <- sum(terra::values(csa), na.rm = TRUE)
+          pct_lost <- round((tot_density - clipped_density)/tot_density * 100, 2)
+          rm(sa, csa, tot_density, clipped_density)
+        }
+        rm(clip2)
+      }
+
       r <- terra::res(mask)
+      if(length(r) == 1) r <- rep(r, 2)
       stopifnot(length(r) == 2)
       active_sq_m <- sum(terra::values(mask)) * prod(r)
 
@@ -199,6 +249,12 @@ preprocess_species <- function(species,
       res <- ceiling(target_res_km / tp)  * tp
       # round() would be closer, but might overshoot
       cat(" (", res, "km chosen)\n", sep = "")
+
+      if(!missing(clip) && verbose){
+        cat("Clipping removed ", format(pct_lost, nsmall = 2), "% of the total density\n", sep = "" )
+        rm(pct_lost)
+      }
+
     }
     res_m <- 1000 * res # target resolution in meters (res argument uses KM)
 
@@ -211,8 +267,9 @@ preprocess_species <- function(species,
         stop("output directory ", out_dir, " does not exist.")
       out_base <- file.path(out_dir,
                             paste0(download_species, "_", st_year,"_", res,"km"))
-      if(p != 1)
-        out_base <- paste0(out_base, "_p", 100 *p)
+
+      if(!missing(clip))
+        out_base <- paste0(out_base, "_clip")
 
       paths <- list()
       if(hdf5){
@@ -247,13 +304,6 @@ preprocess_species <- function(species,
   levels <- c("hr", "mr", "lr")
   load_res <- levels[findInterval(res, breaks)]
 
-  # Load map parameters and set crs
-  mp  <- ebirdst::load_fac_map_parameters(path = sp_path)
-  if(missing(crs)){
-    crs <- terra::crs(mp$custom_projection)
-  } else {
-    crs <- terra::crs(crs)
-  }
 
   # load abundance data
   #   uci and lci are short for upper and lower confidence intervals
@@ -293,6 +343,13 @@ preprocess_species <- function(species,
   reproject_res <- res_m / factor
   mask<- terra::project(mask, crs, method = "near", origin = 0,
                         res = reproject_res)
+  if(!missing(clip)){
+    # Note locally mask is a SpatRast that indicates which cells
+    # have data (at any timestep). The terra mask function
+    #  sets cells to NA if they are outside the polygon.
+    mask <- terra::mask(mask, clip)
+  }
+
   mask <- make_mask(mask)  # re-crop to data in new projection
 
   # Add leading rows and columns to maintain origin of 0 after aggregation
@@ -369,53 +426,6 @@ preprocess_species <- function(species,
     abunds_lci_low_res <- terra::crop(abunds_lci_low_res, mask)
   }
 
-  #----------------------------------------------------------------------------#
-  #  Trim distribution                                                      ####
-  #----------------------------------------------------------------------------#
-  # This trims low values off the end of the distribution to create a more
-  # parsimonious dataset.
-  #
-  # the Argument p defines the proportion of the total density we want to
-  # retain.
-  #
-  # I may drop this section entirely as it seems like eBird folks have
-  #  eliminated long tails at a sensible cut point already.
-  #
-  if(p != 1){
-    cat("Trimming tail of distribution. Retaining ",
-        p * 100 , "% of the density.\n")
-    # Force to zero the values that are below the threshold
-    v <- terra::values(abunds_low_res)
-    thresholds <- apply(v, 2, find_threshold, p = p)
-    for(i in seq_len(ncol(v))){
-      d <- v[ , i]
-      d[d < thresholds[i]] <- 0
-      v[ , i] <- d
-    }
-
-    # Renormalize
-    # Note we are dividing all three datasets by the total abundance
-    # for each timestep (the column sums of the abundance dataset).
-    v <- terra::values(abunds_low_res)
-    totals <- colSums(v, na.rm = TRUE)
-    v_uci <- terra::values(abunds_uci_low_res)
-    v_lci <- terra::values(abunds_lci_low_res)
-    for(i in seq_len(ncol(v))){
-      v[  , i ] <- v[ , i ] / totals[ i ]
-      v_uci[ , i ] <- v_uci[ , i ] / totals[ i ]
-      v_lci[, i ] <- v_lci[, i ] / totals[ i ]
-    }
-
-    # Because we've forced some values to zero can now remask and recrop
-    new_mask <- make_mask(abunds_low_res)
-    cat("Trimming reduced extent from ", sum(terra::values(mask)),  "/", ncell(mask),
-        " to ", sum(terra::values(new_mask)) , "/", ncell(new_mask),
-        "(active cells/extent cells).", sep = "")
-    mask <- new_mask
-    abunds_low_res <- crop(abunds_low_res, mask)
-    abunds_lci_low_res <- crop(abunds_lci_low_res, mask)
-    abunds_uci_low_res <- crop(abunds_uci_low_res, mask)
-  } # Done trimming distribution (if p != 1)
 
   #----------------------------------------------------------------------------#
   #  Flatten raster data
@@ -432,8 +442,9 @@ preprocess_species <- function(species,
   lci[is.na(lci)] <- 0
 
   # Calculate realized number of parameters in BirdFlow model
-  n_active <- sum(m)
-  n_transitions <- ncol(distr) - 1
+  export$metadata$n_active <- n_active <- sum(m)
+  export$metadata$n_transitions <- n_transitions <- ncol(distr) - 1
+
   n_params <- n_active^2 * (n_transitions) + nrow(distr)
   pct_max_params <- n_params/max_params*100
   if(verbose)
@@ -454,7 +465,6 @@ preprocess_species <- function(species,
   export$lci <- lci
 
   export$metadata$has_distr <- TRUE
-  export$metadata$n_timesteps <- ncol(distr) - 1 # in distr last is a repeat of 1st
 
   #----------------------------------------------------------------------------#
   #  Define geom  and metadata                                              ####
@@ -484,6 +494,7 @@ preprocess_species <- function(species,
   dates <- rbind(dates, first)
 
   export$dates <- dates
+  export$metadata$n_timesteps <- length(unique(dates$date))
 
   #----------------------------------------------------------------------------#
   #  Write files                                                            ####
@@ -530,6 +541,8 @@ preprocess_species <- function(species,
     }
   }
   #  class(export) <- "BirdFlow"
+
+  validate_BirdFlow(export, allow_incomplete = TRUE)
 
   # invisibly return exported BirdFlow model
   invisible(export)

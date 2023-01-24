@@ -22,15 +22,17 @@
 #'   `end` are timesteps and `direction` is omitted than the direction will
 #'   default to "forward" regardless of which timestep is larger - possibly
 #'   passing over the year boundary from the last timestep to the first.
-#' @param obj A BirdFlow object or the `dates` component of one.
+#' @param bf A BirdFlow object or the `dates` component of one.
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
 #' @export
 #'
-lookup_transitions <- function(start, end, direction, obj){
+lookup_transitions <- function(start, end, direction, bf){
 
-  if("dates" %in% names(obj) & !is.data.frame(obj)){
-    obj <- obj$dates
+  if("dates" %in% names(bf) & !is.data.frame(bf)){
+    dates <- bf$dates
+  } else {
+    dates <- bf
   }
 
   if(class(start) != class(end))
@@ -43,8 +45,8 @@ lookup_transitions <- function(start, end, direction, obj){
   if(lubridate::is.Date(start)){
     start_doy <- lubridate::yday(start)+0.5
     end_doy <- lubridate::yday(end)+0.5
-    start <- which.min(abs(obj$doy - start_doy))
-    end <-  which.min(abs(obj$doy - end_doy))
+    start <- which.min(abs(dates$doy - start_doy))
+    end <-  which.min(abs(dates$doy - end_doy))
     direction <- ifelse(end > start, "forward", "backward")
   }
 
@@ -53,14 +55,14 @@ lookup_transitions <- function(start, end, direction, obj){
 
   if(missing(direction)) direction <- "forward"
   stopifnot(direction %in% c("forward", "backward"))
-  if(!start %in% 1:nrow(obj))
+  if(!start %in% 1:nrow(dates))
     stop("Start resolved to timestep", start, "which isn't a modeled timestep.")
-  if(!end %in% 1:nrow(obj))
+  if(!end %in% 1:nrow(dates))
     stop("Start resolved to timestep", start, "which isn't a modeled timestep.")
   if(start == end)
     stop("Start and stop resolved to same timestep (", start, ")")
 
-  nc <- nchar(nrow(obj))
+  nc <- nchar(nrow(dates))
   pad <- function(x) stringr::str_pad(x, width = nc, pad = "0")
 
 
@@ -71,7 +73,7 @@ lookup_transitions <- function(start, end, direction, obj){
   loops <- start == end | ( start < end & is_backward) |
     start > end & !is_backward
   if(loops){
-    last_ts <- nrow(obj)
+    last_ts <- nrow(dates)
     edge1 <- ifelse(is_backward, 1, last_ts)
     edge2 <- ifelse(is_backward, last_ts, 1)
     steps <- c(seq(start, edge1, step), seq(edge2, end, step))

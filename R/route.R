@@ -26,7 +26,6 @@
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-#' @examples
 route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   # Convert x and y coordinates input into row and col
@@ -41,8 +40,8 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   stopifnot(
     `Unequal row and column lengths` = length(row) == length(col),
-    `row has values that are not row numbers` = row %in% 1:x$geom$nrow,
-    `col has values that are not column numbers` = col  %in% 1:x$geom$ncol
+    `row has values that are not row numbers` = row %in% 1:nrow(x),
+    `col has values that are not column numbers` = col  %in% 1:ncol(x)
     )
 
   # Duplicate starting positions based on n
@@ -64,7 +63,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   # Create initial state with one 1 per column
   # each column represents a single model state
   # There is a column for each initial position - for each value in row and col.
-  initial_distr <- Matrix::Matrix(0, nrow = x$n_active, ncol = length(row))
+  initial_distr <- Matrix::Matrix(0, nrow = n_active(x), ncol = length(row))
   indices <- rc_to_i(row, col, x)
   sel <- cbind(indices,  1:length(indices) ) # 2 column matrix of (row, col) start positions
   initial_distr[sel] <- 1
@@ -90,7 +89,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
     trajectory[i+1, ] <- extract_positions(distr) # save the location
   }
 
-  format_trajectory <- function(trajectory, obj){
+  format_trajectory <- function(trajectory, bf){
     # dimensions of trajectory are timestep and route
     # values are the index i of the location at the time and route
     # Converting to a long format. With columns:
@@ -98,11 +97,11 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
     #  timestep : integer timestep, corresponds to rows in the dates element of x
     #  route : integer route ID
     #  date : the date associated with the timestep
-    x <- as.vector(i_to_x(trajectory, obj))
-    y <- as.vector(i_to_y(trajectory, obj))
+    x <- as.vector(i_to_x(trajectory, bf))
+    y <- as.vector(i_to_y(trajectory, bf))
     timestep <- rep(1:nrow(trajectory), times = ncol(trajectory))
     route <- rep(1:ncol(trajectory), each = nrow(trajectory))
-    date <- obj$dates$date[timestep]
+    date <- bf$dates$date[timestep]
     return( data.frame(x, y, route, timestep, date) )
   }
 
@@ -119,7 +118,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   points <- format_trajectory(trajectory, x)
   lines <- convert_route_to_sf(points)
-  sf::st_crs(lines) <- sf::st_crs(x$geom$crs)
+  sf::st_crs(lines) <- sf::st_crs(crs(x))
 
   return(list(points = points, lines = lines))
 }

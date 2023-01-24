@@ -4,7 +4,7 @@
 \alias{expand_distr}
 \title{Convert a collapsed distribution into a expanded, raster equivalent}
 \usage{
-expand_distr(x, obj)
+expand_distr(x, bf)
 }
 \arguments{
 \item{x}{Either a vector representing a single distribution with one value
@@ -12,7 +12,7 @@ per location in the model or a matrix in which each column is such a vector.
 Higher dimensions are allowed (but unlikely); in all cases the first
 dimension is for locations in the model.}
 
-\item{obj}{A BirdFlow model or the \code{geom} component of one.}
+\item{bf}{A BirdFlow model or the \code{geom} component of one.}
 }
 \value{
 An expanded version of \code{x} with one additional dimension, in which

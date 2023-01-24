@@ -30,6 +30,10 @@ geom <- list(nrow = nrow(mask), ncol = ncol(mask), res = rep(cellsize, 2),
              crs = "",
              mask = mask)
 
+bf <- new_BirdFlow()
+bf$geom <- geom
+bf$metadata$n_active <- sum(bf$geom$mask)
+
 # column and row indices in order
 columns <- 1:geom$ncol
 rows <- 1:geom$nrow
@@ -45,79 +49,78 @@ sel2 <- c( 1, 2, 5, 6, 9) # correspond to rows 1:nrow
 
 rast <- terra::rast(x = full, ext = geom$ext) # SpatRast object
 
+
+
 #------------------------------------------------------------------------------#
 ####  Tests
 #------------------------------------------------------------------------------#
 
 test_that("x_to_col works on cell centers", {
-  expect_equal(x_to_col(col_center_x, geom), columns )
+  expect_equal(x_to_col(col_center_x, bf), columns )
 })
 test_that("y_to_row works on cell centers", {
-  expect_equal(y_to_row(row_center_y, geom), rows )
+  expect_equal(y_to_row(row_center_y, bf), rows )
 })
 
 # Test boundary conditions on x_to_col an y_to_row
 # The cell boundary belongs to the the higher index but all values within
 # extent should still be in; i.e. xmax, and ymin will fall within
 # the last column and row instead of being out.
-xmin <- geom$ext[1]
-xmax <- geom$ext[2]
-x_vals <- c(xmin, xmin + cellsize, xmax)
-expected_cols <- c(1, 2, geom$ncol)
+x_vals <- c(xmin(bf), xmin(bf) + xres(bf), xmax(bf))
+expected_cols <- c(1, 2, ncol(bf))
 test_that("x_to_col works on cell boundaries", {
-  expect_equal(x_to_col(x_vals, geom), expected_cols )
+  expect_equal(x_to_col(x_vals, bf), expected_cols )
   expect_equal(terra::colFromX(object = rast, x = x_vals),
                expected_cols)
 })
-ymin <- geom$ext[3]
-ymax <- geom$ext[4]
-y_vals <- c(ymax, ymax - cellsize, ymin)
-expected_rows <- c(1, 2, geom$nrow)
+
+y_vals <- c(ymax(bf), ymax(bf) - yres(bf), ymin(bf))
+expected_rows <- c(1, 2, nrow(bf))
 test_that("y_to_row works on cell boundaries", {
-  expect_equal(y_to_row(y_vals, geom), expected_rows )
+  expect_equal(y_to_row(y_vals, bf), expected_rows )
   expect_equal(terra::rowFromY(object = rast, y = y_vals),
                expected_rows) # check for consistency with terra on boundaries
 
 })
-rm(xmin, xmax, x_vals, y_vals, ymin, ymax, expected_cols)
+rm( x_vals, y_vals, expected_cols, expected_rows)
 
 test_that("x_to_col and y_to_row throw errors with out of range values", {
-  expect_error(x_to_col(geom$ext[1] - 0.001, geom))
-  expect_error(x_to_col(geom$ext[2] + 0.001, geom))
-  expect_error(y_to_row(geom$ext[3] - 0.001, geom))
-  expect_error(y_to_row(geom$ext[4] + 0.001, geom))
+  expect_error(x_to_col(xmin(bf) - 0.001, bf))
+  expect_error(x_to_col(xmax(bf) + 0.001, bf))
+  expect_error(y_to_row(ymin(bf) - 0.001, bf))
+  expect_error(y_to_row(ymax(bf) + 0.001, bf))
 })
 
 test_that("row_to_y works", {
-  expect_equal(row_to_y(1:geom$nrow, geom), row_center_y)
+  expect_equal(row_to_y(1:nrow(bf), bf), row_center_y)
 })
 
 test_that("col_to_x works", {
-  expect_equal(col_to_x(1:geom$ncol, geom), col_center_x)
+  expect_equal(col_to_x(1:ncol(bf), bf), col_center_x)
 })
 
 test_that("i_to_rc works", {
-  expect_equal(i_to_rc(vect, geom),
-               cbind(i_to_row(vect, geom), i_to_col(vect, geom)),
+  expect_equal(i_to_rc(vect, bf),
+               cbind(i_to_row(vect, bf), i_to_col(vect, bf)),
                ignore_attr = TRUE )
-  expect_equal(full[i_to_rc(vect, geom)], vect)
+  expect_equal(full[i_to_rc(vect, bf)], vect)
 })
 
 test_that("i_to_col, i_to_row work", {
-    expect_equal(full[ cbind(i_to_row(vect, geom), i_to_col(vect, geom))],
+    expect_equal(full[ cbind(i_to_row(vect, bf), i_to_col(vect, bf))],
                  vect)
 })
 
 test_that("i_to_x, i_to_y work", {
-  expect_equal(i_to_col(sel1, geom), 1:geom$ncol) # verify sel1
-  expect_equal(i_to_x(sel1, geom), col_center_x)  # actual test
-  expect_equal(i_to_row(sel2, geom), 1:geom$nrow) # verify sel2
-  expect_equal(i_to_y(sel2, geom), row_center_y ) # actual test
+  expect_equal(i_to_col(sel1, bf), 1:ncol(bf)) # verify sel1
+  expect_equal(i_to_x(sel1, bf), col_center_x)  # actual test
+  expect_equal(i_to_row(sel2, bf), 1:nrow(bf)) # verify sel2
+  expect_equal(i_to_y(sel2, bf), row_center_y ) # actual test
 })
 
 test_that("i_to_xy works", {
-  expect_equal(i_to_xy(vect, geom),
-               cbind(i_to_x(vect, geom), i_to_y(vect, geom)),
+  expect_equal(i_to_xy(vect, bf),
+               cbind(i_to_x(vect, bf), i_to_y(vect, bf)),
                ignore_attr = TRUE)
 })
 
@@ -125,16 +128,16 @@ rc <- matrix(c(1, 2, 3, 2, 5, 3), ncol = 2, byrow = T)
 vals <- c(1, 4, 9) # values in those cells , same as index for testing objects
 test_that("rc_to_i works" , {
   expect_equal(full[rc], vals) # test rc, vals
-  expect_equal(rc_to_i(row = rc[, 1], col = rc[, 2], geom), vals)
-  expect_equal(rc_to_i(rc, obj = geom), vals)  # matrix passing
+  expect_equal(rc_to_i(row = rc[, 1], col = rc[, 2], bf), vals)
+  expect_equal(rc_to_i(rc, bf = bf), vals)  # matrix passing
 })
 
 x <- col_center_x[rc[, 2]]
 y <- row_center_y[rc[, 1]]
 xy <- cbind(x,y)
 test_that("xy_to_i works" , {
-  expect_equal(xy_to_i(x = xy[, 1], y = xy[, 2], geom), vals)
-  expect_equal(xy_to_i(x = xy, obj = geom), vals)  # matrix passing
+  expect_equal(xy_to_i(x = xy[, 1], y = xy[, 2], bf), vals)
+  expect_equal(xy_to_i(x = xy, bf = bf), vals)  # matrix passing
 })
 
 

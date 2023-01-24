@@ -5,10 +5,7 @@
 \alias{has_marginals}
 \alias{has_transitions}
 \alias{has_distr}
-\title{Does a BirdFlow object have  marginals, distributions or transitions
-
-These are private functions to query the contents of a BirdFlow object and
-allow for more concise and clear code.}
+\title{Does a BirdFlow object have all marginals, distributions or transitions}
 \usage{
 has_marginals(x)
 
@@ -23,8 +20,6 @@ has_distr(x)
 logical indicating the BirdFlow model has the relevant element
 }
 \description{
-Does a BirdFlow object have  marginals, distributions or transitions
-
 These are private functions to query the contents of a BirdFlow object and
 allow for more concise and clear code.
 }

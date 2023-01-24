@@ -1,8 +1,41 @@
-validate_BirdFlow <- function(x){
+#' Function to validate a BirdFlow object
+#'
+#' Throw error if a BirdFlow object is malformed or incomplete.
+#'
+#' [preprocess_species()] creates a BirdFlow object that lacks both marginals
+#' and transitions and thus can't be used to make projections.
+#' `validate_BirdFlow()` tags the absence of these with the type "incomplete".
+#'  Any other missing or malformed components are tagged "error".
+#'
+#' Since marginals can be used to calculate both distributions and
+#' transition matrices, a BirdFlow object can be complete if it has marginals;
+#' or has both transitions and distributions. Having redundancy in these three
+#' is not considered an error.
+#'
+#' @param x a BirdFlow object
+#' @param error if TRUE throw an error if there are problems if FALSE return
+#' any problems as a data.frame.
+#' @param allow_incomplete if TRUE only throw an error if the problem type is
+#' not `"incomplete"`; this allows checking output of
+#' [preprocess_species()].
+#'
+#' @return  If `error = FALSE` the function returns
+#'  a data.frame describing any errors with columns:
+#' \describe{
+#' \item{problem}{a character description of any problems}
+#' \item{type}{the problem type, either "error" or "incomplete"}
+#' }
+#' Otherwise, if there are no problems a similar data.frame with no rows is
+#' returned invisibly.
+#' @export
+validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   # problem types:
   #   error: BirdFlow object is malformed
   # incomplete: BirdFlow object is missing core components necessary for forecasting
   # missing metadata: BirdFlow object is missing
+
+  stopifnot(error %in% c(TRUE, FALSE),
+            allow_incomplete %in% c(TRUE, FALSE))
 
 
   # Look for problems in nested list names, order, and items by comparing
@@ -13,7 +46,10 @@ validate_BirdFlow <- function(x){
   problems <- setdiff(problems,
                       c("x$marginals should not be a list",
                         "x$dates should not be a list",
-                        "x$transitions should not be a list") )
+                        "x$transitions should not be a list",
+                        "x extra:uci, lci",  # Ok to have these extra
+                        "x missing:marginals") ) # ok to be missing marginals
+
 
   p <- data.frame(problem = problems, type = rep("error", length(problems)) )
 
@@ -47,10 +83,10 @@ validate_BirdFlow <- function(x){
 
   # Completeness
   if(!has_transitions(x) && !has_marginals(x))
-    p <- add_prob("model lacks transitions or marginals", "incomplete", p)
+    p <- add_prob("model has neither transitions nor marginals", "incomplete", p)
 
   if(!has_distr(x) && !has_marginals(x) )
-    p <- add_prob("model lacks distr or marginals", "incomplete", p)
+    p <- add_prob("model hs neither distr nor marginals", "incomplete", p)
 
 
   # Consistent in number of transitions
@@ -145,15 +181,57 @@ validate_BirdFlow <- function(x){
     } # end geom list is complete
   } # end geom is list
 
+  # check dates
+  if( !"dates" %in% names(x) || !is.data.frame(x$dates)){
+    p <- add_prob("x$dates is missing, NA or not a dataframe", "error", p)
+  } else { # dates exists and is data.frame
 
-  # NOT YET VALIDATED:  ####
-  # dates
-  # transition names
-  # marginal index and marginal names
+    required.cols <- c( "interval", "date", "doy" )
+    if( !all( required.cols  %in% names( x$dates ) ) ){
+      p <- add_prob( paste0("dates is missing columns:",
+                            paste(setdiff(required.cols, names(x$dates)))),
+                     "error", p)
+    } # end if dates missing columns
+    rm( required.cols )
+
+    if("distr" %in% names(x) && is.data.frame(x$distr)){
+      if( nrow(x$dates) != ncol(x$distr)){
+        p <- add_prob( "x$dates")
+      }
+    }
+
+  } # end dates is data.frame
 
 
-  if(nrow(p) == 0) return(invisible(p))
+  # check marginal names and index
+  if( "marginals" %in% names(x) && is.list("marginals") ){
+    mn <- setdiff(names(x$marginals), "index")
+    index <- x$marginals$index
+    if(!all(mn %in%  index$marginal))
+      p <- add_prob("Not all marginals are indexed.", "error", p)
+    if(!all(index$marginal %in% mn))
+      p <- add_prob("Not all marginals in index exist")
 
+    marginal_sums <- as.numeric(sapply(mn, function(m) sum(x$marginals[[m]] ) ))
+    sums_to_one <- sapply(marginal_sums,
+                          function(s) isTRUE(all.equal(s, 1, tolerance = 1e-6)))
+    p <- add_prob("Not all marginals have a sum of one.", "error", p)
+
+  }
+
+  # Still need to validate transitions!
+
+  if(error){
+    if(allow_incomplete){
+      if(any(p$type == "error"))
+        stop("Problems found:", paste(p$problem[p$type == "error"], collapse ="; "))
+    } else { # Don't allow incomplete:
+      if(nrow(p) > 0)
+        stop("Problems found:", paste(p$problem, collapse ="; "))
+    }
+  }
+
+  if(error == TRUE) return(invisible(p))
   return(p)
 
 } # end validation function

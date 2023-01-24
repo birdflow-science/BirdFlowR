@@ -121,9 +121,9 @@ import_birdflow <- function(hdf5, tiff, species){
   tax <- auk::get_ebird_taxonomy()
   stopifnot(species %in% tax$species_code)
   sel <- which(tax$species_code == species)
-  bf$species$species_code == species
-  bf$species$common_name = tax$common_name[sel]
-  bf$species$scientific_name = tax$scientific_name[sel]
+  bf$species$species_code <-  species
+  bf$species$common_name  <- tax$common_name[sel]
+  bf$species$scientific_name <-  tax$scientific_name[sel]
 
   bf$metadata$birdflow_model_date <- h5read(hdf5, "date")
 

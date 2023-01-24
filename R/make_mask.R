@@ -16,7 +16,7 @@
 #' otherwise.
 #' @export
 #' @keywords internal
-make_mask <- function(x){
+make_mask <- function(x, clip){
   # Clips to extent of the non-zero data
   m <- terra::values(x, mat = TRUE)
   m[is.nan(m)] <- 0

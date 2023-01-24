@@ -59,7 +59,7 @@ forecast <- function(x, distr, start, end, direction){
       }
       return(fc)
   }  else {  # Single distribution
-      fc <- matrix(NA_real_, nrow = x$n_active, ncol = length(transitions) + 1 )
+      fc <- matrix(NA_real_, nrow = n_active(x), ncol = length(transitions) + 1 )
       dimnames(fc) <- list(i = NULL, timestep = paste0("t",timesteps))
       fc[ , 1] <- distr
       for(i in seq_along(transitions)){

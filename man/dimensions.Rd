@@ -10,6 +10,7 @@
 \alias{ncol.BirdFlow}
 \alias{dim.BirdFlow}
 \alias{n_timesteps}
+\alias{n_distr}
 \alias{n_transitions}
 \alias{n_active}
 \alias{crs,BirdFlow-method}
@@ -17,6 +18,10 @@
 \alias{res,BirdFlow-method}
 \alias{xres,BirdFlow-method}
 \alias{yres,BirdFlow-method}
+\alias{xmin,BirdFlow-method}
+\alias{ymin,BirdFlow-method}
+\alias{xmax,BirdFlow-method}
+\alias{ymax,BirdFlow-method}
 \title{Dimensions of a BirdFlow object}
 \usage{
 \method{nrow}{BirdFlow}(x)
@@ -27,7 +32,7 @@
 
 n_timesteps(x)
 
-n_timesteps(x)
+n_distr(x)
 
 n_transitions(x)
 
@@ -42,6 +47,14 @@ n_active(x)
 \S4method{xres}{BirdFlow}(x)
 
 \S4method{yres}{BirdFlow}(x)
+
+\S4method{xmin}{BirdFlow}(x)
+
+\S4method{ymin}{BirdFlow}(x)
+
+\S4method{xmax}{BirdFlow}(x)
+
+\S4method{ymax}{BirdFlow}(x)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -80,6 +93,14 @@ which contains the xmin, xmax, ymin, and ymax of the extent.
 \code{xres()} the width of the cells (x resolution).
 
 \code{yres()} the height of the cells (y resolution).
+
+\code{xmin()} minimum x coordinate of extent.
+
+\code{ymin()} minimum y coordinate of extent.
+
+\code{xmax()} maximum x coordinate of extent.
+
+\code{ymax()} maximum y coordinate of extent.
 }
 \description{
 Functions to return BirdFlow model dimensions and other basic information

@@ -21,7 +21,7 @@ if omitted the common name of the species;  otherwise the element named by
 BirdFlow model species metadata is from \link[ebirdst:ebirdst_runs]{ebirdst_runs}
 }
 \details{
-\code{species()} returns data taken from \link[ebirdst:ebirst_runs]{ebirdst::ebirst_runs} and
+\code{species()} returns data taken from \link[ebirdst:ebirdst_runs]{ebirdst::ebirdst_runs} and
 uses the same names. Descriptions copied from \pkg{ebirdst}):
 \describe{
 \item{species_code}{Six letter eBird code in eBird Taxonomy v2018}
@@ -29,16 +29,16 @@ uses the same names. Descriptions copied from \pkg{ebirdst}):
 \item{common_name}{English common name from eBird Taxonomy v2018}
 \item{breeding_quality}{Breeding season quality}
 \item{breeding_start}{Breeding season start date}
-\item{breeding_end}{Breeding season start date}
+\item{breeding_end}{Breeding season end date}
 \item{nonbreeding_quality}{Non-breeding season quality}
 \item{nonbreeding_start}{Non-breeding season start date}
-\item{nonbreeding_end}{Non-breeding season start date}
+\item{nonbreeding_end}{Non-breeding season end date}
 \item{postbreeding_migration_quality}{Post-breeding season quality}
 \item{postbreeding_migration_start}{Post-breeding season start date}
-\item{postbreeding_migration_end}{Post-breeding season start date}
+\item{postbreeding_migration_end}{Post-breeding season end date}
 \item{prebreeding_migration_quality}{Pre-breeding season quality}
 \item{prebreeding_migration_start}{Pre-breeding season start date}
-\item{prebreeding_migration_end}{Pre-breeding season start date}
+\item{prebreeding_migration_end}{Pre-breeding season end date}
 }
 
 'all' is a special case and returns the complete list.
@@ -51,7 +51,7 @@ parenthesis:
 "scientific" ("scientific_name")
 "species" ("common_name")
 
-The 8 variables below are in \link[ebirdst:ebirst_runs]{ebirdst::ebirst_runs} but are dropped
+The 8 variables below are in \link[ebirdst:ebirdst_runs]{ebirdst::ebirdst_runs} but are dropped
 from the BirdFlow model and thus can not be retrieved by \code{species()}.
 
 Four variables that track whether the full range is covered by eBird that

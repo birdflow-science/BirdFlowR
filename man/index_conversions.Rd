@@ -16,29 +16,29 @@
 \alias{xy_to_i}
 \title{Functions to convert among spatial indices}
 \usage{
-x_to_col(x, obj)
+x_to_col(x, bf)
 
-y_to_row(y, obj)
+y_to_row(y, bf)
 
-row_to_y(row, obj)
+row_to_y(row, bf)
 
-col_to_x(col, obj)
+col_to_x(col, bf)
 
-i_to_rc(i, obj)
+i_to_rc(i, bf)
 
-i_to_row(i, obj)
+i_to_row(i, bf)
 
-i_to_col(i, obj)
+i_to_col(i, bf)
 
-i_to_x(i, obj)
+i_to_x(i, bf)
 
-i_to_y(i, obj)
+i_to_y(i, bf)
 
-i_to_xy(i, obj)
+i_to_xy(i, bf)
 
-rc_to_i(row, col, obj)
+rc_to_i(row, col, bf)
 
-xy_to_i(x, y, obj)
+xy_to_i(x, y, bf)
 }
 \arguments{
 \item{x, y}{The x and y coordinates associated with the BirdFlow model or data.
@@ -46,7 +46,7 @@ This will typically be an easting and northing in meters. A two column
 matrix containing x and y columns can also be passed to \code{x} in which case
 \code{y} should be omitted.}
 
-\item{obj}{Either a full BirdFlow model or the geom component of one.}
+\item{bf}{a BirdFlow model}
 
 \item{row, col}{The row and column index of a cell in the BirdFlow model and
 associated raster data. Alternatively, a two column matrix containing row and
@@ -59,25 +59,25 @@ unmasked cells.}
 \value{
 \describe{
 
-\item{\code{x_to_col(x, obj)} and \code{y_to_row(y, obj)}}{return the column or row
+\item{\code{x_to_col(x, bf)} and \code{y_to_row(y, bf)}}{return the column or row
 index that each \code{x} or \code{y} coordinate falls within.}
 
-\item{\code{row_to_y(row, obj)} and \code{col_to_x(col, obj)}}{return the y or x
+\item{\code{row_to_y(row, bf)} and \code{col_to_x(col, bf)}}{return the y or x
 coordinate of the center each row or column. }
 
-\item{\code{i_to_row(i, obj)} and \code{i_to_col(i, obj)}}{return the row or column
+\item{\code{i_to_row(i, bf)} and \code{i_to_col(i, bf)}}{return the row or column
 index corresponding to the vector state index, \code{i}.}
 
-\item{\code{i_to_rc(i, obj)}}{returns a two column matrix of the row and column
+\item{\code{i_to_rc(i, bf)}}{returns a two column matrix of the row and column
 index in the raster corresponding to the index, \code{i} of the vector state.}
 
-\item{\code{i_to_x(i, obj)} and \code{i_to_y(i, obj)}}{return the x or y coordinate
+\item{\code{i_to_x(i, bf)} and \code{i_to_y(i, bf)}}{return the x or y coordinate
 from the vector state index, \code{i}.}
 
-\item{\code{i_to_xy(i, obj)}}{returns a two column matrix of the x and y
+\item{\code{i_to_xy(i, bf)}}{returns a two column matrix of the x and y
 coordinates corresponding to the index, \code{i} of the vector state space.}
 
-\item{\code{rc_to_i(row, col, obj)} and \code{xy_to_i(x, y, obj)}}{return the state
+\item{\code{rc_to_i(row, col, bf)} and \code{xy_to_i(x, y, bf)}}{return the state
 space index corresponding to x and y coordinates or row and column indices.}
 }
 }

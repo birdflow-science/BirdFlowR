@@ -31,7 +31,7 @@ if (FALSE) {
 #'
 #' @param x Either a matrix representing a single bird distribution or an array
 #' representing multiple distributions.
-#' @param obj A `BirdFlow` model or the `geom` component of one.
+#' @param bf A `BirdFlow` model or the `geom` component of one.
 #'
 #' @return Either a vector representing a single distribution in its collapsed
 #' form or, if x represents multiple distributions,  a matrix with one
@@ -52,9 +52,9 @@ if (FALSE) {
 #' f <- collapse_distr(e, bf)
 #' stopifnot(all(d == f))
 #' }
-collapse_distr <- function(x, obj) {
-  if ("geom" %in% names(obj)) {
-    obj <- obj$geom
+collapse_distr <- function(x, bf) {
+  if ("geom" %in% names(bf)) {
+    bf <- bf$geom
   }
   x <- as.array(x)
   xdim <- dim(x)
@@ -63,12 +63,12 @@ collapse_distr <- function(x, obj) {
   perm[1:2] <- 2:1
   x <- aperm(x, perm = perm) # permute the array so first two dimensions are
   # row, col
-  a <- x[t(obj$mask)]
+  a <- x[t(bf$mask)]
   if (ndim == 2) { # 2 d input, 1d output - result is vector
     return(a)
   }
 
   # 2d or higher output - format vector back into an array
-  new_dim <- c(sum(obj$mask), xdim[3:length(xdim)])
+  new_dim <- c(sum(bf$mask), xdim[3:length(xdim)])
   a <- array(data = a, dim = new_dim)
 }

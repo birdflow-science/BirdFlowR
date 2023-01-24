@@ -5,13 +5,13 @@
 \title{Function to convert a raster bird distribution into its collapsed, vector
 equivalent}
 \usage{
-collapse_distr(x, obj)
+collapse_distr(x, bf)
 }
 \arguments{
 \item{x}{Either a matrix representing a single bird distribution or an array
 representing multiple distributions.}
 
-\item{obj}{A \code{BirdFlow} model or the \code{geom} component of one.}
+\item{bf}{A \code{BirdFlow} model or the \code{geom} component of one.}
 }
 \value{
 Either a vector representing a single distribution in its collapsed

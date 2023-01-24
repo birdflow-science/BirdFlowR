@@ -4,12 +4,12 @@
 \alias{get_transition}
 \title{extract a transition matrix from a BirdFlowR model}
 \usage{
-get_transition(x, obj)
+get_transition(x, bf)
 }
 \arguments{
 \item{x}{transition code. E.g. "T_01-02"}
 
-\item{obj}{a BirdFlow object}
+\item{bf}{a BirdFlow object}
 }
 \value{
 a transition matrix
@@ -21,7 +21,7 @@ calculating them from marginals.
 }
 \details{
 \code{get_transition} will construct a transition matrix from the marginals
-if \code{obj}doesn't have transitions, or return the relevant stored transition
+if \code{bf}doesn't have transitions, or return the relevant stored transition
 matrix if it does.
 
 The nomenclature for a transition is "T_[from]-[to]" where [from] and

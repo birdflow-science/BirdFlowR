@@ -4,7 +4,7 @@
 \alias{make_mask}
 \title{function to determine the extent of a SpatRaster}
 \usage{
-make_mask(x)
+make_mask(x, clip)
 }
 \arguments{
 \item{x}{a SpatRaster, typically it's multilayered and containins the

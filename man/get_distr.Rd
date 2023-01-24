@@ -4,7 +4,7 @@
 \alias{get_distr}
 \title{extract distributions from BirdFlow models}
 \usage{
-get_distr(which, obj, from_marginals = FALSE)
+get_distr(which = "all", bf, from_marginals = FALSE)
 }
 \arguments{
 \item{which}{indicates which distributions to return. Can be one or more
@@ -12,10 +12,10 @@ integers indicating timesteps; character dates in the format
 year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or
 \code{"all"} which will return distributions for all timesteps.}
 
-\item{obj}{a BirdFlow model}
+\item{bf}{a BirdFlow model}
 
-\item{from_marginals}{if TRUE and \code{obj} has marginals the distribution will
-be from the marginals even if \code{obj} also has distributions.}
+\item{from_marginals}{if TRUE and \code{bf} has marginals the distribution will
+be from the marginals even if \code{bf} also has distributions.}
 }
 \value{
 either a vector with a distribution for a single timestep or a matrix

@@ -3,8 +3,8 @@
 #' @title Dimensions of a BirdFlow object
 #' @description
 #' Functions to return BirdFlow model dimensions and other basic information
-#' @importFrom terra crs ext res xres yres
-#' @importMethodsFrom terra crs ext res xres yres
+#' @importFrom terra crs ext res xres yres xmin xmax ymin ymax
+#' @importMethodsFrom terra crs ext res xres yres xmin xmax ymin ymax
 #' @aliases nrow ncol dim ext
 #' @param x A BirdFlow object
 #' @inheritParams terra::crs
@@ -48,7 +48,7 @@ n_timesteps <- function(x){
 #' @rdname dimensions
 #' @export
 #' @return `n_distr()` number of distributions
-n_timesteps <- function(x){
+n_distr <- function(x){
   ncol(x$distr)
 }
 
@@ -58,7 +58,7 @@ n_timesteps <- function(x){
 #' @return `n_transitions()` number of transitions, if the model is circular in
 #' time this will equal `n_timesteps()`.
 n_transitions <- function(x){
-  x$metadata$n_trans
+  x$metadata$n_transitions
 }
 
 #' @rdname dimensions
@@ -73,7 +73,7 @@ n_active <- function(x){
 # terra it allows
 
 #  setOldClass("BirdFlow") allows S4 dispatch on S3 BirdFlow objects.
-setOldClass("BirdFlow")
+methods::setOldClass("BirdFlow")
 
 crs.BirdFlow <- function(x, proj=FALSE, describe=FALSE, parse=FALSE){
   terra::crs(x$geom$crs, proj, describe, parse)
@@ -85,7 +85,7 @@ crs.BirdFlow <- function(x, proj=FALSE, describe=FALSE, parse=FALSE){
 setMethod(crs, "BirdFlow", crs.BirdFlow)
 
 ext.BirdFlow <- function(x){
-  terra::ext(bf$geom$ext)
+  terra::ext(x$geom$ext)
 }
 #' @rdname dimensions
 #' @export
@@ -117,5 +117,39 @@ yres.BirdFlow <- function(x){
 #' @export
 setMethod(yres, "BirdFlow", yres.BirdFlow)
 
+
+xmin.BirdFlow <- function(x){
+  xmin(ext(x))
+}
+#' @rdname dimensions
+#' @return `xmin()` minimum x coordinate of extent.
+#' @export
+setMethod(xmin, "BirdFlow", xmin.BirdFlow)
+
+ymin.BirdFlow <- function(x){
+  ymin(ext(x))
+}
+#' @rdname dimensions
+#' @return `ymin()` minimum y coordinate of extent.
+#' @export
+setMethod(ymin,"BirdFlow", ymin.BirdFlow)
+
+
+
+xmax.BirdFlow <- function(x){
+  xmax(ext(x))
+}
+#' @rdname dimensions
+#' @return `xmax()` maximum x coordinate of extent.
+#' @export
+setMethod(xmax, "BirdFlow", xmax.BirdFlow)
+
+ymax.BirdFlow <- function(x){
+  ymax(ext(x))
+}
+#' @rdname dimensions
+#' @return `ymax()` maximum y coordinate of extent.
+#' @export
+setMethod(ymax, "BirdFlow", ymax.BirdFlow)
 
 

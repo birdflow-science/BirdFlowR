@@ -5,12 +5,12 @@
 #' calculating them from marginals.
 #'
 #' @param x transition code. E.g. "T_01-02"
-#' @param obj a BirdFlow object
+#' @param bf a BirdFlow object
 #'
 #' @return a transition matrix
 #'
 #' @details `get_transition` will construct a transition matrix from the marginals
-#' if `obj`doesn't have transitions, or return the relevant stored transition
+#' if `bf`doesn't have transitions, or return the relevant stored transition
 #' matrix if it does.
 #'
 #' The nomenclature for a transition is "T_\[from\]-\[to\]" where \[from\] and
@@ -33,19 +33,19 @@
 #' this function. The internal function [transition_from_marginal] does the
 #' calculations.
 #' @export
-get_transition <- function(x, obj){
+get_transition <- function(x, bf){
 
-   if(obj$metadata$has_transitions){
-     return(obj$transition[[x]])
+   if(bf$metadata$has_transitions){
+     return(bf$transition[[x]])
    }
 
-  if(obj$metadata$has_marginals){
-    ind <- obj$marginals$index
+  if(bf$metadata$has_marginals){
+    ind <- bf$marginals$index
     i <- which(ind$transition == x)
     if(length(i) == 0){
       stop("There is no marginal for transition ", x)
     }
-    m <- obj$marginals[[ind$marginal[i]]]
+    m <- bf$marginals[[ind$marginal[i]]]
     direction <- ind$direction[i]
     return(transition_from_marginal(m, direction))
   }

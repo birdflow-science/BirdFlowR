@@ -23,23 +23,23 @@
 #'   per location in the model or a matrix in which each column is such a vector.
 #'   Higher dimensions are allowed (but unlikely); in all cases the first
 #'   dimension is for locations in the model.
-#' @param obj A BirdFlow model or the `geom` component of one.
+#' @param bf A BirdFlow model or the `geom` component of one.
 #' @return An expanded version of `x` with one additional dimension, in which
 #'   the first two dimensions are rows and columns in space (a raster) and
 #'   replace the first dimension in the input.
 #' @export
-expand_distr<- function(x, obj){
+expand_distr<- function(x, bf){
   # The expansion is awkward because the collapsed state is a subset of the full
   # matrix in row-major order but R will assign in column-major order.
   # This is resolved by switching the order of the first two dimension to fill
   # and then switching back. If state was always a vector the return value would
   # be a matrix and the "switch" would be transposing.
 
-  if("geom" %in% names(obj))
-    obj <- obj$geom
+  if("geom" %in% names(bf))
+    bf <- bf$geom
 
   # Check for proper number of active cells
-  n_active <- sum(obj$mask)
+  n_active <- sum(bf$mask)
   x <- as.array(x) # so dim will work even when 1 dimensional.
   if(!dim(x)[1] == n_active)
     stop("Expected first (possibly only) dimension of x to represent ",
@@ -47,8 +47,8 @@ expand_distr<- function(x, obj){
 
   # Create empty array for result but with first two dimensions switched
   # so that it is filling is by row instead of column.
-  a <- array(NA, dim = c(obj$ncol, obj$nrow, dim(x)[-1])) # col, row, ...
-  a[t(obj$mask)] <- as.vector(x) # fill
+  a <- array(NA, dim = c(bf$ncol, bf$nrow, dim(x)[-1])) # col, row, ...
+  a[t(bf$mask)] <- as.vector(x) # fill
   perm <- 1:length(dim(a))
   perm[1:2] <- 2:1
   a <- aperm(a, perm = perm) # permute the array so first two dimensions are
@@ -63,8 +63,8 @@ expand_distr<- function(x, obj){
   # if(is.vector(x)){
   #   if(length(x) != n_active)
   #     stop("State should have", n_active, "values.")
-  #   m <- matrix(nrow = obj$ncol , ncol = obj$nrow) # reversed on purpose
-  #   m[t(obj$mask)] <- x # fills by columns which represent rows
+  #   m <- matrix(nrow = bf$ncol , ncol = bf$nrow) # reversed on purpose
+  #   m[t(bf$mask)] <- x # fills by columns which represent rows
   #   return(t(m))
   # }
 

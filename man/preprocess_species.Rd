@@ -12,8 +12,8 @@ preprocess_species(
   tiff = TRUE,
   overwrite = TRUE,
   crs,
-  max_params = 8.1e+08,
-  p = 1
+  clip,
+  max_params = 8.1e+08
 )
 }
 \arguments{
@@ -39,37 +39,49 @@ projection eBird has assigned to this species - see
 \code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
+\item{clip}{a polygon or the path to a file containing a polygon. It must
+have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object or
+or produce one when called with \link[terra:vect]{vect(clip)}}
+
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
 model should contain. If \code{res} is omitted a resolution will be chosen that
 yields this many fitted parameters. The default value represents the number
 of parameters that could efficiently be fit in early BirdFlow models
 (around 4000 active cells and 51 transitions).}
-
-\item{p}{Set to values less than 1 to trim the tail off of the distributions.
-\code{p} is the proportion of the species distribution to be retained (within each
-timestep). In practice it should be between 0.95 (or even 0.99) and 1.
-The default of 1 indicates no trimming. This parameter (and functionality)
-may be dropped as eBird status and trends data has already been
-trimmed. The heuristic to determine resolution does not factor in
-trimming.}
 }
 \value{
 returns a BirdFlow model object that lacks
 marginals, but is otherwise complete.
 }
 \description{
-This uses the \pkg{ebirdst} package to download, crop, and resample abundance
-data for a given species. It writes a template BirdFlow object to an hdf5
-file containing all the components except the marginals.
+Write a template BirdFlow object to an hdf5 file based on distribution data
+downloaded with \pkg{ebirdst}. The object is complete except for
+marginals and transitions.
 }
 \examples{
 \dontrun{
- dir <- tempdir()
- bf <- preprocess_species("amewoo", dir )
 
+ bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
  plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
- unlink(dir)
+
+Create clip polgyon as an sf object
+Use the extent rectangle but with western edge moved in
+The clip can be anything that terra::vect will process into a polygon
+e <- ext(bf)
+e[1] <- -1500000
+coords <- matrix(c(e[1], e[3],
+                   e[1], e[4],
+                   e[2], e[4],
+                   e[2], e[3],
+                   e[1], e[3]), ncol = 2, byrow = TRUE)
+sfc <- st_sfc(st_polygon(list(coords)), crs = crs(bf))
+clip <- st_sf(data.frame(id = 1, geom = sfc))
+
+bfc <- preprocess_species("amewoo", tiff = FALSE,
+                         hdf5 = FALSE, clip = clip ) # clipped bird flow
+
+ plot(rasterize_distr(get_distr(c(1), bfc), bfc))
+
 
 }
-
 }
