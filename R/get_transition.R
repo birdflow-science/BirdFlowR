@@ -68,12 +68,16 @@ get_transition <- function(x, bf){
 #' a distribution to project the distribution.  See [get_transition] for more
 #' details.
 transition_from_marginal <- function(m, direction){
+  if(!direction %in% c("forward", "backward"))
+    stop("Direction must be forward or backward")
   if(direction == "forward"){
-    return( t( m /rowSums(m) ) )
+    m <-  Matrix::t( m /Matrix::rowSums(m) )
   }
   if(direction == "backward"){
-    return( apply(m, 2, function(x) x / sum(x)))
+    m <-  apply(m, 2, function(x) x / sum(x))
   }
-  stop("Direction must be forward or backward")
+  m[is.na(m)] <- 0
+  return(m)
+
 }
 

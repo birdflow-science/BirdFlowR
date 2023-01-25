@@ -29,24 +29,24 @@
 #' @importClassesFrom Matrix Matrix sparseMatrix
 forecast <- function(x, distr, start, end, direction){
   if(is.vector(distr)){
-    stopifnot(`distr length isn't right for x` = length(distr) == x$n_active)
+    stopifnot(`distr length isn't right for x` = length(distr) == n_active(x))
     multiple_distributions <- FALSE
   } else {
     stopifnot(
       `distr should be a vector or matrix` = length(dim(x)) == 2,
-      `distr has the wrong number of columns for x` = dim(x)[2] == x$nactive)
+      `distr has the wrong number of columns for x` = dim(x)[2] == n_active(x))
     multiple_distributions <- TRUE
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(start, end, direction, x)
+  transitions <- lookup_transitions(start, end, x, direction)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                           gsub("^.*-", "", transitions ) ) )
 
   if(multiple_distributions){
       nd <- ncol(distr) # number of distributions
       fc <- array(NA_real_,
-                  dim = c(  x$n_active, nd, length(transitions) + 1) )
+                  dim = c(  n_active(x), nd, length(transitions) + 1) )
       dimnames(fc) <- list(  i = NULL,
                              distribution = 1:nd,
                              timestep = paste0("t", timesteps)
@@ -65,7 +65,7 @@ forecast <- function(x, distr, start, end, direction){
       for(i in seq_along(transitions)){
         tm <- get_transition( transitions[i], x) # transition matrix
         distr <- tm %*% distr
-        fc[ , i+1] <- distr # save the location
+        fc[ , i+1] <- as.numeric(distr) # save the location
       }
       return(fc)
   }

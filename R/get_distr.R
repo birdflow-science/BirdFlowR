@@ -64,12 +64,12 @@ get_distr <- function(which = "all", bf, from_marginals = FALSE){
       id <- which[i]  # Distribution id
       if(id == 1){  # use marginal after the distribution
         m <- bf$marginals[[id]]
-        d[[i]] <- rowSums(m)
+        d[[i]] <- Matrix::rowSums(m)
       } else { # use marginal before the distribution
         # (not available for first marginal)
         # marginal column sums are the distribution after that marginal
         m <- bf$marginals[[id - 1 ]] # Prior marginal
-        d[[i]] <- colSums(m)  # colsums = distribution for state after marginal
+        d[[i]] <- Matrix::colSums(m)  # colsums = distribution for state after marginal
       }
     }
     # Return single distribution as vector

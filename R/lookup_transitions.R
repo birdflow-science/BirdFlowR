@@ -15,6 +15,7 @@
 #'   following formats: character, a date in the form year-month-day e.g.
 #'   "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
 #'   [`Date`][base::Dates] object.
+#' @param bf A BirdFlow object or the `dates` component of one.
 #' @param direction Either "forward" or "backward". Only used if `start` and
 #'   `end` are timesteps (numeric). Otherwise the direction will be determined
 #'   by the dates - forward if `start` and `end` are in chronological order, and
@@ -22,18 +23,21 @@
 #'   `end` are timesteps and `direction` is omitted than the direction will
 #'   default to "forward" regardless of which timestep is larger - possibly
 #'   passing over the year boundary from the last timestep to the first.
-#' @param bf A BirdFlow object or the `dates` component of one.
+#'
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
 #' @export
 #'
-lookup_transitions <- function(start, end, direction, bf){
+lookup_transitions <- function(start, end, bf,  direction){
 
-  if("dates" %in% names(bf) & !is.data.frame(bf)){
+  if( "dates" %in% names(bf) && !is.data.frame(bf)){
     dates <- bf$dates
   } else {
     dates <- bf
   }
+  if(is.integer(start)) start <- as.numeric(start)
+  if(is.integer(end)) end <- as.numeric(end)
+
 
   if(class(start) != class(end))
     stop("start and end must both be specified in the same manner.")

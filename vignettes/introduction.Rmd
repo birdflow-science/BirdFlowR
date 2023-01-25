@@ -33,14 +33,14 @@ Currently the example model isn't part of this or any other package so to run
 the code in this vignette you will need to download the model file and edit 
 the model_path line below to point to the local file.
 
-[Download](https://drive.google.com/file/d/1LSX32iI3FD69Z5YWaRlXQwD38VJd8Awt/edit)
+[Download](https://drive.google.com/file/d/1KW0jy44_PbAI6askkVZn9xP1_bBz-HlC/edit)
 (634 MB from google drive)
 
 ```{r setup}
 library(BirdFlowR)
 library(terra)
 
-model_path <- "../../Models/amewoo.Rds"  # This will need to be changed
+model_path <- "../../Models/amewoo_sparse.Rds"  # This will need to be changed
 bf <- readRDS(model_path)
 
 ```

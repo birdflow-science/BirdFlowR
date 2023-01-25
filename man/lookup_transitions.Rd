@@ -4,13 +4,15 @@
 \alias{lookup_transitions}
 \title{Lookup a series of transitions connecting two dates or timesteps}
 \usage{
-lookup_transitions(start, end, direction, obj)
+lookup_transitions(start, end, bf, direction)
 }
 \arguments{
 \item{start, end}{The starting and ending points in time. In one of the
 following formats: character, a date in the form year-month-day e.g.
 "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
 \code{\link[base:Dates]{Date}} object.}
+
+\item{bf}{A BirdFlow object or the \code{dates} component of one.}
 
 \item{direction}{Either "forward" or "backward". Only used if \code{start} and
 \code{end} are timesteps (numeric). Otherwise the direction will be determined
@@ -19,8 +21,6 @@ backward if the \code{end} date is before the \code{start} date. If \code{start}
 \code{end} are timesteps and \code{direction} is omitted than the direction will
 default to "forward" regardless of which timestep is larger - possibly
 passing over the year boundary from the last timestep to the first.}
-
-\item{obj}{A BirdFlow object or the \code{dates} component of one.}
 }
 \value{
 A character vector with the named transitions required to get between

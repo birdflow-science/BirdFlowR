@@ -58,7 +58,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(start, end, direction, x)
+  transitions <- lookup_transitions(start, end, x, direction)
 
   # Create initial state with one 1 per column
   # each column represents a single model state

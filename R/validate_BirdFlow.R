@@ -48,7 +48,9 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
                         "x$dates should not be a list",
                         "x$transitions should not be a list",
                         "x extra:uci, lci",  # Ok to have these extra
-                        "x missing:marginals") ) # ok to be missing marginals
+                        "x missing:marginals" ,# ok to be missing marginals
+                        "x$metadata$sparse_stats should not be a list"
+                        ) )
 
 
   p <- data.frame(problem = problems, type = rep("error", length(problems)) )

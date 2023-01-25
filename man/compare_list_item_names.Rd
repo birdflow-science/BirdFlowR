@@ -11,9 +11,9 @@ compare_list_item_names(x, y, map = "x", differences)
 
 \item{y}{reference list}
 
-\item{map}{used internally for tracking where in x differences are found}
+\item{map}{used during recursion to tracking where in x differences are found}
 
-\item{differences}{used internally for collecting differences}
+\item{differences}{used during recursion to collecting differences}
 }
 \value{
 data frame with where and difference columns will have 0 rows if no

@@ -49,7 +49,9 @@ new_BirdFlow <- function(){
                    ebird_release_year = NA_integer_,
                    ebird_access_end_date = NA,
                    birdflow_preprocess_date = NA,
-                   birdflow_model_date = NA
+                   birdflow_model_date = NA,
+                   is_sparse = FALSE,
+                   sparse_stats = NA
                   ) ),
             class = "BirdFlow")
 

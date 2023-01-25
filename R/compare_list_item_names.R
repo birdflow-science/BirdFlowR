@@ -6,8 +6,8 @@
 #'
 #' @param x list
 #' @param y reference list
-#' @param map used internally for tracking where in x differences are found
-#' @param differences used internally for collecting differences
+#' @param map used during recursion to tracking where in x differences are found
+#' @param differences used during recursion to collecting differences
 #'
 #' @return data frame with where and difference columns will have 0 rows if no
 #' differences found.
