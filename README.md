@@ -2,7 +2,8 @@
 
 <!-- badges: start -->
   [![R-CMD-check](https://github.com/birdflow-science/BirdFlowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/birdflow-science/BirdFlowR/actions/workflows/R-CMD-check.yaml)
-  <!-- badges: end -->
+[![Codecov test coverage](https://codecov.io/gh/birdflow-science/BirdFlowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/birdflow-science/BirdFlowR?branch=main)
+<!-- badges: end -->
 
 An R package to forecast changes in distributions and generates synthetic 
 migration routes based on BirdFlow models.
@@ -50,6 +51,5 @@ plot(rts$lines, add = TRUE, col = rgb(0, 0, 0, .25))
 ## Learn more
 
 Read  `vignette("BirdFlowR")` for a longer introduction to the package.
-
 
 
