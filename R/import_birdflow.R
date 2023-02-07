@@ -134,8 +134,8 @@ import_birdflow <- function(hdf5, tiff, species){
 
   runs <- ebirdst::ebirdst_runs
   si <- as.list(runs[runs$species_code == species(bf, "code"), ])
-  si_fields <- intersect(x = names(bf$species), y = names(md))
-  for(field in md_fields){
+  si_fields <- intersect(x = names(bf$species), y = names(si))
+  for(field in si_fields){
     a <- si[[field]]
     if(lubridate::is.Date(a))
       a <- as.character(a)

@@ -5,18 +5,19 @@
 #'  one marginal encodes transitions into a state for which the next marginal
 #'  has no transitions out.
 #'
+
 #'  Consider two adjacent marginals; the rows of the second and the columns of
 #'  the first both correspond with the species distribution for the timestep
-#'  between them. For every location in the model at that timestep
-#'  there are four possibilities (1) the first marginal's column doesn't sum
-#'   to zero and the second marginal's row does then there is a forward
-#'   transition into that state but no forward transition out and it's a
-#'   forward dead end; (2) the situation is reversed and first marginals column
-#'   sums to zero and the second marginal's corresponding row does not than
-#'  there is a backward dead end; (3) if they both sum to zero the model is fine
-#'   but that state is dropped; and (4) if they both have non-zero sums than the
-#'  corresponding state is valid and can be reached and exited when projecting
-#'  forward or backwards.
+#'  between them. For every location in the model at that timestep there are
+#'  four possibilities (1) the first marginal's column has non-zero values and
+#'  the second marginal's row is all zero; there is a forward transition into
+#'  that state but no forward transition out and it's a forward dead end; (2)
+#'  the situation is reversed and first marginals column is all zeros and the
+#'  second marginal's corresponding row has non-zero values, a backward dead end
+#'  (encountered when projecting backwards in time); (3) if they both have only
+#'  zeros: the model is fine but that state is dropped; and (4) if they both
+#'  have non-zero values than the corresponding state is valid and can be
+#'  reached and exited when projecting forward or backwards.
 #'
 #'  Dead ends result in lost density with [forecast()] and errors when
 #'  they are entered with [route()]. Based on initial testing the transitions
@@ -30,9 +31,13 @@
 #' @return a data.frame with columns:
 #'| `timestep` | the timestep associated with the dead end |
 #'| --- | --- |
+#'|  | \cr |
 #'| `direction` | either `"forward"` or `"backward"` indicating which direction the dead end is encountered in |
+#'|  | \cr |
 #'| `i` | the index of the model state that has a dead end |
+#'|  | \cr |
 #'| `mar` | the marginal which leads into the dead end (this marginal has non-zero value in the i'th column if direction is forward and i'th row if direction is backward) |
+#'|  | \cr |
 #'| `x`, and `y` | the x and y coordinates corresponding with state `i` |
 #'
 #' There will be a row for each dead end state, if no dead ends are found an

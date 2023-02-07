@@ -1,34 +1,35 @@
 #' prepare eBird Status and Trends data for BirdFlow model fitting
 #'
 #' Write a template BirdFlow object to an hdf5 file based on distribution data
-#' downloaded with \pkg{ebirdst}. The object is complete except for
-#'  marginals and transitions.
+#' downloaded with \pkg{ebirdst}. The object is complete except for marginals
+#' and transitions.
 #'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
-#' both `tiff` and `hdf5` are TRUE.  File names created here will
-#' incorporate the species code, resolution, and eBird version year.
-#' @param res the target resolution of the BirdFlow model in kilometers if
-#' omitted a resolution will be chosen that results slightly less than
-#' `max_params` parameters.
+#'   both `tiff` and `hdf5` are TRUE.  File names created here will incorporate
+#'   the species code, resolution, and eBird version year.
+#' @param res the target resolution of the BirdFlow model in kilometers. If
+#'   `res` is omitted than a resolution that results in less than`max_params`
+#'   parameters will be used, while also minimizing the resolution and limiting
+#'   the number of significant digits.
 #' @param hdf5 if TRUE (default) an hdf5 file will be exported.
 #' @param tiff if TRUE (default) geoTIFF files will be exported.
-#' @param overwrite if TRUE (default) any pre-existing output files will
-#' be overwritten. If FALSE pre-existing files will result in an error.
+#' @param overwrite if TRUE (default) any pre-existing output files will be
+#'   overwritten. If FALSE pre-existing files will result in an error.
 #' @param crs coordinate reference system (CRS) to use.  Defaults to the custom
-#' projection eBird has assigned to this species - see
-#' [ebirdst::load_fac_map_parameters()]). It will be interpreted by
-#' [terra::crs()] to generate a well known text representation of the CRS.
+#'   projection eBird has assigned to this species - see
+#'   [ebirdst::load_fac_map_parameters()]). It will be interpreted by
+#'   [terra::crs()] to generate a well known text representation of the CRS.
 #' @param clip a polygon or the path to a file containing a polygon. It must
-#' have a CRS and should either be a [SpatVector()][terra::SpatVector] object or
-#' or produce one when called with [vect(clip)][terra::vect()]
+#'   have a CRS and should either be a [SpatVector()][terra::SpatVector] object
+#'   or or produce one when called with [vect(clip)][terra::vect()]
 #' @param max_params the maximum number of fitted parameters that the BirdFlow
-#'  model should contain. If `res` is omitted a resolution will be chosen that
-#'  yields this many fitted parameters. The default value represents the number
-#'  of parameters that could efficiently be fit in early BirdFlow models
-#'  (around 4000 active cells and 51 transitions).
-#' @return returns a BirdFlow model object that lacks
-#' marginals, but is otherwise complete.
+#'   model should contain. If `res` is omitted a resolution will be chosen that
+#'   yields this many fitted parameters. The default value represents the number
+#'   of parameters that could efficiently be fit in early BirdFlow models
+#'   (around 4000 active cells and 51 transitions).
+#' @return returns a BirdFlow model object that lacks marginals, but is
+#'   otherwise complete.
 #' @export
 #'
 #' @examples
@@ -37,9 +38,9 @@
 #'  bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
 #'  plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
 #'
-#' Create clip polgyon as an sf object
-#' Use the extent rectangle but with western edge moved in
-#' The clip can be anything that terra::vect will process into a polygon
+#' # Create clip polgyon as an sf object
+#' # Use the extent rectangle but with western edge moved in
+#' # The clip can be anything that terra::vect will process into a polygon
 #' e <- ext(bf)
 #' e[1] <- -1500000
 #' coords <- matrix(c(e[1], e[3],

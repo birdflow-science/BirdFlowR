@@ -20,19 +20,20 @@ preprocess_species(
 \item{species}{a species in any format accepted by \code{\link[ebirdst:get_species]{ebirdst::get_species()}}}
 
 \item{out_dir}{output directory, files will be written here. Required unless
-both \code{tiff} and \code{hdf5} are TRUE.  File names created here will
-incorporate the species code, resolution, and eBird version year.}
+both \code{tiff} and \code{hdf5} are TRUE.  File names created here will incorporate
+the species code, resolution, and eBird version year.}
 
-\item{res}{the target resolution of the BirdFlow model in kilometers if
-omitted a resolution will be chosen that results slightly less than
-\code{max_params} parameters.}
+\item{res}{the target resolution of the BirdFlow model in kilometers. If
+\code{res} is omitted than a resolution that results in less than\code{max_params}
+parameters will be used, while also minimizing the resolution and limiting
+the number of significant digits.}
 
 \item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
 
 \item{tiff}{if TRUE (default) geoTIFF files will be exported.}
 
-\item{overwrite}{if TRUE (default) any pre-existing output files will
-be overwritten. If FALSE pre-existing files will result in an error.}
+\item{overwrite}{if TRUE (default) any pre-existing output files will be
+overwritten. If FALSE pre-existing files will result in an error.}
 
 \item{crs}{coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
@@ -40,8 +41,8 @@ projection eBird has assigned to this species - see
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
 \item{clip}{a polygon or the path to a file containing a polygon. It must
-have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object or
-or produce one when called with \link[terra:vect]{vect(clip)}}
+have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object
+or or produce one when called with \link[terra:vect]{vect(clip)}}
 
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
 model should contain. If \code{res} is omitted a resolution will be chosen that
@@ -50,13 +51,13 @@ of parameters that could efficiently be fit in early BirdFlow models
 (around 4000 active cells and 51 transitions).}
 }
 \value{
-returns a BirdFlow model object that lacks
-marginals, but is otherwise complete.
+returns a BirdFlow model object that lacks marginals, but is
+otherwise complete.
 }
 \description{
 Write a template BirdFlow object to an hdf5 file based on distribution data
-downloaded with \pkg{ebirdst}. The object is complete except for
-marginals and transitions.
+downloaded with \pkg{ebirdst}. The object is complete except for marginals
+and transitions.
 }
 \examples{
 \dontrun{
@@ -64,9 +65,9 @@ marginals and transitions.
  bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
  plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
 
-Create clip polgyon as an sf object
-Use the extent rectangle but with western edge moved in
-The clip can be anything that terra::vect will process into a polygon
+# Create clip polgyon as an sf object
+# Use the extent rectangle but with western edge moved in
+# The clip can be anything that terra::vect will process into a polygon
 e <- ext(bf)
 e[1] <- -1500000
 coords <- matrix(c(e[1], e[3],

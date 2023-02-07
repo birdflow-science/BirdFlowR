@@ -12,9 +12,9 @@ validate_BirdFlow(x, error = TRUE, allow_incomplete = FALSE)
 \item{error}{if TRUE throw an error if there are problems if FALSE return
 any problems as a data.frame.}
 
-\item{allow_incomplete}{if TRUE only throw an error if the problem type is
-not \code{"incomplete"}; this allows checking output of
-\code{\link[=preprocess_species]{preprocess_species()}}.}
+\item{allow_incomplete}{if TRUE allow the BirdFlow object to be missing
+both marginals and transitions (but not other components). This allows
+checking the output of \code{\link[=preprocess_species]{preprocess_species()}}.}
 }
 \value{
 If \code{error = FALSE} the function returns
@@ -27,7 +27,7 @@ Otherwise, if there are no problems a similar data.frame with no rows is
 returned invisibly.
 }
 \description{
-Throw error if a BirdFlow object is malformed or incomplete.
+Throw an error if a BirdFlow object is malformed or incomplete.
 }
 \details{
 \code{\link[=preprocess_species]{preprocess_species()}} creates a BirdFlow object that lacks both marginals
@@ -39,4 +39,9 @@ Since marginals can be used to calculate both distributions and
 transition matrices, a BirdFlow object can be complete if it has marginals;
 or has both transitions and distributions. Having redundancy in these three
 is not considered an error.
+
+Currently metadata and species information is not checked for completeness.
+
+Currently dead end transitions are permitted.  See \code{\link[=find_dead_ends]{find_dead_ends()}} for
+checking for those.
 }

@@ -1,6 +1,6 @@
 #' Function to validate a BirdFlow object
 #'
-#' Throw error if a BirdFlow object is malformed or incomplete.
+#' Throw an error if a BirdFlow object is malformed or incomplete.
 #'
 #' [preprocess_species()] creates a BirdFlow object that lacks both marginals
 #' and transitions and thus can't be used to make projections.
@@ -12,12 +12,17 @@
 #' or has both transitions and distributions. Having redundancy in these three
 #' is not considered an error.
 #'
+#' Currently metadata and species information is not checked for completeness.
+#'
+#' Currently dead end transitions are permitted.  See [find_dead_ends()] for
+#' checking for those.
+#'
 #' @param x a BirdFlow object
 #' @param error if TRUE throw an error if there are problems if FALSE return
 #' any problems as a data.frame.
-#' @param allow_incomplete if TRUE only throw an error if the problem type is
-#' not `"incomplete"`; this allows checking output of
-#' [preprocess_species()].
+#' @param allow_incomplete if TRUE allow the BirdFlow object to be missing
+#' both marginals and transitions (but not other components). This allows
+#' checking the output of [preprocess_species()].
 #'
 #' @return  If `error = FALSE` the function returns
 #'  a data.frame describing any errors with columns:
@@ -43,15 +48,15 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   diff <- compare_list_item_names(x, new_BirdFlow() )
   problems <- paste(diff$where, diff$differences)
   # new_BirdFlow doesn't populate these lists so these aren't actually problems
-  problems <- setdiff(problems,
-                      c("x$marginals should not be a list",
-                        "x$dates should not be a list",
-                        "x$transitions should not be a list",
-                        "x extra:uci, lci",  # Ok to have these extra
-                        "x missing:marginals" ,# ok to be missing marginals
-                        "x$metadata$sparse_stats should not be a list"
-                        ) )
-
+  problems <- setdiff(
+    problems,
+    c("x$marginals should not be a list", # ok to have marginals
+      "x$dates should not be a list", # ok to have dates
+      "x$transitions should not be a list", # ok to have transitions
+      "x extra:uci, lci",  # Ok to have these (included in preprocessing output)
+      "x missing:marginals" ,# ok to be missing marginals
+      "x$metadata$sparse_stats should not be a list"
+    ) )
 
   p <- data.frame(problem = problems, type = rep("error", length(problems)) )
 
@@ -89,7 +94,6 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
 
   if(!has_distr(x) && !has_marginals(x) )
     p <- add_prob("model hs neither distr nor marginals", "incomplete", p)
-
 
   # Consistent in number of transitions
   nt <- x$metadata$n_transitions
@@ -156,7 +160,6 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
 
   } # end n_active consistency check
 
-
   # check geometry
   if(!is.list(x$geom)){
     p <- add_prob("x$geom is not a list", "error", p)
@@ -221,8 +224,8 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
                           function(s) isTRUE(all.equal(s, 1, tolerance = 1e-6)))
     if(!all(sums_to_one))
       p <- add_prob("Not all marginals have a sum of one.", "error", p)
-
   }
+
 
   # Still need to validate transitions!
 
