@@ -60,8 +60,8 @@ get_metadata <- function(x, what){
   }
 
   if(what == "all")
-    return(bf$metadata)
+    return(x$metadata)
 
-  return(bf$metadata[[what]])
+  return(x$metadata[[what]])
 
 }

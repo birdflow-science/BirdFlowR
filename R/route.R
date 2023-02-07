@@ -66,7 +66,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   end <-  as.numeric( gsub("T_[[:digit:]]+-", "", transitions[length(transitions)]) )
   stopifnot(is.numeric(start), is.numeric(end),
             length(start) == 1, length(end) == 1,
-            c(start, end) %in% bf$dates$interval)
+            c(start, end) %in% x$dates$interval)
 
   # Create initial state with one 1 per column
   # each column represents a single model state
