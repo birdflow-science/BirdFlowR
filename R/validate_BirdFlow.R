@@ -206,18 +206,21 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
 
 
   # check marginal names and index
-  if( "marginals" %in% names(x) && is.list("marginals") ){
-    mn <- setdiff(names(x$marginals), "index")
+  if( "marginals" %in% names(x) && is.list(x$marginals) ){
+
+     mn <- setdiff(names(x$marginals), "index")
     index <- x$marginals$index
     if(!all(mn %in%  index$marginal))
       p <- add_prob("Not all marginals are indexed.", "error", p)
     if(!all(index$marginal %in% mn))
       p <- add_prob("Not all marginals in index exist")
 
+    # Check that all marginals sum to 1
     marginal_sums <- as.numeric(sapply(mn, function(m) sum(x$marginals[[m]] ) ))
     sums_to_one <- sapply(marginal_sums,
                           function(s) isTRUE(all.equal(s, 1, tolerance = 1e-6)))
-    p <- add_prob("Not all marginals have a sum of one.", "error", p)
+    if(!all(sums_to_one))
+      p <- add_prob("Not all marginals have a sum of one.", "error", p)
 
   }
 

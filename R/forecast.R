@@ -33,8 +33,8 @@ forecast <- function(x, distr, start, end, direction){
     multiple_distributions <- FALSE
   } else {
     stopifnot(
-      `distr should be a vector or matrix` = length(dim(x)) == 2,
-      `distr has the wrong number of columns for x` = dim(x)[2] == n_active(x))
+      `distr should be a vector or matrix` = length(dim(distr)) == 2,
+      `distr has the wrong number of rows for x` = dim(distr)[1] == n_active(x))
     multiple_distributions <- TRUE
   }
 
@@ -55,7 +55,7 @@ forecast <- function(x, distr, start, end, direction){
       for(i in seq_along(transitions)){
         tm <- get_transition( transitions[i], x)  # transition matrix
         distr <-  tm %*%  distr          # project
-        fc[  , , i+1] <- distr # save the location
+        fc[  , , (i+1)] <- as.vector(distr) # save the location
       }
       return(fc)
   }  else {  # Single distribution

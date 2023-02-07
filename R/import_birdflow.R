@@ -127,6 +127,24 @@ import_birdflow <- function(hdf5, tiff, species){
 
   bf$metadata$birdflow_model_date <- h5read(hdf5, "date")
 
+  # Add species information from ebirdst_runs
+  # This is a little hacky because the models are currently
+  # From 2019 ebirdst but the runs table is 2021
+  # The species are the same though!
+
+  runs <- ebirdst::ebirdst_runs
+  si <- as.list(runs[runs$species_code == species(bf, "code"), ])
+  si_fields <- intersect(x = names(bf$species), y = names(md))
+  for(field in md_fields){
+    a <- si[[field]]
+    if(lubridate::is.Date(a))
+      a <- as.character(a)
+    bf$species[[field]] <- a
+  }
+
+
+
+
   # Add dates - in pending workflow these will be in the hdf5
   bf$dates <- get_dates(year = 2019, n = dim(r)[3])
 

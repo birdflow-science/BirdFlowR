@@ -12,6 +12,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
 Suggests: 
     auk,
+    BirdFlowModels,
     ebirdst,
     knitr,
     rmarkdown,
@@ -30,3 +31,5 @@ Imports:
     stringr,
     terra
 VignetteBuilder: knitr
+Remotes:
+  birdflow-science/BirdFlowModels

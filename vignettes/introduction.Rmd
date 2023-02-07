@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
   fig.height = 5
 )
 ```
-A brief introduction to core BirdFlowR functions. 
+A brief introduction to BirdFlowR.
 
-## Install packages and load BirdFlow model
+## Setup
 
 Install packages
 ```{r install, eval = FALSE }
@@ -27,21 +27,17 @@ if(!"devtools" %in% installed)
   install.packages("devtools")
 if(!"BirdFlowR" %in% installed)
   devtools::install_github("birdflow-science/BirdFlowR")
+if(!"BirdFlowModels" %in% installed)
+  devtools::install_github("birdflow-science/BirdFlowModels")
 ```
 
-Currently the example model isn't part of this or any other package so to run
-the code in this vignette you will need to download the model file and edit 
-the model_path line below to point to the local file.
-
-[Download](https://drive.google.com/file/d/1KW0jy44_PbAI6askkVZn9xP1_bBz-HlC/edit)
-(634 MB from google drive)
-
+Load libraries and define local BirdFlow model (`bf`)
 ```{r setup}
 library(BirdFlowR)
+library(BirdFlowModels)
 library(terra)
 
-model_path <- "../../Models/amewoo_sparse.Rds"  # This will need to be changed
-bf <- readRDS(model_path)
+bf <- amewoo  # from BirdFlowModels
 
 ```
 
@@ -49,13 +45,13 @@ bf <- readRDS(model_path)
 ```{r access}
 # Methods for base R functions:
 dim(bf)
-nrow(bf)
-ncol(bf)
+c( nrow(bf), ncol(bf) )
 
 # New functions:
 n_active(bf)
 n_transitions(bf)
 n_timesteps(bf)
+
 species(bf)  
 species(bf, "scientific")
 # species(bf, "all") # list with all species metadata
@@ -65,11 +61,9 @@ species(bf, "scientific")
 a <- crs(bf) # well known text (long)
 crs(bf, proj = TRUE)  # proj4 string
 res(bf)
-xres(bf)
-yres(bf)
+c( xres(bf), yres(bf) ) # same as res(bf)
 ext(bf)
-c(xmin(bf), xmax(bf), ymin(bf), ymax(bf))
-
+c(xmin(bf), xmax(bf), ymin(bf), ymax(bf)) # same as ext(bf)
 
 # Print method for BirdFlow objects:
 print(bf)  
@@ -95,6 +89,7 @@ d <- get_distr(26:30, bf)
 dim(d)
 head(d, 3)
 ```
+
 We can also specify distributions with dates, or use "all" to retrieve all the distributions. 
 ```{r get_distr options}
 d <- get_distr("2022-12-15", bf) # from character date
@@ -102,61 +97,75 @@ d <- get_distr("all", bf)  # all distributions
 d <- get_distr(Sys.Date(), bf)  # Using a Date object 
 ```
 
-Use `rasterize_distr()` or `rast()`to convert to SpatRaster defined in the terra package. 
-With `rasterize_distr()` the second argument is the BirdFlow model.
+Use `rasterize_distr()` to convert a distribution to a SpatRaster defined in the
+terra package. The second argument, the BirdFlow 
+model, is needed for the spatial information it contains. 
 ```{r get distributions}
 d <- get_distr(c(1, 26), bf) # winter and summer
 r <- rasterize_distr(d, bf) # convert to SpatRaster 
 ```
+
 Alternatively convert directly from BirdFlow to SpatRast with `rast()` the 
-second, optional, argument `which` takes the same input as `get_distr()`.
+second, optional, argument `which` accepts the same inputs a as `which` in
+`get_distr()`.
 
 ```{r rast, fig.width=8, fig.height=4, out.width='100%'}
 r <- rast(bf) # all distributions
-r <- rast(bf, c(1, 26))
+r <- rast(bf, c(1, 26))  # 1st, and 26th timesteps.
 plot(r)
 ```
 
 # Forecasting
 In this section we will sample a single starting location from the winter distribution and project it forward to generate a distribution of predicted breeding grounds for birds that wintered at the starting location.
 
-Set forecasting parameters
+Set forecast parameters.
 ```{r forecast parameters}
 start <- 1         # starting timestep (winter)
 end <- 26          # ending timestep (summer)
 ```
 
 ## Sample starting distribution
-`sample_distr()` will probabilistically assign a 1 to a single location per input distribution and set the remaining cells to 0.  
+`sample_distr()` will sample from one or more input distribution to select a 
+single location per distribution. The result is one or moe distributions 
+with ones in the selected location(s) and zero elsewhere.  
 ```{r starting location}
 set.seed(0)
 d <- get_distr(start, bf)
 location <- sample_distr(d)
+
+
+print( i_to_xy( which( as.logical(location) ), bf) )  # starting coordinates
+
 ```
 
 ## Project forward from this location to summer
 Forecast returns the distribution over time as a matrix with
 one column per timestep. 
 
-The plot shows how the probability density spreads over time from the starting 
-location for a subset of the timesteps.  The last panel represents the summer distribution.
+The plot shows where birds that winter at a particular location are
+likely to be as the year progresses and ultimately where they might spend their
+summer. The probability density spreads as the weeks progress.
 ```{r forecast, out.width='100%'}
 f <- forecast(bf, location, start, end, "forward")
 r <- rasterize_distr(f[, c(1, 9, 18, 26)], bf)
 plot(r)
 ```
-Alternatively we can calculate the difference between the projected distribution and the distribution of the species as a whole at the same timestep.
+
+Alternatively we can calculate the difference between the projected distribution
+for bird's wintering at that particular location and the distribution of the 
+species as a whole at the same timestep.
 ```{r probability over time}
 projected <- f[ , ncol(f)]  # last projected distribution
 diff <-  projected - get_distr(end, bf) 
 plot(rasterize_distr(diff, bf))
 ```
 
+
 # Generate synthetic routes 
 In this section we sample locations from the American Woodcock winter 
 distribution and then generate routes to their summer grounds.
 
-Set route parameters
+Set route parameters.
 ```{r route parameters}
 n_positions <-  15 # number of starting positions
 n_each <- 1        # how many birds to start at each
@@ -170,6 +179,7 @@ First extract the winter distribution, then use `sample_locations()` with `n = n
 d <- get_distr(start, bf)
 locations  <- sample_distr(d, n = n_positions)  
 ```
+
 Collapse the locations down to a vector of the index of each
 non-zero value and then convert to x and y coordinates.
 ```{r starting locations as row and column}
@@ -177,6 +187,7 @@ ind <- apply(locations, 2, function(x) which( as.logical(x) ) )
 x <- i_to_x(ind, bf)
 y <- i_to_y(ind, bf)
 ```
+
 Plot the starting (winter) distribution and sampled locations
 ```{r plot starting distribution}
 winter <- rasterize_distr(d, bf)

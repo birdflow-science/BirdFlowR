@@ -1,68 +1,75 @@
-#' lookup species information from a BirdFlow model
+#' retrieve species information from a BirdFlow model
 #'
-#' BirdFlow model species metadata is from [ebirdst_runs][ebirdst::ebirdst_runs]
+#' `species_info()` and `species()` return species data stored in a BirdFlow
+#' model. They differ only in that `species()` returns the
+#' common name by default so provides a succinct way to get the species name.
 #'
-#' @param x A `BirdFlow` model
-#' @param what (optional) 'all' for all information (in a list) or the name of
-#'   the information to be returned. See details for full option list.
-#' @return if `what` is `all` a list of all the species information available;
-#'  if omitted the common name of the species;  otherwise the element named by
-#'   `what`.
-#' @details `species()` returns data taken from [ebirdst::ebirdst_runs] and
-#'  uses the same names. Descriptions copied from \pkg{ebirdst}):
-#'  \describe{
-#'   \item{species_code}{Six letter eBird code in eBird Taxonomy v2018}
-#'   \item{scientific_name}{Scientific name from eBird Taxonomy v2018}
-#'   \item{common_name}{English common name from eBird Taxonomy v2018}
-#'   \item{breeding_quality}{Breeding season quality}
-#'   \item{breeding_start}{Breeding season start date}
-#'   \item{breeding_end}{Breeding season end date}
-#'   \item{nonbreeding_quality}{Non-breeding season quality}
-#'   \item{nonbreeding_start}{Non-breeding season start date}
-#'   \item{nonbreeding_end}{Non-breeding season end date}
-#'   \item{postbreeding_migration_quality}{Post-breeding season quality}
-#'   \item{postbreeding_migration_start}{Post-breeding season start date}
-#'   \item{postbreeding_migration_end}{Post-breeding season end date}
-#'   \item{prebreeding_migration_quality}{Pre-breeding season quality}
-#'   \item{prebreeding_migration_start}{Pre-breeding season start date}
-#'   \item{prebreeding_migration_end}{Pre-breeding season end date}
-#'}
 #'
-#'  'all' is a special case and returns the complete list.
+#' @param x `BirdFlow` model
+#' @param what `"all"` for all information (in a list) or the name (see details)
+#'   of the desired information. If `what` is omitted `species()` defaults
+#'   to `"common_name"` and `species_info()` defaults to `"all"`.
+#' @return the element named by `what`, unless `what` is `"all"` in which case a
+#'   list of all the species information.  If `what` is omitted `species()` will
+#'   return the common name of the species, and `species_info()` will return the
+#'   complete list.
+#' @details  The `what`
+#'   argument takes the column names used in [ebirdst::ebirdst_runs] as input
+#'   (descriptions from \pkg{ebirdst}):
+#'| `species_code` | Six letter eBird code in eBird Taxonomy v2018 |
+#'| --- | --- |
+#'| `scientific_name` | Scientific name from eBird Taxonomy v2018 |
+#'| `common_name` | English common name from eBird Taxonomy v2018 |
+#'| `breeding_quality` | Breeding season quality |
+#'| `breeding_start` | Breeding season start date |
+#'| `breeding_end` | Breeding season end date |
+#'| `nonbreeding_quality` | Non-breeding season quality |
+#'| `nonbreeding_start` | Non-breeding season start date |
+#'|`nonbreeding_end` | Non-breeding season end date |
+#'|`postbreeding_migration_quality` | Post-breeding season quality |
+#'|`postbreeding_migration_start` | Post-breeding season start date |
+#'|`postbreeding_migration_end` | Post-breeding season end date |
+#'|`prebreeding_migration_quality` | Pre-breeding season quality |
+#'|`prebreeding_migration_start`| Pre-breeding season start date |
+#'|`prebreeding_migration_end`| Pre-breeding season end date |
+#'| | |
+#'|`all` | returns the complete list |
 #'
-#'  For convenience the following are treated the same as the text in
-#'  parenthesis:
-#'    "code" ("species_code")
-#'    "common" ("common name")
-#'    "name" ("common_name")
-#'    "scientific" ("scientific_name")
-#'    "species" ("common_name")
+#'For convenience the following short versions are also accepted:
+#'|    `code` | (`species_code`) |
+#'| --- | --- |
+#'|    `common` | (`common_name`) |
+#'|    `name` | (`common_name`) |
+#'|    `scientific`  | (`scientific_name`) |
+#'|    `species` | (`common_name`) |
 #'
+#' @section{Dropped items}:
 #' The 8 variables below are in [ebirdst::ebirdst_runs] but are dropped
-#' from the BirdFlow model and thus can not be retrieved by `species()`.
+#' from the BirdFlow model and thus can not be retrieved by
+#' `species_info()`.
 #'
 #' Four variables that track whether the full range is covered by eBird that
-#' must be TRUE for a BirdFlow model to be fit:
-#'  \describe{
-#'   \item{postbreeding_migration_range_modeled}{Is the full range modeled?}
-#'   \item{prebreeding_migration_range_modeled}{Is the full range modeled?}
-#'   \item{nonbreeding_range_modeled}{Is the full range modeled?}
-#'   \item{breeding_range_modeled}{Is the full range modeled?}
-#'  }
-#' `resident` is verified to be `FALSE` before the model is fit and three
-#'  variables that relate to resident birds:
-#'  \describe{
-#'   \item{resident}{Classifies this species a resident or a migrant}
-#'   \item{resident_quality}{Resident quality}
-#'   \item{resident_start}{For resident species, the year-round start date}
-#'   \item{resident_end}{For resident species, the year-round end date}
-#'}
+#' must be TRUE for a BirdFlow model to be fit and are then dropped:
+#'| `postbreeding_migration_range_modeled` | Is the full range modeled? |
+#'| --- | --- |
+#'| `prebreeding_migration_range_modeled` | Is the full range modeled? |
+#'| `nonbreeding_range_modeled` | Is the full range modeled? |
+#'| `breeding_range_modeled` | Is the full range modeled? |
+#'
+#' `resident` is verified to be `FALSE` before the model is fit. It and three
+#'  related variables are then dropped:
+#'| `resident` | Classifies this species a resident or a migrant |
+#'| --- | --- |
+#'| `resident_quality` | Resident quality |
+#'| `resident_start` | For resident species, the year-round start date |
+#'| `resident_end` | For resident species, the year-round end date |
 #' @export
-species <- function(x, what){
+species_info <- function(x, what){
   stopifnot(class(x) == "BirdFlow")
-  if(missing(what))
-    return(x$species$common_name)
   what <- tolower(what)
+
+  if(missing(what))
+    what <- "all"
 
   if(what == "all")
     return(x$species)
@@ -74,12 +81,19 @@ species <- function(x, what){
                  "species" = "common_name",
                  "scientific" = "scientific_name",
                  "code" = "species_code", # ebirdst used 'species_code',
-                 what
-                 )
+                 what)
   options <- c(names(x$species), "all")
 
   if(!what %in% options){
     stop("what should be one of: ", paste(options, collapse = ", "))
   }
   return(x$species[[what]])
+}
+
+#' @rdname species_info
+#' @export
+species <- function(x, what){
+  if(missing(what))
+    what <- "common_name"
+  return(species_info(x, what))
 }

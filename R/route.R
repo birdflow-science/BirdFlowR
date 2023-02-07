@@ -60,6 +60,14 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   # This is a sequence of transition codes to progress through
   transitions <- lookup_transitions(start, end, x, direction)
 
+  # Re-define start and end as timesteps based on date parsing
+  # in lookup_transitions
+  start <- as.numeric( gsub("^T_|-[[:digit:]]+$", "", transitions[1]) )
+  end <-  as.numeric( gsub("T_[[:digit:]]+-", "", transitions[length(transitions)]) )
+  stopifnot(is.numeric(start), is.numeric(end),
+            length(start) == 1, length(end) == 1,
+            c(start, end) %in% bf$dates$interval)
+
   # Create initial state with one 1 per column
   # each column represents a single model state
   # There is a column for each initial position - for each value in row and col.
@@ -89,7 +97,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
     trajectory[i+1, ] <- extract_positions(distr) # save the location
   }
 
-  format_trajectory <- function(trajectory, bf){
+  format_trajectory <- function(trajectory, bf, start, end){
     # dimensions of trajectory are timestep and route
     # values are the index i of the location at the time and route
     # Converting to a long format. With columns:
@@ -99,7 +107,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
     #  date : the date associated with the timestep
     x <- as.vector(i_to_x(trajectory, bf))
     y <- as.vector(i_to_y(trajectory, bf))
-    timestep <- rep(1:nrow(trajectory), times = ncol(trajectory))
+    timestep <- rep(start:end, times = ncol(trajectory))
     route <- rep(1:ncol(trajectory), each = nrow(trajectory))
     date <- bf$dates$date[timestep]
     return( data.frame(x, y, route, timestep, date) )
@@ -112,11 +120,12 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   # Create an sf object with lines for each route
   convert_route_to_sf <- function(x){
     x %>% dplyr::group_by(route) %>%
-      dplyr::summarize(geometry = sf::st_geometry(convert_to_lines(.data$x, .data$y)) ) %>%
+      dplyr::summarize(
+        geometry = sf::st_geometry(convert_to_lines(.data$x, .data$y)) ) %>%
       as.data.frame() %>% sf::st_as_sf()
   }
 
-  points <- format_trajectory(trajectory, x)
+  points <- format_trajectory(trajectory, x, start, end)
   lines <- convert_route_to_sf(points)
   sf::st_crs(lines) <- sf::st_crs(crs(x))
 
