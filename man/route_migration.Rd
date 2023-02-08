@@ -21,14 +21,27 @@ This will likely change. Currently returns a list with:
 \item{lines}{a \link[sf:sf]{sf} object containing one line per route.}
 }
 \description{
-create stochastic migration routes for a species by sampling approriate
-starting locations and then routing (with \code{\link[=route]{route()}}) for the
+create stochastic migration routes for a species by sampling appropriate
+starting locations and then \link[=route]{routing} for the
 duration of the migration window.
 }
 \details{
 The two migration periods are defined based on the species information in the
-BirdFlow model:\tabular{ll}{
-   \code{prebreeding} \tab migration starts at \code{species_info("nonbreeding_end")} and ends at \code{species_info("breeding_start")} \cr
-   \code{postbreeding} \tab migration starts at \code{species_info("breeding_end")} and ends at \code{species_info("nonbreeding_start")} \cr
+BirdFlow model:
+\describe{
+\item{\code{prebreeding}}{ migration starts at \code{species_info("nonbreeding_end")} and ends at \code{species_info("breeding_start")}}
+\item{\code{postbreeding}}{ migration starts at \code{species_info("breeding_end")} and ends at \code{species_info("nonbreeding_start")}}
 }
+}
+\examples{
+  bf <-  BirdFlowModels::amewoo
+  rts <- route_migration(bf, 2)
+  plot(rts$lines)
+  head(rts$points)
+
+}
+\seealso{
+\code{route_migration()} is a convenience wrapper for \code{\link[=route]{route()}}.
+\code{\link[=forcast]{forcast()}} projects future or past distributions based on a starting
+location or distribution.
 }
