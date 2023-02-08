@@ -21,7 +21,7 @@
 #'   \item{lines}{a [sf][sf::sf] object containing one line per route.}
 #' @seealso
 #' `route_migration()` is a convenience wrapper for [route()].
-#' [`forcast()`] projects future or past distributions based on a starting
+#' [`forecast()`] projects future or past distributions based on a starting
 #'    location or distribution.
 #' @export
 #' @examples
