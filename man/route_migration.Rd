@@ -42,6 +42,6 @@ BirdFlow model:
 }
 \seealso{
 \code{route_migration()} is a convenience wrapper for \code{\link[=route]{route()}}.
-\code{\link[=forcast]{forcast()}} projects future or past distributions based on a starting
+\code{\link[=forecast]{forecast()}} projects future or past distributions based on a starting
 location or distribution.
 }
