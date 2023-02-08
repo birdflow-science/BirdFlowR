@@ -39,7 +39,7 @@ start <- species_info(bf, "nonbreeding_end")
 r <- rast(bf, start)
 plot(r)
 
-# Generate migration rooutes
+# Generate migration routes
 rts <- route_migration(bf, 10, "prebreeding")
 
 # Add lines to plot
