@@ -26,13 +26,14 @@ routes for a species.
 ```{r}
 library(BirdFlowR)
 library(BirdFlowModels)
+library(terra)
 
 bf <- amewoo 
 
 species(bf)
 
 # start migration at end of the nonbreeding season
-start <- get_metadata(bf, "nonbreeding_end")
+start <- species_info(bf, "nonbreeding_end")
 
 # Retreive starting distribution as a SpatRaster and plot
 r <- rast(bf, start)
