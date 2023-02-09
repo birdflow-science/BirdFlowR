@@ -18,12 +18,13 @@ devtools::install_github("birdflow-science/BirdFlowModels")  # data package
 
 ## Usage 
 
-The two primary functions are `forecast()` to project distributions and code `route()` to generate syntetic routes.  
+The two primary functions are `forecast()` to project distributions and 
+`route()` to generate synthetic routes.  
 
-`route_migration()` is a convience wrapper to `route()` which automates sampling
-locations from the starting distribution and setting the start and end dates to 
-route over based on the migration window. We can use it to create synthetic 
-routes for a species.
+`route_migration()` is a wrapper to `route()` which automates sampling
+locations from the a distribution for the start of the migration and setting 
+the start and end dates to route for the migration window. We can use it to 
+create synthetic routes for a species.
 ```{r}
 library(BirdFlowR)
 library(BirdFlowModels)

@@ -16,6 +16,7 @@ Suggests:
     ebirdst,
     knitr,
     rmarkdown,
+    rnaturalearthdata,
     methods,
     testthat (>= 3.0.0),
     covr
@@ -28,6 +29,7 @@ Imports:
     progress,
     rhdf5,
     rlang,
+    rnaturalearth,
     sf,
     stringr,
     terra
