@@ -130,6 +130,7 @@ preprocess_species <- function(species,
   export$marginals <- NULL
   max_param_per_gb <- 23224801
 
+
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
@@ -232,7 +233,7 @@ preprocess_species <- function(species,
       }
 
       if(verbose)
-        cat("Calculating resolution")
+        cat("Calculating resolution\n")
       # Load low res abundance data and calculate total areas birds occupy at any
       # time (active_sq_m)
       abunds <- terra::rast(ebirdst::load_raster("abundance",
@@ -262,21 +263,81 @@ preprocess_species <- function(species,
       r <- terra::res(mask)
       if(length(r) == 1) r <- rep(r, 2)
       stopifnot(length(r) == 2)
+
+
+      target_cells <- sqrt(max_params / 52)  # target number of cells
       active_sq_m <- sum(terra::values(mask)) * prod(r)
 
-      # Calculate target resolution
-      target_cells <- sqrt(max_params / 52)  # target number of cells
-      target_res <- sqrt(active_sq_m / target_cells ) # target resolution (meters)
-      target_res_km <- round(target_res / 1000)
+      n_attempts <- 4
+      prior_active_sq_m <- rep(NA, n_attempts)
 
-      # Variably round resolution
-      #   Precision used in rounding for each interval defined in breaks
-      breaks <-  c(-Inf, 5, 10, 20, 100, 250, Inf)  # in km
-      precision = c(0.5, 1, 5, 10, 50, 100)  # in km
-      tp <- precision[findInterval(target_res_km, breaks)] # target precision
-      res <- ceiling(target_res_km / tp)  * tp
-      # round() would be closer, but might overshoot
-      cat(" (", res, "km chosen)\n", sep = "")
+      # Iteratively attempt to set resolution
+      # there's some inherent slop in the predictions because not all
+      # the course cells fully overlap fine cells that have data
+      for(i in 1:n_attempts){
+        # Calculate target resolution
+        prior_active_sq_m[i] <- active_sq_m
+        if(verbose)
+          cat("  Attempt ", i , " at setting resolution\n")
+        target_res <- sqrt(active_sq_m / target_cells ) # target resolution (meters)
+        target_res_km <- ceiling(target_res / 1000)
+
+        # Variably round resolution
+        #   Precision used in rounding for each interval defined in breaks
+        breaks <-  c(-Inf, 5, 10, 20, 150, 250, Inf)  # in km
+        precision = c(0.5, 1, 5, 10, 25, 50)  # in km
+        tp <- precision[findInterval(target_res_km, breaks)] # target precision
+        res <- ceiling(target_res_km / tp)  * tp
+        # round() would be closer, but might overshoot
+        cat("  (", res, "km chosen)\n", sep = "")
+        res_m <- res * 1000
+        # It's still possible to overshoot  - I think because along
+        # edges single values at a fine resolution may map to a large cell
+
+        # Trial reprojection
+        initial_res <- mean(res(mask))
+        factor <- round(res_m / initial_res)
+        reproject_res <- res_m / factor
+
+        trial_ref <-  terra::project(mask, crs, method = "near", origin = 0,
+                                     res = reproject_res)
+        trial <- terra::project(abunds, trial_ref)
+
+        trial <- terra::aggregate(trial,
+                                  fact = factor,
+                                  fun = mean,
+                                  na.rm = TRUE)
+        trial_mask <- make_mask(trial)
+        trial_cells <- sum(values(trial_mask), na.rm = TRUE)
+        trial_active_sq_m <- trial_cells * xres(trial_mask)^2
+
+        pct_of_target <- (trial_cells^2) / (target_cells^2) * 100
+
+        if(verbose)
+          cat("  ", pct_of_target, "% of target (estimate).\n")
+
+        if(pct_of_target <= 100 && pct_of_target > 90){
+          if(verbose)
+            cat(" success\n")
+          break
+        } else {
+          # Try again (up to 3 times)
+          if(verbose)
+            cat("  trying again\n")
+          if(i < 3){
+            active_sq_m <- trial_active_sq_m
+          } else {
+            # If we've tried a few times often we've bounced around and this
+            # will perhaps force us towards the middle:
+            active_sq_m <- mean(c(trial_active_sq_m, prior_active_sq_m[1:(i-1)]))
+
+
+          }
+        }
+      } # end resolution trials
+
+      if(pct_of_target > 100 || pct_of_target < 90)
+        cat("  Failed to find a resolution that resulted in > 90% and < 100 % of the target parameters.\n")
 
       if(!missing(clip) && verbose){
         cat("Clipping removed ", format(pct_lost, nsmall = 2), "% of the total density\n", sep = "" )
@@ -477,7 +538,7 @@ preprocess_species <- function(species,
   pct_max_params <- n_params/max_params*100
   if(verbose)
     cat("Model has:\n\t",
-        sum(m), " active cells,\n\t", ncol(distr) - 1, " transitions, and\n\t",
+        sum(m), " active cells,\n\t", n_transitions , " transitions, and\n\t",
         format(n_params, big.mark = ","), " parameters (",
         round(pct_max_params, 1), "% of maximum parameters)\n",
         sep ="")

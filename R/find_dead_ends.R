@@ -1,11 +1,12 @@
-#' identify inconsistencies in sparse BirdFlow models
+#' @rdname fix_dead_ends
+#' @title find and fix inconsistencies in sparse BirdFlow models
 #'
-#' With sparsification ([sparsify()]) it's possible to create models that
+#' @description With sparsification ([sparsify()]) it's possible to create models that
 #' have dead ends -  states that can be entered but not exited. This occurs when
 #'  one marginal encodes transitions into a state for which the next marginal
-#'  has no transitions out.
+#'  has no transitions out. These functions find and fix those states.
 #'
-
+#' @details
 #'  Consider two adjacent marginals; the rows of the second and the columns of
 #'  the first both correspond with the species distribution for the timestep
 #'  between them. For every location in the model at that timestep there are
@@ -24,11 +25,9 @@
 #'  dead end are often low probability so routing may work most of the time but
 #'  occasionally fail. The error will occur with the subsequent iteration when
 #'  attempting to sample from a bunch of zero probability states.
-
-
 #' @param x `BirdFlow` model
 #'
-#' @return a data.frame with columns:
+#' @return `find_dead_ends() returns a data.frame with columns:
 #'| `timestep` | the timestep associated with the dead end |
 #'| --- | --- |
 #'|  | \cr |
@@ -42,6 +41,10 @@
 #'
 #' There will be a row for each dead end state, if no dead ends are found an
 #' empty (zero row) data.frame is returned.
+#'
+#' @seealso
+#'  [sparsify()] calls `fix_dead_ends()`, which in turn calls
+#' `find_dead_ends()` and [fix_current_dead_ends()].
 #'
 #' @export
 #'

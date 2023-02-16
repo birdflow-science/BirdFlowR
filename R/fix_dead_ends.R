@@ -1,6 +1,13 @@
+# Note most of the documentation for this is in find_dead_ends
+# which uses @rdname fix_dead_ends so is combined with the documentation here.
 
-
-
+#' @param bf BirdFlow model
+#' @param max_attempts The maximum number of iterations to try before giving up
+#'
+#' @return `fix_dead_ends()` returns a BirdFlow model with additional marginal
+#'   row and columns zeroed out. If successful it will have no dead ends. It
+#'   also adds a data.frame  `fix_stats` to `bf$metadata$sparse`.
+#' @export
 fix_dead_ends <- function(bf, max_attempts = 100){
 
   verbose = TRUE
@@ -21,7 +28,6 @@ fix_dead_ends <- function(bf, max_attempts = 100){
     # initial sum is just the number of marginals.
     initial_sum <- n_transitions(bf)
   }
-
 
   for(i in 1:(max_attempts+1) ){
 
@@ -49,8 +55,18 @@ fix_dead_ends <- function(bf, max_attempts = 100){
 }
 
 
-
-
+#' Fix the dead ends currently present in the model
+#'
+#' THe internal function `fix_current_dead_ends()` zeros
+#' out the row or column of the marginal that leads into current dead ends,
+#' eliminating all transitions into the existing dead end states.  It tends to
+#' create new dead ends in the process so is called iteratively by
+#' [fix_dead_ends()].
+#'
+#' @param bf BirdFlow model
+#' @param de (optional) output from [find_dead_ends()]
+#'
+#' @return a BirdFlow model with selected marginal rows and columns zeroed out.
 fix_current_dead_ends <- function(bf, de){
   if(missing(de))
     de <- find_dead_ends(bf)

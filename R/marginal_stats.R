@@ -7,7 +7,7 @@
 #' These are used by sparsify and fix_dead_ends.  marginal_stats is slightly
 #' more efficient than calling the other two functions independently.
 #'
-#' @param bf
+#' @param bf BirdFlowModel
 #'
 #' @return `marginal_stats()` returns a list with
 #'  \item{sum}{the sum of all the marginals}

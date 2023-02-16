@@ -13,7 +13,7 @@ sum_marginals(bf)
 calc_pct_zero(bf)
 }
 \arguments{
-\item{bf}{}
+\item{bf}{BirdFlowModel}
 }
 \value{
 \code{marginal_stats()} returns a list with
