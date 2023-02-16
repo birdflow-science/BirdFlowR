@@ -4,16 +4,23 @@
 \alias{import_birdflow}
 \title{import BirdFlow model from an hdf5 file}
 \usage{
-import_birdflow(hdf5, tiff, species)
+import_birdflow(hdf5, ..., version)
 }
 \arguments{
 \item{hdf5}{Path to an hdf5 file}
 
+\item{...}{Arguments to be passed to a version specific internal function.
+Likely will only be used with
+version 1 which takes two additional arguments: \describe{
 \item{tiff}{Path to the model geotiff}
-
 \item{species}{An eBird species code.  It should appear in the
 \code{species_code} column of the data.frame returned by
 \code{\link[auk:get_ebird_taxonomy]{auk::get_ebird_taxonomy()}}}
+}}
+
+\item{version}{(optional) force reading of BirdFlow models as a particular
+version. Normally, this will be determined from metadata in the hdf5
+file.}
 }
 \value{
 a BirdFlow object

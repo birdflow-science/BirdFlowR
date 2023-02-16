@@ -21,7 +21,7 @@
 #' @param bf BirdFlow object
 #' @param type The type of data to retrieve. One of "coastline", "country", or
 #'   "states" for data included in \pkg{rnaturalearth}; or any value accepted by
-#'   [rnaturalearth::ne_download()].
+#'   [ne_download()][rnaturalearth::ne_download()].
 #' @param scale The scale of data to return. Ignored if type is "states",
 #'   otherwise passed to one of [ne_download()][rnaturalearth::ne_download()].
 #'   [ne_coastline()][rnaturalearth::ne_coastline()],
@@ -30,16 +30,15 @@
 #'   Valid values are 110, 50, 10, small', 'medium', and 'large'.
 #' @param buffer A buffer in degrees (latitude and longitude) to add to the
 #'   extent of `bf` prior to cropping the Natural Earth data.
-#' @param keep_attributes If `FALSE`, the default attribute columns are dropped
-#'   to facilitate clean plotting. sf by default creates one facet per column in
-#'   the data.
+#' @param keep_attributes If `FALSE`, the default, attribute columns are dropped
+#'   to facilitate clean plotting.
 #' @param country if retrieving states with `get_states()` or
-#'  `get_naturalearth(type = "states")`) this is used to select a country. If
+#'  `get_naturalearth(type = "states")` this is used to select a country. If
 #'   omitted, states from all countries are returned.
-#' @param ... Other arguments to be passed to [rnaturalearth::ne_download()].
+#' @param ... Other arguments to be passed to [ne_download()][rnaturalearth::ne_download()].
 #'   Quite possibly you will want to use `category = "physical"`.
 #' @return [sf][sf::st_sf] object with the same coordinate reference system
-#'   (CRS) as `bf` and (with default buffer) a somewhat larger extent.
+#'   (CRS) as `bf` and (with default `buffer`) a somewhat larger extent.
 #' @export
 #' @examples
 #'  bf <- BirdFlowModels::amewoo
@@ -53,7 +52,7 @@
 get_naturalearth <- function(bf,
                              type,
                              scale = "medium",
-                             buffer = 10,
+                             buffer = 15,
                              keep_attributes = FALSE,
                              country,
                              ... ){

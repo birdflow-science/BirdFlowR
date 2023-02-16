@@ -28,16 +28,50 @@
 #' from the hdf5 are checked against redundant versions in the geoTiff.
 #'
 #' @param hdf5 Path to an hdf5 file
-#' @param tiff  Path to the model geotiff
-#' @param species An eBird species code.  It should appear in the
+#' @param ... Arguments to be passed to a version specific internal function.
+#'    Likely will only be used with
+#'    version 1 which takes two additional arguments: \describe{
+#'        \item{tiff}{Path to the model geotiff}
+#'        \item{species}{An eBird species code.  It should appear in the
 #'   `species_code` column of the data.frame returned by
-#'   [auk::get_ebird_taxonomy()]
+#'   [auk::get_ebird_taxonomy()]}
+#'    }
+#' @param version (optional) force reading of BirdFlow models as a particular
+#'   version. Normally, this will be determined from metadata in the hdf5
+#'   file.
 #' @return a BirdFlow object
 #' @export
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
-import_birdflow <- function(hdf5, tiff, species){
+import_birdflow <- function(hdf5, ..., version){
+  if(missing(version)){
+    contents <- h5ls(hdf5)
+    contents <- paste0(contents$group, "/", contents$name)
+    contents <- gsub("^/*", "", contents)
+
+    if("version" %in% contents){
+      # used in version 1
+      version <- as.vector(h5read(hdf5, "version"))
+    } else if("metadata/birdflow_version" %in% contents){
+      # used in version 2+
+      version <- as.vector(h5read(hdf5, "metadata/birdflow_version"))
+    } else {
+      # default to current version
+      version = new_BirdFlow()$metadata$birdflow_version
+    }
+  }
+
+  version <- as.character(version)
+  return(switch(as.character(version),
+                "1" = import_birdflow_v1(hdf5 = hdf5, ...),
+                "2" = import_birdflow_v2(hdf5 = hdf5, ...),
+                stop("Unrecognized version") ) )
+}
+
+
+
+import_birdflow_v1 <- function(hdf5, tiff, species){
 
   stopifnot(file.exists(hdf5), file.exists(tiff))
 

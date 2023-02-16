@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_dead_ends.R
 \name{find_dead_ends}
 \alias{find_dead_ends}
-\title{function to identify inconsistencies in sparse BirdFlow models}
+\title{identify inconsistencies in sparse BirdFlow models}
 \usage{
 find_dead_ends(x)
 }
@@ -37,21 +37,20 @@ Consider two adjacent marginals; the rows of the second and the columns of
 the first both correspond with the species distribution for the timestep
 between them. For every location in the model at that timestep there are
 four possibilities (1) the first marginal's column has non-zero values and
-the second marginal's row is all zero; there is a forward transition into
+the second marginal's row is all zero: there is a forward transition into
 that state but no forward transition out and it's a forward dead end; (2)
-the situation is reversed and first marginals column is all zeros and the
-second marginal's corresponding row has non-zero values, a backward dead end
-(encountered when projecting backwards in time); (3) if they both have only
-zeros: the model is fine but that state is dropped; and (4) if they both
-have non-zero values than the corresponding state is valid and can be
+the situation is reversed and the first marginals column is all zeros and
+the second marginal's corresponding row has non-zero values, a backward dead
+end (encountered when projecting backwards in time); (3) if they both have
+only zeros: the model is fine but that state is dropped; and (4) if they
+both have non-zero values than the corresponding state is valid and can be
 reached and exited when projecting forward or backwards.
 
-Dead ends result in lost density with \code{\link[=forecast]{forecast()}} and errors when
-they are entered with \code{\link[=route]{route()}}. Based on initial testing the transitions
-into the dead end are often low probability so routing may work most of the
-time but occasionally fail. The error will occur with the subsequent
-iteration when attempting to sample from a bunch of zero
-probability states.
+Dead ends result in lost density with \code{\link[=forecast]{forecast()}} and errors when they are
+entered with \code{\link[=route]{route()}}. Based on initial testing the transitions into the
+dead end are often low probability so routing may work most of the time but
+occasionally fail. The error will occur with the subsequent iteration when
+attempting to sample from a bunch of zero probability states.
 }
 \examples{
 library(BirdFlowModels)

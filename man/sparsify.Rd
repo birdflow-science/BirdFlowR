@@ -4,7 +4,7 @@
 \alias{sparsify}
 \title{sparsify BirdFlow models}
 \usage{
-sparsify(bf, method, p)
+sparsify(bf, method, p, fix = TRUE)
 }
 \arguments{
 \item{bf}{A BirdFlow model}
@@ -17,6 +17,11 @@ vector (\code{c("state", "marginal")}) or a single string
 \item{p}{Required unless \code{method = "state"} to control the proportion of the
 probability density retained in the sparsification process. See "Methods"
 below.}
+
+\item{fix}{if TRUE call \code{\link[=fix_dead_ends]{fix_dead_ends()}} to eliminate dead ends
+in the sparse model. Defaults to TRUE, unless the method is "state" in
+which case it will be forced to FALSE as the state method does not
+create dead ends.}
 }
 \value{
 A BirdFlow object with many values in the marginals set to zero. The

@@ -80,6 +80,10 @@
 #' @param p Required unless `method = "state"` to control the proportion of the
 #'   probability density retained in the sparsification process. See "Methods"
 #'   below.
+#' @param fix if TRUE call [fix_dead_ends()] to eliminate dead ends
+#'   in the sparse model. Defaults to TRUE, unless the method is "state" in
+#'   which case it will be forced to FALSE as the state method does not
+#'   create dead ends.
 #' @return A BirdFlow object with many values in the marginals set to zero. The
 #'   metadata will also be updated with sparsification statistics. The
 #'   marginals will be standardized so that they sum to 1.
@@ -93,7 +97,7 @@
 #' bf <- import_birdflow(hdf5_path)
 #' bf <- sparsify(bf, method = "marginal+state", p = 0.99)
 #' }
-sparsify <- function(bf, method, p){
+sparsify <- function(bf, method, p, fix = TRUE){
 
   supported_methods <- c("model", "marginal", "conditional", "state")
   proportional_methods <- setdiff(supported_methods, "state")
@@ -124,13 +128,21 @@ sparsify <- function(bf, method, p){
     if( length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1){
       stop("p should be a single numeric greater than zero and less than or equal to 1.")
     }
+    if(missing(fix))
+      fix = TRUE
+  } else {
+    fix = FALSE
   }
 
   #----------------------------------------------------------------------------#
   # Setup (common to all methods)
   #----------------------------------------------------------------------------#
-  pre_sparsification_stats <- evaluate_perfomance(bf)
+
   verbose <- TRUE
+
+  if(verbose)
+    cat("Evaluating full model performance\n")
+  pre_sparsification_stats <- evaluate_perfomance(bf)
   index <- bf$marginals$index
   index <- index[index$direction == "forward", ]
   marginal_names <- index$marginal
@@ -170,15 +182,26 @@ sparsify <- function(bf, method, p){
 
       # Calculate which cells need to be zeroed based on retaining p of each row
       row_thresholds <- apply(mar, 1, find_threshold, p = p)
-      to_zero_r <- mapply(function(m, thresh) m < thresh, m = mar, thresh = row_thresholds)
-      to_zero_r <- matrix(to_zero_r, nrow = nrow(mar), ncol = ncol(mar))
+      for(j in 1:nrow(mar)){
+        sv <- mar[j , ] < row_thresholds[j]
+        to_zero[j, sv] <- TRUE
+      }
+
+      #  to_zero_r <- mapply(function(m, thresh) m < thresh, m = mar, thresh = row_thresholds)
+      #  to_zero_r <- matrix(to_zero_r, nrow = nrow(mar), ncol = ncol(mar))
 
       # Calculate which cells need to be zeroed based on retaining p of each col
       col_thresholds <- apply(mar, 2, find_threshold, p = p)
-      to_zero_c <- mapply(function(m, thresh) m < thresh, m = t(mar), thresh = col_thresholds )
-      to_zero_c <- t(matrix(to_zero_c, nrow = nrow(mar), ncol = ncol(mar)))
+      for(j in 1:ncol(mar)){
+        sv <- mar[ , j ] < col_thresholds[j]
+        to_zero[ sv , j ] <- TRUE
+      }
 
-      mar[to_zero_c | to_zero_r] <- 0
+      #  to_zero_c <- mapply(function(m, thresh) m < thresh, m = t(mar), thresh = col_thresholds )
+      #  to_zero_c <- t(matrix(to_zero_c, nrow = nrow(mar), ncol = ncol(mar)))
+      #   mar[to_zero_c | to_zero_r] <- 0
+      mar[to_zero ] <- 0
+
       bf$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
       if(verbose) cat(".")
     }
@@ -283,36 +306,85 @@ sparsify <- function(bf, method, p){
 
   #----------------------------------------------------------------------------#
   #
-  # Finish: standardize marginals and save statistics
+  #  save post sparsification statistics
   #
   #----------------------------------------------------------------------------#
 
-  # Save stats in BirdFlow object
-  post_sparsification_stats <- evaluate_perfomance(bf)
-  performance <- cbind(data.frame(model = c("full", "sparse")),
-                       rbind(as.data.frame(pre_sparsification_stats),
-                             as.data.frame(post_sparsification_stats) ) )
+  # I need to standarize (so marginals sum to 1) prior to calculating stats
+  # but I'm also keeping the non-standaridzed model as if
+  # we also fix dead ends we want to calculate the density lost based
+  # on the non-standardized object.
 
-  # Re-standardize and calculate level of sparsification
-  marginal_sums <- n_zero <- numeric(length(marginal_names))
+  if(verbose)
+    cat("Evaluating post-sparsification performance\n")
+
+  # Make standardized version
+  standardized_bf <- bf
   for(i in seq_along(marginal_names)){
-    mar <- bf$marginals[[marginal_names[i] ]]
+    mar <- standardized_bf$marginals[[marginal_names[i] ]]
     s <- sum(mar)
-    marginal_sums[i] <- s
-    n_zero[i] <- sum(mar == 0)
     mar <- Matrix(mar/s, sparse = TRUE)  # re-normalize
-    bf$marginals[[marginal_names[i] ]] <- mar
+    standardized_bf$marginals[[marginal_names[i] ]] <- mar
   }
-  pct_zero <- sum(n_zero) / (n_active(bf)^2 * length(marginal_names))* 100
-  n_mar <- length(marginal_names)
-  pct_density_lost <- (n_mar - sum(marginal_sums) ) / n_mar * 100 # started with sum of 1
+  post_sparsification_stats <- evaluate_perfomance(standardized_bf)
+
+  # Calculate density lost and and percent zero on the non-standardized version
+  ms <- marginal_stats(bf)
+  pct_zero = ms$pct_zero
+  pct_density_lost = (n_transitions(bf) - ms$sum ) / n_transitions(bf) * 100
+
+  # Assemble all the stats in one table
+  stats <- cbind(data.frame(model = c("full", "sparse"),
+                            pct_zero = c(0, ms$pct_zero),
+                            pct_density_lost = c(0, pct_density_lost) ),
+                 rbind(as.data.frame(pre_sparsification_stats),
+                       as.data.frame(post_sparsification_stats) ) )
+
+  if(fix){
+    if(verbose)
+      cat("Fixing dead ends\n")
+
+    bf <- fix_dead_ends(bf)
+
+    if(verbose)
+      cat("Evaluating post-fix performance\n")
+
+    ms <- marginal_stats(bf)
+    pct_zero <- ms$pct_zero
+    pct_density_lost = (n_transitions(bf) - ms$sum ) / n_transitions(bf) * 100
+
+    # Update standardized version
+    standardized_bf <- bf
+    for(i in seq_along(marginal_names)){
+      mar <- standardized_bf$marginals[[marginal_names[i] ]]
+      s <- sum(mar)
+      mar <- Matrix(mar/s, sparse = TRUE)  # re-normalize
+      standardized_bf$marginals[[marginal_names[i] ]] <- mar
+    }
+
+    post_fix_stats <- evaluate_perfomance(standardized_bf)
+
+    # Add row to stats with the stats on the fixed version
+    stats <- rbind(stats,
+                   cbind(data.frame(model = "fixed",
+                                    pct_zero = pct_zero,
+                                    pct_density_lost = pct_density_lost),
+                         as.data.frame(post_fix_stats) )  )
+  }
+
+  # Update object to latest standardized version
+  bf <- standardized_bf
 
   if(verbose)
     cat("\t", format(pct_zero, digits = 3), "% zero\n\t",
         format(pct_density_lost, digits = 3), "% density lost\n\t",
         "traverse correlation:\n\t\t",
-        "full: ", format(performance$traverse_cor[1], digits = 3), "\n\t\t",
-        "sparse: ", format(performance$traverse_cor[2], digits = 3), "\n",
+        "full: ", format(stats$traverse_cor[1], digits = 3), "\n\t\t",
+        "sparse: ", format(stats$traverse_cor[2], digits = 3), "\n",
+        ifelse(fix,
+               paste0("\t\t", "fix: ",
+                      format(stats$traverse_cor[3], digits = 3), "\n"),
+               ""),
         sep = "")
 
   # Build list of used arguments (other than bf and method)
@@ -324,12 +396,12 @@ sparsify <- function(bf, method, p){
     args <- NA
 
   bf$metadata$is_sparse <- TRUE
-  bf$metadata$sparse_stats <- list(method  = method,
-                                   arguments = args,
-                                   performance = performance,
-                                   pct_zero = pct_zero,
-                                   pct_density_lost = pct_density_lost
-  )
+  bf$metadata$sparse$method  = method
+  bf$metadata$sparse$arguments = args
+  bf$metadata$sparse$stats = stats
+  bf$metadata$sparse$pct_zero = pct_zero
+  bf$metadata$sparse$pct_density_lost = pct_density_lost
+
 
   validate_BirdFlow(bf)  # still good?
 

@@ -13,7 +13,9 @@ preprocess_species(
   overwrite = TRUE,
   crs,
   clip,
-  max_params = 8.1e+08
+  max_params,
+  gb = 12,
+  skip_quality_checks = FALSE
 )
 }
 \arguments{
@@ -45,10 +47,18 @@ have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} ob
 or or produce one when called with \link[terra:vect]{vect(clip)}}
 
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
-model should contain. If \code{res} is omitted a resolution will be chosen that
-yields this many fitted parameters. The default value represents the number
-of parameters that could efficiently be fit in early BirdFlow models
-(around 4000 active cells and 51 transitions).}
+model should contain. Ignored if \code{res} is set.  Otherwise a resolution
+will be chosen that yields this many fitted parameters. See \code{gb} for
+the default way of setting \code{max_params} and \code{res}.}
+
+\item{gb}{Gigabytes of memory on machine that will fit the models. If \code{res}
+and \code{max_params} are both missing this is used to estimate \code{max_params}
+which is, in turn, used to determine the resolution. Ignroed if either
+\code{res} or \code{max_params} is set.}
+
+\item{skip_quality_checks}{If \code{TRUE} than preprocess the species even if
+not all of four ranges are modeled (based on
+\link[ebirdst:ebirdst_runs]{ebirdst_runs()}).}
 }
 \value{
 returns a BirdFlow model object that lacks marginals, but is
@@ -59,6 +69,21 @@ Write a template BirdFlow object to an hdf5 file based on distribution data
 downloaded with \pkg{ebirdst}. The object is complete except for marginals
 and transitions.
 }
+\section{{Maximum number of parameters}}{
+
+
+The maximum number of parameters that can be fit is machine dependent.
+2023-02-10 we tested under different resolutions with "amewoo" and
+identified bounds on the maximum.\tabular{lllll}{
+   Machine \tab GB Mem. \tab Lower Bound (worked) \tab Upper Bound (failed) \tab Params / GB \cr
+   titanx gpu \tab 12GB \tab 306804561 \tab 334693725 \tab 25567047 \cr
+   m40 gpu \tab 24GB \tab 557395226 \tab 610352178 \tab 23224801 \cr
+}
+
+
+\code{parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)}
+}
+
 \examples{
 \dontrun{
 

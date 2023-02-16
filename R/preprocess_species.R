@@ -4,6 +4,19 @@
 #' downloaded with \pkg{ebirdst}. The object is complete except for marginals
 #' and transitions.
 #'
+#' @section {Maximum number of parameters}:
+#'
+#' The maximum number of parameters that can be fit is machine dependent.
+#' 2023-02-10 we tested under different resolutions with "amewoo" and
+#' identified bounds on the maximum.
+#'
+#'| Machine | GB Mem. | Lower Bound (worked) | Upper Bound (failed)| Params / GB |
+#'| ------- | ------- | -------------------- | ------------------- | ------------|
+#'|titanx gpu | 12GB  | 306804561            | 334693725           | 25567047    |
+#'| m40 gpu  | 24GB   | 557395226            | 610352178           | 23224801    |
+#'
+#' `parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)`
+#'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
 #'   both `tiff` and `hdf5` are TRUE.  File names created here will incorporate
@@ -24,10 +37,17 @@
 #'   have a CRS and should either be a [SpatVector()][terra::SpatVector] object
 #'   or or produce one when called with [vect(clip)][terra::vect()]
 #' @param max_params the maximum number of fitted parameters that the BirdFlow
-#'   model should contain. If `res` is omitted a resolution will be chosen that
-#'   yields this many fitted parameters. The default value represents the number
-#'   of parameters that could efficiently be fit in early BirdFlow models
-#'   (around 4000 active cells and 51 transitions).
+#'   model should contain. Ignored if `res` is set.  Otherwise a resolution
+#'   will be chosen that yields this many fitted parameters. See `gb` for
+#'   the default way of setting `max_params` and `res`.
+#' @param gb Gigabytes of memory on machine that will fit the models. If `res`
+#'   and `max_params` are both missing this is used to estimate `max_params`
+#'   which is, in turn, used to determine the resolution. Ignroed if either
+#'   `res` or `max_params` is set.
+#' @param skip_quality_checks If `TRUE` than preprocess the species even if
+#'   not all of four ranges are modeled (based on
+#'   [ebirdst_runs()][ebirdst::ebirdst_runs()]).
+#'
 #' @return returns a BirdFlow model object that lacks marginals, but is
 #'   otherwise complete.
 #' @export
@@ -66,7 +86,10 @@ preprocess_species <- function(species,
                                overwrite = TRUE,
                                crs,
                                clip,
-                               max_params = 8.1e+8
+                               max_params,
+                               gb = 12,
+                               skip_quality_checks = FALSE
+
 ){
 
   # Validate inputs
@@ -105,7 +128,7 @@ preprocess_species <- function(species,
   export <- new_BirdFlow()
   export$trans <- NULL
   export$marginals <- NULL
-
+  max_param_per_gb <- 23224801
 
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
@@ -134,7 +157,8 @@ preprocess_species <- function(species,
                                 "nonbreeding_range_modeled",
                                 "postbreeding_migration_range_modeled",
                                 "prebreeding_migration_range_modeled")
-  if(! all( unlist( spmd[model_coverage_variables]) ) )
+
+  if(!skip_quality_checks && ! all( unlist( spmd[model_coverage_variables]) ) )
     stop("eBird status and trends models do not cover the full range for ",
          spmd$common_name, " (", spmd$species_code, ")")
 
@@ -166,11 +190,7 @@ preprocess_species <- function(species,
   # Saves to disk. Path for windows 10 was:
   #  ~\AppData\Roaming\R\data\R\ebirdst\2021\[species]
   #----------------------------------------------------------------------------#
-  if(file.exists(ebirdst::get_species_path(download_species))){
-    sp_path <-  suppressMessages(ebirdst::ebirdst_download(download_species))
-  } else {
-    sp_path <-  ebirdst::ebirdst_download(download_species)
-  }
+  sp_path <-  ebirdst::ebirdst_download(download_species)
 
   # Load map parameters and set crs
   mp  <- ebirdst::load_fac_map_parameters(path = sp_path)
@@ -195,14 +215,21 @@ preprocess_species <- function(species,
   #   resolution that will result in close to max_params (but stay under it)
   #   the total number of fitted parameters in the model. It rounds the
   #   resolution variably - rounding more for larger values.
+  #   Feb 10 - added gb parameter that allows estimating max_params from the
+  #     GB of ram on the machine used to fit the models
   #----------------------------------------------------------------------------#
-
   if(missing(res)){
     if(download_species == "example_data"){
       if(verbose)
         cat("Resolution forced to 30 for example data.\n")
       res <- 30
     } else {
+
+      if(missing(max_params)){
+        stopifnot( is.numeric(gb) | length(gb) == 1 | !is.na(gb) |  gb < 0 )
+        max_params <- max_param_per_gb * gb
+        cat("Setting max_params to ", max_params, " anticipating ", gb, " GB of memory.\n" )
+      }
 
       if(verbose)
         cat("Calculating resolution")
@@ -257,42 +284,42 @@ preprocess_species <- function(species,
       }
 
     }
-    res_m <- 1000 * res # target resolution in meters (res argument uses KM)
+  }
+  res_m <- 1000 * res # target resolution in meters (res argument uses KM)
 
-    #----------------------------------------------------------------------------#
-    # Set output paths  (depends on resolution)                               ####
-    #----------------------------------------------------------------------------#
-    if(any_output){
-      out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
-      if(!dir.exists(out_dir))
-        stop("output directory ", out_dir, " does not exist.")
-      out_base <- file.path(out_dir,
-                            paste0(download_species, "_", st_year,"_", res,"km"))
+  #----------------------------------------------------------------------------#
+  # Set output paths  (depends on resolution)                               ####
+  #----------------------------------------------------------------------------#
+  if(any_output){
+    out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
+    if(!dir.exists(out_dir))
+      stop("output directory ", out_dir, " does not exist.")
+    out_base <- file.path(out_dir,
+                          paste0(download_species, "_", st_year,"_", res,"km"))
 
-      if(!missing(clip))
-        out_base <- paste0(out_base, "_clip")
+    if(!missing(clip))
+      out_base <- paste0(out_base, "_clip")
 
-      paths <- list()
-      if(hdf5){
-        paths <- c(paths, list( hdf5 = paste0( out_base, ".hdf5" ) ) )
-      }
-      if(tiff){
-        paths <- c(paths, list(
-          abundance = paste0(out_base, ".tif"),
-          uci = paste0(out_base, "_uci.tif"),
-          lci = paste0(out_base, "_lci.tif")
-        ))
-      }
-
-      exist <- file.exists(unlist(paths))
-      if(!overwrite && any(exist)){
-        stop("Prexisiting output files: ",
-             paste(unlist(paths[exist]), collapse = ", "),
-             " Set overwrite = TRUE to overwrite.")
-      }
-      rm(exist, out_base)
+    paths <- list()
+    if(hdf5){
+      paths <- c(paths, list( hdf5 = paste0( out_base, ".hdf5" ) ) )
     }
-  }  # end if(missing(res))
+    if(tiff){
+      paths <- c(paths, list(
+        abundance = paste0(out_base, ".tif"),
+        uci = paste0(out_base, "_uci.tif"),
+        lci = paste0(out_base, "_lci.tif")
+      ))
+    }
+
+    exist <- file.exists(unlist(paths))
+    if(!overwrite && any(exist)){
+      stop("Prexisiting output files: ",
+           paste(unlist(paths[exist]), collapse = ", "),
+           " Set overwrite = TRUE to overwrite.")
+    }
+    rm(exist, out_base)
+  }
 
   #----------------------------------------------------------------------------#
   #
@@ -360,7 +387,7 @@ preprocess_species <- function(species,
   if(!isTRUE(all.equal(e[1] %% res, 0, check.attributes = FALSE))){
     # n_to_add is the number of columns to add on the left
     n_to_add <- factor - round( (e[1] %% res_m) / reproject_res )
-    new_ext[1] <- ext[1] - n_to_add * reproject_res
+    new_ext[1] <- e[1] - n_to_add * reproject_res
   }
   if(!isTRUE(all.equal(e[4] %% res, 0, check.attributes = FALSE))){
     # n_to_add is the number of rows to add at the top
@@ -444,7 +471,7 @@ preprocess_species <- function(species,
 
   # Calculate realized number of parameters in BirdFlow model
   export$metadata$n_active <- n_active <- sum(m)
-  export$metadata$n_transitions <- n_transitions <- ncol(distr) - 1
+  export$metadata$n_transitions <- n_transitions <- ncol(distr)
 
   n_params <- n_active^2 * (n_transitions) + nrow(distr)
   pct_max_params <- n_params/max_params*100

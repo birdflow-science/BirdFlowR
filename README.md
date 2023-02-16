@@ -5,8 +5,9 @@
 [![Codecov test coverage](https://codecov.io/gh/birdflow-science/BirdFlowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/birdflow-science/BirdFlowR?branch=main)
 <!-- badges: end -->
 
-An R package to forecast changes in distributions and generates synthetic 
-migration routes based on BirdFlow models.
+An R package to forecast changes in distributions and generate synthetic migration routes based on BirdFlow models.
+
+This package is under development and not yet formally released. Function names and arguments may change.
 
 ## Installation
 

@@ -11,7 +11,7 @@ get_naturalearth(
   bf,
   type,
   scale = "medium",
-  buffer = 10,
+  buffer = 15,
   keep_attributes = FALSE,
   country,
   ...
@@ -28,7 +28,7 @@ get_countries(bf, scale = "medium", buffer = 15, keep_attributes = FALSE)
 
 \item{type}{The type of data to retrieve. One of "coastline", "country", or
 "states" for data included in \pkg{rnaturalearth}; or any value accepted by
-\code{\link[rnaturalearth:ne_download]{rnaturalearth::ne_download()}}.}
+\link[rnaturalearth:ne_download]{ne_download()}.}
 
 \item{scale}{The scale of data to return. Ignored if type is "states",
 otherwise passed to one of \link[rnaturalearth:ne_download]{ne_download()}.
@@ -40,20 +40,19 @@ Valid values are 110, 50, 10, small', 'medium', and 'large'.}
 \item{buffer}{A buffer in degrees (latitude and longitude) to add to the
 extent of \code{bf} prior to cropping the Natural Earth data.}
 
-\item{keep_attributes}{If \code{FALSE}, the default attribute columns are dropped
-to facilitate clean plotting. sf by default creates one facet per column in
-the data.}
+\item{keep_attributes}{If \code{FALSE}, the default, attribute columns are dropped
+to facilitate clean plotting.}
 
 \item{country}{if retrieving states with \code{get_states()} or
-\code{get_naturalearth(type = "states")}) this is used to select a country. If
+\code{get_naturalearth(type = "states")} this is used to select a country. If
 omitted, states from all countries are returned.}
 
-\item{...}{Other arguments to be passed to \code{\link[rnaturalearth:ne_download]{rnaturalearth::ne_download()}}.
+\item{...}{Other arguments to be passed to \link[rnaturalearth:ne_download]{ne_download()}.
 Quite possibly you will want to use \code{category = "physical"}.}
 }
 \value{
 \link[sf:sf]{sf} object with the same coordinate reference system
-(CRS) as \code{bf} and (with default buffer) a somewhat larger extent.
+(CRS) as \code{bf} and (with default \code{buffer}) a somewhat larger extent.
 }
 \description{
 These are convenience wrappers to \pkg{rnaturalearth} functions. They

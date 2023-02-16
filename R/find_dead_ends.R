@@ -1,4 +1,4 @@
-#' function to identify inconsistencies in sparse BirdFlow models
+#' identify inconsistencies in sparse BirdFlow models
 #'
 #' With sparsification ([sparsify()]) it's possible to create models that
 #' have dead ends -  states that can be entered but not exited. This occurs when
@@ -10,22 +10,22 @@
 #'  the first both correspond with the species distribution for the timestep
 #'  between them. For every location in the model at that timestep there are
 #'  four possibilities (1) the first marginal's column has non-zero values and
-#'  the second marginal's row is all zero; there is a forward transition into
+#'  the second marginal's row is all zero: there is a forward transition into
 #'  that state but no forward transition out and it's a forward dead end; (2)
-#'  the situation is reversed and first marginals column is all zeros and the
-#'  second marginal's corresponding row has non-zero values, a backward dead end
-#'  (encountered when projecting backwards in time); (3) if they both have only
-#'  zeros: the model is fine but that state is dropped; and (4) if they both
-#'  have non-zero values than the corresponding state is valid and can be
+#'  the situation is reversed and the first marginals column is all zeros and
+#'  the second marginal's corresponding row has non-zero values, a backward dead
+#'  end (encountered when projecting backwards in time); (3) if they both have
+#'  only zeros: the model is fine but that state is dropped; and (4) if they
+#'  both have non-zero values than the corresponding state is valid and can be
 #'  reached and exited when projecting forward or backwards.
 #'
-#'  Dead ends result in lost density with [forecast()] and errors when
-#'  they are entered with [route()]. Based on initial testing the transitions
-#'  into the dead end are often low probability so routing may work most of the
-#'  time but occasionally fail. The error will occur with the subsequent
-#'  iteration when attempting to sample from a bunch of zero
-#'   probability states.
-#'
+#'  Dead ends result in lost density with [forecast()] and errors when they are
+#'  entered with [route()]. Based on initial testing the transitions into the
+#'  dead end are often low probability so routing may work most of the time but
+#'  occasionally fail. The error will occur with the subsequent iteration when
+#'  attempting to sample from a bunch of zero probability states.
+
+
 #' @param x `BirdFlow` model
 #'
 #' @return a data.frame with columns:
