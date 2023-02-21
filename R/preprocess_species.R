@@ -15,7 +15,16 @@
 #'|titanx gpu | 12GB  | 306804561            | 334693725           | 25567047    |
 #'| m40 gpu  | 24GB   | 557395226            | 610352178           | 23224801    |
 #'
-#' `parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)`
+#' Parameters are calculated as: \cr
+#'   `parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)`
+#'
+#' If `gb` is used (and not `res` or `max_parameters` ) than  `max_parameters` is
+#' set to `23,224,801 * gb` (lower of two values in table above).
+#'
+#' The heuristic to determine resolution given a maximum number of parameters
+#' must estimate the number of cells covered by the data
+#' at a different resolution, a noisy process, so it iteratively tries to find
+#  the right resolution and then rounds.
 #'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
@@ -26,7 +35,7 @@
 #'   parameters will be used, while also minimizing the resolution and limiting
 #'   the number of significant digits.
 #' @param hdf5 if TRUE (default) an hdf5 file will be exported.
-#' @param tiff if TRUE (default) geoTIFF files will be exported.
+#' @param tiff set to TRUE to export geoTIFF files. They are not needed to fit the BirdFlow model.
 #' @param overwrite if TRUE (default) any pre-existing output files will be
 #'   overwritten. If FALSE pre-existing files will result in an error.
 #' @param crs coordinate reference system (CRS) to use.  Defaults to the custom
@@ -42,7 +51,7 @@
 #'   the default way of setting `max_params` and `res`.
 #' @param gb Gigabytes of memory on machine that will fit the models. If `res`
 #'   and `max_params` are both missing this is used to estimate `max_params`
-#'   which is, in turn, used to determine the resolution. Ignroed if either
+#'   which is, in turn, used to determine the resolution. Ignored if either
 #'   `res` or `max_params` is set.
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
 #'   not all of four ranges are modeled (based on
@@ -82,7 +91,7 @@ preprocess_species <- function(species,
                                out_dir,
                                res,
                                hdf5 = TRUE,
-                               tiff = TRUE,
+                               tiff = FALSE,
                                overwrite = TRUE,
                                crs,
                                clip,
@@ -130,6 +139,14 @@ preprocess_species <- function(species,
   export$marginals <- NULL
   max_param_per_gb <- 23224801
 
+
+  if(any_output){
+    if(missing(out_dir))
+      stop("Need an output directory. Please set out_dir.")
+    out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
+    if(!dir.exists(out_dir))
+      stop("output directory ", out_dir, " does not exist.")
+  }
 
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
@@ -220,131 +237,126 @@ preprocess_species <- function(species,
   #     GB of ram on the machine used to fit the models
   #----------------------------------------------------------------------------#
   if(missing(res)){
-    if(download_species == "example_data"){
-      if(verbose)
-        cat("Resolution forced to 30 for example data.\n")
-      res <- 30
-    } else {
 
-      if(missing(max_params)){
-        stopifnot( is.numeric(gb) | length(gb) == 1 | !is.na(gb) |  gb < 0 )
-        max_params <- max_param_per_gb * gb
-        cat("Setting max_params to ", max_params, " anticipating ", gb, " GB of memory.\n" )
+    if(missing(max_params)){
+      stopifnot( is.numeric(gb) | length(gb) == 1 | !is.na(gb) |  gb < 0 )
+      max_params <- max_param_per_gb * gb
+      cat("Setting max_params to ", max_params, " anticipating ", gb, " GB of memory.\n" )
+    }
+
+    if(verbose)
+      cat("Calculating resolution\n")
+    # Load low res abundance data and calculate total areas birds occupy at any
+    # time (active_sq_m)
+    abunds <- terra::rast(ebirdst::load_raster("abundance",
+                                               path = sp_path,
+                                               resolution="lr"))
+
+
+    mask <- make_mask(x = abunds)
+    if(!missing(clip)){
+      clip2 <- terra::project(clip, terra::crs(mask))
+      mask <- terra::mask(mask, clip2)
+      mask[is.na(mask)] <- FALSE
+
+      if(verbose){
+        # Calculate percent of density lost
+        # will print after printing the resolved resolution
+        sa <- sum(abunds)
+        csa <- mask(sa, clip2)
+        tot_density <- sum(terra::values(sa), na.rm = TRUE)
+        clipped_density <- sum(terra::values(csa), na.rm = TRUE)
+        pct_lost <- round((tot_density - clipped_density)/tot_density * 100, 2)
+        rm(sa, csa, tot_density, clipped_density)
       }
+      rm(clip2)
+    }
 
+    r <- terra::res(mask)
+    if(length(r) == 1) r <- rep(r, 2)
+    stopifnot(length(r) == 2)
+
+
+    target_cells <- sqrt(max_params / 52)  # target number of cells
+    active_sq_m <- sum(terra::values(mask)) * prod(r)
+
+    n_attempts <- 10
+
+    # Iteratively attempt to set resolution
+    # there's some inherent slop in the predictions because not all
+    # the course cells fully overlap fine cells that have data
+    for(i in 1:n_attempts){
+      # Calculate target resolution
       if(verbose)
-        cat("Calculating resolution\n")
-      # Load low res abundance data and calculate total areas birds occupy at any
-      # time (active_sq_m)
-      abunds <- terra::rast(ebirdst::load_raster("abundance",
-                                                 path = sp_path,
-                                                 resolution="lr"))
+        cat("  Attempt ", i , " at setting resolution\n")
+      res_m <- sqrt(active_sq_m / target_cells ) # target resolution (meters)
+      res <- res_m / 1000
 
+      cat("  (", round(res, 3), "km chosen)\n", sep = "")
 
-      mask <- make_mask(x = abunds)
-      if(!missing(clip)){
-        clip2 <- terra::project(clip, terra::crs(mask))
-        mask <- terra::mask(mask, clip2)
-        mask[is.na(mask)] <- FALSE
+      # It's still possible to overshoot  - I think because along
+      # edges single values at a fine resolution may map to a large cell
 
-        if(verbose){
-          # Calculate percent of density lost
-          # will print after printing the resolved resolution
-          sa <- sum(abunds)
-          csa <- mask(sa, clip2)
-          tot_density <- sum(terra::values(sa), na.rm = TRUE)
-          clipped_density <- sum(terra::values(csa), na.rm = TRUE)
-          pct_lost <- round((tot_density - clipped_density)/tot_density * 100, 2)
-          rm(sa, csa, tot_density, clipped_density)
-        }
-        rm(clip2)
-      }
+      # Trial reprojection
+      initial_res <- mean(res(mask))
+      factor <- round(res_m / initial_res)
+      if(factor < 1) factor <- 1
+      reproject_res <- res_m / factor
 
-      r <- terra::res(mask)
-      if(length(r) == 1) r <- rep(r, 2)
-      stopifnot(length(r) == 2)
+      trial_ref <-  terra::project(mask, crs, method = "near", origin = 0,
+                                   res = reproject_res)
+      trial <- terra::project(abunds, trial_ref)
 
-
-      target_cells <- sqrt(max_params / 52)  # target number of cells
-      active_sq_m <- sum(terra::values(mask)) * prod(r)
-
-      n_attempts <- 4
-      prior_active_sq_m <- rep(NA, n_attempts)
-
-      # Iteratively attempt to set resolution
-      # there's some inherent slop in the predictions because not all
-      # the course cells fully overlap fine cells that have data
-      for(i in 1:n_attempts){
-        # Calculate target resolution
-        prior_active_sq_m[i] <- active_sq_m
-        if(verbose)
-          cat("  Attempt ", i , " at setting resolution\n")
-        target_res <- sqrt(active_sq_m / target_cells ) # target resolution (meters)
-        target_res_km <- ceiling(target_res / 1000)
-
-        # Variably round resolution
-        #   Precision used in rounding for each interval defined in breaks
-        breaks <-  c(-Inf, 5, 10, 20, 150, 250, Inf)  # in km
-        precision = c(0.5, 1, 5, 10, 25, 50)  # in km
-        tp <- precision[findInterval(target_res_km, breaks)] # target precision
-        res <- ceiling(target_res_km / tp)  * tp
-        # round() would be closer, but might overshoot
-        cat("  (", res, "km chosen)\n", sep = "")
-        res_m <- res * 1000
-        # It's still possible to overshoot  - I think because along
-        # edges single values at a fine resolution may map to a large cell
-
-        # Trial reprojection
-        initial_res <- mean(res(mask))
-        factor <- round(res_m / initial_res)
-        reproject_res <- res_m / factor
-
-        trial_ref <-  terra::project(mask, crs, method = "near", origin = 0,
-                                     res = reproject_res)
-        trial <- terra::project(abunds, trial_ref)
-
+      if(factor != 1)
         trial <- terra::aggregate(trial,
                                   fact = factor,
                                   fun = mean,
                                   na.rm = TRUE)
-        trial_mask <- make_mask(trial)
-        trial_cells <- sum(values(trial_mask), na.rm = TRUE)
-        trial_active_sq_m <- trial_cells * xres(trial_mask)^2
+      trial_mask <- make_mask(trial)
+      trial_cells <- sum(terra::values(trial_mask), na.rm = TRUE)
+      trial_active_sq_m <- trial_cells * xres(trial_mask)^2
 
-        pct_of_target <- (trial_cells^2) / (target_cells^2) * 100
+      pct_of_target <- (trial_cells^2) / (target_cells^2) * 100
 
+      if(verbose)
+        cat("  ", pct_of_target, "% of target (estimate).\n")
+
+      if(pct_of_target <= 100 && pct_of_target > 90){
         if(verbose)
-          cat("  ", pct_of_target, "% of target (estimate).\n")
-
-        if(pct_of_target <= 100 && pct_of_target > 90){
-          if(verbose)
-            cat(" success\n")
-          break
-        } else {
-          # Try again (up to 3 times)
-          if(verbose)
-            cat("  trying again\n")
-          if(i < 3){
-            active_sq_m <- trial_active_sq_m
-          } else {
-            # If we've tried a few times often we've bounced around and this
-            # will perhaps force us towards the middle:
-            active_sq_m <- mean(c(trial_active_sq_m, prior_active_sq_m[1:(i-1)]))
-
-
-          }
-        }
-      } # end resolution trials
-
-      if(pct_of_target > 100 || pct_of_target < 90)
-        cat("  Failed to find a resolution that resulted in > 90% and < 100 % of the target parameters.\n")
-
-      if(!missing(clip) && verbose){
-        cat("Clipping removed ", format(pct_lost, nsmall = 2), "% of the total density\n", sep = "" )
-        rm(pct_lost)
+          cat(" success\n")
+        break
+      } else {
+        # Try again (up to 3 times)
+        if(verbose)
+          cat("  trying again\n")
+        active_sq_m <- trial_active_sq_m
       }
+    } # end resolution trials
 
+
+    if(pct_of_target > 100 || pct_of_target < 90)
+      cat("  Failed to find a resolution that resulted in > 90% and < 100 % of the target parameters.\n")
+
+
+    # Round
+    breaks <-  c(-Inf, 2.5,  5,   100,  300, 600, Inf)  # in km
+    precision =   c(0.1,  .5,  1,     2,     5,  10)  # in km
+    tp <- precision[findInterval(res, breaks)] # target precision
+    res <- ceiling(res / tp)  * tp
+    cat("Rounded to", res, "final resolution.\n")
+
+    if(!missing(clip) && verbose){
+      cat("Clipping removed ", format(pct_lost, nsmall = 2), "% of the total density\n", sep = "" )
+      rm(pct_lost)
     }
+
+
+  }  # End if missing res
+
+  if(download_species == "example_data"){
+    if(verbose)
+      cat("Resolution forced to 30 for example data, which only has low resolution images\n")
+    res <- 30
   }
   res_m <- 1000 * res # target resolution in meters (res argument uses KM)
 
@@ -352,9 +364,7 @@ preprocess_species <- function(species,
   # Set output paths  (depends on resolution)                               ####
   #----------------------------------------------------------------------------#
   if(any_output){
-    out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
-    if(!dir.exists(out_dir))
-      stop("output directory ", out_dir, " does not exist.")
+
     out_base <- file.path(out_dir,
                           paste0(download_species, "_", st_year,"_", res,"km"))
 
@@ -429,6 +439,7 @@ preprocess_species <- function(species,
   # aggregate can hit target exactly
   initial_res <- mean(res(mask))
   factor <- round(res_m / initial_res)
+  if(factor < 1) factor <- 1
   reproject_res <- res_m / factor
   mask<- terra::project(mask, crs, method = "near", origin = 0,
                         res = reproject_res)
@@ -473,6 +484,7 @@ preprocess_species <- function(species,
     cat(" done.\n")
 
   # aggregate to target resolution
+  if(factor != 1){
   if(verbose)
     cat("Resampling to target resolution (", res, " km)\n", sep = "")
   abunds_low_res <- terra::aggregate(abunds,
@@ -490,7 +502,13 @@ preprocess_species <- function(species,
                                          fun = mean,
                                          na.rm = TRUE)
 
+  } else {
 
+    abunds_low_res <- abunds
+    abunds_uci_low_res <- abunds_uci
+    abunds_lci_low_res <- abunds_lci
+
+  }
   # Renormalize
   # Note we are dividing all three datasets by the total abundance
   # for each timestep (the column sums of the abundance dataset).
@@ -533,16 +551,20 @@ preprocess_species <- function(species,
   # Calculate realized number of parameters in BirdFlow model
   export$metadata$n_active <- n_active <- sum(m)
   export$metadata$n_transitions <- n_transitions <- ncol(distr)
-
   n_params <- n_active^2 * (n_transitions) + nrow(distr)
-  pct_max_params <- n_params/max_params*100
-  if(verbose)
+  if(!missing(max_params)){
+    pct_max_params <- n_params/max_params*100
+  }
+  if(verbose){
     cat("Model has:\n\t",
         sum(m), " active cells,\n\t", n_transitions , " transitions, and\n\t",
-        format(n_params, big.mark = ","), " parameters (",
-        round(pct_max_params, 1), "% of maximum parameters)\n",
-        sep ="")
-
+        format(n_params, big.mark = ","), " parameters ", sep = "")
+    if(!missing(max_params)){
+      cat(round(pct_max_params, 1), "% of maximum parameters)\n", sep ="")
+    } else {
+      cat("\n")
+    }
+  }
   # Append first column onto end so we have full cycle of transitions
   distr <- cbind(distr, distr[, 1, drop = FALSE])
   uci <- cbind(uci, uci[ , 1 , drop = FALSE])
