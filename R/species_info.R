@@ -66,10 +66,11 @@
 #' @export
 species_info <- function(x, what){
   stopifnot(class(x) == "BirdFlow")
-  what <- tolower(what)
 
   if(missing(what))
     what <- "all"
+
+  what <- tolower(what)
 
   if(what == "all")
     return(x$species)

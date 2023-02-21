@@ -8,16 +8,19 @@
 #' @param x a BirdFlow model
 #'
 #' @return logical indicating the BirdFlow model has the relevant element
+#' @export
 has_marginals <- function(x){
   x$metadata$has_marginals
 }
 
 #' @rdname has
+#' @export
 has_transitions<- function(x){
   x$metadata$has_transitions
 }
 
 #' @rdname has
+#' @export
 has_distr <- function(x){
   x$metadata$has_distr
 }

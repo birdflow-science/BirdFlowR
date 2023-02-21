@@ -9,7 +9,7 @@ preprocess_species(
   out_dir,
   res,
   hdf5 = TRUE,
-  tiff = TRUE,
+  tiff = FALSE,
   overwrite = TRUE,
   crs,
   clip,
@@ -32,7 +32,7 @@ the number of significant digits.}
 
 \item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
 
-\item{tiff}{if TRUE (default) geoTIFF files will be exported.}
+\item{tiff}{set to TRUE to export geoTIFF files. They are not needed to fit the BirdFlow model.}
 
 \item{overwrite}{if TRUE (default) any pre-existing output files will be
 overwritten. If FALSE pre-existing files will result in an error.}
@@ -53,7 +53,7 @@ the default way of setting \code{max_params} and \code{res}.}
 
 \item{gb}{Gigabytes of memory on machine that will fit the models. If \code{res}
 and \code{max_params} are both missing this is used to estimate \code{max_params}
-which is, in turn, used to determine the resolution. Ignroed if either
+which is, in turn, used to determine the resolution. Ignored if either
 \code{res} or \code{max_params} is set.}
 
 \item{skip_quality_checks}{If \code{TRUE} than preprocess the species even if
@@ -81,7 +81,15 @@ identified bounds on the maximum.\tabular{lllll}{
 }
 
 
+Parameters are calculated as: \cr
 \code{parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)}
+
+If \code{gb} is used (and not \code{res} or \code{max_parameters} ) than  \code{max_parameters} is
+set to \verb{23,224,801 * gb} (lower of two values in table above).
+
+The heuristic to determine resolution given a maximum number of parameters
+must estimate the number of cells covered by the data
+at a different resolution, a noisy process, so it iteratively tries to find
 }
 
 \examples{
