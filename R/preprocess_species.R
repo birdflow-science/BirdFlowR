@@ -24,7 +24,8 @@
 #' The heuristic to determine resolution given a maximum number of parameters
 #' must estimate the number of cells covered by the data
 #' at a different resolution, a noisy process, so it iteratively tries to find
-#  the right resolution and then rounds.
+#'  the finest resolution that doesn't exceed max_params and then rounds to a
+#'  slightly large resolution (fewer parameters).
 #'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
