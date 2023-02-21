@@ -26,7 +26,7 @@ installed <- rownames(installed.packages())
 if(!"devtools" %in% installed)
   install.packages("devtools")
 if(!"BirdFlowR" %in% installed)
-  devtools::install_github("birdflow-science/BirdFlowR")
+  devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 if(!"BirdFlowModels" %in% installed)
   devtools::install_github("birdflow-science/BirdFlowModels")
 ```
@@ -264,6 +264,6 @@ end_pts <- rts$points[rts$points$timestep == end, ]  # end points
 points(x = end_pts$x, y = end_pts$y,
        cex = 0.4, pch = 12, col = pt_col )
 
-title(main = bf$metadata$species)
+title(main = species(bf))
 
 ```
