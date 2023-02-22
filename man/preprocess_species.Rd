@@ -90,6 +90,8 @@ set to \verb{23,224,801 * gb} (lower of two values in table above).
 The heuristic to determine resolution given a maximum number of parameters
 must estimate the number of cells covered by the data
 at a different resolution, a noisy process, so it iteratively tries to find
+the finest resolution that doesn't exceed max_params and then rounds to a
+slightly large resolution (fewer parameters).
 }
 
 \examples{

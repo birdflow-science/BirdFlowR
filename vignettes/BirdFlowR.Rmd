@@ -25,10 +25,13 @@ Install packages
 installed <- rownames(installed.packages())
 if(!"devtools" %in% installed)
   install.packages("devtools")
-if(!"BirdFlowR" %in% installed)
-  devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 if(!"BirdFlowModels" %in% installed)
   devtools::install_github("birdflow-science/BirdFlowModels")
+if(!"BirdFlowR" %in% installed)
+  devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+if(!"rnaturalearthdata" %in% installed)
+  devtools::install_cran("rnaturalearthdata")
+
 ```
 
 Load libraries and define local BirdFlow model (`bf`)
@@ -161,8 +164,8 @@ In this section we will sample a single starting location from the winter distri
 
 Set forecast parameters.
 ```{r forecast parameters}
-    start <- species_info(bf, "nonbreeding_end")  # end of winter 
-    end <- species_info(bf, "breeding_end")     # breeding
+    start <- 1     #  winter 
+    end <-  26     # summer
 ```
 
 ## Sample starting distribution

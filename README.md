@@ -13,8 +13,9 @@ This package is under development and not yet formally released. Function names 
 
 Install the package and the accompanying data package from github:
 ```{r}
-devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 devtools::install_github("birdflow-science/BirdFlowModels")  # data package
+devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+
 ```
 
 ## Usage 
