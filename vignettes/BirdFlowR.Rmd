@@ -30,7 +30,7 @@ if(!"BirdFlowModels" %in% installed)
 if(!"BirdFlowR" %in% installed)
   devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 if(!"rnaturalearthdata" %in% installed)
-  devtools::install_cran("rnaturalearthdata")
+  install.packages("rnaturalearthdata")
 
 ```
 
