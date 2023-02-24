@@ -14,5 +14,5 @@ a BirdFlow object
 }
 \description{
 This function imports a BirdFlow model data from an HDF5 file written by
-python. It works for version 2 hdf5 files.
+python. It works for version 2 hdf5.
 }

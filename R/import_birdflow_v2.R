@@ -1,7 +1,7 @@
 #' import BirdFlow model from an hdf5 file
 #'
 #' This function imports a BirdFlow model data from an HDF5 file written by
-#' python. It works for version 2 hdf5 files.
+#' python. It works for version 2 hdf5.
 #'
 #' @param hdf5 Path to an hdf5 file
 #' @return a BirdFlow object
@@ -58,7 +58,7 @@ import_birdflow_v2 <- function(hdf5){
     "metadata/n_active", "metadata/n_timesteps", "metadata/ebird_version_year",
     "metadata/ebird_release_year", "metadata/ebird_access_end_date",
     "metadata/birdflow_preprocess_date", "metadata/birdflow_model_date",
-    "metadata/is_sparse", "metadata/sparse_stats", "marginals")
+    "metadata/is_sparse", "marginals")
 
 
 
