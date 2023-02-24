@@ -1,3 +1,7 @@
+* Added "biocViews:" before "Imports:"" in DESCRIPTION so that devtools can find
+and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR 
+needs. Fixes [#13](https://github.com/birdflow-science/BirdFlowR/issues/13) 
+
 * Updated get_naturalearth() so that it handles some cases in which it previously
 failed.  In particular extents that span more than 180 deg of longitude, and 
 extents that cross the 180 deg. meridian that defines the edge of the WGS84 
