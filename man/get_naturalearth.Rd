@@ -63,11 +63,24 @@ BirdFlow objects. The output is the desired data in the same CRS as the
 BirdFlow object with a somewhat larger extent.
 }
 \details{
-This function eliminates the hassle of clipping Natural Earth data in its
-CRS to bounds from the BirdFlow object and CRS, and then transforming the
-data to the BirdFlow CRS, which is the necessary workflow to prevent
-artifacts caused when polygons or lines are shifted across the bounds of
-the CRS.
+\code{get_naturalearth()} does all the work and is called by the other functions.
+It converts the bounds of the BirdFlow object to WGS84,
+adds a buffer to the converted bounds, breaks the bounding box into
+two if it crosses the 180 degree meridian in WGS84, crops to the bounding
+box or boxes, projects each cropped section to the BirdFlow model's CRS,
+and then combines the pieces into one object. These steps will usually
+prevent artifacts caused when polygons or lines are shifted across
+the bounds of the CRS. However, it does not work for all extents
+in all projections and in particular is unlikely to work with polar
+projections and with extents that cover the entire globe.
+
+In the case of a full global extent in projections other than WGS84 an
+automated solution would need to cut the naturalearth vector data in WGS84
+at the edge of the target projection before projecting. I haven't yet
+figured out how to generically find that edge.
+
+In some cases where this fail setting the buffer to zero may be an easy
+solution.
 
 \code{get_states()} requires \pkg{rnaturalearthhires}. Install with:\cr
 \code{ install.packages("devtools") # if you don't have it already
