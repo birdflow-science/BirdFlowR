@@ -1,5 +1,8 @@
+# BirdFlowR 0.0.0.9016  2023-02-27
 
-# BirdflowR 0.0.0.9017
+* Added package down. Starting to use [semantic versioning](https://semver.org/).
+
+# BirdflowR 0.0.0.9017  2023-02-27
 
 * Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra)
 [#17](https://github.com/birdflow-science/BirdFlowR/issues/17).

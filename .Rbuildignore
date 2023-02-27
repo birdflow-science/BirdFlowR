@@ -6,3 +6,6 @@
 ^doc$
 ^Meta$
 ^Dockerfile$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
