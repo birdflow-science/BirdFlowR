@@ -1,8 +1,5 @@
 test_that("preprocess_species runs on test dataset", {
 
-
-  skip_on_ci()
-  skip_on_covr()
   skip_on_cran()
 
   # Run on example data setting resolution based on gb (and then overiding for example_data)
@@ -13,8 +10,6 @@ test_that("preprocess_species runs on test dataset", {
 
 test_that("preprocess_species runs with pre-set resolution and matches prior results", {
 
-  skip_on_ci()
-  skip_on_covr()
   skip_on_cran()
 
   # Using snapshot on 50 m version because it results in a small object.

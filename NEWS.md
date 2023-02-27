@@ -1,3 +1,9 @@
+
+# BirdflowR 0.0.0.9017
+
+* Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra)
+[#17](https://github.com/birdflow-science/BirdFlowR/issues/17).
+
 # BirdFlowR 0.0.0.9003  2023-02-27
 
 * Updated installation instructions.  Closing [#11](https://github.com/birdflow-science/BirdFlowR/issues/11).
