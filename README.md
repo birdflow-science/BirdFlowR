@@ -11,11 +11,17 @@ This package is under development and not yet formally released. Function names 
 
 ## Installation
 
-Install the package and the accompanying data package from github:
+Install just the package:
 ```{r}
-devtools::install_github("birdflow-science/BirdFlowModels")  # data package
-devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+devtools::install_github("birdflow-science/BirdFlowR")
+```
+Or to install with example data and vignette:
 
+```{r}
+install.packages("remotes")
+install.packages("rnaturalearthdata") # required for vignette
+remotes::install_github("birdflow-science/BirdFlowModels")  # data package
+remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 ```
 
 ## Usage 

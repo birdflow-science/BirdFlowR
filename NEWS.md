@@ -1,3 +1,9 @@
+# BirdFlowR 0.0.0.9003  2023-02-27
+
+* Updated installation instructions.  Closing [#11](https://github.com/birdflow-science/BirdFlowR/issues/11).
+
+* Added docker file. [Usage instructions.](https://github.com/birdflow-science/BirdFlowR/pull/15#issuecomment-1445152787) 
+
 # BirdFlowR 0.0.0.9002  2023-02-23
 
 * Added "biocViews:" before "Imports:" in DESCRIPTION so that devtools can find
