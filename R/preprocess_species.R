@@ -102,9 +102,18 @@ preprocess_species <- function(species,
 
 ){
 
+  # ebirdst is listed under suggests so may not be installed.
+  # I anticipate a group of users who work with fit models provided by the
+  # BirdFlow team but don't fit their own models, and my initial installation
+  # of ebirdst was tricky so I didn't want all users to need to import it.
+  a <- requireNamespace("ebirdst", versionCheck = list(op =">=", version = "2.2021.0"))
+  if(!a){
+    stop("Install ebirdst >= 2.2021.0 to use preprocess_species()")
+  }
+
   # Validate inputs
   if(length(species) != 1)
-    stop("Can only preprpocess one species at a time")
+    stop("Can only preprocess one species at a time")
   stopifnot( is.logical( tiff ),
              is.logical( hdf5 ),
              length( tiff ) == 1,
@@ -249,9 +258,7 @@ preprocess_species <- function(species,
       cat("Calculating resolution\n")
     # Load low res abundance data and calculate total areas birds occupy at any
     # time (active_sq_m)
-    abunds <- terra::rast(ebirdst::load_raster("abundance",
-                                               path = sp_path,
-                                               resolution="lr"))
+    abunds <- ebirdst::load_raster("abundance",path = sp_path, resolution="lr")
 
 
     mask <- make_mask(x = abunds)
@@ -421,11 +428,6 @@ preprocess_species <- function(species,
                                      path = sp_path,resolution=load_res)
   abunds_uci <- ebirdst::load_raster("abundance", metric = "upper",
                                      path = sp_path, resolution=load_res)
-
-  # Convert to terra::rast
-  abunds <- terra::rast(abunds)
-  abunds_lci <- terra::rast(abunds_lci)
-  abunds_uci <- terra::rast(abunds_uci)
 
   if(verbose)
     cat("Creating mask in target resolution and projection\n")
