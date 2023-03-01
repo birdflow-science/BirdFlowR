@@ -38,7 +38,7 @@
 #' }
 evaluate_performance <- function(x){
 
-  transitions <- lookup_transitions(start = 1, end = n_distr(x), x)
+  transitions <- lookup_transitions(x, start = 1, end = n_distr(x))
   distr_cor <- single_step_cor <- numeric(length(transitions))
   for(i in seq_along(transitions)){
     from <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[i]))

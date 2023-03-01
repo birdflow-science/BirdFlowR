@@ -39,7 +39,7 @@ forecast <- function(x, distr, start, end, direction){
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(start, end, x, direction)
+  transitions <- lookup_transitions(x, start, end, direction)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                           gsub("^.*-", "", transitions ) ) )
 
