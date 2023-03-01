@@ -66,6 +66,7 @@ get_transition <- function(x, transition){
 #' @return a transition matrix formulated such that you multiply the matrix by a
 #'   distribution to project the distribution.  See [get_transition()] for more
 #'   details.
+#' @keywords internal
 transition_from_marginal <- function(m, direction){
   if(!direction %in% c("forward", "backward"))
     stop("Direction must be forward or backward")

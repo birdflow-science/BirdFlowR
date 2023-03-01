@@ -1,6 +1,7 @@
 #' Private function to create the empty shell of a BirdFlow object
 #'
 #' @return An empty BirdFlow object
+#' @keywords internal
 new_BirdFlow <- function(){
   structure(list(geom = list(nrow = NA_integer_,
                              ncol = NA_integer_,

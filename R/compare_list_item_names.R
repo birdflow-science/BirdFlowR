@@ -11,6 +11,7 @@
 #'
 #' @return data frame with where and difference columns will have 0 rows if no
 #' differences found.
+#' @keywords internal
 compare_list_item_names <- function(x, y, map ="x", differences){
   if(missing(differences))
     differences <- data.frame(where = character(0), difference = character(0))

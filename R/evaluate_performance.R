@@ -36,6 +36,7 @@
 #'  training distribution. The minium observed coorlation between a marginal and
 #'  training distribution.}
 #' }
+#' @keywords internal
 evaluate_performance <- function(x){
 
   transitions <- lookup_transitions(x, start = 1, end = n_distr(x))

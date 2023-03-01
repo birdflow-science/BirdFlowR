@@ -6,7 +6,6 @@
 #'
 #' @return A threshold in values of x such that dropping everything smaller than
 #' the threshold retains at least proportion `p` of the total of `x`
-#' @export
 #' @keywords internal
 find_threshold <- function(x, p){
   x <- sort(x[!is.na(x) & !x==0], decreasing = TRUE)

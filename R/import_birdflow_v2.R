@@ -8,6 +8,7 @@
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
+#' @keywords internal
 import_birdflow_v2 <- function(hdf5){
 
   stopifnot(file.exists(hdf5))
