@@ -6,16 +6,17 @@
 \alias{rast,BirdFlow-method}
 \title{Functions to convert a BirdFlow object or distribution into a SpatRaster}
 \usage{
-rasterize_distr(x, bf)
+rasterize_distr(distr, bf)
 
 \S4method{rast}{BirdFlow}(x, which = "all")
 }
 \arguments{
-\item{x}{For \code{rasterize_distr()} a distribution in its vector form or a
-matrix in which each column represents a different distribution.
-For \code{rast()} a BirdFlow object.}
+\item{distr}{a distribution in its vector form or a
+matrix in which each column represents a different distribution.}
 
 \item{bf}{A BirdFlow object.}
+
+\item{x}{A BirdFlow object}
 
 \item{which}{indicates which distributions to return. Can be one or more
 integers indicating timesteps; character dates in the format

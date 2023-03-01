@@ -5,16 +5,16 @@
 #' vector form. `rast()` converts a BirdFlow object directly to a
 #' [SpatRaster][terra::SpatRaster].
 #'
-#' @param x For `rasterize_distr()` a distribution in its vector form or a
+#' @param distr a distribution in its vector form or a
 #' matrix in which each column represents a different distribution.
-#' For `rast()` a BirdFlow object.
 #' @param bf A BirdFlow object.
+#' @param x A BirdFlow object
 #' @inheritParams get_distr
 #' @return A [terra::SpatRaster] object.
 #' @importMethodsFrom terra rast
 #' @export
-rasterize_distr <- function(x, bf){
-  m <- expand_distr(x, bf)
+rasterize_distr <- function(distr, bf){
+  m <- expand_distr(distr, bf)
   r <- terra::rast(m, extent = bf$geom$ext, crs = bf$geom$crs)
   if(length(dim(m)) == 3)
     names(r) <- dimnames(m)[[3]]

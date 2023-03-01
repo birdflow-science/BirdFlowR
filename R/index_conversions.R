@@ -1,5 +1,6 @@
 #'@name index conversions
 #'@rdname index_conversions
+#'@aliases index_conversions
 #'
 #'@title Functions to convert among spatial indices
 #'

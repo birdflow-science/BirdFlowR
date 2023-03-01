@@ -2,8 +2,7 @@
 % Please edit documentation in R/index_conversions.R
 \name{index conversions}
 \alias{index conversions}
-\alias{`index}
-\alias{conversions`}
+\alias{index_conversions}
 \alias{x_to_col}
 \alias{y_to_row}
 \alias{row_to_y}
