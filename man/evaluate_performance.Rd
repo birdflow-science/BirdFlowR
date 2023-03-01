@@ -4,10 +4,10 @@
 \alias{evaluate_performance}
 \title{Evaluate BirdFlow model performance}
 \usage{
-evaluate_performance(bf)
+evaluate_performance(x)
 }
 \arguments{
-\item{bf}{A BirdFlow object}
+\item{x}{A BirdFlow object}
 }
 \value{
 \describe{
