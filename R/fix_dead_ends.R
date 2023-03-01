@@ -67,7 +67,7 @@ fix_dead_ends <- function(bf, max_attempts = 100){
 #' @param de (optional) output from [find_dead_ends()]
 #'
 #' @return a BirdFlow model with selected marginal rows and columns zeroed out.
-#' #' @keywords internal
+#' @keywords internal
 fix_current_dead_ends <- function(bf, de){
   if(missing(de))
     de <- find_dead_ends(bf)
