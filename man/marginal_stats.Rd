@@ -33,3 +33,4 @@ percent of marginal values that are zero.
 These are used by sparsify and fix_dead_ends.  marginal_stats is slightly
 more efficient than calling the other two functions independently.
 }
+\keyword{internal}

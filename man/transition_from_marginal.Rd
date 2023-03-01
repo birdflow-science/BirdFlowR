@@ -25,3 +25,4 @@ this is called from \code{\link[=get_transition]{get_transition()}}. If at some 
 to store transitions rather than marginals it will also be called from
 \code{\link[=import_birdflow]{import_birdflow()}}.
 }
+\keyword{internal}

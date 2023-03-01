@@ -16,3 +16,4 @@ a BirdFlow object
 This function imports a BirdFlow model data from an HDF5 file written by
 python. It works for version 2 hdf5.
 }
+\keyword{internal}

@@ -12,3 +12,4 @@ An empty BirdFlow object
 \description{
 Private function to create the empty shell of a BirdFlow object
 }
+\keyword{internal}

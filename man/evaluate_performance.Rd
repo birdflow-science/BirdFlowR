@@ -45,3 +45,4 @@ a training distribution that is multiplied with a transition matrix
 or multiplied repeatedly with transition matrices to project forward
 multiple timesteps.
 }
+\keyword{internal}
