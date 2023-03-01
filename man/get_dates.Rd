@@ -27,3 +27,4 @@ By necessity one week ends up longer - 52 weeks = 264 days.  Ultimately, I'd
 like to retain the date information from the eBird status and trends data
 rather than regenerate it after fitting the model.
 }
+\keyword{internal}

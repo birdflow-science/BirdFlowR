@@ -63,13 +63,8 @@ dead end are often low probability so routing may work most of the time but
 occasionally fail. The error will occur with the subsequent iteration when
 attempting to sample from a bunch of zero probability states.
 }
-\examples{
-library(BirdFlowModels)
-bf <- amewoo
-head(find_dead_ends(amewoo))
-
-}
 \seealso{
 \code{\link[=sparsify]{sparsify()}} calls \code{fix_dead_ends()}, which in turn calls
 \code{find_dead_ends()} and \code{\link[=fix_current_dead_ends]{fix_current_dead_ends()}}.
 }
+\keyword{internal}

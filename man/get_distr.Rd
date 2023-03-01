@@ -4,26 +4,26 @@
 \alias{get_distr}
 \title{extract distributions from BirdFlow models}
 \usage{
-get_distr(which = "all", bf, from_marginals = FALSE)
+get_distr(x, which = "all", from_marginals = FALSE)
 }
 \arguments{
+\item{x}{a BirdFlow model}
+
 \item{which}{indicates which distributions to return. Can be one or more
-integers indicating timesteps; character dates in the format
-year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or
-\code{"all"} which will return distributions for all timesteps.}
+integers indicating timesteps; character dates in the format year-month-day
+e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or \code{"all"} which will
+return distributions for all timesteps.}
 
-\item{bf}{a BirdFlow model}
-
-\item{from_marginals}{if TRUE and \code{bf} has marginals the distribution will
-be from the marginals even if \code{bf} also has distributions.}
+\item{from_marginals}{if TRUE and \code{x} has marginals the distribution will be
+from the marginals even if \code{x} also has distributions.}
 }
 \value{
 either a vector with a distribution for a single timestep or a matrix
 with a column for each distribution.
 }
 \description{
-\code{get_distr} will return one or more distributions in their compact form.
-A single distribution will be returned as a vector; if multiple they will be
+\code{get_distr} will return one or more distributions in their flattened form. A
+single distribution will be returned as a vector; if multiple they will be
 columns in a matrix.
 }
 \details{
@@ -31,12 +31,12 @@ If the BirdFlow object has stored distributions they will be the training
 distributions and will be returned by default unless \code{from_marginals = TRUE}
 in which case distributions calculated from the marginal will be returned.
 
-The training distributions and the distributions calculated from the
-marginal are very similar.
+The training distributions and the distributions calculated from the marginal
+are very similar.
 }
 \seealso{
-Distributions can be passed to \link{forecast} or converted to rasters
-with \link{expand_distr} or converted to \link[terra:rast]{SpatRaster} with
-\link{rasterize_distr}.  \link{sample_distr} will convert one cell to 1 and the rest
+Distributions can be passed to \code{\link[=forecast]{forecast()}} or converted to rasters
+with \code{\link[=expand_distr]{expand_distr()}} or converted to \link[terra:rast]{SpatRaster} with
+\code{\link[=rasterize_distr]{rasterize_distr()}}.  \code{\link[=sample_distr]{sample_distr()}} will convert one cell to 1 and the rest
 to 0 probabilistically based on the densities in the distribution.
 }

@@ -3,7 +3,7 @@
 #' route() projects bird positions over time based on the probabilities
 #' embedded in a BirdFlow model. The output is linear, stochastic routes.
 #'
-#' @param x A BirdFlow model object
+#' @param x A BirdFlow object
 #' @param x_coord,y_coord  One or more sets of coordinates identifying starting
 #' positions.
 #' @param n Optional, if provided each starting position will be duplicated this
@@ -58,7 +58,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(start, end, x, direction)
+  transitions <- lookup_transitions(x, start, end, direction)
 
   # Re-define start and end as timesteps based on date parsing
   # in lookup_transitions
@@ -91,7 +91,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   # Projection
   for(i in seq_along(transitions)){
-    tm <- get_transition( transitions[i], x)  # transition matrix
+    tm <- get_transition(x,  transitions[i])  # transition matrix
     distr <- tm %*% distr           # project
     distr <- sample_distr(distr)  # "one hot"
     trajectory[i+1, ] <- extract_positions(distr) # save the location

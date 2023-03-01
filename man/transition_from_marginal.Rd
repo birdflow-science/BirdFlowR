@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_transition.R
 \name{transition_from_marginal}
 \alias{transition_from_marginal}
-\title{transition_from_marginal}
+\title{convert a marginal into a transition matrix}
 \usage{
 transition_from_marginal(m, direction)
 }
@@ -13,15 +13,16 @@ transition_from_marginal(m, direction)
 "backward"}
 }
 \value{
-a transition matrix formulated such that you multiply the matrix by
-a distribution to project the distribution.  See \link{get_transition} for more
+a transition matrix formulated such that you multiply the matrix by a
+distribution to project the distribution.  See \code{\link[=get_transition]{get_transition()}} for more
 details.
 }
 \description{
 internal function to generate a transition matrix from a marginal
 }
 \details{
-this is called from get_transition. If at some point we decide
+this is called from \code{\link[=get_transition]{get_transition()}}. If at some point we decide
 to store transitions rather than marginals it will also be called from
-import_birdflow.
+\code{\link[=import_birdflow]{import_birdflow()}}.
 }
+\keyword{internal}

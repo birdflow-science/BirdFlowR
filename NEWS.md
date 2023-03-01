@@ -1,3 +1,26 @@
+# BirdFlowR 0.0.0.9019  2023-03-01
+
+* Nomenclature cleanup (round 1)
+  - collapse_distr(x, bf) -> collapse_raster(raster, bf)
+  - evaluate_perfomance(bf) -> evaluate_performance(x) 
+  - expand_distr(x, bf) -> expand_distr(distr, bf)
+  - get_distr(which, bf, from_marginals) -> get_distr(x, which, from_marginals) 
+  - get_transition(x, bf) -> get_transition(x, transition) 
+  - lookup_transitions(start, end, bf, direction) -> lookup_transition(x, start, end, direction) 
+  - sample_distr(x, bf) -> sample_distr(distr, bf)
+
+* No longer exported:
+  - evaluate_performance()
+  - find_dead_ends()
+  - find_threshold() 
+  - fix_dead_ends()
+  - import_prototype() 
+  - lookup_transitions() 
+  - new_BirdFlow()
+  - transition_from_marginal()
+
+* Added "@keyword internal" to documentation for all non-exported functions.  This removes the documentation from the package manual and index, but it's still accessible with ?function_name. 
+
 # BirdFlowR 0.0.0.9016  2023-02-27
 
 * Added package down. Starting to use [semantic versioning](https://semver.org/).

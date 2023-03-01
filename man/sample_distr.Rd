@@ -4,25 +4,25 @@
 \alias{sample_distr}
 \title{Sample locations from a distribution}
 \usage{
-sample_distr(x, n = 1)
+sample_distr(distr, n = 1)
 }
 \arguments{
-\item{x}{a vector representing a single distribution; a matrix respresenting
+\item{distr}{a vector representing a single distribution; a matrix respresenting
 one distribution per column, or (unlikely) an  array in which the first
-dimension represents model states. The values in x are treated as relative
+dimension represents model states. The values in distr are treated as relative
 probability of the species being in each position.}
 
-\item{n}{Only used if \code{x} is a vector representing a single model state, in
+\item{n}{Only used if \code{distr} is a vector representing a single model state, in
 which case that model state will be sampled \code{n} times to generate a
 matrix representing \code{n} sampled locations from that distribution.}
 }
 \value{
-An object ussually with the same dimensions as \code{x} (but see \code{n})
+An object ussually with the same dimensions as \code{distr} (but see \code{n})
 single location (containing a 1) while the remaining locations
 have 0's.
 }
 \description{
-This function treats \code{x} as one or more probability distributions and converts
+This function treats \code{distr} as one or more probability distributions and converts
 each to a single location by assigning a 1 to one value and
 converting the rest to 0.
 }

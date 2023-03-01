@@ -1,18 +1,18 @@
 #'Sample locations from a distribution
 #'
-#'This function treats `x` as one or more probability distributions and converts
+#'This function treats `distr` as one or more probability distributions and converts
 #'each to a single location by assigning a 1 to one value and
 #'converting the rest to 0.
 #'
-#'@param x a vector representing a single distribution; a matrix respresenting
+#'@param distr a vector representing a single distribution; a matrix respresenting
 #' one distribution per column, or (unlikely) an  array in which the first
-#' dimension represents model states. The values in x are treated as relative
+#' dimension represents model states. The values in distr are treated as relative
 #' probability of the species being in each position.
-#'@param n Only used if `x` is a vector representing a single model state, in
+#'@param n Only used if `distr` is a vector representing a single model state, in
 #'  which case that model state will be sampled `n` times to generate a
 #'  matrix representing `n` sampled locations from that distribution.
-#'@return An object ussually with the same dimensions as `x` (but see `n`)
-#   in which all the weight in each distribution in `x` is assigned to a
+#'@return An object ussually with the same dimensions as `distr` (but see `n`)
+#   in which all the weight in each distribution in `distr` is assigned to a
 #'   single location (containing a 1) while the remaining locations
 #'   have 0's.
 #'@export
@@ -39,7 +39,8 @@
 #'      xlab = "location", ylab = "times sampled")
 #' }
 #'
-sample_distr <- function(x, n = 1){
+sample_distr <- function(distr, n = 1){
+
   select_one <- function(x){
     # Takes a probability vector and randomly converts one value to 1
     # using the original values as probabilities
@@ -48,20 +49,21 @@ sample_distr <- function(x, n = 1){
     r[i] <- 1
     return(r)
   }
-  x <- as.array(x)
-  ndim <- length(dim(x))
+
+  distr <- as.array(distr)
+  ndim <- length(dim(distr))
 
   if(ndim == 1){
     if(n == 1){# special, one dimensional case
-      return(select_one(x))
+      return(select_one(distr))
     } else{
       # If n > 1 AND ndim == 1
-      # repeat values in x, n times while converting to matrix
-      x <- array(data = x, dim = c(length(x), n) )
+      # repeat values in distr, n times while converting to matrix
+      distr <- array(data = distr, dim = c(length(distr), n) )
       ndim <- 2
     }
   }
 
   # Select one from each state (if 2 or more dimensions)
-  return(apply(x, 2:ndim, select_one))
+  return(apply(distr, 2:ndim, select_one))
 }

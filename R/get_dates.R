@@ -15,7 +15,7 @@
 #' \item{doy}{The day of year associated with the midpoint of each interval.}
 #' \item{interval}{The interval ID; it will range from 1 to n.}
 #' \item{date}{The date associated with the interval's midpoint}
-#'
+#' @keywords internal
 get_dates <- function(year, n = 52) {
 
   # proportional end points of each interval

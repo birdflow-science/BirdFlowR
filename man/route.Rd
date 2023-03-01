@@ -7,7 +7,7 @@
 route(x, x_coord, y_coord, n, row, col, start, end, direction)
 }
 \arguments{
-\item{x}{A BirdFlow model object}
+\item{x}{A BirdFlow object}
 
 \item{x_coord, y_coord}{One or more sets of coordinates identifying starting
 positions.}

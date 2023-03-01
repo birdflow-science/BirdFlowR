@@ -11,8 +11,8 @@
 #' @param species  The ebird species code for the model
 #'
 #' @return a BirdFlow object
-#' @export
 #' @importFrom Matrix Matrix
+#' @keywords internal
 import_prototype <- function(base_dir, species){
 
   #----  Global constants from shiny app

@@ -45,14 +45,7 @@
 #' @seealso
 #'  [sparsify()] calls `fix_dead_ends()`, which in turn calls
 #' `find_dead_ends()` and [fix_current_dead_ends()].
-#'
-#' @export
-#'
-#' @examples
-#' library(BirdFlowModels)
-#' bf <- amewoo
-#' head(find_dead_ends(amewoo))
-#'
+#' @keywords internal
 find_dead_ends <- function(x){
   if(! has_marginals(x)){
     stop("x lacks marginals can't find dead ends.")

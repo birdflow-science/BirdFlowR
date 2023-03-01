@@ -1,40 +1,37 @@
 #'
 #' Lookup a series of transitions connecting two dates or timesteps
 #'
-#' `lookup_transitions()` returns an ordered vector of transition names that connect
-#' start to end. If `start` and `end` are dates than their order determines
-#' whether the transitions flow forward or backward in time.  If they are
-#' timesteps than the `direction` argument should be used to indicate whether to
-#' project "forward" or "backward" in time possibly passing the year boundary.
+#' `lookup_transitions()` returns an ordered vector of transition names that
+#' connect start to end. If `start` and `end` are dates than their order
+#' determines whether the transitions flow forward or backward in time.  If they
+#' are timesteps than the `direction` argument should be used to indicate
+#' whether to project "forward" or "backward" in time possibly passing the year
+#' boundary.
 #'
-#' @details Transitions are named "T_\[from\]-\[to\]" where \[from\] and
-#' \[to\] are timesteps padded with zeros. Direction is important; "T_03-04"
-#' represents a transition backward in time.
-#'
+#' @details Transitions are named "T_\[from\]-\[to\]" where \[from\] and \[to\]
+#'   are timesteps padded with zeros. Direction is important; "T_03-04"
+#'   represents a transition backward in time.
+#' @param x A BirdFlow object
 #' @param start,end The starting and ending points in time. In one of the
 #'   following formats: character, a date in the form year-month-day e.g.
 #'   "2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
 #'   [`Date`][base::Dates] object.
-#' @param bf A BirdFlow object or the `dates` component of one.
+#'
 #' @param direction Either "forward" or "backward". Only used if `start` and
 #'   `end` are timesteps (numeric). Otherwise the direction will be determined
 #'   by the dates - forward if `start` and `end` are in chronological order, and
-#'   backward if the `end` date is before the `start` date. If `start` and
-#'   `end` are timesteps and `direction` is omitted than the direction will
-#'   default to "forward" regardless of which timestep is larger - possibly
-#'   passing over the year boundary from the last timestep to the first.
+#'   backward if the `end` date is before the `start` date. If `start` and `end`
+#'   are timesteps and `direction` is omitted than the direction will default to
+#'   "forward" regardless of which timestep is larger - possibly passing over
+#'   the year boundary from the last timestep to the first.
 #'
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
-#' @export
-#'
-lookup_transitions <- function(start, end, bf,  direction){
+lookup_transitions <- function(x, start, end, direction){
 
-  if( "dates" %in% names(bf) && !is.data.frame(bf)){
-    dates <- bf$dates
-  } else {
-    dates <- bf
-  }
+  stopifnot(inherits(x, "BirdFlow"))
+  dates <- x$dates
+
   if(is.integer(start)) start <- as.numeric(start)
   if(is.integer(end)) end <- as.numeric(end)
 

@@ -39,7 +39,7 @@ forecast <- function(x, distr, start, end, direction){
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(start, end, x, direction)
+  transitions <- lookup_transitions(x, start, end, direction)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                           gsub("^.*-", "", transitions ) ) )
 
@@ -53,7 +53,7 @@ forecast <- function(x, distr, start, end, direction){
       )
       fc[ , , 1 ] <- distr
       for(i in seq_along(transitions)){
-        tm <- get_transition( transitions[i], x)  # transition matrix
+        tm <- get_transition(x,  transitions[i])  # transition matrix
         distr <-  tm %*%  distr          # project
         fc[  , , (i+1)] <- as.vector(distr) # save the location
       }
@@ -63,7 +63,7 @@ forecast <- function(x, distr, start, end, direction){
       dimnames(fc) <- list(i = NULL, timestep = paste0("t",timesteps))
       fc[ , 1] <- distr
       for(i in seq_along(transitions)){
-        tm <- get_transition( transitions[i], x) # transition matrix
+        tm <- get_transition(x, transitions[i]) # transition matrix
         distr <- tm %*% distr
         fc[ , i+1] <- as.numeric(distr) # save the location
       }

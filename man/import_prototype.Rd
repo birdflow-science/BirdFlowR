@@ -23,3 +23,4 @@ with \link{import_birdflow}.
 Forward transition matrices are transposed on read so that
 all transitions can be implemented as M \%*\% d.
 }
+\keyword{internal}
