@@ -19,16 +19,16 @@
 #' accessible as position in the vector is ordered based on row-major ordered
 #' unmasked cells in the extent, and R uses column-major order.
 #'
-#' @param x Either a vector representing a single distribution with one value
+#' @param distr Either a vector representing a single distribution with one value
 #'   per location in the model or a matrix in which each column is such a vector.
 #'   Higher dimensions are allowed (but unlikely); in all cases the first
 #'   dimension is for locations in the model.
 #' @param bf A BirdFlow model or the `geom` component of one.
-#' @return An expanded version of `x` with one additional dimension, in which
+#' @return An expanded version of `distr` with one additional dimension, in which
 #'   the first two dimensions are rows and columns in space (a raster) and
 #'   replace the first dimension in the input.
 #' @export
-expand_distr<- function(x, bf){
+expand_distr<- function(distr, bf){
   # The expansion is awkward because the collapsed state is a subset of the full
   # matrix in row-major order but R will assign in column-major order.
   # This is resolved by switching the order of the first two dimension to fill
@@ -40,31 +40,31 @@ expand_distr<- function(x, bf){
 
   # Check for proper number of active cells
   n_active <- sum(bf$mask)
-  x <- as.array(x) # so dim will work even when 1 dimensional.
-  if(!dim(x)[1] == n_active)
-    stop("Expected first (possibly only) dimension of x to represent ",
-         n_active, " active cells. Found ", dim(x)[1], ".")
+  distr <- as.array(distr) # so dim will work even when 1 dimensional.
+  if(!dim(distr)[1] == n_active)
+    stop("Expected first (possibly only) dimension of distr to represent ",
+         n_active, " active cells. Found ", dim(distr)[1], ".")
 
   # Create empty array for result but with first two dimensions switched
   # so that it is filling is by row instead of column.
-  a <- array(NA, dim = c(bf$ncol, bf$nrow, dim(x)[-1])) # col, row, ...
-  a[t(bf$mask)] <- as.vector(x) # fill
+  a <- array(NA, dim = c(bf$ncol, bf$nrow, dim(distr)[-1])) # col, row, ...
+  a[t(bf$mask)] <- as.vector(distr) # fill
   perm <- 1:length(dim(a))
   perm[1:2] <- 2:1
   a <- aperm(a, perm = perm) # permute the array so first two dimensions are
                              # row, col
 
-  dimnames(a) <- c(list(row = NULL, col = NULL), dimnames(x)[2])
+  dimnames(a) <- c(list(row = NULL, col = NULL), dimnames(distr)[2])
   return(a)
 
   # # Code that only handles one dimensional input
   # # and is slightly easier to interpret:
   # # Converts vector to matrix
-  # if(is.vector(x)){
-  #   if(length(x) != n_active)
+  # if(is.vector(distr)){
+  #   if(length(distr) != n_active)
   #     stop("State should have", n_active, "values.")
   #   m <- matrix(nrow = bf$ncol , ncol = bf$nrow) # reversed on purpose
-  #   m[t(bf$mask)] <- x # fills by columns which represent rows
+  #   m[t(bf$mask)] <- distr # fills by columns which represent rows
   #   return(t(m))
   # }
 

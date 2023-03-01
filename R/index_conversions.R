@@ -1,4 +1,4 @@
-#'@name index_conversions
+#'@name index conversions
 #'@rdname index_conversions
 #'
 #'@title Functions to convert among spatial indices
@@ -44,11 +44,11 @@
 #'  space index corresponding to x and y coordinates or row and column indices.}
 #'  }
 #' @seealso
-#' * [expand_distr] converts a vector distribution into it's raster (matrix)
+#' * [expand_distr()] converts a vector distribution into it's raster (matrix)
 #'   equivalent or a matrix (representing multiple distributions) into an array
 #'   equivalent.
-#' * [rasterize_distr] converts a vector distribution into a `SpatRast` -
-#'   similar to those created by [terra::rast].
+#' * [rasterize_distr()] converts a vector distribution into a [terra::SpatRaster] -
+#'   similar to those created by [terra::rast()].
 #'
 NULL # required object for above roxygen2 page documentation
      # shared by functions below

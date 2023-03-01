@@ -4,10 +4,10 @@
 \alias{expand_distr}
 \title{Convert a collapsed distribution into a expanded, raster equivalent}
 \usage{
-expand_distr(x, bf)
+expand_distr(distr, bf)
 }
 \arguments{
-\item{x}{Either a vector representing a single distribution with one value
+\item{distr}{Either a vector representing a single distribution with one value
 per location in the model or a matrix in which each column is such a vector.
 Higher dimensions are allowed (but unlikely); in all cases the first
 dimension is for locations in the model.}
@@ -15,7 +15,7 @@ dimension is for locations in the model.}
 \item{bf}{A BirdFlow model or the \code{geom} component of one.}
 }
 \value{
-An expanded version of \code{x} with one additional dimension, in which
+An expanded version of \code{distr} with one additional dimension, in which
 the first two dimensions are rows and columns in space (a raster) and
 replace the first dimension in the input.
 }
