@@ -61,7 +61,7 @@ route_migration <- function(bf, n, migration = "prebreeding"){
 
   # Sample starting positions from distributions and convert to
   # xy coordinates
-  locations  <- sample_distr(get_distr(start, bf, from_marginals = TRUE), n = n)
+  locations  <- sample_distr(get_distr(bf, start, from_marginals = TRUE), n = n)
   if(n == 1){
     ind <- which(as.logical(locations) )
   } else {

@@ -1,6 +1,6 @@
 if (FALSE) {
   # Example and test code, assumes BirdFlow object bf
-  d <- get_distr(1, bf) # compacted form
+  d <- get_distr(bf, 1) # compacted form
   e <- expand_distr(d, bf) # expand
 
   # Convert to SpatRaster
@@ -47,7 +47,7 @@ if (FALSE) {
 #'
 #' @examples
 #' bf <- BirdFlowModels::amewoo
-#' d <- get_distr(1, bf)
+#' d <- get_distr( bf, 1)
 #' r <- expand_distr(d, bf) # convert to raster
 #' f <- flatten_raster(r, bf) # convert back to distribution
 #' stopifnot(all(d == f))

@@ -284,7 +284,7 @@ sparsify <- function(bf, method, p, fix = TRUE){
   # zero in the the training (ebirdst) distributions.
   #----------------------------------------------------------------------------#
   if(any(method == "state")){
-    d <- get_distr(bf = bf)
+    d <- get_distr(bf)
     d_is_zero  <- d == 0
 
     if(verbose){

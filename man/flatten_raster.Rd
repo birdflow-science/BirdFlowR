@@ -28,7 +28,7 @@ export, import, and visualize the data.
 }
 \examples{
 bf <- BirdFlowModels::amewoo
-d <- get_distr(1, bf)
+d <- get_distr( bf, 1)
 r <- expand_distr(d, bf) # convert to raster
 f <- flatten_raster(r, bf) # convert back to distribution
 stopifnot(all(d == f))

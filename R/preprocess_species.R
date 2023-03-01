@@ -66,7 +66,7 @@
 #' \dontrun{
 #'
 #'  bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
-#'  plot(rasterize_distr(get_distr(c(1, 26), bf), bf))
+#'  plot(rasterize_distr(get_distr( bf, c(1, 26)), bf))
 #'
 #' # Create clip polgyon as an sf object
 #' # Use the extent rectangle but with western edge moved in
@@ -84,7 +84,7 @@
 #' bfc <- preprocess_species("amewoo", tiff = FALSE,
 #'                          hdf5 = FALSE, clip = clip ) # clipped bird flow
 #'
-#'  plot(rasterize_distr(get_distr(c(1), bfc), bfc))
+#'  plot(rasterize_distr(get_distr(bfc, 1), bfc))
 #'
 #'
 #' }

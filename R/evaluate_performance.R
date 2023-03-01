@@ -44,18 +44,18 @@ evaluate_perfomance <- function(bf){
   for(i in seq_along(transitions)){
     from <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[i]))
     to <- as.numeric(gsub("^T_[[:digit:]]+-", "", transitions[i]))
-    start_distr <- get_distr(from, bf, from_marginals = FALSE)
-    end_distr <- get_distr(to, bf, from_marginals = FALSE)
+    start_distr <- get_distr( bf, from, from_marginals = FALSE)
+    end_distr <- get_distr(bf, to, from_marginals = FALSE)
     projected <- forecast(bf,distr = start_distr, start = from, end = to)
     single_step_cor[i] <- cor(end_distr, projected[, ncol(projected)])
-    marginal_start_distr <- get_distr(from, bf = bf, from_marginals = TRUE)
+    marginal_start_distr <- get_distr(bf, from, from_marginals = TRUE)
     distr_cor[i] <- cor(start_distr, marginal_start_distr)
   }
 
   start <- 1
   end <- n_distr(bf)
-  start_distr <- get_distr(1, bf, from_marginals = FALSE)
-  end_distr <- get_distr(end, bf, from_marginals = FALSE)
+  start_distr <- get_distr(bf, 1, from_marginals = FALSE)
+  end_distr <- get_distr(bf, end, from_marginals = FALSE)
   projected <- forecast(bf, start_distr, start, end, "forward")
   projected <- projected[, ncol(projected)] # end
   traverse_cor <- cor(start_distr, projected)

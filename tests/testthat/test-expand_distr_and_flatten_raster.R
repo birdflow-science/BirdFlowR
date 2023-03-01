@@ -10,7 +10,7 @@
 
 test_that("expand_distr and flatten_raster are reversable - 1 distr", {
   bf <- make_test_birdflow()
-  d <- get_distr(1, bf)
+  d <- get_distr(bf, 1)
   r <- expand_distr(d, bf)
   f <- flatten_raster(r, bf)
   expect_equal(d, f)
@@ -18,7 +18,7 @@ test_that("expand_distr and flatten_raster are reversable - 1 distr", {
 
 test_that("expand_distr and flatten_raster are reversable - multiple distr", {
   bf <- BirdFlowModels::amewoo
-  d <- get_distr(3:4, bf)
+  d <- get_distr(bf, 3:4)
   r <- expand_distr(d, bf)
   f <- flatten_raster(r, bf)
   expect_equal(d, f)

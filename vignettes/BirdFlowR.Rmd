@@ -116,29 +116,29 @@ Use timestep, character dates, date objects, or "all" to specify which distribut
 
 Retrieve the first distribution and compare its length to the number of active cells.
 ```{r single distribution}
-d <- get_distr(1, bf) # get first timestep distribution 
+d <- get_distr(bf, 1) # get first timestep distribution 
 length(d)  # 1 distribution so d is a vector
 n_active(bf)  # its length is the the number of active cells in the model
 ```
 
 Get 5 distributions, the result is a matrix in which each column is a  distribution with a row for each active cell. 
 ```{r multiple distributions}
-d <- get_distr(26:30, bf) 
+d <- get_distr(bf, 26:30) 
 dim(d)
 head(d, 3)
 ```
 
 We can also specify distributions with dates, or use "all" to retrieve all the distributions. 
 ```{r get_distr options}
-d <- get_distr("2022-12-15", bf) # from character date
-d <- get_distr("all", bf)  # all distributions
-d <- get_distr(Sys.Date(), bf)  # Using a Date object 
+d <- get_distr(bf, "2022-12-15") # from character date
+d <- get_distr(bf, "all")  # all distributions
+d <- get_distr(bf, Sys.Date())  # Using a Date object 
 ```
 
 Use `rasterize_distr()` to convert a distribution to a SpatRaster defined in the terra package. The second argument, the BirdFlow 
 model, is needed for the spatial information it contains. 
 ```{r get distributions}
-d <- get_distr(c(1, 26), bf) # winter and summer
+d <- get_distr(bf, c(1, 26)) # winter and summer
 r <- rasterize_distr(d, bf) # convert to SpatRaster 
 ```
 
@@ -174,7 +174,7 @@ single location per distribution. The result is one or moe distributions
 with ones in the selected location(s) and zero elsewhere.  
 ```{r starting location}
 set.seed(0)
-d <- get_distr(start, bf)
+d <- get_distr(bf, start)
 location <- sample_distr(d)
 
 print( i_to_xy( which( as.logical(location) ), bf) )  # starting coordinates
@@ -200,7 +200,7 @@ for bird's wintering at that particular location and the distribution of the
 species as a whole at the same timestep.
 ```{r probability over time}
 projected <- f[ , ncol(f)]  # last projected distribution
-diff <-  projected - get_distr(end, bf) 
+diff <-  projected - get_distr(bf, end) 
 plot(rasterize_distr(diff, bf))
 ```
 
@@ -220,7 +220,7 @@ end <- 26          # ending timestep (summer)
 ## Generate starting locations 
 First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly resulting in a matrix in which each column has a single 1 representing the sampled location.
 ```{r starting locations}
-d <- get_distr(start, bf)
+d <- get_distr(bf, start)
 locations  <- sample_distr(d, n = n_positions)  
 ```
 
@@ -254,7 +254,7 @@ head(rts$points, 4)
 ## Plot routes 
 Plot the route lines over the summer distribution along with points at the starting and ending positions.
 ```{r plot routes}
-d <- get_distr(end, bf)
+d <- get_distr(bf, end)
 summer <- rasterize_distr(d, bf)
 
 line_col <- rgb(0, 0, 0, .2)

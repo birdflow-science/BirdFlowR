@@ -23,7 +23,7 @@ rasterize_distr <- function(distr, bf){
 
 
 rast.BirdFlow <- function(x, which = "all"){
-  rasterize_distr(get_distr(which, x), x)
+  rasterize_distr(get_distr( x, which), x)
 }
 #' @rdname rasterize
 #' @export
