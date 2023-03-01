@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,25 +58,9 @@
         <dd>birdflow_crs</dd>
       </dl><dl><dt>
           
-          <code><a href="collapse_distr.html">collapse_distr()</a></code> 
-        </dt>
-        <dd>Function to convert a raster bird distribution into its collapsed, vector
-equivalent</dd>
-      </dl><dl><dt>
-          
-          <code><a href="compare_list_item_names.html">compare_list_item_names()</a></code> 
-        </dt>
-        <dd>compare names of two nested lists</dd>
-      </dl><dl><dt>
-          
           <code><a href="dimensions.html">nrow(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ncol(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">dim(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">n_timesteps()</a></code> <code><a href="dimensions.html">n_distr()</a></code> <code><a href="dimensions.html">n_transitions()</a></code> <code><a href="dimensions.html">n_active()</a></code> <code><a href="dimensions.html">crs(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ext(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">res(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">yres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmax(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymax(<i>&lt;BirdFlow&gt;</i>)</a></code> 
         </dt>
         <dd>Dimensions of a BirdFlow object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="evaluate_perfomance.html">evaluate_perfomance()</a></code> 
-        </dt>
-        <dd>Evaluate BirdFlow model performance</dd>
       </dl><dl><dt>
           
           <code><a href="expand_distr.html">expand_distr()</a></code> 
@@ -89,19 +73,14 @@ equivalent</dd>
         <dd>Fix the dead ends currently present in the model</dd>
       </dl><dl><dt>
           
-          <code><a href="fix_dead_ends.html">find_dead_ends()</a></code> <code><a href="fix_dead_ends.html">fix_dead_ends()</a></code> 
+          <code><a href="flatten_raster.html">flatten_raster()</a></code> 
         </dt>
-        <dd>find and fix inconsistencies in sparse BirdFlow models</dd>
+        <dd>Convert a raster bird distribution into its flattened, vector equivalent</dd>
       </dl><dl><dt>
           
           <code><a href="forecast.html">forecast()</a></code> 
         </dt>
         <dd>Forecast bird distributions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_dates.html">get_dates()</a></code> 
-        </dt>
-        <dd>internal function to calculate the date of each BirdFlow timestep.</dd>
       </dl><dl><dt>
           
           <code><a href="get_distr.html">get_distr()</a></code> 
@@ -121,7 +100,7 @@ equivalent</dd>
           
           <code><a href="get_transition.html">get_transition()</a></code> 
         </dt>
-        <dd>extract a transition matrix from a BirdFlowR model</dd>
+        <dd>Return a transition matrix from a BirdFlowR model</dd>
       </dl><dl><dt>
           
           <code><a href="has.html">has_marginals()</a></code> <code><a href="has.html">has_transitions()</a></code> <code><a href="has.html">has_distr()</a></code> 
@@ -134,16 +113,6 @@ equivalent</dd>
         <dd>import BirdFlow model from an hdf5 file</dd>
       </dl><dl><dt>
           
-          <code><a href="import_birdflow_v2.html">import_birdflow_v2()</a></code> 
-        </dt>
-        <dd>import BirdFlow model from an hdf5 file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="import_prototype.html">import_prototype()</a></code> 
-        </dt>
-        <dd>Function to import BirdFlow model from the Shiny App</dd>
-      </dl><dl><dt>
-          
           <code><a href="index_conversions.html">x_to_col()</a></code> <code><a href="index_conversions.html">y_to_row()</a></code> <code><a href="index_conversions.html">row_to_y()</a></code> <code><a href="index_conversions.html">col_to_x()</a></code> <code><a href="index_conversions.html">i_to_rc()</a></code> <code><a href="index_conversions.html">i_to_row()</a></code> <code><a href="index_conversions.html">i_to_col()</a></code> <code><a href="index_conversions.html">i_to_x()</a></code> <code><a href="index_conversions.html">i_to_y()</a></code> <code><a href="index_conversions.html">i_to_xy()</a></code> <code><a href="index_conversions.html">rc_to_i()</a></code> <code><a href="index_conversions.html">xy_to_i()</a></code> 
         </dt>
         <dd>Functions to convert among spatial indices</dd>
@@ -152,16 +121,6 @@ equivalent</dd>
           <code><a href="lookup_transitions.html">lookup_transitions()</a></code> 
         </dt>
         <dd>Lookup a series of transitions connecting two dates or timesteps</dd>
-      </dl><dl><dt>
-          
-          <code><a href="marginal_stats.html">marginal_stats()</a></code> <code><a href="marginal_stats.html">sum_marginals()</a></code> <code><a href="marginal_stats.html">calc_pct_zero()</a></code> 
-        </dt>
-        <dd>marginal statistics</dd>
-      </dl><dl><dt>
-          
-          <code><a href="new_BirdFlow.html">new_BirdFlow()</a></code> 
-        </dt>
-        <dd>Private function to create the empty shell of a BirdFlow object</dd>
       </dl><dl><dt>
           
           <code><a href="preprocess_species.html">preprocess_species()</a></code> 
@@ -202,11 +161,6 @@ equivalent</dd>
           <code><a href="species_info.html">species_info()</a></code> <code><a href="species_info.html">species()</a></code> 
         </dt>
         <dd>retrieve species information from a BirdFlow model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="transition_from_marginal.html">transition_from_marginal()</a></code> 
-        </dt>
-        <dd>transition_from_marginal</dd>
       </dl><dl><dt>
           
           <code><a href="validate_BirdFlow.html">validate_BirdFlow()</a></code> 

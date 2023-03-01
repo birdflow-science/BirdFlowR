@@ -16,7 +16,7 @@ SpatRaster."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ vector form. <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="exte
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterize_distr</span><span class="op">(</span><span class="va">x</span>, <span class="va">bf</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterize_distr</span><span class="op">(</span><span class="va">distr</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BirdFlow</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
@@ -65,21 +65,24 @@ vector form. <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="exte
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>For <code>rasterize_distr()</code> a distribution in its vector form or a
-matrix in which each column represents a different distribution.
-For <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> a BirdFlow object.</p></dd>
+    <dl><dt>distr</dt>
+<dd><p>a distribution in its vector form or a
+matrix in which each column represents a different distribution.</p></dd>
 
 
 <dt>bf</dt>
 <dd><p>A BirdFlow object.</p></dd>
 
 
+<dt>x</dt>
+<dd><p>A BirdFlow object</p></dd>
+
+
 <dt>which</dt>
 <dd><p>indicates which distributions to return. Can be one or more
-integers indicating timesteps; character dates in the format
-year-month-day e.g. <code>"2019-02-25"</code>; <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> objects; or
-<code>"all"</code> which will return distributions for all timesteps.</p></dd>
+integers indicating timesteps; character dates in the format year-month-day
+e.g. <code>"2019-02-25"</code>; <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> objects; or <code>"all"</code> which will
+return distributions for all timesteps.</p></dd>
 
 </dl></div>
     <div class="section level2">

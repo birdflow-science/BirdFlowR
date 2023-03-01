@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,29 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9019" id="birdflowr-0009019-2023-03-01">BirdFlowR 0.0.0.9019 2023-03-01<a class="anchor" aria-label="anchor" href="#birdflowr-0009019-2023-03-01"></a></h2>
+<ul><li>Nomenclature cleanup (round 1)
+<ul><li>collapse_distr(x, bf) -&gt; collapse_raster(raster, bf)</li>
+<li>evaluate_perfomance(bf) -&gt; evaluate_performance(x)</li>
+<li>expand_distr(x, bf) -&gt; expand_distr(distr, bf)</li>
+<li>get_distr(which, bf, from_marginals) -&gt; get_distr(x, which, from_marginals)</li>
+<li>get_transition(x, bf) -&gt; get_transition(x, transition)</li>
+<li>lookup_transitions(start, end, bf, direction) -&gt; lookup_transition(x, start, end, direction)</li>
+<li>sample_distr(x, bf) -&gt; sample_distr(distr, bf)</li>
+</ul></li>
+<li>No longer exported:
+<ul><li>evaluate_performance()</li>
+<li>find_dead_ends()</li>
+<li>find_threshold()</li>
+<li>fix_dead_ends()</li>
+<li>import_prototype()</li>
+<li>lookup_transitions()</li>
+<li>new_BirdFlow()</li>
+<li>transition_from_marginal()</li>
+</ul></li>
+<li>Added “@keyword internal” to documentation for all non-exported functions. This removes the documentation from the package manual and index, but it’s still accessible with ?function_name.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9016" id="birdflowr-0009016-2023-02-27">BirdFlowR 0.0.0.9016 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009016-2023-02-27"></a></h2>
 <ul><li>Added package down. Starting to use <a href="https://semver.org/" class="external-link">semantic versioning</a>.</li>

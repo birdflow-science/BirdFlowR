@@ -18,7 +18,7 @@ for plotting or conversion into spatial objects."><!-- mathjax --><script src="h
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,12 +60,12 @@ for plotting or conversion into spatial objects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">expand_distr</span><span class="op">(</span><span class="va">x</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">expand_distr</span><span class="op">(</span><span class="va">distr</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt>distr</dt>
 <dd><p>Either a vector representing a single distribution with one value
 per location in the model or a matrix in which each column is such a vector.
 Higher dimensions are allowed (but unlikely); in all cases the first
@@ -80,7 +80,7 @@ dimension is for locations in the model.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An expanded version of <code>x</code> with one additional dimension, in which
+<p>An expanded version of <code>distr</code> with one additional dimension, in which
 the first two dimensions are rows and columns in space (a raster) and
 replace the first dimension in the input.</p>
     </div>

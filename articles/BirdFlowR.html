@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -203,7 +203,7 @@ or “all” to specify which distributions to retrieve.</p>
 <p>Retrieve the first distribution and compare its length to the number
 of active cells.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># get first timestep distribution </span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># get first timestep distribution </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>  <span class="co"># 1 distribution so d is a vector</span></span>
 <span><span class="co">#&gt; [1] 1706</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># its length is the the number of active cells in the model</span></span>
@@ -211,7 +211,7 @@ of active cells.</p>
 <p>Get 5 distributions, the result is a matrix in which each column is a
 distribution with a row for each active cell.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="fl">26</span><span class="op">:</span><span class="fl">30</span>, <span class="va">bf</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">26</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1706    5</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">3</span><span class="op">)</span></span>
@@ -223,14 +223,14 @@ distribution with a row for each active cell.</p>
 <p>We can also specify distributions with dates, or use “all” to
 retrieve all the distributions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="st">"2022-12-15"</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># from character date</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="va">bf</span><span class="op">)</span>  <span class="co"># all distributions</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span>  <span class="co"># Using a Date object </span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"2022-12-15"</span><span class="op">)</span> <span class="co"># from character date</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"all"</span><span class="op">)</span>  <span class="co"># all distributions</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Using a Date object </span></span></code></pre></div>
 <p>Use <code><a href="../reference/rasterize.html">rasterize_distr()</a></code> to convert a distribution to a
 SpatRaster defined in the terra package. The second argument, the
 BirdFlow model, is needed for the spatial information it contains.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">26</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># winter and summer</span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">26</span><span class="op">)</span><span class="op">)</span> <span class="co"># winter and summer</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to SpatRaster </span></span></code></pre></div>
 <p>Alternatively convert directly from BirdFlow to SpatRast with
 <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> the second, optional, argument <code>which</code>
@@ -271,7 +271,7 @@ one or moe distributions with ones in the selected location(s) and zero
 elsewhere.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">bf</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">location</span><span class="op">)</span> <span class="op">)</span>, <span class="va">bf</span><span class="op">)</span> <span class="op">)</span>  <span class="co"># starting coordinates</span></span>
@@ -298,7 +298,7 @@ distribution for bird’s wintering at that particular location and the
 distribution of the species as a whole at the same timestep.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="va">f</span><span class="op">[</span> , <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">]</span>  <span class="co"># last projected distribution</span></span>
-<span><span class="va">diff</span> <span class="op">&lt;-</span>  <span class="va">projected</span> <span class="op">-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">end</span>, <span class="va">bf</span><span class="op">)</span> </span>
+<span><span class="va">diff</span> <span class="op">&lt;-</span>  <span class="va">projected</span> <span class="op">-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">end</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">diff</span>, <span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/probability%20over%20time-1.png" width="65%"></p>
 </div>
@@ -322,7 +322,7 @@ distribution and then generate routes to their summer grounds.</p>
 sample the input distribution repeatedly resulting in a matrix in which
 each column has a single 1 representing the sampled location.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">bf</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
 <span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span><span class="op">)</span>  </span></code></pre></div>
 <p>Collapse the locations down to a vector of the index of each non-zero
 value and then convert to x and y coordinates.</p>
@@ -366,7 +366,7 @@ each route</li>
 <p>Plot the route lines over the summer distribution along with points
 at the starting and ending positions.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">end</span>, <span class="va">bf</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">end</span><span class="op">)</span></span>
 <span><span class="va">summer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">line_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.2</span><span class="op">)</span></span>

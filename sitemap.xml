@@ -28,16 +28,13 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc>
   </url>
   <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/collapse_distr.html</loc>
-  </url>
-  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/dimensions.html</loc>
   </url>
   <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/evaluate_perfomance.html</loc>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/evaluate_performance.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/expand_distr.html</loc>
@@ -50,6 +47,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_dead_ends.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/forecast.html</loc>
