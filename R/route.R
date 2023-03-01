@@ -91,7 +91,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
 
   # Projection
   for(i in seq_along(transitions)){
-    tm <- get_transition( transitions[i], x)  # transition matrix
+    tm <- get_transition(x,  transitions[i])  # transition matrix
     distr <- tm %*% distr           # project
     distr <- sample_distr(distr)  # "one hot"
     trajectory[i+1, ] <- extract_positions(distr) # save the location
