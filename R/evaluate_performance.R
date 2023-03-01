@@ -13,7 +13,7 @@
 #' or multiplied repeatedly with transition matrices to project forward
 #' multiple timesteps.
 #'
-#' @param bf A BirdFlow object
+#' @param x A BirdFlow object
 #'
 #' @return
 #' \describe{
@@ -36,27 +36,26 @@
 #'  training distribution. The minium observed coorlation between a marginal and
 #'  training distribution.}
 #' }
-#' @export
-evaluate_perfomance <- function(bf){
+evaluate_performance <- function(x){
 
-  transitions <- lookup_transitions(start = 1, end = n_distr(bf), bf)
+  transitions <- lookup_transitions(start = 1, end = n_distr(x), x)
   distr_cor <- single_step_cor <- numeric(length(transitions))
   for(i in seq_along(transitions)){
     from <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[i]))
     to <- as.numeric(gsub("^T_[[:digit:]]+-", "", transitions[i]))
-    start_distr <- get_distr( bf, from, from_marginals = FALSE)
-    end_distr <- get_distr(bf, to, from_marginals = FALSE)
-    projected <- forecast(bf,distr = start_distr, start = from, end = to)
+    start_distr <- get_distr( x, from, from_marginals = FALSE)
+    end_distr <- get_distr(x, to, from_marginals = FALSE)
+    projected <- forecast(x,distr = start_distr, start = from, end = to)
     single_step_cor[i] <- cor(end_distr, projected[, ncol(projected)])
-    marginal_start_distr <- get_distr(bf, from, from_marginals = TRUE)
+    marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
     distr_cor[i] <- cor(start_distr, marginal_start_distr)
   }
 
   start <- 1
-  end <- n_distr(bf)
-  start_distr <- get_distr(bf, 1, from_marginals = FALSE)
-  end_distr <- get_distr(bf, end, from_marginals = FALSE)
-  projected <- forecast(bf, start_distr, start, end, "forward")
+  end <- n_distr(x)
+  start_distr <- get_distr(x, 1, from_marginals = FALSE)
+  end_distr <- get_distr(x, end, from_marginals = FALSE)
+  projected <- forecast(x, start_distr, start, end, "forward")
   projected <- projected[, ncol(projected)] # end
   traverse_cor <- cor(start_distr, projected)
 
