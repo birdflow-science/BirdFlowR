@@ -1,3 +1,11 @@
+# BirdFlowR 0.0.0.9021  2023-03-03
+
+* Updated preprocess_species()
+  - Now only downloads the files it needs [#21](https://github.com/birdflow-science/BirdFlowR/issues/21)
+  - Slight adjustment to resolution heuristic, it should take fewer steps to 
+  find the right resolution.
+  - Added  additional tests to cover error conditions and clipping
+
 # BirdFlowR 0.0.0.9019  2023-03-01
 
 * Nomenclature cleanup (round 1)

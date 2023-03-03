@@ -4,8 +4,8 @@
       b
     Output
       Yellow-bellied Sapsucker BirdFlow model
-        dimensions   : 24, 25, 53  (nrow, ncol, ntimesteps)
-        resolution   : 30000, 30000  (x, y)
-        active cells : 253
-        size         : 344.1 Kb
+        dimensions   : 14, 15, 53  (nrow, ncol, ntimesteps)
+        resolution   : 50000, 50000  (x, y)
+        active cells : 106
+        size         : 159.9 Kb
 
