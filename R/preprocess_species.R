@@ -288,7 +288,7 @@ preprocess_species <- function(species,
         # Calculate percent of density lost
         # will print after printing the resolved resolution
         sa <- sum(abunds)
-        csa <- mask(sa, clip2)
+        csa <- terra::mask(sa, clip2)
         tot_density <- sum(terra::values(sa), na.rm = TRUE)
         clipped_density <- sum(terra::values(csa), na.rm = TRUE)
         pct_lost <- round((tot_density - clipped_density)/tot_density * 100, 2)

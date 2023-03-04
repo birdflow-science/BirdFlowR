@@ -9,3 +9,14 @@
         active cells : 106
         size         : 159.9 Kb
 
+# preprocess_species() works with clip
+
+    Code
+      ext(b)
+    Output
+      SpatExtent : 810000, 1560000, 660000, 1320000 (xmin, xmax, ymin, ymax)
+    Code
+      res(b)
+    Output
+      [1] 30000 30000
+
