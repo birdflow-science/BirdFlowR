@@ -13,7 +13,6 @@ fix_current_dead_ends(bf, de)
 }
 \value{
 a BirdFlow model with selected marginal rows and columns zeroed out.
-#' @keywords internal
 }
 \description{
 THe internal function \code{fix_current_dead_ends()} zeros
@@ -22,3 +21,4 @@ eliminating all transitions into the existing dead end states.  It tends to
 create new dead ends in the process so is called iteratively by
 \code{\link[=fix_dead_ends]{fix_dead_ends()}}.
 }
+\keyword{internal}

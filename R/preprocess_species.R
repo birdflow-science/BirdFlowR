@@ -155,7 +155,7 @@ preprocess_species <- function(species,
       stop("Need an output directory. Please set out_dir.")
     out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
     if(!dir.exists(out_dir))
-      stop("output directory ", out_dir, " does not exist.")
+      stop("Output directory ", out_dir, " does not exist.")
   }
 
   #----------------------------------------------------------------------------#
@@ -218,7 +218,15 @@ preprocess_species <- function(species,
   # Saves to disk. Path for windows 10 was:
   #  ~\AppData\Roaming\R\data\R\ebirdst\2021\[species]
   #----------------------------------------------------------------------------#
-  sp_path <-  ebirdst::ebirdst_download(download_species)
+
+  # Define patterns for selecting specific files to download for each resolution
+  download_patterns <-
+    as.list(paste0("_abundance_((lower)|(median)|(upper))_", c("lr", "mr", "hr")))
+  names(download_patterns) <- c("lr", "mr", "hr")
+
+  # Initially download just the Low resolution
+  sp_path <-  ebirdst::ebirdst_download(download_species,
+                                        pattern = download_patterns$lr)
 
   # Load map parameters and set crs
   mp  <- ebirdst::load_fac_map_parameters(path = sp_path)
@@ -243,6 +251,15 @@ preprocess_species <- function(species,
   #   resolution that will result in close to max_params (but stay under it)
   #   the total number of fitted parameters in the model. It rounds the
   #   resolution variably - rounding more for larger values.
+  #   Note: it turned out to be really hard to anticipate how many cells would
+  #     contain data after a resolution change.  The code estimates by
+  #     calculating the area of the non-zero cells in the current resolution
+  #     and then figure out the cell size that would cover that much area in the
+  #     new resolution.  However, it's a poor estimate because it ignores the
+  #     fact that coarse cells along the edges overlap fine cells that contain
+  #     a mix of no data and data.  The code here makes the estimate and then
+  #     resamples to the new estimate, and resestimates until the number of
+  #     parameters is between 90 and 100 % of the target number.
   #   Feb 10 - added gb parameter that allows estimating max_params from the
   #     GB of ram on the machine used to fit the models
   #----------------------------------------------------------------------------#
@@ -271,7 +288,7 @@ preprocess_species <- function(species,
         # Calculate percent of density lost
         # will print after printing the resolved resolution
         sa <- sum(abunds)
-        csa <- mask(sa, clip2)
+        csa <- terra::mask(sa, clip2)
         tot_density <- sum(terra::values(sa), na.rm = TRUE)
         clipped_density <- sum(terra::values(csa), na.rm = TRUE)
         pct_lost <- round((tot_density - clipped_density)/tot_density * 100, 2)
@@ -284,8 +301,10 @@ preprocess_species <- function(species,
     if(length(r) == 1) r <- rep(r, 2)
     stopifnot(length(r) == 2)
 
+    p_adj <- 0.95  # Used to adjust the target number of cells down slightly as
+                   # we are looking to be below not at max_params
 
-    target_cells <- sqrt(max_params / 52)  # target number of cells
+    target_cells <- sqrt( max_params / 52 ) * p_adj # target number of cells
     active_sq_m <- sum(terra::values(mask)) * prod(r)
 
     n_attempts <- 10
@@ -361,7 +380,7 @@ preprocess_species <- function(species,
 
   }  # End if missing res
 
-  if(download_species == "example_data"){
+  if(download_species == "example_data" & res < 30){
     if(verbose)
       cat("Resolution forced to 30 for example data, which only has low resolution images\n")
     res <- 30
@@ -423,6 +442,12 @@ preprocess_species <- function(species,
                stop("unrecognized resolution")
         ),
         " geoTIFFs\n", sep = "")
+
+  # Download high or medium resolution data (if needed)
+  if(load_res != "lr"){
+    ebirdst::ebirdst_download(download_species,
+                            pattern = download_patterns[[load_res]])
+  }
   abunds <- ebirdst::load_raster("abundance", path = sp_path,resolution=load_res)
   abunds_lci <- ebirdst::load_raster("abundance", metric = "lower",
                                      path = sp_path,resolution=load_res)
