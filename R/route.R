@@ -97,37 +97,58 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
     trajectory[i+1, ] <- extract_positions(distr) # save the location
   }
 
-  format_trajectory <- function(trajectory, bf, start, end){
-    # dimensions of trajectory are timestep and route
-    # values are the index i of the location at the time and route
-    # Converting to a long format. With columns:
-    #  x, y : coordinates of position
-    #  timestep : integer timestep, corresponds to rows in the dates element of x
-    #  route : integer route ID
-    #  date : the date associated with the timestep
-    x <- as.vector(i_to_x(trajectory, bf))
-    y <- as.vector(i_to_y(trajectory, bf))
-    timestep <- rep(start:end, times = ncol(trajectory))
-    route <- rep(1:ncol(trajectory), each = nrow(trajectory))
-    date <- bf$dates$date[timestep]
-    return( data.frame(x, y, route, timestep, date) )
-  }
-
-  # Make x and y vectors into lines
-  convert_to_lines <- function(x, y)
-    sf::st_linestring(cbind(x, y), "XY")
-
-  # Create an sf object with lines for each route
-  convert_route_to_sf <- function(x){
-    x %>% dplyr::group_by(route) %>%
-      dplyr::summarize(
-        geometry = sf::st_geometry(convert_to_lines(.data$x, .data$y)) ) %>%
-      as.data.frame() %>% sf::st_as_sf()
-  }
-
   points <- format_trajectory(trajectory, x, start, end)
   lines <- convert_route_to_sf(points)
   sf::st_crs(lines) <- sf::st_crs(crs(x))
 
   return(list(points = points, lines = lines))
+}
+
+
+# Internal helper functions
+
+# Make x and y vectors into lines
+convert_to_lines <- function(x, y)
+  sf::st_linestring(cbind(x, y), "XY")
+
+# Create an sf object with lines for each route
+convert_route_to_sf <- function(x){
+  x %>% dplyr::group_by(route) %>%
+    dplyr::summarize(
+      geometry = sf::st_geometry(convert_to_lines(.data$x, .data$y)) ) %>%
+    as.data.frame() %>% sf::st_as_sf()
+}
+
+
+# Internal helper function to convert one or more trajectories
+# stored as a vector or in columns of a matrix into a data.frame
+# with x, y, route, timestep, date, i, stay_id, and stay_len columns
+format_trajectory <- function(trajectory, bf, start, end){
+  # dimensions of trajectory are timestep and route
+  # values are the index i of the location at the time and route
+  # Converting to a long format. With columns:
+  #  x, y : coordinates of position
+  #  timestep : integer timestep, corresponds to rows in the dates element of x
+  #  route : integer route ID
+  #  date : the date associated with the timestep
+  x <- as.vector(i_to_x(trajectory, bf))
+  y <- as.vector(i_to_y(trajectory, bf))
+  timestep <- rep(start:end, times = ncol(trajectory))
+  route <- rep(1:ncol(trajectory), each = nrow(trajectory))
+  date <- bf$dates$date[timestep]
+
+
+  points <- data.frame(x, y, route, timestep, date, i = as.vector(trajectory))
+
+  add_stay_id <- function(df){
+    # Benjamin's function
+    df %>%
+      dplyr::mutate(stay_id = cumsum(c(1,as.numeric(diff(i))!=0)),
+                    stay_len = rep(rle(stay_id)$lengths,
+                                   times = rle(stay_id)$lengths))
+  }
+
+  points <- points %>% dplyr::group_by(route) %>% add_stay_id()
+
+  return( as.data.frame( points ) )
 }
