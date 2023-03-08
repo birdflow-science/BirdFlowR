@@ -45,7 +45,7 @@
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
 import_birdflow <- function(hdf5, ..., version){
-  if(missing(version))
+  if(missing(version)){
     contents <- h5ls(hdf5)
     contents <- paste0(contents$group, "/", contents$name)
     contents <- gsub("^/*", "", contents)
