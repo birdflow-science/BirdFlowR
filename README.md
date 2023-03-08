@@ -13,16 +13,22 @@ This package is under development and not yet formally released. Function names 
 
 Install just the package:
 ```{r}
-devtools::install_github("birdflow-science/BirdFlowR")
+if(!require("remotes"))
+  install.packages("remotes") 
+remotes::install_github("birdflow-science/BirdFlowR")
 ```
 Or to install with example data and vignette:
 
 ```{r}
-install.packages("remotes")
-install.packages("rnaturalearthdata") # required for vignette
-remotes::install_github("birdflow-science/BirdFlowModels")  # data package
+installed <- rownames(installed.packages())
+if(!"remotes" %in% installed)
+  install.packages("remotes")
+if(!"rnaturalearthdata" %in% installed)
+  install.packages("rnaturalearthdata")
+remotes::install_github("birdflow-science/BirdFlowModels")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 ```
+See `vignette("Installation")` for troubleshooting and more installation options.
 
 ## Usage 
 
@@ -59,6 +65,10 @@ plot(rts$lines, add = TRUE, col = rgb(0, 0, 0, .25))
 
 ## Learn more
 
-Read  `vignette("BirdFlowR")` for a longer introduction to the package.
+- `vignette("BirdFlowR")` has a longer introduction to the package, and how to use `forcast()` and `route()` to project bird distributions and movement. 
+- `vignette("Installation")` for detailed installation instructions.
+- `vignette("Preprocess")` covers downloading and formatting data for model fitting with `preprocess_species()`, importing fitted models with `import_birdflow()`, and reducing model size with `sparsify()`.   
+- Read the paper:
+  - [BirdFlow: Learning Seasonal Bird Movements from Citizen Science Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1) Miguel Fuentes, Benjamin M. Van Doren, Daniel Fink, Daniel Sheldon bioRxiv 2022.04.12.488057; doi: https://doi.org/10.1101/2022.04.12.488057
 
 

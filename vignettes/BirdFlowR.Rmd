@@ -1,6 +1,8 @@
 ---
 title: "BirdFlowR"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{BirdFlowR}
   %\VignetteEngine{knitr::rmarkdown}
@@ -16,21 +18,18 @@ knitr::opts_chunk$set(
   fig.height = 5
 )
 ```
-A brief introduction to BirdFlowR.
 
 ## Setup
 
 Install packages
 ```{r install, eval = FALSE }
 installed <- rownames(installed.packages())
-if(!"devtools" %in% installed)
-  install.packages("devtools")
-if(!"BirdFlowModels" %in% installed)
-  devtools::install_github("birdflow-science/BirdFlowModels")
-if(!"BirdFlowR" %in% installed)
-  devtools::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+if(!"remotes" %in% installed)
+  install.packages("remotes")
 if(!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
+remotes::install_github("birdflow-science/BirdFlowModels")
+remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 
 ```
 

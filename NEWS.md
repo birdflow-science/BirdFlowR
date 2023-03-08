@@ -1,3 +1,18 @@
+
+# Birdflow 0.0.0.9028  2023-03-08
+
+* New `vignette("Preprocess")` covers preprocessing, importing, and  
+  sparsification 
+
+* New `vignette("Installation")` covers R, RStudio, and package installation; 
+  and installing in a  Docker container. 
+
+* Updated installation instructions everywhere to use remotes instead of 
+  devtools and do not re-install packages unnecessarily.
+
+* Expanded "Learn More"" section in README.md to link to all vignettes as well
+  as the BirdFlow paper.
+
 # BirdFlowR 0.0.0.9021  2023-03-03
 
 * Updated preprocess_species()
@@ -28,6 +43,7 @@
   - transition_from_marginal()
 
 * Added "@keyword internal" to documentation for all non-exported functions.  This removes the documentation from the package manual and index, but it's still accessible with ?function_name. 
+
 
 # BirdFlowR 0.0.0.9016  2023-02-27
 
