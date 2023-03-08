@@ -1,0 +1,88 @@
+---
+title: "Preprocess and sparsify"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Preprocess and sparsify}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "65%",
+  fig.width = 6,
+  fig.height = 5
+)
+```
+
+### Load R packages and set species.  
+The "example_data" allows processing the ebirdst example data, which doesn't require an access code.
+
+If you plan on preprocessing any other species be sure to [setup an ebirdst access code](https://cornelllabofornithology.github.io/ebirdst/articles/ebirdst.html#access).
+
+```{r setup, message=FALSE}
+library(BirdFlowR)
+library(ebirdst)
+library(terra)
+species <- "example_data"  # optionally, set species here
+```
+
+You'll also have to setup a destination folder for the purpose of the vignette I'm going to use a temporary folder.
+```{r tempdir }
+dir <- tempdir() 
+```
+You could optionally set to a directory of your choice that is somewhere more permanent and accessible.  The code below should add a BirdFlowModels directory to your home directory, to use for model output. This block is not run when building the vignette.
+```{r dir, eval = FALSE}
+dir <- "~/BirdFlowModels"
+dir.create(dir, showWarnings = FALSE)
+```
+
+### Preprocess
+
+Now we can preprocess the species.  The `gb` parameter is one way of setting the resolution; it specifies the amount of ram available on the machine where we intend to fit the BirdFlow model - with python and Jax, and probably on a cluster.  Here, we set `gb` to a small value to keep file size and memory requirements small.
+
+```{r preprocess, eval = FALSE}
+# Note:
+#   amewoo 100km resolution is equivalent to gb = 1
+#   amewoo 75 km resolution is equivalent to gb = 2.9
+
+bf <- preprocess_species(species, dir, gb = 1)
+```
+
+### Fit models 
+
+In python. Come back after you're done.
+
+### Import
+
+The rest of this vignette is predicated on having an .hdf5 file with a fitted model.  Set the path to the file and import it.  
+```{r import, eval = FALSE}
+model_file <- file.path(dir, "fitted.hdf5")
+bf <- import_birdflow(model_file)
+```
+
+### Sparsify
+
+It's a good idea to sparsify immediately after importing to reduce memory usage and processing time for the models.
+
+The state method eliminates all transitions into and out of model states (locations in space and time) for which the ebirdst distribution is zero.  Those states are thus removed from the model. 
+
+You can read more about sparsification methods in the help for `sparasify()`.  
+```{r sparsify, eval = FALSE}
+bf <- sparsify(bf, method = "state")
+```
+
+### Save sparse model
+
+Saving the sparse model will save time and disk space if we want to use it later. Here we write it as a serialized R object which is fast and efficient but not at all portable to other software.
+```{r save, eval = FALSE}
+sparse_file <- file.path(dir, "sparse.Rds")  # change 
+saveRDS(bf, file = sparse_file)
+```
+In a later session we could then read it with.
+```{r readRds, eval = FALSE}
+bf <- readRDS(sparse_file)
+```
+See `vignette('BirdFlowR')` for examples of routing and forecasting with BirdFlow objects.
