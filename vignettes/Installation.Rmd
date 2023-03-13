@@ -61,20 +61,26 @@ Alternatively you can install from a Dockerfile
 
 Here's how one can use the Dockerfile in Linux/MacOS (Windows should be similar).
 
-1. Clone the [BirdFlowR package](https://github.com/birdflow-science/BirdFlowR) from git hub.
+1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+
+1. If your computer has an Apple Silicon chip (e.g., M1 or M2), in Docker Desktop go to Settings > General and ensure "Use Virtualization Framework" is checked, then go to Features in Development > and check "Use Rosetta for x86/amd64 emulation on Apple Silcon". Apply these settings and restart Docker Desktop as needed.
+
+1. Ensure that Docker Desktop is running.
+
+1. Clone the [BirdFlowR package](https://github.com/birdflow-science/BirdFlowR) from GitHub.
 
 1. Go to the top level BirdFlowR directory, build the image from the Dockerfile, and tag the image as 'birdflow'.  It will take a long time the first time because it will need to download the rocker/geospatial:4.2.2 image from Docker Hub, which is the starting point before we install our custom packages via the Dockerfile.  For future builds on the same machine, rocker/geospatial will already be cached by Docker, so all it needs to do to is re-install our custom packages. The build step really only needs to happen when you want to use a newer version of the BirdFlowR repo. See also: https://rocker-project.org/images/versioned/rstudio.html
     ```{bash eval=FALSE, include=TRUE}
     cd ~/BirdFlowR
-    docker build -t birdflow .
+    docker build -t birdflow . --no-cache
     ```
 1. Launch a Docker container from the image, and launch an RStudio Server instance from the container.  If you're doing it locally on your computer, you can use this version to skip the password. Specifying the IP address in this way should make it only accessible from the same computer, according to the Rocker page.
     ```{bash eval=FALSE, include=TRUE}
-    docker run --rm -ti -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 birdflow
+    docker run --platform linux/amd64 --rm -ti -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 birdflow
     ```
     If you're doing it between computers, make sure to only include the ports, and require authentication:
     ```{bash eval=FALSE, include=TRUE}
-    docker run --rm -ti -e PASSWORD=yourpassword -p 8787:8787 birdflow
+    docker run --platform linux/amd64 --rm -ti -e PASSWORD=yourpassword -p 8787:8787 birdflow
     ```
 1. Once you see the message saying services are started, point your web browser to [localhost:8787/](localhost:8787/) to use RStudio from the image.
 
