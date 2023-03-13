@@ -126,8 +126,16 @@ of the “Tools” menu.</p>
 <p>Here’s how one can use the Dockerfile in Linux/MacOS (Windows should
 be similar).</p>
 <ol style="list-style-type: decimal">
+<li><p>Download and install <a href="https://www.docker.com/products/docker-desktop/" class="external-link">Docker
+Desktop</a>.</p></li>
+<li><p>If your computer has an Apple Silicon chip (e.g., M1 or M2), in
+Docker Desktop go to Settings &gt; General and ensure “Use
+Virtualization Framework” is checked, then go to Features in Development
+&gt; and check “Use Rosetta for x86/amd64 emulation on Apple Silcon”.
+Apply these settings and restart Docker Desktop as needed.</p></li>
+<li><p>Ensure that Docker Desktop is running.</p></li>
 <li><p>Clone the <a href="https://github.com/birdflow-science/BirdFlowR" class="external-link">BirdFlowR
-package</a> from git hub.</p></li>
+package</a> from GitHub.</p></li>
 <li>
 <p>Go to the top level BirdFlowR directory, build the image from the
 Dockerfile, and tag the image as ‘birdflow’. It will take a long time
@@ -139,7 +147,7 @@ cached by Docker, so all it needs to do to is re-install our custom
 packages. The build step really only needs to happen when you want to
 use a newer version of the BirdFlowR repo. See also: <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link uri">https://rocker-project.org/images/versioned/rstudio.html</a></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/BirdFlowR</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow .</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow . <span class="at">--no-cache</span></span></code></pre></div>
 </li>
 <li>
 <p>Launch a Docker container from the image, and launch an RStudio
@@ -147,10 +155,10 @@ Server instance from the container. If you’re doing it locally on your
 computer, you can use this version to skip the password. Specifying the
 IP address in this way should make it only accessible from the same
 computer, according to the Rocker page.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> DISABLE_AUTH=true <span class="at">-p</span> 127.0.0.1:8787:8787 birdflow</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--platform</span> linux/amd64 <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> DISABLE_AUTH=true <span class="at">-p</span> 127.0.0.1:8787:8787 birdflow</span></code></pre></div>
 <p>If you’re doing it between computers, make sure to only include the
 ports, and require authentication:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> PASSWORD=yourpassword <span class="at">-p</span> 8787:8787 birdflow</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--platform</span> linux/amd64 <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> PASSWORD=yourpassword <span class="at">-p</span> 8787:8787 birdflow</span></code></pre></div>
 </li>
 <li><p>Once you see the message saying services are started, point your
 web browser to <a href="localhost:8787/">localhost:8787/</a> to use
