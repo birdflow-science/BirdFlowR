@@ -4,10 +4,10 @@
 \alias{sparsify}
 \title{sparsify BirdFlow models}
 \usage{
-sparsify(bf, method, p, fix = TRUE)
+sparsify(x, method, p, fix = TRUE)
 }
 \arguments{
-\item{bf}{A BirdFlow model}
+\item{x}{A BirdFlow model}
 
 \item{method}{One of \code{"state"}, \code{"conditional"}, \code{"marginal"}, or \code{"model"};
 or \code{"state"} paired with one of the other methods in a character
@@ -110,6 +110,6 @@ marginal.
 # Full models are huge so we don't distribute them.
 # Assuming you have an hdf5 file wit a full model you could run:
 bf <- import_birdflow(hdf5_path)
-bf <- sparsify(bf, method = "marginal+state", p = 0.99)
+sbf <- sparsify(bf, method = "marginal+state", p = 0.99)
 }
 }
