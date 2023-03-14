@@ -7,7 +7,7 @@
       Geometry type: LINESTRING
       Dimension:     XY
       Bounding box:  xmin: -3903813 ymin: -5517335 xmax: 2434301 ymax: 2722826
-      CRS:           PROJCRS["unknown",
+      Projected CRS: PROJCRS["unknown",
           BASEGEOGCRS["unknown",
               DATUM["World Geodetic System 1984",
                   ELLIPSOID["WGS 84",6378137,298.257223563,
