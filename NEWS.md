@@ -1,3 +1,16 @@
+# Birdflow 0.0.0.9038
+
+* Updated docker file to work with Apple silicon and not to use cached github 
+  repos. (commit #37)
+
+* Updated installation instructions for Docker (commit #37)
+
+* Route output snapshot testing no longer depends on the print(lines) but does
+  check novel points in the points component of the return value.  This should 
+  fix an issue currently with it failing CRAN check because sf:: changed 
+  slightly how it prints a summary of an SF object to screen and also make the
+  snapshot test a little less hair trigger.
+
 
 # Birdflow 0.0.0.9028  2023-03-08
 
