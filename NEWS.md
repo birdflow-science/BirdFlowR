@@ -1,7 +1,12 @@
+# BirdFlowR 0.0.0.9034
+
+* Changed `preprocess_species()` `gb` argument to `gpu_ram`.  
+
+
 # BirdFlowR 0.0.0.9035
 
-* sparsify() no longer throws confusing warning (#35)
-* First argument of sparsify() changed from bf to x (consistent with #19) 
+* `sparsify()` no longer throws confusing warning (#35)
+* First argument of `sparsify()` changed from `bf` to `x` (consistent with #19) 
 
 # BirdFlowR 0.0.0.9038
 
