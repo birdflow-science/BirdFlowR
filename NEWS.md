@@ -1,4 +1,9 @@
-# Birdflow 0.0.0.9038
+# BirdFlowR 0.0.0.9035
+
+* sparsify() no longer throws confusing warning (#35)
+* First argument of sparsify() changed from bf to x (consistent with #19) 
+
+# BirdFlowR 0.0.0.9038
 
 * Updated docker file to work with Apple silicon and not to use cached github 
   repos. (commit #37)
@@ -12,7 +17,7 @@
   snapshot test a little less hair trigger.
 
 
-# Birdflow 0.0.0.9028  2023-03-08
+# BirdFlowR 0.0.0.9028  2023-03-08
 
 * New `vignette("Preprocess")` covers preprocessing, importing, and  
   sparsification 
