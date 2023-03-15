@@ -14,7 +14,7 @@ and transitions."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ and transitions.</p>
 <span>  <span class="va">crs</span>,</span>
 <span>  <span class="va">clip</span>,</span>
 <span>  <span class="va">max_params</span>,</span>
-<span>  gb <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  gpu_ram <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  skip_quality_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -124,15 +124,15 @@ or or produce one when called with <a href="https://rdrr.io/pkg/terra/man/vect.h
 <dt>max_params</dt>
 <dd><p>the maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if <code>res</code> is set.  Otherwise a resolution
-will be chosen that yields this many fitted parameters. See <code>gb</code> for
+will be chosen that yields this many fitted parameters. See <code>gpu_ram</code> for
 the default way of setting <code>max_params</code> and <code>res</code>.</p></dd>
 
 
-<dt>gb</dt>
-<dd><p>Gigabytes of memory on machine that will fit the models. If <code>res</code>
-and <code>max_params</code> are both missing this is used to estimate <code>max_params</code>
-which is, in turn, used to determine the resolution. Ignored if either
-<code>res</code> or <code>max_params</code> is set.</p></dd>
+<dt>gpu_ram</dt>
+<dd><p>Gigabytes of ram on GPU machine that will fit the models.
+If <code>res</code> and <code>max_params</code> are both missing this is used to estimate
+<code>max_params</code>which is, in turn, used to determine the resolution. Ignored
+if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 
 
 <dt>skip_quality_checks</dt>
@@ -155,9 +155,9 @@ otherwise complete.</p>
 
 <p>The maximum number of parameters that can be fit is machine dependent.
 2023-02-10 we tested under different resolutions with "amewoo" and
-identified bounds on the maximum.</p><table class="table table"><tr><td>Machine</td><td>GB Mem.</td><td>Lower Bound (worked)</td><td>Upper Bound (failed)</td><td>Params / GB</td></tr><tr><td>titanx gpu</td><td>12GB</td><td>306804561</td><td>334693725</td><td>25567047</td></tr><tr><td>m40 gpu</td><td>24GB</td><td>557395226</td><td>610352178</td><td>23224801</td></tr></table><p>Parameters are calculated as: <br><code>parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)</code></p>
-<p>If <code>gb</code> is used (and not <code>res</code> or <code>max_parameters</code> ) than  <code>max_parameters</code> is
-set to <code>23,224,801 * gb</code> (lower of two values in table above).</p>
+identified bounds on the maximum.</p><table class="table table"><tr><td>Machine</td><td>GPU Ram (GB)</td><td>Lower Bound (worked)</td><td>Upper Bound (failed)</td><td>Params / GB</td></tr><tr><td>titanx gpu</td><td>12GB</td><td>306804561</td><td>334693725</td><td>25567047</td></tr><tr><td>m40 gpu</td><td>24GB</td><td>557395226</td><td>610352178</td><td>23224801</td></tr></table><p>Parameters are calculated as: <br><code>parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)</code></p>
+<p>If <code>gpu_ram</code> is used (and not <code>res</code> or <code>max_parameters</code> ) than  <code>max_parameters</code> is
+set to <code>23,224,801 * gpu_ram</code> (lower of two values in table above).</p>
 <p>The heuristic to determine resolution given a maximum number of parameters
 must estimate the number of cells covered by the data
 at a different resolution, a noisy process, so it iteratively tries to find

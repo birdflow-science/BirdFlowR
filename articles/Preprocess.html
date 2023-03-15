@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,10 +112,10 @@ with python and Jax, and probably on a cluster. Here, we set
 requirements small.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note:</span></span>
-<span><span class="co">#   amewoo 100km resolution is equivalent to gb = 1</span></span>
-<span><span class="co">#   amewoo 75 km resolution is equivalent to gb = 2.9</span></span>
+<span><span class="co">#   amewoo 100km resolution is equivalent to gpu_ram = 1</span></span>
+<span><span class="co">#   amewoo 75 km resolution is equivalent to gpu_ram = 2.9</span></span>
 <span></span>
-<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preprocess_species.html">preprocess_species</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">dir</span>, gb <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preprocess_species.html">preprocess_species</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">dir</span>, gpu_ram <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="fit-models">Fit models<a class="anchor" aria-label="anchor" href="#fit-models"></a>
