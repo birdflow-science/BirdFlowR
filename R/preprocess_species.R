@@ -10,16 +10,16 @@
 #' 2023-02-10 we tested under different resolutions with "amewoo" and
 #' identified bounds on the maximum.
 #'
-#'| Machine | GB Mem. | Lower Bound (worked) | Upper Bound (failed)| Params / GB |
-#'| ------- | ------- | -------------------- | ------------------- | ------------|
+#'| Machine | GPU Ram (GB) | Lower Bound (worked) | Upper Bound (failed)| Params / GB  |
+#'| ------- | ------------ | -------------------- | ------------------- | ------------|
 #'|titanx gpu | 12GB  | 306804561            | 334693725           | 25567047    |
 #'| m40 gpu  | 24GB   | 557395226            | 610352178           | 23224801    |
 #'
 #' Parameters are calculated as: \cr
 #'   `parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)`
 #'
-#' If `gb` is used (and not `res` or `max_parameters` ) than  `max_parameters` is
-#' set to `23,224,801 * gb` (lower of two values in table above).
+#' If `gpu_ram` is used (and not `res` or `max_parameters` ) than  `max_parameters` is
+#' set to `23,224,801 * gpu_ram` (lower of two values in table above).
 #'
 #' The heuristic to determine resolution given a maximum number of parameters
 #' must estimate the number of cells covered by the data
@@ -48,12 +48,12 @@
 #'   or or produce one when called with [vect(clip)][terra::vect()]
 #' @param max_params the maximum number of fitted parameters that the BirdFlow
 #'   model should contain. Ignored if `res` is set.  Otherwise a resolution
-#'   will be chosen that yields this many fitted parameters. See `gb` for
+#'   will be chosen that yields this many fitted parameters. See `gpu_ram` for
 #'   the default way of setting `max_params` and `res`.
-#' @param gb Gigabytes of memory on machine that will fit the models. If `res`
-#'   and `max_params` are both missing this is used to estimate `max_params`
-#'   which is, in turn, used to determine the resolution. Ignored if either
-#'   `res` or `max_params` is set.
+#' @param gpu_ram Gigabytes of ram on GPU machine that will fit the models.
+#'   If `res` and `max_params` are both missing this is used to estimate
+#'   `max_params`which is, in turn, used to determine the resolution. Ignored
+#'   if either` res` or `max_params` is set.
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
 #'   not all of four ranges are modeled (based on
 #'   [ebirdst_runs()][ebirdst::ebirdst_runs()]).
@@ -97,7 +97,7 @@ preprocess_species <- function(species,
                                crs,
                                clip,
                                max_params,
-                               gb = 12,
+                               gpu_ram = 12,
                                skip_quality_checks = FALSE
 
 ){
@@ -260,15 +260,15 @@ preprocess_species <- function(species,
   #     a mix of no data and data.  The code here makes the estimate and then
   #     resamples to the new estimate, and resestimates until the number of
   #     parameters is between 90 and 100 % of the target number.
-  #   Feb 10 - added gb parameter that allows estimating max_params from the
+  #   Feb 10 - added gpu_ram parameter that allows estimating max_params from the
   #     GB of ram on the machine used to fit the models
   #----------------------------------------------------------------------------#
   if(missing(res)){
 
     if(missing(max_params)){
-      stopifnot( is.numeric(gb) | length(gb) == 1 | !is.na(gb) |  gb < 0 )
-      max_params <- max_param_per_gb * gb
-      cat("Setting max_params to ", max_params, " anticipating ", gb, " GB of memory.\n" )
+      stopifnot( is.numeric(gpu_ram) | length(gpu_ram) == 1 | !is.na(gpu_ram) |  gpu_ram < 0 )
+      max_params <- max_param_per_gb * gpu_ram
+      cat("Setting max_params to ", max_params, " anticipating ", gpu_ram, " GB of GPU ram.\n" )
     }
 
     if(verbose)
@@ -586,9 +586,9 @@ preprocess_species <- function(species,
   if(verbose){
     cat("Model has:\n\t",
         sum(m), " active cells,\n\t", n_transitions , " transitions, and\n\t",
-        format(n_params, big.mark = ","), " parameters ", sep = "")
+        format(n_params, big.mark = ","), " parameters", sep = "")
     if(!missing(max_params)){
-      cat(round(pct_max_params, 1), "% of maximum parameters)\n", sep ="")
+      cat(", ", round(pct_max_params, 1), "% of maximum parameters\n", sep ="")
     } else {
       cat("\n")
     }

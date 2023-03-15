@@ -14,7 +14,7 @@ preprocess_species(
   crs,
   clip,
   max_params,
-  gb = 12,
+  gpu_ram = 12,
   skip_quality_checks = FALSE
 )
 }
@@ -48,13 +48,13 @@ or or produce one when called with \link[terra:vect]{vect(clip)}}
 
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if \code{res} is set.  Otherwise a resolution
-will be chosen that yields this many fitted parameters. See \code{gb} for
+will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}.}
 
-\item{gb}{Gigabytes of memory on machine that will fit the models. If \code{res}
-and \code{max_params} are both missing this is used to estimate \code{max_params}
-which is, in turn, used to determine the resolution. Ignored if either
-\code{res} or \code{max_params} is set.}
+\item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
+If \code{res} and \code{max_params} are both missing this is used to estimate
+\code{max_params}which is, in turn, used to determine the resolution. Ignored
+if either\code{ res} or \code{max_params} is set.}
 
 \item{skip_quality_checks}{If \code{TRUE} than preprocess the species even if
 not all of four ranges are modeled (based on
@@ -75,7 +75,7 @@ and transitions.
 The maximum number of parameters that can be fit is machine dependent.
 2023-02-10 we tested under different resolutions with "amewoo" and
 identified bounds on the maximum.\tabular{lllll}{
-   Machine \tab GB Mem. \tab Lower Bound (worked) \tab Upper Bound (failed) \tab Params / GB \cr
+   Machine \tab GPU Ram (GB) \tab Lower Bound (worked) \tab Upper Bound (failed) \tab Params / GB \cr
    titanx gpu \tab 12GB \tab 306804561 \tab 334693725 \tab 25567047 \cr
    m40 gpu \tab 24GB \tab 557395226 \tab 610352178 \tab 23224801 \cr
 }
@@ -84,8 +84,8 @@ identified bounds on the maximum.\tabular{lllll}{
 Parameters are calculated as: \cr
 \code{parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)}
 
-If \code{gb} is used (and not \code{res} or \code{max_parameters} ) than  \code{max_parameters} is
-set to \verb{23,224,801 * gb} (lower of two values in table above).
+If \code{gpu_ram} is used (and not \code{res} or \code{max_parameters} ) than  \code{max_parameters} is
+set to \verb{23,224,801 * gpu_ram} (lower of two values in table above).
 
 The heuristic to determine resolution given a maximum number of parameters
 must estimate the number of cells covered by the data

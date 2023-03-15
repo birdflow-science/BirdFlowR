@@ -45,10 +45,10 @@ Now we can preprocess the species.  The `gb` parameter is one way of setting the
 
 ```{r preprocess, eval = FALSE}
 # Note:
-#   amewoo 100km resolution is equivalent to gb = 1
-#   amewoo 75 km resolution is equivalent to gb = 2.9
+#   amewoo 100km resolution is equivalent to gpu_ram = 1
+#   amewoo 75 km resolution is equivalent to gpu_ram = 2.9
 
-bf <- preprocess_species(species, dir, gb = 1)
+bf <- preprocess_species(species, dir, gpu_ram = 1)
 ```
 
 ### Fit models 
