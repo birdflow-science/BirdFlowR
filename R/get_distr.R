@@ -50,7 +50,11 @@ get_distr <- function(x, which = "all", from_marginals = FALSE){
 
 
   if(x$metadata$has_distr && !from_marginals){ # Return stored distribution
-    return(x$distr[, which])
+    d <- x$distr[, which]
+    if(length(which) == 1){
+      attr(d, "time") <- paste0("t", which)
+    }
+    return(reformat_distr_labels( d, x) )
   } else { # Or calculate from marginals
     if(!x$metadata$has_marginals){
       if(from_marginals){
@@ -73,11 +77,15 @@ get_distr <- function(x, which = "all", from_marginals = FALSE){
       }
     }
     # Return single distribution as vector
-    if(length(which) == 1)
-      return(d[[1]])
+    if(length(which) == 1){
+      d <- d[[1]] # reformat as vector
+      attr(d, "time") <- paste0("t", which)
+      return(reformat_distr_labels(d, x))
+    }
+
     # Return multiple distributions as matrix
     d <- do.call(cbind, args = d)
-    dimnames(d) <- list(i = NULL, timestep = paste0("t", which))
-    return(d)
+    dimnames(d) <- list(i = NULL, time = paste0("t", which))
+    return(reformat_distr_labels(d, x))
   }
 }

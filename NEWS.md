@@ -1,7 +1,34 @@
 # BirdFlowR 0.0.0.9034
 
-* Changed `preprocess_species()` `gb` argument to `gpu_ram`.  
+* [get_distr()] now adds an attribute "time" when returning a single 
+  distribution as a vector.  Multiple distributions already used matrix column 
+  names to record the time associated with each distribution.
 
+* Similarly, [expand_distr()] when called on a single distribution will preserve
+  the "time" attribute in it's output (matrix), and 
+  [flatten_raster()] called on a single distribution's raster (matrix) will 
+  also preserve the "time" attribute in its output vector.
+
+* new [birdflow_options()] allows setting global options that persist for the 
+  session.  Currently there are two options "verbose" and "time_format".
+ 
+* The `time_format` option controls the labeling of distributions either 
+  in column names if there are more than 1 distribution or via the "time" 
+  attribute (see above) if there's a single distribution. This affects 
+  [get_distr()], [forecast()], and [rast()].
+
+* [rasterize_distr()] and thus also [rast()] now convert the `"time"` attribute
+  to a layer name in the output raster when there is a single distribution. They 
+  previously and still do this with the distribution column names for multiple
+  distributions.
+  
+* The names for the column dimension of distribution matrices has changed from
+  "timestep" to "time"" both in the internal, stored object and in returned 
+  objects from `get_distr()` and `forecast()`.
+ 
+# BirdFlowR 0.0.0.9034
+
+* Changed `preprocess_species()` `gb` argument to `gpu_ram`.  
 
 # BirdFlowR 0.0.0.9035
 

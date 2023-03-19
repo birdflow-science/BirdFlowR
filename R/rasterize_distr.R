@@ -16,8 +16,14 @@
 rasterize_distr <- function(distr, bf){
   m <- expand_distr(distr, bf)
   r <- terra::rast(m, extent = bf$geom$ext, crs = bf$geom$crs)
-  if(length(dim(m)) == 3)
+  n_dim <- length(dim(m)) # no of dimensions of output
+  if(n_dim == 3) # two or more distributions
     names(r) <- dimnames(m)[[3]]
+  if(n_dim == 2){# one distribution
+    time <- attr(distr, "time")
+    if(!is.null(time) && length(time) == 1)
+      names(r) <- time
+  }
   return(r)
 }
 
