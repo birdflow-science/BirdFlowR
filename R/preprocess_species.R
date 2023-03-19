@@ -141,7 +141,7 @@ preprocess_species <- function(species,
   }
   # Define local variables
   st_year <- ebirdst::ebirdst_version()$version_year
-  verbose <- TRUE
+  verbose <- birdflow_options("verbose")
   any_output <- hdf5 || tiff
 
   export <- new_BirdFlow()

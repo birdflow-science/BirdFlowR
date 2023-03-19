@@ -10,7 +10,7 @@
 #' @keywords internal
 fix_dead_ends <- function(bf, max_attempts = 100){
 
-  verbose = TRUE
+  verbose = birdflow_options("verbose")
   fix_stats <- data.frame(step =0:max_attempts, pct_lost = NA_real_,
                           n_dead_ends = NA_integer_ )
 

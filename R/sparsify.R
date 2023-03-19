@@ -138,7 +138,7 @@ sparsify <- function(x, method, p, fix = TRUE){
   # Setup (common to all methods)
   #----------------------------------------------------------------------------#
 
-  verbose <- TRUE
+  verbose <- birdflow_options("verbose")
 
   if(verbose)
     cat("Evaluating full model performance\n")
