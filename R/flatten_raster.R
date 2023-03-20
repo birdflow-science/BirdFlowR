@@ -55,6 +55,12 @@ flatten_raster <- function(raster, bf) {
   if ("geom" %in% names(bf)) {
     bf <- bf$geom
   }
+
+  # Preserve time attribute if it's present
+  # rasterize_distr will add this attribute if it's a single distribution
+  # and thus time can't be stored in dimnames.
+  time_attribute <- attr(raster, "time")
+
   raster <- as.array(raster)
   r_dimnames <- dimnames(raster)
   r_dim <- dim(raster)
@@ -66,6 +72,8 @@ flatten_raster <- function(raster, bf) {
   # row, col
   a <- raster[t(bf$mask)]
   if (n_dim == 2) { # 2 d input, 1d output - result is vector
+    if(!is.null(time_attribute))
+      attr(a, "time") <- time_attribute
     return(a)
   }
 

@@ -55,6 +55,11 @@ expand_distr<- function(distr, bf){
                              # row, col
 
   dimnames(a) <- c(list(row = NULL, col = NULL), dimnames(distr)[2])
+
+  if(length(dim(a)) == 2 && !is.null(attr(distr, "time"))){
+    attr(a, "time") <- attr(distr, "time")
+  }
+
   return(a)
 
   # # Code that only handles one dimensional input

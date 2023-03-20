@@ -28,14 +28,15 @@
 #' @importMethodsFrom Matrix t
 #' @importClassesFrom Matrix Matrix sparseMatrix
 forecast <- function(x, distr, start, end, direction){
-  if(is.vector(distr)){
-    stopifnot(`distr length isn't right for x` = length(distr) == n_active(x))
-    multiple_distributions <- FALSE
-  } else {
+
+  multiple_distributions <- !is.null(dim(distr))
+
+  if(multiple_distributions) {
     stopifnot(
       `distr should be a vector or matrix` = length(dim(distr)) == 2,
       `distr has the wrong number of rows for x` = dim(distr)[1] == n_active(x))
-    multiple_distributions <- TRUE
+  } else {
+    stopifnot(`distr length isn't right for x` = length(distr) == n_active(x))
   }
 
   # This is a sequence of transition codes to progress through
@@ -57,7 +58,7 @@ forecast <- function(x, distr, start, end, direction){
         distr <-  tm %*%  distr          # project
         fc[  , , (i+1)] <- as.vector(distr) # save the location
       }
-      return(fc)
+      return(reformat_distr_labels(fc, x))
   }  else {  # Single distribution
       fc <- matrix(NA_real_, nrow = n_active(x), ncol = length(transitions) + 1 )
       dimnames(fc) <- list(i = NULL, timestep = paste0("t",timesteps))
@@ -67,6 +68,6 @@ forecast <- function(x, distr, start, end, direction){
         distr <- tm %*% distr
         fc[ , i+1] <- as.numeric(distr) # save the location
       }
-      return(fc)
+      return(reformat_distr_labels(fc, x))
   }
 }

@@ -153,8 +153,11 @@ import_birdflow_v2 <- function(hdf5){
     if(!all(d[, 1] == d[, ncol(d)]))
       stop("Expected extra distribution to matrch first distribution")
     d <- d[ , 1:(ncol(d) - 1)]
-    bf$distr <- d
+    d
   }
+  dimnames(d) <- list(i = NULL, time = paste0("t",bf$dates$interval ) )
+  bf$distr <- d
+
 
   # Save marginal index - allows looking up a marginal, and direction from
   # a transition code
