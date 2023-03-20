@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9034</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -262,7 +262,7 @@ make it suitable for plotting with BirdFlow output.</p>
 winter distribution and project it forward to generate a distribution of
 predicted breeding grounds for birds that wintered at the starting
 location.</p>
-<p>Set forecast parameters.</p>
+<p>Set predict parameters.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">start</span> <span class="op">&lt;-</span> <span class="fl">1</span>     <span class="co">#  winter </span></span>
 <span>    <span class="va">end</span> <span class="op">&lt;-</span>  <span class="fl">26</span>     <span class="co"># summer</span></span></code></pre></div>
@@ -285,18 +285,19 @@ elsewhere.</p>
 <div class="section level3">
 <h3 id="project-forward-from-this-location-to-summer">Project forward from this location to summer<a class="anchor" aria-label="anchor" href="#project-forward-from-this-location-to-summer"></a>
 </h3>
-<p>Forecast returns the distribution over time as a matrix with one
-column per timestep.</p>
+<p><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> returns the distribution over time as a matrix
+with one column per timestep.</p>
 <p>The plot shows where birds that winter at a particular location are
 likely to be as the year progresses and ultimately where they might
 spend their summer. The probability density spreads as the weeks
 progress.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">location</span>, <span class="va">start</span>, <span class="va">end</span>, <span class="st">"forward"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span>, </span>
+<span>             direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></code></pre></div>
-<p><img src="BirdFlowR_files/figure-html/forecast-1.png" width="100%"></p>
+<p><img src="BirdFlowR_files/figure-html/predict-1.png" width="100%"></p>
 <p>Alternatively we can calculate the difference between the projected
 distribution for bird’s wintering at that particular location and the
 distribution of the species as a whole at the same timestep.</p>

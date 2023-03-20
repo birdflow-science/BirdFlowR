@@ -61,9 +61,6 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.html</loc>
   </url>
   <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/forecast.html</loc>
-  </url>
-  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dates.html</loc>
   </url>
   <url>
@@ -107,6 +104,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.html</loc>

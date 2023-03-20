@@ -16,7 +16,7 @@ has no transitions out. These functions find and fix those states."><!-- mathjax
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9034</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,7 @@ end (encountered when projecting backwards in time); (3) if they both have
 only zeros: the model is fine but that state is dropped; and (4) if they
 both have non-zero values than the corresponding state is valid and can be
 reached and exited when projecting forward or backwards.</p>
-<p>Dead ends result in lost density with <code><a href="forecast.html">forecast()</a></code> and errors when they are
+<p>Dead ends result in lost density with <a href="predict.BirdFlow.html">predict()</a> and errors when they are
 entered with <code><a href="route.html">route()</a></code>. Based on initial testing the transitions into the
 dead end are often low probability so routing may work most of the time but
 occasionally fail. The error will occur with the subsequent iteration when
