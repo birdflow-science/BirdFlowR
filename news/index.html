@@ -50,6 +50,17 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9034" id="birdflowr-0009034">BirdFlowR 0.0.0.9034<a class="anchor" aria-label="anchor" href="#birdflowr-0009034"></a></h2>
+<p>The end result of all the time stuff enumerated below is that (1) you can set the time format, (2) as before when possible the time associated with each distribution is stored in dim names, (3) when it’s a single distribution and thus not possible to store the time in the dim names a new <code>"time"</code> attribute is added to the object to store the time associated with the distribution.</p>
+<ul><li><p>new <code><a href="../reference/birdflow_options.html">birdflow_options()</a></code> allows setting global options that persist for the session. Currently there are two options <code>verbose</code> and <code>time_format</code>.</p></li>
+<li><p>The <code>time_format</code> option controls the labeling of distributions either in column names if there are more than 1 distribution or via the “time” attribute (See below) if there’s a single distribution. This affects [get_distr()], [forecast()], and [rast()].</p></li>
+<li><p><code><a href="../reference/get_distr.html">get_distr()</a></code> now adds an attribute <code>"time"</code> when returning a single distribution as a vector. Multiple distributions already used matrix column names to record the time associated with each distribution.</p></li>
+<li><p>Similarly, <code><a href="../reference/expand_distr.html">expand_distr()</a></code> when called on a single distribution will preserve the <code>"time"</code> attribute in its output matrix, and <code><a href="../reference/flatten_raster.html">flatten_raster()</a></code> called on a single distribution’s raster (a matrix) will also preserve the “time” attribute in its output vector.</p></li>
+<li><p><code><a href="../reference/rasterize.html">rasterize_distr()</a></code> and thus also <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> now convert the <code>"time"</code> attribute to a layer name in the output raster when there is a single distribution. They previously and still do this with the distribution column names for multiple distributions.</p></li>
+<li><p>The names for the column dimension of distribution matrices has changed from “timestep” to “time” both in the internal, stored object and in returned objects from <code><a href="../reference/get_distr.html">get_distr()</a></code> and <code><a href="../reference/forecast.html">forecast()</a></code>.</p></li>
+<li><p><code><a href="../reference/fix_dead_ends.html">fix_dead_ends()</a></code>, <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, and <code><a href="../reference/sparsify.html">sparsify()</a></code> now honor <code>birdflow_options("verbose")</code> - printing progress and information only if it is <code>TRUE</code>.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9034" id="birdflowr-0009034-1">BirdFlowR 0.0.0.9034<a class="anchor" aria-label="anchor" href="#birdflowr-0009034-1"></a></h2>
 <ul><li>Changed <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> <code>gb</code> argument to <code>gpu_ram</code>.</li>
 </ul></div>
     <div class="section level2">

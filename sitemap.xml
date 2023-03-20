@@ -34,6 +34,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc>
   </url>
   <url>
@@ -113,6 +116,12 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_distr_labels.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_timestep.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/route.html</loc>
