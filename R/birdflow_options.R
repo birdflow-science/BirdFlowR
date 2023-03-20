@@ -47,7 +47,7 @@
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_options() # print current settings
 #' original_format <- birdflow_options("time_format")
-#' birdflow_options(time_format = "month_day")
+#' birdflow_options(time_format = "date")
 #' head(get_distr(bf, 1:3))
 #' birdflow_options(time_format = original_format)
 #'

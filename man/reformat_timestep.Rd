@@ -14,16 +14,16 @@ consisting of a "t" and the timestep.}
 }
 \value{
 x with update column labels, as dictated by
-\link{birdflow_options("time_format")}
+\link[=birdflow_options]{birdflow_options("time_format")}
 }
 \description{
-given a vector of timestep labels provide a vector of formated labels based
-on the value of \code{birdflow_options("time_format")} (see that function for
+given a vector of timestep labels provide a vector of formatted labels based
+on the value of \link[=birdflow_options]{birdflow_options("time_format")} (see that function for
 options.)
 }
 \details{
 Internally distributions are labled with "t" and the timestep integer.
-When returning them to the user \code{\link[=update_distr_labels]{update_distr_labels()}} is called to change
+When returning them to the user \code{\link[=reformat_distr_labels]{reformat_distr_labels()}} is called to change
 the format which in turn calls this function.
 }
 \keyword{internal}
