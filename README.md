@@ -5,9 +5,11 @@
 [![Codecov test coverage](https://codecov.io/gh/birdflow-science/BirdFlowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/birdflow-science/BirdFlowR?branch=main)
 <!-- badges: end -->
 
-An R package to forecast changes in distributions and generate synthetic migration routes based on BirdFlow models.
+An R package to predict changes in distributions and generate synthetic 
+migration routes based on BirdFlow models.
 
-This package is under development and not yet formally released. Function names and arguments may change.
+This package is under development and not yet formally released. Function names
+and arguments may change.
 
 ## Installation
 
@@ -28,11 +30,12 @@ if(!"rnaturalearthdata" %in% installed)
 remotes::install_github("birdflow-science/BirdFlowModels")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 ```
-See `vignette("Installation")` for troubleshooting and more installation options.
+See `vignette("Installation")` for troubleshooting and more installation 
+options.
 
 ## Usage 
 
-The two primary functions are `forecast()` to project distributions and 
+The two primary functions are `predict()` to project distributions and 
 `route()` to generate synthetic routes.  
 
 `route_migration()` is a wrapper to `route()` which automates sampling
@@ -65,9 +68,12 @@ plot(rts$lines, add = TRUE, col = rgb(0, 0, 0, .25))
 
 ## Learn more
 
-- `vignette("BirdFlowR")` has a longer introduction to the package, and how to use `forcast()` and `route()` to project bird distributions and movement. 
+- `vignette("BirdFlowR")` has a longer introduction to the package, and how to
+  use `predict()` and `route()` to project bird distributions and movement. 
 - `vignette("Installation")` for detailed installation instructions.
-- `vignette("Preprocess")` covers downloading and formatting data for model fitting with `preprocess_species()`, importing fitted models with `import_birdflow()`, and reducing model size with `sparsify()`.   
+- `vignette("Preprocess")` covers downloading and formatting data for model 
+  fitting with `preprocess_species()`, importing fitted models with 
+  `import_birdflow()`, and reducing model size with `sparsify()`.   
 - Read the paper:
   - [BirdFlow: Learning Seasonal Bird Movements from Citizen Science Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1) Miguel Fuentes, Benjamin M. Van Doren, Daniel Fink, Daniel Sheldon bioRxiv 2022.04.12.488057; doi: https://doi.org/10.1101/2022.04.12.488057
 

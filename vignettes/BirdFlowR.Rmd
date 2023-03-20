@@ -161,8 +161,8 @@ plot(coast, add = TRUE)
 # Forecasting
 In this section we will sample a single starting location from the winter distribution and project it forward to generate a distribution of predicted breeding grounds for birds that wintered at the starting location.
 
-Set forecast parameters.
-```{r forecast parameters}
+Set predict parameters.
+```{r predict parameters}
     start <- 1     #  winter 
     end <-  26     # summer
 ```
@@ -181,14 +181,15 @@ print( i_to_xy( which( as.logical(location) ), bf) )  # starting coordinates
 ```
 
 ## Project forward from this location to summer
-Forecast returns the distribution over time as a matrix with
+`predict()` returns the distribution over time as a matrix with
 one column per timestep. 
 
 The plot shows where birds that winter at a particular location are
 likely to be as the year progresses and ultimately where they might spend their
 summer. The probability density spreads as the weeks progress.
-```{r forecast, out.width='100%'}
-f <- forecast(bf, location, start, end, "forward")
+```{r predict, out.width='100%'}
+f <- predict(bf, distr = location, start = start, end = end, 
+             direction = "forward")
 
 r <- rasterize_distr(f[, c(1, 7, 14, 19)], bf)
 plot(r)

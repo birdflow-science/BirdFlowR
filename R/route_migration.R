@@ -21,8 +21,8 @@
 #'   \item{lines}{a [sf][sf::sf] object containing one line per route.}
 #' @seealso
 #' `route_migration()` is a convenience wrapper for [route()].
-#' [`forecast()`] projects future or past distributions based on a starting
-#'    location or distribution.
+#' [predict()][predict.BirdFlow()] projects future or past distributions based
+#'  on a starting location or distribution.
 #' @export
 #' @examples
 #'   bf <-  BirdFlowModels::amewoo
