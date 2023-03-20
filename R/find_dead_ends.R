@@ -20,7 +20,7 @@
 #'  both have non-zero values than the corresponding state is valid and can be
 #'  reached and exited when projecting forward or backwards.
 #'
-#'  Dead ends result in lost density with [forecast()] and errors when they are
+#'  Dead ends result in lost density with [predict()][predict.BirdFlow] and errors when they are
 #'  entered with [route()]. Based on initial testing the transitions into the
 #'  dead end are often low probability so routing may work most of the time but
 #'  occasionally fail. The error will occur with the subsequent iteration when

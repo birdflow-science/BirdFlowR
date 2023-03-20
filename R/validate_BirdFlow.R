@@ -36,7 +36,7 @@
 validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   # problem types:
   #   error: BirdFlow object is malformed
-  # incomplete: BirdFlow object is missing core components necessary for forecasting
+  # incomplete: BirdFlow object is missing core components necessary for predicting
 
   # Note: compare_list_item_names() currently doesn't pay any attention to
   #   the order of items.

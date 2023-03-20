@@ -1,4 +1,8 @@
-# BirdFlowR 0.0.0.9034
+# BirdFlowR 0.0.0.9036
+
+* replaced `forecast()` with a BirdFlow method for `predict()`.  
+  
+# BirdFlowR 0.0.0.9033
 
 The end result of all the time stuff enumerated below is that (1) you can set 
 the time format, (2) as before when possible the time associated with each 
@@ -12,7 +16,7 @@ is added to the object to store the time associated with the distribution.
 * The `time_format` option controls the labeling of distributions either 
   in column names if there are more than 1 distribution or via the "time" 
   attribute (See below) if there's a single distribution. This affects 
-  [get_distr()], [forecast()], and [rast()].
+  `get_distr()`, `predict()`, and `rast()`.
 
 * `get_distr()` now adds an attribute `"time"` when returning a single 
   distribution as a vector.  Multiple distributions already used matrix column 

@@ -28,7 +28,7 @@
 #'   by dividing each column by its sum, without transposing.
 #'
 #' @seealso [lookup_transitions()] will generate a list of the transitions
-#'   needed to forecast or route between two points in time that can then be
+#'   needed to predict or route between two points in time that can then be
 #'   passed to this function. The internal function [transition_from_marginal()]
 #'   does the calculations.
 #' @export

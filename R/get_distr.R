@@ -11,7 +11,7 @@
 #' The training distributions and the distributions calculated from the marginal
 #' are very similar.
 #'
-#' @seealso Distributions can be passed to [forecast()] or converted to rasters
+#' @seealso Distributions can be passed to [predict()][predict.BirdFlow] or converted to rasters
 #'   with [expand_distr()] or converted to [SpatRaster][terra::rast] with
 #'   [rasterize_distr()].  [sample_distr()] will convert one cell to 1 and the rest
 #'   to 0 probabilistically based on the densities in the distribution.

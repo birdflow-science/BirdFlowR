@@ -35,7 +35,7 @@ The training distributions and the distributions calculated from the marginal
 are very similar.
 }
 \seealso{
-Distributions can be passed to \code{\link[=forecast]{forecast()}} or converted to rasters
+Distributions can be passed to \link[=predict.BirdFlow]{predict()} or converted to rasters
 with \code{\link[=expand_distr]{expand_distr()}} or converted to \link[terra:rast]{SpatRaster} with
 \code{\link[=rasterize_distr]{rasterize_distr()}}.  \code{\link[=sample_distr]{sample_distr()}} will convert one cell to 1 and the rest
 to 0 probabilistically based on the densities in the distribution.

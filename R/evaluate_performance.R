@@ -46,7 +46,7 @@ evaluate_performance <- function(x){
     to <- as.numeric(gsub("^T_[[:digit:]]+-", "", transitions[i]))
     start_distr <- get_distr( x, from, from_marginals = FALSE)
     end_distr <- get_distr(x, to, from_marginals = FALSE)
-    projected <- forecast(x,distr = start_distr, start = from, end = to)
+    projected <- predict(x, distr = start_distr, start = from, end = to)
     single_step_cor[i] <- cor(end_distr, projected[, ncol(projected)])
     marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
     distr_cor[i] <- cor(start_distr, marginal_start_distr)
@@ -56,7 +56,8 @@ evaluate_performance <- function(x){
   end <- n_distr(x)
   start_distr <- get_distr(x, 1, from_marginals = FALSE)
   end_distr <- get_distr(x, end, from_marginals = FALSE)
-  projected <- forecast(x, start_distr, start, end, "forward")
+  projected <- predict(x, distr =  start_distr, start =  start,
+                       end =  end, direction =  "forward")
   projected <- projected[, ncol(projected)] # end
   traverse_cor <- cor(start_distr, projected)
 
