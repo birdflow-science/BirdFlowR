@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9044</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,11 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9044" id="birdflowr-0009044">BirdFlowR 0.0.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0009044"></a></h2>
+<ul><li><p>new function <code>build_transitions(x)</code> will populate <code>x$transitions</code> with both forward and backwards transitions. This is recommended before repeated <code>forecast()</code> or predict calls as it avoids repeatedly making transitions on the fly. It does triple the memory usage for the BirdFlow object so should probably only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse.</p></li>
+<li><p>previously <code>transitions_from_marginal()</code> produced a standard matrix. Now, if the mariginal is a sparse the conversion is done on and preserves the sparse matrix. Similarly, if the transition matrix is sparse <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> both calculate on sparse objects. This should speed those two functions up significantly.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9036" id="birdflowr-0009036">BirdFlowR 0.0.0.9036<a class="anchor" aria-label="anchor" href="#birdflowr-0009036"></a></h2>
 <ul><li>replaced <code>forecast()</code> with a BirdFlow method for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>.</li>
