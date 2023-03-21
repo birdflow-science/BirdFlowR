@@ -31,6 +31,7 @@
 #'   needed to predict or route between two points in time that can then be
 #'   passed to this function. The internal function [transition_from_marginal()]
 #'   does the calculations.
+#' @import Matrix
 #' @export
 get_transition <- function(x, transition){
 
@@ -67,17 +68,20 @@ get_transition <- function(x, transition){
 #'   distribution to project the distribution.  See [get_transition()] for more
 #'   details.
 #' @keywords internal
+#'
 transition_from_marginal <- function(m, direction){
-  if(!direction %in% c("forward", "backward"))
-    stop("Direction must be forward or backward")
-  if(direction == "forward"){
-    m <-  Matrix::t( m /Matrix::rowSums(m) )
-  }
-  if(direction == "backward"){
-    m <-  apply(m, 2, function(x) x / sum(x))
-  }
-  m[is.na(m)] <- 0
-  return(m)
 
+
+  if(direction == "forward"){
+    m <- Matrix::t( Matrix::rowScale( m, d = 1/Matrix::rowSums(m, sparseResult = TRUE) ) )
+    return( as(m, "RsparseMatrix") )
+  }
+
+  if(direction == "backward"){
+    m <- Matrix::colScale(m, d = 1/Matrix::colSums(m, sparseResult = TRUE))
+    return( as(m, "RsparseMatrix") )
+  }
+
+  stop("Direction must be forward or backward")
 }
 

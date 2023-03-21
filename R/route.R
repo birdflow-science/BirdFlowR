@@ -90,6 +90,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction){
   trajectory[1, ] <- extract_positions(distr)
 
   # Projection
+  distr <- Matrix::Matrix(distr, sparse = TRUE)
   for(i in seq_along(transitions)){
     tm <- get_transition(x,  transitions[i])  # transition matrix
     distr <- tm %*% distr           # project
