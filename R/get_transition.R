@@ -33,16 +33,16 @@
 #'   does the calculations.
 #' @import Matrix
 #' @export
-get_transition <- function(x, transition){
+get_transition <- function(x, transition) {
 
-  if(x$metadata$has_transitions){
+  if (x$metadata$has_transitions) {
     return(x$transition[[transition]])
   }
 
-  if(x$metadata$has_marginals){
+  if (x$metadata$has_marginals) {
     ind <- x$marginals$index
     i <- which(ind$transition == transition)
-    if(length(i) == 0){
+    if (length(i) == 0) {
       stop("There is no marginal for transition ", transition)
     }
     m <- x$marginals[[ind$marginal[i]]]
@@ -69,35 +69,34 @@ get_transition <- function(x, transition){
 #'   details.
 #' @keywords internal
 #'
-transition_from_marginal <- function(m, direction){
+transition_from_marginal <- function(m, direction) {
 
   # Sparse matrix
   # Forces calculations to take with sparse matrices all the way through
   # Much faster for sparse matrices but throws error on regular matrices
-  if(is(m, "sparseMatrix")){
-    if(direction == "forward"){
-      m <- Matrix::t( Matrix::rowScale( m, d = 1/Matrix::rowSums(m, sparseResult = TRUE) ) )
-      return( as(m, "RsparseMatrix") )
+  if (is(m, "sparseMatrix")) {
+    if (direction == "forward") {
+      m <- Matrix::t(
+        Matrix::rowScale(m, d = 1 / Matrix::rowSums(m, sparseResult = TRUE)))
+      return(as(m, "RsparseMatrix"))
     }
-    if(direction == "backward"){
-      m <- Matrix::colScale(m, d = 1/Matrix::colSums(m, sparseResult = TRUE))
-      return( as(m, "RsparseMatrix") )
+    if (direction == "backward") {
+      m <- Matrix::colScale(m, d = 1 / Matrix::colSums(m, sparseResult = TRUE))
+      return(as(m, "RsparseMatrix"))
     }
 
-  }  else {  # Standard (non-sparse) matrix
+  } else {  # Standard (non-sparse) matrix
     # Works with standard matrices (in non-sparse BirdFlow objects)
-    if(direction == "forward"){
-      m <-  Matrix::t( m /Matrix::rowSums(m) )
+    if (direction == "forward") {
+      m <-  Matrix::t(m / Matrix::rowSums(m))
       m[is.na(m)] <- 0
       return(m)
     }
-    if(direction == "backward"){
+    if (direction == "backward") {
       m <-  apply(m, 2, function(x) x / sum(x))
       m[is.na(m)] <- 0
       return(m)
     }
   }
-
   stop("Direction must be forward or backward")
 }
-

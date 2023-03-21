@@ -5,7 +5,7 @@ test_that("get_transition() is consistent for forward transitions", {
             breaks = c(seq(0, 0.0001, 0.0001),
                        seq(0.002, 0.01, 0.001),
                        seq(0.02, .1, 0.02),
-                       seq(0.2, 1, 0.4) ))
+                       seq(0.2, 1, 0.4)))
   histogram_counts <- data.frame(upper_bound = h[["breaks"]][-1],
                                  count = h[["counts"]])
   expect_snapshot(histogram_counts)
@@ -18,7 +18,7 @@ test_that("get_transition() is consistent for backwards transitions", {
             breaks = c(seq(0, 0.0001, 0.0001),
                        seq(0.002, 0.01, 0.001),
                        seq(0.02, .1, 0.02),
-                       seq(0.2, 1, 0.4) ))
+                       seq(0.2, 1, 0.4)))
   histogram_counts <- data.frame(upper_bound = h[["breaks"]][-1],
                                  count = h[["counts"]])
   expect_snapshot(histogram_counts)
@@ -34,8 +34,9 @@ test_that("get_transition() produces error with missing transition", {
 
 test_that("get_transition() throws error when there are no transitions", {
   bf <- new_BirdFlow()
-  expect_error(t <- get_transition(bf, "T_01-02"),
-               "The BirdFlow object should have either transitions or marginals")
+  expect_error(
+    t <- get_transition(bf, "T_01-02"),
+    "The BirdFlow object should have either transitions or marginals")
 })
 
 test_that("forward and backwards transitions are consistent", {
@@ -55,24 +56,22 @@ test_that("forward and backwards transitions are consistent", {
 test_that("transition_from_marginal throws errors with bogus direction", {
   bf <- BirdFlowModels::amewoo
   expect_error(transition_from_marginal(bf$marginals[["M_01-02"]],
-               direction = "Bleh"), "Direction must be forward or backward" )
+                                        direction = "Bleh"),
+               "Direction must be forward or backward")
 })
 
-test_that("get_transition returns same values from sparse and standard marginals", {
-  # As of 0.0.0.9044 we use different calculations on sparse vs standard marg.
-  sparse_bf <- BirdFlowModels::amewoo
-  full_bf <- sparse_bf
-  # Convert first three marginals to standard matricies
-  for(marg in c("M_01-02", "M_02-03", "M_03-04")){
-    full_bf$marginals[marg] <- as.matrix(full_bf$marginals[marg])
-  }
-  # Forward
-  expect_equal(as.matrix(get_transition(sparse_bf, "T_01-02")),
-               as.matrix(get_transition(full_bf, "T_01-02")))
-  # Backward
-  expect_equal(as.matrix(get_transition(sparse_bf, "T_02-01")),
-               as.matrix(get_transition(full_bf, "T_02-01")))
-})
-
-
-
+test_that("get_transition is consistent with sparse and standard marginals", {
+    # As of 0.0.0.9044 we use different calculations on sparse vs standard marg.
+    sparse_bf <- BirdFlowModels::amewoo
+    full_bf <- sparse_bf
+    # Convert first three marginals to standard matricies
+    for (marg in c("M_01-02", "M_02-03", "M_03-04")){
+      full_bf$marginals[marg] <- as.matrix(full_bf$marginals[marg])
+    }
+    # Forward
+    expect_equal(as.matrix(get_transition(sparse_bf, "T_01-02")),
+                 as.matrix(get_transition(full_bf, "T_01-02")))
+    # Backward
+    expect_equal(as.matrix(get_transition(sparse_bf, "T_02-01")),
+                 as.matrix(get_transition(full_bf, "T_02-01")))
+  })
