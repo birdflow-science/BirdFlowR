@@ -26,8 +26,9 @@
 #' @return a matrix with rows for each location and columns for each timestep
 #' @export
 #' @importFrom Matrix Matrix
-#' @importMethodsFrom Matrix t
-#' @importClassesFrom Matrix Matrix sparseMatrix
+#' @importFrom methods as is
+#' @importMethodsFrom Matrix t %*% print
+#' @importClassesFrom Matrix Matrix sparseMatrix dgCMatrix dgRMatrix
 #' @importFrom stats predict
 predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
 

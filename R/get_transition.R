@@ -31,7 +31,6 @@
 #'   needed to predict or route between two points in time that can then be
 #'   passed to this function. The internal function [transition_from_marginal()]
 #'   does the calculations.
-#' @import Matrix
 #' @export
 get_transition <- function(x, transition) {
 
@@ -67,6 +66,8 @@ get_transition <- function(x, transition) {
 #' @return a transition matrix formulated such that you multiply the matrix by a
 #'   distribution to project the distribution.  See [get_transition()] for more
 #'   details.
+#' @importMethodsFrom Matrix rowSums colSums
+#' @importFrom Matrix colScale rowScale
 #' @keywords internal
 #'
 transition_from_marginal <- function(m, direction) {

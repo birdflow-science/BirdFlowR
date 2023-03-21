@@ -64,8 +64,10 @@ test_that("preprocess_species() works with clip", {
   xmax <-  1550000
   ymax <-  1300000
   poly <- matrix(c( xmin, xmin, xmax, xmax, xmin,
-                    ymin, ymax, ymax, ymin, ymin), ncol = 2 )  %>%
-    list() %>% sf::st_polygon()
+                    ymin, ymax, ymax, ymin, ymin), ncol = 2 ) |>
+    list() |>
+    sf::st_polygon()
+
   clip <- terra::vect(poly)
   sp_path <- ebirdst::get_species_path("example_data")
   proj  <- terra::crs(ebirdst::load_fac_map_parameters(sp_path)$custom_projection)
