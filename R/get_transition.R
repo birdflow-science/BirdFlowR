@@ -67,7 +67,6 @@ get_transition <- function(x, transition) {
 #'   distribution to project the distribution.  See [get_transition()] for more
 #'   details.
 #' @importMethodsFrom Matrix rowSums colSums
-#' @importFrom Matrix colScale rowScale
 #' @keywords internal
 #'
 transition_from_marginal <- function(m, direction) {
