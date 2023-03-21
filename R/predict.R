@@ -26,54 +26,61 @@
 #' @return a matrix with rows for each location and columns for each timestep
 #' @export
 #' @importFrom Matrix Matrix
-#' @importMethodsFrom Matrix t
-#' @importClassesFrom Matrix Matrix sparseMatrix
+#' @importFrom methods as is
+#' @importMethodsFrom Matrix t %*% print
+#' @importClassesFrom Matrix Matrix sparseMatrix dgCMatrix dgRMatrix
 #' @importFrom stats predict
-predict.BirdFlow <- function(object, distr, start, end, direction, ...){
+predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
 
   multiple_distributions <- !is.null(dim(distr))
 
-  if(multiple_distributions) {
+  if (multiple_distributions) {
     stopifnot(
       `distr should be a vector or matrix` = length(dim(distr)) == 2,
-      `distr has the wrong number of rows for object` = dim(distr)[1] == n_active(object))
+      `distr has the wrong number of rows for object` =
+        dim(distr)[1] == n_active(object))
   } else {
-    stopifnot(`distr length isn't right for object` = length(distr) == n_active(object))
+    stopifnot(`distr length isn't right for object` =
+                length(distr) == n_active(object))
   }
 
   # This is a sequence of transition codes to progress through
   transitions <- lookup_transitions(object, start, end, direction)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
-                            gsub("^.*-", "", transitions ) ) )
+                            gsub("^.*-", "", transitions)))
 
-  if(multiple_distributions){
+  if (multiple_distributions) {
     nd <- ncol(distr) # number of distributions
-    fc <- array(NA_real_,
-                dim = c(  n_active(object), nd, length(transitions) + 1) )
-    dimnames(fc) <- list(  i = NULL,
+    pred <- array(NA_real_,
+                dim = c(n_active(object), nd, length(transitions) + 1))
+    dimnames(pred) <- list(i = NULL,
                            distribution = 1:nd,
                            timestep = paste0("t", timesteps)
     )
-    fc[ , , 1 ] <- distr
-    for(i in seq_along(transitions)){
+    pred[, , 1] <- distr
+    distr <- as(distr, "sparseMatrix")
+    for (i in seq_along(transitions)) {
       tm <- get_transition(object,  transitions[i])  # transition matrix
       distr <-  tm %*%  distr          # project
-      fc[  , , (i+1)] <- as.vector(distr) # save the location
+      pred[, , (i + 1)] <- as.vector(distr) # save the location
     }
-    return(reformat_distr_labels(fc, object))
+    return(reformat_distr_labels(pred, object))
   }  else {  # Single distribution
-    fc <- matrix(NA_real_, nrow = n_active(object), ncol = length(transitions) + 1 )
-    dimnames(fc) <- list(i = NULL, timestep = paste0("t",timesteps))
-    fc[ , 1] <- distr
-    for(i in seq_along(transitions)){
+    pred <- matrix(NA_real_,
+                   nrow = n_active(object),
+                   ncol = length(transitions) + 1)
+    dimnames(pred) <- list(i = NULL, timestep = paste0("t", timesteps))
+    pred[, 1] <- distr
+    distr <- as(distr, "sparseVector")
+    for (i in seq_along(transitions)){
       tm <- get_transition(object, transitions[i]) # transition matrix
       distr <- tm %*% distr
-      fc[ , i+1] <- as.numeric(distr) # save the location
+      pred[, i + 1] <- as.numeric(distr) # save the location
     }
-    return(reformat_distr_labels(fc, object))
+    return(reformat_distr_labels(pred, object))
   }
 }
 
-forecast <- function(x, ...){
+forecast <- function(x, ...) {
   stop("forecast() is deprecated. Please use predict() instead.")
 }

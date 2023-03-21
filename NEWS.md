@@ -1,3 +1,16 @@
+# BirdFlowR 0.0.0.9044
+
+* new function `build_transitions(x)` will populate `x$transitions` with both
+forward and backwards transitions. This is recommended before repeated 
+`forecast()` or predict calls as it avoids repeatedly making transitions on the 
+fly.  It does triple the memory usage for the BirdFlow object so should probably 
+only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse. 
+
+* previously `transitions_from_marginal()` produced a standard matrix. Now, if 
+the mariginal is a sparse the conversion is done on and preserves the sparse 
+matrix.  Similarly, if the transition matrix is sparse `predict()` and `route()`
+both calculate on sparse objects.  This should speed those two functions up significantly.
+
 # BirdFlowR 0.0.0.9036
 
 * replaced `forecast()` with a BirdFlow method for `predict()`.  

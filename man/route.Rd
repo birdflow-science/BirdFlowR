@@ -13,12 +13,12 @@ route(x, x_coord, y_coord, n, row, col, start, end, direction)
 positions.}
 
 \item{n}{Optional, if provided each starting position will be duplicated this
-many times. \code{n} can be a single integer or a vector with one integer per starting
-position.}
+many times. \code{n} can be a single integer or a vector with one integer per
+starting position.}
 
-\item{row, col}{One or more row and column indices to begin routing from. These
-are an alternative to \code{x_coord} and \code{y_coord} and both sets of parameters
-should not be used at the same time.}
+\item{row, col}{One or more row and column indices to begin routing from.
+These are an alternative to \code{x_coord} and \code{y_coord} and both sets of
+parameters should not be used at the same time.}
 
 \item{start, end}{These define the time period to route over. They can be
 \link[base:date]{Date} objects, integer timesteps, or a string with
