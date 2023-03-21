@@ -24,7 +24,7 @@ biocViews:
 Imports:
     dplyr,
     lubridate,
-    Matrix,
+    Matrix (>= 1.5-2),
     methods,
     progress,
     rhdf5,
