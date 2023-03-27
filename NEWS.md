@@ -1,3 +1,23 @@
+# BirdflowR 0.0.0.9022 (3/27/2023)
+
+* `get_naturalearth()` and related functions now throw a helpful warning if
+the extent is empty, and, as before, return an empty `sf` object.
+
+* `get_naturalearth()` has an improved, more robust way of processing the vector
+data that works for specific projections. Currently it is used only for 
+Mollweide ("moll") and Lambert equal area ("laea") based CRSs.
+
+* `get_naturalearth()` has a new argument `match_extent` which if set to `TRUE`
+causes the result to be clipped to the precise extent of the input object (`x`).
+Use `TRUE` when plotting with ggplot2 so that the Natural Earth data doesn't 
+result in an expanded plot extent. The default, `FALSE` is appropriate for base 
+R plotting so that the Natural Earth Data runs up to and beyond the edge of the
+plot regardless of whether the aspect ratio of `x` matches the plot window's.
+
+* `get_naturalearth()` has a new argument `use_old_method` which, if TRUE 
+forces the less robust method regardless of projection. It is there only for 
+testing the  function and should be left at the default for all other uses.
+
 # BirdFlowR 0.0.0.9044
 
 * new function `build_transitions(x)` will populate `x$transitions` with both

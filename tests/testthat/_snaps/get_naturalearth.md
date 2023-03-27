@@ -3,10 +3,10 @@
     Code
       coast
     Output
-      Simple feature collection with 24 features and 0 fields
+      Simple feature collection with 23 features and 0 fields
       Geometry type: LINESTRING
       Dimension:     XY
-      Bounding box:  xmin: -3903813 ymin: -5517335 xmax: 2434301 ymax: 2722826
+      Bounding box:  xmin: -3665000 ymin: -5517335 xmax: 2434301 ymax: 2660450
       Projected CRS: PROJCRS["unknown",
           BASEGEOGCRS["unknown",
               DATUM["World Geodetic System 1984",
@@ -38,7 +38,7 @@
                       ID["EPSG",9001]]]]
       First 10 features:
                                geometry
-      1  LINESTRING (-3903813 -32260...
+      1  LINESTRING (-3665000 -43162...
       2  LINESTRING (-1250705 -19552...
       3  LINESTRING (-1293033 -19280...
       4  LINESTRING (-1365446 -25838...
