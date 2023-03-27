@@ -71,15 +71,16 @@ omitted, states from all countries are returned.}
 
 \item{match_extent}{if \code{TRUE} after transforming the Natural Earth data it
 will be cropped to the precise extent of \code{x}. This is useful when plotting
-with \pkg{ggplot2} which expands the bounds of the plot to encompass all the
-plotted data.}
+with \pkg{ggplot2} which expands the bounds of the plot to encompass all
+the plotted data.}
 
 \item{force_old_method}{This is for internal testing. The default should be
 best for all other uses.  If \code{TRUE} use the back transformed bounding box
 method even if the projection is covered by the "new" cut at seam method.}
 
-\item{...}{Other arguments to be passed to \link[rnaturalearth:ne_download]{ne_download()}.
-Quite possibly you will want to use \code{category = "physical"}.}
+\item{...}{Other arguments to be passed to
+\link[rnaturalearth:ne_download]{ne_download()}. Possibly you will
+want to use \code{category = "physical"}.}
 }
 \value{
 \link[sf:sf]{sf} object with Natural Earth data in the same
@@ -97,13 +98,12 @@ same CRS as \code{x} with (given default parameters) a somewhat larger extent.
 \code{get_naturalearth()} does all the work and is called by the other functions.
 There are two distinct calculation methods.
 \enumerate{
-\item For Mollweid and Lambert Azimuthal Equal Area projections use the cut at
-seam method.
+\item For Mollweid and Lambert Azimuthal Equal Area projections cut at the seam:
 \itemize{
-\item Find the longitude of projection center (lon_0 in proj4 string) and from it
-determine longitude of the seam.
-\item Clip a narrow (1 m) strip out of the Natural Earth data before transforming
-(in WGS84) at the seam.
+\item Find the longitude of projection center (lon_0 in proj4 string) and from
+it determine longitude of the seam.
+\item Clip a narrow (1 m) strip out of the Natural Earth data before
+transforming (in WGS84) at the seam.
 \item Transform to the CRS of \code{x}. This is now an artifact free object
 containing the global data set minus a narrow strip at the seam.
 \item Crop in destination to approximate equivalent of \code{buffer}.
@@ -111,7 +111,7 @@ containing the global data set minus a narrow strip at the seam.
 
 This should work well for any extent (including global) in any CRS that is
 based on the covered projections.
-\item For all other projections use the the back transformed bounding box method.
+\item For all other projections back transform the bounding box and clip:
 \itemize{
 \item Convert the corners of the bounds of \code{x} object to WGS84.
 \item adds a buffer (\code{buffer}) to the converted corners.
