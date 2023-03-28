@@ -222,11 +222,11 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
   }
 
   # new method
-  expect_warning( a <- get_coastline(bf, buffer = 0),
+  expect_warning( get_naturalearth(bf, "coastline", buffer = 0),
                   "No objects within extent. Returning empty sf object.")
 
   # old method
-  expect_warning( a <- get_naturalearth(bf, "coastline",  buffer = 0,
+  expect_warning( get_naturalearth(bf, "coastline",  buffer = 0,
                                         force_old_method = TRUE),
                   "No objects within extent. Returning empty sf object.")
 

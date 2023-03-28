@@ -154,7 +154,7 @@ get_naturalearth <- function(x,
   if (use_seam_method) {
     # This is the newer method that is more robust but only works for specific
     # projections
-    data <- cut_at_seam_and_transform(data, x, buffer)
+    data <- cut_at_seam_and_transform(data, x, buffer, match_extent)
   } else {
     # This method is more generalized but not as robust
     data <- crop_to_transformed_extent(data, x, buffer)
@@ -172,7 +172,9 @@ get_naturalearth <- function(x,
 
 }
 
-cut_at_seam_and_transform <- function(data, x, buffer) {
+
+
+cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
 
   km_per_deg <-  111 # at equator. approximate but doesn't need to be exact.
   proj4 <- terra::crs(x, proj = TRUE)
@@ -209,12 +211,7 @@ cut_at_seam_and_transform <- function(data, x, buffer) {
   data <- sf::st_transform(data, terra::crs(x))
 
 
-  if (match_extent) { # crop to precise extent
-    poly <- terra::ext(x) |>  sf::st_bbox() |> sf::st_as_sfc()
-    data <- sf::st_crop(x = data, y = poly)
-
-    if (nrow(data) == 0)
-      warning("No objects within extent. Returning empty sf object.")
+  if (match_extent) {  # No need to crop now if it will be full cropped later
     return(data)
   }
 
@@ -244,6 +241,7 @@ cut_at_seam_and_transform <- function(data, x, buffer) {
     )
     projected_buffer <- buffer * km_per_deg * 1000 / to_meter
   }
+
   if (!has_to_meter && !has_units) {
     stop("Couldn't understand projection units")
   }
@@ -254,10 +252,6 @@ cut_at_seam_and_transform <- function(data, x, buffer) {
   e[c(2, 4)] <- e[c(2, 4)] + projected_buffer
   poly <- sf::st_bbox(e) |> sf::st_as_sfc()
   data <- sf::st_crop(x = data, y = poly)
-
-  if (nrow(data) == 0)
-    warning("No objects within extent. Returning empty sf object.")
-  return(data)
 
 } # end seam method
 
