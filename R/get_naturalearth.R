@@ -10,7 +10,8 @@
 #'  `get_naturalearth()` does all the work and is called by the other functions.
 #'  There are two distinct calculation methods.
 #'
-#' 1. For Mollweid and Lambert Azimuthal Equal Area projections cut at the seam:
+#' 1. For Mollweid, Lambert Azimuthal Equal Area,  Albers Equal Area, and
+#' Lambert Conformal Conic projections cut at the seam:
 #'    - Find the longitude of projection center (lon_0 in proj4 string) and from
 #'     it determine longitude of the seam.
 #'    - Clip a narrow (1 m) strip out of the Natural Earth data before
@@ -146,7 +147,8 @@ get_naturalearth <- function(x,
   projection <- gsub("^.*\\+proj=([[:alpha:]]*)[[:blank:]]*.*$", "\\1",
                      x = proj4, perl = TRUE)
 
-  seamed_projections <- c("moll", "laea") # These are the ones I've worked out
+  # These are the ones I've worked out
+  seamed_projections <- c("moll", "laea", "aea", "lcc")
 
 
   use_seam_method <- projection %in% seamed_projections && !force_old_method
@@ -177,6 +179,7 @@ get_naturalearth <- function(x,
 cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
 
   km_per_deg <-  111 # at equator. approximate but doesn't need to be exact.
+  ft_per_km  <- 3280.84
   proj4 <- terra::crs(x, proj = TRUE)
   #--------------------------------------------------------------------------#
   # Determine clip longitude
@@ -220,15 +223,16 @@ cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
   # Figure out buffer in CRS units
   has_units <- grepl("+units=", proj4, fixed = TRUE)
   if (has_units) {
-    crs_units <- gsub("^.*\\+units=([-]*[[:alpha:]\\.]*)[[:blank:]]*.*$",
+    crs_units <- gsub("^.*\\+units=([-]*[[:alpha:]\\.-]*)[[:blank:]]*.*$",
                       "\\1", x = proj4, perl = TRUE)
-    if (crs_units != "m") {
+    projected_buffer <- switch(
+      crs_units,
+      "m" = buffer * km_per_deg * 1000,
+      "us-ft" = buffer * km_per_deg * ft_per_km,
       stop("get_naturalearth() cannot process CRS with units '", crs_units,
            "' submit an issue to ",
            "(https://github.com/birdflow-science/BirdFlowR) and we can fix ",
-           "it.")
-    }
-    projected_buffer <- buffer * km_per_deg * 1000
+           "it."))
   }
   has_to_meter <- grepl("+to_meter=", proj4, fixed = TRUE)
   if (has_to_meter) {

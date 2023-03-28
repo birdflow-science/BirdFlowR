@@ -98,7 +98,8 @@ same CRS as \code{x} with (given default parameters) a somewhat larger extent.
 \code{get_naturalearth()} does all the work and is called by the other functions.
 There are two distinct calculation methods.
 \enumerate{
-\item For Mollweid and Lambert Azimuthal Equal Area projections cut at the seam:
+\item For Mollweid, Lambert Azimuthal Equal Area,  Albers Equal Area, and
+Lambert Conformal Conic projections cut at the seam:
 \itemize{
 \item Find the longitude of projection center (lon_0 in proj4 string) and from
 it determine longitude of the seam.

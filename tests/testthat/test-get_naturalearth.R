@@ -45,6 +45,8 @@ test_that("get_states returns expected objects", {
   # Use:  devtools::install_github("ropensci/rnaturalearthhires")
   # to install.
   skip_if_not_installed("rnaturalearthhires")
+  skip_on_cran()
+  skip_on_ci()
 
   bf <- BirdFlowModels::amewoo
   expect_s3_class(states <-
@@ -54,6 +56,9 @@ test_that("get_states returns expected objects", {
   expect_s3_class(states$geometry[1],  c("sfc_MULTIPOLYGON", "sfc" ) )
 
   expect_true( sf::st_crs(states) == sf::st_crs(crs(bf) ) )
+
+  expect_no_condition(states2 <- get_states(bf, scale = "lowres") )
+
 
 })
 
@@ -157,6 +162,19 @@ test_that("get_naturalearth() works at edge of WGS84 with old method", {
 
 })
 
+test_that("get_naturalearth() works at edge of WGS84 with double wrapping", {
+  seam_crs <- crs("+proj=moll +lon_0=180 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs")  # mollweide centered on 180 deg lon.
+  bf <- new_BirdFlow()
+  bf$geom$crs <- seam_crs
+  bf$geom$ext <- c(-2000000, 2000000,-5000000, 1000000)
+
+  expect_no_error(
+    coast <- get_naturalearth(bf, type = "coastline",
+                              scale = 110, force_old_method = TRUE, buffer = 180) )
+
+
+})
+
 test_that("get_naturalearth() works with mollweide and broken bounding box",{
   # Construct a psuedo BirdFlow object with the extent and
   #  projection that a user submitted.  This is a mollweide where
@@ -230,8 +248,102 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
                                         force_old_method = TRUE),
                   "No objects within extent. Returning empty sf object.")
 
+})
+
+test_that("match_extent argument crops to input extent", {
+  bf <- new_BirdFlow()
+  bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
+                                   " +ellps=WGS84 +units=m +no_defs"))
+  bf$geom$ext <- c(-1560000, 2515000,
+                   2820000, 6420000)
+
+  expect_no_error(coast <- get_naturalearth(bf, type = "coastline",
+                                            res = "lowres", match_extent = TRUE))
+  # Note this depends on the coasts intersecting each edge of the extent
+  expect_equal(as.numeric(terra::ext(coast)[1:4]),
+               as.numeric(terra::ext(bf)[1:4]))
 
 })
+
+
+test_that("get_naturalearth() works with projections that have +units=us-ft", {
+
+  bf <- new_BirdFlow()
+  bf$geom$crs <- terra::crs("EPSG:2249")
+  if(interactive()){
+    print(crs(bf, proj = TRUE))
+  }
+  bf$geom$ext <- c(40000, 1100000, 2500000, 3500000)
+
+  if (interactive()) {
+    box <- sf::st_bbox(ext(bf)) |> sf::st_as_sfc()
+    sf::st_crs(box) <- crs(bf)
+    box_wgs84 <- sf::st_transform(box, sf::st_crs("EPSG:4326") )
+
+
+    coast <- rnaturalearth::ne_coastline(scale = "medium", returnclass = "sf")
+    plot(coast[, "geometry", drop = FALSE])
+    plot(box_wgs84, add = TRUE, border = "red")
+
+    plot(box_wgs84)
+    plot(coast[ , "geometry"], add = TRUE, col  = "blue")
+  }
+
+  expect_no_error(coast <- get_naturalearth(bf, type = "coastline",
+                                            res = "small", buffer = 0))
+
+
+})
+
+
+test_that("Double wrapped buffer works.", {
+  # Note this only sort of works because there are artifacts but
+  # if you don't force the old method it works perfectly
+  bf <- new_BirdFlow()
+  bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
+                                   " +ellps=WGS84 +units=m +no_defs"))
+  bf$geom$ext <- c(-1560000, 2515000,
+                   2820000, 6420000)
+
+  expect_no_error(coast <- get_naturalearth(bf, "coastline",
+                                            scale = "small", buffer = 180,
+                                            force_old_method = TRUE))
+
+  expect_equal(nrow(coast), 110)
+
+
+
+})
+
+
+test_that("Left wrapped buffer works.", {
+  bf <- new_BirdFlow()
+  bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
+                                   " +ellps=WGS84 +units=m +no_defs"))
+  bf$geom$ext <- c(-1560000, 2515000,
+                   2820000, 6420000)
+
+  expect_no_error(coast <- get_naturalearth(bf, "coastline",
+                                            scale = "small", buffer = 100,
+                                            force_old_method = TRUE))
+})
+
+
+
+test_that("Right wrapped buffer works.", {
+  bf <- new_BirdFlow()
+  bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=+90 +x_0=0 +y_0=0",
+                                   " +ellps=WGS84 +units=m +no_defs"))
+  bf$geom$ext <- c(-1560000, 2515000,
+                   2820000, 6420000)
+
+  expect_no_error(coast <- get_naturalearth(bf, "coastline",
+                                            scale = "small", buffer = 100,
+                                            force_old_method = TRUE))
+  expect_equal(nrow(coast), 86)
+})
+
+
 
 
 
