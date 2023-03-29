@@ -8,23 +8,45 @@
 \title{retrieve, crop, and transform Natural Earth data}
 \usage{
 get_naturalearth(
-  bf,
+  x,
   type,
   scale = "medium",
   buffer = 15,
   keep_attributes = FALSE,
   country,
+  match_extent = FALSE,
+  force_old_method = FALSE,
   ...
 )
 
-get_states(bf, country, scale = "medium", buffer = 15, keep_attributes = FALSE)
+get_states(
+  x,
+  country,
+  scale = "medium",
+  buffer = 15,
+  keep_attributes = FALSE,
+  match_extent = FALSE
+)
 
-get_coastline(bf, scale = "medium", buffer = 15, keep_attributes = FALSE)
+get_coastline(
+  x,
+  scale = "medium",
+  buffer = 15,
+  keep_attributes = FALSE,
+  match_extent = FALSE
+)
 
-get_countries(bf, scale = "medium", buffer = 15, keep_attributes = FALSE)
+get_countries(
+  x,
+  scale = "medium",
+  buffer = 15,
+  keep_attributes = FALSE,
+  match_extent = FALSE
+)
 }
 \arguments{
-\item{bf}{BirdFlow object}
+\item{x}{A BirdFlow, \link[terra:SpatRaster-class]{terra::SpatRaster}, \link[=sf]{sf::sf}, or any other object
+that you can call \code{terra::ext()} and \code{\link[terra:crs]{terra::crs()}}.}
 
 \item{type}{The type of data to retrieve. One of "coastline", "country", or
 "states" for data included in \pkg{rnaturalearth}; or any value accepted by
@@ -38,7 +60,7 @@ otherwise passed to one of \link[rnaturalearth:ne_download]{ne_download()}.
 Valid values are 110, 50, 10, small', 'medium', and 'large'.}
 
 \item{buffer}{A buffer in degrees (latitude and longitude) to add to the
-extent of \code{bf} prior to cropping the Natural Earth data.}
+extent of \code{x} prior to cropping the Natural Earth data.}
 
 \item{keep_attributes}{If \code{FALSE}, the default, attribute columns are dropped
 to facilitate clean plotting.}
@@ -47,40 +69,68 @@ to facilitate clean plotting.}
 \code{get_naturalearth(type = "states")} this is used to select a country. If
 omitted, states from all countries are returned.}
 
-\item{...}{Other arguments to be passed to \link[rnaturalearth:ne_download]{ne_download()}.
-Quite possibly you will want to use \code{category = "physical"}.}
+\item{match_extent}{if \code{TRUE} after transforming the Natural Earth data it
+will be cropped to the precise extent of \code{x}. This is useful when plotting
+with \pkg{ggplot2} which expands the bounds of the plot to encompass all
+the plotted data.}
+
+\item{force_old_method}{This is for internal testing. The default should be
+best for all other uses.  If \code{TRUE} use the back transformed bounding box
+method even if the projection is covered by the "new" cut at seam method.}
+
+\item{...}{Other arguments to be passed to
+\link[rnaturalearth:ne_download]{ne_download()}. Possibly you will
+want to use \code{category = "physical"}.}
 }
 \value{
-\link[sf:sf]{sf} object with the same coordinate reference system
-(CRS) as \code{bf} and (with default \code{buffer}) a somewhat larger extent.
+\link[sf:sf]{sf} object with Natural Earth data in the same
+coordinate reference system (CRS) as \code{x}.
 }
 \description{
 These are convenience wrappers to \pkg{rnaturalearth} functions. They
 retrieve, crop, format, and project
 \href{https://www.naturalearthdata.com/}{Natural Earth}
 data to facilitate plotting with
-BirdFlow objects. The output is the desired data in the same CRS as the
-BirdFlow object with a somewhat larger extent.
+BirdFlow and other spatial objects. The output is the desired data in the
+same CRS as \code{x} with (given default parameters) a somewhat larger extent.
 }
 \details{
 \code{get_naturalearth()} does all the work and is called by the other functions.
-It converts the bounds of the BirdFlow object to WGS84,
-adds a buffer to the converted bounds, breaks the bounding box into
-two if it crosses the 180 degree meridian in WGS84, crops to the bounding
-box or boxes, projects each cropped section to the BirdFlow model's CRS,
-and then combines the pieces into one object. These steps will usually
-prevent artifacts caused when polygons or lines are shifted across
-the bounds of the CRS. However, it does not work for all extents
-in all projections and in particular is unlikely to work with polar
-projections and with extents that cover the entire globe.
+There are two distinct calculation methods.
+\enumerate{
+\item For Mollweid, Lambert Azimuthal Equal Area,  Albers Equal Area, and
+Lambert Conformal Conic projections cut at the seam:
+\itemize{
+\item Find the longitude of projection center (lon_0 in proj4 string) and from
+it determine longitude of the seam.
+\item Clip a narrow (1 m) strip out of the Natural Earth data before
+transforming (in WGS84) at the seam.
+\item Transform to the CRS of \code{x}. This is now an artifact free object
+containing the global data set minus a narrow strip at the seam.
+\item Crop in destination to approximate equivalent of \code{buffer}.
+}
 
-In the case of a full global extent in projections other than WGS84 an
-automated solution would need to cut the naturalearth vector data in WGS84
-at the edge of the target projection before projecting. I haven't yet
-figured out how to generically find that edge.
+This should work well for any extent (including global) in any CRS that is
+based on the covered projections.
+\item For all other projections back transform the bounding box and clip:
+\itemize{
+\item Convert the corners of the bounds of \code{x} object to WGS84.
+\item adds a buffer (\code{buffer}) to the converted corners.
+\item Check to see if the bounds wrap the seam (180 deg meridian) and break
+the bounding box into two if it does.
+\item Crop to the bounding box or boxes.
+\item Project each cropped section to the \code{x}'s CRS.
+\item Combine the pieces into one object.
+}
 
-In some cases where this fail setting the buffer to zero may be an easy
+These steps will usually prevent artifacts caused when polygons or lines
+are shifted across the bounds of the CRS. However, it does not work for
+all extents in all projections and in particular is unlikely to work with
+polar projections and with extents that cover the entire globe.
+
+In some cases where this fails setting the buffer to zero may be an easy
 solution.
+}
 
 \code{get_states()} requires \pkg{rnaturalearthhires}. Install with:\cr
 \code{ install.packages("devtools") # if you don't have it already
