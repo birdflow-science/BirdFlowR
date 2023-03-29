@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9044</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9022</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,13 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022-3272023">BirdflowR 0.0.0.9022 (3/27/2023)<a class="anchor" aria-label="anchor" href="#birdflowr-0009022-3272023"></a></h2>
+<ul><li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> and related functions now throw a helpful warning if the extent is empty, and, as before, return an empty <code>sf</code> object.</p></li>
+<li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has an improved, more robust way of processing the vector data that works for specific projections. Currently it is used only for Mollweide (“moll”) and Lambert equal area (“laea”) based CRSs.</p></li>
+<li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has a new argument <code>match_extent</code> which if set to <code>TRUE</code> causes the result to be clipped to the precise extent of the input object (<code>x</code>). Use <code>TRUE</code> when plotting with ggplot2 so that the Natural Earth data doesn’t result in an expanded plot extent. The default, <code>FALSE</code> is appropriate for base R plotting so that the Natural Earth Data runs up to and beyond the edge of the plot regardless of whether the aspect ratio of <code>x</code> matches the plot window’s.</p></li>
+<li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has a new argument <code>use_old_method</code> which, if TRUE forces the less robust method regardless of projection. It is there only for testing the function and should be left at the default for all other uses.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9044" id="birdflowr-0009044">BirdFlowR 0.0.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0009044"></a></h2>
 <ul><li><p>new function <code>build_transitions(x)</code> will populate <code>x$transitions</code> with both forward and backwards transitions. This is recommended before repeated <code>forecast()</code> or predict calls as it avoids repeatedly making transitions on the fly. It does triple the memory usage for the BirdFlow object so should probably only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse.</p></li>
