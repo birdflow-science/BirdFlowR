@@ -306,10 +306,10 @@ test_that("Double wrapped buffer works.", {
                    2820000, 6420000)
 
   expect_no_error(coast <- get_naturalearth(bf, "coastline",
-                                            scale = "small", buffer = 180,
+                                            scale = "small", buffer = 250,
                                             force_old_method = TRUE))
 
-  expect_equal(nrow(coast), 110)
+  expect_equal(nrow(coast), 134)
 
 
 
