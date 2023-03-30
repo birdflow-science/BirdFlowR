@@ -79,7 +79,7 @@ if(FALSE){
   # save full table
   full_obs <- obs
 
-  # and subset to what I care about
+  # and subset to rows I care about
   obs <- obs[, c("id", "bird_id", "lat_dd", "lon_dd", "event_date")]
   obs <- dplyr::rename(obs, lat = lat_dd, lon = lon_dd, date = event_date)
 
@@ -102,17 +102,40 @@ if(FALSE){
 
   intervals$interval_id <- 1:nrow(intervals)
 
+  full_intervals <- intervals
+
+  n <- 3000
+  set.seed(1)
+  intervals <- full_intervals[sample(1:nrow(full_intervals), n), ]
+
+
+
   # Now have test objects:
   head(intervals, 3)
   head(obs, 3)
   bf
+
   observations <- obs
+
+
+mb <-   microbenchmark::microbenchmark(
+    a <- interval_loglikelihood(bf, observations, intervals),
+    b <- interval_loglikelihood(bf, observations, intervals,
+                                one_at_a_time = TRUE),
+    times = 1)
+
+mb <- microbenchmark::microbenchmark(
+  a <- interval_loglikelihood(bf, observations, full_intervals),
+  times = 1
+)
+
+stopifnot(all.equal(a, b))
+mb
 
 }
 
 
-interval_loglikelihood <- function(bf, observations, intervals) {
-
+interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = FALSE) {
 
   stopifnot("date" %in% names(observations),
             "lon" %in% names(observations),
@@ -128,7 +151,11 @@ interval_loglikelihood <- function(bf, observations, intervals) {
   if(!all(intv$from %in% obs$id))
     stop("Not all from values in intervals are in the id column of observations")
   if(!all(intv$to %in% obs$id))
-    stop("Not all from values in intervals are in the id column of observations")
+    stop("Not all to values in intervals are in the id column of observations")
+
+  original_time_format <- birdflow_options("time_format")
+  on.exit(birdflow_options(time_format = original_time_format))
+  birdflow_options(time_format = "timestep")
 
   # Convert observation lat, lon to to x,y and state index (i)
   obs_sf <- sf::st_as_sf(obs, coords= c("lon", "lat"))
@@ -179,83 +206,114 @@ interval_loglikelihood <- function(bf, observations, intervals) {
   # probability in the S&T data for that timestep. These you might want to
   # assign some very low predicted log likelihood to rather than drop from the
   # analysis.
-  intv$exclude <- intv$zero_prob<- FALSE
-  intv$exclude[is.na(intv$lag) | is.na(intv$i1) | is.na(intv$t2)] <- TRUE
-  intv$zero_prob[is.na(intv$i1) | is.na(intv$t2)] <- TRUE
+  intv$exclude <- intv$zero_prob <- FALSE
+  intv$exclude[is.na(intv$lag)]  <- TRUE
+  # intv$zero_prob[is.na(intv$i1) | is.na(intv$i2)] <- TRUE
 
-  head(intv)
+  # Exclude locations that are not modeled at the given timestep
   valid <- is_location_valid(i = intv$i1, timestep = intv$t1, bf = bf) &
     is_location_valid(i = intv$i2, timestep = intv$t2, bf = bf)
   intv$exclude[!valid] <- TRUE
   intv$zero_prob[!valid] <- TRUE
 
-  intv$log_likelihood <- NA_real_
-
-  starting_timesteps <- sort(unique(intv$t1))
-
-
-  coast <- get_coastline(bf)
-
-  one_at_a_time <- TRUE
+  # Exclude intervals that fall into the same timestep
+  intv$exclude[intv$t1 == intv$t2] <- TRUE
 
   if(one_at_a_time){
+
     rows <- which(!intv$exclude)
+    pb <- progress::progress_bar$new(
+      total = length(rows),
+      format = " Calculating log likelihoods [:bar] :percent eta: :eta")
+
+    likelihood <- rep(NA_real_, nrow(intv))
+    null_likelihood <- rep(NA_real_, nrow(intv))
+
     for(j in seq_along(rows)){
       r <- rows[j] # row in intv table
       t1 <- intv$t1[r]
       t2 <- intv$t2[r]
       i1 <- intv$i1[r]
       i2 <- intv$i2[r]
-      d <- rep(0, n_active(bf))
-      d[i1] <- 1
-      ds <- predict(bf, distr = d, start = t1, end = t2)
-      plot(rasterize_distr(ds[, 1], bf))
-      plot(coast)
+      d1 <- rep(0, n_active(bf))
+      d1[i1] <- 1
+      pred_d <- predict(bf, distr = d1, start = t1, end = t2, direction = "forward")
+      likelihood[r] <- pred_d[ i2 , ncol(pred_d)]
+
+      # Null likelihood based on random sample from full distribution
+      full_d <- get_distr(bf, t2)
+
+      null_likelihood[r] <- full_d[i2]
 
 
-
+      if(FALSE){
+        coast <- get_coastline(bf)
+        plot(rasterize_distr(ds[, 18], bf))
+        plot(coast, add = TRUE)
+        points(i_to_xy(c(i1, i2), bf, col = "red"))
+      }
+      pb$tick()
     }
 
 
-
-
+    intv$log_likelihood <- log(likelihood)
+    intv$null_ll  <- log(null_likelihood)
 
   } else {
 
     # Here we are going to process all the locations that start at the timestep
     # in a batch, iterating through timesteps.
+    starting_timesteps <- sort(unique(intv$t1[!intv$exclude]))
+
+    pb <- progress::progress_bar$new(
+      total = sum(!intv$exclude),
+      format = " Calculating log likelihoods [:bar] :percent eta: :eta")
 
 
-   for(j in seq_along(starting_timesteps)){
-    t1 <- starting_timesteps[j]
+    likelihood <- rep(NA_real_, nrow(intv))
+    null_likelihood <- rep(NA_real_, nrow(intv))
 
-    sv <- intv$t1 == t1 & !intv$exclude
+    for(j in seq_along(starting_timesteps)){
+      t1 <- starting_timesteps[j]
+      sv <- intv$t1 == t1 & !intv$exclude
+      i1s <- intv$i1[sv]
+      i2s <- intv$i2[sv]
+      t2s <- intv$t2[sv]
 
-    i1s <- intv$i1[sv]
-    i2s <- intv$i2[sv]
-    t2s <- intv$t2[sv]
+      # Figure out last step to project forward to (accounting for cyclical year)
+      if(any(t2s < t1)) {
+        endt <- max(t2s[t2s < t1])
+      } else {
+        endt <- max(t2s)
+      }
 
-    # Figure out last step to project forward to (accounting for cyclical year)
+      # Create starting distributions (1 distribution per column)
+      d1 <- matrix(0, nrow = n_active(bf), ncol = sum(sv))
+      d1[cbind(i1s, 1:length(i1s))] <- 1
 
-    if(any(t2s < t1)) {
-      endt <- max(t2s[t2s < t1])
-    } else {
-      endt <- max(t2s)
+      # Project together to last timestep
+      ds <- predict(bf, distr = d1, start = t1, end = endt)
+
+      # Pull out probability of ending location and time
+      time_index <- match(paste0("t", t2s), dimnames(ds)[[3]])
+      sel <- cbind( i2s , seq_along(i1s) , time_index)
+      likelihood[sv] <-  ds[ sel ]
+
+      # sample alternative ending locations from distributions
+      full_distr <- get_distr(bf, which = t2s)
+      if(!is.matrix(full_distr))
+        full_distr <- matrix(full_distr, ncol = 1)
+
+      null_likelihood[sv] <- full_distr[cbind(i2s , seq_along(i2s) )]
+      pb$tick(len= sum(sv))
+
     }
-    # Create starting distributions (1 distribution per column)
-    d1 <- matrix(0, nrow = n_active(bf), ncol = sum(sv))
-    d1[cbind(i1s, 1:length(i1s))] <- 1
 
-    ds <- predict(bf, distr = d1, start = t1, end = endt)
-
-
-    stop("This isn't fully implemented.")
+    intv$log_likelihood <- log(likelihood)
+    intv$null_ll  <- log(null_likelihood)
 
   }
 
-
-
-
+  return(cbind(intervals, intv[, c("zero_prob", "exclude", "log_likelihood", "null_ll")]) )
 
 }
-
