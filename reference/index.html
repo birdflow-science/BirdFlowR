@@ -70,9 +70,9 @@
         <dd>Set and retrieve BirdFlowR options</dd>
       </dl><dl><dt>
           
-          <code><a href="build_transitions.html">build_transitions()</a></code> 
+          <code><a href="build_transitions.html">build_transitions()</a></code> <code><a href="build_transitions.html">drop_transitions()</a></code> 
         </dt>
-        <dd>add transition matrices to a BirdFlow object</dd>
+        <dd>add or drop transition matrices</dd>
       </dl><dl><dt>
           
           <code><a href="dimensions.html">nrow(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ncol(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">dim(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">n_timesteps()</a></code> <code><a href="dimensions.html">n_distr()</a></code> <code><a href="dimensions.html">n_transitions()</a></code> <code><a href="dimensions.html">n_active()</a></code> <code><a href="dimensions.html">crs(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ext(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">res(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">yres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmax(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymax(<i>&lt;BirdFlow&gt;</i>)</a></code> 
@@ -123,6 +123,21 @@
           <code><a href="index_conversions.html">x_to_col()</a></code> <code><a href="index_conversions.html">y_to_row()</a></code> <code><a href="index_conversions.html">row_to_y()</a></code> <code><a href="index_conversions.html">col_to_x()</a></code> <code><a href="index_conversions.html">i_to_rc()</a></code> <code><a href="index_conversions.html">i_to_row()</a></code> <code><a href="index_conversions.html">i_to_col()</a></code> <code><a href="index_conversions.html">i_to_x()</a></code> <code><a href="index_conversions.html">i_to_y()</a></code> <code><a href="index_conversions.html">i_to_xy()</a></code> <code><a href="index_conversions.html">rc_to_i()</a></code> <code><a href="index_conversions.html">xy_to_i()</a></code> 
         </dt>
         <dd>Functions to convert among spatial indices</dd>
+      </dl><dl><dt>
+          
+          <code><a href="interval_loglikelihood.html">interval_loglikelihood()</a></code> 
+        </dt>
+        <dd>calculate log likelihoods of observed bird movements</dd>
+      </dl><dl><dt>
+          
+          <code><a href="is_location_valid.html">is_location_valid()</a></code> <code><a href="is_location_valid.html">is_distr_valid()</a></code> 
+        </dt>
+        <dd>Are locations and distributions covered by the model for the given time</dd>
+      </dl><dl><dt>
+          
+          <code><a href="lookup_timestep.html">lookup_timestep()</a></code> 
+        </dt>
+        <dd>lookup timestep</dd>
       </dl><dl><dt>
           
           <code><a href="lookup_transitions.html">lookup_transitions()</a></code> 
