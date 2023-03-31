@@ -7,14 +7,26 @@
 lookup_timestep(x, bf)
 }
 \arguments{
-\item{x}{character representing date as year-month-day eg "2023-03-29",
-a date object, or a numeric timestep.}
+\item{x}{a character object representing date as year-month-day e.g.
+"2023-03-29", date object, or a numeric timestep.}
+
+\item{bf}{a BirdFlow object}
 }
 \value{
 a vector of timesteps corresponding to elements in \code{x}
 }
 \description{
-This function looks up the timestep or timesteps associated with \code{x}.
+This function returns the timestep or timesteps associated with \code{x} in a
+particular BirdFlow model, where \code{x} dates or timesteps in various formats.
+}
+\details{
+So far all BirdFlow objects have had timesteps corresponding to weeks of
+the year and matching the S&T timesteps. However, it is likely that
+we will add the ability to make BirdFlow objects that only model part of the
+year. If we do this the timestep values will not necessarily match weeks.
+
+If \code{x} is numeric it is assumed to already be a timestep. This is useful
+when using this function internally within \code{\link[=route]{route()}} and \code{\link[=predict]{predict()}}.
 }
 \examples{
 bf <- BirdFlowModels::amewoo

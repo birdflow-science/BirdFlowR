@@ -1,141 +1,87 @@
-if(FALSE){
-
-  # Example data
-
-  # Paths
-  dir <- "../Models/band_example_for_get_loglikelihood/"
-  species <- "gwfgoo"
-
-  # BirdFlow
-  hdf5 <- paste0(dir, species, "_trained.hdf5")
-  bf <- import_birdflow(hdf5) |>
-    sparsify(method = "state") |>
-    build_transitions()
-
-  # obseration data
-  obs_path <-  paste0(dir, species, ".rds")
-  obs <- as.data.frame(readRDS(obs_path))
-  names(obs) <- tolower(names(obs))
-  obs$observation_id <- 1:nrow(obs)
-  sv <- obs$band != obs$original_band
-  sv <- obs$other_bands != "" &  obs$original_band != obs$other_bands
-
-
-
-  # Construct data frame of pairs of bands known to be the same
-  sv <- obs$band != obs$original_band
-  same_band <- data.frame(a = obs$band[sv], b =  obs$original_band[sv])
-
-  sv <- obs$other_bands != "" &  obs$original_band != obs$other_bands
-  same_band <- rbind(same_band,
-                     data.frame(a = obs$original_band[sv], b = obs$other_bands[sv]))
-
-  sv <- obs$other_bands != "" &  obs$band != obs$other_bands
-  same_band <- rbind(same_band,
-                     data.frame(a = obs$band[sv], b = obs$other_bands[sv]))
-  same_band <- same_band[!duplicated(same_band), ]
-
-  sv <- grepl(";.+$", same_band$a) | grepl(";.+$", same_band$b)
-  if(any(sv))
-    stop("Multiple bands stored in other_bands column. Need to handle differently.")
-  same_band$a <- gsub(";$", "", same_band$a)
-  same_band$b <- gsub(";$", "", same_band$b)
-
-  sv <- grepl(";", same_band$a) | grepl(";", same_band$b)
-  if(any(sv))
-    stop("; in unexpected location")
-  same_band <- apply(same_band, 1, sort , simplify = TRUE) |> t() |>
-    as.data.frame()
-  names(same_band) <- c("a", "b")
-  same_band <- same_band[!duplicated(same_band), , drop = FALSE]
-  same_band <- same_band[order(same_band$a), ]
-  rownames(same_band) <- NULL
-  same_band <- same_band[same_band$a != same_band$b ,  , drop = FALSE]
-
-  # Same_band is sorted so that the band in column a is alphabetically before
-  # the band in column b.
-  # Here we iteratively replace any of the column b bands with the column a
-  # equivallent until there's no bands left from any column b band.
-  # I'm calling this the bird's ID.  It unites all observations of the bird
-  # (under different bands), but may NOT be the original band ID.
-  obs$bird_id <- obs$band
-  i <- 1
-  while(any(obs$bird_id %in% same_band$b)){
-    sv <- obs$bird_id %in% same_band$b
-    cat("Pass ", i, ":", sum(sv), "bands relabled\n")
-    ok <- obs[!sv, , drop = FALSE]
-    not_ok <- obs[sv, , drop = FALSE]
-    mv <- match(not_ok$bird_id, same_band$b)
-    # stopifnot(all(not_ok$bird_id == same_band$b[mv]))
-    not_ok$bird_id <- same_band$a[mv]
-    obs <- rbind(ok, not_ok)
-    i <- i + 1
-  }
-
-  # Add unique observation ID (numeric)
-  obs <- obs[order(obs$bird_id, obs$event_date), ]
-  obs$id <- 1:nrow(obs)
-
-  # save full table
-  full_obs <- obs
-
-  # and subset to rows I care about
-  obs <- obs[, c("id", "bird_id", "lat_dd", "lon_dd", "event_date")]
-  obs <- dplyr::rename(obs, lat = lat_dd, lon = lon_dd, date = event_date)
-
-  obs <-
-    dplyr::group_by(obs, bird_id) %>%
-    dplyr::mutate(obs_no = dplyr::row_number()) |>
-    as.data.frame()
-
-  # Make intervals
-
-  #### For simplicities sake I'm just going to compare the first and second
-  #### observation of each bird.  This isn't a good statistical choice but
-  #### I just want example data.
-
-  intervals <-
-    obs[obs$obs_no %in% 1:2, c("bird_id", "id", "obs_no"), drop = FALSE] |>
-    tidyr::pivot_wider(names_from = obs_no, values_from = id) |>
-    dplyr::rename(from = `1`, to = `2`) |>
-    as.data.frame()
-
-  intervals$interval_id <- 1:nrow(intervals)
-
-  full_intervals <- intervals
-
-  n <- 3000
-  set.seed(1)
-  intervals <- full_intervals[sample(1:nrow(full_intervals), n), ]
-
-
-
-  # Now have test objects:
-  head(intervals, 3)
-  head(obs, 3)
-  bf
-
-  observations <- obs
-
-
-mb <-   microbenchmark::microbenchmark(
-    a <- interval_loglikelihood(bf, observations, intervals),
-    b <- interval_loglikelihood(bf, observations, intervals,
-                                one_at_a_time = TRUE),
-    times = 1)
-
-mb <- microbenchmark::microbenchmark(
-  a <- interval_loglikelihood(bf, observations, full_intervals),
-  times = 1
-)
-
-stopifnot(all.equal(a, b))
-mb
-
-}
-
-
-interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = FALSE) {
+#' calculate log likelihoods of observed bird movements
+#'
+#' This function calculates the log likelihoods of inferred bird movement
+#' based on two observation points (in time and space). The second point must
+#' have a different timestep (week) than the first, but the location can remain
+#' the same.
+#'
+#' @details
+#' The core of this function is calling `predict()` on a distribution that has
+#' the starting location hot (value of 1) and all other locations zero and then
+#' extracting the probability of the ending week and location. The
+#' log of this probability is returned in the `log_likelihood` column. The null
+#' model assumes that the ebird S&T distribution and thus the `null_ll` column
+#' contains the log of the probability density from the S&T distribution
+#' at the ending week and location.
+#'
+#' The observations and intervals are separated into two tables to allow
+#' flexibility in assigning and evaluating intervals.  With tracking data in
+#' which the frequency of observations is much greater than the weekly S&T data
+#' there are a lot of choices to be made and this function leaves those
+#' decisions to the user.
+#'
+#' @param bf a BirdFlow object
+#' @param observations a data.frame describing observations of birds each row
+#' should be an individual bird, at a location, and date.
+#'  \describe{
+#'  \item{`id`}{ Unique observation identifier }
+#'  \item{`lon` , `lat`}{  longitude and latitude of observation in WGS84
+#'  (EPSG:4326) }
+#' \item{ `date`}{ date associated with observation. See [lookup_timestep()] for
+#'  valid formats.}
+#' \item{ ... }{ Other columns allowed, but will be ignored. }
+#'  }
+#' @param intervals  a data.frame that describes intervals (movements or
+#' stationary periods) for which log likelihood will be calculated by
+#' referencing the `id` column in `observations`.
+#'  \describe{
+#'  \item{`from`}{ observation id of the starting location and date}
+#'  \item{ `to` }{ observation id of the ending location and date}
+#'  \item{ ...  }{ any additional columns will be included in the returned
+#'  object but not used by this function }
+#'  }
+#'
+#' @param one_at_a_time Mainly here for debugging. If FALSE, the default, then
+#' all intervals that start at the same timestep are processed together,
+#' otherwise each interval is processed separately. Results should be identical,
+#' but TRUE is slower.
+#'
+#' @return The intervals table is returned  along with new columns:
+#'  \item{log_likelihood }{ The model derived log likelihood of the interval }
+#'  \item{ null_ll }{ the log likelihood of the interval based on a null model
+#'  that assumes the eBird S&T distribution for the species at the end point }
+#'  \item{ lag }{ the number of timesteps (likely weeks) between the start and
+#'  end of the interval }
+#'  \item{  exclude }{ TRUE if the log likelihood couldn't be calculated for
+#'  the interval, in which case there should also be a TRUE in one of the
+#'   remaining columns indicating why. }
+#'  \item{ not_active }{ If TRUE the start or end point is not within the model
+#'   mask }
+#'  \item{ dynamic_mask }{ If TRUE ebirds S&T has assigned zero probability to
+#'  the the start or end point for the associated date and therefore it is
+#'  excluded by the dynamic mask or state based sparsification }
+#'  \item{ sparse }{ TRUE if the model assigned zero probability to the interval
+#'  and it wasn't due to any of the other reasons. This is likely due to
+#'  sparsification eliminating all possible routes between the start and
+#'  end point.}
+#'  \item{ same_timestep }{ TRUE if the start and end timesteps are the same, a
+#'   lag of zero }
+#'  \item{ bad_date }{ TRUE if the date couldn't be parsed, or if `bf` is a
+#'   partial model and the date falls in the uncovered portion of the year }
+#'
+#'  The returned table rows will have a 1:1 correspondence with the input
+#'  `intervals` table.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' bf <- BirdFlowModels::rewbla
+#' observations <- BirdFlowModels::rewbla_observations
+#' intervals <- BirdFlowModels::rewbla_intervals
+#' ll <- interval_loglikelihood(bf, observations, intervals)
+#' }
+interval_loglikelihood <- function(bf, observations, intervals,
+                                   one_at_a_time = FALSE) {
 
   stopifnot("date" %in% names(observations),
             "lon" %in% names(observations),
@@ -149,9 +95,9 @@ interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = 
   intv <- intervals
 
   if(!all(intv$from %in% obs$id))
-    stop("Not all from values in intervals are in the id column of observations")
+    stop("Not all `from` values are in the id column of observations")
   if(!all(intv$to %in% obs$id))
-    stop("Not all to values in intervals are in the id column of observations")
+    stop("Not all `to` values are in the id column of observations")
 
   original_time_format <- birdflow_options("time_format")
   on.exit(birdflow_options(time_format = original_time_format))
@@ -190,7 +136,7 @@ interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = 
 
   # Determine the lag  (weeks between observations)
   cyclical <- n_transitions(bf) == n_timesteps(bf)
-  same_year<-   intv$t1 < intv$t2
+  same_year<-   intv$t1 <= intv$t2
   intv$lag[same_year] <- intv$t2[same_year] - intv$t1[same_year]
   if(cyclical){
     intv$lag[!same_year] <- intv$t2[!same_year] + n_timesteps(bf) - intv$t1[!same_year]
@@ -206,21 +152,32 @@ interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = 
   # probability in the S&T data for that timestep. These you might want to
   # assign some very low predicted log likelihood to rather than drop from the
   # analysis.
-  intv$exclude <- intv$zero_prob <- FALSE
-  intv$exclude[is.na(intv$lag)]  <- TRUE
-  # intv$zero_prob[is.na(intv$i1) | is.na(intv$i2)] <- TRUE
+
+  # Logical columns for problems and exclusions
+  intv$bad_date <- intv$same_timestep <- intv$not_active <-
+    intv$dynamic_mask <- intv$sparse <-  intv$exclude  <- FALSE
+
+  sv <- is.na(intv$lag)
+  intv$exclude[sv]  <- TRUE
+  intv$bad_date[sv] <- TRUE
+
+  sv <- is.na(intv$i1) | is.na(intv$i2)
+  intv$not_active[sv] <-  TRUE
+  intv$exclude[sv] <- TRUE
 
   # Exclude locations that are not modeled at the given timestep
   valid <- is_location_valid(i = intv$i1, timestep = intv$t1, bf = bf) &
     is_location_valid(i = intv$i2, timestep = intv$t2, bf = bf)
+  sv <- !valid & !intv$not_active & !intv$bad_date
+  intv$dynamic_mask[sv] <- TRUE
   intv$exclude[!valid] <- TRUE
-  intv$zero_prob[!valid] <- TRUE
 
   # Exclude intervals that fall into the same timestep
-  intv$exclude[intv$t1 == intv$t2] <- TRUE
+  sv <- intv$t1 == intv$t2
+  intv$exclude[sv] <- TRUE
+  intv$same_timestep[sv] <- TRUE
 
   if(one_at_a_time){
-
     rows <- which(!intv$exclude)
     pb <- progress::progress_bar$new(
       total = length(rows),
@@ -254,10 +211,6 @@ interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = 
       }
       pb$tick()
     }
-
-
-    intv$log_likelihood <- log(likelihood)
-    intv$null_ll  <- log(null_likelihood)
 
   } else {
 
@@ -309,11 +262,26 @@ interval_loglikelihood <- function(bf, observations, intervals, one_at_a_time = 
 
     }
 
-    intv$log_likelihood <- log(likelihood)
-    intv$null_ll  <- log(null_likelihood)
-
   }
 
-  return(cbind(intervals, intv[, c("zero_prob", "exclude", "log_likelihood", "null_ll")]) )
+
+  intv$log_likelihood <- log(likelihood)
+  intv$null_ll  <- log(null_likelihood)
+
+  sv <- likelihood %in%  0
+  intv$sparse[sv] <- TRUE
+  intv$exclude[sv] <- TRUE
+  intv$log_likelihood[sv] <- NA
+
+  if(FALSE){ # for debugging
+    sv <- sapply(intv, is.logical)
+    round(apply(intv[, sv], 2, sum)/nrow(intv) * 100, 2)
+  }
+
+  retained_new_columns <-
+    c("log_likelihood", "null_ll", "lag", "exclude","not_active",
+      "dynamic_mask", "sparse", "same_timestep", "bad_date")
+
+  return(cbind(intervals, intv[, retained_new_columns]) )
 
 }
