@@ -6,22 +6,33 @@ if(FALSE){
 
 
 
-#' add transition matrices to a BirdFlow object
+#' add or drop transition matrices
 #'
-#' Given a BirdFlow object with marginals and without transitions return
-#' a BirdFlow object with both marginals and transitions.
+#' Given a BirdFlow object with marginals and without transitions
+#' `build_transitions()` return a BirdFlow object with both marginals
+#' and transitions, `drop_tansitions()` will reverse the process.
 #'
+#' @rdname build_transitions
 #' @param x BirdFlow object
-#'
+#' @param rebuild set to TRUE to rebuild transitions if they are already
+#' present.
 #' @return BirdFlow object with transition matrices
 #' @export
-#'
+#' @seealso [has_transitions()]
 #' @examples
 #' \dontrun{
 #' bf1 <- BirdFlowModels::amewoo
 #' bf2 <- build_transitions(bf)
+#' bf2
+#'
+#' bf3 <- drop_transitions(bf2)
+#' bf3
 #' }
-build_transitions <- function(x){
+build_transitions <- function(x, rebuild = FALSE){
+  if(has_transitions(x) && !rebuild)
+    stop("x already has transitions.")
+  if(!has_marginals(x))
+    stop("marginals are missing and necessary to build transitions.")
   mi <- x$marginals$index
   tl <- vector(mode = "list", length = nrow(mi))
   names(tl) <- mi$transition
@@ -32,3 +43,15 @@ build_transitions <- function(x){
   x$metadata$has_transitions <- TRUE
   return(x)
 }
+
+#' @rdname build_transitions
+#' @aliases drop_transitions
+#' @export
+drop_transitions <- function(x){
+  if(!has_marginals(x))
+    stop("Cannot drop transitions from a BirdFlow object that lacks marginals.")
+  x$transitions <- NA
+  x$metadata$has_transitions <- FALSE
+  return(x)
+}
+
