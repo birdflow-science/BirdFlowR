@@ -1,4 +1,4 @@
-# intererval_log_likelihood produces identical results with one_at_a_time = TRUE
+# interval_log_likelihood produces identical results with one_at_a_time = TRUE
 
     Code
       ll

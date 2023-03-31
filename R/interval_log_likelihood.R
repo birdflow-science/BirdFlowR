@@ -20,7 +20,16 @@
 #' there are a lot of choices to be made and this function leaves those
 #' decisions to the user.
 #'
-#' @param bf a BirdFlow object
+#' @param intervals  a data.frame that describes intervals (movements or
+#' stationary periods) for which log likelihood will be calculated by
+#' referencing the `id` column in `observations`.
+#'  \describe{
+#'  \item{`from`}{ observation id of the starting location and date}
+#'  \item{ `to` }{ observation id of the ending location and date}
+#'  \item{ ...  }{ any additional columns will be included in the returned
+#'  object but not used by this function. It probably should include an
+#'  interval ID.}
+#'  }
 #' @param observations a data.frame describing observations of birds each row
 #' should be an individual bird, at a location, and date.
 #'  \describe{
@@ -31,20 +40,11 @@
 #'  valid formats.}
 #' \item{ ... }{ Other columns allowed, but will be ignored. }
 #'  }
-#' @param intervals  a data.frame that describes intervals (movements or
-#' stationary periods) for which log likelihood will be calculated by
-#' referencing the `id` column in `observations`.
-#'  \describe{
-#'  \item{`from`}{ observation id of the starting location and date}
-#'  \item{ `to` }{ observation id of the ending location and date}
-#'  \item{ ...  }{ any additional columns will be included in the returned
-#'  object but not used by this function }
-#'  }
-#'
+#' @param bf a BirdFlow object
 #' @param one_at_a_time Mainly here for debugging. If FALSE, the default, then
 #' all intervals that start at the same timestep are processed together,
 #' otherwise each interval is processed separately. Results should be identical,
-#' but TRUE is slower.
+#' TRUE uses less memory but is slower.
 #'
 #' @return The intervals table is returned  along with new columns:
 #'  \item{log_likelihood }{ The model derived log likelihood of the interval }
@@ -74,14 +74,16 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' bf <- BirdFlowModels::rewbla
 #' observations <- BirdFlowModels::rewbla_observations
 #' intervals <- BirdFlowModels::rewbla_intervals
-#' ll <- interval_loglikelihood(bf, observations, intervals)
-#' }
-interval_loglikelihood <- function(bf, observations, intervals,
+#' intervals <- intervals[1:20, ] # toy example
+#' intervals  <- interval_log_likelihood(intervals, observations, bf)
+#' head(intervals, 3)
+interval_log_likelihood <- function(intervals, observations, bf,
                                    one_at_a_time = FALSE) {
+
+  verbose <- birdflow_options("verbose")
 
   stopifnot("date" %in% names(observations),
             "lon" %in% names(observations),
@@ -91,20 +93,32 @@ interval_loglikelihood <- function(bf, observations, intervals,
   stopifnot("from" %in% names(intervals),
             "to" %in% names(intervals))
 
+  retained_new_columns <-
+    c("log_likelihood", "null_ll", "lag", "exclude", "not_active",
+      "dynamic_mask", "sparse", "same_timestep", "bad_date")
+
+  if (any(retained_new_columns %in% names(intervals))) {
+    conflicts <- intersect(retained_new_columns, names(intervals))
+    warning("These columns will be replaced in the output: '",
+            paste0(conflicts, collapse = "', '"), "'", sep = "")
+    intervals <- intervals[, !names(intervals) %in% conflicts, drop = FALSE]
+  }
+
   obs <- observations
   intv <- intervals
 
-  if(!all(intv$from %in% obs$id))
+  if (!all(intv$from %in% obs$id))
     stop("Not all `from` values are in the id column of observations")
-  if(!all(intv$to %in% obs$id))
+  if (!all(intv$to %in% obs$id))
     stop("Not all `to` values are in the id column of observations")
 
+  # Set distribution timestep labeling to "t1" etc,
   original_time_format <- birdflow_options("time_format")
   on.exit(birdflow_options(time_format = original_time_format))
   birdflow_options(time_format = "timestep")
 
   # Convert observation lat, lon to to x,y and state index (i)
-  obs_sf <- sf::st_as_sf(obs, coords= c("lon", "lat"))
+  obs_sf <- sf::st_as_sf(obs, coords = c("lon", "lat"))
   sf::st_crs(obs_sf) <- sf::st_crs("EPSG:4326")
   obs_t <- sf::st_transform(obs_sf, sf::st_crs(crs(bf)))
   coords <- sf::st_coordinates(obs_t)
@@ -120,47 +134,35 @@ interval_loglikelihood <- function(bf, observations, intervals,
   # Add starting and ending state index and dates to intervals table
   # 't' indicates timestep, 'i' indicates state index
   # suffix of '1' for starting and '2' for ending (date or timestep)
-
-  ### Note date stuff is tricky.  We might want to move dates into intervals
-  # before converting to timestep and verify that the ending dates is after
-  # the starting date.   Weirdness can happen as is.
-  #  For instance May 2020 to June 2021 will end up being a 1 month lag, not
-  #  13 month.
-
-  mv <- match(intv$from, obs$id )
+  mv <- match(intv$from, obs$id)
   intv$i1 <- obs$i[mv]
   intv$t1 <- obs$ts[mv]
-  mv <- match(intv$to, obs$id )
+  mv <- match(intv$to, obs$id)
   intv$i2 <- obs$i[mv]
   intv$t2 <- obs$ts[mv]
 
   # Determine the lag  (weeks between observations)
   cyclical <- n_transitions(bf) == n_timesteps(bf)
-  same_year<-   intv$t1 <= intv$t2
+  same_year <-   intv$t1 <= intv$t2
   intv$lag[same_year] <- intv$t2[same_year] - intv$t1[same_year]
-  if(cyclical){
-    intv$lag[!same_year] <- intv$t2[!same_year] + n_timesteps(bf) - intv$t1[!same_year]
+  if (cyclical) {
+    intv$lag[!same_year] <-
+      intv$t2[!same_year] + n_timesteps(bf) - intv$t1[!same_year]
   } else {
     intv$lag[!same_year] <- NA
   }
 
-  # Add exclude column and zero_prob
-  # exclude covers anything we can't model (including dates out of the modeled
-  # range if the model isn't for the full year).
-  # zero_prob is for locations that the model indicates have zero probability
-  # either because they aren't active cells or because they have zero
-  # probability in the S&T data for that timestep. These you might want to
-  # assign some very low predicted log likelihood to rather than drop from the
-  # analysis.
-
-  # Logical columns for problems and exclusions
+  # Add logical columns for problems and exclusions
   intv$bad_date <- intv$same_timestep <- intv$not_active <-
     intv$dynamic_mask <- intv$sparse <-  intv$exclude  <- FALSE
 
+  # Exclude NA lags (these are caused by date issues)
   sv <- is.na(intv$lag)
   intv$exclude[sv]  <- TRUE
   intv$bad_date[sv] <- TRUE
 
+  # Exclude intervals where the starting or ending location aren't within
+  # active cells.
   sv <- is.na(intv$i1) | is.na(intv$i2)
   intv$not_active[sv] <-  TRUE
   intv$exclude[sv] <- TRUE
@@ -168,25 +170,30 @@ interval_loglikelihood <- function(bf, observations, intervals,
   # Exclude locations that are not modeled at the given timestep
   valid <- is_location_valid(i = intv$i1, timestep = intv$t1, bf = bf) &
     is_location_valid(i = intv$i2, timestep = intv$t2, bf = bf)
+  # Valid will also capture problems above so only capturing new problems here
   sv <- !valid & !intv$not_active & !intv$bad_date
   intv$dynamic_mask[sv] <- TRUE
   intv$exclude[!valid] <- TRUE
 
-  # Exclude intervals that fall into the same timestep
+  # Exclude intervals that start and end in the same timestep
   sv <- intv$t1 == intv$t2
   intv$exclude[sv] <- TRUE
   intv$same_timestep[sv] <- TRUE
 
-  if(one_at_a_time){
-    rows <- which(!intv$exclude)
-    pb <- progress::progress_bar$new(
-      total = length(rows),
-      format = " Calculating log likelihoods [:bar] :percent eta: :eta")
+  # Calculate log likelihood
 
+  # The one at a time implementation is more straight forward but takes
+  # about 4 times as long.
+  if (one_at_a_time) {
+    rows <- which(!intv$exclude)
+    if (verbose)
+      pb <- progress::progress_bar$new(
+        total = length(rows),
+        format = " Calculating log likelihoods [:bar] :percent eta: :eta")
     likelihood <- rep(NA_real_, nrow(intv))
     null_likelihood <- rep(NA_real_, nrow(intv))
 
-    for(j in seq_along(rows)){
+    for (j in seq_along(rows)) {
       r <- rows[j] # row in intv table
       t1 <- intv$t1[r]
       t2 <- intv$t2[r]
@@ -194,47 +201,53 @@ interval_loglikelihood <- function(bf, observations, intervals,
       i2 <- intv$i2[r]
       d1 <- rep(0, n_active(bf))
       d1[i1] <- 1
-      pred_d <- predict(bf, distr = d1, start = t1, end = t2, direction = "forward")
-      likelihood[r] <- pred_d[ i2 , ncol(pred_d)]
+      pred_d <- predict(bf, distr = d1, start = t1, end = t2,
+                        direction = "forward")
+      likelihood[r] <- pred_d[i2, ncol(pred_d)]
 
       # Null likelihood based on random sample from full distribution
       full_d <- get_distr(bf, t2)
-
       null_likelihood[r] <- full_d[i2]
-
-
-      if(FALSE){
-        coast <- get_coastline(bf)
-        plot(rasterize_distr(ds[, 18], bf))
-        plot(coast, add = TRUE)
-        points(i_to_xy(c(i1, i2), bf, col = "red"))
-      }
-      pb$tick()
+      if (verbose)
+        pb$tick()
     }
 
   } else {
 
-    # Here we are going to process all the locations that start at the timestep
-    # in a batch, iterating through timesteps.
+    # Batch implementation
+
+    # Process in batches based on shared starting timestep. The predict()
+    # function can take multiple distributions in a matrix internally using
+    # matrix multiplication against the transition matrix for each timestep to
+    # project all of them at once, it then returns a three dimensional array
+    # with dimensions location, distribution, and time from which all the ending
+    # probabilities can be extracted at once for the batch.
+    # One trade off is it uses more memory, another is that all the starting
+    # locations for a given timestep are projected forward
+    # to the latest ending timestep so there's a bunch of unnecessary
+    # calculations done for the short intervals.
+    # Empirically it seems to take about 1/4 the time of the other approach.
+
     starting_timesteps <- sort(unique(intv$t1[!intv$exclude]))
 
-    pb <- progress::progress_bar$new(
-      total = sum(!intv$exclude),
-      format = " Calculating log likelihoods [:bar] :percent eta: :eta")
-
+    if (verbose) {
+      pb <- progress::progress_bar$new(
+        total = sum(!intv$exclude),
+        format = " Calculating log likelihoods [:bar] :percent eta: :eta")
+    }
 
     likelihood <- rep(NA_real_, nrow(intv))
     null_likelihood <- rep(NA_real_, nrow(intv))
 
-    for(j in seq_along(starting_timesteps)){
-      t1 <- starting_timesteps[j]
+    for (j in seq_along(starting_timesteps)) {
+      t1 <- starting_timesteps[j]  # starting timestep (common to all)
       sv <- intv$t1 == t1 & !intv$exclude
-      i1s <- intv$i1[sv]
-      i2s <- intv$i2[sv]
-      t2s <- intv$t2[sv]
+      i1s <- intv$i1[sv] # starting locations
+      i2s <- intv$i2[sv] # ending locations
+      t2s <- intv$t2[sv] # ending timesteps
 
-      # Figure out last step to project forward to (accounting for cyclical year)
-      if(any(t2s < t1)) {
+      # Figure out last step to project forward to accounting for cyclical year
+      if (cyclical && any(t2s < t1)) {
         endt <- max(t2s[t2s < t1])
       } else {
         endt <- max(t2s)
@@ -242,46 +255,43 @@ interval_loglikelihood <- function(bf, observations, intervals,
 
       # Create starting distributions (1 distribution per column)
       d1 <- matrix(0, nrow = n_active(bf), ncol = sum(sv))
-      d1[cbind(i1s, 1:length(i1s))] <- 1
+      d1[cbind(i1s, seq_along(i1s))] <- 1
 
       # Project together to last timestep
       ds <- predict(bf, distr = d1, start = t1, end = endt)
 
       # Pull out probability of ending location and time
       time_index <- match(paste0("t", t2s), dimnames(ds)[[3]])
-      sel <- cbind( i2s , seq_along(i1s) , time_index)
-      likelihood[sv] <-  ds[ sel ]
+      sel <- cbind(i2s, seq_along(i1s), time_index)
+      likelihood[sv] <-  ds[sel]
 
-      # sample alternative ending locations from distributions
+      # Retrieve values for ending location from the distributions for the
+      # species (eBird S&T distribution) at the ending timesteps
       full_distr <- get_distr(bf, which = t2s)
-      if(!is.matrix(full_distr))
+      if (!is.matrix(full_distr))
         full_distr <- matrix(full_distr, ncol = 1)
+      null_likelihood[sv] <- full_distr[cbind(i2s, seq_along(i2s))]
 
-      null_likelihood[sv] <- full_distr[cbind(i2s , seq_along(i2s) )]
-      pb$tick(len= sum(sv))
-
+      if (verbose)
+        pb$tick(len = sum(sv))
     }
-
   }
-
 
   intv$log_likelihood <- log(likelihood)
   intv$null_ll  <- log(null_likelihood)
 
+  # Given that we've already excluded intervals that start and
+  # end at dropped states, all of these zero probability intervals
+  # should be because sparsification eliminated all the routes that connect
+  # the pair of observations.
   sv <- likelihood %in%  0
   intv$sparse[sv] <- TRUE
   intv$exclude[sv] <- TRUE
   intv$log_likelihood[sv] <- NA
 
-  if(FALSE){ # for debugging
-    sv <- sapply(intv, is.logical)
-    round(apply(intv[, sv], 2, sum)/nrow(intv) * 100, 2)
-  }
+  # Double check that rows still correspond
+  stopifnot(all(intv$from == intervals$from, intv$to == intervals$to))
 
-  retained_new_columns <-
-    c("log_likelihood", "null_ll", "lag", "exclude","not_active",
-      "dynamic_mask", "sparse", "same_timestep", "bad_date")
-
-  return(cbind(intervals, intv[, retained_new_columns]) )
+  return(cbind(intervals, intv[, retained_new_columns]))
 
 }
