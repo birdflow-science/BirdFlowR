@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9022</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9054</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022-3272023">BirdflowR 0.0.0.9022 (3/27/2023)<a class="anchor" aria-label="anchor" href="#birdflowr-0009022-3272023"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9054" id="birdflowr-0009054">BirdflowR 0.0.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0009054"></a></h2>
+<p>2023-03-30</p>
+<ul><li><p>New interval_loglikelihood() calculates log likelihood for banding and tracking data given a BirdFlow model.</p></li>
+<li><p>new supporting functions:</p></li>
+<li><p><code><a href="../reference/build_transitions.html">drop_transitions()</a></code></p></li>
+<li><p><code><a href="../reference/is_location_valid.html">is_location_valid()</a></code>, <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> test whether locations and distributions are valid inputs for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code></p></li>
+<li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code></p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022">BirdflowR 0.0.0.9022<a class="anchor" aria-label="anchor" href="#birdflowr-0009022"></a></h2>
+<p>2023-03-27</p>
 <ul><li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> and related functions now throw a helpful warning if the extent is empty, and, as before, return an empty <code>sf</code> object.</p></li>
 <li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has an improved, more robust way of processing the vector data that works for specific projections. Currently it is used only for Mollweide (“moll”) and Lambert equal area (“laea”) based CRSs.</p></li>
 <li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has a new argument <code>match_extent</code> which if set to <code>TRUE</code> causes the result to be clipped to the precise extent of the input object (<code>x</code>). Use <code>TRUE</code> when plotting with ggplot2 so that the Natural Earth data doesn’t result in an expanded plot extent. The default, <code>FALSE</code> is appropriate for base R plotting so that the Natural Earth Data runs up to and beyond the edge of the plot regardless of whether the aspect ratio of <code>x</code> matches the plot window’s.</p></li>
@@ -92,7 +102,8 @@
 <li><p>Route output snapshot testing no longer depends on the print(lines) but does check novel points in the points component of the return value. This should fix an issue currently with it failing CRAN check because sf:: changed slightly how it prints a summary of an SF object to screen and also make the snapshot test a little less hair trigger.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9028" id="birdflowr-0009028-2023-03-08">BirdFlowR 0.0.0.9028 2023-03-08<a class="anchor" aria-label="anchor" href="#birdflowr-0009028-2023-03-08"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9028" id="birdflowr-0009028">BirdFlowR 0.0.0.9028<a class="anchor" aria-label="anchor" href="#birdflowr-0009028"></a></h2>
+<p>2023-03-08</p>
 <ul><li><p>New <code><a href="../articles/Preprocess.html">vignette("Preprocess")</a></code> covers preprocessing, importing, and<br>
 sparsification</p></li>
 <li><p>New <code><a href="../articles/Installation.html">vignette("Installation")</a></code> covers R, RStudio, and package installation; and installing in a Docker container.</p></li>
