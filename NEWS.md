@@ -1,4 +1,18 @@
-# BirdflowR 0.0.0.9022 (3/27/2023)
+# BirdflowR 0.0.0.9054
+2023-03-30
+
+* New interval_loglikelihood() calculates log likelihood for banding and 
+tracking data given a BirdFlow model. 
+
+* new supporting functions:
+ - `drop_transitions()` 
+ - `is_location_valid()`, `is_distr_valid()` test whether locations and 
+ distributions are valid inputs for `predict()` and `route()`
+ - `lookup_timestep()` 
+
+
+# BirdflowR 0.0.0.9022 
+2023-03-27
 
 * `get_naturalearth()` and related functions now throw a helpful warning if
 the extent is empty, and, as before, return an empty `sf` object.
@@ -96,7 +110,8 @@ it is `TRUE`.
   snapshot test a little less hair trigger.
 
 
-# BirdFlowR 0.0.0.9028  2023-03-08
+# BirdFlowR 0.0.0.9028
+2023-03-08
 
 * New `vignette("Preprocess")` covers preprocessing, importing, and  
   sparsification 
