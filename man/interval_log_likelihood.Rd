@@ -85,10 +85,10 @@ there are a lot of choices to be made and this function leaves those
 decisions to the user.
 }
 \examples{
-\dontrun{
 bf <- BirdFlowModels::rewbla
 observations <- BirdFlowModels::rewbla_observations
 intervals <- BirdFlowModels::rewbla_intervals
-ll <- interval_log_likelihood(bf, observations, intervals)
-}
+intervals <- intervals[1:20, ] # toy example
+intervals  <- interval_log_likelihood(intervals, observations, bf)
+head(intervals, 3)
 }
