@@ -139,17 +139,22 @@ preprocess_species <- function(species,
     if (res < 3)
       stop("Resolution cannot be less than 3 km")
   }
+
   # Define local variables
   st_year <- ebirdst::ebirdst_version()$version_year
   verbose <- birdflow_options("verbose")
   any_output <- hdf5 || tiff
+  max_param_per_gb <- 23224801 # Relationship between parameters and GPU_ram
 
+
+  # Create empty BirdFlow object
+  # This is a nested list of all the components but most are NA.
   export <- new_BirdFlow()
   export$trans <- NULL
   export$marginals <- NULL
-  max_param_per_gb <- 23224801
 
 
+  # Check for output directories.
   if(any_output){
     if(missing(out_dir))
       stop("Need an output directory. Please set out_dir.")
@@ -165,7 +170,8 @@ preprocess_species <- function(species,
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
   if(verbose)
-    cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n", sep ="")
+    cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n",
+        sep ="")
 
   # Reformat dates as strings
   date_to_char <- function(x){
@@ -175,7 +181,7 @@ preprocess_species <- function(species,
   }
   spmd <- lapply(spmd, date_to_char)
 
-  # Check that ebirdst species data supports BirdFlow modelling
+  # Check that ebirdst species data supports BirdFlow modeling
   if(spmd$resident)
     stop(spmd$common_name, " (", spmd$species_code, ") is a resident ",
          "(non-migratory) species and is therefore a poor candidate for ",
@@ -254,14 +260,19 @@ preprocess_species <- function(species,
   #   Note: it turned out to be really hard to anticipate how many cells would
   #     contain data after a resolution change.  The code estimates by
   #     calculating the area of the non-zero cells in the current resolution
-  #     and then figure out the cell size that would cover that much area in the
-  #     new resolution.  However, it's a poor estimate because it ignores the
+  #     and then figures out the resolution where the number of cells required
+  #     to cover that area matches our target number of parameters. However,
+  #     it's a poor estimate because it ignores the
   #     fact that coarse cells along the edges overlap fine cells that contain
   #     a mix of no data and data.  The code here makes the estimate and then
-  #     resamples to the new estimate, and resestimates until the number of
-  #     parameters is between 90 and 100 % of the target number.
-  #   Feb 10 - added gpu_ram parameter that allows estimating max_params from the
-  #     GB of ram on the machine used to fit the models
+  #     resamples to the new estimate, evaluates the new number of cells (and
+  #     thus parameters), and repeates until the estimate converges on a number
+  #     of parameters between 90 and 100 % of the target number.
+  #
+  #   Feb 10 - added gpu_ram parameter that allows estimating max_params from
+  #     the GB of ram on the machine used to fit the models. Internally, this
+  #     is just a different way of setting the max_params before doing the work
+  #     outlined above.
   #----------------------------------------------------------------------------#
   if(missing(res)){
 
@@ -353,7 +364,7 @@ preprocess_species <- function(species,
           cat(" success\n")
         break
       } else {
-        # Try again (up to 3 times)
+        # Try again (up to 10 times)
         if(verbose)
           cat("  trying again\n")
         active_sq_m <- trial_active_sq_m
@@ -513,22 +524,22 @@ preprocess_species <- function(species,
 
   # aggregate to target resolution
   if(factor != 1){
-  if(verbose)
-    cat("Resampling to target resolution (", res, " km)\n", sep = "")
-  abunds_low_res <- terra::aggregate(abunds,
-                                     fact = factor,
-                                     fun = mean,
-                                     na.rm = TRUE)
+    if(verbose)
+      cat("Resampling to target resolution (", res, " km)\n", sep = "")
+    abunds_low_res <- terra::aggregate(abunds,
+                                       fact = factor,
+                                       fun = mean,
+                                       na.rm = TRUE)
 
-  abunds_uci_low_res <- terra::aggregate(abunds_uci,
-                                         fact = factor,
-                                         fun = mean,
-                                         na.rm = TRUE)
+    abunds_uci_low_res <- terra::aggregate(abunds_uci,
+                                           fact = factor,
+                                           fun = mean,
+                                           na.rm = TRUE)
 
-  abunds_lci_low_res <- terra::aggregate(abunds_lci,
-                                         fact = factor,
-                                         fun = mean,
-                                         na.rm = TRUE)
+    abunds_lci_low_res <- terra::aggregate(abunds_lci,
+                                           fact = factor,
+                                           fun = mean,
+                                           na.rm = TRUE)
 
   } else {
 
@@ -537,7 +548,7 @@ preprocess_species <- function(species,
     abunds_lci_low_res <- abunds_lci
 
   }
-  # Renormalize
+  # Standardize to sum of 1
   # Note we are dividing all three datasets by the total abundance
   # for each timestep (the column sums of the abundance dataset).
   v <- terra::values(abunds_low_res)
@@ -561,12 +572,11 @@ preprocess_species <- function(species,
     abunds_lci_low_res <- terra::crop(abunds_lci_low_res, mask)
   }
 
-
   #----------------------------------------------------------------------------#
   #  Flatten raster data
   #----------------------------------------------------------------------------#
 
-  # Generate distribution matrix (selected cells in columns)
+  # Generate distribution matrix containing the activ cells in columns
   # and similar objects for upper and lower confidence intervals
   m <- as.logical(terra::values(mask))
   distr <- terra::values(abunds_low_res)[m, , drop = FALSE]
@@ -599,10 +609,11 @@ preprocess_species <- function(species,
   lci <- cbind(lci, lci[ ,1 ,  drop = FALSE])
   colnames(uci) <- colnames(lci) <-  colnames(distr) <-
     paste0("t", seq_len(ncol(distr)))
+
+  # Save to export object
   export$distr <- distr
   export$uci <- uci
   export$lci <- lci
-
   export$metadata$has_distr <- TRUE
 
   #----------------------------------------------------------------------------#
@@ -632,14 +643,25 @@ preprocess_species <- function(species,
   first$interval <- dates$interval[nrow(dates)] + 1
   dates <- rbind(dates, first)
 
+  # Save to export object
   export$dates <- dates
   export$metadata$n_timesteps <- length(unique(dates$date))
 
   #----------------------------------------------------------------------------#
+  #  Add dynamic_mask and distances                                         ####
+  #----------------------------------------------------------------------------#
+  export$distances <- great_circle_distances(export) |>
+    shorten_distance_matrix()
+  export$geom$dynamic_mask <- export$distr > 0
+
+  #----------------------------------------------------------------------------#
+  #  Validate                                                            ####
+  #----------------------------------------------------------------------------#
+  validate_BirdFlow(export, allow_incomplete = TRUE)
+
+  #----------------------------------------------------------------------------#
   #  Write files                                                            ####
   #----------------------------------------------------------------------------#
-
-
   if(tiff){
 
     if(verbose){
@@ -679,9 +701,11 @@ preprocess_species <- function(species,
                      createnewfile = i == 1)  # TRUE for first object
     }
   }
-  #  class(export) <- "BirdFlow"
 
-  validate_BirdFlow(export, allow_incomplete = TRUE)
+
+
+
+
 
   # invisibly return exported BirdFlow model
   invisible(export)

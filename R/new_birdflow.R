@@ -8,11 +8,13 @@ new_BirdFlow <- function(){
                              res = rep(NA_real_, 2),
                              ext = rep(NA_real_, 4),
                              crs = NA_character_,
-                             mask = NA),
+                             mask = NA,
+                             dynamic_mask = NA),
                  transitions = NA,
                  marginals = NA,
                  dates = NA,
                  distr = NA,
+                 distances = NA,
                  species = list(
                    # Dropped items from ebirdst_runs are commented out
                    species_code = NA_character_,
