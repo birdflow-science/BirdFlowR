@@ -32,6 +32,12 @@
 #' @importFrom stats predict
 predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
 
+  # To ease transition pain
+  if(!has_dynamic_mask(object))
+   object <- add_dynamic_mask(object)
+
+  dyn_mask <- object$geom$dynamic_mask
+
   multiple_distributions <- !is.null(dim(distr))
 
   if (multiple_distributions) {
@@ -49,33 +55,39 @@ predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                             gsub("^.*-", "", transitions)))
 
+  current_dm <- dyn_mask[ , start]
+
   if (multiple_distributions) {
     nd <- ncol(distr) # number of distributions
-    pred <- array(NA_real_,
+    pred <- array(0,
                 dim = c(n_active(object), nd, length(transitions) + 1))
     dimnames(pred) <- list(i = NULL,
                            distribution = 1:nd,
-                           timestep = paste0("t", timesteps)
+                           time = paste0("t", timesteps)
     )
     pred[, , 1] <- distr
     distr <- as(distr, "sparseMatrix")
+    distr <- distr[current_dm, ]
     for (i in seq_along(transitions)) {
       tm <- get_transition(object,  transitions[i])  # transition matrix
-      distr <-  tm %*%  distr          # project
-      pred[, , (i + 1)] <- as.vector(distr) # save the location
+      distr <-  tm %*%  distr
+      current_dm <- dyn_mask[, timesteps[i + 1]]
+      pred[ current_dm, , (i + 1)] <- as.vector(distr) # save the location
     }
     return(reformat_distr_labels(pred, object))
   }  else {  # Single distribution
-    pred <- matrix(NA_real_,
+    pred <- matrix(0,
                    nrow = n_active(object),
                    ncol = length(transitions) + 1)
     dimnames(pred) <- list(i = NULL, timestep = paste0("t", timesteps))
     pred[, 1] <- distr
+    distr <- distr[current_dm]
     distr <- as(distr, "sparseVector")
     for (i in seq_along(transitions)){
       tm <- get_transition(object, transitions[i]) # transition matrix
       distr <- tm %*% distr
-      pred[, i + 1] <- as.numeric(distr) # save the location
+      current_dm <- dyn_mask[, timesteps[i + 1]]
+      pred[current_dm, i + 1] <- as.numeric(distr) # save the location
     }
     return(reformat_distr_labels(pred, object))
   }

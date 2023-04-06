@@ -8,7 +8,9 @@ lookup_timestep(x, bf)
 }
 \arguments{
 \item{x}{a character object representing date as year-month-day e.g.
-"2023-03-29", date object, or a numeric timestep.}
+"2023-03-29", date object (\code{\link[base:Dates]{Date}},
+\code{\link[base:DateTimeClasses]{POSIXct}}, or \code{\link[base:DateTimeClasses]{POSIXlt}}),
+a numeric timestep, or "all" for all timesteps.}
 
 \item{bf}{a BirdFlow object}
 }

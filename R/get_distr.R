@@ -16,9 +16,9 @@
 #'   [rasterize_distr()].  [sample_distr()] will convert one cell to 1 and the rest
 #'   to 0 probabilistically based on the densities in the distribution.
 #' @param x a BirdFlow model
-#' @param which indicates which distributions to return. Can be one or more
+#' @param which indicates which timesteps to return. Can be one or more
 #'   integers indicating timesteps; character dates in the format year-month-day
-#'   e.g. `"2019-02-25"`; [`Date`][base::Dates] objects; or `"all"` which will
+#'   e.g. `"2019-02-25"`; [`Date`][base::Dates] objects;    or `"all"` which will
 #'   return distributions for all timesteps.
 #' @param from_marginals if TRUE and `x` has marginals the distribution will be
 #'   from the marginals even if `x` also has distributions.
@@ -29,36 +29,23 @@
 get_distr <- function(x, which = "all", from_marginals = FALSE){
 
   # Resolve which into integer timesteps
-  if(is.character(which)){
-    if(length(which) == 1 && which == "all"){
-      which <- x$dates$interval
-    } else {
-      which <- lubridate::as_date(which)
-    }
-  }
-  if(lubridate::is.Date(which)){
-    doy <- lubridate::yday(which)+0.5
-    centers <- x$dates$doy
-    breaks <- c(-Inf, (centers[-1] + centers[-length(centers)])/2, Inf )
-    which <- findInterval(doy, breaks)
-  }
-  if(!all(which %in% x$dates$interval) ){
-    wrong <- setdiff(which, x$dates$interval)
-    stop("which resolved to timesteps that aren't in the model:",
-         paste(wrong, collapse = ", "))
-  }
+  which <- lookup_timestep(which, x)
 
 
-  if(x$metadata$has_distr && !from_marginals){ # Return stored distribution
+
+  if(x$metadata$has_distr && !from_marginals){
+    # Return stored distribution
     d <- x$distr[, which]
     if(length(which) == 1){
       attr(d, "time") <- paste0("t", which)
     }
     return(reformat_distr_labels( d, x) )
-  } else { # Or calculate from marginals
+  } else {
+    # Or calculate from marginals
     if(!x$metadata$has_marginals){
       if(from_marginals){
-        stop("The BirdFlow model has no marginals to calculate distribution from.")
+        stop("The BirdFlow model has no marginals to ",
+             "calculate distribution from.")
       } else {
         stop("No distributions available in the BirdFlow object.")
       }

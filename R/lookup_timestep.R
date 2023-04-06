@@ -2,18 +2,25 @@
 #' lookup timestep
 #'
 #'  This function returns the timestep or timesteps associated with `x` in a
-#'  particular BirdFlow model, where `x` dates or timesteps in various formats.
+#'  particular BirdFlow model, where `x` represents dates or timesteps in
+#'  various formats.
 #'
-#'  So far all BirdFlow objects have had timesteps corresponding to weeks of
+#'  So far all BirdFlow objects have had timesteps corresponding with weeks of
 #'  the year and matching the S&T timesteps. However, it is likely that
 #'  we will add the ability to make BirdFlow objects that only model part of the
 #'  year. If we do this the timestep values will not necessarily match weeks.
+#'  For example a model that covers Week 6, to 20  would have timesteps from 1
+#'  to 15.
 #'
 #'  If `x` is numeric it is assumed to already be a timestep. This is useful
-#'  when using this function internally within [route()] and [predict()].
+#'  when using this function internally to resolve arguments to other
+#'  functions like [route()], [predict()], and [get_distr()].
 #'
 #' @param x a character object representing date as year-month-day e.g.
-#'  "2023-03-29", date object, or a numeric timestep.
+#'  "2023-03-29", date object ([`Date`][base::Dates],
+#'  [`POSIXct`][base::DateTimeClasses], or [`POSIXlt`][base::DateTimeClasses]),
+#'  a numeric timestep, a character representing a timestep e.g. "t1", or "all"
+#'  for all timesteps in the model.
 #' @param bf a BirdFlow object
 #' @return a vector of timesteps corresponding to elements in `x`
 #' @export
@@ -26,12 +33,24 @@ lookup_timestep <- function(x, bf){
   dates <- bf$dates
   original_x <- x
 
+  # Special case "all" returns all timesteps in order
+  if(length(x) == 1 && is.character(x) &&  tolower(x) == "all")
+    return(bf$dates$interval)
 
-  if(is.character(x) || inherits(x, "POSIXt") ){
+  if (inherits(x, "POSIXt")) {
     x <- lubridate::as_date(x)
   }
 
-  if(lubridate::is.Date(x)) {
+  if (is.character(x)) {
+    if(all(grepl("^t[[:digit:]]*$", ignore.case = TRUE, x = x))){
+      # timesteps e.g. "t1" "t2"
+      x <- as.numeric(gsub("t", "", x))
+    } else {
+      x <- lubridate::as_date(x)
+    }
+  }
+
+  if (lubridate::is.Date(x)) {
     doy <- lubridate::yday(x) + 0.5
     ### We should switch over to using find_interval on week_start and week_end
     ### but the current (dated) example model doesn't have those columns
@@ -42,13 +61,14 @@ lookup_timestep <- function(x, bf){
     x <- sapply(doy, function(doy) which.min(abs(dates$doy - doy)) )
   }
 
-  if(!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$interval)){
+  if (!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$interval)) {
     xtext <- ifelse(length(original_x) > 3,
                     paste0(paste(original_x[1:3], collapse = ", "),
                            ", ..."),
                     paste0(original_x, collpase = ", "))
     stop("Date lookup failed for x = ", xtext)
   }
-  if(is.integer(x)) x <- as.numeric(x)
+  if (is.integer(x))
+    x <- as.numeric(x)
   return(x)
 }

@@ -27,6 +27,12 @@
 #' @importFrom rlang .data
 route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
 
+  # To ease transition pain
+  if(!has_dynamic_mask(x)){
+    x <- add_dynamic_mask(x)
+  }
+  dyn_mask <- x$geom$dynamic_mask
+
   # Convert x and y coordinates input into row and col
   if (!missing(x_coord)) {
     if (missing(y_coord))
@@ -58,48 +64,58 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
 
   # This is a sequence of transition codes to progress through
   transitions <- lookup_transitions(x, start, end, direction)
+  timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
+                            gsub("^.*-", "", transitions)))
 
-  # Re-define start and end as timesteps based on date parsing
-  # in lookup_transitions
-  start <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[1]))
-  end <-  as.numeric(gsub("T_[[:digit:]]+-", "",
-                          transitions[length(transitions)]))
+  # Re-define start and end as timesteps (if they aren't already)
+  start <- timesteps[1]
+  end <-  timesteps[length(timesteps)]
   stopifnot(is.numeric(start), is.numeric(end),
             length(start) == 1, length(end) == 1,
             c(start, end) %in% x$dates$interval)
 
-  # Create initial state with one 1 per column
-  # each column represents a single model state
-  # There is a column for each initial position - for each value in row and col.
+  # Create initial distributions (concentrated to single locations)
   initial_distr <- Matrix::Matrix(0, nrow = n_active(x), ncol = length(row))
   indices <- rc_to_i(row, col, x)
-  # Make a 2 column matrix of (row, col) start positions
   sel <- cbind(indices,  seq_len(length(indices)))
   initial_distr[sel] <- 1
 
-  extract_positions <- function(x) {
-    apply(x, MARGIN = 2,  function(x) which(as.logical(x)))
+  # Make positions - a list of of state indices that are within the dynamic
+  # mask for each timestep
+  s <- 1:n_active(x)
+  positions <- apply(dyn_mask, 2, function(x) s[x])
+
+
+
+  extract_positions <- function(x, timestep) {
+    pos <- positions[[timestep]]  # positions associated with the d. masked
+                                  # distribution for this timestep
+    if(is.null(dim(x)))
+      return(pos[as.logical(x)])
+
+    apply(x, 2, function(vals)  pos[as.logical(vals)] )
   }
 
-  distr <- initial_distr
+  # Add dynamic mask
+  distr <- initial_distr[dyn_mask[, start], ]
+
 
   # Trajectory will hold the route information in a matrix with
-  #  dimensions: timesteps, routes
+  #  dimensions: time steps, routes
   #  values: the index of the location in the distribution matrix
   trajectory <- matrix(nrow = length(transitions) + 1, ncol = length(row))
   dimnames(trajectory) <-  list(timestep = NULL, route = NULL)
-  trajectory[1, ] <- extract_positions(distr)
+  trajectory[1, ] <- extract_positions(distr, timestep = start)
 
-  # Projection
   distr <- Matrix::Matrix(distr, sparse = TRUE)
   for (i in seq_along(transitions)) {
     tm <- get_transition(x,  transitions[i])  # transition matrix
     distr <- tm %*% distr           # project
     distr <- sample_distr(distr)  # "one hot"
-    trajectory[i + 1, ] <- extract_positions(distr) # save the location
+    trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1]) # save the location
   }
 
-  format_trajectory <- function(trajectory, bf, start, end) {
+  format_trajectory <- function(trajectory, bf, timesteps) {
     # dimensions of trajectory are timestep and route
     # values are the index i of the location at the time and route
     # Converting to a long format. With columns:
@@ -109,7 +125,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
     #  date : the date associated with the timestep
     x <- as.vector(i_to_x(trajectory, bf))
     y <- as.vector(i_to_y(trajectory, bf))
-    timestep <- rep(start:end, times = ncol(trajectory))
+    timestep <- rep(timesteps, times = ncol(trajectory))
     route <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
     date <- bf$dates$date[timestep]
     return(data.frame(x, y, route, timestep, date))
@@ -129,7 +145,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
       sf::st_as_sf()
   }
 
-  points <- format_trajectory(trajectory, x, start, end)
+  points <- format_trajectory(trajectory, x, timesteps = timesteps)
   lines <- convert_route_to_sf(points)
   sf::st_crs(lines) <- sf::st_crs(crs(x))
 

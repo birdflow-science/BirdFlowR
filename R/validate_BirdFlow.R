@@ -58,6 +58,8 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       "x extra:uci, lci",  # Ok to have these (included in preprocessing output)
       "x extra:lci, uci",  # ok in thiw order too
       "x missing:marginals" ,# ok to be missing marginals
+      "x missing:marginals, distances",
+      "x missing:distances",
       "x$metadata$sparse_stats should not be a list",  # Having them is fine
       "x$metadata$sparse should not be a list",  #
       "x$metadata missing:birdflow_version"
@@ -173,10 +175,10 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   if(!is.list(x$geom)){
     p <- add_prob("x$geom is not a list", "error", p)
   } else {
-    expected.names <- names(new_BirdFlow()$geom)
+    expected.names <- setdiff(names(new_BirdFlow()$geom), "dynamic_mask")
     if(!all(expected.names %in% names(x$geom) )) {
-      p <- add_prob(paste0("x$geom is missing",
-                           paste(setdiff(names(x$geom), expected.names),
+      p <- add_prob(paste0("x$geom is missing: ",
+                           paste(setdiff(expected.names, names(x$geom)),
                                  collapse = ", ") ), "error", p)
     } else {  # has geom list with complete set of names
       if(!is.matrix(x$geom$mask)){

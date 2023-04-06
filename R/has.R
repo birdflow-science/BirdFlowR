@@ -1,9 +1,10 @@
 
 #' @name has
-#' @title Does a BirdFlow object have all marginals, distributions or transitions
+#' @title Does a BirdFlow object have certain compoenents
 #'
-#' @description These are private functions to query the contents of a BirdFlow object and
-#' allow for more concise and clear code.
+#' @description These functions return information about the contents of a
+#' BirdFlow object.
+#'
 #'
 #' @param x a BirdFlow model
 #'
@@ -23,6 +24,12 @@ has_transitions<- function(x){
 #' @export
 has_distr <- function(x){
   x$metadata$has_distr
+}
+
+#' @rdname has
+#' @export
+has_dynamic_mask <- function(x){
+  ! is.null(x$geom$dynamic_mask) && is.matrix(x$geom$dynamic_mask)
 }
 
 
