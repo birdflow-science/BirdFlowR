@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9054</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9070</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9054" id="birdflowr-0009054">BirdflowR 0.0.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0009054"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9070" id="birdflowr-0009070">BirdFlowR 0.0.0.9070<a class="anchor" aria-label="anchor" href="#birdflowr-0009070"></a></h2>
+<p>2023-04-06</p>
+<ul><li><p>Switching development version number scheme. From now on I will increment the development version by one with every change in the main branch (merged pull request). Previously the version was the issue number.</p></li>
+<li><p>Fixed #61 (and added test). Now <code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> sets <code>exclude</code> and <code>not_active</code> columns to TRUE if either of the involved observations are entirely outside of the extent of the BirdFlow object. Previously locations outside of extent resulted in an error.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9054" id="birdflowr-0009054">BirdFlowR 0.0.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0009054"></a></h2>
 <p>2023-03-30</p>
 <ul><li><p>New interval_loglikelihood() calculates log likelihood for banding and tracking data given a BirdFlow model.</p></li>
 <li><p>new supporting functions:</p></li>
@@ -58,7 +64,7 @@
 <li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code></p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022">BirdflowR 0.0.0.9022<a class="anchor" aria-label="anchor" href="#birdflowr-0009022"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022">BirdFlowR 0.0.0.9022<a class="anchor" aria-label="anchor" href="#birdflowr-0009022"></a></h2>
 <p>2023-03-27</p>
 <ul><li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> and related functions now throw a helpful warning if the extent is empty, and, as before, return an empty <code>sf</code> object.</p></li>
 <li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has an improved, more robust way of processing the vector data that works for specific projections. Currently it is used only for Mollweide (“moll”) and Lambert equal area (“laea”) based CRSs.</p></li>
