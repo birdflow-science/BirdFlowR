@@ -1,4 +1,16 @@
-# BirdflowR 0.0.0.9054
+# BirdFlowR 0.0.0.9070
+2023-04-06
+
+* Switching development version number scheme.  From now on I will increment
+the development version by one with every change in the 
+main branch (merged pull request). Previously the version was the issue number.  
+
+* Fixed #61 (and added test). Now `interval_log_likelihood()` sets `exclude` and 
+`not_active` columns to TRUE if either of the involved observations are entirely
+outside of the extent of the BirdFlow object. Previously locations outside of
+extent resulted in an error.
+
+# BirdFlowR 0.0.0.9054
 2023-03-30
 
 * New interval_loglikelihood() calculates log likelihood for banding and 
@@ -11,7 +23,7 @@ tracking data given a BirdFlow model.
  - `lookup_timestep()` 
 
 
-# BirdflowR 0.0.0.9022 
+# BirdFlowR 0.0.0.9022 
 2023-03-27
 
 * `get_naturalearth()` and related functions now throw a helpful warning if
