@@ -15,6 +15,8 @@
 \alias{i_to_xy}
 \alias{rc_to_i}
 \alias{xy_to_i}
+\alias{latlon_to_xy}
+\alias{xy_to_latlon}
 \title{Functions to convert among spatial indices}
 \usage{
 x_to_col(x, bf)
@@ -40,22 +42,30 @@ i_to_xy(i, bf)
 rc_to_i(row, col, bf)
 
 xy_to_i(x, y, bf)
+
+latlon_to_xy(lat, lon, bf)
+
+xy_to_latlon(x, y, bf)
 }
 \arguments{
-\item{x, y}{The x and y coordinates associated with the BirdFlow model or data.
-This will typically be an easting and northing in meters. A two column
-matrix containing x and y columns can also be passed to \code{x} in which case
-\code{y} should be omitted.}
+\item{x, y}{x and y coordinates in the BirdFlow model's CRS.
+This typically represents an easting and northing in meters. For functions
+that require both \code{x} and \code{y} a two column matrix containing \code{x} and \code{y}
+columns in that order can be passed to \code{x} in which case \code{y} should be
+omitted.}
 
 \item{bf}{a BirdFlow model}
 
 \item{row, col}{The row and column index of a cell in the BirdFlow model and
-associated raster data. Alternatively, a two column matrix containing row and
-column indices in columns 1 and 2 respectively can be passed to \code{row} in
-which case \code{col} should be omitted.}
+associated raster data. Alternatively, a two column matrix containing row
+and column indices in columns 1 and 2 respectively can be passed to
+\code{row} in which case the \code{col} argument should be omitted.}
 
 \item{i}{The index along a state vector that contains the data for
 unmasked cells.}
+
+\item{lat, lon}{The latitude and longitude in WGS 1984 (EPSG:4326). A two
+column matrix or data frame can also be passed to lat.}
 }
 \value{
 \describe{
@@ -81,12 +91,33 @@ coordinates corresponding to the index, \code{i} of the vector state space.}
 \item{\code{rc_to_i(row, col, bf)} and \code{xy_to_i(x, y, bf)}}{return the state
 space index corresponding to x and y coordinates or row and column indices.}
 }
+
+\item{\code{latlon_to_xy(lat, lon, bf)}}{returns a two column matrix of the x
+and y coordinates corresponding to the supplied latitude and longitude. The
+output is in the CRS of \code{bf} (\code{crs(bf)}).}
+
+\item{\code{xy_to_latlon(x, y, bf)}}{returns a two column matrix of the
+latitude and longitude of points in WGS84 given their coordinates in the
+BirdFlow object's CRS.}
 }
 \description{
-These functions allow conversions among different indices for
-locations in BirdFlow models and output. Specifically they convert among the
-raster spatial coordinates (x and y), raster row and col indices, and the
-index \code{i} along a location vector.
+These functions convert among different ways of referencing
+locations in BirdFlow models and output. They convert among the
+spatial coordinates (x and y), raster row and col indices, and the
+index \code{i} along a location vector. \code{latlon_to_xy()} and \code{xy_to_latlon()}
+convert between WGS 1984 latitude and longitude and x and y coordinates
+in a BirdFlow object's coordinate reference system (CRS).
+}
+\details{
+In general I've made these functions mirror NA input in output; and
+functions that return rows, columns, or the index (\code{i}) will return NA
+if the input isn't within the extent; or for (\code{i}) within the active cells.
+
+For most CRSs longitude translates to the x coordinate and
+latitude to the y coordinate. The traditional order of coordinates
+lat and lon; row and col, and x and y are not consistent, but that is
+still what I've used here, i.e. lat, row, and y are generally correlated,
+and are first, first, and second in argument order.
 }
 \seealso{
 \itemize{

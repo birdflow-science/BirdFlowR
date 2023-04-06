@@ -84,13 +84,6 @@ test_that("y_to_row works on cell boundaries", {
 })
 rm( x_vals, y_vals, expected_cols, expected_rows)
 
-test_that("x_to_col and y_to_row throw errors with out of range values", {
-  expect_error(x_to_col(xmin(bf) - 0.001, bf))
-  expect_error(x_to_col(xmax(bf) + 0.001, bf))
-  expect_error(y_to_row(ymin(bf) - 0.001, bf))
-  expect_error(y_to_row(ymax(bf) + 0.001, bf))
-})
-
 test_that("row_to_y works", {
   expect_equal(row_to_y(1:nrow(bf), bf), row_center_y)
 })
@@ -139,6 +132,159 @@ test_that("xy_to_i works" , {
   expect_equal(xy_to_i(x = xy[, 1], y = xy[, 2], bf), vals)
   expect_equal(xy_to_i(x = xy, bf = bf), vals)  # matrix passing
 })
+
+
+test_that("latlon_to_xy works", {
+  bf <- BirdFlowModels::amewoo
+  i <- sample(1:n_active(bf), 10)
+  xy <- i_to_xy(i, bf) |> as.data.frame()
+  pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
+    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_coordinates() |>
+    as.data.frame()
+  names(pts) <- c("lon", "lat")
+
+  # Two arguments
+  expect_no_error(xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf))
+  expect_equal(as.matrix(xy), xy2)
+
+  # One argument with names (and columns reversed)
+  xy3 <- latlon_to_xy(pts, bf = bf)
+  expect_equal(as.matrix(xy), xy3)
+
+  # One argument no column names
+  pts <- pts[ , c("lat", "lon")]
+  pts <- as.matrix(pts)
+  names(pts) <- NULL
+  xy4 <- latlon_to_xy(pts, bf = bf)
+  expect_equal(as.matrix(xy), xy4)
+
+})
+
+
+
+test_that("latlon_to_xy and xy_to_latlon are consistant", {
+  bf <- BirdFlowModels::amewoo
+  i <- sample(1:n_active(bf), 10)
+  xy <- i_to_xy(i, bf) |> as.data.frame()
+  pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
+    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_coordinates() |>
+    as.data.frame()
+  names(pts) <- c("lon", "lat")
+
+  # Two arguments
+  expect_no_error(xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf))
+
+  # one argument
+  expect_no_error(latlon <- xy_to_latlon(x = xy2, bf = bf))
+  expect_equal(latlon, as.matrix(pts))
+
+})
+
+
+
+test_that("latlon_to_xy returns NA for out of range and NA input values", {
+  bf <- BirdFlowModels::amewoo
+  i <- sample(1:n_active(bf), 5)
+  xy <- i_to_xy(i, bf) |> as.data.frame()
+  pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
+    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_coordinates() |>
+    as.data.frame()
+  names(pts) <- c("lon", "lat")
+
+  # Test points
+  # 1. Valid
+  # 2. NA lon
+  # 3. NA lat
+  # 4. lon out of range
+  # 5. lat out of range
+  pts$lon[2] <- NA
+  pts$lat[3] <- NA
+  pts$lon[4] <- 500
+  pts$lat[5] <- 500
+
+  expect_no_error( xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf) )
+
+  expect_equal(xy2[1, ], as.matrix(xy)[1, ])
+  expect_true(all(is.na(xy2[2:5, ])))
+
+})
+
+test_that("functions with x and y as inputs return NA if input out of range or NA", {
+  bf <- BirdFlowModels::amewoo
+
+  n = 7
+  set.seed(1)
+  pts <- data.frame(x = runif(n, xmin(bf), xmax(bf)),
+                    y = runif(n, ymin(bf), ymax(bf)))
+
+  # Test points
+  # 1. valid
+  # 2. x high
+  # 3. x low
+  # 4. y high
+  # 5.  y low
+  # 6. x NA
+  # 7. y NA
+
+  pts$x[2] <- xmax(bf) + 1000
+  pts$x[3] <- xmin(bf) - 1000
+  pts$y[4] <- ymax(bf) + 1000
+  pts$y[5] <- ymin(bf) - 1000
+  pts$x[6] <- NA
+  pts$y[7] <- NA
+
+  expected_na_rows <- c(4, 5, 7)
+  expected_na_cols <- c(2, 3, 6)
+  expected_na_i <- sort(unique(c(expected_na_rows, expected_na_cols)))
+
+  expect_no_error(na_i <- which(is.na(xy_to_i(pts, bf =  bf))))
+  expect_no_error(na_cols <- which(is.na(x_to_col(pts$x, bf))))
+  expect_no_error(na_rows <- which(is.na(y_to_row(pts$y, bf))))
+
+  expect_equal(na_i, expected_na_i)
+  expect_equal(na_cols, expected_na_cols)
+  expect_equal(na_rows, expected_na_rows)
+
+})
+
+
+
+
+test_that("rc_to_i()  returns NA if input out of range or NA", {
+  bf <- BirdFlowModels::amewoo
+
+  n = 9
+  set.seed(1)
+  i <- sample(1:n_active(bf), size = n)
+  rc <- i_to_rc(i, bf) |> as.data.frame()
+
+  # Test points
+  # 1. valid
+  # 2. r 0
+  # 3. r low
+  # 4. r high
+  # 5. r NA
+  # 6. c 0
+  # 7. c low
+  # 8. c high
+  # 9. c NA
+  rc$row[2] <- 0
+  rc$row[3] <- -2
+  rc$row[4] <- nrow(bf) + 5
+  rc$row[5] <- NA
+  rc$col[6] <- 0
+  rc$col[7] <- -2
+  rc$col[8] <- ncol(bf) + 5
+  rc$col[9] <- NA
+
+  expect_equal(which(is.na(rc_to_i(rc, bf = bf))), 2:9)
+
+})
+
+
 
 
 
