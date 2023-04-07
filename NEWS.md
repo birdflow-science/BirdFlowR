@@ -1,3 +1,12 @@
+# BirdFlowR 0.0.0.9071
+2023-04-06
+
+* Added functions `latlon_to_xy()` and `xy_to_latlon()` to convert from 
+WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS.  Fixes #64.  
+
+* CHANGED behavior in a bunch of the index conversion functions, previously, 
+many threw errors with NA input or values out of range. Most of them now return NA in both of those situations.  This made sense to me in the context of #61.
+
 # BirdFlowR 0.0.0.9070
 2023-04-06
 
