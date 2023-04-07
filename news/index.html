@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9070</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9071</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,12 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9071" id="birdflowr-0009071">BirdFlowR 0.0.0.9071<a class="anchor" aria-label="anchor" href="#birdflowr-0009071"></a></h2>
+<p>2023-04-06</p>
+<ul><li><p>Added functions <code><a href="../reference/index_conversions.html">latlon_to_xy()</a></code> and <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> to convert from WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS. Fixes #64.</p></li>
+<li><p>CHANGED behavior in a bunch of the index conversion functions, previously, many threw errors with NA input or values out of range. Most of them now return NA in both of those situations. This made sense to me in the context of #61.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9070" id="birdflowr-0009070">BirdFlowR 0.0.0.9070<a class="anchor" aria-label="anchor" href="#birdflowr-0009070"></a></h2>
 <p>2023-04-06</p>
