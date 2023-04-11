@@ -43,7 +43,8 @@ test_that("preprocess_species catches error conditions", {
 
   # Error when full range isn't modeled by ebirdst
   runs <- ebirdst::ebirdst_runs
-  i <- which( !runs$resident & !runs$nonbreeding_range_modeled) [1]
+  i <- which(!as.logical(runs$resident) &
+               !as.logical(runs$nonbreeding_range_modeled))[1]
   code <- runs$species_code[i]
   species <- runs$common_name[i]
   err <- paste0(
