@@ -10,7 +10,8 @@ lookup_timestep(x, bf)
 \item{x}{a character object representing date as year-month-day e.g.
 "2023-03-29", date object (\code{\link[base:Dates]{Date}},
 \code{\link[base:DateTimeClasses]{POSIXct}}, or \code{\link[base:DateTimeClasses]{POSIXlt}}),
-a numeric timestep, or "all" for all timesteps.}
+a numeric timestep, a character representing a timestep e.g. "t1", or "all"
+for all timesteps in the model.}
 
 \item{bf}{a BirdFlow object}
 }
@@ -19,16 +20,20 @@ a vector of timesteps corresponding to elements in \code{x}
 }
 \description{
 This function returns the timestep or timesteps associated with \code{x} in a
-particular BirdFlow model, where \code{x} dates or timesteps in various formats.
+particular BirdFlow model, where \code{x} represents dates or timesteps in
+various formats.
 }
 \details{
-So far all BirdFlow objects have had timesteps corresponding to weeks of
+So far all BirdFlow objects have had timesteps corresponding with weeks of
 the year and matching the S&T timesteps. However, it is likely that
 we will add the ability to make BirdFlow objects that only model part of the
 year. If we do this the timestep values will not necessarily match weeks.
+For example a model that covers Week 6, to 20  would have timesteps from 1
+to 15.
 
 If \code{x} is numeric it is assumed to already be a timestep. This is useful
-when using this function internally within \code{\link[=route]{route()}} and \code{\link[=predict]{predict()}}.
+when using this function internally to resolve arguments to other
+functions like \code{\link[=route]{route()}}, \code{\link[=predict]{predict()}}, and \code{\link[=get_distr]{get_distr()}}.
 }
 \examples{
 bf <- BirdFlowModels::amewoo

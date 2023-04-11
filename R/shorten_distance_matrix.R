@@ -47,12 +47,14 @@
 #' `expand_distance_matrix()` returns the full matrix given that vector.
 #' @keywords internal
 #' @examples
+#' \dontrun{
 #' x <- runif(5, 1, 100)
 #' y <- runif(5, 1, 100)
 #' dm <- as.matrix(dist(cbind(x, y)))
 #' a <- shorten_distance_matrix(dm)
 #' dm2 <- expand_distance_matrix(a)
 #' all.equal(dm, dm2, check.attributes = FALSE)
+#' }
 shorten_distance_matrix <- function(dm){
   stopifnot(isTRUE(all.equal(t(dm), dm)))
   stopifnot(all(diag(dm) == 0))

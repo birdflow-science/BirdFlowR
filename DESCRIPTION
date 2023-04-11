@@ -30,6 +30,7 @@ Imports:
     rhdf5,
     rlang,
     rnaturalearth,
+    s2,
     sf,
     stringr,
     terra
