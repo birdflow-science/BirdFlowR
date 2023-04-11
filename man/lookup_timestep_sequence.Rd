@@ -21,8 +21,9 @@ be thrown if \code{direction} isn't consistent with direction implied by the
 dates.  If \code{start} and \code{end} do not represent dates then \code{direction} will
 default to "forward".}
 
-\item{buffer}{Only used if \code{start} is a season, an integer number of
-timesteps to extend the season by. Passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
+\item{buffer}{Only used if \code{start} is a season. A number of
+timesteps to extend the season by. It is passed to
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1.}
 }
 \value{
 An integer sequence of timesteps.
@@ -36,8 +37,8 @@ crossing over the year boundary.
 differently:
 \enumerate{
 \item If \code{start} and \code{end} are numeric than they are treated as timesteps and
-\code{direction} is used to route either forward or backwards between them,
-possibly passing over the year boundary.
+\code{direction} is used to route either forward (default) or backwards between
+them, possibly passing over the year boundary.
 \item If \code{start} and \code{end} are date objects or both characters they are
 treated as dates, and the direction is determined from the dates:"forward"
 if in chronological order, "backwards" otherwise.  If the \code{direction}
@@ -46,8 +47,7 @@ implicit direction from the dates, than an error will be thrown.
 \item If \code{start} is a character and \code{end} is missing than it is assumed that
 \code{start} is a key word that is either "all" for all timesteps, or a season
 name. Season names are passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} along with
-\code{buffer}. In either case ("all" or season) \code{direction} will be followed
-and will default to "forward".
+\code{buffer}. \code{direction} will be followed and will default to "forward".
 }
 }
 \examples{
@@ -61,11 +61,11 @@ lookup_timestep_sequence(bf, 50, 3, direction = "backward") # 50:3
 lookup_timestep_sequence(bf, "2023-12-1", "2024-01-20")
 lookup_timestep_sequence(bf, "2024-01-20", "2023-12-1")
 
-# All - direction default to "forward"
+# "all" - direction defaults to "forward"
 lookup_timestep_sequence(bf, "all")
 lookup_timestep_sequence(bf, "all", direction = "backward")
 
-# Season - direction defaults to "forward", buffer defualts to 1
+# Season - direction defaults to "forward", buffer defaults to 1
 lookup_timestep_sequence(bf, "prebreeding_migration")
 lookup_timestep_sequence(bf, "prebreeding_migration",
                          buffer = 0, direction = "backward")

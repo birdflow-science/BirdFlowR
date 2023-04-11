@@ -1,0 +1,50 @@
+test_that("lookup_transitions works with timesteps", {
+  bf <- BirdFlowModels::rewbla
+
+  # Forward
+  a <- lookup_transitions(bf, 1, 4)
+  expect_equal(a, c("T_01-02", "T_02-03", "T_03-04") )
+
+  # Backward
+  a <- lookup_transitions(bf, 4, 1, "backward")
+  expect_equal(a, c("T_04-03", "T_03-02", "T_02-01") )
+
+  # Across year boundary
+  a <- lookup_transitions(bf, 51, 2)
+  expect_equal(a, c("T_51-52", "T_52-01", "T_01-02"))
+  a <- lookup_transitions(bf, 2, 51, "backward")
+  expect_equal(a, c("T_02-01", "T_01-52", "T_52-51"))
+
+  # Forward dates across year boundary
+  a <- lookup_transitions(bf, "2022-12-10", "2023-01-13")
+  expect_equal(a, c("T_49-50", "T_50-51", "T_51-52", "T_52-01", "T_01-02"))
+
+  # Backward dates across year boundary
+  a <- lookup_transitions(bf,  "2023-01-13", "2022-12-10")
+  expect_equal(a, c("T_02-01", "T_01-52", "T_52-51", "T_51-50", "T_50-49"))
+  expect_equal(lookup_timestep("2023-01-13", bf), 2 )
+
+  # Season buffer = 0
+  a <- lookup_transitions(bf, "prebreeding", buffer = 0)
+  start <- lookup_timestep(species_info(bf, "prebreeding_migration_start"), bf)
+  end <- lookup_timestep(species_info(bf, "prebreeding_migration_end"), bf)
+  expect_equal(a[1], paste0("T_0", start, "-0", start + 1))
+  expect_equal(a[length(a)], paste0("T_", end - 1, "-", end))
+
+  # season with default buffer of 1
+  a <- lookup_transitions(bf, "prebreeding")
+  start <- lookup_timestep(species_info(bf, "prebreeding_migration_start"), bf)
+  end <- lookup_timestep(species_info(bf, "prebreeding_migration_end"), bf)
+  start <- start - 1  # add buffer
+  end <- end + 1
+  expect_equal(a[1], paste0("T_0", start, "-0", start + 1))
+  expect_equal(a[length(a)], paste0("T_", end - 1, "-", end))
+
+})
+
+test_that("lookup_transition() works with example from github issue #66", {
+  bf <- BirdFlowModels::rewbla
+  a <- lookup_transitions(bf, '2021-12-15', '2022-01-15', 'forward')
+  expect_equal(a, c("T_50-51", "T_51-52", "T_52-01", "T_01-02", "T_02-03"))
+})
+

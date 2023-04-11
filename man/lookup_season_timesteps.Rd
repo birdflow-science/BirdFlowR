@@ -10,7 +10,7 @@ lookup_season_timesteps(x, season, buffer = 1)
 \item{x}{a BirdFlow object}
 
 \item{season}{the season to lookup timesteps for one of the four seasons
-returned by \link{species_info(x)} or one of the alternative  names listed  in
+returned by \code{\link[=species_info]{species_info()}} or one of the alternative  names listed  in
 details.}
 
 \item{buffer}{the number of extra timesteps to add to the beginning and end

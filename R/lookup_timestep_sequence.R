@@ -8,8 +8,8 @@
 #'   differently:
 #'
 #'  1. If `start` and `end` are numeric than they are treated as timesteps and
-#'  `direction` is used to route either forward or backwards between them,
-#'  possibly passing over the year boundary.
+#'  `direction` is used to route either forward (default) or backwards between
+#'  them, possibly passing over the year boundary.
 #'
 #'  2. If `start` and `end` are date objects or both characters they are
 #'  treated as dates, and the direction is determined from the dates:"forward"
@@ -20,8 +20,7 @@
 #'  3. If `start` is a character and `end` is missing than it is assumed that
 #'  `start` is a key word that is either "all" for all timesteps, or a season
 #'  name. Season names are passed to [lookup_season_timesteps()] along with
-#'  `buffer`. In either case ("all" or season) `direction` will be followed
-#'   and will default to "forward".
+#'  `buffer`. `direction` will be followed and will default to "forward".
 #
 #' @param x A BirdFlow object
 #' @param start,end The starting and ending points in time specified as
@@ -39,6 +38,7 @@
 #'   timesteps to extend the season by. It is passed to
 #'   [lookup_season_timesteps()] and defaults to 1.
 #' @return An integer sequence of timesteps.
+#' @export
 #' @examples
 #' bf <- BirdFlowModels::rewbla
 #'
@@ -118,12 +118,9 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
              ") is in conflict with direction argument (", direction, ").")
     }
 
-    # This section should be updated to use intervals after we update
-    # BirdFlowModels::amewoo$dates to have week_start and week_end cols
-    start_doy <- lubridate::yday(start) + 0.5
-    end_doy <- lubridate::yday(end) + 0.5
-    start <- which.min(abs(dates$doy - start_doy))
-    end <-  which.min(abs(dates$doy - end_doy))
+    # Convert to timesteps
+    start <- lookup_timestep(start, x)
+    end <-  lookup_timestep(end, x)
   }
 
   stopifnot(is.numeric(start),
@@ -131,7 +128,7 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
             length(start) == 1,
             length(end) == 1 )
 
-  # Direction still might not be set if there's timestep input
+  # Direction still might not be set if there is timestep input
   if(missing(direction))
     direction <- "forward"
   stopifnot(direction %in% c("forward", "backward"))
@@ -189,7 +186,7 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
 #'
 #' @param x a BirdFlow object
 #' @param season the season to lookup timesteps for one of the four seasons
-#' returned by [species_info(x)] or one of the alternative  names listed  in
+#' returned by [species_info()] or one of the alternative  names listed  in
 #' details.
 #' @param buffer the number of extra timesteps to add to the beginning and end
 #' of the season.
@@ -248,7 +245,7 @@ lookup_season_timesteps <- function (x, season, buffer = 1) {
       stop("Cannot resolve timesteps for ", season,
            " for non-circular BirdFlow model.")
     start <- max(1, start - buffer)
-    end <- min(end, n_timesteps(x))
+    end <- min(end + buffer, n_timesteps(x))
   }
 
   if(start < end){

@@ -1,3 +1,34 @@
+# BirdflowR 0.0.0.9073
+2023-04-11
+
+* New functions: 
+  - `lookup_timestep_sequence()`  workhorse function for processing date
+    range input to other functions. Can work with  forward and backwards with
+    timesteps, dates, or season names. 
+
+  - `lookup_season_timesteps()` narrowly focused helper, returns forward timesteps
+    associated with a season possibly with a buffer (in timesteps) beyond the 
+    edge of the season.
+  
+* Updated functions to use [lookup_timestep_sequence()]
+  - [lookup_transitions()]
+  - [route()]
+  - [route_migration()] 
+
+* Addresses issues: 
+  - Fixes bug in #66 where date lookup forward across the year boundary failed.
+  - Addresses #68 by providing a function to lookup timestep series based on 
+    season names (and adds a buffer ability).
+  - Addresses much of #56 
+    
+* Pending time cleanup - mostly from #56
+  - update the example amewoo model and use find_interval() to look up dates.
+  - use [lookup_timestep_sequence()] in [predict()] add ... so that "buffer" 
+    is accessible. 
+  - consider replacing some of the ... in [route()] and [predict()] with 
+    parameters and think through trade offs.
+ 
+
 # BirdflowR 0.0.0.9072
 2023-04-11
 

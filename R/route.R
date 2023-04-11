@@ -12,11 +12,7 @@
 #' @param row,col One or more row and column indices to begin routing from.
 #' These are an alternative to `x_coord` and `y_coord` and both sets of
 #' parameters should not be used at the same time.
-#' @param start,end These define the time period to route over. They can be
-#' [Date][base::date] objects, integer timesteps, or a string with
-#' "year-month-day" e.g. "2022-11-28".
-#' @param direction either "forward" or "backwards", only used if `start` and
-#' `end` represent timesteps.
+#' @inheritDotParams lookup_timestep_sequence -x
 #' @return This will likely change. Currently returns a list with:
 #' \item{points}{A data.frame with coordinates, date, and route id}
 #' \item{lines}{a [sf][sf::sf] object containing one line per route.}
@@ -25,7 +21,7 @@
 #' @importMethodsFrom Matrix t
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom rlang .data
-route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
+route <- function(x, x_coord, y_coord, n, row, col, ...) {
 
   # Convert x and y coordinates input into row and col
   if (!missing(x_coord)) {
@@ -57,7 +53,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction) {
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(x, start, end, direction)
+  transitions <- lookup_transitions(x, ...)
 
   # Re-define start and end as timesteps based on date parsing
   # in lookup_transitions

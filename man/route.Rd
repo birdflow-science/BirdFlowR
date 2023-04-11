@@ -4,7 +4,7 @@
 \alias{route}
 \title{Generate BirdFlow routes}
 \usage{
-route(x, x_coord, y_coord, n, row, col, start, end, direction)
+route(x, x_coord, y_coord, n, row, col, ...)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -20,12 +20,23 @@ starting position.}
 These are an alternative to \code{x_coord} and \code{y_coord} and both sets of
 parameters should not be used at the same time.}
 
-\item{start, end}{These define the time period to route over. They can be
-\link[base:date]{Date} objects, integer timesteps, or a string with
-"year-month-day" e.g. "2022-11-28".}
-
-\item{direction}{either "forward" or "backwards", only used if \code{start} and
-\code{end} represent timesteps.}
+\item{...}{
+  Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
+  \describe{
+    \item{\code{start,end}}{The starting and ending points in time specified as
+\code{timesteps}, dates as characters or date objects, or if  \code{end} is omitted
+start may be set to "all" or a season name to be interpreted by
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
+    \item{\code{direction}}{Either "forward" or "backward".  Determines direction if
+\code{start} and \code{end} are timesteps (numeric), or \code{start} is "all" or a season.
+If \code{start} and \code{end} represent dates and \code{direction} is used an error will
+be thrown if \code{direction} isn't consistent with direction implied by the
+dates.  If \code{start} and \code{end} do not represent dates then \code{direction} will
+default to "forward".}
+    \item{\code{buffer}}{Only used if \code{start} is a season. A number of
+timesteps to extend the season by. It is passed to
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1.}
+  }}
 }
 \value{
 This will likely change. Currently returns a list with:
