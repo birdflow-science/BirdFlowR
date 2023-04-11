@@ -1,3 +1,11 @@
+# BirdflowR 0.0.0.9072
+2023-04-11
+
+* Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of
+ `ebirdst_runs` to character. `preprocess_species()` now defensively forces the 
+  columns that should be (and were) logical to logical, and numeric to numeric. 
+
+
 # BirdFlowR 0.0.0.9071
 2023-04-06
 
