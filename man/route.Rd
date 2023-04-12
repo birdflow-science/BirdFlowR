@@ -4,7 +4,7 @@
 \alias{route}
 \title{Generate BirdFlow routes}
 \usage{
-route(x, x_coord, y_coord, n, row, col, ...)
+route(x, x_coord, y_coord, n, row, col, start, end, direction, season_buffer)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -20,23 +20,25 @@ starting position.}
 These are an alternative to \code{x_coord} and \code{y_coord} and both sets of
 parameters should not be used at the same time.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
-  \describe{
-    \item{\code{start,end}}{The starting and ending points in time specified as
-\code{timesteps}, dates as characters or date objects, or if  \code{end} is omitted
+\item{start, end}{The starting and ending points in time specified as
+timesteps, character dates, date objects, or if  \code{end} is omitted
 start may be set to "all" or a season name to be interpreted by
 \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
-    \item{\code{direction}}{Either "forward" or "backward".  Determines direction if
-\code{start} and \code{end} are timesteps (numeric), or \code{start} is "all" or a season.
-If \code{start} and \code{end} represent dates and \code{direction} is used an error will
-be thrown if \code{direction} isn't consistent with direction implied by the
-dates.  If \code{start} and \code{end} do not represent dates then \code{direction} will
-default to "forward".}
-    \item{\code{buffer}}{Only used if \code{start} is a season. A number of
-timesteps to extend the season by. It is passed to
-\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1.}
-  }}
+
+\item{direction}{Either "forward" or "backward".
+
+If \code{start} and \code{end}
+represent dates and \code{direction} is used an error will
+be thrown if \code{direction} isn't consistent with direction indicated by the
+dates.
+
+If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
+\code{start} and \code{end} should either both be timesteps (numeric); or
+\code{end} should be omitted and start should be "all" or a season name.}
+
+\item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
+passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
+of timesteps to extend the season by at each end.}
 }
 \value{
 This will likely change. Currently returns a list with:

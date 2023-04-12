@@ -167,20 +167,20 @@ test_that("lookup_timestep_sequence() works with season input", {
   bf <- BirdFlowModels::rewbla
 
   # Four seasons buffer = 0  cover entire year with no overlap
-  spring  <- lookup_timestep_sequence(bf, "spring", buffer = 0)
-  summer <-  lookup_timestep_sequence(bf, "summer", buffer = 0)
-  fall <-    lookup_timestep_sequence(bf, "fall", buffer = 0)
-  winter <-  lookup_timestep_sequence(bf, "winter", buffer = 0)
+  spring  <- lookup_timestep_sequence(bf, "spring", season_buffer = 0)
+  summer <-  lookup_timestep_sequence(bf, "summer", season_buffer = 0)
+  fall <-    lookup_timestep_sequence(bf, "fall", season_buffer = 0)
+  winter <-  lookup_timestep_sequence(bf, "winter", season_buffer = 0)
   all <- c(spring, summer, fall, winter)
   expect_false(any(duplicated(all)))
   expect_true(setequal(all, 1:n_timesteps(bf)))
 
   # Four seasons, buffer = 1, cover the entire year.  overlap will be 2 at each
   # transition, 8 total duplicated values
-  spring  <- lookup_timestep_sequence(bf, "spring", buffer = 1)
-  summer <-  lookup_timestep_sequence(bf, "summer", buffer = 1)
-  fall <-    lookup_timestep_sequence(bf, "fall", buffer = 1)
-  winter <-  lookup_timestep_sequence(bf, "winter", buffer = 1)
+  spring  <- lookup_timestep_sequence(bf, "spring", season_buffer = 1)
+  summer <-  lookup_timestep_sequence(bf, "summer", season_buffer = 1)
+  fall <-    lookup_timestep_sequence(bf, "fall", season_buffer = 1)
+  winter <-  lookup_timestep_sequence(bf, "winter", season_buffer = 1)
   all <- c(spring, summer, fall, winter)
   expect_equal(sum(duplicated(all)), 8)
   expect_true(setequal(all, 1:n_timesteps(bf)))
@@ -194,10 +194,10 @@ test_that("lookup_timestep_sequence() works with season input", {
   winter <- c(start:n_timesteps(bf), 1:end)
 
   # Forward
-  expect_equal(lookup_timestep_sequence(bf, "winter", buffer = buffer), winter)
+  expect_equal(lookup_timestep_sequence(bf, "winter", season_buffer = buffer), winter)
 
   # Backward
-  s <-lookup_timestep_sequence(bf, "winter", buffer = buffer,
+  s <-lookup_timestep_sequence(bf, "winter", season_buffer = buffer,
                                direction = "backward")
   expect_equal(s, rev(winter))
 

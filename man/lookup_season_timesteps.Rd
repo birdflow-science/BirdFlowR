@@ -4,17 +4,17 @@
 \alias{lookup_season_timesteps}
 \title{Lookup breeding, non-breeding, or migration season timesteps}
 \usage{
-lookup_season_timesteps(x, season, buffer = 1)
+lookup_season_timesteps(x, season, season_buffer = 1)
 }
 \arguments{
 \item{x}{a BirdFlow object}
 
 \item{season}{the season to lookup timesteps for one of the four seasons
-returned by \code{\link[=species_info]{species_info()}} or one of the alternative  names listed  in
-details.}
+returned by \code{\link[=species_info]{species_info()}}; one of the alternative  names listed  in
+details; or \code{"all"} for all timesteps in the model.}
 
-\item{buffer}{the number of extra timesteps to add to the beginning and end
-of the season.}
+\item{season_buffer}{the number of extra timesteps to add to the beginning
+and end of the season.}
 }
 \value{
 a series of integers indicating which timesteps correspond with the
@@ -25,8 +25,8 @@ Retrieve the timesteps associated with a season for the species modeled by
 a BirdFlow object, possibly with a buffer (in timesteps) added on.
 }
 \details{
-\code{season} should be one of the the four seasons or their alternate names
-listed below.\tabular{ll}{
+\code{season} should be \code{'all'} one of the the four seasons or their
+alternate names listed below.\tabular{ll}{
    season \tab alternate names \cr
    \code{prebreeding_migration} \tab \code{pre}, \code{prebreeding}, \code{spring} \cr
    \code{breeding} \tab \code{breed}, \code{summer} \cr
@@ -36,6 +36,6 @@ listed below.\tabular{ll}{
 }
 \examples{
 bf <- BirdFlowModels::rewbla
-lookup_season_timesteps(bf, "breeding", buffer = 0)
+lookup_season_timesteps(bf, "breeding", season_buffer = 0)
 
 }

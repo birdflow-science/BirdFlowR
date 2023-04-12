@@ -4,7 +4,7 @@
 \alias{route_migration}
 \title{generate migration routes from a BirdFlow model}
 \usage{
-route_migration(bf, n, migration = "prebreeding", buffer = 1)
+route_migration(bf, n, migration = "prebreeding", season_buffer = 1)
 }
 \arguments{
 \item{bf}{\code{BirdFlow} model}
@@ -15,7 +15,7 @@ route_migration(bf, n, migration = "prebreeding", buffer = 1)
 migration; or "postbreeding", "post", or "fall" for the postbreeding
 migration.}
 
-\item{buffer}{a buffer in timesteps (likely weeks) to add to the beginning
+\item{season_buffer}{a buffer in timesteps (likely weeks) to add to the beginning
 and end of the season. The default of 1 means we start a week before the
 metadata suggests the season starts and continue one week past the end.}
 }

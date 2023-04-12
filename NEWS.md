@@ -14,6 +14,7 @@
   - [lookup_transitions()]
   - [route()]
   - [route_migration()] 
+  - [predict()]
 
 * Addresses issues: 
   - Fixes bug in #66 where date lookup forward across the year boundary failed.
@@ -23,10 +24,7 @@
     
 * Pending time cleanup - mostly from #56
   - update the example amewoo model and use find_interval() to look up dates.
-  - use [lookup_timestep_sequence()] in [predict()] add ... so that "buffer" 
-    is accessible. 
-  - consider replacing some of the ... in [route()] and [predict()] with 
-    parameters and think through trade offs.
+  
  
 
 # BirdflowR 0.0.0.9072

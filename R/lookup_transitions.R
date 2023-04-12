@@ -11,15 +11,15 @@
 #' @details Transitions are named "T_\[from\]-\[to\]" where \[from\] and \[to\]
 #'   are timesteps padded with zeros. Direction is important; "T_03-04"
 #'   represents a transition backward in time.
-#' @inheritDotParams lookup_timestep_sequence
+#' @inheritParams lookup_timestep_sequence
 #'
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
 #' @keywords internal
-lookup_transitions <- function(x, ...){
+lookup_transitions <- function(x, start, end, direction, season_buffer){
 
   stopifnot(inherits(x, "BirdFlow"))
-  steps <- lookup_timestep_sequence(x = x, ...)
+  steps <- lookup_timestep_sequence(x = x, start, end, direction, season_buffer)
 
   nc <- nchar(n_timesteps(x))
   pad <- function(x) stringr::str_pad(x, width = nc, pad = "0")

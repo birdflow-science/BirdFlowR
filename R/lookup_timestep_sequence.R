@@ -20,23 +20,27 @@
 #'  3. If `start` is a character and `end` is missing than it is assumed that
 #'  `start` is a key word that is either "all" for all timesteps, or a season
 #'  name. Season names are passed to [lookup_season_timesteps()] along with
-#'  `buffer`. `direction` will be followed and will default to "forward".
+#'  `season_buffer`. `direction` will be followed and will default to "forward".
 #
 #' @param x A BirdFlow object
 #' @param start,end The starting and ending points in time specified as
-#' `timesteps`, dates as characters or date objects, or if  `end` is omitted
+#' timesteps, character dates, date objects, or if  `end` is omitted
 #'  start may be set to "all" or a season name to be interpreted by
 #'  [lookup_season_timesteps()].
-#' @param direction Either "forward" or "backward".  Determines direction if
-#'   `start` and `end` are timesteps (numeric), or `start` is "all" or a season.
-#'   If `start` and `end` represent dates and `direction` is used an error will
-#'   be thrown if `direction` isn't consistent with direction implied by the
-#'   dates.  If `start` and `end` do not represent dates then `direction` will
-#'   default to "forward".
+#' @param direction Either "forward" or "backward".
 #'
-#' @param buffer Only used if `start` is a season. A number of
-#'   timesteps to extend the season by. It is passed to
-#'   [lookup_season_timesteps()] and defaults to 1.
+#'   If `start` and `end`
+#'   represent dates and `direction` is used an error will
+#'   be thrown if `direction` isn't consistent with direction indicated by the
+#'   dates.
+#'
+#'   If `start` and `end` are not dates, `direction` defaults to "forward" and
+#'   `start` and `end` should either both be timesteps (numeric); or
+#'   `end` should be omitted and start should be "all" or a season name.
+#'
+#' @param season_buffer Only used if `start` is a season. `season_buffer` is
+#'   passed to [lookup_season_timesteps()] and defaults to 1; it is the number
+#'   of timesteps to extend the season by at each end.
 #' @return An integer sequence of timesteps.
 #' @export
 #' @examples
@@ -54,12 +58,12 @@
 #' lookup_timestep_sequence(bf, "all")
 #' lookup_timestep_sequence(bf, "all", direction = "backward")
 #'
-#' # Season - direction defaults to "forward", buffer defaults to 1
+#' # Season - direction defaults to "forward", season_buffer defaults to 1
 #' lookup_timestep_sequence(bf, "prebreeding_migration")
-#' lookup_timestep_sequence(bf, "prebreeding_migration",
-#'                          buffer = 0, direction = "backward")
+#' lookup_timestep_sequence(bf, "prebreeding_migration", season_buffer = 0,
+#'                          direction = "backward")
 #'
-lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
+lookup_timestep_sequence <- function (x, start, end, direction, season_buffer) {
 
   stopifnot(inherits(x, "BirdFlow"))
   dates <- x$dates
@@ -72,38 +76,31 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
     stopifnot(length(start) == 1)
     if(missing(direction))
       direction <- "forward"
-    if(missing(buffer))
-      buffer <- 1
+    if(missing(season_buffer))
+      season_buffer <- 1
 
-    if(tolower(start) == "all"){
-      s <- seq_len(n_timesteps(x))
-    }  else {
-      s <- lookup_season_timesteps(x, start, buffer)
-    }
+    s <- lookup_season_timesteps(x, start, season_buffer)
+
     if(direction == "backward")
       s <-  rev(s)
     return(s)
   }
 
-  if(!missing(buffer))
-    stop("buffer argument is only used if start is a season name",
+  if(!missing(season_buffer))
+    warning("season_buffer is only used if start is a season name",
          "and end is missing.")
 
   if(is.integer(start))
     start <- as.numeric(start)
   if(is.integer(end))
     end <- as.numeric(end)
-  if(!all(class(start) == class(end)))
-    stop("start and end must both be specified in the same manner.")
 
-  # Standard character dates (all special cases handled above)
-  if(is.character(start)){
-    start <- lubridate::as_date(start)
-    end <- lubridate::as_date(end)
-  }
+  if((is.numeric(start) && !is.numeric(end)) ||
+     (is.numeric(end) && !is.numeric(start)))
+    stop("start and end must both be timesteps or both be dates.")
 
-  # Posix dates
-  if(inherits(start, "POSIXct") || inherits(start, "POSIXlt")){
+
+  if(!is.numeric(start)){
     start <- lubridate::as_date(start)
     end <- lubridate::as_date(end)
   }
@@ -150,7 +147,7 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
   # circular is a flag that indicates whether the model is circular
   circular <- n_timesteps(x) == n_transitions(x)
   if(loops && !circular)
-    stop("Input indicates a cross over the year boundary but the model",
+    stop("Input indicates crossing the year boundary but the model",
          " does not support that.")
 
   step <- ifelse(is_backward, -1, 1)
@@ -174,8 +171,8 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
 #' Retrieve the timesteps associated with a season for the species modeled by
 #' a BirdFlow object, possibly with a buffer (in timesteps) added on.
 #'
-#'  `season` should be one of the the four seasons or their alternate names
-#'  listed below.
+#'  `season` should be `'all'` one of the the four seasons or their
+#'  alternate names listed below.
 #'
 #'  | season | alternate names |
 #'  |--------|----------------|
@@ -186,19 +183,19 @@ lookup_timestep_sequence <- function (x, start, end, direction, buffer) {
 #'
 #' @param x a BirdFlow object
 #' @param season the season to lookup timesteps for one of the four seasons
-#' returned by [species_info()] or one of the alternative  names listed  in
-#' details.
-#' @param buffer the number of extra timesteps to add to the beginning and end
-#' of the season.
+#' returned by [species_info()]; one of the alternative  names listed  in
+#' details; or `"all"` for all timesteps in the model.
+#' @param season_buffer the number of extra timesteps to add to the beginning
+#' and end of the season.
 #' @return a series of integers indicating which timesteps correspond with the
 #' (possibly buffered) season.
 #'
 #' @export
 #' @examples
 #' bf <- BirdFlowModels::rewbla
-#' lookup_season_timesteps(bf, "breeding", buffer = 0)
+#' lookup_season_timesteps(bf, "breeding", season_buffer = 0)
 #'
-lookup_season_timesteps <- function (x, season, buffer = 1) {
+lookup_season_timesteps <- function (x, season, season_buffer = 1) {
   stopifnot("x must be a BirdFlow object" = inherits(x, "BirdFlow"))
   season <- tolower(season)
   season = switch(season,
@@ -214,6 +211,13 @@ lookup_season_timesteps <- function (x, season, buffer = 1) {
                   "non" = "nonbreeding",
                   season)
 
+
+  if(tolower(season) == "all"){
+    return(seq_len(n_timesteps(x)))
+  }
+
+
+
   stopifnot(season %in% c("prebreeding_migration",
                           "postbreeding_migration",
                           "breeding",
@@ -228,15 +232,15 @@ lookup_season_timesteps <- function (x, season, buffer = 1) {
 
     # Buffered season should at most add up to n_timesteps
     n <- ifelse(end > start, end - start + 1, n_timesteps(x) - start + 1 + end)
-    if((n + 2 * buffer) > n_timesteps(x))
-      stop("buffer is too large.")
+    if((n + 2 * season_buffer) > n_timesteps(x))
+      stop("season_buffer is too large.")
 
-    # Add buffer to start and end
-    start <-  start - buffer
+    # Add season buffer to start and end
+    start <-  start - season_buffer
     if(start <= 0){
       start = n_timesteps(x) - start
     }
-    end <- end + buffer
+    end <- end + season_buffer
     if(end > n_timesteps(x)){
       end <- end - n_timesteps(x)
     }
@@ -244,8 +248,8 @@ lookup_season_timesteps <- function (x, season, buffer = 1) {
     if(end < start)
       stop("Cannot resolve timesteps for ", season,
            " for non-circular BirdFlow model.")
-    start <- max(1, start - buffer)
-    end <- min(end + buffer, n_timesteps(x))
+    start <- max(1, start - season_buffer)
+    end <- min(end + season_buffer, n_timesteps(x))
   }
 
   if(start < end){

@@ -16,7 +16,7 @@
 #' @param migration "prebreeding", "pre", or "spring" for the prebreeding
 #'   migration; or "postbreeding", "post", or "fall" for the postbreeding
 #'   migration.
-#' @param buffer a buffer in timesteps (likely weeks) to add to the beginning
+#' @param season_buffer a buffer in timesteps (likely weeks) to add to the beginning
 #'   and end of the season. The default of 1 means we start a week before the
 #'   metadata suggests the season starts and continue one week past the end.
 #' @return This will likely change. Currently returns a list with:
@@ -34,9 +34,9 @@
 #'   plot(rts$lines)
 #'   head(rts$points)
 #'
-route_migration <- function(bf, n, migration = "prebreeding", buffer = 1){
+route_migration <- function(bf, n, migration = "prebreeding", season_buffer = 1){
 
-  timesteps <- lookup_season_timesteps(bf, migration, buffer)
+  timesteps <- lookup_season_timesteps(bf, migration, season_buffer)
   start <- timesteps[1]
   end <- timesteps[length(timesteps)]
 
