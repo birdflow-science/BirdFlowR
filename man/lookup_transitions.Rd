@@ -4,23 +4,30 @@
 \alias{lookup_transitions}
 \title{Lookup a series of transitions connecting two dates or timesteps}
 \usage{
-lookup_transitions(x, start, end, direction)
+lookup_transitions(x, start, end, direction, season_buffer)
 }
 \arguments{
 \item{x}{A BirdFlow object}
 
-\item{start, end}{The starting and ending points in time. In one of the
-following formats: character, a date in the form year-month-day e.g.
-"2022-11-25" for Nov. 25, 2022); numeric, a timestep; or  Date, a
-\code{\link[base:Dates]{Date}} object.}
+\item{start, end}{The starting and ending points in time specified as
+timesteps, character dates, date objects, or if  \code{end} is omitted
+start may be set to "all" or a season name to be interpreted by
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
 
-\item{direction}{Either "forward" or "backward". Only used if \code{start} and
-\code{end} are timesteps (numeric). Otherwise the direction will be determined
-by the dates - forward if \code{start} and \code{end} are in chronological order, and
-backward if the \code{end} date is before the \code{start} date. If \code{start} and \code{end}
-are timesteps and \code{direction} is omitted than the direction will default to
-"forward" regardless of which timestep is larger - possibly passing over
-the year boundary from the last timestep to the first.}
+\item{direction}{Either "forward" or "backward".
+
+If \code{start} and \code{end}
+represent dates and \code{direction} is used an error will
+be thrown if \code{direction} isn't consistent with direction indicated by the
+dates.
+
+If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
+\code{start} and \code{end} should either both be timesteps (numeric); or
+\code{end} should be omitted and start should be "all" or a season name.}
+
+\item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
+passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
+of timesteps to extend the season by at each end.}
 }
 \value{
 A character vector with the named transitions required to get between
@@ -39,3 +46,4 @@ Transitions are named "T_[from]-[to]" where [from] and [to]
 are timesteps padded with zeros. Direction is important; "T_03-04"
 represents a transition backward in time.
 }
+\keyword{internal}

@@ -1,3 +1,44 @@
+# BirdflowR 0.0.0.9073
+2023-04-11
+
+* New Behavior:  
+  - `lookup_timestep()` and timestep lookup throughout the package is now 
+  consistent with `ebirdst::date_to_st_week()` this wasn't previously true. Some
+  dates near the edges of the week breaks will end up classified into a 
+  different timestep than previously.
+
+  - `preprocess_species()` now saves the breakpoints from 
+  `ebirdst::ebirdst_weeks` as `start` and `end` instead of `week_start` and 
+  `week_end`.
+
+* New functions: 
+  - `lookup_timestep_sequence()`  workhorse function for processing date
+    range input to other functions. Generate forward or backward sequences from
+    timesteps, dates, or season name input, possibly with a season buffer.
+
+  - `lookup_season_timesteps()` narrowly focused helper, returns forward 
+    timestep sequences associated with a season possibly with a buffer 
+    (in timesteps) beyond the edge of the season.
+  
+* Updated functions to use `lookup_timestep_sequence()`
+  - `lookup_transitions()`
+  - `route()`
+  - `route_migration()` 
+  - `predict()`
+* Updated functions to use `lookup_timestep()`
+  - `get_distr()`
+
+* Addresses issues: 
+  - Fixes bug in #66 where date lookup forward across the year boundary failed.
+  - Addresses #68 by providing a function to lookup timestep series based on 
+    season names (and adds a buffer ability).
+  - Closes #56 time now is processed mostly by `lookup_timestep()` for points in
+    time, and `lookup_timestep_sequence()` for date ranges. Point lookup now
+    uses `findInterval` on breaks derived from `ebirdst::ebirdst_weeks` rather
+    than from `which.min()` on a difference from center of the nominal day for 
+    each week. This should also make time lookup compatible with partial year
+    BirdFlow models.
+
 # BirdflowR 0.0.0.9072
 2023-04-11
 

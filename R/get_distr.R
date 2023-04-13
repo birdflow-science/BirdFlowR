@@ -26,39 +26,34 @@
 #'   with a column for each distribution.
 #' @export
 #'
-get_distr <- function(x, which = "all", from_marginals = FALSE){
+get_distr <- function(x, which = "all", from_marginals = FALSE) {
 
   # Resolve which into integer timesteps
-  if(is.character(which)){
-    if(length(which) == 1 && which == "all"){
-      which <- x$dates$interval
-    } else {
-      which <- lubridate::as_date(which)
-    }
+
+  if (is.character(which) && which == "all") {
+    which <- x$dates$interval
+  } else {
+   which <- lookup_timestep(which, x)
   }
-  if(lubridate::is.Date(which)){
-    doy <- lubridate::yday(which)+0.5
-    centers <- x$dates$doy
-    breaks <- c(-Inf, (centers[-1] + centers[-length(centers)])/2, Inf )
-    which <- findInterval(doy, breaks)
-  }
-  if(!all(which %in% x$dates$interval) ){
+
+  if (!all(which %in% x$dates$interval)) {
     wrong <- setdiff(which, x$dates$interval)
     stop("which resolved to timesteps that aren't in the model:",
          paste(wrong, collapse = ", "))
   }
 
-
-  if(x$metadata$has_distr && !from_marginals){ # Return stored distribution
+  if (x$metadata$has_distr && !from_marginals) { # Return stored distribution
     d <- x$distr[, which]
     if(length(which) == 1){
       attr(d, "time") <- paste0("t", which)
     }
     return(reformat_distr_labels( d, x) )
+
   } else { # Or calculate from marginals
-    if(!x$metadata$has_marginals){
+    if(!x$metadata$has_marginals) {
       if(from_marginals){
-        stop("The BirdFlow model has no marginals to calculate distribution from.")
+        stop("The BirdFlow model has no marginals to calculate",
+             "distribution from.")
       } else {
         stop("No distributions available in the BirdFlow object.")
       }
