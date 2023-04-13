@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9073</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9074</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9074" id="birdflowr-0009074">BirdflowR 0.0.0.9074<a class="anchor" aria-label="anchor" href="#birdflowr-0009074"></a></h2>
+<p>2023-04-13</p>
+<ul><li>Changed behavior
+<ul><li>
+<code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> and related functions now by default crop off the buffer after transforming the Natural Earth data so that the returned object extent matches the extent of <code>x</code>. Whether this cropping occurs is now controlled by <code>keep_buffer</code> which defaults to FALSE. Previously it was<br>
+controlled by <code>match_extent</code>.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9073" id="birdflowr-0009073">BirdflowR 0.0.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0009073"></a></h2>
 <p>2023-04-11</p>
-<ul><li>New Behavior:
+<ul><li>Changed behavior:
 <ul><li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> and timestep lookup throughout the package is now consistent with <code><a href="https://rdrr.io/pkg/ebirdst/man/date_to_st_week.html" class="external-link">ebirdst::date_to_st_week()</a></code> this wasn’t previously true. Some dates near the edges of the week breaks will end up classified into a different timestep than previously.</p></li>
 <li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now saves the breakpoints from <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_weeks.html" class="external-link">ebirdst::ebirdst_weeks</a></code> as <code>start</code> and <code>end</code> instead of <code>week_start</code> and <code>week_end</code>.</p></li>
 </ul></li>
