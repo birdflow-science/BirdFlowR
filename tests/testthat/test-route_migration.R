@@ -17,7 +17,8 @@ test_that("route_migration() works with n = 1", {
 test_that("route_migration() works with n > 1", {
   set.seed(1)
   # expect no error:
-  expect_error( rts <- route_migration(BirdFlowModels::amewoo, migration = "fall",  n = 3), NA )
+  expect_no_error(
+    rts <- route_migration(BirdFlowModels::amewoo, migration = "fall",  n = 3))
 
   novel_points <- rts$points[!duplicated(rts$points[, c("x", "y", "route")]), ]
   # Expect consistent output

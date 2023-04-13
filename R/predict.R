@@ -1,36 +1,30 @@
 #' Predict bird distributions
 #'
-#' predict() projects bird distributions into the future or past
-#'
-#' given an initial distribution, a start time and end time generate
-#' probability distributions for each timestep between the start and end.
-#'
-#' @details If using dates the order of the dates are used to determine if the
-#' projection is forward or backward in time and then the dates are resolved to
-#' timesteps. Projections will therefore be at most one year in length and dates
-#' further than a year apart may yield nonsensical results.
-#'
-#'  It is possible to supply multiple starting distributions as a matrix with
-#'  a row for each location and a column for each distribution. In this case
-#'  the result will be an array with dimensions: location, distribution,
-#'  and timestep.
+#' `predict()` projects bird distributions into the future or past. Given an
+#'  initial distribution, and a start and end timestep or date, `predict()`
+#'  generates probability distributions for each timestep between the start
+#'  and end.
 #'
 #' @param object A BirdFlow model object
 #' @param distr  a starting distribution
-#' @param start,end These define the time period to predict over. They can be
-#' [Date][base::date] objects, integer timesteps, or a string with
-#' "year-month-day" e.g. "2022-11-28".
-#' @param direction either "forward" or "backward", only used if `start` and
-#' `end` represent timesteps.
+#' @inheritParams lookup_timestep_sequence
 #' @param ... required for consistency with generic method, but is not used.
-#' @return a matrix with rows for each location and columns for each timestep
+#' @return If multiple starting distributions are input in a matrix the result
+#'  will be an array with dimensions: location, distribution, and time. With one
+#'  input distribution the result will be a matrix with dimensions: location
+#'  and time.
 #' @export
 #' @importFrom Matrix Matrix
 #' @importFrom methods as is
 #' @importMethodsFrom Matrix t %*% print
 #' @importClassesFrom Matrix Matrix sparseMatrix dgCMatrix dgRMatrix
 #' @importFrom stats predict
-predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
+#' @seealso
+#' * [lookup_timestep_sequence()] processes the time inputs
+#'   (`start`, `end`, `direction`, and `season_buffer`)
+#' * [route()] and [route_migration()] are similar to `predict()` but
+#'    generate routes instead of distributions.
+predict.BirdFlow <- function(object, distr, start, end, direction, season_buffer, ...) {
 
   # To ease transition pain
   if(!has_dynamic_mask(object))
@@ -51,7 +45,7 @@ predict.BirdFlow <- function(object, distr, start, end, direction, ...) {
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(object, start, end, direction)
+  transitions <- lookup_transitions(object, start, end, direction, season_buffer)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                             gsub("^.*-", "", transitions)))
 

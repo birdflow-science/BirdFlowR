@@ -26,20 +26,20 @@
 #'   with a column for each distribution.
 #' @export
 #'
-get_distr <- function(x, which = "all", from_marginals = FALSE){
+get_distr <- function(x, which = "all", from_marginals = FALSE) {
 
   # Resolve which into integer timesteps
   which <- lookup_timestep(which, x)
 
-
-
   if(x$metadata$has_distr && !from_marginals){
     # Return stored distribution
+
     d <- x$distr[, which]
     if(length(which) == 1){
       attr(d, "time") <- paste0("t", which)
     }
     return(reformat_distr_labels( d, x) )
+
   } else {
     # Or calculate from marginals
     if(!x$metadata$has_marginals){

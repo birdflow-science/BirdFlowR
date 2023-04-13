@@ -126,7 +126,11 @@ interval_log_likelihood <- function(intervals, observations, bf,
   stopifnot(colnames(coords) == c("x", "y"))
   obs <- obs[, !names(obs) %in% c("x", "y", "i", "timestep")]
   obs <- cbind(obs, coords)
-  obs$i <- xy_to_i(obs$x, obs$y, bf)
+  obs$beyond_extent <-
+    obs$x > xmax(bf) | obs$x < xmin(bf) | obs$y > ymax(bf) | obs$y < ymin(bf)
+  obs$i <- NA
+  sv <- !obs$beyond_extent
+  obs$i[sv] <-  xy_to_i(obs$x[sv], obs$y[sv], bf)
 
   # Convert date to timestep
   obs$ts <- lookup_timestep(obs$date, bf)

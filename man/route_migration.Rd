@@ -4,7 +4,7 @@
 \alias{route_migration}
 \title{generate migration routes from a BirdFlow model}
 \usage{
-route_migration(bf, n, migration = "prebreeding")
+route_migration(bf, n, migration = "prebreeding", season_buffer = 1)
 }
 \arguments{
 \item{bf}{\code{BirdFlow} model}
@@ -14,6 +14,10 @@ route_migration(bf, n, migration = "prebreeding")
 \item{migration}{"prebreeding", "pre", or "spring" for the prebreeding
 migration; or "postbreeding", "post", or "fall" for the postbreeding
 migration.}
+
+\item{season_buffer}{a buffer in timesteps (likely weeks) to add to the beginning
+and end of the season. The default of 1 means we start a week before the
+metadata suggests the season starts and continue one week past the end.}
 }
 \value{
 This will likely change. Currently returns a list with:
@@ -44,4 +48,5 @@ BirdFlow model:
 \code{route_migration()} is a convenience wrapper for \code{\link[=route]{route()}}.
 \link[=predict.BirdFlow]{predict()} projects future or past distributions based
 on a starting location or distribution.
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} does what its name suggests.
 }

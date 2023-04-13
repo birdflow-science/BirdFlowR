@@ -37,29 +37,45 @@ lookup_timestep <- function(x, bf){
   if(length(x) == 1 && is.character(x) &&  tolower(x) == "all")
     return(bf$dates$interval)
 
-  if (inherits(x, "POSIXt")) {
+  # timesteps e.g. "t1" "t2"
+  if (is.character(x) && all(grepl("^t[[:digit:]]*$",
+                                   ignore.case = TRUE, x = x))) {
+      x <- as.numeric(gsub("t", "", x))
+  }
+
+  # convert date like things to dates
+  if(is.character(x) || inherits(x, "POSIXt")){
     x <- lubridate::as_date(x)
   }
 
-  if (is.character(x)) {
-    if(all(grepl("^t[[:digit:]]*$", ignore.case = TRUE, x = x))){
-      # timesteps e.g. "t1" "t2"
-      x <- as.numeric(gsub("t", "", x))
-    } else {
-      x <- lubridate::as_date(x)
-    }
-  }
+  if(lubridate::is.Date(x)) {
 
-  if (lubridate::is.Date(x)) {
-    doy <- lubridate::yday(x) + 0.5
-    ### We should switch over to using find_interval on week_start and week_end
-    ### but the current (dated) example model doesn't have those columns
-    ### Because it's old and they are derived from the S&T metadata.
-    ### The code below doesn't work if the whole year isn't modeled.
-    if(nrow(bf$dates) != 52)
-      stop("This function assumes whole year is modeled")
-    x <- sapply(doy, function(doy) which.min(abs(dates$doy - doy)) )
-  }
+    # Calculate the proportion of the year that has passed at each date.
+    # using 366 for all years as that's what ebirdst::date_to_st_week does
+
+    # Support old models with a different naming convention
+    if(any(grepl("^weeks_", names(dates))))
+      names(dates) <- gsub("^weeks_", "", names(dates))
+
+    if(all(c("start", "end") %in% names(bf$dates))){
+      # Note POSIXct$yday starts at 0   lubridate::doy()  starts at 1
+      py <- (as.POSIXlt(x)$yday + 0.5) / 366  # proportion of year
+          # 366 was used in ebirdst.  max(yday+0.5) = 365.5  (on leap yr)
+      breaks <- c(dates$start[1], dates$end)
+      x <- findInterval(py, vec = breaks, all.inside = TRUE)
+
+    }  else {   #  SHOULD be DROPPED when we complete switch to dynamic masking
+      # Support very old models that don't have columns eith "start" and "end";
+      # or "week_start" and "week_end"
+
+      if (nrow(bf$dates) != 52)
+        stop("This is unexpected. bf is both lacking some date columns ",
+             "AND doesn't include all timesteps. To look up timesteps only",
+             " one of those can be true.")
+      x <- ebirdst::date_to_st_week(x)
+
+    }
+  }  # End is date
 
   if (!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$interval)) {
     xtext <- ifelse(length(original_x) > 3,

@@ -1,4 +1,84 @@
-# BirdflowR 0.0.0.9054
+# BirdflowR 0.0.0.9074
+2023-04-13
+
+* Changed behavior
+  - `get_naturalearth()` and related functions now by default crop off the
+    buffer after transforming the Natural Earth data so that the returned 
+    object extent matches the extent of `x`. Whether this cropping occurs is 
+    now controlled by `keep_buffer` which defaults to FALSE.  Previously it was    
+    controlled by `match_extent`.
+
+# BirdflowR 0.0.0.9073
+2023-04-11
+
+* Changed behavior:  
+  - `lookup_timestep()` and timestep lookup throughout the package is now 
+  consistent with `ebirdst::date_to_st_week()` this wasn't previously true. Some
+  dates near the edges of the week breaks will end up classified into a 
+  different timestep than previously.
+
+  - `preprocess_species()` now saves the breakpoints from 
+  `ebirdst::ebirdst_weeks` as `start` and `end` instead of `week_start` and 
+  `week_end`.
+
+* New functions: 
+  - `lookup_timestep_sequence()`  workhorse function for processing date
+    range input to other functions. Generate forward or backward sequences from
+    timesteps, dates, or season name input, possibly with a season buffer.
+
+  - `lookup_season_timesteps()` narrowly focused helper, returns forward 
+    timestep sequences associated with a season possibly with a buffer 
+    (in timesteps) beyond the edge of the season.
+  
+* Updated functions to use `lookup_timestep_sequence()`
+  - `lookup_transitions()`
+  - `route()`
+  - `route_migration()` 
+  - `predict()`
+* Updated functions to use `lookup_timestep()`
+  - `get_distr()`
+
+* Addresses issues: 
+  - Fixes bug in #66 where date lookup forward across the year boundary failed.
+  - Addresses #68 by providing a function to lookup timestep series based on 
+    season names (and adds a buffer ability).
+  - Closes #56 time now is processed mostly by `lookup_timestep()` for points in
+    time, and `lookup_timestep_sequence()` for date ranges. Point lookup now
+    uses `findInterval` on breaks derived from `ebirdst::ebirdst_weeks` rather
+    than from `which.min()` on a difference from center of the nominal day for 
+    each week. This should also make time lookup compatible with partial year
+    BirdFlow models.
+
+# BirdflowR 0.0.0.9072
+2023-04-11
+
+* Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of
+ `ebirdst_runs` to character. `preprocess_species()` now defensively forces the 
+  columns that should be (and were) logical to logical, and numeric to numeric. 
+
+
+# BirdFlowR 0.0.0.9071
+2023-04-06
+
+* Added functions `latlon_to_xy()` and `xy_to_latlon()` to convert from 
+WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS.  Fixes #64.  
+
+* CHANGED behavior in a bunch of the index conversion functions, previously, 
+many threw errors with NA input or values out of range. Most of them now return NA in both of those situations.  This made sense to me in the context of #61.
+
+# BirdFlowR 0.0.0.9070
+2023-04-06
+
+* Switching development version number scheme.  From now on I will increment
+the development version by one with every change in the 
+main branch (merged pull request). Previously the version was the issue number.  
+
+* Fixed #61 (and added test). Now `interval_log_likelihood()` sets `exclude` and 
+`not_active` columns to TRUE if either of the involved observations are entirely
+outside of the extent of the BirdFlow object. Previously locations outside of
+extent resulted in an error.
+
+# BirdFlowR 0.0.0.9054
 2023-03-30
 
 * New interval_loglikelihood() calculates log likelihood for banding and 
@@ -11,7 +91,7 @@ tracking data given a BirdFlow model.
  - `lookup_timestep()` 
 
 
-# BirdflowR 0.0.0.9022 
+# BirdFlowR 0.0.0.9022 
 2023-03-27
 
 * `get_naturalearth()` and related functions now throw a helpful warning if

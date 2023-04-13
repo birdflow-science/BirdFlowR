@@ -169,6 +169,7 @@ preprocess_species <- function(species,
   er <- ebirdst::ebirdst_runs
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
+
   if(verbose)
     cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n",
         sep ="")
@@ -186,6 +187,25 @@ preprocess_species <- function(species,
     stop(spmd$common_name, " (", spmd$species_code, ") is a resident ",
          "(non-migratory) species and is therefore a poor candidate for ",
          "BirdFlow modeling.")
+
+  # Restore formatting to ebirdst columns
+  # in ebirdst 2.2021.1 all columns are stored as characters.
+  #  It's fixed by 2.2021.3 but CRAN is still on 2.2021.1
+  logical_variables <- c("resident",
+                         "breeding_range_modeled",
+                         "nonbreeding_range_modeled",
+                         "postbreeding_migration_range_modeled",
+                         "prebreeding_migration_range_modeled")
+
+  numeric_variables <- c("breeding_quality",
+                         "nonbreeding_quality",
+                         "postbreeding_migration_quality",
+                         "prebreeding_migration_quality")
+
+  spmd[logical_variables] <- as.logical(spmd[logical_variables] )
+  spmd[numeric_variables] <- as.numeric(spmd[numeric_variables] )
+
+
 
   model_coverage_variables <- c("breeding_range_modeled",
                                 "nonbreeding_range_modeled",
@@ -637,6 +657,9 @@ preprocess_species <- function(species,
   names(dates)[names(dates) == "week_number"] <- "interval"
   dates$doy <- lubridate::yday(dates$date) + 0.5
   dates$date <- as.character(dates$date)
+
+  # Rename ("week_" columns by dropping preffix )
+  names(dates) <- gsub("^week_", "", names(dates))
 
   # add date info for last distribution (a repeat of the first)
   first <- dates[1, , drop = FALSE]

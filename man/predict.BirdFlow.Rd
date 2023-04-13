@@ -4,39 +4,52 @@
 \alias{predict.BirdFlow}
 \title{Predict bird distributions}
 \usage{
-\method{predict}{BirdFlow}(object, distr, start, end, direction, ...)
+\method{predict}{BirdFlow}(object, distr, start, end, direction, season_buffer, ...)
 }
 \arguments{
 \item{object}{A BirdFlow model object}
 
 \item{distr}{a starting distribution}
 
-\item{start, end}{These define the time period to predict over. They can be
-\link[base:date]{Date} objects, integer timesteps, or a string with
-"year-month-day" e.g. "2022-11-28".}
+\item{start, end}{The starting and ending points in time specified as
+timesteps, character dates, date objects, or if  \code{end} is omitted
+start may be set to "all" or a season name to be interpreted by
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
 
-\item{direction}{either "forward" or "backward", only used if \code{start} and
-\code{end} represent timesteps.}
+\item{direction}{Either "forward" or "backward".
+
+If \code{start} and \code{end}
+represent dates and \code{direction} is used an error will
+be thrown if \code{direction} isn't consistent with direction indicated by the
+dates.
+
+If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
+\code{start} and \code{end} should either both be timesteps (numeric); or
+\code{end} should be omitted and start should be "all" or a season name.}
+
+\item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
+passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
+of timesteps to extend the season by at each end.}
 
 \item{...}{required for consistency with generic method, but is not used.}
 }
 \value{
-a matrix with rows for each location and columns for each timestep
+If multiple starting distributions are input in a matrix the result
+will be an array with dimensions: location, distribution, and time. With one
+input distribution the result will be a matrix with dimensions: location
+and time.
 }
 \description{
-predict() projects bird distributions into the future or past
+\code{predict()} projects bird distributions into the future or past. Given an
+initial distribution, and a start and end timestep or date, \code{predict()}
+generates probability distributions for each timestep between the start
+and end.
 }
-\details{
-given an initial distribution, a start time and end time generate
-probability distributions for each timestep between the start and end.
-
-If using dates the order of the dates are used to determine if the
-projection is forward or backward in time and then the dates are resolved to
-timesteps. Projections will therefore be at most one year in length and dates
-further than a year apart may yield nonsensical results.
-
-It is possible to supply multiple starting distributions as a matrix with
-a row for each location and a column for each distribution. In this case
-the result will be an array with dimensions: location, distribution,
-and timestep.
+\seealso{
+\itemize{
+\item \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence()}} processes the time inputs
+(\code{start}, \code{end}, \code{direction}, and \code{season_buffer})
+\item \code{\link[=route]{route()}} and \code{\link[=route_migration]{route_migration()}} are similar to \code{predict()} but
+generate routes instead of distributions.
+}
 }
