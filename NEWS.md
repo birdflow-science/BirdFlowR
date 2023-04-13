@@ -1,7 +1,17 @@
+# BirdflowR 0.0.0.9074
+2023-04-13
+
+* Changed behavior
+  - `get_naturalearth()` and related functions now by default crop off the
+    buffer after transforming the Natural Earth data so that the returned 
+    object extent matches the extent of `x`. Whether this cropping occurs is 
+    now controlled by `keep_buffer` which defaults to FALSE.  Previously it was    
+    controlled by `match_extent`.
+
 # BirdflowR 0.0.0.9073
 2023-04-11
 
-* New Behavior:  
+* Changed behavior:  
   - `lookup_timestep()` and timestep lookup throughout the package is now 
   consistent with `ebirdst::date_to_st_week()` this wasn't previously true. Some
   dates near the edges of the week breaks will end up classified into a 

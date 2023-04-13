@@ -14,7 +14,7 @@ get_naturalearth(
   buffer = 15,
   keep_attributes = FALSE,
   country,
-  match_extent = FALSE,
+  keep_buffer = FALSE,
   force_old_method = FALSE,
   ...
 )
@@ -25,7 +25,7 @@ get_states(
   scale = "medium",
   buffer = 15,
   keep_attributes = FALSE,
-  match_extent = FALSE
+  keep_buffer = FALSE
 )
 
 get_coastline(
@@ -33,7 +33,7 @@ get_coastline(
   scale = "medium",
   buffer = 15,
   keep_attributes = FALSE,
-  match_extent = FALSE
+  keep_buffer = FALSE
 )
 
 get_countries(
@@ -41,12 +41,12 @@ get_countries(
   scale = "medium",
   buffer = 15,
   keep_attributes = FALSE,
-  match_extent = FALSE
+  keep_buffer = FALSE
 )
 }
 \arguments{
 \item{x}{A BirdFlow, \link[terra:SpatRaster-class]{terra::SpatRaster}, \link[=sf]{sf::sf}, or any other object
-that you can call \code{terra::ext()} and \code{\link[terra:crs]{terra::crs()}}.}
+on which you can call \code{\link[terra:ext]{terra::ext()}} and \code{\link[terra:crs]{terra::crs()}}.}
 
 \item{type}{The type of data to retrieve. One of "coastline", "country", or
 "states" for data included in \pkg{rnaturalearth}; or any value accepted by
@@ -54,13 +54,14 @@ that you can call \code{terra::ext()} and \code{\link[terra:crs]{terra::crs()}}.
 
 \item{scale}{The scale of data to return. Ignored if type is "states",
 otherwise passed to one of \link[rnaturalearth:ne_download]{ne_download()}.
-\link[rnaturalearth:ne_coastline]{ne_coastline()},
-\link[rnaturalearth:ne_countries]{ne_countries()}, or
-\link[rnaturalearth:ne_states]{ne_states()}.
-Valid values are 110, 50, 10, small', 'medium', and 'large'.}
+\link[rnaturalearth:ne_coastline]{ne_coastline()}, or
+\link[rnaturalearth:ne_countries]{ne_countries()}.
+Valid values are 110, 50, 10, 'small', 'medium', and 'large'.}
 
 \item{buffer}{A buffer in degrees (latitude and longitude) to add to the
-extent of \code{x} prior to cropping the Natural Earth data.}
+extent of \code{x} prior to cropping the Natural Earth data in WGS84. This is
+needed so that after transformation to the CRS of \code{x} the data cover all
+of the extent of \code{x}.}
 
 \item{keep_attributes}{If \code{FALSE}, the default, attribute columns are dropped
 to facilitate clean plotting.}
@@ -69,10 +70,10 @@ to facilitate clean plotting.}
 \code{get_naturalearth(type = "states")} this is used to select a country. If
 omitted, states from all countries are returned.}
 
-\item{match_extent}{if \code{TRUE} after transforming the Natural Earth data it
-will be cropped to the precise extent of \code{x}. This is useful when plotting
-with \pkg{ggplot2} which expands the bounds of the plot to encompass all
-the plotted data.}
+\item{keep_buffer}{if \code{FALSE}, the default, after transforming the Natural
+Earth data it will cropped to the precise extent of \code{x}. Set to  \code{TRUE}
+to keep the buffer - useful when overlaying Natural Earth data
+on an existing base R plot.}
 
 \item{force_old_method}{This is for internal testing. The default should be
 best for all other uses.  If \code{TRUE} use the back transformed bounding box
@@ -84,7 +85,7 @@ want to use \code{category = "physical"}.}
 }
 \value{
 \link[sf:sf]{sf} object with Natural Earth data in the same
-coordinate reference system (CRS) as \code{x}.
+CRS as \code{x}.
 }
 \description{
 These are convenience wrappers to \pkg{rnaturalearth} functions. They
@@ -92,7 +93,7 @@ retrieve, crop, format, and project
 \href{https://www.naturalearthdata.com/}{Natural Earth}
 data to facilitate plotting with
 BirdFlow and other spatial objects. The output is the desired data in the
-same CRS as \code{x} with (given default parameters) a somewhat larger extent.
+same coordinate reference system (CRS) and extent as \code{x}.
 }
 \details{
 \code{get_naturalearth()} does all the work and is called by the other functions.
@@ -107,7 +108,8 @@ it determine longitude of the seam.
 transforming (in WGS84) at the seam.
 \item Transform to the CRS of \code{x}. This is now an artifact free object
 containing the global data set minus a narrow strip at the seam.
-\item Crop in destination to approximate equivalent of \code{buffer}.
+\item Crop in destination to the extent of \code{x}, or if \code{keep_buffer = TRUE},
+the extent plus the approximate equivalent of \code{buffer}.
 }
 
 This should work well for any extent (including global) in any CRS that is
@@ -115,12 +117,14 @@ based on the covered projections.
 \item For all other projections back transform the bounding box and clip:
 \itemize{
 \item Convert the corners of the bounds of \code{x} object to WGS84.
-\item adds a buffer (\code{buffer}) to the converted corners.
+\item adds a buffer (\code{buffer}) to the converted corners this is important to
+guarantee that we still cover the extent after we transform.
 \item Check to see if the bounds wrap the seam (180 deg meridian) and break
 the bounding box into two if it does.
 \item Crop to the bounding box or boxes.
-\item Project each cropped section to the \code{x}'s CRS.
+\item Project each cropped section to \code{x}'s CRS.
 \item Combine the pieces into one object.
+\item If \code{keep_buffer = FALSE} crop to the exact extent of \code{x}.
 }
 
 These steps will usually prevent artifacts caused when polygons or lines
@@ -130,6 +134,14 @@ polar projections and with extents that cover the entire globe.
 
 In some cases where this fails setting the buffer to zero may be an easy
 solution.
+
+There are many more projections where method 1 or a variant on it
+would work. We may eventually cover more of those projections with the
+first method.
+
+If you encounter a use case that doesn't work you may
+\href{https://github.com/birdflow-science/BirdFlowR/issues}{submit an issue};
+please include the output from \code{crs(x)} and \code{ext(x)}.
 }
 
 \code{get_states()} requires \pkg{rnaturalearthhires}. Install with:\cr

@@ -6,7 +6,8 @@ test_that("get_coastline returns expected objects", {
                       2822153.67510416, 6421966.58574292)
 
   # Using "new" method
-  expect_s3_class(coast <- get_coastline(bf), class = c("sf", "data.frame") )
+  expect_s3_class(coast <- get_coastline(bf, keep_buffer = TRUE),
+                  class = c("sf", "data.frame") )
   expect_s3_class(coast$geometry, c("sfc_GEOMETRY", "sfc") )
   expect_s3_class(coast$geometry[1],  c("sfc_LINESTRING", "sfc"))
   expect_true( sf::st_crs(coast) == sf::st_crs(crs(bf) ) )
@@ -14,7 +15,8 @@ test_that("get_coastline returns expected objects", {
 
   # using "old" method
   expect_no_error(coast2 <- get_naturalearth(bf, type = "coastline",
-                            force_old_method = TRUE) )
+                                             keep_buffer = TRUE,
+                                             force_old_method = TRUE) )
   expect_s3_class(coast2, c("sf", "data.frame"))
   expect_s3_class(coast2$geometry, c("sfc_GEOMETRY", "sfc") )
   expect_s3_class(coast2$geometry[1],  c("sfc_LINESTRING", "sfc"))
@@ -118,7 +120,7 @@ test_that("get_naturalearth() works at edge of WGS84", {
     par(op)
   }  # end skip visualization
 
-  expect_no_error( coast <- get_coastline(bf, scale = 110) )
+  expect_no_error( coast <- get_coastline(bf, scale = 110, keep_buffer = TRUE) )
   expect_snapshot(coast) # eastern Australia and islands
 
 })
@@ -148,8 +150,8 @@ test_that("get_naturalearth() works at edge of WGS84 with old method", {
   }  # end skip visualization
 
   expect_no_error(
-    coast <- get_naturalearth(bf, type = "coastline",
-                              scale = 110, force_old_method = TRUE) )
+    coast <- get_naturalearth(bf, type = "coastline", scale = 110,
+                              keep_buffer = TRUE, force_old_method = TRUE) )
   if(interactive()){
     plot(coast)
   }
@@ -196,7 +198,7 @@ test_that("get_naturalearth() works with mollweide and broken bounding box",{
     plot(terra::ext(bf), add = TRUE, border = "red")
   }
 
-  expect_no_error(coast2 <- get_coastline(bf))
+  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE))
   expect_equal(nrow(coast2), 668 )
 })
 
@@ -209,7 +211,7 @@ test_that("get_naturalearth() works with lambert equal area (laea)",{
                             "+y_0=0 +datum=WGS84 +units=m +no_defs"))
   bf$geom$ext <- c(-2410760.5, 1958109.5, -1548178, 1658294)
 
-  expect_no_error(coast2 <- get_coastline(bf))
+  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE))
   expect_equal(nrow(coast2),  241 )  # original run through had 134
 
   if(interactive()){
@@ -240,7 +242,7 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
   }
 
   # new method
-  expect_warning( get_naturalearth(bf, "coastline", buffer = 0),
+  expect_warning( get_naturalearth(bf, "coastline", buffer = 0, keep_buffer = TRUE),
                   "No objects within extent. Returning empty sf object.")
 
   # old method
@@ -250,7 +252,8 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
 
 })
 
-test_that("match_extent argument crops to input extent", {
+test_that(paste0("get_naturalearth with default keep_buffer = FALSE, crops ",
+                 "to input extent"), {
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
                                    " +ellps=WGS84 +units=m +no_defs"))
@@ -307,6 +310,7 @@ test_that("Double wrapped buffer works.", {
 
   expect_no_error(coast <- get_naturalearth(bf, "coastline",
                                             scale = "small", buffer = 250,
+                                            keep_buffer = TRUE,
                                             force_old_method = TRUE))
 
   expect_equal(nrow(coast), 134)
@@ -339,6 +343,7 @@ test_that("Right wrapped buffer works.", {
 
   expect_no_error(coast <- get_naturalearth(bf, "coastline",
                                             scale = "small", buffer = 100,
+                                            keep_buffer = TRUE,
                                             force_old_method = TRUE))
   expect_equal(nrow(coast), 86)
 })
