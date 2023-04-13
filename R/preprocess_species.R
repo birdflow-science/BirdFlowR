@@ -647,6 +647,9 @@ preprocess_species <- function(species,
   dates$doy <- lubridate::yday(dates$date) + 0.5
   dates$date <- as.character(dates$date)
 
+  # Rename ("week_" columns by dropping preffix )
+  names(dates) <- gsub("^week_", "", names(dates))
+
   # add date info for last distribution (a repeat of the first)
   first <- dates[1, , drop = FALSE]
   first$interval <- dates$interval[nrow(dates)] + 1
