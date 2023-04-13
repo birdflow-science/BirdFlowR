@@ -103,7 +103,13 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep_sequence.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_transitions.html</loc>

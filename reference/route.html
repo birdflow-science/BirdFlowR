@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><!-- mat
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9072</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9073</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span><span class="va">x</span>, <span class="va">x_coord</span>, <span class="va">y_coord</span>, <span class="va">n</span>, <span class="va">row</span>, <span class="va">col</span>, <span class="va">start</span>, <span class="va">end</span>, <span class="va">direction</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span><span class="va">x</span>, <span class="va">x_coord</span>, <span class="va">y_coord</span>, <span class="va">n</span>, <span class="va">row</span>, <span class="va">col</span>, <span class="va">start</span>, <span class="va">end</span>, <span class="va">direction</span>, <span class="va">season_buffer</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,14 +85,27 @@ parameters should not be used at the same time.</p></dd>
 
 
 <dt>start, end</dt>
-<dd><p>These define the time period to route over. They can be
-<a href="https://rdrr.io/r/base/date.html" class="external-link">Date</a> objects, integer timesteps, or a string with
-"year-month-day" e.g. "2022-11-28".</p></dd>
+<dd><p>The starting and ending points in time specified as
+timesteps, character dates, date objects, or if  <code>end</code> is omitted
+start may be set to "all" or a season name to be interpreted by
+<code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code>.</p></dd>
 
 
 <dt>direction</dt>
-<dd><p>either "forward" or "backwards", only used if <code>start</code> and
-<code>end</code> represent timesteps.</p></dd>
+<dd><p>Either "forward" or "backward".</p>
+<p>If <code>start</code> and <code>end</code>
+represent dates and <code>direction</code> is used an error will
+be thrown if <code>direction</code> isn't consistent with direction indicated by the
+dates.</p>
+<p>If <code>start</code> and <code>end</code> are not dates, <code>direction</code> defaults to "forward" and
+<code>start</code> and <code>end</code> should either both be timesteps (numeric); or
+<code>end</code> should be omitted and start should be "all" or a season name.</p></dd>
+
+
+<dt>season_buffer</dt>
+<dd><p>Only used if <code>start</code> is a season. <code>season_buffer</code> is
+passed to <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code> and defaults to 1; it is the number
+of timesteps to extend the season by at each end.</p></dd>
 
 </dl></div>
     <div class="section level2">

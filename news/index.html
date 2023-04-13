@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9072</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9073</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,32 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9073" id="birdflowr-0009073">BirdflowR 0.0.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0009073"></a></h2>
+<p>2023-04-11</p>
+<ul><li>New Behavior:
+<ul><li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> and timestep lookup throughout the package is now consistent with <code><a href="https://rdrr.io/pkg/ebirdst/man/date_to_st_week.html" class="external-link">ebirdst::date_to_st_week()</a></code> this wasn’t previously true. Some dates near the edges of the week breaks will end up classified into a different timestep than previously.</p></li>
+<li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now saves the breakpoints from <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_weeks.html" class="external-link">ebirdst::ebirdst_weeks</a></code> as <code>start</code> and <code>end</code> instead of <code>week_start</code> and <code>week_end</code>.</p></li>
+</ul></li>
+<li>New functions:
+<ul><li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> workhorse function for processing date range input to other functions. Generate forward or backward sequences from timesteps, dates, or season name input, possibly with a season buffer.</p></li>
+<li><p><code><a href="../reference/lookup_season_timesteps.html">lookup_season_timesteps()</a></code> narrowly focused helper, returns forward timestep sequences associated with a season possibly with a buffer (in timesteps) beyond the edge of the season.</p></li>
+</ul></li>
+<li>Updated functions to use <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>
+<ul><li><code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code></li>
+<li><code><a href="../reference/route.html">route()</a></code></li>
+<li><code><a href="../reference/route_migration.html">route_migration()</a></code></li>
+<li><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code></li>
+</ul></li>
+<li>Updated functions to use <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code>
+<ul><li><code><a href="../reference/get_distr.html">get_distr()</a></code></li>
+</ul></li>
+<li>Addresses issues:
+<ul><li>Fixes bug in #66 where date lookup forward across the year boundary failed.</li>
+<li>Addresses #68 by providing a function to lookup timestep series based on season names (and adds a buffer ability).</li>
+<li>Closes #56 time now is processed mostly by <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> for points in time, and <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> for date ranges. Point lookup now uses <code>findInterval</code> on breaks derived from <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_weeks.html" class="external-link">ebirdst::ebirdst_weeks</a></code> rather than from <code><a href="https://rdrr.io/pkg/terra/man/summarize-generics.html" class="external-link">which.min()</a></code> on a difference from center of the nominal day for each week. This should also make time lookup compatible with partial year BirdFlow models.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9072" id="birdflowr-0009072">BirdflowR 0.0.0.9072<a class="anchor" aria-label="anchor" href="#birdflowr-0009072"></a></h2>
 <p>2023-04-11</p>
