@@ -265,8 +265,8 @@ preprocess_species <- function(species,
   #     it's a poor estimate because it ignores the
   #     fact that coarse cells along the edges overlap fine cells that contain
   #     a mix of no data and data.  The code here makes the estimate and then
-  #     resamples to the new estimate, evaluates the new number of cells (and
-  #     thus parameters), and repeates until the estimate converges on a number
+  #     resamples to the estimate, evaluates the new number of cells (and
+  #     thus parameters), and repeats until the estimate converges on a number
   #     of parameters between 90 and 100 % of the target number.
   #
   #   Feb 10 - added gpu_ram parameter that allows estimating max_params from
@@ -576,7 +576,7 @@ preprocess_species <- function(species,
   #  Flatten raster data
   #----------------------------------------------------------------------------#
 
-  # Generate distribution matrix containing the activ cells in columns
+  # Generate distribution matrix containing the active cells in columns
   # and similar objects for upper and lower confidence intervals
   m <- as.logical(terra::values(mask))
   distr <- terra::values(abunds_low_res)[m, , drop = FALSE]
@@ -617,7 +617,7 @@ preprocess_species <- function(species,
   export$metadata$has_distr <- TRUE
 
   #----------------------------------------------------------------------------#
-  #  Define geom  and metadata                                              ####
+  #  Define geom and metadata                                               ####
   #----------------------------------------------------------------------------#
 
   # Create geometry object describing this BirdFlow model
