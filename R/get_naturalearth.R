@@ -5,7 +5,7 @@
 #' [Natural Earth](https://www.naturalearthdata.com/)
 #' data to facilitate plotting with
 #' BirdFlow and other spatial objects. The output is the desired data in the
-#' same CRS as `x` with (given default parameters) a somewhat larger extent.
+#' same coordinate reference system (CRS) and extent as `x`.
 #'
 #'  `get_naturalearth()` does all the work and is called by the other functions.
 #'  There are two distinct calculation methods.
@@ -18,19 +18,22 @@
 #'     transforming (in WGS84) at the seam.
 #'    - Transform to the CRS of `x`. This is now an artifact free object
 #'      containing the global data set minus a narrow strip at the seam.
-#'    - Crop in destination to approximate equivalent of `buffer`.
+#'    - Crop in destination to the extent of `x`, or if `keep_buffer = TRUE`,
+#'      the extent plus the approximate equivalent of `buffer`.
 #'
 #'    This should work well for any extent (including global) in any CRS that is
 #'    based on the covered projections.
 #'
 #' 1. For all other projections back transform the bounding box and clip:
 #'    - Convert the corners of the bounds of `x` object to WGS84.
-#'    - adds a buffer (`buffer`) to the converted corners.
+#'    - adds a buffer (`buffer`) to the converted corners this is important to
+#'      guarantee that we still cover the extent after we transform.
 #'    - Check to see if the bounds wrap the seam (180 deg meridian) and break
-#'    the bounding box into two if it does.
+#'      the bounding box into two if it does.
 #'    - Crop to the bounding box or boxes.
-#'    - Project each cropped section to the `x`'s CRS.
+#'    - Project each cropped section to `x`'s CRS.
 #'    - Combine the pieces into one object.
+#'    - If `keep_buffer = FALSE` crop to the exact extent of `x`.
 #'
 #'    These steps will usually prevent artifacts caused when polygons or lines
 #'    are shifted across the bounds of the CRS. However, it does not work for
@@ -40,23 +43,33 @@
 #'    In some cases where this fails setting the buffer to zero may be an easy
 #'    solution.
 #'
+#'    There are many more projections where method 1 or a variant on it
+#'    would work. We may eventually cover more of those projections with the
+#'    first method.
+#'
+#'    If you encounter a use case that doesn't work you may
+#'    [submit an issue](https://github.com/birdflow-science/BirdFlowR/issues);
+#'    please include the output from `crs(x)` and `ext(x)`.
+#'
+#'
 #' `get_states()` requires \pkg{rnaturalearthhires}. Install with:\cr
 #'  \code{ install.packages("devtools") # if you don't have it already
 #'  devtools::install_github("ropensci/rnaturalearthhires") }
 #'
 #' @param x A BirdFlow, [terra::SpatRaster], [sf::sf][sf], or any other object
-#'  that you can call `terra::ext()` and [terra::crs()].
+#'  on which you can call [terra::ext()] and [terra::crs()].
 #' @param type The type of data to retrieve. One of "coastline", "country", or
 #'   "states" for data included in \pkg{rnaturalearth}; or any value accepted by
 #'   [ne_download()][rnaturalearth::ne_download()].
 #' @param scale The scale of data to return. Ignored if type is "states",
 #'   otherwise passed to one of [ne_download()][rnaturalearth::ne_download()].
-#'   [ne_coastline()][rnaturalearth::ne_coastline()],
-#'   [ne_countries()][rnaturalearth::ne_countries()], or
-#'   [ne_states()][rnaturalearth::ne_states()].
-#'   Valid values are 110, 50, 10, small', 'medium', and 'large'.
+#'   [ne_coastline()][rnaturalearth::ne_coastline()], or
+#'   [ne_countries()][rnaturalearth::ne_countries()].
+#'   Valid values are 110, 50, 10, 'small', 'medium', and 'large'.
 #' @param buffer A buffer in degrees (latitude and longitude) to add to the
-#'   extent of `x` prior to cropping the Natural Earth data.
+#'   extent of `x` prior to cropping the Natural Earth data in WGS84. This is
+#'   needed so that after transformation to the CRS of `x` the data cover all
+#'   of the extent of `x`.
 #' @param keep_attributes If `FALSE`, the default, attribute columns are dropped
 #'   to facilitate clean plotting.
 #' @param country if retrieving states with `get_states()` or
@@ -65,16 +78,16 @@
 #' @param ... Other arguments to be passed to
 #'   [ne_download()][rnaturalearth::ne_download()]. Possibly you will
 #'   want to use `category = "physical"`.
-#' @param match_extent if `TRUE` after transforming the Natural Earth data it
-#'   will be cropped to the precise extent of `x`. This is useful when plotting
-#'   with \pkg{ggplot2} which expands the bounds of the plot to encompass all
-#'   the plotted data.
+#' @param keep_buffer if `FALSE`, the default, after transforming the Natural
+#'   Earth data it will cropped to the precise extent of `x`. Set to  `TRUE`
+#'   to keep the buffer - useful when overlaying Natural Earth data
+#'   on an existing base R plot.
 #' @param force_old_method This is for internal testing. The default should be
 #'   best for all other uses.  If `TRUE` use the back transformed bounding box
 #'   method even if the projection is covered by the "new" cut at seam method.
 #'
 #' @return [sf][sf::st_sf] object with Natural Earth data in the same
-#'  coordinate reference system (CRS) as `x`.
+#'  CRS as `x`.
 #'
 #' @export
 #' @examples
@@ -92,7 +105,7 @@ get_naturalearth <- function(x,
                              buffer = 15,
                              keep_attributes = FALSE,
                              country,
-                             match_extent = FALSE,
+                             keep_buffer = FALSE,
                              force_old_method = FALSE,
                              ...) {
 
@@ -156,13 +169,13 @@ get_naturalearth <- function(x,
   if (use_seam_method) {
     # This is the newer method that is more robust but only works for specific
     # projections
-    data <- cut_at_seam_and_transform(data, x, buffer, match_extent)
+    data <- cut_at_seam_and_transform(data, x, buffer, keep_buffer)
   } else {
     # This method is more generalized but not as robust
     data <- crop_to_transformed_extent(data, x, buffer)
   }
 
-  if (match_extent) { # crop to precise extent
+  if (!keep_buffer) { # crop to precise extent
     poly <- terra::ext(x) |>  sf::st_bbox() |> sf::st_as_sfc()
     data <- sf::st_crop(x = data, y = poly)
   }
@@ -176,7 +189,7 @@ get_naturalearth <- function(x,
 
 
 
-cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
+cut_at_seam_and_transform <- function(data, x, buffer, keep_buffer) {
 
   km_per_deg <-  111 # at equator. approximate but doesn't need to be exact.
   ft_per_km  <- 3280.84
@@ -214,7 +227,7 @@ cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
   data <- sf::st_transform(data, terra::crs(x))
 
 
-  if (match_extent) {  # No need to crop now if it will be full cropped later
+  if (!keep_buffer) {  # No need to crop now if it will be full cropped later
     return(data)
   }
 
@@ -264,7 +277,7 @@ cut_at_seam_and_transform <- function(data, x, buffer, match_extent) {
 crop_to_transformed_extent <- function(data, x, buffer) {
   # This is the first method I implemented it works by transforming
   # the extent of x into the crs of data, buffering, and then cropping the
-  # data, and finaly transforming the cropped data to match x
+  # data, and finally transforming the cropped data to match x
 
   #----------------------------------------------------------------------------#
   # Get buffered bounding box (or boxes if it crosses 180 deg)
@@ -387,29 +400,29 @@ crop_to_transformed_extent <- function(data, x, buffer) {
 #' @rdname get_naturalearth
 #' @export
 get_states <- function(x, country, scale = "medium", buffer = 15,
-                       keep_attributes = FALSE, match_extent = FALSE) {
+                       keep_attributes = FALSE, keep_buffer = FALSE) {
   get_naturalearth(x, type = "states",
                    country =  country,
                    scale = scale,
                    buffer = buffer,
                    keep_attributes = keep_attributes,
-                   match_extent = match_extent)
+                   keep_buffer = keep_buffer)
 }
 
 #' @rdname get_naturalearth
 #' @export
 get_coastline <- function(x, scale = "medium", buffer = 15,
-                          keep_attributes = FALSE, match_extent = FALSE) {
+                          keep_attributes = FALSE, keep_buffer = FALSE) {
   get_naturalearth(x, type = "coastline", scale = scale, buffer = buffer,
                    keep_attributes = keep_attributes,
-                   match_extent = match_extent)
+                   keep_buffer = keep_buffer)
 }
 
 #' @rdname get_naturalearth
 #' @export
 get_countries <- function(x, scale = "medium", buffer = 15,
-                          keep_attributes = FALSE, match_extent = FALSE) {
+                          keep_attributes = FALSE, keep_buffer = FALSE) {
   get_naturalearth(x, type = "countries", scale = scale, buffer = buffer,
                    keep_attributes = keep_attributes,
-                   match_extent = match_extent)
+                   keep_buffer = keep_buffer)
 }
