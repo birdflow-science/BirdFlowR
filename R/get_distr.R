@@ -50,19 +50,45 @@ get_distr <- function(x, which = "all", from_marginals = FALSE) {
         stop("No distributions available in the BirdFlow object.")
       }
     }
+
     d <- vector(mode = "list", length = length(which))
-    for(i in seq_along(which)){
+    if(has_dynamic_mask(x)){
+      for(i in seq_along(which)){
       id <- which[i]  # Distribution id
+
       if(id == 1){  # use marginal after the distribution
         m <- x$marginals[[id]]
-        d[[i]] <- Matrix::rowSums(m)
+        dmd <- Matrix::rowSums(m)
       } else { # use marginal before the distribution
         # (not available for first marginal)
         # marginal column sums are the distribution after that marginal
         m <- x$marginals[[id - 1 ]] # Prior marginal
-        d[[i]] <- Matrix::colSums(m)  # colsums = distribution for state after marginal
+        dmd <- Matrix::colSums(m)  # colsums = distribution for state after marginal
       }
-    }
+
+      # dm_d = dynamically masked distribution
+      # need to expand to unmasked distribution (um_d)
+      umd <- rep(0, n_active(x))
+      umd[get_dynamic_mask(x, id)] <- dmd
+      d[[i]] <- umd
+      }
+    } else {  # no dynamic mask
+
+      ### BACK COMPATABILITY CODE
+      for(i in seq_along(which)){
+        id <- which[i]  # Distribution id
+        if(id == 1){  # use marginal after the distribution
+          m <- x$marginals[[id]]
+          d[[i]] <- Matrix::rowSums(m)
+        } else { # use marginal before the distribution
+          # (not available for first marginal)
+          # marginal column sums are the distribution after that marginal
+          m <- x$marginals[[id - 1 ]] # Prior marginal
+          d[[i]] <- Matrix::colSums(m)  # colsums = distribution for state after marginal
+        }
+      }  # end no dynamic mask
+    } # end from marginals
+
     # Return single distribution as vector
     if(length(which) == 1){
       d <- d[[1]] # reformat as vector

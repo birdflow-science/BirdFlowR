@@ -24,11 +24,12 @@
 #'   (`start`, `end`, `direction`, and `season_buffer`)
 #' * [route()] and [route_migration()] are similar to `predict()` but
 #'    generate routes instead of distributions.
-predict.BirdFlow <- function(object, distr, start, end, direction, season_buffer, ...) {
+predict.BirdFlow <- function(object, distr, start, end,
+                             direction, season_buffer, ...) {
 
-  # To ease transition pain
-  if(!has_dynamic_mask(object))
-   object <- add_dynamic_mask(object)
+
+  ### BACK COMPATABILITY CODE
+  object <- add_dynamic_mask(object)  # To ease transition pain
 
   dyn_mask <- object$geom$dynamic_mask
 
@@ -45,7 +46,8 @@ predict.BirdFlow <- function(object, distr, start, end, direction, season_buffer
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(object, start, end, direction, season_buffer)
+  transitions <- lookup_transitions(object, start, end,
+                                    direction, season_buffer)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                             gsub("^.*-", "", transitions)))
 

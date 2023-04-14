@@ -24,10 +24,10 @@
 route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
                   season_buffer) {
 
-  # To ease transition pain
-  if(!has_dynamic_mask(x)){
-    x <- add_dynamic_mask(x)
-  }
+  ### BACK COMPATABILITY CODE
+  x <- add_dynamic_mask(x)  # To ease transition pain
+
+
   dyn_mask <- x$geom$dynamic_mask
 
   # Convert x and y coordinates input into row and col
@@ -72,6 +72,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
             c(start, end) %in% x$dates$interval)
 
   # Create initial distributions (concentrated to single locations)
+  # These aren't dynamically masked
   initial_distr <- Matrix::Matrix(0, nrow = n_active(x), ncol = length(row))
   indices <- rc_to_i(row, col, x)
   sel <- cbind(indices,  seq_len(length(indices)))
@@ -81,10 +82,9 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
   # mask for each timestep
   s <- 1:n_active(x)
   positions <- apply(dyn_mask, 2, function(x) s[x])
-
-
-
   extract_positions <- function(x, timestep) {
+    # given a dynamically masked distribution generate state space index i
+
     pos <- positions[[timestep]]  # positions associated with the d. masked
                                   # distribution for this timestep
     if(is.null(dim(x)))

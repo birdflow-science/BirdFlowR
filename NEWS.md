@@ -1,3 +1,56 @@
+# BirdFlowR  dynamic masking changes
+
+Dynamic masking is a major overhaul of the package in which the cells the model
+acts on will change over time and be limited to cells with non-zero value in the eBird S&T distributions. This means that the marginal dimensions will vary over time, and they will often not be square.
+
+Implementation wise, the intent is to isolate the user from the changes. In 
+particular the output and input distribution objects will still contain all
+the active cells. This means that functions that 
+interact with the marginals now have to convert between full distributions covering all active cells, and subsets that interact with the marginals.  `predict()`, `route()`, and `import_birdflow()` all had substantial updates.
+
+ * BirdFlow object format changes
+  - add `/distances/` Values from a distance matrix containing
+    great circle km between weach pair of locations - converted to a vector of 
+    non duplicated values by `shorten_distance_matrix()` full matrix can be 
+    recreated with `expand_distance_matrix()` this is added to the export HDF5
+    by `preprocess_species()` but not imported with the fitted models.  
+  - add `/geom/dynamic_mask` this is a matrix with a row for each active cell 
+    in the model (see `n_active()`) and a column for each timestep.  The cells
+    have a one to one relationship with the cells in `/distr/'
+  - update `/metadata/birdflow_version` to 3.  
+  - add `/metdata/birdflowr_version` which stores the package version when 
+    `preprocess_species()` was called to create the original object.
+    
+ * New functions
+ - `get_dynamic_mask()` similar to `get_distr()` but for dynamic mask data.
+ - `add_dynamic_mask()` updates a BirdFlow object (in an R session) by adding
+    a dynamic mask.  This is mainly to facilitate the transition to allow 
+    testing the package with the old models.
+ - `has_dynamic_mask()` returns a logical.
+ - `import_birdflow_v3()` internal function is called by `import_birdflow()` for
+    version 3 BirdFlow HDF5 files.
+ - `great_circle_distances()` creates a great circle distance matrix encoding
+   the distance (km) between every pair of cells in a BirdFlow object.
+   
+ * Updated functions
+ - `import_birdflow()` now works with version 2 and 3 HDF5 files (added version
+    3, dropped version 1)
+ - `get_distr()` with `from_marginals = TRUE` now has to expand the truncated 
+    distribution calculated from the marginal out to a full distribution.
+ - `predict()` and `route()` have to map from full distributions, to truncated 
+    distributions before applying the transition and then, expand back to full
+    for output.
+ -  `validate_birdflow()` now checks the dimensions of the marginals and 
+    transition matrices against the dynamic mask cell counts for each timestep.
+ -  `preprocess_species()` now calls `great_circle_distances()` and   
+    `shorten_distance_matrix()` to create the "/distances" component of the 
+    HDF5, and adds "geom/dynamic_mask" which is a logical matrix indicating 
+    which cells of "/distr" are non-zero for each timestep.
+
+STILL PENDING
+  - `preprocess_species()` parameter heuristic update.
+  
+
 # BirdflowR 0.0.0.9074
 2023-04-13
 

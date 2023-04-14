@@ -23,7 +23,7 @@ add_dynamic_mask <- function(bf){
     stop("bf must have distributions to add a dynamic mask.")
 
   if(has_dynamic_mask(bf))
-    stop("bf already has a dynamic mask.")
+    return(bf)
   had_transitions <- has_transitions(bf)
   if(had_transitions)
     bf <- drop_transitions(bf)

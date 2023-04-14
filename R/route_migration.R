@@ -38,7 +38,7 @@ route_migration <- function(bf, n, migration = "prebreeding", season_buffer = 1)
 
   timesteps <- lookup_season_timesteps(bf, migration, season_buffer)
   start <- timesteps[1]
-  end <- timesteps[length(timesteps)]
+  end <- dplyr::last(timesteps)
 
   # Sample starting positions from distributions and convert to
   # xy coordinates
