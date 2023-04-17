@@ -3,7 +3,7 @@
 #' This function imports a BirdFlow model data from an HDF5 file written by
 #' python. It works for version 2 hdf5.
 #'
-#' @param hdf5 Path to an hdf5 file
+#' @param hdf5 Path to an HDF5 file
 #' @return a BirdFlow object
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
@@ -39,7 +39,7 @@ import_birdflow_v3 <- function(hdf5){
     expected_contents <- c(list_structure(bf), "marginals")
   }
 
-  # Fixed for V2 (for now)
+  # Fixed for V3 (for now)
   expected_contents <- c(
     "geom",
     "geom/nrow",
@@ -86,7 +86,7 @@ import_birdflow_v3 <- function(hdf5){
     "metadata/is_sparse",
     "marginals")
 
-  # Check hdf5 for version consistency and missing contents
+  # Check HDF5 for version consistency and missing contents
   contents <- h5ls(hdf5)
   contents <- paste0(contents$group, "/", contents$name)
   contents <- gsub("^/*", "", contents)
@@ -98,11 +98,12 @@ import_birdflow_v3 <- function(hdf5){
          paste(absent, collapse = "', '"), "'")
   }
 
-  # Not al version2 files have a version number!
   expected_version <- 3  # of HDF5 BirdFlow export
-
   version <- as.vector(h5read(hdf5, "metadata/birdflow_version"))
-  stopifnot(version == expected_version)
+  if (version != expected_version) {
+    warning("Reading as version ", expected_version,
+            " but file indicates ", version)
+  }
 
   #----------------------------------------------------------------------------#
   #   Process HDF5

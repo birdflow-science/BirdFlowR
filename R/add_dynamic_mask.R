@@ -24,6 +24,7 @@ add_dynamic_mask <- function(bf){
 
   if(has_dynamic_mask(bf))
     return(bf)
+
   had_transitions <- has_transitions(bf)
   if(had_transitions)
     bf <- drop_transitions(bf)
