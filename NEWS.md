@@ -1,3 +1,13 @@
+# BirdflowR 0.0.0.9075
+2023-04-18  
+
+Added BirdFlow methods for generics defined in **sf**
+* `st_crs()`  returns an object of class `crs` used by **sf** to define 
+  coordinate reference sytems (CRS).
+* `st_bbox()` returns an object of class `bbox` containing both the extent and
+  crs of a BirdFlow object.  Can be passed to `st_as_sfc()` to convert to a 
+  polygon.
+
 # BirdflowR 0.0.0.9074
 2023-04-13
 
