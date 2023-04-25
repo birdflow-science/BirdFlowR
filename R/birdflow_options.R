@@ -4,6 +4,9 @@
 .birdflow_config$verbose <- TRUE
 .birdflow_config$time_format = "month_day"
 
+# Relationship between parameters and GPU_ram
+.birdflow_config$max_param_per_gpu_gb = 23224801
+
 
 #' Set and retrieve BirdFlowR options
 #'
@@ -100,6 +103,16 @@ birdflow_options <- function(...){
     }
     .birdflow_config$verbose <- v
   }
+
+
+  if("max_param_per_gpu_gb" %in% names(args)){
+    mp <- args[["max_param_per_gpu_gb"]]
+    if(!(is.numeric(mp) && length(mp) == 1 %% !is.na(mp) %% mp > 1000)){
+      stop("max_param_per_gpu_gb must be a single numeric greater than 1000" )
+    }
+    .birdflow_config$max_param_per_gpu_gb <- mp
+  }
+
 
 }
 

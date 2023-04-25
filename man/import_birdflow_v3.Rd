@@ -7,7 +7,7 @@
 import_birdflow_v3(hdf5)
 }
 \arguments{
-\item{hdf5}{Path to an hdf5 file}
+\item{hdf5}{Path to an HDF5 file}
 }
 \value{
 a BirdFlow object

@@ -15,8 +15,9 @@
 #'|titanx gpu | 12GB  | 306804561            | 334693725           | 25567047    |
 #'| m40 gpu  | 24GB   | 557395226            | 610352178           | 23224801    |
 #'
-#' Parameters are calculated as: \cr
-#'   `parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)`
+#' The number of parameters is the number of unmasked cells for the first
+#' timestep + the total number of cells in the marginals which is calculated
+#' from the dynamic mask.
 #'
 #' If `gpu_ram` is used (and not `res` or `max_parameters` ) than  `max_parameters` is
 #' set to `23,224,801 * gpu_ram` (lower of two values in table above).
@@ -24,9 +25,9 @@
 #' The heuristic to determine resolution given a maximum number of parameters
 #' must estimate the number of cells covered by the data
 #' at a different resolution, a noisy process, so it iteratively tries to find
-#'  the finest resolution that doesn't exceed max_params and then rounds to a
-#'  slightly large resolution (fewer parameters).
-#'
+#'  the smallest resolution that doesn't exceed `max_params` and then rounds to
+#'  a slightly larger resolution (fewer parameters).
+#'0gftt-m
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
 #'   both `tiff` and `hdf5` are TRUE.  File names created here will incorporate
@@ -57,6 +58,13 @@
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
 #'   not all of four ranges are modeled (based on
 #'   [ebirdst_runs()][ebirdst::ebirdst_runs()]).
+#' @param dummy_dynamic_mask set to TRUE to force all cells in the dynamic mask
+#'   to TRUE. This creates a BirdFlow object with a dynamic mask component
+#'   that is compatible with the current BirdFlowR package but that mimics the
+#'   older  predynamic mask BirdFlow models.  If fit the resulting object will
+#'   have transitions at every timestep among all active cells.  The only
+#'   reason to set this to TRUE is for comparsion testing and quality control
+#'   during the transition, and this parameter may eventually be dropped.
 #'
 #' @return returns a BirdFlow model object that lacks marginals, but is
 #'   otherwise complete.
@@ -98,7 +106,8 @@ preprocess_species <- function(species,
                                clip,
                                max_params,
                                gpu_ram = 12,
-                               skip_quality_checks = FALSE
+                               skip_quality_checks = FALSE,
+                               dummy_dynamic_mask = FALSE
 
 ){
 
@@ -144,7 +153,7 @@ preprocess_species <- function(species,
   st_year <- ebirdst::ebirdst_version()$version_year
   verbose <- birdflow_options("verbose")
   any_output <- hdf5 || tiff
-  max_param_per_gb <- 23224801 # Relationship between parameters and GPU_ram
+  max_param_per_gb <- birdflow_options("max_param_per_gpu_gb") # Relationship between parameters and GPU_ram
 
 
   # Create empty BirdFlow object
@@ -299,7 +308,8 @@ preprocess_species <- function(species,
     if(missing(max_params)){
       stopifnot( is.numeric(gpu_ram) | length(gpu_ram) == 1 | !is.na(gpu_ram) |  gpu_ram < 0 )
       max_params <- max_param_per_gb * gpu_ram
-      cat("Setting max_params to ", max_params, " anticipating ", gpu_ram, " GB of GPU ram.\n" )
+      if(verbose)
+        cat("Setting max_params to ", max_params, " anticipating ", gpu_ram, " GB of GPU ram.\n" )
     }
 
     if(verbose)
@@ -310,10 +320,13 @@ preprocess_species <- function(species,
 
 
     mask <- make_mask(x = abunds)
+
+
     if(!missing(clip)){
       clip2 <- terra::project(clip, terra::crs(mask))
       mask <- terra::mask(mask, clip2)
       mask[is.na(mask)] <- FALSE
+      abunds <- terra::mask(abunds, clip2)
 
       if(verbose){
         # Calculate percent of density lost
@@ -326,37 +339,47 @@ preprocess_species <- function(species,
         rm(sa, csa, tot_density, clipped_density)
       }
       rm(clip2)
-    }
+    } # end clip
+
 
     r <- terra::res(mask)
     if(length(r) == 1) r <- rep(r, 2)
     stopifnot(length(r) == 2)
 
-    p_adj <- 0.95  # Used to adjust the target number of cells down slightly as
-                   # we are looking to be below not at max_params
+    p_adj <- .97  # Used to adjust the target number of cells down slightly as
+    # we are looking to be below not at max_params
 
-    target_cells <- sqrt( max_params / 52 ) * p_adj # target number of cells
-    active_sq_m <- sum(terra::values(mask)) * prod(r)
+    target_params <- max_params * p_adj # target number of parameters
 
     n_attempts <- 10
+    a_stats <- calc_abundance_stats(abunds,
+                                    dummy_dynamic_mask = dummy_dynamic_mask)
 
     # Iteratively attempt to set resolution
     # there's some inherent slop in the predictions because not all
     # the course cells fully overlap fine cells that have data
     for(i in 1:n_attempts){
       # Calculate target resolution
-      if(verbose)
-        cat("  Attempt ", i , " at setting resolution\n")
-      res_m <- sqrt(active_sq_m / target_cells ) # target resolution (meters)
-      res <- res_m / 1000
+      f <- function(res) (predict_params(a_stats, res) - target_params)^2
+      #o <- optim(par = list(res = a_stats$res), fn = f, method = "Brent",
+      #           lower = 1, upper = 1000)
+      o <- stats::optimize(f =f, interval = c(1, 1000))
 
-      cat("  (", round(res, 3), "km chosen)\n", sep = "")
+      res <-  o$minimum
+      res_m <- 1000 * res
+
+
+
+      if(verbose){
+        cat("  Attempt ", i , " at setting resolution\n")
+        cat("  (", round(res, 3), "km chosen)\n", sep = "")
+      }
 
       # It's still possible to overshoot  - I think because along
       # edges single values at a fine resolution may map to a large cell
 
       # Trial reprojection
-      initial_res <- mean(res(mask))
+      initial_res <- mean(res(abunds))
       factor <- round(res_m / initial_res)
       if(factor < 1) factor <- 1
       reproject_res <- res_m / factor
@@ -370,14 +393,15 @@ preprocess_species <- function(species,
                                   fact = factor,
                                   fun = mean,
                                   na.rm = TRUE)
-      trial_mask <- make_mask(trial)
-      trial_cells <- sum(terra::values(trial_mask), na.rm = TRUE)
-      trial_active_sq_m <- trial_cells * xres(trial_mask)^2
 
-      pct_of_target <- (trial_cells^2) / (target_cells^2) * 100
+      a_stats <- calc_abundance_stats(trial,
+                                      dummy_dynamic_mask = dummy_dynamic_mask)
+
+      # Evaluating on actual max_params (not target_params which is adjusted for faster convergence)
+      pct_of_target <- a_stats$n_params/ max_params * 100
 
       if(verbose)
-        cat("  ", pct_of_target, "% of target (estimate).\n")
+        cat("  ", round(pct_of_target, 2), "% of target (estimate).\n")
 
       if(pct_of_target <= 100 && pct_of_target > 90){
         if(verbose)
@@ -387,8 +411,9 @@ preprocess_species <- function(species,
         # Try again (up to 10 times)
         if(verbose)
           cat("  trying again\n")
-        active_sq_m <- trial_active_sq_m
+
       }
+
     } # end resolution trials
 
 
@@ -401,7 +426,7 @@ preprocess_species <- function(species,
     precision =   c(0.1,  .5,  1,     2,     5,  10)  # in km
     tp <- precision[findInterval(res, breaks)] # target precision
     res <- ceiling(res / tp)  * tp
-    cat("Rounded to", res, "final resolution.\n")
+    cat("Rounded to", res, "km final resolution.\n")
 
     if(!missing(clip) && verbose){
       cat("Clipping removed ", format(pct_lost, nsmall = 2), "% of the total density\n", sep = "" )
@@ -477,7 +502,7 @@ preprocess_species <- function(species,
   # Download high or medium resolution data (if needed)
   if(load_res != "lr"){
     ebirdst::ebirdst_download(download_species,
-                            pattern = download_patterns[[load_res]])
+                              pattern = download_patterns[[load_res]])
   }
   abunds <- ebirdst::load_raster("abundance", path = sp_path,resolution=load_res)
   abunds_lci <- ebirdst::load_raster("abundance", metric = "lower",
@@ -606,23 +631,17 @@ preprocess_species <- function(species,
   lci <- terra::values(abunds_lci_low_res)[m , , drop = FALSE]
   lci[is.na(lci)] <- 0
 
-  # Calculate realized number of parameters in BirdFlow model
+  # Update metadata
   export$metadata$n_active <- n_active <- sum(m)
   export$metadata$n_transitions <- n_transitions <- ncol(distr)
+
+
+  # Calculate realized number of parameters in BirdFlow model
   n_params <- n_active^2 * (n_transitions) + nrow(distr)
   if(!missing(max_params)){
     pct_max_params <- n_params/max_params*100
   }
-  if(verbose){
-    cat("Model has:\n\t",
-        sum(m), " active cells,\n\t", n_transitions , " transitions, and\n\t",
-        format(n_params, big.mark = ","), " parameters", sep = "")
-    if(!missing(max_params)){
-      cat(", ", round(pct_max_params, 1), "% of maximum parameters\n", sep ="")
-    } else {
-      cat("\n")
-    }
-  }
+
   # Append first column onto end so we have full cycle of transitions
   distr <- cbind(distr, distr[, 1, drop = FALSE])
   uci <- cbind(uci, uci[ , 1 , drop = FALSE])
@@ -675,7 +694,33 @@ preprocess_species <- function(species,
   #----------------------------------------------------------------------------#
   export$distances <- great_circle_distances(export) |>
     shorten_distance_matrix()
+
   export$geom$dynamic_mask <- export$distr > 0
+
+  if(dummy_dynamic_mask)
+    export$geom$dynamic_mask[, ] <- TRUE
+
+
+  #----------------------------------------------------------------------------#
+  #  Print details                                                          ####
+  #----------------------------------------------------------------------------#
+
+  n_params <- n_parameters(export)
+
+  if(verbose){
+    cat("Model has:\n\t",
+        sum(m), " active cells,\n\t", n_transitions , " transitions, and\n\t",
+        format(n_params, big.mark = ","), " parameters", sep = "")
+    if(!missing(max_params)){
+      pct_max_params <- n_params / max_params * 100
+      cat(", ", round(pct_max_params, 1), "% of maximum parameters\n", sep ="")
+    } else {
+      cat("\n")
+    }
+  }
+
+
+
 
   #----------------------------------------------------------------------------#
   #  Validate                                                            ####

@@ -4,17 +4,21 @@
 \alias{make_mask}
 \title{function to determine the extent of a SpatRaster}
 \usage{
-make_mask(x, clip)
+make_mask(x, count = FALSE)
 }
 \arguments{
 \item{x}{a SpatRaster, typically it's multilayered and containins the
 distribution of a species over time.}
+
+\item{count}{= FALSE}
 }
 \value{
 a single layer SpatRaster with the same CRS, alignment, and
-resolution as x; cropped to the extent of the data in \code{x}; and with
-a \code{TRUE} if there are non-zero cells in any layer in \code{x} and \code{FALSE}
-otherwise.
+resolution as x; cropped to the extent of the data in \code{x}.  With
+\code{count = FALSE} the result is a logical that is \code{TRUE} if there are non-zero
+cells in any layer in \code{x} and \code{FALSE} otherwise.  With \code{count = TRUE} the
+result is an integer with a count of the number of timesteps in which the
+cell appears (0 to 52 given weekly steps).
 }
 \description{
 This function returns a logical single layer SpatRaster

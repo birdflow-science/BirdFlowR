@@ -7,6 +7,11 @@
 #' time (column) is included in the model.
 #'
 #' @param bf a BirdFlow object
+#' @param dummy_mask if TRUE a mask is addded to the object, but the mask is
+#' TRUE for every cell. This yields a BirdFlow object that works with the
+#' current mask dependent version of the package but mimics and old BirdFlow
+#' model.  Note if the old model included state based sparsification the
+#' predictions should be identical even with `dummy_mask = FALSE` (the default).
 #'
 #' @return a BirdFlow object that has a dynamic_mask component and in which
 #' the marginals only includes transitions between cells that are not
@@ -16,7 +21,7 @@
 #' @examples
 #' bf <- add_dynamic_mask(BirdFlowModels::amewoo)
 #'
-add_dynamic_mask <- function(bf){
+add_dynamic_mask <- function(bf, dummy_mask = FALSE){
   if(!has_marginals(bf))
     stop("bf must have marginals to add a dynamic mask.")
   if(!has_distr(bf))
@@ -30,8 +35,10 @@ add_dynamic_mask <- function(bf){
     bf <- drop_transitions(bf)
 
   # make dynamic mask
-
   dyn_mask <- bf$distr != 0 # Avoid get_distr() here - might change col names
+  if(dummy_mask){
+    dyn_mask[ , ] <- TRUE
+  }
   bf$geom$dynamic_mask <- dyn_mask
 
   # Index of forward transitions only
