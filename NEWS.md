@@ -1,3 +1,4 @@
+
 # BirdFlowR  dynamic masking changes
 
 Dynamic masking is a major overhaul of the package in which the cells the model
@@ -42,14 +43,29 @@ interact with the marginals now have to convert between full distributions cover
     for output.
  -  `validate_birdflow()` now checks the dimensions of the marginals and 
     transition matrices against the dynamic mask cell counts for each timestep.
- -  `preprocess_species()` now calls `great_circle_distances()` and   
-    `shorten_distance_matrix()` to create the "/distances" component of the 
-    HDF5, and adds "geom/dynamic_mask" which is a logical matrix indicating 
-    which cells of "/distr" are non-zero for each timestep.
+ -  `preprocess_species()` 
+    - now calls `great_circle_distances()` and `shorten_distance_matrix()`to 
+      create "/distances" component of the HDF5
+    - adds "geom/dynamic_mask" which is a logical matrix indicating 
+      which cells of "/distr" are non-zero for each timestep.
+    - Has updated heuristic to set resolution based on the number of parameters 
+      given dynamic masking.
+    - new argument `dummy_dynamic_mask()` adds a dynamic mask that is all TRUE
+      to force fitting of the prior style of birdflow object.
+    
+ 
+    
 
-STILL PENDING
-  - `preprocess_species()` parameter heuristic update.
-  
+# BirdflowR 0.0.0.9075
+2023-04-18  
+
+Added BirdFlow methods for generics defined in **sf**
+* `st_crs()`  returns an object of class `crs` used by **sf** to define 
+  coordinate reference sytems (CRS).
+* `st_bbox()` returns an object of class `bbox` containing both the extent and
+  crs of a BirdFlow object.  Can be passed to `st_as_sfc()` to convert to a 
+  polygon.
+
 
 # BirdflowR 0.0.0.9074
 2023-04-13
