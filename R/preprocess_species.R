@@ -27,7 +27,7 @@
 #' at a different resolution, a noisy process, so it iteratively tries to find
 #'  the smallest resolution that doesn't exceed `max_params` and then rounds to
 #'  a slightly larger resolution (fewer parameters).
-#'0gftt-m
+#'
 #' @param species a species in any format accepted by [ebirdst::get_species()]
 #' @param out_dir output directory, files will be written here. Required unless
 #'   both `tiff` and `hdf5` are TRUE.  File names created here will incorporate
@@ -717,6 +717,9 @@ preprocess_species <- function(species,
     } else {
       cat("\n")
     }
+    cat(round(n_params / max_param_per_gb, 1),
+        "gb of GPU ram required to fit model.\n"  )
+
   }
 
 

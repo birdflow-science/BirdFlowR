@@ -43,12 +43,12 @@ calc_abundance_stats <- function(x, circular = TRUE, dummy_dynamic_mask = FALSE)
 
 #' predict the number of parameters based on resolution
 #'
-#' This is a helper function that predicts how many parameters the model is
-#' likely to have at a different resolution given a set of stats on the number
-#' of cells and their area for each timestep at the current resolution,
-#' calculated by `calc_abundance_stats()`
+#' This function is called by [preprocess_species()] to predicts how many
+#' parameters the model is likely to have at a different resolution
+#' given a set of stats on the number of cells and their area for each
+#' timestep at the current resolution, calculated by `calc_abundance_stats()`
 #'
-#' The function calculates a preliminary estimate based on the (inaccurate)
+#' `predict_params()` calculates a preliminary estimate based on the inaccurate
 #' assumption that the area covered by cells will be the same at the two
 #' resolutions. However, when changing the resolution not all of the fine cells
 #' underlying occupied coarse cells are occupied thus when increasing the
@@ -59,16 +59,15 @@ calc_abundance_stats <- function(x, circular = TRUE, dummy_dynamic_mask = FALSE)
 #'
 #' `adjustment` allows compensating for this bias. `adjustment` is multiplied by
 #' both the proportional change in resolution: (res2 - res1)/res1 and by the
-#' initial area based estimate and the (possibly negative) result is subtracted
-#' from the area based estimate.
+#' initial area based estimate and the (possibly negative) result is added
+#' to the area based estimate.
 #'
 #' For example if you are doubling the resolution the proportional change is 1
-#' and with an  adjustment of 0.35 you end up subtracting .35 of the initial
-#' estimate (from itself).
+#' and with an  adjustment of 0.35 you end up adding 35% to the initial
+#' estimate.
 #'
 #' Conversely if you are halving the resolution the proportional change is -.5
-#' and you end up subtracting .175 of the estimate.
-#'
+#' and you end up subtracting 17.5% from the estimate.
 #'
 #'
 #' @param a_stats output from `calc_abundance_stats()` the only used component

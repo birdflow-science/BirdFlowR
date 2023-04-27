@@ -102,7 +102,6 @@ must estimate the number of cells covered by the data
 at a different resolution, a noisy process, so it iteratively tries to find
 the smallest resolution that doesn't exceed \code{max_params} and then rounds to
 a slightly larger resolution (fewer parameters).
-0gftt-m
 }
 
 \examples{
