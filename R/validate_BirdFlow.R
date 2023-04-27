@@ -63,7 +63,8 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       "x$metadata$sparse_stats should not be a list",  # Having them is fine
       "x$metadata$sparse should not be a list",  #
       "x$metadata missing:birdflow_version",
-      "x$metadata extra:hyperparameters"
+      "x$metadata extra:hyperparameters",
+      "x$metadata extra:hyperparameters, loss_values"
     ) )
 
   p <- data.frame(problem = problems, type = rep("error", length(problems)) )

@@ -81,7 +81,8 @@ import_birdflow <- function(hdf5, ..., version){
                 "supported."),
                 "2" = import_birdflow_v2(hdf5 = hdf5, ...),
                 "3" = import_birdflow_v3(hdf5 = hdf5, ...),
-                stop("Unrecognized version") ) )
+                stop("Unrecognized version. ",
+                     "Was this model fit with a newer version of BirdFlowR?")))
 }
 
 

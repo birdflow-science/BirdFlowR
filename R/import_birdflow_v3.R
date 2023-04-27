@@ -75,6 +75,7 @@ import_birdflow_v3 <- function(hdf5){
     "metadata/has_transitions",
     "metadata/has_distr",
     "metadata/hyperparameters",
+    "metadata/loss_values",
     "metadata/n_transitions",
     "metadata/n_active",
     "metadata/n_timesteps",
@@ -135,6 +136,10 @@ import_birdflow_v3 <- function(hdf5){
 
   # hyperparameters
   bf$metadata$hyperparameters <-  h5read(hdf5, "metadata/hyperparameters")
+
+  # loss values
+  bf$metadata$loss_values <-  as.data.frame(h5read(hdf5, "metadata/loss_values"))
+
 
   # dates
   dates <- h5read(hdf5, "dates")
