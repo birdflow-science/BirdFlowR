@@ -15,7 +15,8 @@ preprocess_species(
   clip,
   max_params,
   gpu_ram = 12,
-  skip_quality_checks = FALSE
+  skip_quality_checks = FALSE,
+  dummy_dynamic_mask = FALSE
 )
 }
 \arguments{
@@ -32,7 +33,8 @@ the number of significant digits.}
 
 \item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
 
-\item{tiff}{set to TRUE to export geoTIFF files. They are not needed to fit the BirdFlow model.}
+\item{tiff}{set to TRUE to export geoTIFF files. They are not needed to fit
+the BirdFlow model.}
 
 \item{overwrite}{if TRUE (default) any pre-existing output files will be
 overwritten. If FALSE pre-existing files will result in an error.}
@@ -59,6 +61,14 @@ if either\code{ res} or \code{max_params} is set.}
 \item{skip_quality_checks}{If \code{TRUE} than preprocess the species even if
 not all of four ranges are modeled (based on
 \link[ebirdst:ebirdst_runs]{ebirdst_runs()}).}
+
+\item{dummy_dynamic_mask}{set to TRUE to force all cells in the dynamic mask
+to TRUE. This creates a BirdFlow object with a dynamic mask component
+that is compatible with the current BirdFlowR package but that mimics the
+older  predynamic mask BirdFlow models.  If fit the resulting object will
+have transitions at every timestep among all active cells.  The only
+reason to set this to TRUE is for comparsion testing and quality control
+during the transition, and this parameter may eventually be dropped.}
 }
 \value{
 returns a BirdFlow model object that lacks marginals, but is
@@ -81,17 +91,19 @@ identified bounds on the maximum.\tabular{lllll}{
 }
 
 
-Parameters are calculated as: \cr
-\code{parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)}
+The number of parameters is the number of unmasked cells for the first
+timestep + the total number of cells in the marginals which is calculated
+from the dynamic mask.
 
-If \code{gpu_ram} is used (and not \code{res} or \code{max_parameters} ) than  \code{max_parameters} is
-set to \verb{23,224,801 * gpu_ram} (lower of two values in table above).
+If \code{gpu_ram} is used (and not \code{res} or \code{max_parameters} ) than
+\code{max_parameters} is set to \verb{23,224,801 * gpu_ram} (lower of two values in
+table above).
 
 The heuristic to determine resolution given a maximum number of parameters
 must estimate the number of cells covered by the data
 at a different resolution, a noisy process, so it iteratively tries to find
-the finest resolution that doesn't exceed max_params and then rounds to a
-slightly large resolution (fewer parameters).
+the smallest resolution that doesn't exceed \code{max_params} and then rounds to
+a slightly larger resolution (fewer parameters).
 }
 
 \examples{

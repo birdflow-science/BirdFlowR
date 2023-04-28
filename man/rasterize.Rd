@@ -18,9 +18,9 @@ matrix in which each column represents a different distribution.}
 
 \item{x}{A BirdFlow object}
 
-\item{which}{indicates which distributions to return. Can be one or more
+\item{which}{indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format year-month-day
-e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or \code{"all"} which will
+e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;    or \code{"all"} which will
 return distributions for all timesteps.}
 }
 \value{

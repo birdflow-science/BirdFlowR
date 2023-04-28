@@ -2,12 +2,12 @@
 % Please edit documentation in R/import_birdflow.R
 \name{import_birdflow}
 \alias{import_birdflow}
-\title{import BirdFlow model from an hdf5 file}
+\title{Import BirdFlow models from HDF5 files}
 \usage{
 import_birdflow(hdf5, ..., version)
 }
 \arguments{
-\item{hdf5}{Path to an hdf5 file}
+\item{hdf5}{Path to an HDF5 file containing a fitted BirdFlow model.}
 
 \item{...}{Arguments to be passed to a version specific internal function.
 Likely will only be used with
@@ -19,41 +19,48 @@ version 1 which takes two additional arguments: \describe{
 }}
 
 \item{version}{(optional) force reading of BirdFlow models as a particular
-version. Normally, this will be determined from metadata in the hdf5
+version. Normally, this will be determined from metadata in the HDF5
 file.}
 }
 \value{
 a BirdFlow object
 }
 \description{
-This function imports a BirdFlow model data from an HDF5 file written by
-python.
+This function imports a BirdFlow model from an HDF5
+(Hierarchical Data Format version 5) file. The workflow is to
+first use \code{\link[=preprocess_species]{preprocess_species()}} to download and format the data for
+model fitting, producing an HDF5 file; then use BirdFlow Python software to
+fit the model and add marginals and hyperparameters to the HDF5 file; and,
+finally import the model with \code{import_birdflow()}.
 }
 \details{
-The hdf5 file should have
-\itemize{
-\item \code{date} the date the model was exported from python
-\item \code{densities} the training distributions in their vector forms stored in a
-matrix
-\item \code{dtuple} (metadata list) with items:
-\itemize{
-\item \code{cells} the number of active (non-masked) cells
-\item \code{nan_mask} a factor matrix of the raster extent with 'TRUE' for masked
-cells, and 'FALSE' for unmasked. This is the reverse of the BirdFlow
-internal representation which uses TRUE for active cells.
-\item \code{weeks} the number of timesteps in the model
-\item \code{x_dim} the number of columns in the model raster
-\item \code{y_dim} the number of rows in the model raster
+After importing you may want to call \code{\link[=sparsify]{sparsify()}} to reduce the
+object size.  If you plan on doing many calls to \code{\link[=route]{route()}} or \code{\link[=predict]{predict()}}
+you should call \code{\link[=build_transitions]{build_transitions()}} as well.
 }
-\item \code{marginals} the marginal probabilities between adjacent timesteps in the
-birdflow model. R reads these in column dominant format even though
-they are stored in row-dominant so they must be transposed.
-\item \code{version} an integer indicating the version of the BirdFlow hdf5 file
-format.  We will increment this when we change what's in the file.
+\section{HDF5 file version}{
+
+
+The HDF5 BirdFlow model files have an internal version number that is
+incremented on major changes to the HDF5 file structure. The file
+version is retained in the imported object.
+\itemize{
+\item Version 1 predates \link[=preprocess_species]{BirdFlowR preprocessing} and only
+contains marginals and a few other python objects, importing it requires
+having an associated TIFF file that has the extent and distribution data.
+The version number (1) is kept in "/version" within the HDF5 file.
+\item Version 2 is the first version that includes preprocessing in BirdFlowR.
+It does not include dynamic masking.  The version number (2) is stored
+in  "/metadata/birdflow_version".  Some version 2 files include
+hyper parameters in the HDF5 but these are not read into R.
+\item Version 3 marks the transition to dynamic masking, the HDF5 created during
+preprocessing gained "/geom/dynamic_mask" and "/distances"  (great
+circle distance matrix).  As in version 2 the version is
+stored in "/metadata/birdflow_version" but unlike previous versions the
+R package version that did the preprocessing is saved in character
+format to "/metdata/birdflowr_version". When version 3 files are imported
+into R with model fits the hyperparameters are saved to
+\verb{$metadata$hyperparameters} (a list).
+}
 }
 
-The geoTiff is required for the coordinate reference system (CRS) and the
-spatial extent. In the future we hope to add this information, along with the
-species code to the hdf5 file.  Currently the mask and some other attributes
-from the hdf5 are checked against redundant versions in the geoTiff.
-}

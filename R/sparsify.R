@@ -99,6 +99,8 @@
 #' }
 sparsify <- function(x, method, p, fix = TRUE){
 
+  if(has_dynamic_mask(x))
+    stop("sparsify() has not yet been updated to work with dynamic masks.")
   supported_methods <- c("model", "marginal", "conditional", "state")
   proportional_methods <- setdiff(supported_methods, "state")
 

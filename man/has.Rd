@@ -5,13 +5,16 @@
 \alias{has_marginals}
 \alias{has_transitions}
 \alias{has_distr}
-\title{Does a BirdFlow object have all marginals, distributions or transitions}
+\alias{has_dynamic_mask}
+\title{Does a BirdFlow object have certain compoenents}
 \usage{
 has_marginals(x)
 
 has_transitions(x)
 
 has_distr(x)
+
+has_dynamic_mask(x)
 }
 \arguments{
 \item{x}{a BirdFlow model}
@@ -20,6 +23,6 @@ has_distr(x)
 logical indicating the BirdFlow model has the relevant element
 }
 \description{
-These are private functions to query the contents of a BirdFlow object and
-allow for more concise and clear code.
+These functions return information about the contents of a
+BirdFlow object.
 }

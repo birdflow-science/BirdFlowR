@@ -9,9 +9,9 @@ get_distr(x, which = "all", from_marginals = FALSE)
 \arguments{
 \item{x}{a BirdFlow model}
 
-\item{which}{indicates which distributions to return. Can be one or more
+\item{which}{indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format year-month-day
-e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects; or \code{"all"} which will
+e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;    or \code{"all"} which will
 return distributions for all timesteps.}
 
 \item{from_marginals}{if TRUE and \code{x} has marginals the distribution will be

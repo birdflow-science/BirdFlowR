@@ -16,9 +16,9 @@
 #'   [rasterize_distr()].  [sample_distr()] will convert one cell to 1 and the rest
 #'   to 0 probabilistically based on the densities in the distribution.
 #' @param x a BirdFlow model
-#' @param which indicates which distributions to return. Can be one or more
+#' @param which indicates which timesteps to return. Can be one or more
 #'   integers indicating timesteps; character dates in the format year-month-day
-#'   e.g. `"2019-02-25"`; [`Date`][base::Dates] objects; or `"all"` which will
+#'   e.g. `"2019-02-25"`; [`Date`][base::Dates] objects;    or `"all"` which will
 #'   return distributions for all timesteps.
 #' @param from_marginals if TRUE and `x` has marginals the distribution will be
 #'   from the marginals even if `x` also has distributions.
@@ -29,48 +29,66 @@
 get_distr <- function(x, which = "all", from_marginals = FALSE) {
 
   # Resolve which into integer timesteps
+  which <- lookup_timestep(which, x)
 
-  if (is.character(which) && which == "all") {
-    which <- x$dates$interval
-  } else {
-   which <- lookup_timestep(which, x)
-  }
+  if(x$metadata$has_distr && !from_marginals){
+    # Return stored distribution
 
-  if (!all(which %in% x$dates$interval)) {
-    wrong <- setdiff(which, x$dates$interval)
-    stop("which resolved to timesteps that aren't in the model:",
-         paste(wrong, collapse = ", "))
-  }
-
-  if (x$metadata$has_distr && !from_marginals) { # Return stored distribution
     d <- x$distr[, which]
     if(length(which) == 1){
       attr(d, "time") <- paste0("t", which)
     }
     return(reformat_distr_labels( d, x) )
 
-  } else { # Or calculate from marginals
-    if(!x$metadata$has_marginals) {
+  } else {
+    # Or calculate from marginals
+    if(!x$metadata$has_marginals){
       if(from_marginals){
-        stop("The BirdFlow model has no marginals to calculate",
-             "distribution from.")
+        stop("The BirdFlow model has no marginals to ",
+             "calculate distribution from.")
       } else {
         stop("No distributions available in the BirdFlow object.")
       }
     }
+
     d <- vector(mode = "list", length = length(which))
-    for(i in seq_along(which)){
+    if(has_dynamic_mask(x)){
+      for(i in seq_along(which)){
       id <- which[i]  # Distribution id
+
       if(id == 1){  # use marginal after the distribution
         m <- x$marginals[[id]]
-        d[[i]] <- Matrix::rowSums(m)
+        dmd <- Matrix::rowSums(m)
       } else { # use marginal before the distribution
         # (not available for first marginal)
         # marginal column sums are the distribution after that marginal
         m <- x$marginals[[id - 1 ]] # Prior marginal
-        d[[i]] <- Matrix::colSums(m)  # colsums = distribution for state after marginal
+        dmd <- Matrix::colSums(m)  # colsums = distribution for state after marginal
       }
-    }
+
+      # dm_d = dynamically masked distribution
+      # need to expand to unmasked distribution (um_d)
+      umd <- rep(0, n_active(x))
+      umd[get_dynamic_mask(x, id)] <- dmd
+      d[[i]] <- umd
+      }
+    } else {  # no dynamic mask
+
+      ### BACK COMPATABILITY CODE
+      for(i in seq_along(which)){
+        id <- which[i]  # Distribution id
+        if(id == 1){  # use marginal after the distribution
+          m <- x$marginals[[id]]
+          d[[i]] <- Matrix::rowSums(m)
+        } else { # use marginal before the distribution
+          # (not available for first marginal)
+          # marginal column sums are the distribution after that marginal
+          m <- x$marginals[[id - 1 ]] # Prior marginal
+          d[[i]] <- Matrix::colSums(m)  # colsums = distribution for state after marginal
+        }
+      }  # end no dynamic mask
+    } # end from marginals
+
     # Return single distribution as vector
     if(length(which) == 1){
       d <- d[[1]] # reformat as vector
