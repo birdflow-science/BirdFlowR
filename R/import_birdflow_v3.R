@@ -1,3 +1,4 @@
+# nolint start: cyclocomp_linter.
 #' import BirdFlow model from an hdf5 file
 #'
 #' This function imports a BirdFlow model data from an HDF5 file written by
@@ -9,7 +10,7 @@
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
 #' @keywords internal
-import_birdflow_v3 <- function(hdf5){
+import_birdflow_v3 <- function(hdf5) {
 
   stopifnot(file.exists(hdf5))
 
@@ -21,13 +22,13 @@ import_birdflow_v3 <- function(hdf5){
   #----------------------------------------------------------------------------#
   #   Verify contents
   #----------------------------------------------------------------------------#
-  if(FALSE){
+  if (FALSE) {
     # Code to generate expected contents from new_BirdFlow
-    list_structure <- function(x){
-      if(is.list(x)){
+    list_structure <- function(x) {
+      if (is.list(x)) {
         n <- names(x)
         res <- vector(mode = "list", length = length(n))
-        for(i in seq_along(n)){
+        for (i in seq_along(n)) {
           res[[i]] <- c(n[i], paste0(n[i], "/", list_index(x[[i]])))
         }
         r <- do.call(c, args = res)
@@ -92,9 +93,9 @@ import_birdflow_v3 <- function(hdf5){
   contents <- paste0(contents$group, "/", contents$name)
   contents <- gsub("^/*", "", contents)
   absent <- setdiff(expected_contents, contents)
-  extra <- setdiff(contents, expected_contents)
+  extra <- setdiff(contents, expected_contents) # nolint: object_usage_linter
 
-  if(length(absent) != 0){
+  if (length(absent) != 0) {
     stop("hdf5 file:", hdf5, " is missing expected contents '",
          paste(absent, collapse = "', '"), "'")
   }
@@ -112,7 +113,7 @@ import_birdflow_v3 <- function(hdf5){
 
   # Process geometry
   geom <- h5read(hdf5, name = "geom", native = TRUE)
-  for(a in c("nrow", "ncol", "res", "ext")){
+  for (a in c("nrow", "ncol", "res", "ext")) {
     bf$geom[[a]] <- as.numeric(geom[[a]])
   }
   bf$geom$crs <- as.character(geom$crs)
@@ -123,14 +124,14 @@ import_birdflow_v3 <- function(hdf5){
   # They are read as one dimensional arrays (a strange type for R)
   # Here I'm using as.vector to force to a standard vector (of length 1)
   species <- h5read(hdf5, "species")
-  for(a in names(bf$species)){
+  for (a in names(bf$species)) {
     bf$species[[a]] <- as.vector(species[[a]])
   }
 
   # metadata
   metadata <- h5read(hdf5, "metadata")
-  for(a in names(bf$metadata)){
-    if(a %in% names(metadata))
+  for (a in names(bf$metadata)) {
+    if (a %in% names(metadata))
       bf$metadata[[a]] <- as.vector(metadata[[a]])
   }
 
@@ -138,21 +139,21 @@ import_birdflow_v3 <- function(hdf5){
   bf$metadata$hyperparameters <-  h5read(hdf5, "metadata/hyperparameters")
 
   # loss values
-  bf$metadata$loss_values <-  as.data.frame(h5read(hdf5, "metadata/loss_values"))
+  bf$metadata$loss_values <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
 
 
   # dates
   dates <- h5read(hdf5, "dates")
-  for(a in colnames(dates)){
+  for (a in colnames(dates)) {
     dates[[a]] <- as.vector(dates[[a]])
   }
   colnames(dates) <- gsub("^week_", "", colnames(dates))
   bf$dates <- dates
 
   # Save marginals into list
-  marg <- h5read(hdf5, "marginals", native = TRUE)  # Not using native but transforming later
+  marg <- h5read(hdf5, "marginals", native = TRUE)
   nt <- dim(marg)[3]
-  pad <- function(x){
+  pad <- function(x) {
     stringr::str_pad(x, width = nchar(nt), pad = 0)
   }
   nt <- length(marg)
@@ -160,12 +161,12 @@ import_birdflow_v3 <- function(hdf5){
   bf$marginals <- vector(mode = "list", length = nt)
 
   # Copy and rename marginals
-  for(i in seq_len(nt)){
+  for (i in seq_len(nt)) {
     python_label <- paste0("Week", i, "_to_", i + 1)
-    if(circular && i == nt){
-      label <- paste0("M_", pad(i), "-",pad(1))
+    if (circular && i == nt) {
+      label <- paste0("M_", pad(i), "-", pad(1))
     } else {
-      label <- paste0("M_", pad(i), "-",pad(i+1))
+      label <- paste0("M_", pad(i), "-", pad(i + 1))
     }
     bf$marginals[[i]] <- marg[[python_label]]
     names(bf$marginals)[i] <- label
@@ -181,30 +182,30 @@ import_birdflow_v3 <- function(hdf5){
 
   # Cleanup duplicated date row
   sv <- duplicated(bf$dates$date)
-  if(any(sv)){
+  if (any(sv)) {
     bf$dates <- bf$dates[!sv, ]
   }
   bf$metadata$n_timesteps <- nrow(bf$dates)
 
   # Delete duplicated distribution
   d <- bf$distr
-  if(ncol(d) == n_timesteps(bf) + 1 ){
-    if(!all(d[, 1] == d[, ncol(d)]))
+  if (ncol(d) == n_timesteps(bf) + 1) {
+    if (!all(d[, 1] == d[, ncol(d)]))
       stop("Expected extra distribution to matrch first distribution")
-    d <- d[ , 1:(ncol(d) - 1)]
+    d <- d[, 1:(ncol(d) - 1)]
   }
-  dimnames(d) <- list(i = NULL, time = paste0("t",bf$dates$interval ) )
+  dimnames(d) <- list(i = NULL, time = paste0("t", bf$dates$interval))
   bf$distr <- d
 
   # Delete duplicated dynamic mask row
   dm <- bf$geom$dynamic_mask
-  if(ncol(dm) == n_timesteps(bf) + 1 ){
-    if(!all(dm[, 1] == dm[, ncol(dm)]))
+  if (ncol(dm) == n_timesteps(bf) + 1) {
+    if (!all(dm[, 1] == dm[, ncol(dm)]))
       stop("Expected first and last dynamic mask columns to matrch in circular",
            "BirdFlow model")
-    dm <- dm[ , 1:(ncol(dm) - 1)]
+    dm <- dm[, 1:(ncol(dm) - 1)]
   }
-  dimnames(dm) <- list(i = NULL, time = paste0("t",bf$dates$interval ) )
+  dimnames(dm) <- list(i = NULL, time = paste0("t", bf$dates$interval))
   bf$geom$dynamic_mask <- dm
 
   # Save marginal index - allows looking up a marginal, and direction from
@@ -217,7 +218,7 @@ import_birdflow_v3 <- function(hdf5){
   #    marginal : marginal code e.g. "M_01-02", order follows
   #      forward transition order, so smaller number is generally first
   #      except with the last marginal in a circular model eg "M_52-01"
-  if(circular){
+  if (circular) {
     index <- data.frame(from = 1:n_timesteps(bf), to = c(2:n_timesteps(bf), 1),
                         direction = "forward")
   } else {
@@ -229,14 +230,13 @@ import_birdflow_v3 <- function(hdf5){
   index$transition <- paste0("T_", pad(index$from), "-", pad(index$to))
   index$marginal <- NA
   sv <- index$direction == "forward" # selection vector
-  index$marginal[sv] <- paste0("M_", pad(index$from[sv]), "-", pad(index$to[sv]))
+  index$marginal[sv] <-
+    paste0("M_", pad(index$from[sv]), "-", pad(index$to[sv]))
   sv <- index$direction == "backward"
-  index$marginal[sv] <- paste0("M_", pad(index$to[sv]), "-", pad(index$from[sv]))
+  index$marginal[sv] <-
+    paste0("M_", pad(index$to[sv]), "-", pad(index$from[sv]))
   bf$marginals$index <- index
 
   return(bf)
 }
-
-
-
-
+# nolint end

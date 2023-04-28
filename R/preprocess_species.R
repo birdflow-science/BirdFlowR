@@ -315,7 +315,7 @@ preprocess_species <- function(species,
       stopifnot(is.numeric(gpu_ram),
                 length(gpu_ram) == 1,
                 !is.na(gpu_ram),
-                gpu_ram < 0)
+                gpu_ram > 0)
       max_params <- max_param_per_gb * gpu_ram
       if (verbose)
         cat("Setting max_params to ", max_params, " anticipating ",

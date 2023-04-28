@@ -51,7 +51,7 @@ predict.BirdFlow <- function(object, distr, start, end,
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                             gsub("^.*-", "", transitions)))
 
-  current_dm <- dyn_mask[ , start]
+  current_dm <- dyn_mask[, start]
 
   if (multiple_distributions) {
     nd <- ncol(distr) # number of distributions
@@ -68,7 +68,7 @@ predict.BirdFlow <- function(object, distr, start, end,
       tm <- get_transition(object,  transitions[i])  # transition matrix
       distr <-  tm %*%  distr
       current_dm <- dyn_mask[, timesteps[i + 1]]
-      pred[ current_dm, , (i + 1)] <- as.vector(distr) # save the location
+      pred[current_dm, , (i + 1)] <- as.vector(distr) # save the location
     }
     return(reformat_distr_labels(pred, object))
   }  else {  # Single distribution

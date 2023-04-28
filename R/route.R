@@ -87,10 +87,10 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
 
     pos <- positions[[timestep]]  # positions associated with the d. masked
                                   # distribution for this timestep
-    if(is.null(dim(x)))
+    if (is.null(dim(x)))
       return(pos[as.logical(x)])
 
-    apply(x, 2, function(vals)  pos[as.logical(vals)] )
+    apply(x, 2, function(vals)  pos[as.logical(vals)])
   }
 
   # Add dynamic mask
@@ -109,7 +109,7 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
     tm <- get_transition(x,  transitions[i])  # transition matrix
     distr <- tm %*% distr           # project
     distr <- sample_distr(distr)  # "one hot"
-    trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1]) # save the location
+    trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1])
   }
 
   format_trajectory <- function(trajectory, bf, timesteps) {

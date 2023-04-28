@@ -54,24 +54,24 @@
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
-import_birdflow <- function(hdf5, ..., version){
+import_birdflow <- function(hdf5, ..., version) {
 
   current_version <- new_BirdFlow()$metadata$birdflow_version
 
-  if(missing(version)){
+  if (missing(version)) {
     contents <- h5ls(hdf5)
     contents <- paste0(contents$group, "/", contents$name)
     contents <- gsub("^/*", "", contents)
 
-    if("version" %in% contents){
+    if ("version" %in% contents) {
       # used in version 1
       version <- as.vector(h5read(hdf5, "version"))
-    } else if("metadata/birdflow_version" %in% contents){
+    } else if ("metadata/birdflow_version" %in% contents) {
       # used in version 2+
       version <- as.vector(h5read(hdf5, "metadata/birdflow_version"))
     } else {
       # default to current version
-      version = current_version
+      version <- current_version
     }
   }
 
@@ -84,7 +84,3 @@ import_birdflow <- function(hdf5, ..., version){
                 stop("Unrecognized version. ",
                      "Was this model fit with a newer version of BirdFlowR?")))
 }
-
-
-
-
