@@ -23,10 +23,11 @@
 #'  `season_buffer`. `direction` will be followed and will default to "forward".
 #
 #' @param x A BirdFlow object
-#' @param start,end The starting and ending points in time specified as
-#' timesteps, character dates, date objects, or if  `end` is omitted
-#'  start may be set to "all" or a season name to be interpreted by
-#'  [lookup_season_timesteps()].
+#' @param start The starting points in time specified as
+#' timesteps, character dates, or date objects; or  may be set to "all" or a
+#' season name to be interpreted by [lookup_season_timesteps()].
+#' @param end If start is a timestep or date `end` should be a timestep or date
+#' indicating the ending point in time.
 #' @param direction Either "forward" or "backward".
 #'
 #'   If `start` and `end`

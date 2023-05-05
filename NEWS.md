@@ -1,3 +1,19 @@
+# BirdflowR 0.1.0.9002
+
+### Added movment vector visualizations
+
+These functions calculate and visualize the average movement out of each cell 
+in a BirdFlow model during a particular transition.
+
+New Functions
+
+ * `calc_movement_vectors()`  returns a data frame with information on the 
+   average movement out of each cell in the model for a given timestep.
+ * `plot_movement_vectors()`  plots movement vectors directly from a BirdFlow 
+   model for a given timestep. Returns a `ggplot` object.
+ * `animate_movement_vectors()` creates an animation of the vectors over a 
+   series of timesteps.  Returns a `gganim` object.
+
 # BirdflowR 0.1.0.9001
 
 ## Switch to Dynamic masking
