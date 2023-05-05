@@ -1,3 +1,13 @@
+# BirdflowR 0.1.0.9003
+
+* `evaluate_performance()` is now exported.
+* `evaluate_performance()` now uses the dynamic mask when calculating 
+correlations (excluding the masked out cells). This means a bunch of cells 
+that were essentially forced to zero in both sides of the correlation aren't 
+included in the calculation. Correlations will get lower and the effect will 
+be more pronounced with lower correlations.
+
+
 # BirdflowR 0.1.0.9002
 
 ### Added movment vector visualizations
