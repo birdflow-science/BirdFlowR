@@ -27,7 +27,7 @@
 #' - [animate_movement_vectors()] to produce animations of the vectors over
 #'   time.
 #' @export
-#'
+#' @importFrom grDevices rgb
 #' @examples
 #' bf <- BirdFlowModels::amewoo
 #' plot_movement_vectors(bf, start = 7)
