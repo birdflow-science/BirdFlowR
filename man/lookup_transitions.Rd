@@ -9,10 +9,12 @@ lookup_transitions(x, start, end, direction, season_buffer)
 \arguments{
 \item{x}{A BirdFlow object}
 
-\item{start, end}{The starting and ending points in time specified as
-timesteps, character dates, date objects, or if  \code{end} is omitted
-start may be set to "all" or a season name to be interpreted by
-\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
+\item{start}{The starting points in time specified as
+timesteps, character dates, or date objects; or  may be set to "all" or a
+season name to be interpreted by \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
+
+\item{end}{If start is a timestep or date \code{end} should be a timestep or date
+indicating the ending point in time.}
 
 \item{direction}{Either "forward" or "backward".
 
