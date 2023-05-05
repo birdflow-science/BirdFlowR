@@ -4,7 +4,7 @@
 \alias{evaluate_performance}
 \title{Evaluate BirdFlow model performance}
 \usage{
-evaluate_performance(x)
+evaluate_performance(x, distr_only = FALSE)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -44,5 +44,11 @@ a training distribution that is multiplied with a transition matrix
 (derived from the marginal distribution) to project forward one timestep;
 or multiplied repeatedly with transition matrices to project forward
 multiple timesteps.
+
+Correlations are calculated for only the non-dynamically masked cells.
+}
+\examples{
+bf <- BirdFlowModels::amewoo
+evaluate_performance(bf)
 }
 \keyword{internal}

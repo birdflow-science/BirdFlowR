@@ -13,6 +13,8 @@
 #' or multiplied repeatedly with transition matrices to project forward
 #' multiple timesteps.
 #'
+#' Correlations are calculated for only the non-dynamically masked cells.
+#'
 #' @param x A BirdFlow object
 #'
 #' @return
@@ -37,21 +39,46 @@
 #'  training distribution.}
 #' }
 #' @keywords internal
-evaluate_performance <- function(x){
+#' @examples
+#' bf <- BirdFlowModels::amewoo
+#' evaluate_performance(bf)
+#' @export
+evaluate_performance <- function(x, distr_only = FALSE) {
 
+  ### Transition code
+  if (!has_dynamic_mask(x))
+    x <- add_dynamic_mask(x)
+
+  # Calculate metrics that are based on one timestep or a
+  # single step projection
   transitions <- lookup_transitions(x, start = 1, end = n_distr(x))
   distr_cor <- single_step_cor <- numeric(length(transitions))
-  for(i in seq_along(transitions)){
+  for (i in seq_along(transitions)) {
     from <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[i]))
+    start_distr <- get_distr(x, from, from_marginals = FALSE)
+    marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
+    start_dm <- get_dynamic_mask(x, from)
+    distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
+
+    if (distr_only)
+      next
+
     to <- as.numeric(gsub("^T_[[:digit:]]+-", "", transitions[i]))
-    start_distr <- get_distr( x, from, from_marginals = FALSE)
     end_distr <- get_distr(x, to, from_marginals = FALSE)
     projected <- predict(x, distr = start_distr, start = from, end = to)
-    single_step_cor[i] <- cor(end_distr, projected[, ncol(projected)])
-    marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
-    distr_cor[i] <- cor(start_distr, marginal_start_distr)
+    end_dm <- get_dynamic_mask(x, to) # end dynamic mask
+    single_step_cor[i] <- cor(end_distr[end_dm],
+                              projected[end_dm, ncol(projected)])
+
   }
 
+  if (distr_only) {
+    return(list(mean_distr_cor = mean(distr_cor),
+                min_distr_cor = min(distr_cor)))
+  }
+
+
+  # Calculate Traverse Correlation
   start <- 1
   end <- n_distr(x)
   start_distr <- get_distr(x, 1, from_marginals = FALSE)
@@ -59,12 +86,13 @@ evaluate_performance <- function(x){
   projected <- predict(x, distr =  start_distr, start =  start,
                        end =  end, direction =  "forward")
   projected <- projected[, ncol(projected)] # end
+  end_dm <- get_dynamic_mask(x, end)
   traverse_cor <- cor(start_distr, projected)
 
   return(list(mean_step_cor = mean(single_step_cor),
               min_step_cor = min(single_step_cor),
               traverse_cor = traverse_cor,
               mean_distr_cor = mean(distr_cor),
-              min_distr_cor = min(distr_cor) ) )
+              min_distr_cor = min(distr_cor)))
 
 }
