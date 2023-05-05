@@ -3,4 +3,11 @@ template:
   bootstrap: 5
 
 development:
-  mode: auto
+  mode: unreleased
+
+home:
+  links:
+  - text: BirdFlow Science
+    href: https://https://birdflow-science.github.io/
+  - text: BirdFlow (python)
+    href:https://github.com/Miguel-Fuentes/birdflow
