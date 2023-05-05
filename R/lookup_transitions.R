@@ -16,10 +16,11 @@
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`
 #' @keywords internal
-lookup_transitions <- function(x, start, end, direction, season_buffer){
+lookup_transitions <- function(x, start, end, direction, season_buffer, n){
 
   stopifnot(inherits(x, "BirdFlow"))
-  steps <- lookup_timestep_sequence(x = x, start, end, direction, season_buffer)
+  steps <- lookup_timestep_sequence(x = x, start, end, direction,
+                                    season_buffer, n)
 
   nc <- nchar(n_timesteps(x))
   pad <- function(x) stringr::str_pad(x, width = nc, pad = "0")

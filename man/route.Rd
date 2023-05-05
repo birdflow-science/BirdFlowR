@@ -4,7 +4,19 @@
 \alias{route}
 \title{Generate BirdFlow routes}
 \usage{
-route(x, x_coord, y_coord, n, row, col, start, end, direction, season_buffer)
+route(
+  x,
+  x_coord,
+  y_coord,
+  n_each,
+  row,
+  col,
+  start,
+  end,
+  direction,
+  season_buffer,
+  n
+)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -12,9 +24,9 @@ route(x, x_coord, y_coord, n, row, col, start, end, direction, season_buffer)
 \item{x_coord, y_coord}{One or more sets of coordinates identifying starting
 positions.}
 
-\item{n}{Optional, if provided each starting position will be duplicated this
-many times. \code{n} can be a single integer or a vector with one integer per
-starting position.}
+\item{n_each}{Optional, if provided each starting position will be
+duplicated this many times. \code{n_each} can be a single integer or a vector
+with one integer per starting position.}
 
 \item{row, col}{One or more row and column indices to begin routing from.
 These are an alternative to \code{x_coord} and \code{y_coord} and both sets of
@@ -36,11 +48,19 @@ dates.
 
 If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
 \code{start} and \code{end} should either both be timesteps (numeric); or
-\code{end} should be omitted and start should be "all" or a season name.}
+\code{end} should be omitted and start should be "all" or a season name.
+
+If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
+than \code{direction} defaults to "forward".}
 
 \item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
+
+\item{n}{Alternative to \code{end} for specifying when a sequence should end.
+\code{n} indicates how many transitions should be in the sequence in \code{direction}
+which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
+timesteps.}
 }
 \value{
 This will likely change. Currently returns a list with:

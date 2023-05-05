@@ -4,7 +4,7 @@
 \alias{lookup_transitions}
 \title{Lookup a series of transitions connecting two dates or timesteps}
 \usage{
-lookup_transitions(x, start, end, direction, season_buffer)
+lookup_transitions(x, start, end, direction, season_buffer, n)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -25,11 +25,19 @@ dates.
 
 If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
 \code{start} and \code{end} should either both be timesteps (numeric); or
-\code{end} should be omitted and start should be "all" or a season name.}
+\code{end} should be omitted and start should be "all" or a season name.
+
+If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
+than \code{direction} defaults to "forward".}
 
 \item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
+
+\item{n}{Alternative to \code{end} for specifying when a sequence should end.
+\code{n} indicates how many transitions should be in the sequence in \code{direction}
+which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
+timesteps.}
 }
 \value{
 A character vector with the named transitions required to get between

@@ -18,7 +18,8 @@ test_that("route_migration() works with n > 1", {
   set.seed(1)
   # expect no error:
   expect_no_error(
-    rts <- route_migration(BirdFlowModels::amewoo, migration = "fall",  n = 3))
+    rts <- route_migration(BirdFlowModels::amewoo, migration = "fall",
+                           n = 3))
 
   novel_points <- rts$points[!duplicated(rts$points[, c("x", "y", "route")]), ]
   # Expect consistent output
@@ -35,14 +36,16 @@ test_that("route_migration() works with full (not sparse) marginals", {
   y <- i_to_y(i, bf)
 
   # single
-  expect_no_error(rts <- route( bf,x_coord = x, y_coord = y, n = 1, start = 1, end = 5))
+  expect_no_error(rts <- route( bf,x_coord = x, y_coord = y,
+                                n_each = 1, start = 1, end = 5))
 
   # multiple
   i <- apply(sample_distr(get_distr(bf, 1), n = 4), 2,
              function(x) which(as.logical(x)))
   x <- i_to_x(i, bf)
   y <- i_to_y(i, bf)
-  expect_no_error(rts <- route( bf,x_coord = x, y_coord = y, n = 1, start = 1, end = 5))
+  expect_no_error(rts <- route( bf,x_coord = x, y_coord = y,
+                                n_each = 1, start = 1, end = 5))
 
   if(interactive()){
     plot(rast(bf, 1))

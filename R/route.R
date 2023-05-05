@@ -6,9 +6,9 @@
 #' @param x A BirdFlow object
 #' @param x_coord,y_coord  One or more sets of coordinates identifying starting
 #' positions.
-#' @param n Optional, if provided each starting position will be duplicated this
-#' many times. `n` can be a single integer or a vector with one integer per
-#' starting position.
+#' @param n_each Optional, if provided each starting position will be
+#' duplicated this many times. `n_each` can be a single integer or a vector
+#' with one integer per starting position.
 #' @param row,col One or more row and column indices to begin routing from.
 #' These are an alternative to `x_coord` and `y_coord` and both sets of
 #' parameters should not be used at the same time.
@@ -21,8 +21,8 @@
 #' @importMethodsFrom Matrix t
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom rlang .data
-route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
-                  season_buffer) {
+route <- function(x, x_coord, y_coord, n_each, row, col, start, end, direction,
+                  season_buffer, n) {
 
   ### BACK COMPATABILITY CODE
   x <- add_dynamic_mask(x)  # To ease transition pain
@@ -46,21 +46,21 @@ route <- function(x, x_coord, y_coord, n, row, col, start, end, direction,
     `col has values that are not column numbers` = col  %in% seq_len(ncol(x))
     )
 
-  # Duplicate starting positions based on n
-  if (!missing(n)) {
-    if (length(n) == 1) {
-      row <- rep(row, each = n)
-      col <- rep(col, each = n)
+  # Duplicate starting positions based on n_each
+  if (!missing(n_each)) {
+    if (length(n_each) == 1) {
+      row <- rep(row, each = n_each)
+      col <- rep(col, each = n_each)
     } else {
-      if (length(row) != length(n))
-        stop("n should have a single value, or one value for each position")
-      row <- as.vector(unlist(mapply(FUN = rep, x = row,  each = n)))
-      col <- as.vector(unlist(mapply(FUN = rep, x = col,  each = n)))
+      if (length(row) != length(n_each))
+        stop("n_each should have a single value, or one value for each position")
+      row <- as.vector(unlist(mapply(FUN = rep, x = row,  each = n_each)))
+      col <- as.vector(unlist(mapply(FUN = rep, x = col,  each = n_each)))
     }
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(x, start, end, direction, season_buffer)
+  transitions <- lookup_transitions(x, start, end, direction, season_buffer, n)
   timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
                             gsub("^.*-", "", transitions)))
 

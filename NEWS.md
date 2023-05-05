@@ -1,3 +1,16 @@
+# BirdflowR 0.1.0.9005
+Added argument `n` to `lookup_timestep_sequence()`, an alternative to `end`, 
+`n` indicates how many transitions should be in the resulting sequence. 
+`route()`, `lookup_transitions()`, `predict()`, and `animate_movement_vectors()`
+all gained either an explicit `n` parameter or access to it via `...`.
+
+
+**Breaking change:** The pre-existing `n` parameter to `route()` was renamed 
+`n_each` to avoid conflict with the new `n` parameter which is passed on to
+`lookup_timestep_sequence()`. 
+
+Closes #76.
+
 # BirdflowR 0.1.0.9004
 Made changes to support pkgdown.
 
