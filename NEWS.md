@@ -1,3 +1,13 @@
+# BirdflowR 0.1.0.9004
+Made changes to support pkgdown.
+
+* Added links to .yml
+* Added BugReports field to DESCRIPTION file
+* Added a second link to URL field in DESCRIPTION file linking to github repo
+* Switched development mode in .yml to `unreleased`.  `auto` wasn't working with
+  version 0.0.1.x.  When we have our first formal release it should
+  be switched back to `auto`.
+
 # BirdflowR 0.1.0.9003
 
 * `evaluate_performance()` is now exported.

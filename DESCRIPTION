@@ -1,6 +1,6 @@
 Package: BirdFlowR
 Title: Predict and Visualize Bird Movement
-Version: 0.1.0.9003
+Version: 0.1.0.9004
 Authors@R: 
     c(person("Ethan", "Plunkett",  email = "plunkett@umass.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4405-2251")),
@@ -40,4 +40,5 @@ Imports:
 VignetteBuilder: knitr
 Remotes:
   birdflow-science/BirdFlowModels
-URL: https://birdflow-science.github.io/BirdFlowR/
+URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
+BugReports: https://github.com/birdflow-science/BirdFlowR/issues
