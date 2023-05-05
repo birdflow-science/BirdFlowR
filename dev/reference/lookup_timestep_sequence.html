@@ -12,7 +12,7 @@ crossing over the year boundary."><meta name="robots" content="noindex"><!-- mat
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,11 +67,15 @@ crossing over the year boundary.</p>
 <dd><p>A BirdFlow object</p></dd>
 
 
-<dt>start, end</dt>
-<dd><p>The starting and ending points in time specified as
-timesteps, character dates, date objects, or if  <code>end</code> is omitted
-start may be set to "all" or a season name to be interpreted by
-<code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code>.</p></dd>
+<dt>start</dt>
+<dd><p>The starting points in time specified as
+timesteps, character dates, or date objects; or  may be set to "all" or a
+season name to be interpreted by <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code>.</p></dd>
+
+
+<dt>end</dt>
+<dd><p>If start is a timestep or date <code>end</code> should be a timestep or date
+indicating the ending point in time.</p></dd>
 
 
 <dt>direction</dt>
