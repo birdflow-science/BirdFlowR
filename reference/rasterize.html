@@ -16,7 +16,7 @@ SpatRaster."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,13 @@ SpatRaster."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/birdflow-science/BirdFlowR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -51,7 +57,7 @@ SpatRaster."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Functions to convert a BirdFlow object or distribution into a SpatRaster</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/R/rasterize_distr.R" class="external-link"><code>R/rasterize_distr.R</code></a></small>
       <div class="d-none name"><code>rasterize.Rd</code></div>
     </div>
 
@@ -86,9 +92,9 @@ matrix in which each column represents a different distribution.</p></dd>
 
 
 <dt>which</dt>
-<dd><p>indicates which distributions to return. Can be one or more
+<dd><p>indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format year-month-day
-e.g. <code>"2019-02-25"</code>; <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> objects; or <code>"all"</code> which will
+e.g. <code>"2019-02-25"</code>; <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a></code> objects;    or <code>"all"</code> which will
 return distributions for all timesteps.</p></dd>
 
 </dl></div>

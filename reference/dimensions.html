@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/birdflow-science/BirdFlowR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -45,7 +51,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Dimensions of a BirdFlow object</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/R/dimensions.R" class="external-link"><code>R/dimensions.R</code></a>, <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/R/n_parameters.R" class="external-link"><code>R/n_parameters.R</code></a></small>
       <div class="d-none name"><code>dimensions.Rd</code></div>
     </div>
 
@@ -97,7 +103,9 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">xmax</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BirdFlow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -172,6 +180,15 @@ which contains the xmin, xmax, ymin, and ymax of the extent.</p>
 
 
 <p><code><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax()</a></code> maximum y coordinate of extent.</p>
+
+
+<p><code>n_parameters()</code> the number of of parameters that the BirdFlow model
+contains or will contain. This is the number of cells in the marginal
+matrices + the sum of the dynamic mask for the first timestep (number of
+un masked cells at the first timestep).  If the model isn't dynamically
+masked this is equivalent to <code>n_active(x)^2 * n_transitons(x) + n_active(x)</code></p>
+
+
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

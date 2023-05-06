@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/birdflow-science/BirdFlowR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -60,6 +66,16 @@
 
       <dl><dt>
           
+          <code><a href="add_dynamic_mask.html">add_dynamic_mask()</a></code> 
+        </dt>
+        <dd>Convert a BirdFlow object without a dynamic mask into one with a dynamic mask</dd>
+      </dl><dl><dt>
+          
+          <code><a href="animate_movement_vectors.html">animate_movement_vectors()</a></code> 
+        </dt>
+        <dd>Animate movement vectors</dd>
+      </dl><dl><dt>
+          
           <code><a href="birdflow_crs.html">birdflow_crs</a></code> 
         </dt>
         <dd>birdflow_crs</dd>
@@ -75,7 +91,12 @@
         <dd>add or drop transition matrices</dd>
       </dl><dl><dt>
           
-          <code><a href="dimensions.html">nrow(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ncol(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">dim(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">n_timesteps()</a></code> <code><a href="dimensions.html">n_distr()</a></code> <code><a href="dimensions.html">n_transitions()</a></code> <code><a href="dimensions.html">n_active()</a></code> <code><a href="dimensions.html">crs(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ext(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">res(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">yres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmax(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymax(<i>&lt;BirdFlow&gt;</i>)</a></code> 
+          <code><a href="calc_movement_vectors.html">calc_movement_vectors()</a></code> 
+        </dt>
+        <dd>Calculate the average movement for cells in a BirdFlow model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="dimensions.html">nrow(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ncol(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">dim(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">n_timesteps()</a></code> <code><a href="dimensions.html">n_distr()</a></code> <code><a href="dimensions.html">n_transitions()</a></code> <code><a href="dimensions.html">n_active()</a></code> <code><a href="dimensions.html">crs(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ext(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">res(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">yres(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymin(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">xmax(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">ymax(<i>&lt;BirdFlow&gt;</i>)</a></code> <code><a href="dimensions.html">n_parameters()</a></code> 
         </dt>
         <dd>Dimensions of a BirdFlow object</dd>
       </dl><dl><dt>
@@ -95,6 +116,11 @@
         <dd>extract distributions from BirdFlow models</dd>
       </dl><dl><dt>
           
+          <code><a href="get_dynamic_mask.html">get_dynamic_mask()</a></code> 
+        </dt>
+        <dd>Get the dynamic mask from a BirdFlow object</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_metadata.html">get_metadata()</a></code> 
         </dt>
         <dd>retrieve BirdFlow metadata</dd>
@@ -110,14 +136,14 @@
         <dd>Return a transition matrix from a BirdFlowR model</dd>
       </dl><dl><dt>
           
-          <code><a href="has.html">has_marginals()</a></code> <code><a href="has.html">has_transitions()</a></code> <code><a href="has.html">has_distr()</a></code> 
+          <code><a href="has.html">has_marginals()</a></code> <code><a href="has.html">has_transitions()</a></code> <code><a href="has.html">has_distr()</a></code> <code><a href="has.html">has_dynamic_mask()</a></code> 
         </dt>
-        <dd>Does a BirdFlow object have all marginals, distributions or transitions</dd>
+        <dd>Does a BirdFlow object have certain compoenents</dd>
       </dl><dl><dt>
           
           <code><a href="import_birdflow.html">import_birdflow()</a></code> 
         </dt>
-        <dd>import BirdFlow model from an hdf5 file</dd>
+        <dd>Import BirdFlow models from HDF5 files</dd>
       </dl><dl><dt>
           
           <code><a href="index_conversions.html">x_to_col()</a></code> <code><a href="index_conversions.html">y_to_row()</a></code> <code><a href="index_conversions.html">row_to_y()</a></code> <code><a href="index_conversions.html">col_to_x()</a></code> <code><a href="index_conversions.html">i_to_rc()</a></code> <code><a href="index_conversions.html">i_to_row()</a></code> <code><a href="index_conversions.html">i_to_col()</a></code> <code><a href="index_conversions.html">i_to_x()</a></code> <code><a href="index_conversions.html">i_to_y()</a></code> <code><a href="index_conversions.html">i_to_xy()</a></code> <code><a href="index_conversions.html">rc_to_i()</a></code> <code><a href="index_conversions.html">xy_to_i()</a></code> <code><a href="index_conversions.html">latlon_to_xy()</a></code> <code><a href="index_conversions.html">xy_to_latlon()</a></code> 
@@ -148,6 +174,11 @@
           <code><a href="lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> 
         </dt>
         <dd>Lookup a sequence of timesteps</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot_movement_vectors.html">plot_movement_vectors()</a></code> 
+        </dt>
+        <dd>Plot bird movement vectors</dd>
       </dl><dl><dt>
           
           <code><a href="predict.BirdFlow.html">predict(<i>&lt;BirdFlow&gt;</i>)</a></code> 

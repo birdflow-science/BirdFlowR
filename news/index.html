@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,13 @@
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/birdflow-science/BirdFlowR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -45,9 +51,101 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Changelog</h1>
-      
+      <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9004" id="birdflowr-0109004">BirdflowR 0.1.0.9004<a class="anchor" aria-label="anchor" href="#birdflowr-0109004"></a></h2>
+<p>Made changes to support pkgdown.</p>
+<ul><li>Added links to .yml</li>
+<li>Added BugReports field to DESCRIPTION file</li>
+<li>Added a second link to URL field in DESCRIPTION file linking to github repo</li>
+<li>Switched development mode in .yml to <code>unreleased</code>. <code>auto</code> wasn’t working with version 0.0.1.x. When we have our first formal release it should be switched back to <code>auto</code>.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9003" id="birdflowr-0109003">BirdflowR 0.1.0.9003<a class="anchor" aria-label="anchor" href="#birdflowr-0109003"></a></h2>
+<ul><li>
+<code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> is now exported.</li>
+<li>
+<code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> now uses the dynamic mask when calculating correlations (excluding the masked out cells). This means a bunch of cells that were essentially forced to zero in both sides of the correlation aren’t included in the calculation. Correlations will get lower and the effect will be more pronounced with lower correlations.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9002" id="birdflowr-0109002">BirdflowR 0.1.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-0109002"></a></h2>
+<div class="section level4">
+<h4 id="added-movment-vector-visualizations-0-1-0-9002">Added movment vector visualizations<a class="anchor" aria-label="anchor" href="#added-movment-vector-visualizations-0-1-0-9002"></a></h4>
+<p>These functions calculate and visualize the average movement out of each cell in a BirdFlow model during a particular transition.</p>
+<p>New Functions</p>
+<ul><li>
+<code><a href="../reference/calc_movement_vectors.html">calc_movement_vectors()</a></code> returns a data frame with information on the average movement out of each cell in the model for a given timestep.</li>
+<li>
+<code><a href="../reference/plot_movement_vectors.html">plot_movement_vectors()</a></code> plots movement vectors directly from a BirdFlow model for a given timestep. Returns a <code>ggplot</code> object.</li>
+<li>
+<code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code> creates an animation of the vectors over a series of timesteps. Returns a <code>gganim</code> object.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9001" id="birdflowr-0109001">BirdflowR 0.1.0.9001<a class="anchor" aria-label="anchor" href="#birdflowr-0109001"></a></h2>
+<div class="section level3">
+<h3 id="switch-to-dynamic-masking-0-1-0-9001">Switch to Dynamic masking<a class="anchor" aria-label="anchor" href="#switch-to-dynamic-masking-0-1-0-9001"></a></h3>
+<div class="section level4">
+<h4 id="summary-0-1-0-9001">Summary<a class="anchor" aria-label="anchor" href="#summary-0-1-0-9001"></a></h4>
+<p>Dynamic masking is a major overhaul of the package in which the cells the model acts on will change over time and be limited to cells with non-zero value in the eBird S&amp;T distributions. This means that the marginal dimensions will vary over time, and they will often not be square.</p>
+<p>The intent is to isolate the user and from the changes. In particular the output and input distribution objects will still contain all the active cells and most public function arguments are unchanged.</p>
+<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamicly masked distributions that conform to the marginal dimensions. <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
+<p>BirdFlow objects gained a great circle distance and a dynamic mask, both created in preprocessing, and variable marginals and transitions dimensions. The great circle distance is used by python and then dropped (in python) from the fitted model, as it’s fairly large and easy to recalculate with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</p>
+</div>
+<div class="section level4">
+<h4 id="detailed-changes-0-1-0-9001">Detailed changes<a class="anchor" aria-label="anchor" href="#detailed-changes-0-1-0-9001"></a></h4>
+<ul><li>
+<strong>BirdFlow object format changes</strong>
+<ul><li>New <code>/distances/</code> constains values from a distance matrix of great circle distances in km between each pair of locations - converted to a vector of non duplicated values by <code><a href="../reference/shorten_distance_matrix.html">shorten_distance_matrix()</a></code> full matrix can be recreated with <code><a href="../reference/shorten_distance_matrix.html">expand_distance_matrix()</a></code> this is added to the export HDF5 by <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> but not retained in the fitted models, the distances can be recreated with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</li>
+<li>New <code>/geom/dynamic_mask</code> this is a matrix with a row for each active cell in the model (see <code><a href="../reference/dimensions.html">n_active()</a></code>) and a column for each timestep. The cells have a one to one relationship with the cells in `/distr’ and are TRUE if the cell is included in the model for the timestep and FALSE otherwise.</li>
+<li>
+<code>/metadata/birdflow_version</code> is now 3.<br></li>
+<li>New <code>/metdata/birdflowr_version</code> stores the package version when <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> is/was called.</li>
+<li>New <code>metadata/hyperparameters</code> and <code>metadata/loss_values</code> contain information generated during python model fitting.</li>
+</ul></li>
+<li>
+<strong>New functions</strong>
+<ul><li>
+<code><a href="../reference/get_dynamic_mask.html">get_dynamic_mask()</a></code> similar to <code><a href="../reference/get_distr.html">get_distr()</a></code> but for dynamic mask data.</li>
+<li>
+<code><a href="../reference/add_dynamic_mask.html">add_dynamic_mask()</a></code> updates an old BirdFlow object (in an R session) by adding a dynamic mask. This is mainly to facilitate the transition to allow testing the package with the old models.</li>
+<li>
+<code><a href="../reference/has.html">has_dynamic_mask()</a></code> returns a logical.</li>
+<li>
+<code><a href="../reference/import_birdflow_v3.html">import_birdflow_v3()</a></code> internal function is called by <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> for version 3 BirdFlow HDF5 files.</li>
+<li>
+<code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code> creates a great circle distance matrix encoding the distance (km) between every pair of cells in a BirdFlow object.</li>
+</ul></li>
+<li>
+<strong>Updated functions</strong>
+<ul><li>
+<code><a href="../reference/import_birdflow.html">import_birdflow()</a></code>
+<ul><li>now works with version 2 and 3 BirdFlow HDF5 files (added version 3, dropped version 1)</li>
+<li>reads the dynamic mask</li>
+<li>reads metadata/hyperparameters</li>
+<li>read metadata/loss_values</li>
+</ul></li>
+<li>
+<code><a href="../reference/get_distr.html">get_distr()</a></code> with <code>from_marginals = TRUE</code> now has to expand the truncated distribution calculated from the marginal out to a full distribution.</li>
+<li>
+<code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> have to map from full distributions, to truncated distributions before applying the transition and then, expand back to full for output.</li>
+<li>
+<code>validate_birdflow()</code> now checks the dimensions of the marginals and transition matrices against the dynamic mask cell counts for each timestep.</li>
+<li>
+<code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>
+<ul><li>now calls <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code> and <code><a href="../reference/shorten_distance_matrix.html">shorten_distance_matrix()</a></code>to create “/distances” component of the HDF5</li>
+<li>adds “geom/dynamic_mask” which is a logical matrix indicating which cells of “/distr” are non-zero for each timestep.</li>
+<li>Has updated heuristic to set resolution based on the number of parameters given dynamic masking.</li>
+<li>new argument <code>dummy_dynamic_mask()</code> adds a dynamic mask that is all TRUE to force fitting of the prior style of birdflow object.</li>
+</ul></li>
+<li>
+<code><a href="../reference/sparsify.html">sparsify()</a></code> has not been updated to work with dynamic masks, but will now throw an error telling you that if you try to use it on a BirdFlow object with a dynamic mask.</li>
+</ul></li>
+</ul></div>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9075" id="birdflowr-0009075">BirdflowR 0.0.0.9075<a class="anchor" aria-label="anchor" href="#birdflowr-0009075"></a></h2>
 <p>2023-04-18</p>
@@ -83,9 +181,9 @@ controlled by <code>match_extent</code>.</li>
 <ul><li><code><a href="../reference/get_distr.html">get_distr()</a></code></li>
 </ul></li>
 <li>Addresses issues:
-<ul><li>Fixes bug in #66 where date lookup forward across the year boundary failed.</li>
-<li>Addresses #68 by providing a function to lookup timestep series based on season names (and adds a buffer ability).</li>
-<li>Closes #56 time now is processed mostly by <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> for points in time, and <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> for date ranges. Point lookup now uses <code>findInterval</code> on breaks derived from <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_weeks.html" class="external-link">ebirdst::ebirdst_weeks</a></code> rather than from <code><a href="https://rdrr.io/pkg/terra/man/summarize-generics.html" class="external-link">which.min()</a></code> on a difference from center of the nominal day for each week. This should also make time lookup compatible with partial year BirdFlow models.</li>
+<ul><li>Fixes bug in <a href="https://github.com/birdflow-science/BirdFlowR/issues/66" class="external-link">#66</a> where date lookup forward across the year boundary failed.</li>
+<li>Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/68" class="external-link">#68</a> by providing a function to lookup timestep series based on season names (and adds a buffer ability).</li>
+<li>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/56" class="external-link">#56</a> time now is processed mostly by <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> for points in time, and <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> for date ranges. Point lookup now uses <code>findInterval</code> on breaks derived from <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_weeks.html" class="external-link">ebirdst::ebirdst_weeks</a></code> rather than from <code><a href="https://rdrr.io/pkg/terra/man/summarize-generics.html" class="external-link">which.min()</a></code> on a difference from center of the nominal day for each week. This should also make time lookup compatible with partial year BirdFlow models.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
@@ -96,14 +194,14 @@ controlled by <code>match_extent</code>.</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9071" id="birdflowr-0009071">BirdFlowR 0.0.0.9071<a class="anchor" aria-label="anchor" href="#birdflowr-0009071"></a></h2>
 <p>2023-04-06</p>
-<ul><li><p>Added functions <code><a href="../reference/index_conversions.html">latlon_to_xy()</a></code> and <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> to convert from WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS. Fixes #64.</p></li>
-<li><p>CHANGED behavior in a bunch of the index conversion functions, previously, many threw errors with NA input or values out of range. Most of them now return NA in both of those situations. This made sense to me in the context of #61.</p></li>
+<ul><li><p>Added functions <code><a href="../reference/index_conversions.html">latlon_to_xy()</a></code> and <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> to convert from WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/64" class="external-link">#64</a>.</p></li>
+<li><p>CHANGED behavior in a bunch of the index conversion functions, previously, many threw errors with NA input or values out of range. Most of them now return NA in both of those situations. This made sense to me in the context of <a href="https://github.com/birdflow-science/BirdFlowR/issues/61" class="external-link">#61</a>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9070" id="birdflowr-0009070">BirdFlowR 0.0.0.9070<a class="anchor" aria-label="anchor" href="#birdflowr-0009070"></a></h2>
 <p>2023-04-06</p>
 <ul><li><p>Switching development version number scheme. From now on I will increment the development version by one with every change in the main branch (merged pull request). Previously the version was the issue number.</p></li>
-<li><p>Fixed #61 (and added test). Now <code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> sets <code>exclude</code> and <code>not_active</code> columns to TRUE if either of the involved observations are entirely outside of the extent of the BirdFlow object. Previously locations outside of extent resulted in an error.</p></li>
+<li><p>Fixed <a href="https://github.com/birdflow-science/BirdFlowR/issues/61" class="external-link">#61</a> (and added test). Now <code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> sets <code>exclude</code> and <code>not_active</code> columns to TRUE if either of the involved observations are entirely outside of the extent of the BirdFlow object. Previously locations outside of extent resulted in an error.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9054" id="birdflowr-0009054">BirdFlowR 0.0.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0009054"></a></h2>
@@ -149,13 +247,13 @@ controlled by <code>match_extent</code>.</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9035" id="birdflowr-0009035">BirdFlowR 0.0.0.9035<a class="anchor" aria-label="anchor" href="#birdflowr-0009035"></a></h2>
 <ul><li>
-<code><a href="../reference/sparsify.html">sparsify()</a></code> no longer throws confusing warning (#35)</li>
-<li>First argument of <code><a href="../reference/sparsify.html">sparsify()</a></code> changed from <code>bf</code> to <code>x</code> (consistent with #19)</li>
+<code><a href="../reference/sparsify.html">sparsify()</a></code> no longer throws confusing warning (<a href="https://github.com/birdflow-science/BirdFlowR/issues/35" class="external-link">#35</a>)</li>
+<li>First argument of <code><a href="../reference/sparsify.html">sparsify()</a></code> changed from <code>bf</code> to <code>x</code> (consistent with <a href="https://github.com/birdflow-science/BirdFlowR/issues/19" class="external-link">#19</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9038" id="birdflowr-0009038">BirdFlowR 0.0.0.9038<a class="anchor" aria-label="anchor" href="#birdflowr-0009038"></a></h2>
-<ul><li><p>Updated docker file to work with Apple silicon and not to use cached github repos. (commit #37)</p></li>
-<li><p>Updated installation instructions for Docker (commit #37)</p></li>
+<ul><li><p>Updated docker file to work with Apple silicon and not to use cached github repos. (commit <a href="https://github.com/birdflow-science/BirdFlowR/issues/37" class="external-link">#37</a>)</p></li>
+<li><p>Updated installation instructions for Docker (commit <a href="https://github.com/birdflow-science/BirdFlowR/issues/37" class="external-link">#37</a>)</p></li>
 <li><p>Route output snapshot testing no longer depends on the print(lines) but does check novel points in the points component of the return value. This should fix an issue currently with it failing CRAN check because sf:: changed slightly how it prints a summary of an SF object to screen and also make the snapshot test a little less hair trigger.</p></li>
 </ul></div>
     <div class="section level2">

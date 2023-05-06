@@ -14,7 +14,7 @@ and transitions."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,13 @@ and transitions."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/birdflow-science/BirdFlowR/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -49,7 +55,7 @@ and transitions."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>prepare eBird Status and Trends data for BirdFlow model fitting</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/R/preprocess_species.R" class="external-link"><code>R/preprocess_species.R</code></a></small>
       <div class="d-none name"><code>preprocess_species.Rd</code></div>
     </div>
 
@@ -72,7 +78,8 @@ and transitions.</p>
 <span>  <span class="va">clip</span>,</span>
 <span>  <span class="va">max_params</span>,</span>
 <span>  gpu_ram <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  skip_quality_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  skip_quality_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dummy_dynamic_mask <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,7 +107,8 @@ the number of significant digits.</p></dd>
 
 
 <dt>tiff</dt>
-<dd><p>set to TRUE to export geoTIFF files. They are not needed to fit the BirdFlow model.</p></dd>
+<dd><p>set to TRUE to export geoTIFF files. They are not needed to fit
+the BirdFlow model.</p></dd>
 
 
 <dt>overwrite</dt>
@@ -140,6 +148,16 @@ if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 not all of four ranges are modeled (based on
 <a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs()</a>).</p></dd>
 
+
+<dt>dummy_dynamic_mask</dt>
+<dd><p>set to TRUE to force all cells in the dynamic mask
+to TRUE. This creates a BirdFlow object with a dynamic mask component
+that is compatible with the current BirdFlowR package but that mimics the
+older  predynamic mask BirdFlow models.  If fit the resulting object will
+have transitions at every timestep among all active cells.  The only
+reason to set this to TRUE is for comparsion testing and quality control
+during the transition, and this parameter may eventually be dropped.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -155,14 +173,17 @@ otherwise complete.</p>
 
 <p>The maximum number of parameters that can be fit is machine dependent.
 2023-02-10 we tested under different resolutions with "amewoo" and
-identified bounds on the maximum.</p><table class="table table"><tr><td>Machine</td><td>GPU Ram (GB)</td><td>Lower Bound (worked)</td><td>Upper Bound (failed)</td><td>Params / GB</td></tr><tr><td>titanx gpu</td><td>12GB</td><td>306804561</td><td>334693725</td><td>25567047</td></tr><tr><td>m40 gpu</td><td>24GB</td><td>557395226</td><td>610352178</td><td>23224801</td></tr></table><p>Parameters are calculated as: <br><code>parameters = n_active(bf)^2 * n_transitions(bf) + n_active(bf)</code></p>
-<p>If <code>gpu_ram</code> is used (and not <code>res</code> or <code>max_parameters</code> ) than  <code>max_parameters</code> is
-set to <code>23,224,801 * gpu_ram</code> (lower of two values in table above).</p>
+identified bounds on the maximum.</p><table class="table table"><tr><td>Machine</td><td>GPU Ram (GB)</td><td>Lower Bound (worked)</td><td>Upper Bound (failed)</td><td>Params / GB</td></tr><tr><td>titanx gpu</td><td>12GB</td><td>306804561</td><td>334693725</td><td>25567047</td></tr><tr><td>m40 gpu</td><td>24GB</td><td>557395226</td><td>610352178</td><td>23224801</td></tr></table><p>The number of parameters is the number of unmasked cells for the first
+timestep + the total number of cells in the marginals which is calculated
+from the dynamic mask.</p>
+<p>If <code>gpu_ram</code> is used (and not <code>res</code> or <code>max_parameters</code> ) than
+<code>max_parameters</code> is set to <code>23,224,801 * gpu_ram</code> (lower of two values in
+table above).</p>
 <p>The heuristic to determine resolution given a maximum number of parameters
 must estimate the number of cells covered by the data
 at a different resolution, a noisy process, so it iteratively tries to find
-the finest resolution that doesn't exceed max_params and then rounds to a
-slightly large resolution (fewer parameters).</p>
+the smallest resolution that doesn't exceed <code>max_params</code> and then rounds to
+a slightly larger resolution (fewer parameters).</p>
     </div>
 
     <div class="section level2">

@@ -31,6 +31,12 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/news/index.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc>
   </url>
   <url>
@@ -38,6 +44,12 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc>
@@ -70,6 +82,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_distr.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.html</loc>
   </url>
   <url>
@@ -79,6 +94,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_transition.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/great_circle_distances.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/has.html</loc>
   </url>
   <url>
@@ -86,6 +104,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow_v2.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow_v3.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_prototype.html</loc>
@@ -124,7 +145,13 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/predict_params.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.html</loc>
@@ -149,6 +176,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/shorten_distance_matrix.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/sparsify.html</loc>
