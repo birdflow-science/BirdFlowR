@@ -31,7 +31,3 @@ has_distr <- function(x){
 has_dynamic_mask <- function(x){
   ! is.null(x$geom$dynamic_mask) && is.matrix(x$geom$dynamic_mask)
 }
-
-
-
-

@@ -22,6 +22,7 @@
 \alias{ymin,BirdFlow-method}
 \alias{xmax,BirdFlow-method}
 \alias{ymax,BirdFlow-method}
+\alias{is_cyclical}
 \alias{n_parameters}
 \title{Dimensions of a BirdFlow object}
 \usage{
@@ -56,6 +57,8 @@ n_active(x)
 \S4method{xmax}{BirdFlow}(x)
 
 \S4method{ymax}{BirdFlow}(x)
+
+is_cyclical(x)
 
 n_parameters(x)
 }
@@ -104,6 +107,9 @@ which contains the xmin, xmax, ymin, and ymax of the extent.
 \code{xmax()} maximum x coordinate of extent.
 
 \code{ymax()} maximum y coordinate of extent.
+
+\code{is_cyclical()} returns TRUE if the BirdFlow model has a transition
+from the last timestep to the first and FALSE otherwise.
 
 \code{n_parameters()} the number of of parameters that the BirdFlow model
 contains or will contain. This is the number of cells in the marginal

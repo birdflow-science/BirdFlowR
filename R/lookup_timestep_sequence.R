@@ -4,7 +4,7 @@
 #' `lookup_timestep_sequence()` returns an ordered vector of timesteps possibly
 #' crossing over the year boundary.
 #'
-#' `start` and `end` will fall into one of three categories which are treated
+#' `start` and `end` will fall into one of four categories which are treated
 #'   differently:
 #'
 #'  1. If `start` and `end` are numeric than they are treated as timesteps and
@@ -21,6 +21,12 @@
 #'  `start` is a key word that is either "all" for all timesteps, or a season
 #'  name. Season names are passed to [lookup_season_timesteps()] along with
 #'  `season_buffer`. `direction` will be followed and will default to "forward".
+#'
+#'  4. If `start` is a timestep or date, `end` is missing, and `n` is not
+#'   missing than `n` transitions from start are added to the sequence in
+#'   `direction` which defaults to "forward". This results in `n + 1` timesteps
+#'   in the sequence.  The sequence will wrap around the year boundary when
+#'   appropriate if `x` is cyclical.
 #
 #' @param x A BirdFlow object
 #' @param start The starting points in time specified as
@@ -39,9 +45,16 @@
 #'   `start` and `end` should either both be timesteps (numeric); or
 #'   `end` should be omitted and start should be "all" or a season name.
 #'
+#'   If `start` is a timestep or date, `end` is omitted, and `n` is an integer
+#'   than `direction` defaults to "forward".
+#'
 #' @param season_buffer Only used if `start` is a season. `season_buffer` is
 #'   passed to [lookup_season_timesteps()] and defaults to 1; it is the number
 #'   of timesteps to extend the season by at each end.
+#' @param n Alternative to `end` for specifying when a sequence should end.
+#' `n` indicates how many transitions should be in the sequence in `direction`
+#'  which defaults to "forward" if `n` is used.  The sequence will have `n + 1`
+#'  timesteps.
 #' @return An integer sequence of timesteps.
 #' @export
 #' @examples
@@ -64,7 +77,8 @@
 #' lookup_timestep_sequence(bf, "prebreeding_migration", season_buffer = 0,
 #'                          direction = "backward")
 #'
-lookup_timestep_sequence <- function (x, start, end, direction, season_buffer) {
+lookup_timestep_sequence <- function (x, start, end, direction,
+                                      season_buffer, n) {
 
   stopifnot(inherits(x, "BirdFlow"))
   dates <- x$dates
@@ -72,8 +86,11 @@ lookup_timestep_sequence <- function (x, start, end, direction, season_buffer) {
   if(!missing(direction))
     direction <- match.arg(direction, c("forward", "backward"))
 
+  if(!missing(end) && !missing(n))
+    stop("end and n and mutually exclusive.  Use only one of these arguments.")
+
   # Handle special cases where start is "all" or a season name
-  if(is.character(start) && missing(end)){
+  if(is.character(start) && missing(end) && missing(n)){
     stopifnot(length(start) == 1)
     if(missing(direction))
       direction <- "forward"
@@ -90,6 +107,35 @@ lookup_timestep_sequence <- function (x, start, end, direction, season_buffer) {
   if(!missing(season_buffer))
     warning("season_buffer is only used if start is a season name",
          "and end is missing.")
+
+  # Handle start and offset (n)
+  if(!missing(start) && missing(end) && !missing(n)){
+    if(missing(direction))
+      direction <- "forward"
+    if(n > n_timesteps(x))
+      stop("n must be less than n_timesteps(x)")
+
+    start <- lookup_timestep(start, bf = x)
+    stopifnot(direction %in% c("forward", "backward"))
+    if (direction == "forward") {
+      end <- start + n
+      if (end > n_timesteps(x)) {
+        if (!is_cyclical(x))
+          stop("x is not cyclical and n is large enough to extend beyond the",
+               " last timestep.")
+        end <- end - n_timesteps(x)
+      }
+    }
+    if (direction == "backward") {
+      end <- start - n
+      if (end < 1) {
+        if (!is_cyclical(x))
+          stop("x is not cyclical and n is large enough to extend back past ",
+               "the first timestep.")
+        end <- n_timesteps(x) + start - n
+      }
+    }
+  }
 
   if(is.integer(start))
     start <- as.numeric(start)

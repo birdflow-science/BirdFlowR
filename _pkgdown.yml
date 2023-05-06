@@ -7,7 +7,6 @@ development:
 
 home:
   links:
-links:
   - text: BirdFlow Science
     href: https:birdflow-science.github.io/
   - text: BirdFlow (python)

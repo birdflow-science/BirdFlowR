@@ -24,7 +24,7 @@
 #'
 #' @param bf a BirdFlow object
 #' @inheritParams lookup_timestep_sequence
-#' @inheritDotParams lookup_timestep_sequence end direction season_buffer
+#' @inheritDotParams lookup_timestep_sequence end direction season_buffer n
 #'
 #' @return a `gganim` object. `print()` will plot it with default
 #' options, or use [animate()] to set the options. See the example for

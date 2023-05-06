@@ -247,7 +247,7 @@ Currently `route()` returns a list with two items (this may change):
 * `lines` sf object containing a line for each route
 ```{r route, fig.show='hide'}
 rts <- route(bf, x_coord = x, y_coord = y, start = start,
-             end = end, n = n_each)
+             end = end, n_each = n_each)
 head(rts$points, 4)
 ```
 

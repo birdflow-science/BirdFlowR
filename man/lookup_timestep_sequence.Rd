@@ -4,7 +4,7 @@
 \alias{lookup_timestep_sequence}
 \title{Lookup a sequence of timesteps}
 \usage{
-lookup_timestep_sequence(x, start, end, direction, season_buffer)
+lookup_timestep_sequence(x, start, end, direction, season_buffer, n)
 }
 \arguments{
 \item{x}{A BirdFlow object}
@@ -25,11 +25,19 @@ dates.
 
 If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
 \code{start} and \code{end} should either both be timesteps (numeric); or
-\code{end} should be omitted and start should be "all" or a season name.}
+\code{end} should be omitted and start should be "all" or a season name.
+
+If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
+than \code{direction} defaults to "forward".}
 
 \item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
+
+\item{n}{Alternative to \code{end} for specifying when a sequence should end.
+\code{n} indicates how many transitions should be in the sequence in \code{direction}
+which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
+timesteps.}
 }
 \value{
 An integer sequence of timesteps.
@@ -39,7 +47,7 @@ An integer sequence of timesteps.
 crossing over the year boundary.
 }
 \details{
-\code{start} and \code{end} will fall into one of three categories which are treated
+\code{start} and \code{end} will fall into one of four categories which are treated
 differently:
 \enumerate{
 \item If \code{start} and \code{end} are numeric than they are treated as timesteps and
@@ -54,6 +62,11 @@ implicit direction from the dates, than an error will be thrown.
 \code{start} is a key word that is either "all" for all timesteps, or a season
 name. Season names are passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} along with
 \code{season_buffer}. \code{direction} will be followed and will default to "forward".
+\item If \code{start} is a timestep or date, \code{end} is missing, and \code{n} is not
+missing than \code{n} transitions from start are added to the sequence in
+\code{direction} which defaults to "forward". This results in \code{n + 1} timesteps
+in the sequence.  The sequence will wrap around the year boundary when
+appropriate if \code{x} is cyclical.
 }
 }
 \examples{

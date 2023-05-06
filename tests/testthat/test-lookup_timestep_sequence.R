@@ -222,4 +222,29 @@ test_that("lookup_timestep_sequence() works with season input", {
 })
 
 
+test_that("lookup_timestep() works with start and n input", {
+  bf <- BirdFlowModels::rewbla
+
+  # Forward over year boundary
+  expect_no_error( a <- lookup_timestep_sequence(bf, start = 50, n = 10))
+  expect_equal(a, c(50:52, 1:8))
+  expect_equal(length(a), 11)
+
+  # Backward over year boundary
+  expect_no_error( a <- lookup_timestep_sequence(bf, start = 3, n = 5,
+                                                 direction = "backward"))
+  expect_equal(a, c(3:1, 52:50))
+  expect_equal(length(a), 6)
+})
+
+test_that("lookup_timestep() throws expected errors with non-cyclical models", {
+  bf <- BirdFlowModels::amewoo
+  expect_false(is_cyclical(bf))
+  expect_error(a <- lookup_timestep_sequence(bf, start = 50, n = 10),
+               regexp = "x is not cyclical and n is large enough")
+  expect_error(a <- lookup_timestep_sequence(bf, start = 3, n = 10,
+                                             direction = "backward"),
+               regexp = "x is not cyclical and n is large enough")
+})
+
 

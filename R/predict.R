@@ -25,7 +25,7 @@
 #' * [route()] and [route_migration()] are similar to `predict()` but
 #'    generate routes instead of distributions.
 predict.BirdFlow <- function(object, distr, start, end,
-                             direction, season_buffer, ...) {
+                             direction, season_buffer, n, ...) {
 
 
   ### BACK COMPATABILITY CODE

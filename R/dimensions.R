@@ -152,4 +152,11 @@ ymax.BirdFlow <- function(x){
 #' @export
 setMethod(ymax, "BirdFlow", ymax.BirdFlow)
 
+#' @rdname dimensions
+#' @return `is_cyclical()` returns TRUE if the BirdFlow model has a transition
+#' from the last timestep to the first and FALSE otherwise.
+#' @export
+is_cyclical <- function(x){
+  n_timesteps(x) == n_transitions(x)
+}
 
