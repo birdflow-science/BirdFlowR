@@ -16,7 +16,7 @@ of images created with plot_movement_vectors()."><!-- mathjax --><script src="ht
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,12 +98,20 @@ be thrown if <code>direction</code> isn't consistent with direction indicated by
 dates.</p>
 <p>If <code>start</code> and <code>end</code> are not dates, <code>direction</code> defaults to "forward" and
 <code>start</code> and <code>end</code> should either both be timesteps (numeric); or
-<code>end</code> should be omitted and start should be "all" or a season name.</p></dd>
+<code>end</code> should be omitted and start should be "all" or a season name.</p>
+<p>If <code>start</code> is a timestep or date, <code>end</code> is omitted, and <code>n</code> is an integer
+than <code>direction</code> defaults to "forward".</p></dd>
 
     <dt><code>season_buffer</code></dt>
 <dd><p>Only used if <code>start</code> is a season. <code>season_buffer</code> is
 passed to <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code> and defaults to 1; it is the number
 of timesteps to extend the season by at each end.</p></dd>
+
+    <dt><code>n</code></dt>
+<dd><p>Alternative to <code>end</code> for specifying when a sequence should end.
+<code>n</code> indicates how many transitions should be in the sequence in <code>direction</code>
+which defaults to "forward" if <code>n</code> is used.  The sequence will have <code>n + 1</code>
+timesteps.</p></dd>
 
   
 </dl></dd>

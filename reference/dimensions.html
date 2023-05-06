@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,6 +105,8 @@
 <span><span class="co"># S4 method for BirdFlow</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">is_cyclical</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -180,6 +182,10 @@ which contains the xmin, xmax, ymin, and ymax of the extent.</p>
 
 
 <p><code><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax()</a></code> maximum y coordinate of extent.</p>
+
+
+<p><code>is_cyclical()</code> returns TRUE if the BirdFlow model has a transition
+from the last timestep to the first and FALSE otherwise.</p>
 
 
 <p><code>n_parameters()</code> the number of of parameters that the BirdFlow model

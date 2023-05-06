@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9006</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,16 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9006" id="birdflowr-0109006">BirdflowR 0.1.0.9006<a class="anchor" aria-label="anchor" href="#birdflowr-0109006"></a></h2>
+<p>Cleaned up bad formatting in _pkgdown.yml.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9005" id="birdflowr-0109005">BirdflowR 0.1.0.9005<a class="anchor" aria-label="anchor" href="#birdflowr-0109005"></a></h2>
+<p>Added argument <code>n</code> to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, an alternative to <code>end</code>, <code>n</code> indicates how many transitions should be in the resulting sequence. <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, and <code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code> all gained either an explicit <code>n</code> parameter or access to it via <code>...</code>.</p>
+<p><strong>Breaking change:</strong> The pre-existing <code>n</code> parameter to <code><a href="../reference/route.html">route()</a></code> was renamed <code>n_each</code> to avoid conflict with the new <code>n</code> parameter which is passed on to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>.</p>
+<p>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/76" class="external-link">#76</a>.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9004" id="birdflowr-0109004">BirdflowR 0.1.0.9004<a class="anchor" aria-label="anchor" href="#birdflowr-0109004"></a></h2>
 <p>Made changes to support pkgdown.</p>
