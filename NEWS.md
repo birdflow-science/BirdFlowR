@@ -1,3 +1,6 @@
+# BirdflowR 0.1.0.9006
+Cleaned up bad formatting in _pkgdown.yml. 
+
 # BirdflowR 0.1.0.9005
 Added argument `n` to `lookup_timestep_sequence()`, an alternative to `end`, 
 `n` indicates how many transitions should be in the resulting sequence. 
