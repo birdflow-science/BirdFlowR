@@ -194,8 +194,8 @@ test_that("get_naturalearth() works with mollweide and broken bounding box",{
     coast <- rnaturalearth::ne_coastline(returnclass = "sf") |>
       sf::st_transform( crs = crs(bf))
 
-    plot(coast[ , "geometry"])
-    plot(terra::ext(bf), add = TRUE, border = "red")
+    terra::plot(coast[ , "geometry"])
+    terra::plot(terra::ext(bf), add = TRUE, border = "red")
   }
 
   expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE))
@@ -217,8 +217,8 @@ test_that("get_naturalearth() works with lambert equal area (laea)",{
   if(interactive()){
     coast <- rnaturalearth::ne_coastline(returnclass = "sf") |>
       sf::st_transform( crs = crs(bf))
-    plot(coast[ , "geometry"])
-    plot(terra::ext(bf), add = TRUE, border = "red")
+    terra::plot(coast[ , "geometry"])
+    terra::plot(terra::ext(bf), add = TRUE, border = "red")
   }
 
 })
