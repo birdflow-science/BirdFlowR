@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9007</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9008</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,18 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9008" id="birdflowr-0109008">BirdflowR 0.1.0.9008<a class="anchor" aria-label="anchor" href="#birdflowr-0109008"></a></h2>
+<p>2023-05-09</p>
+<ul><li><p><code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> now converts logical hyperparameters masquerading as factors into logical. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/81" class="external-link">#81</a>.</p></li>
+<li>
+<p>Dropped legacy import functions:</p>
+<ul><li>
+<code>import_birdflow_v1()</code> for models that predate the R Package, this import required first converting a pickle file to an hdf5 and then importing from that and a .tif file with the distributions.<br></li>
+<li>
+<code>import_prototype()</code> for the models that were includes in the prototype shiny app.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9007" id="birdflowr-0109007">BirdflowR 0.1.0.9007<a class="anchor" aria-label="anchor" href="#birdflowr-0109007"></a></h2>
 <p>Fixed URL.</p>
