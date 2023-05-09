@@ -1,3 +1,16 @@
+# BirdflowR 0.1.0.9008
+2023-05-09
+
+* `import_birdflow()` now converts logical hyperparameters masquerading as 
+  factors into logical.  Addresses #81.
+
+* Dropped legacy import functions:
+  - `import_birdflow_v1()` for models that predate the R Package, this import
+  required first converting a pickle file to an hdf5 and then importing from 
+  that and a .tif file with the distributions.  
+  - `import_prototype()` for the models that were includes in the prototype 
+  shiny app.
+
 # BirdflowR 0.1.0.9007
 Fixed URL.
 
