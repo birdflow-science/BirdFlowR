@@ -136,7 +136,17 @@ import_birdflow_v3 <- function(hdf5) {
   }
 
   # hyperparameters
-  bf$metadata$hyperparameters <-  h5read(hdf5, "metadata/hyperparameters")
+  hp <- h5read(hdf5, "metadata/hyperparameters")
+  # hdf5 seems to store logical as a factor or at least R reads them as such.
+  # The code below looks for factors that store logical values and
+  # explicitly converts them to logical
+  for(i in seq_along(hp)){
+    if(is.factor(hp[[i]]) &&
+       all(tolower(levels(hp[[i]])) %in% c("true", "false"))){
+      hp[[i]] <- as.logical(hp[[i]])
+    }
+  }
+  bf$metadata$hyperparameters <- hp
 
   # loss values
   bf$metadata$loss_values <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
