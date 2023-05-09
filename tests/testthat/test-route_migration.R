@@ -48,9 +48,9 @@ test_that("route_migration() works with full (not sparse) marginals", {
                                 n_each = 1, start = 1, end = 5))
 
   if(interactive()){
-    plot(rast(bf, 1))
-    points(x, y)
-    plot(rts$lines, add = TRUE, col = "black")
+    terra::plot(rast(bf, 1))
+    terra::points(x, y)
+    terra::plot(rts$lines, add = TRUE, col = "black")
   }
 })
 
