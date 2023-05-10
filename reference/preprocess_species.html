@@ -70,7 +70,7 @@ and transitions.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">preprocess_species</span><span class="op">(</span></span>
 <span>  <span class="va">species</span>,</span>
 <span>  <span class="va">out_dir</span>,</span>
-<span>  <span class="va">res</span>,</span>
+<span>  res <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hdf5 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  tiff <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -97,7 +97,7 @@ the species code, resolution, and eBird version year.</p></dd>
 
 <dt>res</dt>
 <dd><p>the target resolution of the BirdFlow model in kilometers. If
-<code>res</code> is omitted than a resolution that results in less than<code>max_params</code>
+<code>res</code> is NULL (default) then a resolution that results in less than <code>max_params</code>
 parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.</p></dd>
 
@@ -131,14 +131,14 @@ or or produce one when called with <a href="https://rdrr.io/pkg/terra/man/vect.h
 
 <dt>max_params</dt>
 <dd><p>the maximum number of fitted parameters that the BirdFlow
-model should contain. Ignored if <code>res</code> is set.  Otherwise a resolution
+model should contain. Ignored if <code>res</code> is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See <code>gpu_ram</code> for
 the default way of setting <code>max_params</code> and <code>res</code>.</p></dd>
 
 
 <dt>gpu_ram</dt>
 <dd><p>Gigabytes of ram on GPU machine that will fit the models.
-If <code>res</code> and <code>max_params</code> are both missing this is used to estimate
+If <code>res</code> is NULL and <code>max_params</code> is missing this is used to estimate
 <code>max_params</code>which is, in turn, used to determine the resolution. Ignored
 if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 
