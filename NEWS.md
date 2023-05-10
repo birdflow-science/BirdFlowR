@@ -1,3 +1,10 @@
+# BirdflowR 0.1.0.9009
+2023-05-09
+
+* `preprocess_species()` now defaults the `res` parameter to NULL, making it easier to script around `preprocess_species()`
+
+* Tweaked some tests to better run across different development environments
+
 # BirdflowR 0.1.0.9008
 2023-05-09
 
