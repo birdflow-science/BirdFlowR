@@ -1,3 +1,8 @@
+# BirdflowR 0.1.0.9010
+2023-05-09
+
+* Dockerfile: Bump rocker image to R 4.3.0 and error out of build on package installation failure
+
 # BirdflowR 0.1.0.9009
 2023-05-09
 
