@@ -1,3 +1,10 @@
+# BirdflowR 0.1.0.9011
+2023-05-11
+
+* Minor change to `interval_log_likelihood()` for clearer code and to avoid 
+warning when tibbles are used. 
+
+
 # BirdflowR 0.1.0.9010
 2023-05-09
 

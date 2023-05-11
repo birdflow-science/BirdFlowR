@@ -148,6 +148,7 @@ interval_log_likelihood <- function(intervals, observations, bf,
   # Determine the lag  (weeks between observations)
   cyclical <- n_transitions(bf) == n_timesteps(bf)
   same_year <-   intv$t1 <= intv$t2
+  intv$lag <- NA_integer_
   intv$lag[same_year] <- intv$t2[same_year] - intv$t1[same_year]
   if (cyclical) {
     intv$lag[!same_year] <-
