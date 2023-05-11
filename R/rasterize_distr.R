@@ -45,22 +45,33 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
     all$x <- col_to_x(all$col, bf)
     all$y <- row_to_y(all$row, bf)
     all$i <- rc_to_i(all$row, all$col, bf)
-        i_to_rc(1, bf)
     mv <- match(1:n_active(bf), all$i)
     n_rast <- ncol(bf) * nrow(bf)
 
+    distr_is_vector <- !is.matrix(distr) && !is.array(distr)
+
     # Expand distribution out to one row per cell in raster
-    if(is.vector(distr)){
+    if(distr_is_vector){
       distr2 <- rep(NA, n_rast)
       distr2[mv] <- distr
-      distr2 <- data.frame(distr = distr2)
+      distr2 <- data.frame(density = distr2)
+      # Add time column if appropriate
+      time <- attr(distr, "time")
+      if(!is.null(time))
+        distr2 <- cbind(data.frame(time = time), distr2)
+      df <- cbind(all[ , c(-1, -2)], distr2)
     } else {
       distr2 <- matrix(NA, nrow = n_rast, ncol = ncol(distr))
       distr2[mv, ] <- distr
       colnames(distr2) <- colnames(distr)
       distr2 <- as.data.frame(distr2)
+      df <- cbind(all[ , c(-1, -2)], distr2)
+      df <-   tidyr::pivot_longer(df,  cols = setdiff(names(df), names(all)),
+                                  names_to = "time",
+                                  values_to = "density")
     }
-    df <- cbind(all[ , c(-1, -2)], distr2)
+
+
 
     return(df)
   }
