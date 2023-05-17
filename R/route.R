@@ -112,7 +112,7 @@ route <- function(x, x_coord, y_coord, n_each, row, col, start, end, direction,
     trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1])
   }
 
-  points <- format_trajectory(trajectory, x, start, end)
+  points <- format_trajectory(trajectory, x, timesteps)
   lines <- convert_route_to_sf(points)
   sf::st_crs(lines) <- sf::st_crs(crs(x))
   return(list(points = points, lines = lines))
@@ -140,7 +140,7 @@ convert_route_to_sf <- function(x) {
 # Internal helper function to convert one or more trajectories
 # stored as a vector or in columns of a matrix into a data.frame
 # with x, y, route, timestep, date, i, stay_id, and stay_len columns
-format_trajectory <- function(trajectory, bf, start, end){
+format_trajectory <- function(trajectory, bf, timesteps){
   # dimensions of trajectory are timestep and route
   # values are the index i of the location at the time and route
   # Converting to a long format. With columns:
@@ -150,7 +150,7 @@ format_trajectory <- function(trajectory, bf, start, end){
   #  date : the date associated with the timestep
   x <- as.vector(i_to_x(trajectory, bf))
   y <- as.vector(i_to_y(trajectory, bf))
-  timestep <- rep(start:end, times = ncol(trajectory))
+  timestep <- rep(timesteps, times = ncol(trajectory))
   route <- rep(1:ncol(trajectory), each = nrow(trajectory))
   date <- bf$dates$date[timestep]
 

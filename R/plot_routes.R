@@ -37,6 +37,12 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
   # Data reformatting and preparation
   #----------------------------------------------------------------------------#
 
+  # Check for full output from route() and select just point component
+  if(is.list(points) && all(names(points) == c("points", "lines")) &&
+                            is.data.frame(points$points)){
+    points <- points$points
+  }
+
   # Reformat and add columns to points
   # pyear is the proportion of the year using it instead of
   # date allows assigning a cyclical color scale
@@ -75,8 +81,20 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
                                                         "2023-12-31")))
   pyear_breaks <- seq(pyear_ends[2], pyear_ends[1], length.out = 5)
 
-  # Observed range in proportion of year (used for subtitle)
-  pyear_range <- range(points$pyear)
+  # Determine subtitle (based on unique date ranges in the data)
+  date_ranges <- points |>
+    dplyr::group_by(.data$route) |>
+    dplyr::summarize(first = dplyr::first(.data$pyear),
+                     last = dplyr::last(.data$pyear)) |>
+    dplyr::mutate(first = format_pyear(first),
+                  last = format_pyear(last),
+                  label = paste0(.data$first, " - ", .data$last)) |>
+    dplyr::select(last_col()) |>
+    dplyr::distinct()
+  subtitle <- paste(date_ranges$label, collapse = ", ")
+
+
+
 
   #----------------------------------------------------------------------------#
   # Set parameters that control plot aesthetics
@@ -106,23 +124,6 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
 
   # Set dot size (smallest, largest)
   dot_sizes <- c(1.1, 3.5)
-
-  #----------------------------------------------------------------------------#
-  # Helper functions
-  #----------------------------------------------------------------------------#
-
-  # Define function to create legend labels with month and day
-  # from proportion of year.
-  format_pyear <- function(x, format = birdflow_options("time_format")) {
-    year <- 2023  # arbitrary but shouldn't be a leap year
-    dates <- lubridate::as_date(rep("2000-01-01", length(x)))
-    lubridate::year(dates) <- year
-    lubridate::yday(dates) <- round((x * 366) + 0.5)
-    # using ebirdst convention of 366
-    # + 0.5 because of 0 vs 1 indexing in posix vs lubridate::yday
-    paste(lubridate::month(dates, label = TRUE, abbr = FALSE),
-          lubridate::day(dates))
-  }
 
   #----------------------------------------------------------------------------#
   # Assemble the plot
@@ -182,7 +183,7 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
 
   p <- p + ggplot2::ggtitle(
     label = species(bf),
-    subtitle = paste(format_pyear(pyear_range), collapse = " - "))
+    subtitle = subtitle)
 
 
   if (facet) {
