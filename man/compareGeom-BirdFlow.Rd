@@ -3,6 +3,7 @@
 \name{compareGeom}
 \alias{compareGeom}
 \alias{compareGeom-BirdFlow}
+\alias{compareGeom,BirdFlow,BirdFlow-method}
 \alias{compareGeom,SpatRaster,BirdFlow-method}
 \alias{compareGeom,BirdFlow,SpatRaster-method}
 \title{BirdFlow compareGeom methods}

@@ -159,12 +159,12 @@ format_trajectory <- function(trajectory, bf, start, end){
   add_stay_id <- function(df){
     # Benjamin's function
     df |>
-      dplyr::mutate(stay_id = cumsum(c(1,as.numeric(diff(i))!=0)),
-                    stay_len = rep(rle(stay_id)$lengths,
-                                   times = rle(stay_id)$lengths))
+      dplyr::mutate(stay_id = cumsum(c(1,as.numeric(diff(.data$i))!=0)),
+                    stay_len = rep(rle(.data$stay_id)$lengths,
+                                   times = rle(.data$stay_id)$lengths))
   }
 
-  points <- points |> dplyr::group_by(route) |> add_stay_id()
+  points <- points |> dplyr::group_by(.data$route) |> add_stay_id()
 
   return( as.data.frame( points ) )
 }

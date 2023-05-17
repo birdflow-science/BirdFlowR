@@ -13,8 +13,7 @@ methods::setOldClass("BirdFlow")
 
 
 
-#' @rdname compareGeom-BirdFlow
-#' @aliases compareGeom-BirdFlow compareGeom
+#' @aliases compareGeom-BirdFlow compareGeom,BirdFlow,BirdFlow-method
 #' @name compareGeom
 #' @title BirdFlow compareGeom methods
 #'
@@ -27,6 +26,7 @@ methods::setOldClass("BirdFlow")
 #' @inheritDotParams terra::compareGeom
 #' @importMethodsFrom terra compareGeom
 #' @export
+#' @rdname compareGeom-BirdFlow
 setMethod("compareGeom", signature(x = "BirdFlow", y = "BirdFlow"),
           function (x, y, ...) {
             x <- rast(x)

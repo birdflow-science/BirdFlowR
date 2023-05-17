@@ -26,6 +26,8 @@ Imports:
     gganimate,
     dplyr,
     ggplot2,
+    ggthemes,
+    grDevices,
     lubridate,
     Matrix (>= 1.5-2),
     methods,
@@ -33,12 +35,12 @@ Imports:
     rhdf5,
     rlang,
     rnaturalearth,
+    scales,
     s2,
     sf,
     stringr,
     tidyr,
-    terra,
-    viridis
+    terra
 VignetteBuilder: knitr
 Remotes:
   birdflow-science/BirdFlowModels
