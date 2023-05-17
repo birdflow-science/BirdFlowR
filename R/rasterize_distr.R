@@ -10,7 +10,7 @@
 #' @param bf A BirdFlow object.
 #' @param x A BirdFlow object
 #' @param format One of `'SpatRast'` for a [terra::SpatRaster] object,
-#'   `'numeric'` for a matrix or array, or`'data.frame'` for raster data
+#'   `'numeric'` for a matrix or array, or`'dataframe'` for raster data
 #'   suitable for plotting with [ggplot2::geom_raster()]
 #' @inheritParams get_distr
 #' @return A [terra::SpatRaster] object.
@@ -25,14 +25,15 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
                    "terra" = "spatrast",
                    "matrix" = "numeric",
                    "array" = "numeric",
-                   "raster.data.frame" = "data.frame",
+                   "raster.data.frame" = "dataframe",
+                   "data.frame" = "dataframe",
                    format
                    )
 
-  stopifnot("Format must be one of 'SpatRast', 'numeric', or 'data.frame'" =
-              format %in% c("spatrast", "numeric","data.frame") )
+  stopifnot("Format must be one of 'SpatRast', 'numeric', or 'dataframe'" =
+              format %in% c("spatrast", "numeric","dataframe") )
 
-  if(format == "data.frame"){
+  if(format == "dataframe"){
     # Data frame for use with ggplot2 geom_raster() it will
     # have one row per cell in the full raster
 

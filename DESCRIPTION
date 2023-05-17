@@ -36,7 +36,9 @@ Imports:
     s2,
     sf,
     stringr,
-    terra
+    tidyr,
+    terra,
+    viridis
 VignetteBuilder: knitr
 Remotes:
   birdflow-science/BirdFlowModels

@@ -17,7 +17,7 @@ matrix in which each column represents a different distribution.}
 \item{bf}{A BirdFlow object.}
 
 \item{format}{One of \code{'SpatRast'} for a \link[terra:SpatRaster-class]{terra::SpatRaster} object,
-\code{'numeric'} for a matrix or array, or\code{'data.frame'} for raster data
+\code{'numeric'} for a matrix or array, or\code{'dataframe'} for raster data
 suitable for plotting with \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}}
 
 \item{x}{A BirdFlow object}

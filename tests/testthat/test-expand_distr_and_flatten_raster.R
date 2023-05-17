@@ -4,12 +4,11 @@
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------------------#
-#### Test
+#### Test with numerics
 #------------------------------------------------------------------------------#
 
-
 test_that("expand_distr and flatten_raster are reversable - 1 distr", {
-  bf <- make_test_birdflow()
+  bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 1)
   r <- expand_distr(d, bf)
   f <- flatten_raster(r, bf)

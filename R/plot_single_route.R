@@ -2,32 +2,31 @@
 if(FALSE){
   bf <- BirdFlowModels::amewoo
   rts <- route_migration(bf, 5)
-
   p <- plot_single_route(rts$points, bf)
-
-  bf <- a
-  rts <- route_migration(bf, 100)
-
-  p <-  plot_single_route(rts$points, bf, route = 4)
-
-  p + geom_sf(data = rts$lines, inherit.aes = FALSE, aes(linewidth = 0.1)) +
-    scale_linewidth_identity()
-
-  pts <- rts$points
-
-  p + geom_path(data = pts[pts$route %in% 1:10, ],
-                mapping = aes(x = x, y = y, color = timestep),
-                linewidth = .5,
-                lineend = "round",
-                alpha = 0.7) + viridis::scale_color_viridis()
-
-  for(i in 1:10)
-    print(plot_single_route(pts, bf, route = i))
-
-
 }
 
 
+#' plot_single_route()
+#'
+#' Function to plot a single route while using color to indicate when the bird
+#' moved.
+#'
+#' This function is provisional and might change or be dropped.
+#'
+#' @param points The points component of a list returned by [route()]
+#' or [route_migration()]
+#' @param bf A BirdFlow object
+#' @param route The route number to plot
+#' @param max_stay_len This is used to determine the scaling of the circles
+#' that indicate the stay length. To plot many routes consistently set this
+#' to the maximum observed value across all routes.
+#'
+#' @return a ggplot object.  Use [print()] to display it.
+#' @export
+#' @examples
+#'bf <- BirdFlowModels::amewoo
+#'rts <- route_migration(bf, 5)
+#'p <- plot_single_route(rts$points, bf)
 plot_single_route <- function(points, bf, route, max_stay_len){
 
   if(missing(max_stay_len))
@@ -44,8 +43,8 @@ plot_single_route <- function(points, bf, route, max_stay_len){
 
   points <- points[points$route == route, , drop = FALSE]
 
-  rast <- rasterize_distr(get_distr(bf, 1), bf, format = "data.frame")
-  rast$value <- !is.na(rast$distr)
+  rast <- rasterize_distr(get_distr(bf, 1), bf, format = "dataframe")
+  rast$value <- !is.na(rast$density)
 
   # The stops, unique locations where they stayed more than a week
   the_stops <- points[points$stay_len > 1, ]
@@ -57,7 +56,7 @@ plot_single_route <- function(points, bf, route, max_stay_len){
     theme_void() +
     theme(axis.title = element_blank()) +
     guides(fill="none") +
-    scale_fill_manual(values=c(`TRUE`=gray(.7), `FALSE` = gray(0.9)) ) +
+    scale_fill_manual(values=c(`TRUE`=gray(.8), `FALSE` = gray(0.95)) ) +
     geom_raster(data = rast,
                 aes(fill=value))  +
 
@@ -65,7 +64,7 @@ plot_single_route <- function(points, bf, route, max_stay_len){
                aes(size=stay_len,
                    color=timestep),
                alpha=.6) +
-    geom_path(aes(color=timestep), #weekno),
+    geom_path(aes(color=timestep),
               linewidth=1,
               lineend = "round",
               alpha=.7) +
@@ -76,14 +75,8 @@ plot_single_route <- function(points, bf, route, max_stay_len){
     theme(strip.background = element_blank()) +
     coord_fixed(ratio =1)
 
-  # Add coast as an overlay I couldn't figure out how to prevent the
-  # coastline from expanding the extent of the plot so I'm clipping it
-  # to the bf extent precisely, before I plot it.
 
   coast <- get_coastline(bf)
-  bb <- sf::st_bbox(ext(bf))
-  sf::st_crs(bb) <- crs(bf)
-  coast <- sf::st_crop(coast, bb)
 
   p <- p + geom_sf(data = coast$geometry, inherit.aes = FALSE,
               mapping = aes(linewidth = 0.3)) + scale_linewidth_identity()

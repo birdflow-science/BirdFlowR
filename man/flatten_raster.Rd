@@ -4,14 +4,14 @@
 \alias{flatten_raster}
 \title{Convert a raster bird distribution into its flattened, vector equivalent}
 \usage{
-flatten_raster(raster, bf)
+flatten_raster(x, bf)
 }
 \arguments{
-\item{raster}{Either a matrix representing a single bird distribution or an
+\item{x}{Either a matrix representing a single bird distribution or an
 array representing multiple distributions with dimensions: row, col, and
 distribution.}
 
-\item{bf}{A \code{BirdFlow} model or the \code{geom} component of one.}
+\item{bf}{A \code{BirdFlow} model.}
 }
 \value{
 Either a vector representing a single distribution in its collapsed
@@ -26,18 +26,13 @@ the top left and proceeding left to right along each row.  The collapsed form
 is used for projecting the flow model while the expanded form is used to
 export, import, and visualize the data.
 }
-\examples{
-bf <- BirdFlowModels::amewoo
-d <- get_distr( bf, 1)
-r <- expand_distr(d, bf) # convert to raster
-f <- flatten_raster(r, bf) # convert back to distribution
-stopifnot(all(d == f))
-}
 \seealso{
 \itemize{
 \item \code{\link[=expand_distr]{expand_distr()}} does the opposite of \code{flatten_raster()}.
-\item \code{\link[=rasterize_distr]{rasterize_distr()}} goes one step further and adds spatial metdata to make
-a \link[terra:SpatRaster-class]{terra::SpatRaster}.
+\item \code{\link[=rasterize_distr]{rasterize_distr()}} has replaced this function in the public API.  With
+\code{format = "numeric"} it returns an identical object to \code{expand_distr()} but
+by default (`format = "SpatRaster" it goes one step further and adds spatial
+metdata to make a \link[terra:SpatRaster-class]{terra::SpatRaster}.
 \item \link{index_conversions} for ways to convert among indexes of the data in
 raster row and column, index along the flattened vector, and Cartesian space.
 }

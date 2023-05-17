@@ -39,4 +39,8 @@ individual birds, model runs etc.
 The location information in the collapsed distribution is not easily
 accessible as position in the vector is ordered based on row-major ordered
 unmasked cells in the extent, and R uses column-major order.
+
+As of May 2023 this is now an internal function replaced by
+\link[=rasterize_distr]{rasterize_distr( format = "numeric")}.
 }
+\keyword{internal}

@@ -19,6 +19,9 @@
 #' accessible as position in the vector is ordered based on row-major ordered
 #' unmasked cells in the extent, and R uses column-major order.
 #'
+#' As of May 2023 this is now an internal function replaced by
+#' [rasterize_distr( format = "numeric")][rasterize_distr()].
+#'
 #' @param distr Either a vector representing a single distribution with one value
 #'   per location in the model or a matrix in which each column is such a vector.
 #'   Higher dimensions are allowed (but unlikely); in all cases the first
@@ -27,7 +30,7 @@
 #' @return An expanded version of `distr` with one additional dimension, in which
 #'   the first two dimensions are rows and columns in space (a raster) and
 #'   replace the first dimension in the input.
-#' @export
+#' @keywords internal
 expand_distr<- function(distr, bf){
   # The expansion is awkward because the collapsed state is a subset of the full
   # matrix in row-major order but R will assign in column-major order.
