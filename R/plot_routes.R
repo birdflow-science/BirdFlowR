@@ -81,15 +81,15 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
                                                         "2023-12-31")))
   pyear_breaks <- seq(pyear_ends[2], pyear_ends[1], length.out = 5)
 
-  # Determine subtitle (based on unique date ranges in the data)
+  # Set subtitle based on unique date ranges in the data
   date_ranges <- points |>
     dplyr::group_by(.data$route) |>
     dplyr::summarize(first = dplyr::first(.data$pyear),
                      last = dplyr::last(.data$pyear)) |>
-    dplyr::mutate(first = format_pyear(first),
-                  last = format_pyear(last),
+    dplyr::mutate(first = format_pyear(.data$first),
+                  last = format_pyear(.data$last),
                   label = paste0(.data$first, " - ", .data$last)) |>
-    dplyr::select(last_col()) |>
+    dplyr::select(dplyr::last_col()) |>
     dplyr::distinct()
   subtitle <- paste(date_ranges$label, collapse = ", ")
 
