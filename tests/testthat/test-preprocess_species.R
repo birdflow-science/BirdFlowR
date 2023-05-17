@@ -76,8 +76,8 @@ test_that("preprocess_species() works with clip", {
   if(interactive()){
     # Plot "Full" abundance for "example_data" and our clipping polygon
     a <- preprocess_species("example_data", hdf5 = FALSE)
-    plot(rast(a, 1))
-    plot(poly, add = TRUE)
+    terra::plot(rast(a, 1))
+    terra::plot(poly, add = TRUE)
   }
 
   expect_no_error(

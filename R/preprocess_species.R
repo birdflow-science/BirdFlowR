@@ -35,7 +35,7 @@
 #'   both `tiff` and `hdf5` are TRUE.  File names created here will incorporate
 #'   the species code, resolution, and eBird version year.
 #' @param res the target resolution of the BirdFlow model in kilometers. If
-#'   `res` is omitted than a resolution that results in less than`max_params`
+#'   `res` is NULL (default) then a resolution that results in less than `max_params`
 #'   parameters will be used, while also minimizing the resolution and limiting
 #'   the number of significant digits.
 #' @param hdf5 if TRUE (default) an hdf5 file will be exported.
@@ -51,11 +51,11 @@
 #'   have a CRS and should either be a [SpatVector()][terra::SpatVector] object
 #'   or or produce one when called with [vect(clip)][terra::vect()]
 #' @param max_params the maximum number of fitted parameters that the BirdFlow
-#'   model should contain. Ignored if `res` is set.  Otherwise a resolution
+#'   model should contain. Ignored if `res` is not NULL.  Otherwise a resolution
 #'   will be chosen that yields this many fitted parameters. See `gpu_ram` for
 #'   the default way of setting `max_params` and `res`.
 #' @param gpu_ram Gigabytes of ram on GPU machine that will fit the models.
-#'   If `res` and `max_params` are both missing this is used to estimate
+#'   If `res` is NULL and `max_params` is missing this is used to estimate
 #'   `max_params`which is, in turn, used to determine the resolution. Ignored
 #'   if either` res` or `max_params` is set.
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
@@ -103,7 +103,7 @@
 # nolint start: cyclocomp_linter.
 preprocess_species <- function(species,
                                out_dir,
-                               res,
+                               res = NULL,
                                hdf5 = TRUE,
                                tiff = FALSE,
                                overwrite = TRUE,
@@ -141,7 +141,7 @@ preprocess_species <- function(species,
         "should only used for demonstrating package functions.\n", sep = "")
     download_species <- "example_data"
     species <- "yebsap"
-    if (!missing(res) && res < 27)
+    if (!is.null(res) && res < 27)
       stop("res must be at least 27 when working with the low resolution ",
            "example_data")
   } else {
@@ -149,7 +149,7 @@ preprocess_species <- function(species,
     download_species <- species
   }
 
-  if (!missing(res)) {
+  if (!is.null(res)) {
     stopifnot(length(res) == 1)
     if (res < 3)
       stop("Resolution cannot be less than 3 km")
@@ -288,7 +288,7 @@ preprocess_species <- function(species,
 
   #----------------------------------------------------------------------------#
   # Determine BirdFlow model resolution                                     ####
-  #   If the res argument isn't supplied the heuristic here attempts to set a
+  #   If the res argument is NULL the heuristic here attempts to set a
   #   resolution that will result in close to max_params (but stay under it)
   #   the total number of fitted parameters in the model. It rounds the
   #   resolution variably - rounding more for larger values.
@@ -309,7 +309,7 @@ preprocess_species <- function(species,
   #     is just a different way of setting the max_params before doing the work
   #     outlined above.
   #----------------------------------------------------------------------------#
-  if (missing(res)) {
+  if (is.null(res)) {
 
     if (missing(max_params)) {
       stopifnot(is.numeric(gpu_ram),

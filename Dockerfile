@@ -1,4 +1,9 @@
-FROM --platform=linux/amd64 rocker/geospatial:4.2.3
-RUN R -q -e 'install.packages(c("rnaturalearth", "rnaturalearthdata", "ebirdst"))' \
+FROM --platform=linux/amd64 rocker/geospatial:4.3.0
+RUN install2.r --error --skipinstalled --ncpus -1 \
+    rnaturalearth \
+    rnaturalearthdata \
+    ebirdst \
+    && rm -rf /tmp/downloaded_packages \
+    && strip /usr/local/lib/R/site-library/*/libs/*.so \
     && R -q -e 'remotes::install_github("birdflow-science/BirdFlowModels")' \
     && R -q -e 'remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, upgrade = "never")'

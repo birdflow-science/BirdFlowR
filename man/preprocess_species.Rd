@@ -7,7 +7,7 @@
 preprocess_species(
   species,
   out_dir,
-  res,
+  res = NULL,
   hdf5 = TRUE,
   tiff = FALSE,
   overwrite = TRUE,
@@ -27,7 +27,7 @@ both \code{tiff} and \code{hdf5} are TRUE.  File names created here will incorpo
 the species code, resolution, and eBird version year.}
 
 \item{res}{the target resolution of the BirdFlow model in kilometers. If
-\code{res} is omitted than a resolution that results in less than\code{max_params}
+\code{res} is NULL (default) then a resolution that results in less than \code{max_params}
 parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.}
 
@@ -49,12 +49,12 @@ have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} ob
 or or produce one when called with \link[terra:vect]{vect(clip)}}
 
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
-model should contain. Ignored if \code{res} is set.  Otherwise a resolution
+model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}.}
 
 \item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
-If \code{res} and \code{max_params} are both missing this is used to estimate
+If \code{res} is NULL and \code{max_params} is missing this is used to estimate
 \code{max_params}which is, in turn, used to determine the resolution. Ignored
 if either\code{ res} or \code{max_params} is set.}
 

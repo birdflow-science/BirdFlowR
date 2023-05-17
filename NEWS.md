@@ -1,3 +1,22 @@
+# BirdflowR 0.1.0.9011
+2023-05-11
+
+* Minor change to `interval_log_likelihood()` for clearer code and to avoid 
+warning when tibbles are used. 
+
+
+# BirdflowR 0.1.0.9010
+2023-05-09
+
+* Dockerfile: Bump rocker image to R 4.3.0 and error out of build on package installation failure
+
+# BirdflowR 0.1.0.9009
+2023-05-09
+
+* `preprocess_species()` now defaults the `res` parameter to NULL, making it easier to script around `preprocess_species()`
+
+* Tweaked some tests to better run across different development environments
+
 # BirdflowR 0.1.0.9008
 2023-05-09
 
