@@ -1,3 +1,4 @@
+# nolint start: cyclocomp_linter.
 #' calculate log likelihoods of observed bird movements
 #'
 #' This function calculates the log likelihoods of inferred bird movement
@@ -300,3 +301,5 @@ interval_log_likelihood <- function(intervals, observations, bf,
   return(cbind(intervals, intv[, retained_new_columns]))
 
 }
+
+# nolint end

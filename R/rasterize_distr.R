@@ -1,9 +1,10 @@
 #' @name rasterize
-#' @title Functions to convert a BirdFlow object or distribution into a SpatRaster
-#' @description `rasterize_distr()` creates a [SpatRaster][terra::SpatRaster] similar to those
-#' created by [terra::rast()] from one or more distributions in their compact
-#' vector form. `rast()` converts a BirdFlow object directly to a
-#' [SpatRaster][terra::SpatRaster].
+#' @title Functions to convert a BirdFlow object or distribution into a
+#' SpatRaster
+#' @description `rasterize_distr()` creates a [SpatRaster][terra::SpatRaster]
+#' similar to those created by [terra::rast()] from one or more distributions
+#' in their compact vector form. `rast()` converts a BirdFlow object directly
+#' to a [SpatRaster][terra::SpatRaster].
 #'
 #' @param distr a distribution in its vector form or a
 #' matrix in which each column represents a different distribution.
@@ -16,7 +17,7 @@
 #' @return A [terra::SpatRaster] object.
 #' @importMethodsFrom terra rast
 #' @export
-rasterize_distr <- function(distr, bf, format = "SpatRast"){
+rasterize_distr <- function(distr, bf, format = "SpatRast") {
 
   format <- tolower(format)
 
@@ -31,16 +32,16 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
                    )
 
   stopifnot("Format must be one of 'SpatRast', 'numeric', or 'dataframe'" =
-              format %in% c("spatrast", "numeric","dataframe") )
+              format %in% c("spatrast", "numeric", "dataframe"))
 
-  if(format == "dataframe"){
+  if (format == "dataframe") {
     # Data frame for use with ggplot2 geom_raster() it will
     # have one row per cell in the full raster
 
     # Get x, y, and i for all cells in the full raster
     #  i will be NA for cells that aren't active
-    rows <- 1:nrow(bf)
-    cols <- 1:ncol(bf)
+    rows <- seq_len(nrow(bf))
+    cols <- seq_len(ncol(bf))
     all <- expand.grid(rows, cols)
     names(all) <- c("row", "col")
     all$x <- col_to_x(all$col, bf)
@@ -52,21 +53,21 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
     distr_is_vector <- !is.matrix(distr) && !is.array(distr)
 
     # Expand distribution out to one row per cell in raster
-    if(distr_is_vector){
+    if (distr_is_vector) {
       distr2 <- rep(NA, n_rast)
       distr2[mv] <- distr
       distr2 <- data.frame(density = distr2)
       # Add time column if appropriate
       time <- attr(distr, "time")
-      if(!is.null(time))
+      if (!is.null(time))
         distr2 <- cbind(data.frame(time = time), distr2)
-      df <- cbind(all[ , c(-1, -2)], distr2)
+      df <- cbind(all[, c(-1, -2)], distr2)
     } else {
       distr2 <- matrix(NA, nrow = n_rast, ncol = ncol(distr))
       distr2[mv, ] <- distr
       colnames(distr2) <- colnames(distr)
       distr2 <- as.data.frame(distr2)
-      df <- cbind(all[ , c(-1, -2)], distr2)
+      df <- cbind(all[, c(-1, -2)], distr2)
       df <-   tidyr::pivot_longer(df,  cols = setdiff(names(df), names(all)),
                                   names_to = "time",
                                   values_to = "density")
@@ -79,18 +80,18 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
 
   m <- expand_distr(distr, bf)
 
-  if(format == "numeric"){
+  if (format == "numeric") {
     return(m)
   }
 
-  if(format == "spatrast"){
+  if (format == "spatrast") {
     r <- terra::rast(m, extent = bf$geom$ext, crs = bf$geom$crs)
     n_dim <- length(dim(m)) # no of dimensions of output
-    if(n_dim == 3) # two or more distributions
+    if (n_dim == 3) # two or more distributions
       names(r) <- dimnames(m)[[3]]
-    if(n_dim == 2){# one distribution
+    if (n_dim == 2) {# one distribution
       time <- attr(distr, "time")
-      if(!is.null(time) && length(time) == 1)
+      if (!is.null(time) && length(time) == 1)
         names(r) <- time
     }
     return(r)
@@ -100,10 +101,13 @@ rasterize_distr <- function(distr, bf, format = "SpatRast"){
 
 }
 
-
-rast.BirdFlow <- function(x, which = "all"){
-  rasterize_distr(get_distr( x, which), x)
+# Note the internal object name below echos S3 class names
+# It is a method for rast that works with BirdFlow objects
+# nolint start: object_name_linter.
+rast.BirdFlow <- function(x, which = "all") {
+  rasterize_distr(get_distr(x, which), x)
 }
+# nolint end
 #' @rdname rasterize
 #' @export
 setMethod(rast, "BirdFlow", rast.BirdFlow)

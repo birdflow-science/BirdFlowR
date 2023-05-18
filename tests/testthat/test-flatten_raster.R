@@ -1,10 +1,6 @@
-#------------------------------------------------------------------------------#
-####  Setup test objects
-#
-#------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------------------#
-#### Test with numerics
+# numeric input
 #------------------------------------------------------------------------------#
 
 test_that("expand_distr and flatten_raster are reversable - 1 distr", {
@@ -32,3 +28,27 @@ test_that("flatten_raster is consistent with i_to_rc() subset", {
   d2 <- flatten_raster(m, bf)
   expect_equal(d, d2)
 })
+
+
+#------------------------------------------------------------------------------#
+# SpatRaster input
+#------------------------------------------------------------------------------#
+
+test_that("rasterize_distr and flatten_raster are reversable - SpatRasters",{
+
+  # Single distribution
+  bf <- BirdFlowModels::amewoo
+  r <- rast(bf, 1)
+  d <- get_distr(bf, 1)
+  fd <- flatten_raster(r, bf)
+  expect_equal(fd, d)
+  r2 <- rasterize_distr(d, bf)
+
+  # Note. To compare SpatRasters use all.equal which has a method defined
+  # in terra.  expect_equal() relies on waldo::compare() which will flag
+  # immaterial differences.
+  expect_true(all.equal(r, r2))
+
+})
+
+

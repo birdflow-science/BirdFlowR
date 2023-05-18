@@ -5,13 +5,8 @@
 #  this is inefficient as it's reformatting the data in the BirdFlow
 # rather than using it as is, but it easy and clean and fast enough.
 
-
-
 #  setOldClass("BirdFlow") allows S4 dispatch on S3 BirdFlow objects.
 methods::setOldClass("BirdFlow")
-
-
-
 
 #' @aliases compareGeom-BirdFlow compareGeom,BirdFlow,BirdFlow-method
 #' @name compareGeom
@@ -28,7 +23,7 @@ methods::setOldClass("BirdFlow")
 #' @export
 #' @rdname compareGeom-BirdFlow
 setMethod("compareGeom", signature(x = "BirdFlow", y = "BirdFlow"),
-          function (x, y, ...) {
+          function(x, y, ...) {
             x <- rast(x)
             y <- rast(y)
             return(terra::compareGeom(x, y, ...))
@@ -38,8 +33,8 @@ setMethod("compareGeom", signature(x = "BirdFlow", y = "BirdFlow"),
 
 #' @rdname compareGeom-BirdFlow
 #' @export
-setMethod("compareGeom", signature(x= "SpatRaster", y = "BirdFlow"),
-          function (x, y, ...) {
+setMethod("compareGeom", signature(x = "SpatRaster", y = "BirdFlow"),
+          function(x, y, ...) {
             y <- rast(y)
             return(terra::compareGeom(x, y, ...))
           }
@@ -48,7 +43,7 @@ setMethod("compareGeom", signature(x= "SpatRaster", y = "BirdFlow"),
 #' @rdname compareGeom-BirdFlow
 #' @export
 setMethod("compareGeom", signature(x = "BirdFlow", y = "SpatRaster"),
-          function (x, y, ...) {
+          function(x, y, ...) {
             x <- rast(x)
             return(terra::compareGeom(x, y, ...))
           }

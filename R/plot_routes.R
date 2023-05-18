@@ -38,8 +38,8 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
   #----------------------------------------------------------------------------#
 
   # Check for full output from route() and select just point component
-  if(is.list(points) && all(names(points) == c("points", "lines")) &&
-                            is.data.frame(points$points)){
+  if (is.list(points) && all(names(points) == c("points", "lines")) &&
+                            is.data.frame(points$points)) {
     points <- points$points
   }
 

@@ -12,8 +12,10 @@ if (FALSE) {
   library(stars)
   r <- st_as_stars(t(m), crs = bf$geom$crs)
   r <- st_set_dimensions(r, names = c("x", "y"))
-  r <- st_set_dimensions(r, "x", offset = bf$geom$ext[1], delta = bf$geom$res[1])
-  r <- st_set_dimensions(r, "y", offset = bf$geom$ext[4], delta = -bf$geom$res[2])
+  r <- st_set_dimensions(r, "x", offset = bf$geom$ext[1],
+                         delta = bf$geom$res[1])
+  r <- st_set_dimensions(r, "y", offset = bf$geom$ext[4],
+                         delta = -bf$geom$res[2])
 
   f <- flatten_raster(e, bf)
   stopifnot(all(d == f))
@@ -64,20 +66,26 @@ flatten_raster <- function(x, bf) {
     stop("x must be a SpatRaster or a numeric matrix, or array.")
   }
 
-  if(is_spatraster){
+  if (is_spatraster) {
     compareGeom(x, bf) # will throw error if x and bf don't have matching
                        # extent, res, cellsize, and crs
     n_layers <- terra::nlyr(x)
     r_dimnames <- c(row = NULL, col = NULL, time = names(x))
 
     # The name of a single layer
-    if(n_layers == 1)
+    if (n_layers == 1) {
       dim3_name <- names(x)
-
+    }
     x <- terra::as.array(x)
+
+    if (n_layers == 1) {
+      # If one layer drop third dimension
+      x <- x[,  , 1]
+    }
+
   }
 
-  if(is_numeric){
+  if (is_numeric) {
     x <- as.array(x)
   }
 
@@ -92,7 +100,7 @@ flatten_raster <- function(x, bf) {
 
   a <- x[t(bf$geom$mask)] # transposed so col, row to match permuted x
   if (n_dim == 2) { # 2 d input, 1d output - result is vector
-    if(!is.null(dim3_name))
+    if (!is.null(dim3_name))
       attr(a, "time") <- dim3_name # assuming "time" is appropriate here
     return(a)
   }
@@ -100,7 +108,7 @@ flatten_raster <- function(x, bf) {
   # 2d or higher output - format vector back into an array
   new_dim <- c(sum(bf$geom$mask), r_dim[3:n_dim])
   a <- array(data = a, dim = new_dim)
-  dimnames(a) <- c(list(i = NULL ), r_dimnames[-1:-2])
+  dimnames(a) <- c(list(i = NULL), r_dimnames[-1:-2])
 
   return(a)
 

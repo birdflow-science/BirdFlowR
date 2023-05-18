@@ -53,7 +53,8 @@ route <- function(x, x_coord, y_coord, n_each, row, col, start, end, direction,
       col <- rep(col, each = n_each)
     } else {
       if (length(row) != length(n_each))
-        stop("n_each should have a single value, or one value for each position")
+        stop("n_each should have a single value, or one value for each",
+             " position")
       row <- as.vector(unlist(mapply(FUN = rep, x = row,  each = n_each)))
       col <- as.vector(unlist(mapply(FUN = rep, x = col,  each = n_each)))
     }
@@ -122,9 +123,9 @@ route <- function(x, x_coord, y_coord, n_each, row, col, start, end, direction,
 # Internal helper functions
 
 # Make x and y vectors into lines
-convert_to_lines <- function(x, y)
+convert_to_lines <- function(x, y) {
   sf::st_linestring(cbind(x, y), "XY")
-
+}
 
 # Create an sf object with lines for each route
 convert_route_to_sf <- function(x) {
@@ -140,7 +141,7 @@ convert_route_to_sf <- function(x) {
 # Internal helper function to convert one or more trajectories
 # stored as a vector or in columns of a matrix into a data.frame
 # with x, y, route, timestep, date, i, stay_id, and stay_len columns
-format_trajectory <- function(trajectory, bf, timesteps){
+format_trajectory <- function(trajectory, bf, timesteps) {
   # dimensions of trajectory are timestep and route
   # values are the index i of the location at the time and route
   # Converting to a long format. With columns:
@@ -151,22 +152,20 @@ format_trajectory <- function(trajectory, bf, timesteps){
   x <- as.vector(i_to_x(trajectory, bf))
   y <- as.vector(i_to_y(trajectory, bf))
   timestep <- rep(timesteps, times = ncol(trajectory))
-  route <- rep(1:ncol(trajectory), each = nrow(trajectory))
+  route <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
   date <- bf$dates$date[timestep]
 
   points <- data.frame(x, y, route, timestep, date, i = as.vector(trajectory))
 
-  add_stay_id <- function(df){
+  add_stay_id <- function(df) {
     # Benjamin's function
     df |>
-      dplyr::mutate(stay_id = cumsum(c(1,as.numeric(diff(.data$i))!=0)),
+      dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
                     stay_len = rep(rle(.data$stay_id)$lengths,
                                    times = rle(.data$stay_id)$lengths))
   }
 
   points <- points |> dplyr::group_by(.data$route) |> add_stay_id()
 
-  return( as.data.frame( points ) )
+  return(as.data.frame(points))
 }
-
-
