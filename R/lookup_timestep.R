@@ -59,8 +59,7 @@ lookup_timestep <- function(x, bf){
 
     if(all(c("start", "end") %in% names(bf$dates))){
       # Note POSIXct$yday starts at 0   lubridate::doy()  starts at 1
-      py <- (as.POSIXlt(x)$yday + 0.5) / 366  # proportion of year
-          # 366 was used in ebirdst.  max(yday+0.5) = 365.5  (on leap yr)
+      py <- proportion_of_year(x)
       breaks <- c(dates$start[1], dates$end)
       x <- findInterval(py, vec = breaks, all.inside = TRUE)
 

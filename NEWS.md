@@ -1,3 +1,28 @@
+# BirdflowR 0.1.0.9012
+2023-05-17
+
+* Fixed bug in `route()` and `route_migration()` that prevented routing over 
+  year boudnary.
+* New: 
+  - `plot_routes()` for plotting routes with ggplot2.
+  - `compareGeom()` methods for BirdFlow objects, possibly mixed with
+    `terra::SpatRaster` objects. See `terra::compareGeom()`
+  - `proportion_of_year()` (internal function) converts a date into a number
+    between 0 and 1.
+* Updated:
+  - `flatten_raster()` supports multiple input formats  #23
+  - `rasterize_distr()` supports multiple output formats #23
+  - `route()` and `route_migration()` output return additional columns in the 
+    `points` item.  
+* Deprecated:
+  - `expand_distr()` is now an internal function.  Users can use
+  `rasterize_distr( format = "numeric")` instead.
+  
+     
+  
+  
+  
+
 # BirdflowR 0.1.0.9011
 2023-05-11
 

@@ -22,3 +22,68 @@ test_that("rasterize_distr, flatten_raster, and get_distr are consistent - 1 dis
   expect_equal(dim(sr), dim(sr2))
   expect_equal(terra::crs(sr), terra::crs(sr2))
 })
+
+test_that("rasterize_distr() with data.frame output", {
+  bf <- BirdFlowModels::amewoo
+
+  ## Single distribution
+  expect_no_error(df <- rasterize_distr(get_distr(bf, 1), bf, format = "data.frame"))
+  expect_false(any(is.na(df$x)))
+  expect_false(any(is.na(df$y)))
+  hdf <- head(df[!is.na(df$density) & df$density != 0, ], 3)
+  expect_snapshot(hdf)
+  # Convert back to distribution and compare
+  vals <- df[!is.na(df$i), ]
+  vals <- vals$density[order(vals$i)]
+  expect_equal(vals, as.numeric(get_distr(bf,1)))
+
+  # Multiple distributions
+  expect_no_error(df <- rasterize_distr(get_distr(bf, 1:3), bf, format = "data.frame"))
+  expect_false(any(is.na(df$x)))
+  expect_false(any(is.na(df$y)))
+  hdf <- head(df[!is.na(df$density) & df$density != 0, ], 3)
+  expect_snapshot(hdf)
+})
+
+test_that("rasterize_distr() works with with numeric output", {
+
+  # 1 distribution
+  bf <- BirdFlowModels::amewoo
+  expect_no_error(m <- rasterize_distr(get_distr(bf, 1), bf, format = "numeric"))
+  vals <- t(m)[t(bf$geom$mask)]
+  expect_equal(vals, as.numeric(get_distr(bf, 1)))
+
+  # multiple distributions
+  expect_no_error(m <- rasterize_distr(get_distr(bf, 1:3), bf, format = "numeric"))
+  vals <- t(m[ , , 1])[t(bf$geom$mask)]
+  expect_equal(vals, as.numeric(get_distr(bf, 1)))
+
+  vals <- t(m[ , , 3])[t(bf$geom$mask)]
+  expect_equal(vals, as.numeric(get_distr(bf, 3)))
+})
+
+test_that("rasterize_distr() to numeric is equal to expand_distr()", {
+  bf <- BirdFlowModels::amewoo
+  expect_no_error(r <- rasterize_distr(get_distr(bf, 1),
+                                       bf = bf,
+                                       format = "numeric") )
+
+  m <-terra::as.array(rast(bf, 1))[ , , 1]
+  expect_equal(r, m, ignore_attr = TRUE)
+
+  m2 <- expand_distr(get_distr(bf, 1), bf)
+  expect_equal(r, m2)
+})
+
+test_that("rasterize_distr() to dataframe works", {
+  bf <- BirdFlowModels::amewoo
+  d <- get_distr(bf, 1)
+  expect_no_error(df <- rasterize_distr(d, bf = bf, format =  "dataframe"))
+
+  d <- head(df[!df$density == 0 & !is.na(df), ], 3)
+  expect_snapshot(d)
+})
+
+
+
+

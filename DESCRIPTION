@@ -1,6 +1,6 @@
 Package: BirdFlowR
 Title: Predict and Visualize Bird Movement
-Version: 0.1.0.9011
+Version: 0.1.0.9012
 Authors@R: 
     c(person("Ethan", "Plunkett",  email = "plunkett@umass.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4405-2251")),
@@ -26,6 +26,8 @@ Imports:
     gganimate,
     dplyr,
     ggplot2,
+    ggthemes,
+    grDevices,
     lubridate,
     Matrix (>= 1.5-2),
     methods,
@@ -33,9 +35,11 @@ Imports:
     rhdf5,
     rlang,
     rnaturalearth,
+    scales,
     s2,
     sf,
     stringr,
+    tidyr,
     terra
 VignetteBuilder: knitr
 Remotes:

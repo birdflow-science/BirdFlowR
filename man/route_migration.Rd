@@ -15,9 +15,10 @@ route_migration(bf, n, migration = "prebreeding", season_buffer = 1)
 migration; or "postbreeding", "post", or "fall" for the postbreeding
 migration.}
 
-\item{season_buffer}{a buffer in timesteps (likely weeks) to add to the beginning
-and end of the season. The default of 1 means we start a week before the
-metadata suggests the season starts and continue one week past the end.}
+\item{season_buffer}{a buffer in timesteps (likely weeks) to add to the
+beginning and end of the season. The default of 1 means we start a week
+before the metadata suggests the season starts and continue one week past
+the end.}
 }
 \value{
 This will likely change. Currently returns a list with:
@@ -33,8 +34,10 @@ duration of the migration window.
 The two migration periods are defined based on the species information in the
 BirdFlow model:
 \describe{
-\item{\code{prebreeding}}{ migration starts at \code{species_info("nonbreeding_end")} and ends at \code{species_info("breeding_start")}}
-\item{\code{postbreeding}}{ migration starts at \code{species_info("breeding_end")} and ends at \code{species_info("nonbreeding_start")}}
+\item{\code{prebreeding}}{ migration starts at \code{species_info("nonbreeding_end")}
+and ends at \code{species_info("breeding_start")}}
+\item{\code{postbreeding}}{ migration starts at \code{species_info("breeding_end")}
+and ends at \code{species_info("nonbreeding_start")}}
 }
 }
 \examples{
