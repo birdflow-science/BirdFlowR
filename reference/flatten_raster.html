@@ -20,7 +20,7 @@ export, import, and visualize the data."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,19 +76,19 @@ export, import, and visualize the data.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">flatten_raster</span><span class="op">(</span><span class="va">raster</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">flatten_raster</span><span class="op">(</span><span class="va">x</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>raster</dt>
+    <dl><dt>x</dt>
 <dd><p>Either a matrix representing a single bird distribution or an
 array representing multiple distributions with dimensions: row, col, and
 distribution.</p></dd>
 
 
 <dt>bf</dt>
-<dd><p>A <code>BirdFlow</code> model or the <code>geom</code> component of one.</p></dd>
+<dd><p>A <code>BirdFlow</code> model.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,22 +103,15 @@ distribution per column.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p><code><a href="expand_distr.html">expand_distr()</a></code> does the opposite of <code>flatten_raster()</code>.</p></li>
-<li><p><code><a href="rasterize.html">rasterize_distr()</a></code> goes one step further and adds spatial metdata to make
-a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a>.</p></li>
+<li><p><code><a href="rasterize.html">rasterize_distr()</a></code> has replaced this function in the public API.  With
+<code>format = "numeric"</code> it returns an identical object to <code><a href="expand_distr.html">expand_distr()</a></code> but
+by default (`format = "SpatRaster" it goes one step further and adds spatial
+metdata to make a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a>.</p></li>
 <li><p><a href="index_conversions.html">index_conversions</a> for ways to convert among indexes of the data in
 raster row and column, index along the flattened vector, and Cartesian space.</p></li>
 </ul></div>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_distr.html">get_distr</a></span><span class="op">(</span> <span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="expand_distr.html">expand_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to raster</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">flatten_raster</span><span class="op">(</span><span class="va">r</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert back to distribution</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">d</span> <span class="op">==</span> <span class="va">f</span><span class="op">)</span><span class="op">)</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

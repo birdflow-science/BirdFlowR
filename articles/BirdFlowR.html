@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,9 +90,9 @@
 <p>Install packages</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">installed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="st">"remotes"</span> <span class="op"><a href="https://rdrr.io/pkg/terra/man/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"remotes"</span> <span class="op"><a href="https://rdrr.io/pkg/terra/man/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="st">"rnaturalearthdata"</span> <span class="op"><a href="https://rdrr.io/pkg/terra/man/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"rnaturalearthdata"</span> <span class="op"><a href="https://rdrr.io/pkg/terra/man/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rnaturalearthdata"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowModels"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -120,9 +120,9 @@ more than <code><a href="../reference/dimensions.html">n_transitions()</a></code
 <code class="sourceCode R"><span><span class="co"># Methods for base R functions:</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 45 51</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> <span class="fu"><a href="../reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 45 51</span></span>
-<span><span class="va">bf</span> <span class="co"># print(bf) </span></span>
+<span><span class="va">bf</span> <span class="co"># same as print(bf)</span></span>
 <span><span class="co">#&gt; American Woodcock BirdFlow model</span></span>
 <span><span class="co">#&gt;   dimensions   : 45, 51, 52  (nrow, ncol, ntimesteps)</span></span>
 <span><span class="co">#&gt;   resolution   : 79995.7798343748, 79995.8424586389  (x, y)</span></span>
@@ -159,7 +159,7 @@ available information. Dates associated with migration and resident
 seasons are likely to be useful.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "American Woodcock"</span></span>
 <span><span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"scientific"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Scolopax minor"</span></span>
@@ -194,7 +194,7 @@ describe the dimensions of individual cells in the model.
 <span><span class="co">#&gt; [1] "+proj=moll +lon_0=-90 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">res</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 79995.78 79995.84</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">xres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">yres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="op">)</span> <span class="co"># same as res(bf)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">xres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">yres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as res(bf)</span></span>
 <span><span class="co">#&gt; [1] 79995.78 79995.84</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; SpatExtent : -1564958.2138293, 2514826.55772382, 2822153.67510416, 6421966.58574292 (xmin, xmax, ymin, ymax)</span></span>
@@ -214,7 +214,7 @@ or “all” to specify which distributions to retrieve.</p>
 <p>Retrieve the first distribution and compare its length to the number
 of active cells.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># get first timestep distribution </span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># get first timestep distribution</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>  <span class="co"># 1 distribution so d is a vector</span></span>
 <span><span class="co">#&gt; [1] 1706</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># its length is the the number of active cells in the model</span></span>
@@ -222,7 +222,7 @@ of active cells.</p>
 <p>Get 5 distributions, the result is a matrix in which each column is a
 distribution with a row for each active cell.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">26</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">26</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1706    5</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">3</span><span class="op">)</span></span>
@@ -236,13 +236,13 @@ retrieve all the distributions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"2022-12-15"</span><span class="op">)</span> <span class="co"># from character date</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"all"</span><span class="op">)</span>  <span class="co"># all distributions</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Using a Date object </span></span></code></pre></div>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Using a Date object</span></span></code></pre></div>
 <p>Use <code><a href="../reference/rasterize.html">rasterize_distr()</a></code> to convert a distribution to a
 SpatRaster defined in the terra package. The second argument, the
 BirdFlow model, is needed for the spatial information it contains.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">26</span><span class="op">)</span><span class="op">)</span> <span class="co"># winter and summer</span></span>
-<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to SpatRaster </span></span></code></pre></div>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to SpatRaster</span></span></code></pre></div>
 <p>Alternatively convert directly from BirdFlow to SpatRast with
 <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> the second, optional, argument <code>which</code>
 accepts the same inputs a as <code>which</code> in
@@ -271,7 +271,7 @@ predicted breeding grounds for birds that wintered at the starting
 location.</p>
 <p>Set predict parameters.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="va">start</span> <span class="op">&lt;-</span> <span class="fl">1</span>     <span class="co">#  winter </span></span>
+<code class="sourceCode R"><span>    <span class="va">start</span> <span class="op">&lt;-</span> <span class="fl">1</span>     <span class="co">#  winter</span></span>
 <span>    <span class="va">end</span> <span class="op">&lt;-</span>  <span class="fl">26</span>     <span class="co"># summer</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="sample-starting-distribution">Sample starting distribution<a class="anchor" aria-label="anchor" href="#sample-starting-distribution"></a>
@@ -285,7 +285,7 @@ elsewhere.</p>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">location</span><span class="op">)</span> <span class="op">)</span>, <span class="va">bf</span><span class="op">)</span> <span class="op">)</span>  <span class="co"># starting coordinates</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">location</span><span class="op">)</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span><span class="op">)</span>  <span class="co"># starting coordinates</span></span>
 <span><span class="co">#&gt;              x       y</span></span>
 <span><span class="co">#&gt; [1,] -5040.507 3982093</span></span></code></pre></div>
 </div>
@@ -299,7 +299,7 @@ likely to be as the year progresses and ultimately where they might
 spend their summer. The probability density spreads as the weeks
 progress.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span>, </span>
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span>,</span>
 <span>             direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span><span class="op">)</span></span>
@@ -309,8 +309,8 @@ progress.</p>
 distribution for bird’s wintering at that particular location and the
 distribution of the species as a whole at the same timestep.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="va">f</span><span class="op">[</span> , <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">]</span>  <span class="co"># last projected distribution</span></span>
-<span><span class="va">diff</span> <span class="op">&lt;-</span>  <span class="va">projected</span> <span class="op">-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">end</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">]</span>  <span class="co"># last projected distribution</span></span>
+<span><span class="va">diff</span> <span class="op">&lt;-</span>  <span class="va">projected</span> <span class="op">-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">end</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">diff</span>, <span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/probability%20over%20time-1.png" width="65%"></p>
 </div>
@@ -335,11 +335,11 @@ sample the input distribution repeatedly resulting in a matrix in which
 each column has a single 1 representing the sampled location.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
-<span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span><span class="op">)</span>  </span></code></pre></div>
+<span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span><span class="op">)</span></span></code></pre></div>
 <p>Collapse the locations down to a vector of the index of each non-zero
 value and then convert to x and y coordinates.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">locations</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">locations</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_x</a></span><span class="op">(</span><span class="va">ind</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_y</a></span><span class="op">(</span><span class="va">ind</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
 <p>Plot the starting (winter) distribution and sampled locations</p>
@@ -366,11 +366,11 @@ each route</li>
 <code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, x_coord <span class="op">=</span> <span class="va">x</span>, y_coord <span class="op">=</span> <span class="va">y</span>, start <span class="op">=</span> <span class="va">start</span>,</span>
 <span>             end <span class="op">=</span> <span class="va">end</span>, n_each <span class="op">=</span> <span class="va">n_each</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          x       y route timestep       date</span></span>
-<span><span class="co">#&gt; 1 714921.5 4222081     1        1 2019-01-04</span></span>
-<span><span class="co">#&gt; 2 714921.5 4222081     1        2 2019-01-11</span></span>
-<span><span class="co">#&gt; 3 714921.5 4222081     1        3 2019-01-18</span></span>
-<span><span class="co">#&gt; 4 714921.5 4222081     1        4 2019-01-25</span></span></code></pre></div>
+<span><span class="co">#&gt;          x       y route timestep       date    i stay_id stay_len</span></span>
+<span><span class="co">#&gt; 1 714921.5 4222081     1        1 2019-01-04 1260       1        4</span></span>
+<span><span class="co">#&gt; 2 714921.5 4222081     1        2 2019-01-11 1260       1        4</span></span>
+<span><span class="co">#&gt; 3 714921.5 4222081     1        3 2019-01-18 1260       1        4</span></span>
+<span><span class="co">#&gt; 4 714921.5 4222081     1        4 2019-01-25 1260       1        4</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-routes">Plot routes<a class="anchor" aria-label="anchor" href="#plot-routes"></a>
@@ -382,14 +382,14 @@ at the starting and ending positions.</p>
 <span><span class="va">summer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">line_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.2</span><span class="op">)</span></span>
-<span><span class="va">pt_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span> <span class="op">)</span></span>
+<span><span class="va">pt_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">summer</span><span class="op">)</span> </span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span> <span class="va">x</span>, <span class="va">y</span>, cex <span class="op">=</span> <span class="fl">.4</span>, col <span class="op">=</span> <span class="va">pt_col</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="co"># starting points</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">summer</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, cex <span class="op">=</span> <span class="fl">.4</span>, col <span class="op">=</span> <span class="va">pt_col</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="co"># starting points</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">lines</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="va">line_col</span><span class="op">)</span>  <span class="co"># routes</span></span>
 <span><span class="va">end_pts</span> <span class="op">&lt;-</span> <span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">[</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span> <span class="op">==</span> <span class="va">end</span>, <span class="op">]</span>  <span class="co"># end points</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_pts</span><span class="op">$</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">end_pts</span><span class="op">$</span><span class="va">y</span>,</span>
-<span>       cex <span class="op">=</span> <span class="fl">0.4</span>, pch <span class="op">=</span> <span class="fl">12</span>, col <span class="op">=</span> <span class="va">pt_col</span> <span class="op">)</span></span>
+<span>       cex <span class="op">=</span> <span class="fl">0.4</span>, pch <span class="op">=</span> <span class="fl">12</span>, col <span class="op">=</span> <span class="va">pt_col</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/plot%20routes-1.png" width="65%"></p>

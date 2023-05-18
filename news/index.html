@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,32 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9012" id="birdflowr-0109012">BirdflowR 0.1.0.9012<a class="anchor" aria-label="anchor" href="#birdflowr-0109012"></a></h2>
+<p>2023-05-17</p>
+<ul><li>Fixed bug in <code><a href="../reference/route.html">route()</a></code> and <code><a href="../reference/route_migration.html">route_migration()</a></code> that prevented routing over year boudnary.</li>
+<li>New:
+<ul><li>
+<code><a href="../reference/plot_routes.html">plot_routes()</a></code> for plotting routes with ggplot2.</li>
+<li>
+<code><a href="../reference/compareGeom-BirdFlow.html">compareGeom()</a></code> methods for BirdFlow objects, possibly mixed with <code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> objects. See <code><a href="https://rdrr.io/pkg/terra/man/compareGeom.html" class="external-link">terra::compareGeom()</a></code>
+</li>
+<li>
+<code>proportion_of_year()</code> (internal function) converts a date into a number between 0 and 1.</li>
+</ul></li>
+<li>Updated:
+<ul><li>
+<code><a href="../reference/flatten_raster.html">flatten_raster()</a></code> supports multiple input formats <a href="https://github.com/birdflow-science/BirdFlowR/issues/23" class="external-link">#23</a></li>
+<li>
+<code><a href="../reference/rasterize.html">rasterize_distr()</a></code> supports multiple output formats <a href="https://github.com/birdflow-science/BirdFlowR/issues/23" class="external-link">#23</a></li>
+<li>
+<code><a href="../reference/route.html">route()</a></code> and <code><a href="../reference/route_migration.html">route_migration()</a></code> output return additional columns in the <code>points</code> item.<br></li>
+</ul></li>
+<li>Deprecated:
+<ul><li>
+<code><a href="../reference/expand_distr.html">expand_distr()</a></code> is now an internal function. Users can use <code>rasterize_distr( format = "numeric")</code> instead.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9011" id="birdflowr-0109011">BirdflowR 0.1.0.9011<a class="anchor" aria-label="anchor" href="#birdflowr-0109011"></a></h2>
 <p>2023-05-11</p>
