@@ -26,7 +26,7 @@
 #'   value per location in the model or a matrix in which each column is such a
 #'   vector. Higher dimensions are allowed (but unlikely); in all cases the
 #'   first dimension is for locations in the model.
-#' @param bf A BirdFlow model or the `geom` component of one.
+#' @param bf A BirdFlow model
 #' @return An expanded version of `distr` with one additional dimension, in
 #'   which the first two dimensions are rows and columns in space (a raster) and
 #'   replace the first dimension in the input.
@@ -38,21 +38,17 @@ expand_distr <- function(distr, bf) {
   # and then switching back. If state was always a vector the return value would
   # be a matrix and the "switch" would be transposing.
 
-  if ("geom" %in% names(bf))
-    bf <- bf$geom
-
   # Check for proper number of active cells
-  n_active <- sum(bf$mask)
   distr <- as.array(distr) # so dim will work even when 1 dimensional.
-  if (!dim(distr)[1] == n_active)
+  if (!dim(distr)[1] == n_active(bf))
     stop("Expected first (possibly only) dimension of distr to represent ",
-         n_active, " active cells. Found ", dim(distr)[1], ".")
+         n_active(bf), " active cells. Found ", dim(distr)[1], ".")
 
   # Create empty array for result but with first two dimensions switched
   # so that it is filling is by row instead of column.
-  a <- array(NA, dim = c(bf$ncol, bf$nrow, dim(distr)[-1])) # col, row, ...
-  a[t(bf$mask)] <- as.vector(distr) # fill
-  perm <- seq_len(dim(a))
+  a <- array(NA, dim = c(ncol(bf), nrow(bf), dim(distr)[-1])) # col, row, ...
+  a[t(bf$geom$mask)] <- as.vector(distr) # fill
+  perm <- seq_len(length(dim(a)))
   perm[1:2] <- 2:1
   a <- aperm(a, perm = perm) # permute the array so first two dimensions are
                              # row, col
@@ -70,10 +66,10 @@ expand_distr <- function(distr, bf) {
   # # and is slightly easier to interpret:
   # # Converts vector to matrix
   # if(is.vector(distr)){
-  #   if(length(distr) != n_active)
-  #     stop("State should have", n_active, "values.")
-  #   m <- matrix(nrow = bf$ncol , ncol = bf$nrow) # reversed on purpose
-  #   m[t(bf$mask)] <- distr # fills by columns which represent rows
+  #   if(length(distr) != n_active(bf))
+  #     stop("State should have", n_active(bf), "values.")
+  #   m <- matrix(nrow = ncol(bf) , ncol = nrow(bf)) # reversed on purpose
+  #   m[t(bf$geom$mask)] <- distr # fills by columns which represent rows
   #   return(t(m))
   # }
   # nolint end
