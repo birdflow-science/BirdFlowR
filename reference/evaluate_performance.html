@@ -12,7 +12,7 @@ the ebirdst distributions used to train the BirdFlow model."><!-- mathjax --><sc
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9012</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9013</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,11 @@ the ebirdst distributions used to train the BirdFlow model.</p>
     <dl><dt>x</dt>
 <dd><p>A BirdFlow object</p></dd>
 
+
+<dt>distr_only</dt>
+<dd><p>set to TRUE to calculate only <code>mean_distr_cor</code> and
+<code>min_distr_cor</code> metrics.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -101,7 +106,7 @@ distributions and distributions calculated from the marginals.</p></dd>
 
 <dt>min_distr_cor</dt>
 <dd><p>Indicates how well the poorest marginal preserves the
-training distribution. The minium observed coorlation between a marginal and
+training distribution. The minimum observed correlation between a marginal and
 training distribution.</p></dd>
 
 

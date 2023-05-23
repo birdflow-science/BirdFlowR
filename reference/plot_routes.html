@@ -12,7 +12,7 @@ indicating the length of stay at each stop."><!-- mathjax --><script src="https:
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9012</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9013</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,14 +64,15 @@ indicating the length of stay at each stop.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">points</span>, <span class="va">bf</span>, facet <span class="op">=</span> <span class="cn">FALSE</span>, max_stay_len <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">routes</span>, <span class="va">bf</span>, facet <span class="op">=</span> <span class="cn">FALSE</span>, max_stay_len <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>points</dt>
-<dd><p>The points component of the list returned by <code><a href="route.html">route()</a></code> or
-<code><a href="route_migration.html">route_migration()</a></code></p></dd>
+    <dl><dt>routes</dt>
+<dd><p>The output of <code><a href="route.html">route()</a></code> or
+<code><a href="route_migration.html">route_migration()</a></code>.  The <code>$point</code> component of such an object will also
+work.</p></dd>
 
 
 <dt>bf</dt>
@@ -84,39 +85,37 @@ out into a separate subplot.</p></dd>
 
 
 <dt>max_stay_len</dt>
-<dd><p>Used scale the stay length dots. If omitted it will
-be set to the maximum "stay_len" value in <code>points</code>.  Set it manually to
-keep the dot scaling consistent across multiple plots.</p></dd>
+<dd><p>Used to scale the stay length dots. If NULL
+(the default) it will be set to the maximum "stay_len" value in <code>routes</code>.
+Set it manually to keep the dot scaling consistent across multiple plots.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a ggplot object.  Use <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> to display it.</p>
+<p>a ggplot object. Use <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> to display it.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="va">n_spring</span> <span class="op">&lt;-</span> <span class="va">n_fall</span> <span class="op">&lt;-</span> <span class="fl">4</span></span></span>
-<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">n_spring</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="va">rts</span><span class="op">$</span><span class="va">points</span></span></span>
-<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">points</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spring_rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">n_spring</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># All routes together</span></span></span>
+<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">spring_rts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_routes-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">points</span>, <span class="va">bf</span>, facet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># One panel per route</span></span></span>
+<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">spring_rts</span>, <span class="va">bf</span>, facet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_routes-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Create a plot with both spring and fall migrations</span></span></span>
+<span class="r-in"><span><span class="co"># Both spring and fall migrations on same plot</span></span></span>
 <span class="r-in"><span><span class="va">fall_rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">n_fall</span>, <span class="st">"fall"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fall_rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">route</span> <span class="op">&lt;-</span> <span class="va">fall_rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">route</span> <span class="op">+</span> <span class="va">n_spring</span> <span class="co"># for unique routes</span></span></span>
-<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">points</span>, <span class="va">fall_rts</span><span class="op">$</span><span class="va">points</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">spring_rts</span><span class="op">$</span><span class="va">points</span>, <span class="va">fall_rts</span><span class="op">$</span><span class="va">points</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_routes-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">5</span>, <span class="st">"fall"</span>, season_buffer <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span>, <span class="va">bf</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_routes-4.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
