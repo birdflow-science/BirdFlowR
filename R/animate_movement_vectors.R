@@ -46,8 +46,11 @@
 #'                           width = 6, height = 5,
 #'                           res = 150, units = "in")
 #' print(gif)
-#' path <- tempfile(fileext = ".gif") # set to desired output location
-#' gganimate::anim_save(gif)
+#'
+#' # Save
+#' gif_file <- tempfile("animation", fileext = ".gif")
+#' gganimate::save_animation(gif, gif_file)
+#' file.remove(gif_file) # cleanup
 #' }
 #'
 animate_movement_vectors <- function(bf, start = "all", ...) {

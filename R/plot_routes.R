@@ -4,54 +4,61 @@
 #' Plot routes as lines with color indicating the passage of time and dot size
 #' indicating the length of stay at each stop.
 #'
-#' @param points The points component of the list returned by [route()] or
-#' [route_migration()]
+#' @param routes The output of [route()] or
+#' [route_migration()].  The `$point` component of such an object will also
+#' work.
 #' @param bf A BirdFlow object
 #' @param facet if TRUE then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
-#' @param max_stay_len Used scale the stay length dots. If omitted it will
-#' be set to the maximum "stay_len" value in `points`.  Set it manually to
-#' keep the dot scaling consistent across multiple plots.
-#' @return a ggplot object.  Use [print()] to display it.
+#' @param max_stay_len Used to scale the stay length dots. If NULL
+#' (the default) it will be set to the maximum "stay_len" value in `routes`.
+#' Set it manually to keep the dot scaling consistent across multiple plots.
+#' @return a ggplot object. Use [print()] to display it.
 #' @export
 #' @importFrom rlang .data
 #' @examples
 #'bf <- BirdFlowModels::amewoo
 #'n_spring <- n_fall <- 4
-#'rts <- route_migration(bf, n_spring)
-#'points <- rts$points
-#'plot_routes(points, bf)
+#'spring_rts <- route_migration(bf, n_spring)
 #'
-#'plot_routes(points, bf, facet = TRUE)
+#'# All routes together
+#'plot_routes(spring_rts, bf)
 #'
-#' # Create a plot with both spring and fall migrations
+#'# One panel per route
+#'plot_routes(spring_rts, bf, facet = TRUE)
+#'
+#' # Both spring and fall migrations on same plot
 #' fall_rts <- route_migration(bf, n_fall, "fall")
 #' fall_rts$points$route <- fall_rts$points$route + n_spring # for unique routes
-#' plot_routes(rbind(points, fall_rts$points), bf)
-#'
-#' rts <- route_migration(bf, 5, "fall", season_buffer = 2)
-#' plot_routes(rts$points, bf)
-plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
+#' plot_routes(rbind(spring_rts$points, fall_rts$points), bf)
+plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL) {
 
   #----------------------------------------------------------------------------#
   # Data reformatting and preparation
   #----------------------------------------------------------------------------#
 
   # Check for full output from route() and select just point component
-  if (is.list(points) && all(names(points) == c("points", "lines")) &&
-                            is.data.frame(points$points)) {
-    points <- points$points
+  if (is.list(routes) && all(names(routes) == c("points", "lines")) &&
+                            is.data.frame(routes$points)) {
+    routes <- routes$points
   }
 
-  # Reformat and add columns to points
+  # Reformat and add columns to routes
   # pyear is the proportion of the year using it instead of
   # date allows assigning a cyclical color scale
 
-  points$date <- lubridate::as_date(points$date)
-  points$pyear <- proportion_of_year(points$date)
+  routes$date <- lubridate::as_date(routes$date)
+  routes$pyear <- proportion_of_year(routes$date)
+
+  # Elapsed time at location - used by animate_routes()
+  routes <- routes |>
+    dplyr::group_by(.data$route, .data$stay_id) |>
+    dplyr::mutate(elapsed_stay = dplyr::row_number()) |>
+    as.data.frame()
+
 
   # The stops, unique locations where they stayed more than a week
-  the_stops <- points[points$stay_len > 1, ]
+  the_stops <- routes[routes$stay_len > 1, ]
   the_stops <- the_stops[!duplicated(the_stops[, c("route", "stay_id")]), ]
 
   # Make raster showing which cells are active in the model
@@ -67,13 +74,13 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
 
   # Maximum length of stay
   if (is.null(max_stay_len))
-    max_stay_len <- max(points$stay_len)
+    max_stay_len <- max(routes$elapsed_stay)
   # must be at least 3 so range isn't a point
   max_stay_len <- max(max_stay_len, 3)
 
   # Set breaks for stay length (label values in legend)
-  stay_len_range <- c(2, max_stay_len) # range of stay length
-  stay_len_breaks <- unique(sort(c(2, 5, 10, max_stay_len))) # label values
+  stay_len_range <- c(1, max_stay_len) # range of stay length
+  stay_len_breaks <- unique(sort(c(1, 2, 5, 10, max_stay_len))) # label values
   stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
 
   # Set breaks for dates   (label value in legend)
@@ -82,7 +89,7 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
   pyear_breaks <- seq(pyear_ends[2], pyear_ends[1], length.out = 5)
 
   # Set subtitle based on unique date ranges in the data
-  date_ranges <- points |>
+  date_ranges <- routes |>
     dplyr::group_by(.data$route) |>
     dplyr::summarize(first = dplyr::first(.data$pyear),
                      last = dplyr::last(.data$pyear)) |>
@@ -92,8 +99,6 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
     dplyr::select(dplyr::last_col()) |>
     dplyr::distinct()
   subtitle <- paste(date_ranges$label, collapse = ", ")
-
-
 
 
   #----------------------------------------------------------------------------#
@@ -129,7 +134,7 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
   # Assemble the plot
   #----------------------------------------------------------------------------#
 
-  p <- ggplot2::ggplot(data = points,
+  p <- ggplot2::ggplot(data = routes,
                        ggplot2::aes(x = .data$x, y = .data$y)) +
     ggplot2::theme(axis.title = ggplot2::element_blank()) +
 
@@ -143,9 +148,13 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
                          ggplot2::aes(fill = .data$value)) +
 
     # Add stay dots
-    ggplot2::geom_point(data = the_stops,
-                        ggplot2::aes(size = .data$stay_len,
-                                     color = .data$pyear)) +
+    # Note group is a seq along the time axis
+    # and not the route (or line id) so that it works properly with
+    # transition_reveal (see last example in ?transition_reveal)
+    ggplot2::geom_point(
+                        ggplot2::aes(size = .data$elapsed_stay,
+                                     color = .data$pyear,
+                                     group = seq_along(.data$pyear))) +
 
 
     # Add route lines
@@ -154,7 +163,9 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
                        linewidth = route_linewidth,
                        lineend = "round") +
 
-    #   viridis::scale_color_viridis(labels = format_pyear, name = "Date") +
+    # alternative color scale.  Used in prior plots. it requires adding
+    #  viridis to imports.
+    # viridis::scale_color_viridis(labels = format_pyear, name = "Date") +
 
     # Set color for route lines and stay dots
     ggplot2::scale_color_gradientn(
@@ -173,14 +184,18 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
                                    name = "Stay Length") +
 
     ggplot2::theme(strip.background = ggplot2::element_blank()) +
-    # coord_fixed(ratio =1) +
+
+    # Plot coastal data
     ggplot2::geom_sf(data = coast,
                      inherit.aes = FALSE,
                      linewidth = coast_linewidth,
                      color = coast_color) +
 
+    # coord_sf is required when using geom_sf this prevents expanding the
+    #  extent of the plot beyond the data.
     ggplot2::coord_sf(expand = FALSE)
 
+  # Add title and subtitle
   p <- p + ggplot2::ggtitle(
     label = species(bf),
     subtitle = subtitle)
@@ -191,6 +206,7 @@ plot_routes <- function(points, bf, facet = FALSE, max_stay_len = NULL) {
       ggplot2::facet_wrap(~.data$route) +
 
       # Remove axis labels and ticks
+      # facet plot is cluttered if you leave these in.
       ggplot2::theme(axis.text.x = ggplot2::element_blank(),
                      axis.ticks.x = ggplot2::element_blank(),
                      axis.text.y = ggplot2::element_blank(),

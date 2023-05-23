@@ -64,10 +64,24 @@ timesteps.}
 }
 \value{
 This will likely change. Currently returns a list with:
-\item{points}{A data.frame with coordinates, date, and route id}
+\item{points}{A dataframe with columns:
+\describe{
+\item{\code{x}, \code{y}}{coordinates of point along route}
+\item{\code{date}}{date associated with that point}
+\item{\code{timestep}}{timestep associated with point}
+\item{\code{route}}{unique id for that route or individual}
+\item{\code{i}}{location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}})}
+\item{\code{stay_id}}{within each route a sequential id for locations}
+\item{\code{stay_len}}{how many timesteps was the Bird at that point during
+the stay (minumum of 1)}
+}
+}
 \item{lines}{a \link[sf:sf]{sf} object containing one line per route.}
 }
 \description{
-route() projects bird positions over time based on the probabilities
+\code{route()} projects bird positions over time based on the probabilities
 embedded in a BirdFlow model. The output is linear, stochastic routes.
+}
+\seealso{
+\code{\link[=route_migration]{route_migration()}}
 }

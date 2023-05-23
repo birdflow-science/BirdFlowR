@@ -4,23 +4,24 @@
 \alias{plot_routes}
 \title{Plot routes}
 \usage{
-plot_routes(points, bf, facet = FALSE, max_stay_len = NULL)
+plot_routes(routes, bf, facet = FALSE, max_stay_len = NULL)
 }
 \arguments{
-\item{points}{The points component of the list returned by \code{\link[=route]{route()}} or
-\code{\link[=route_migration]{route_migration()}}}
+\item{routes}{The output of \code{\link[=route]{route()}} or
+\code{\link[=route_migration]{route_migration()}}.  The \verb{$point} component of such an object will also
+work.}
 
 \item{bf}{A BirdFlow object}
 
 \item{facet}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
 
-\item{max_stay_len}{Used scale the stay length dots. If omitted it will
-be set to the maximum "stay_len" value in \code{points}.  Set it manually to
-keep the dot scaling consistent across multiple plots.}
+\item{max_stay_len}{Used to scale the stay length dots. If NULL
+(the default) it will be set to the maximum "stay_len" value in \code{routes}.
+Set it manually to keep the dot scaling consistent across multiple plots.}
 }
 \value{
-a ggplot object.  Use \code{\link[=print]{print()}} to display it.
+a ggplot object. Use \code{\link[=print]{print()}} to display it.
 }
 \description{
 Plot routes as lines with color indicating the passage of time and dot size
@@ -29,17 +30,16 @@ indicating the length of stay at each stop.
 \examples{
 bf <- BirdFlowModels::amewoo
 n_spring <- n_fall <- 4
-rts <- route_migration(bf, n_spring)
-points <- rts$points
-plot_routes(points, bf)
+spring_rts <- route_migration(bf, n_spring)
 
-plot_routes(points, bf, facet = TRUE)
+# All routes together
+plot_routes(spring_rts, bf)
 
-# Create a plot with both spring and fall migrations
+# One panel per route
+plot_routes(spring_rts, bf, facet = TRUE)
+
+# Both spring and fall migrations on same plot
 fall_rts <- route_migration(bf, n_fall, "fall")
 fall_rts$points$route <- fall_rts$points$route + n_spring # for unique routes
-plot_routes(rbind(points, fall_rts$points), bf)
-
-rts <- route_migration(bf, 5, "fall", season_buffer = 2)
-plot_routes(rts$points, bf)
+plot_routes(rbind(spring_rts$points, fall_rts$points), bf)
 }
