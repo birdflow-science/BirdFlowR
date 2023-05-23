@@ -16,6 +16,8 @@
 #' Correlations are calculated for only the non-dynamically masked cells.
 #'
 #' @param x A BirdFlow object
+#' @param distr_only set to TRUE to calculate only `mean_distr_cor` and
+#' `min_distr_cor` metrics.
 #'
 #' @return
 #' \describe{
@@ -35,7 +37,7 @@
 #' the training distributions. The mean correlation between the training
 #' distributions and distributions calculated from the marginals.}
 #'  \item{min_distr_cor}{Indicates how well the poorest marginal preserves the
-#'  training distribution. The minium observed coorlation between a marginal and
+#'  training distribution. The minimum observed correlation between a marginal and
 #'  training distribution.}
 #' }
 #' @keywords internal

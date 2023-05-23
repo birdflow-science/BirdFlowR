@@ -2,7 +2,7 @@
 % Please edit documentation in R/route_migration.R
 \name{route_migration}
 \alias{route_migration}
-\title{generate migration routes from a BirdFlow model}
+\title{Generate migration routes from a BirdFlow model}
 \usage{
 route_migration(bf, n, migration = "prebreeding", season_buffer = 1)
 }
@@ -22,11 +22,22 @@ the end.}
 }
 \value{
 This will likely change. Currently returns a list with:
-\item{points}{A data.frame with coordinates, date, and route id}
+\item{points}{A dataframe with columns:
+\describe{
+\item{\code{x}, \code{y}}{coordinates of point along route}
+\item{\code{date}}{date associated with that point}
+\item{\code{timestep}}{timestep associated with point}
+\item{\code{route}}{unique id for that route or individual}
+\item{\code{i}}{location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}})}
+\item{\code{stay_id}}{within each route a sequential id for locations}
+\item{\code{stay_len}}{how many timesteps was the Bird at that point during
+the stay (minumum of 1)}
+}
+}
 \item{lines}{a \link[sf:sf]{sf} object containing one line per route.}
 }
 \description{
-create stochastic migration routes for a species by sampling appropriate
+Create stochastic migration routes for a species by sampling appropriate
 starting locations and then \link[=route]{routing} for the
 duration of the migration window.
 }
@@ -48,8 +59,9 @@ and ends at \code{species_info("nonbreeding_start")}}
 
 }
 \seealso{
-\code{route_migration()} is a convenience wrapper for \code{\link[=route]{route()}}.
-\link[=predict.BirdFlow]{predict()} projects future or past distributions based
-on a starting location or distribution.
-\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} does what its name suggests.
+\itemize{
+\item \code{\link[=route]{route()}} allows setting the starting locations explicitly.
+\item \link[=predict.BirdFlow]{predict(BirdFlow)} projects future or past
+\item \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} does what its name suggests.
+}
 }

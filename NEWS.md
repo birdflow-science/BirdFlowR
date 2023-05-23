@@ -1,8 +1,18 @@
+# BirdflowR 0.1.0.9013
+2023-05-22
+
+* New `animate_routes()` #93
+* Updated `plot_routes()` 
+  * Added dot for stay = 1 so all segment end points are visibly marked.
+  * Subtle changes to code to support animation.
+* Updated documentation of [route()] and [route_migration()] to full describe
+  additional columns added in 0.1.0.9012
+
 # BirdflowR 0.1.0.9012
 2023-05-17
 
 * Fixed bug in `route()` and `route_migration()` that prevented routing over 
-  year boudnary.
+  year boundary.
 * New: 
   - `plot_routes()` for plotting routes with ggplot2.
   - `compareGeom()` methods for BirdFlow objects, possibly mixed with
@@ -17,11 +27,6 @@
 * Deprecated:
   - `expand_distr()` is now an internal function.  Users can use
   `rasterize_distr( format = "numeric")` instead.
-  
-     
-  
-  
-  
 
 # BirdflowR 0.1.0.9011
 2023-05-11
@@ -38,7 +43,8 @@ warning when tibbles are used.
 # BirdflowR 0.1.0.9009
 2023-05-09
 
-* `preprocess_species()` now defaults the `res` parameter to NULL, making it easier to script around `preprocess_species()`
+* `preprocess_species()` now defaults the `res` parameter to NULL, making it 
+easier to script around `preprocess_species()`
 
 * Tweaked some tests to better run across different development environments
 
@@ -162,8 +168,8 @@ model, as it's fairly large and easy to recalculate with
        adding a dynamic mask.  This is mainly to facilitate the transition to 
        allow testing the package with the old models.
     - `has_dynamic_mask()` returns a logical.
-    - `import_birdflow_v3()` internal function is called by `import_birdflow()` for
-       version 3 BirdFlow HDF5 files.
+    - `import_birdflow_v3()` internal function is called by `import_birdflow()` 
+       for version 3 BirdFlow HDF5 files.
     - `great_circle_distances()` creates a great circle distance matrix encoding
        the distance (km) between every pair of cells in a BirdFlow object.
    
@@ -176,20 +182,21 @@ model, as it's fairly large and easy to recalculate with
         - read metadata/loss_values
     - `get_distr()` with `from_marginals = TRUE` now has to expand the truncated 
        distribution calculated from the marginal out to a full distribution.
-    - `predict()` and `route()` have to map from full distributions, to truncated 
-       distributions before applying the transition and then, expand back to full
-       for output.
+    - `predict()` and `route()` have to map from full distributions, to 
+       truncated distributions before applying the transition and then, expand
+       back to full for output.
     -  `validate_birdflow()` now checks the dimensions of the marginals and 
-       transition matrices against the dynamic mask cell counts for each timestep.
+       transition matrices against the dynamic mask cell counts for each 
+       timestep.
     -  `preprocess_species()` 
        - now calls `great_circle_distances()` and `shorten_distance_matrix()`to 
          create "/distances" component of the HDF5
        - adds "geom/dynamic_mask" which is a logical matrix indicating 
          which cells of "/distr" are non-zero for each timestep.
-       - Has updated heuristic to set resolution based on the number of parameters 
-         given dynamic masking.
-       - new argument `dummy_dynamic_mask()` adds a dynamic mask that is all TRUE
-         to force fitting of the prior style of birdflow object.
+       - Has updated heuristic to set resolution based on the number of
+         parameters given dynamic masking.
+       - new argument `dummy_dynamic_mask()` adds a dynamic mask that is all
+         TRUE to force fitting of the prior style of birdflow object.
    - `sparsify()` has not been updated to work with dynamic masks, but will now
       throw an error telling you that if you try to use it on a BirdFlow object
       with a dynamic mask.
@@ -268,10 +275,12 @@ Added BirdFlow methods for generics defined in **sf**
 2023-04-06
 
 * Added functions `latlon_to_xy()` and `xy_to_latlon()` to convert from 
-WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS.  Fixes #64.  
+WGS84 (EPSG:4326) and x and y coordinates in the BirdFlow objects CRS.  Fixes 
+#64.  
 
 * CHANGED behavior in a bunch of the index conversion functions, previously, 
-many threw errors with NA input or values out of range. Most of them now return NA in both of those situations.  This made sense to me in the context of #61.
+many threw errors with NA input or values out of range. Most of them now return 
+NA in both of those situations.  This made sense to me in the context of #61.
 
 # BirdFlowR 0.0.0.9070
 2023-04-06
@@ -325,12 +334,14 @@ testing the  function and should be left at the default for all other uses.
 forward and backwards transitions. This is recommended before repeated 
 `forecast()` or predict calls as it avoids repeatedly making transitions on the 
 fly.  It does triple the memory usage for the BirdFlow object so should probably 
-only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse. 
+only be done with sparse BirdFlow models. It currently will work on any but 
+throws a warning if the BirdFlow model is not sparse. 
 
 * previously `transitions_from_marginal()` produced a standard matrix. Now, if 
 the mariginal is a sparse the conversion is done on and preserves the sparse 
 matrix.  Similarly, if the transition matrix is sparse `predict()` and `route()`
-both calculate on sparse objects.  This should speed those two functions up significantly.
+both calculate on sparse objects.  This should speed those two functions up
+significantly.
 
 # BirdFlowR 0.0.0.9036
 
@@ -428,7 +439,8 @@ it is `TRUE`.
   - expand_distr(x, bf) -> expand_distr(distr, bf)
   - get_distr(which, bf, from_marginals) -> get_distr(x, which, from_marginals) 
   - get_transition(x, bf) -> get_transition(x, transition) 
-  - lookup_transitions(start, end, bf, direction) -> lookup_transition(x, start, end, direction) 
+  - lookup_transitions(start, end, bf, direction) -> lookup_transition(x, start,
+    end, direction) 
   - sample_distr(x, bf) -> sample_distr(distr, bf)
 
 * No longer exported:
@@ -441,7 +453,9 @@ it is `TRUE`.
   - new_BirdFlow()
   - transition_from_marginal()
 
-* Added "@keyword internal" to documentation for all non-exported functions.  This removes the documentation from the package manual and index, but it's still accessible with ?function_name. 
+* Added "@keyword internal" to documentation for all non-exported functions.  
+  This removes the documentation from the package manual and index, but it's 
+  still accessible with ?function_name. 
 
 
 # BirdFlowR 0.0.0.9016  2023-02-27
@@ -455,9 +469,11 @@ it is `TRUE`.
 
 # BirdFlowR 0.0.0.9003  2023-02-27
 
-* Updated installation instructions.  Closing [#11](https://github.com/birdflow-science/BirdFlowR/issues/11).
+* Updated installation instructions.  Closing
+  [#11](https://github.com/birdflow-science/BirdFlowR/issues/11).
 
-* Added docker file. [Usage instructions.](https://github.com/birdflow-science/BirdFlowR/pull/15#issuecomment-1445152787) 
+* Added docker file. 
+  [Usage instructions.](https://github.com/birdflow-science/BirdFlowR/pull/15#issuecomment-1445152787) 
 
 # BirdFlowR 0.0.0.9002  2023-02-23
 
@@ -466,16 +482,19 @@ and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR
 needs. [#13](https://github.com/birdflow-science/BirdFlowR/issues/13) 
 
 * Vignette now attempts to load rnaturalearthdata with utils::install.packages() 
-instead of devtools::install_cran() in attempt to fix [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
+  instead of devtools::install_cran() in attempt to fix
+  [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
 
-* Updated get_naturalearth() so that it handles some cases in which it previously
-failed.  In particular extents that span more than 180 deg of longitude, and 
-extents that cross the 180 deg. meridian that defines the edge of the WGS84 
-projection both now work. The function still doesn't handle polar projections or
-global extents in most projections. Fixes [#14](https://github.com/birdflow-science/BirdFlowR/issues/14) 
+* Updated get_naturalearth() so that it handles some cases in which it 
+  previously failed.  In particular extents that span more than 180 deg of 
+  longitude, and extents that cross the 180 deg. meridian that defines the edge 
+  of the WGS84 projection both now work. The function still doesn't handle 
+  polar projections or global extents in most projections. Fixes 
+  [#14](https://github.com/birdflow-science/BirdFlowR/issues/14) 
 
 # BirdFlowR 0.0.0.9001   2023-02-21
 * Switched order of package installation in readme and added installation of
-rnaturalearthdata to vignette [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
+  rnaturalearthdata to vignette
+  [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
 
 * Added a `NEWS.md` file to track changes to the package.

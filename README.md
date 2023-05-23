@@ -64,6 +64,9 @@ rts <- route_migration(bf, 10, "prebreeding")
 # Add lines to plot
 plot(rts$lines, add = TRUE, col = rgb(0, 0, 0, .25))
 
+# ggplot2 plotting of routes
+plot_routes(rts, bf)
+
 ```
 
 ## Learn more

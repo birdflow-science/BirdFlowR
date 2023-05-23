@@ -1,6 +1,6 @@
 #' Generate BirdFlow routes
 #'
-#' route() projects bird positions over time based on the probabilities
+#' `route()` projects bird positions over time based on the probabilities
 #' embedded in a BirdFlow model. The output is linear, stochastic routes.
 #'
 #' @param x A BirdFlow object
@@ -14,14 +14,27 @@
 #' parameters should not be used at the same time.
 #' @inheritParams lookup_timestep_sequence
 #' @return This will likely change. Currently returns a list with:
-#' \item{points}{A data.frame with coordinates, date, and route id}
+#' \item{points}{A dataframe with columns:
+#' \describe{
+#'    \item{`x`, `y`}{coordinates of point along route}
+#'    \item{`date`}{date associated with that point}
+#'    \item{`timestep`}{timestep associated with point}
+#'    \item{`route`}{unique id for that route or individual}
+#'    \item{`i`}{location index for the point (see [i_to_xy()])}
+#'    \item{`stay_id`}{within each route a sequential id for locations}
+#'    \item{`stay_len`}{how many timesteps was the Bird at that point during
+#'    the stay (minumum of 1)}
+#'    }
+#'  }
 #' \item{lines}{a [sf][sf::sf] object containing one line per route.}
 #' @export
 #' @importFrom Matrix Matrix
 #' @importMethodsFrom Matrix t
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom rlang .data
-route <- function(x, x_coord, y_coord, n_each, row, col, start, end, direction,
+#' @seealso [route_migration()]
+route <- function(x, x_coord, y_coord, n_each,
+                  row, col, start, end, direction,
                   season_buffer, n) {
 
   ### BACK COMPATABILITY CODE

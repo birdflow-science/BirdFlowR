@@ -8,6 +8,9 @@ evaluate_performance(x, distr_only = FALSE)
 }
 \arguments{
 \item{x}{A BirdFlow object}
+
+\item{distr_only}{set to TRUE to calculate only \code{mean_distr_cor} and
+\code{min_distr_cor} metrics.}
 }
 \value{
 \describe{
@@ -27,7 +30,7 @@ from the fist training distribution; and the last training distribution. }
 the training distributions. The mean correlation between the training
 distributions and distributions calculated from the marginals.}
 \item{min_distr_cor}{Indicates how well the poorest marginal preserves the
-training distribution. The minium observed coorlation between a marginal and
+training distribution. The minimum observed correlation between a marginal and
 training distribution.}
 }
 }

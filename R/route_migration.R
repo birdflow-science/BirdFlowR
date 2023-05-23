@@ -1,7 +1,7 @@
 
-#' generate migration routes from a BirdFlow model
+#' Generate migration routes from a BirdFlow model
 #'
-#' create stochastic migration routes for a species by sampling appropriate
+#' Create stochastic migration routes for a species by sampling appropriate
 #' starting locations and then [routing][route()] for the
 #' duration of the migration window.
 #'
@@ -22,14 +22,12 @@
 #'   beginning and end of the season. The default of 1 means we start a week
 #'   before the metadata suggests the season starts and continue one week past
 #'   the end.
-#' @return This will likely change. Currently returns a list with:
-#'   \item{points}{A data.frame with coordinates, date, and route id}
-#'   \item{lines}{a [sf][sf::sf] object containing one line per route.}
+#' @inherit route return
 #' @seealso
-#' `route_migration()` is a convenience wrapper for [route()].
-#' [predict()][predict.BirdFlow()] projects future or past distributions based
-#'  on a starting location or distribution.
-#'  [lookup_season_timesteps()] does what its name suggests.
+#' * [route()] allows setting the starting locations explicitly.
+#' * [predict(BirdFlow)][predict.BirdFlow()] projects future or past
+#    distributions based on a starting location or distribution.
+#' * [lookup_season_timesteps()] does what its name suggests.
 #' @export
 #' @examples
 #'   bf <-  BirdFlowModels::amewoo
