@@ -12,7 +12,7 @@ producing a dynamic version of plot_routes()."><!-- mathjax --><script src="http
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9013</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@ producing a dynamic version of <code><a href="plot_routes.html">plot_routes()</a
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">animate_routes</span><span class="op">(</span><span class="va">routes</span>, <span class="va">bf</span>, <span class="va">max_stay_len</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">animate_routes</span><span class="op">(</span><span class="va">routes</span>, <span class="va">bf</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,10 +79,28 @@ work.</p></dd>
 <dd><p>A BirdFlow object</p></dd>
 
 
-<dt>max_stay_len</dt>
+<dt>...</dt>
+<dd><p>Arguments passed on to <code><a href="plot_routes.html">plot_routes</a></code></p><dl><dt><code>facet</code></dt>
+<dd><p>if TRUE then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
+out into a separate subplot.</p></dd>
+
+    <dt><code>max_stay_len</code></dt>
 <dd><p>Used to scale the stay length dots. If NULL
 (the default) it will be set to the maximum "stay_len" value in <code>routes</code>.
 Set it manually to keep the dot scaling consistent across multiple plots.</p></dd>
+
+    <dt><code>use_seasonal_colors</code></dt>
+<dd><p>If TRUE a color scale that uses blues, greens, yellows,
+reds, for winter, spring, summer, and fall will be used with a consistent
+mapping of dates to colors regardless of the range of dates plotted.
+If FALSE then the data will be plotted using the full color scale.</p></dd>
+
+    <dt><code>pal</code></dt>
+<dd><p>The color palette to use for plotting whe <code>use_seasonal_cols</code> is
+FALSE. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridisLite::viridis(n = 5)</a>.</p></dd>
+
+  
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
@@ -105,7 +123,7 @@ one point per route, resulting in a message:
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">anim</span> <span class="op">&lt;-</span> <span class="fu">animate_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -113,9 +131,9 @@ one point per route, resulting in a message:
 <span class="r-in"><span>  <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">gif</span> <span class="op">&lt;-</span> <span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">anim</span>,</span></span>
 <span class="r-in"><span>                            device <span class="op">=</span> <span class="st">"ragg_png"</span>, <span class="co"># ragg_png is fast and pretty</span></span></span>
-<span class="r-in"><span>                            width <span class="op">=</span> <span class="fl">6</span>, height <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>                            width <span class="op">=</span> <span class="fl">7</span>, height <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                            res <span class="op">=</span> <span class="fl">150</span>, units <span class="op">=</span> <span class="st">"in"</span>,</span></span>
-<span class="r-in"><span>                            nframes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span> <span class="op">*</span> <span class="fl">4</span>, fps <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                            nframes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span> <span class="op">*</span> <span class="fl">4</span>, fps <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Display</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gif</span><span class="op">)</span></span></span>
