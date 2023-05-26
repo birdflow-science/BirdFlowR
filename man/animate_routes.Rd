@@ -4,7 +4,7 @@
 \alias{animate_routes}
 \title{Animate routes}
 \usage{
-animate_routes(routes, bf, max_stay_len)
+animate_routes(routes, bf, ...)
 }
 \arguments{
 \item{routes}{The output of \code{\link[=route]{route()}} or
@@ -13,9 +13,21 @@ work.}
 
 \item{bf}{A BirdFlow object}
 
-\item{max_stay_len}{Used to scale the stay length dots. If NULL
+\item{...}{
+  Arguments passed on to \code{\link[=plot_routes]{plot_routes}}
+  \describe{
+    \item{\code{facet}}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
+out into a separate subplot.}
+    \item{\code{max_stay_len}}{Used to scale the stay length dots. If NULL
 (the default) it will be set to the maximum "stay_len" value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
+    \item{\code{use_seasonal_colors}}{If TRUE a color scale that uses blues, greens, yellows,
+reds, for winter, spring, summer, and fall will be used with a consistent
+mapping of dates to colors regardless of the range of dates plotted.
+If FALSE then the data will be plotted using the full color scale.}
+    \item{\code{pal}}{The color palette to use for plotting whe \code{use_seasonal_cols} is
+FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
+  }}
 }
 \value{
 a \code{gganim} object. \code{print()} will plot it with default
@@ -35,7 +47,7 @@ one point per route, resulting in a message:
 
 
 bf <- BirdFlowModels::amewoo
-rts <- route_migration(bf, 5)
+rts <- route_migration(bf, 10)
 anim <- animate_routes(rts, bf)
 
 \dontrun{
@@ -43,9 +55,9 @@ anim <- animate_routes(rts, bf)
   timesteps <- unique(rts$points$timestep)
   gif <- gganimate::animate(anim,
                             device = "ragg_png", # ragg_png is fast and pretty
-                            width = 6, height = 5,
+                            width = 7, height = 6,
                             res = 150, units = "in",
-                            nframes = length(timesteps) * 4, fps = 4)
+                            nframes = length(timesteps) * 4, fps = 8)
 
   # Display
   print(gif)

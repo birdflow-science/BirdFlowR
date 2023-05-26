@@ -1,3 +1,15 @@
+# BirdflowR 0.1.0.9014
+2023-05-25
+
+* Updated plot_routes()
+  * Works over year boundary
+  * Color bar only shows the used date range.
+  * Additional arguments to control appearance:    
+     use_seasonal_colors, pal, barheight
+  
+* Updated animate_routes() added ... argument that is passed onto
+  `plot_routes()` to control of appearance. 
+
 # BirdflowR 0.1.0.9013
 2023-05-22
 
