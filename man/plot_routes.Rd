@@ -4,7 +4,15 @@
 \alias{plot_routes}
 \title{Plot routes}
 \usage{
-plot_routes(routes, bf, facet = FALSE, max_stay_len = NULL)
+plot_routes(
+  routes,
+  bf,
+  facet = FALSE,
+  max_stay_len = NULL,
+  use_seasonal_colors = TRUE,
+  pal = NULL,
+  barheight = 8
+)
 }
 \arguments{
 \item{routes}{The output of \code{\link[=route]{route()}} or
@@ -19,6 +27,19 @@ out into a separate subplot.}
 \item{max_stay_len}{Used to scale the stay length dots. If NULL
 (the default) it will be set to the maximum "stay_len" value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
+
+\item{use_seasonal_colors}{If TRUE a color scale that uses blues, greens, yellows,
+reds, for winter, spring, summer, and fall will be used with a consistent
+mapping of dates to colors regardless of the range of dates plotted.
+If FALSE then the data will be plotted using the full color scale.}
+
+\item{pal}{The color palette to use for plotting whe \code{use_seasonal_cols} is
+FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
+
+\item{barheight}{The height of the color gradient legend bar.  Passed to
+\code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colorbar()}} as \code{barheight} argument. Depending on the output
+resolution and plot size this may need to be adjusted. Can take a number or
+the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
 }
 \value{
 a ggplot object. Use \code{\link[=print]{print()}} to display it.
@@ -29,17 +50,28 @@ indicating the length of stay at each stop.
 }
 \examples{
 bf <- BirdFlowModels::amewoo
-n_spring <- n_fall <- 4
-spring_rts <- route_migration(bf, n_spring)
+n <- 10
+rts <- route_migration(bf, n)$points
 
-# All routes together
-plot_routes(spring_rts, bf)
+# Multiple routes on one plot
+plot_routes(rts, bf)
 
 # One panel per route
-plot_routes(spring_rts, bf, facet = TRUE)
+plot_routes(rts[rts$route \%in\% 1:4, ], bf, facet = TRUE)
 
-# Both spring and fall migrations on same plot
-fall_rts <- route_migration(bf, n_fall, "fall")
-fall_rts$points$route <- fall_rts$points$route + n_spring # for unique routes
-plot_routes(rbind(spring_rts$points, fall_rts$points), bf)
+# Returned plot object can be edited
+# Here we change the title and add an additional sf
+# layer with country boundaries
+library(ggplot2)
+p <- plot_routes(rts, bf) +
+ ggtitle(paste0(species(bf), " (with countries)")) +
+ geom_sf(data = get_countries(bf),  inherit.aes = FALSE,  fill = NA) +
+ coord_sf(expand = FALSE)
+p
+\dontrun{
+# Use alternate color palettes
+plot_routes(rts, bf,  use_seasonal_colors = FALSE )
+
+plot_routes(rts, bf, use_seasonal_colors = FALSE, pal = c("red", "yellow", "blue"))
+}
 }

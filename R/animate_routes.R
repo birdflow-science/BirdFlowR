@@ -12,6 +12,7 @@
 #'  from within `animate_routes()` where I could suppress it.
 #'
 #' @inheritParams plot_routes
+#' @inheritDotParams plot_routes facet max_stay_len use_seasonal_colors pal
 #'
 #' @inherit animate_movement_vectors return
 #' @export
@@ -20,7 +21,7 @@
 #'
 #'
 #' bf <- BirdFlowModels::amewoo
-#' rts <- route_migration(bf, 5)
+#' rts <- route_migration(bf, 10)
 #' anim <- animate_routes(rts, bf)
 #'
 #' \dontrun{
@@ -28,9 +29,9 @@
 #'   timesteps <- unique(rts$points$timestep)
 #'   gif <- gganimate::animate(anim,
 #'                             device = "ragg_png", # ragg_png is fast and pretty
-#'                             width = 6, height = 5,
+#'                             width = 7, height = 6,
 #'                             res = 150, units = "in",
-#'                             nframes = length(timesteps) * 4, fps = 4)
+#'                             nframes = length(timesteps) * 4, fps = 8)
 #'
 #'   # Display
 #'   print(gif)
@@ -42,8 +43,8 @@
 #
 #' }
 #'
-animate_routes <- function(routes, bf, max_stay_len ){
-  p <- plot_routes(routes, bf)
+animate_routes <- function(routes, bf, ... ){
+  p <- plot_routes(routes, bf, ...)
 
 
   ring_size <- 4 # point size of the ring symbol used for current location
@@ -55,10 +56,10 @@ animate_routes <- function(routes, bf, max_stay_len ){
                size = ring_size,
                shape = 1,
                mapping = ggplot2::aes(group = .data$route,
-                             color = .data$pyear)) +
+                             color = .data$hpy)) +
 
     # Animate and add dynamic subtitle
-    gganimate::transition_reveal(.data$pyear) +
+    gganimate::transition_reveal(.data$hpy) +
     ggplot2::labs(title = "{species(bf)}", subtitle = "{format_pyear(frame_along)}" )
 
   return(a)
