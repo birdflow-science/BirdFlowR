@@ -69,7 +69,7 @@ Here's how one can use the Dockerfile in Linux/MacOS (Windows should be similar)
 
 1. Clone the [BirdFlowR package](https://github.com/birdflow-science/BirdFlowR) from GitHub.
 
-1. Go to the top level BirdFlowR directory, build the image from the Dockerfile, and tag the image as 'birdflow'.  It will take a long time the first time because it will need to download the rocker/geospatial:4.2.2 image from Docker Hub, which is the starting point before we install our custom packages via the Dockerfile.  For future builds on the same machine, rocker/geospatial will already be cached by Docker, so all it needs to do to is re-install our custom packages. The build step really only needs to happen when you want to use a newer version of the BirdFlowR repo. See also: https://rocker-project.org/images/versioned/rstudio.html
+1. Go to the top level BirdFlowR directory, build the image from the Dockerfile, and tag the image as 'birdflow'.  It will take a long time the first time because it will need to download the rocker/geospatial:<version> image from Docker Hub, which is the starting point before we install our custom packages via the Dockerfile.  For future builds on the same machine, rocker/geospatial will already be cached by Docker, so all it needs to do to is re-install our custom packages. The build step really only needs to happen when you want to use a newer version of the BirdFlowR repo. See also: https://rocker-project.org/images/versioned/rstudio.html
     ```{bash eval=FALSE, include=TRUE}
     cd ~/BirdFlowR
     docker build -t birdflow . --no-cache
