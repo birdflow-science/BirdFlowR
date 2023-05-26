@@ -147,12 +147,12 @@ package</a> from GitHub.</p></li>
 <p>Go to the top level BirdFlowR directory, build the image from the
 Dockerfile, and tag the image as ‘birdflow’. It will take a long time
 the first time because it will need to download the
-rocker/geospatial:4.2.2 image from Docker Hub, which is the starting
+rocker/geospatial:<version> image from Docker Hub, which is the starting
 point before we install our custom packages via the Dockerfile. For
 future builds on the same machine, rocker/geospatial will already be
 cached by Docker, so all it needs to do to is re-install our custom
 packages. The build step really only needs to happen when you want to
-use a newer version of the BirdFlowR repo. See also: <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link uri">https://rocker-project.org/images/versioned/rstudio.html</a></p>
+use a newer version of the BirdFlowR repo. See also: <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link uri">https://rocker-project.org/images/versioned/rstudio.html</a></version></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/BirdFlowR</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow . <span class="at">--no-cache</span></span></code></pre></div>
 </li>
