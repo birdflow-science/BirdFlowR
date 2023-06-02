@@ -1,7 +1,14 @@
+# BirdflowR 0.1.0.9015
+2023-06-02
+* Added tests for `add_dynamic_mask()`  #101
+* Added RMarkdown README.  #104
+  * Now the README.md file is generated from the README.Rmd file (edit the .Rmd)   * Added example plots to README.
+* Added contributing guide.  #97
+
 # BirdflowR 0.1.0.9014
 2023-05-25
 
-* Updated plot_routes()
+* Updated `plot_routes()`
   * Works over year boundary
   * Color bar only shows the used date range.
   * Additional arguments to control appearance:    
