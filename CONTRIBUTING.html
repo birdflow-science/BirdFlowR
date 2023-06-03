@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9015</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9016</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,21 +56,23 @@
 
 <div id="contributing-to-birdflowr" class="section level1">
 
-<p>This outlines how to propose a change to BirdFlowR. Some of it is copied verbatim from the tidyverse style guide.</p>
+<p>We welcome contributions and suggestions!</p>
 <div class="section level2">
 <h2 id="proposing-changes">Proposing changes<a class="anchor" aria-label="anchor" href="#proposing-changes"></a></h2>
-<p>Feel free to propose changes via issues even if you do not intend to submit a pull request. It’s also a good idea to create an issue if you intend to submit a pull request to propose the change and get feedback prior to writing code.</p>
-<div class="section level3">
-<h3 id="pull-request-process">Pull request process<a class="anchor" aria-label="anchor" href="#pull-request-process"></a></h3>
-<p>We’ve documented our complete process but given our small size and paucity of pull requests we aren’t sticklers and will consider pull request with useful code even if they do not include everything here.</p>
+<ul><li><p>Feel free to propose changes by <a href="https://github.com/birdflow-science/BirdFlowR/issues" class="external-link">submitting issues</a> regardless of whether you intend to submit a pull request.</p></li>
+<li><p>If you do intend to to submit a pull request submitting an issue is a good way to get early feedback on your ideas before you write any code.</p></li>
+</ul></div>
+<div class="section level2">
+<h2 id="pull-request-process">Pull request process<a class="anchor" aria-label="anchor" href="#pull-request-process"></a></h2>
+<p>We’ve documented our complete process but given our small size and paucity of pull requests we aren’t sticklers and will consider any pull request with useful code even if it does not include everything here.</p>
 <ul><li><p><strong>Fork and clone the package</strong> onto your computer. If you haven’t done this before you can use <code>usethis::create_from_github("birdflow-science/BirdFlowR", fork = TRUE)</code>.</p></li>
 <li><p><strong>Install development dependencies</strong> with <code>devtools::install_dev_deps()</code>, and then make sure the package passes R CMD check by running <code>devtools::check()</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
-<li><p><strong>Create a Git branch</strong> for your pull request (PR). You can use: <code>usethis::pr_init("brief-description-of-change")</code> or your prefered git tools.</p></li>
-<li><p><strong>Edit the code</strong>. See also the Code Style section below.</p></li>
+<li><p><strong>Create a Git branch</strong> for your pull request (PR). You can use: <code>usethis::pr_init("brief-description-of-change")</code> or your preferred git tools.</p></li>
+<li><p><strong>Edit the code</strong>. See also the <a href="#code-style">Code style</a> section below.</p></li>
 <li><p><strong>Create or update documentation</strong>. BirdFlowR uses <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a> to document functions in structured comments above the function code. If you are adding a new function start documenting (in RStudio) by positioning the cursor in the function body and then selecting “Insert Roxygen Skeleton” from the “Code” menu. Currently all functions except trivial helper functions should be documented with Roxygen comments. If the function is not meant to be public delete the “@export” from the Roxygen comment block and add “@keywords internal”.</p></li>
 <li>
-<p><strong>Add test</strong>. Tests use the <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> package and are stored in “/tests/testhat/” with a file that starts with “test-” and the code’s file name (usually the function name). The easiest way to do this (in RStudio) is to have the new file open and active in the Source Editor Pane and then in the console run <code>usethis::usetest()</code> it will create the appropriate file and open it with an example test that you can then edit (or open the file if it already exists).</p>
-<p>If your pull request addresses a bug or issue you may want to creating a failing test that demonstrates the issue before you make any changes to the package.</p>
+<p><strong>Add tests</strong>. Tests use the <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> package and are stored in “/tests/testhat/” with a file that starts with “test-” and the code’s file name (usually the function name). The easiest way to do this (in RStudio) is to have the new file open and active in the Source Editor Pane and then in the console run <code>usethis::usetest()</code> it will create the appropriate file and open it with an example test that you can then edit (or open the file if it already exists).</p>
+<p>If your pull request addresses a bug or issue you may want to creat a failing test that demonstrates the issue before you make any changes to the package.</p>
 <p>You can run all tests on the package with <code>devtools::test()</code> or (in RStudio) test the currently open file with the “Run Tests” button on the upper right of the source editor. Tests will also be run while checking the package.</p>
 </li>
 <li><p><strong>Rebuild documentation</strong> either using the “Document” item in the “More” menu within the “Build” tab in RStudio.. Ctr+Shift+D, or with <code>devtools::document()</code>. This will convert the Roxygen comments into .Rd files within “man/”. The .Rd files should never be edited directly.</p></li>
@@ -79,15 +81,15 @@
 <li><p><strong>Lint</strong> the function with for example <code>lintr::lint("R/function_name.R")</code>. Please do not lint unrelated code as that will make it harder to see what your pull request is doing.</p></li>
 <li><p><strong>Check</strong> the package with <code>devtools::check()</code>.</p></li>
 <li><p><strong>Commit</strong> to git, and then <strong>create a pull request</strong>. One way of doing this is running <code>usethis::pr_push()</code>, and following the prompts in your browser. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>
-<li><p>Optionally <strong>check code coverage</strong> . After submitting your pull request your branch will appear near the top of the “Branch Context” drop down on the <a href="https://app.codecov.io/gh/birdflow-science/BirdFlowR" class="external-link">coverage page</a>. If your new code is not covered by tests consider adding additional tests and pushing a new commit to the pull request branch - this will update the pull request and rerun the coverage.</p></li>
+<li><p>Optionally <strong>check code coverage</strong> About 10 minuntes after submitting your pull request your branch will appear near the top of the “Branch Context” drop down on the <a href="https://app.codecov.io/gh/birdflow-science/BirdFlowR" class="external-link">coverage page</a>. If your new code is not covered by tests consider adding additional tests and pushing a new commit to the pull request branch - this will update the pull request and rerun the coverage.</p></li>
 </ul></div>
-<div class="section level3">
-<h3 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h3>
+<div class="section level2">
+<h2 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
 <ul><li><p>Code should follow the tidyverse <a href="https://style.tidyverse.org" class="external-link">style guide</a>. We use <code>lintr::lint()</code> to lint files with new code. Do not lint otherwise unchanged code.</p></li>
 <li><p>In general each function is stored in a file that matches its name. This rule can be broken with closely related sets of exported functions and helper functions.</p></li>
 <li><p>We use <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a>, with <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html" class="external-link">Markdown syntax</a>, for documentation.</p></li>
 <li><p>We use <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> for unit tests. Contributions with test cases included are easier to accept.</p></li>
-</ul></div>
+</ul><hr><p>The first draft of this document was created by <code>usethis::use_tidy_contributing()</code>. It has been heavily edited but some of the text is still a direct copy of the resulting tidyverse contributing guidelines. Both <strong>usethis</strong> and <strong>BirdFlowR</strong> are released under an MIT license.</p>
 </div>
 </div>
 
