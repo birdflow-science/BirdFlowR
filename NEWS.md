@@ -1,8 +1,18 @@
+# BirdflowR 0.1.0.9016
+2023-06-03
+
+* Edited Contributing guide
+* `preprocess_species()` now throws better errors when there are problems
+   with the species argument (NA, NULL, or unresolvable species names).
+* Additional tests for`preprocess_species()` for error conditions and to test
+  file output.
+
 # BirdflowR 0.1.0.9015
 2023-06-02
 * Added tests for `add_dynamic_mask()`  #101
 * Added RMarkdown README.  #104
-  * Now the README.md file is generated from the README.Rmd file (edit the .Rmd)   * Added example plots to README.
+  * Now the README.md file is generated from the README.Rmd file (edit the .Rmd)
+  * Added example plots to README.
 * Added contributing guide.  #97
 
 # BirdflowR 0.1.0.9014
