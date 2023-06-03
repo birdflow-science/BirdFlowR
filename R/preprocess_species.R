@@ -126,8 +126,16 @@ preprocess_species <- function(species,
   }
 
   # Validate inputs
+
+  if (is.null(species))
+    stop("species cannot be NULL")
+
   if (length(species) != 1)
     stop("Can only preprocess one species at a time")
+
+  if (is.na(species))
+    stop("species cannot be NA")
+
   stopifnot(is.logical(tiff),
              is.logical(hdf5),
              length(tiff) == 1,
@@ -145,7 +153,10 @@ preprocess_species <- function(species,
       stop("res must be at least 27 when working with the low resolution ",
            "example_data")
   } else {
-    species <- ebirdst::get_species(species)
+    a <- ebirdst::get_species(species)
+    if (is.na(a))
+      stop('"', species, '" is not an eBird S&T species')
+    species <- a
     download_species <- species
   }
 

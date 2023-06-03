@@ -12,9 +12,33 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
 
   skip_on_cran()
 
-  # Using snapshot on 50 m version because it results in a small object.
-  expect_no_error(b <- preprocess_species("example_data", hdf5 = FALSE, tiff = FALSE, res = 50))
+  # Create and commit to cleaning up a temporary dir
+  dir <- file.path(tempdir(), "preprocess_check")
+  dir.create(dir, showWarnings = FALSE)
+  on.exit(
+    unlink(dir, recursive = TRUE)
+  )
+
+  # Using snapshot and write test
+  # on 50 m version because it results in a small object.
+  expect_no_error(
+    b <- preprocess_species("example_data",
+                            hdf5 = TRUE,
+                            tiff = TRUE,
+                            res = 50,
+                            out_dir = dir,
+                            ))
+
   expect_snapshot(b)
+
+  created_files <- list.files(dir)
+  expected_files <- c("example_data_2021_50km.hdf5",
+                      "example_data_2021_50km.tif",
+                      "example_data_2021_50km_lci.tif",
+                      "example_data_2021_50km_uci.tif" )
+  expect_setequal(created_files, expected_files)
+
+
 })
 
 test_that("preprocess_species catches error conditions", {
@@ -51,6 +75,25 @@ test_that("preprocess_species catches error conditions", {
     "eBird status and trends models do not cover the full range for ",
     species, " (", code, ")" )
   expect_error(preprocess_species(code, hdf5 = FALSE), err, fixed = TRUE)
+
+  # Issue #106  (bad species input)
+  expect_error(preprocess_species(NA), "species cannot be NA")
+  expect_error(preprocess_species(NULL), "species cannot be NULL")
+  expect_error(preprocess_species(
+    species = c("American woodcock", "Chipping sparrow")),
+    "Can only preprocess one species at a time")
+  expect_error(
+    preprocess_species(species = "Bad species", hdf5 = FALSE),
+    '"Bad species" is not an eBird S&T species')
+
+  expect_error(
+    preprocess_species(species = "example_data", hdf5 = FALSE, res = 2),
+    'res must be at least 27 when working with the low resolution example_data')
+
+  expect_error(
+    preprocess_species(species = "amewoo", hdf5 = FALSE, res = 2),
+    'Resolution cannot be less than 3 km')
+
 })
 
 
@@ -91,7 +134,6 @@ test_that("preprocess_species() works with clip", {
   })
 
 })
-
 
 
 
