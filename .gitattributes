@@ -12,6 +12,6 @@
 *.Rd    text
 *.Rdx   binary
 *.Rmd	  text
-*.Rd    text
+*.md    text
 *.R  	  text
 *.Rproj text
