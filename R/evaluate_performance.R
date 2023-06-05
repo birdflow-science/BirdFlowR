@@ -1,6 +1,8 @@
 
 #' Evaluate BirdFlow model performance
 #'
+#' DEPRECATED FUNCTION.  Please use [distribution_performance()] instead.
+#'
 #' Calculate several the correlation between projected distributions and
 #' the ebirdst distributions used to train the BirdFlow model.
 #'
@@ -47,54 +49,27 @@
 #' @export
 evaluate_performance <- function(x, distr_only = FALSE) {
 
-  ### Transition code
-  if (!has_dynamic_mask(x))
-    x <- add_dynamic_mask(x)
+  # Note this is now a placeholder wrapper to distribution_performance()
 
-  # Calculate metrics that are based on one timestep or a
-  # single step projection
-  transitions <- lookup_transitions(x, start = 1, end = n_distr(x))
-  distr_cor <- single_step_cor <- numeric(length(transitions))
-  for (i in seq_along(transitions)) {
-    from <- as.numeric(gsub("^T_|-[[:digit:]]+$", "", transitions[i]))
-    start_distr <- get_distr(x, from, from_marginals = FALSE)
-    marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
-    start_dm <- get_dynamic_mask(x, from)
-    distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
+  warning("evaluate_performance is deprecated. ",
+          "Please use distribution_performance() instead.")
 
-    if (distr_only)
-      next
-
-    to <- as.numeric(gsub("^T_[[:digit:]]+-", "", transitions[i]))
-    end_distr <- get_distr(x, to, from_marginals = FALSE)
-    projected <- predict(x, distr = start_distr, start = from, end = to)
-    end_dm <- get_dynamic_mask(x, to) # end dynamic mask
-    single_step_cor[i] <- cor(end_distr[end_dm],
-                              projected[end_dm, ncol(projected)])
-
-  }
-
-  if (distr_only) {
-    return(list(mean_distr_cor = mean(distr_cor),
-                min_distr_cor = min(distr_cor)))
+  if(distr_only){
+    res <- distribution_performance(x, metrics = c("mean_distr_cor",
+                                                   "min_distr_cor"))
+    return(res[c("mean_distr_cor", "min_distr_cor")])
   }
 
 
-  # Calculate Traverse Correlation
-  start <- 1
-  end <- n_distr(x)
-  start_distr <- get_distr(x, 1, from_marginals = FALSE)
-  end_distr <- get_distr(x, end, from_marginals = FALSE)
-  projected <- predict(x, distr =  start_distr, start =  start,
-                       end =  end, direction =  "forward")
-  projected <- projected[, ncol(projected)] # end
-  end_dm <- get_dynamic_mask(x, end)
-  traverse_cor <- cor(start_distr, projected)
+  res <- distribution_performance(x)
+  res$md_traverse_cor <- NULL
+  names(res)[names(res) == "st_traverse_cor"] <- "traverse_cor"
 
-  return(list(mean_step_cor = mean(single_step_cor),
-              min_step_cor = min(single_step_cor),
-              traverse_cor = traverse_cor,
-              mean_distr_cor = mean(distr_cor),
-              min_distr_cor = min(distr_cor)))
+  # enforce original metric order
+  metric_names <- c("mean_step_cor", "min_step_cor", "traverse_cor",
+                    "mean_distr_cor", "min_distr_cor")
+
+  stopifnot(all(metric_names %in% names(res)))
+  return(res[metric_names])
 
 }

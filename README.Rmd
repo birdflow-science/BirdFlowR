@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   dev = "ragg_png",
   dpi = 100
 )
+
+set.seed(1)
 ```
 
 # BirdFlowR
@@ -52,8 +54,6 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 See `vignette("Installation")` for troubleshooting and more installation 
 options.
 
-
-
 ## Usage 
 
 The two primary functions are `predict()` to project distributions and 
@@ -66,7 +66,6 @@ create synthetic routes for a species.
 ```{r examples}
 library(BirdFlowR)
 library(BirdFlowModels)
-library(terra)
 
 bf <- amewoo 
 

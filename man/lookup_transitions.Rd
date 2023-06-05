@@ -4,19 +4,18 @@
 \alias{lookup_transitions}
 \title{Lookup a series of transitions connecting two dates or timesteps}
 \usage{
-lookup_transitions(x, start, end, direction, season_buffer, n)
+lookup_transitions(x, ...)
 }
 \arguments{
-\item{x}{A BirdFlow object}
-
-\item{start}{The starting points in time specified as
+\item{...}{
+  Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
+  \describe{
+    \item{\code{start}}{The starting points in time specified as
 timesteps, character dates, or date objects; or  may be set to "all" or a
 season name to be interpreted by \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
-
-\item{end}{If start is a timestep or date \code{end} should be a timestep or date
+    \item{\code{end}}{If start is a timestep or date \code{end} should be a timestep or date
 indicating the ending point in time.}
-
-\item{direction}{Either "forward" or "backward".
+    \item{\code{direction}}{Either "forward" or "backward".
 
 If \code{start} and \code{end}
 represent dates and \code{direction} is used an error will
@@ -29,22 +28,21 @@ If \code{start} and \code{end} are not dates, \code{direction} defaults to "forw
 
 If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
 than \code{direction} defaults to "forward".}
-
-\item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
+    \item{\code{season_buffer}}{Only used if \code{start} is a season. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
-
-\item{n}{Alternative to \code{end} for specifying when a sequence should end.
+    \item{\code{n}}{Alternative to \code{end} for specifying when a sequence should end.
 \code{n} indicates how many transitions should be in the sequence in \code{direction}
 which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
 timesteps.}
+  }}
 }
 \value{
 A character vector with the named transitions required to get between
 \code{start} and  \code{end}
 }
 \description{
-\code{lookup_transitions()} returns an ordered vector of transition names that
+The private function\code{lookup_transitions()} returns an ordered vector of transition names that
 connect start to end. If \code{start} and \code{end} are dates than their order
 determines whether the transitions flow forward or backward in time.  If they
 are timesteps than the \code{direction} argument should be used to indicate

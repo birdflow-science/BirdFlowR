@@ -1,3 +1,22 @@
+# BirdflowR 0.1.0.9017
+2023-06-05
+
+### Revamping performance metrics
+
+* DEPRECATED `evaluate_performance()` is now deprecated. Use  `distribution_performance()` instead.
+* NEW `distribution_perfomance()` replaces `evaluate_performance()` and has several differences.
+  * `traverse_cor`is replaced by two very similar metrics `st_traverse_cor` and `md_traverse_cor`. The first is a bug free version of the old `traverse_cor()`. The second is identical except it makes the predictions starting with a marginal rather than a status and trends distribution. 
+  * `*_traverse_cor` metrics now utilize the dynamic mask to filter which cells are used in the correlation calculation.
+  * `...` arguments are passed to `lookup_timestep_sequence()` to allow
+  calculating metrics for just part of the year.  
+ 
+* `sparsify()` (which still isn't updated for dynamic masking) now uses `distribution_performance()` instead of `evaluate_performance()`.
+* `lookup_transitions()` (private function) now has only one formal argument (x) all other arguments are now passed to `lookup_timestep_sequence()` via `...` those other arguments are unchanged though so calling it shouldn't change.
+* `lookup_timestep_sequence()` now has a default value `start = "all"` 
+previously there was no default. This is mostly to make use in other functions via `...` easier as `all` is the most common default in calling functions.
+
+
+
 # BirdflowR 0.1.0.9016
 2023-06-03
 

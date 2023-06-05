@@ -35,10 +35,12 @@ training distribution.}
 }
 }
 \description{
-Calculate several the correlation between projected distributions and
-the ebirdst distributions used to train the BirdFlow model.
+DEPRECATED FUNCTION.  Please use \code{\link[=distribution_performance]{distribution_performance()}} instead.
 }
 \details{
+Calculate several the correlation between projected distributions and
+the ebirdst distributions used to train the BirdFlow model.
+
 "Training distribution" is used to describe the ebirdst
 distributions used to train the BirdFlow models.  "Marginal distribution"
 describes a distribution calculated from row or column sums of a marginal,
