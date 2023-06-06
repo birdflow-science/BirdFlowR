@@ -1,4 +1,23 @@
-# BirdflowR 0.1.0.9017
+# BirdFlowR 0.1.0.901
+2023-06-06
+
+* `sample_distr()` has a new argument `format` that allows specifying 
+ `distr`, `xy`, `latlon`, or `i` (location index) as the output format.  
+ The default is `distr`  which mimics previous behavior. This is in response to 
+  [a comment](https://github.com/birdflow-science/BirdFlowR/issues/88#issuecomment-1544401203)
+  in issue [#88](https://github.com/birdflow-science/BirdFlowR/issues/88),
+  the `"xy"` return format greatly simplifies calling `route()` with a sample
+  from a distribution.
+* BirdFlow vignette updated to use `sample_distr(format = "xy")` and to use
+  `plot_routes()`.
+* Bug fixed in `xy_to_latlong()` where column order in returned object was 
+  backwards.
+* Index conversion functions that previously returned a two column matrix now
+  return a two column data.frame: `xy_to_latlon()`, `latlon_to_xy()`,
+  `i_to_rc()`, and `i_to_xy()`.  I found that most often I wanted to refer to 
+  columns by name making the data.frame format easier.
+
+# BirdFlowR 0.1.0.9017
 2023-06-05
 
 ### Revamping performance metrics
@@ -17,7 +36,7 @@ previously there was no default. This is mostly to make use in other functions v
 
 
 
-# BirdflowR 0.1.0.9016
+# BirdFlowR 0.1.0.9016
 2023-06-03
 
 * Edited Contributing guide
@@ -26,7 +45,7 @@ previously there was no default. This is mostly to make use in other functions v
 * Additional tests for`preprocess_species()` for error conditions and to test
   file output.
 
-# BirdflowR 0.1.0.9015
+# BirdFlowR 0.1.0.9015
 2023-06-02
 * Added tests for `add_dynamic_mask()`  #101
 * Added RMarkdown README.  #104
@@ -34,7 +53,7 @@ previously there was no default. This is mostly to make use in other functions v
   * Added example plots to README.
 * Added contributing guide.  #97
 
-# BirdflowR 0.1.0.9014
+# BirdFlowR 0.1.0.9014
 2023-05-25
 
 * Updated `plot_routes()`
@@ -46,7 +65,7 @@ previously there was no default. This is mostly to make use in other functions v
 * Updated animate_routes() added ... argument that is passed onto
   `plot_routes()` to control of appearance. 
 
-# BirdflowR 0.1.0.9013
+# BirdFlowR 0.1.0.9013
 2023-05-22
 
 * New `animate_routes()` #93
@@ -56,7 +75,7 @@ previously there was no default. This is mostly to make use in other functions v
 * Updated documentation of [route()] and [route_migration()] to full describe
   additional columns added in 0.1.0.9012
 
-# BirdflowR 0.1.0.9012
+# BirdFlowR 0.1.0.9012
 2023-05-17
 
 * Fixed bug in `route()` and `route_migration()` that prevented routing over 
@@ -76,19 +95,19 @@ previously there was no default. This is mostly to make use in other functions v
   - `expand_distr()` is now an internal function.  Users can use
   `rasterize_distr( format = "numeric")` instead.
 
-# BirdflowR 0.1.0.9011
+# BirdFlowR 0.1.0.9011
 2023-05-11
 
 * Minor change to `interval_log_likelihood()` for clearer code and to avoid 
 warning when tibbles are used. 
 
 
-# BirdflowR 0.1.0.9010
+# BirdFlowR 0.1.0.9010
 2023-05-09
 
 * Dockerfile: Bump rocker image to R 4.3.0 and error out of build on package installation failure
 
-# BirdflowR 0.1.0.9009
+# BirdFlowR 0.1.0.9009
 2023-05-09
 
 * `preprocess_species()` now defaults the `res` parameter to NULL, making it 
@@ -96,7 +115,7 @@ easier to script around `preprocess_species()`
 
 * Tweaked some tests to better run across different development environments
 
-# BirdflowR 0.1.0.9008
+# BirdFlowR 0.1.0.9008
 2023-05-09
 
 * `import_birdflow()` now converts logical hyperparameters masquerading as 
@@ -109,13 +128,13 @@ easier to script around `preprocess_species()`
   - `import_prototype()` for the models that were includes in the prototype 
   shiny app.
 
-# BirdflowR 0.1.0.9007
+# BirdFlowR 0.1.0.9007
 Fixed URL.
 
-# BirdflowR 0.1.0.9006
+# BirdFlowR 0.1.0.9006
 Cleaned up bad formatting in _pkgdown.yml. 
 
-# BirdflowR 0.1.0.9005
+# BirdFlowR 0.1.0.9005
 Added argument `n` to `lookup_timestep_sequence()`, an alternative to `end`, 
 `n` indicates how many transitions should be in the resulting sequence. 
 `route()`, `lookup_transitions()`, `predict()`, and `animate_movement_vectors()`
@@ -128,7 +147,7 @@ all gained either an explicit `n` parameter or access to it via `...`.
 
 Closes #76.
 
-# BirdflowR 0.1.0.9004
+# BirdFlowR 0.1.0.9004
 Made changes to support pkgdown.
 
 * Added links to .yml
@@ -138,7 +157,7 @@ Made changes to support pkgdown.
   version 0.0.1.x.  When we have our first formal release it should
   be switched back to `auto`.
 
-# BirdflowR 0.1.0.9003
+# BirdFlowR 0.1.0.9003
 
 * `evaluate_performance()` is now exported.
 * `evaluate_performance()` now uses the dynamic mask when calculating 
@@ -148,7 +167,7 @@ included in the calculation. Correlations will get lower and the effect will
 be more pronounced with lower correlations.
 
 
-# BirdflowR 0.1.0.9002
+# BirdFlowR 0.1.0.9002
 
 ### Added movment vector visualizations
 
@@ -164,7 +183,7 @@ New Functions
  * `animate_movement_vectors()` creates an animation of the vectors over a 
    series of timesteps.  Returns a `gganim` object.
 
-# BirdflowR 0.1.0.9001
+# BirdFlowR 0.1.0.9001
 
 ## Switch to Dynamic masking
 
@@ -249,7 +268,7 @@ model, as it's fairly large and easy to recalculate with
       throw an error telling you that if you try to use it on a BirdFlow object
       with a dynamic mask.
 
-# BirdflowR 0.0.0.9075
+# BirdFlowR 0.0.0.9075
 2023-04-18  
 
 Added BirdFlow methods for generics defined in **sf**
@@ -260,7 +279,7 @@ Added BirdFlow methods for generics defined in **sf**
   polygon.
 
 
-# BirdflowR 0.0.0.9074
+# BirdFlowR 0.0.0.9074
 2023-04-13
 
 * Changed behavior
@@ -270,7 +289,7 @@ Added BirdFlow methods for generics defined in **sf**
     now controlled by `keep_buffer` which defaults to FALSE.  Previously it was    
     controlled by `match_extent`.
 
-# BirdflowR 0.0.0.9073
+# BirdFlowR 0.0.0.9073
 2023-04-11
 
 * Changed behavior:  
@@ -311,7 +330,7 @@ Added BirdFlow methods for generics defined in **sf**
     each week. This should also make time lookup compatible with partial year
     BirdFlow models.
 
-# BirdflowR 0.0.0.9072
+# BirdFlowR 0.0.0.9072
 2023-04-11
 
 * Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of
@@ -510,7 +529,7 @@ it is `TRUE`.
 
 * Added package down. Starting to use [semantic versioning](https://semver.org/).
 
-# BirdflowR 0.0.0.9017  2023-02-27
+# BirdFlowR 0.0.0.9017  2023-02-27
 
 * Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra)
 [#17](https://github.com/birdflow-science/BirdFlowR/issues/17).

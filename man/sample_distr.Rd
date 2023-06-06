@@ -4,48 +4,54 @@
 \alias{sample_distr}
 \title{Sample locations from a distribution}
 \usage{
-sample_distr(distr, n = 1)
+sample_distr(distr, n = 1, bf, format = "distr")
 }
 \arguments{
-\item{distr}{a vector representing a single distribution; a matrix respresenting
-one distribution per column, or (unlikely) an  array in which the first
-dimension represents model states. The values in distr are treated as relative
-probability of the species being in each position.}
+\item{distr}{a vector representing a single distribution; a matrix
+representing one distribution per column, or (unlikely) an  array in which
+the first dimension represents locations. The values in \code{distr} are
+treated as the relative probability of the species being in each position.}
 
-\item{n}{Only used if \code{distr} is a vector representing a single model state, in
-which case that model state will be sampled \code{n} times to generate a
+\item{n}{Only used if \code{distr} is a vector representing a single model state,
+in which case that model state will be sampled \code{n} times to generate a
 matrix representing \code{n} sampled locations from that distribution.}
+
+\item{bf}{A BirdFlow object, required if format is \code{"latlon"} or \code{"xy"},
+optional otherwise.}
+
+\item{format}{One of \code{"distr"} (the default), \code{"xy"}, \verb{"latlon}, or \code{"i"}
+indicating what format the sample should be returned in.}
 }
 \value{
-An object ussually with the same dimensions as \code{distr} (but see \code{n})
-single location (containing a 1) while the remaining locations
-have 0's.
+One or more location samples from the distributions in \code{distr} the
+format changes with the value of\code{format}:
+\item{\code{distr}}{Default. Return an object with the same dimensions as
+\code{distr} in which all the weight in each distribution in
+\code{distr} is assigned to a single location containing a 1 and
+remaining locations have 0's.}
+\item{\code{xy}}{\code{x} and \code{y} coordinates of locations, usually as data frame but
+with 3D input it will be an array.}
+\item{\code{latlon}}{return latitude (\code{lat}) and longitude (\code{lon}) coordinates in
+WGS 1984 for the sampled locations, usually as a data frame but with 3D
+input it will be an array. }
+\item{\code{i}}{return location index for the sampled locations}
 }
 \description{
-This function treats \code{distr} as one or more probability distributions and converts
-each to a single location by assigning a 1 to one value and
-converting the rest to 0.
+Probabilistically sample one or more locations from a set of distributions.
 }
 \examples{
-# Generate a hypothetical state space vector
-# representing the probability of finding a bird in each location.
-# This is based on a normal distribution with higher probabilities in the
-# center of the vector.
-s <- dnorm(seq(-2, 2, by = .25))
-s <- s / sum(s)
 
-# sample it once
-loc <- sample_distr(s)
+bf <- BirdFlowModels::amewoo
+d <- get_distr(bf, 5)
 
-# sample it 200 times
-locations <- sample_distr(s, 200)
+# default format "distr" returns an object similar to the input
+# in which all the weight for each distribution has been concentrated
+# in a single location
+one_hot <- sample_distr(d)
+all(one_hot \%in\% c(0, 1))
+sum(one_hot)
 
-\dontrun{
-# Plot the probability of each location
-plot(1:length(s), s, xlab = "location", ylab = "prob")
-# Plot the number of times each location was selected
-plot(1:length(s), apply(locations, 1, sum),
-     xlab = "location", ylab = "times sampled")
-}
+# Sample 10 times from a single distribution and return x and y coordinates.
+xy <- sample_distr(d,  10, format = "xy", bf = bf)
 
 }

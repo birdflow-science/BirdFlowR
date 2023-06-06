@@ -21,10 +21,10 @@ test_that("expand_distr and flatten_raster are reversable - multiple distr", {
 
 
 test_that("flatten_raster is consistent with i_to_rc() subset", {
-  bf <- make_test_birdflow()
-  d <- runif(n = bf$n_active)
-  m <- matrix(NA, nrow = bf$geom$nrow, ncol = bf$geom$ncol)
-  m[i_to_rc(1:bf$n_active, bf)] <- d
+  bf <- BirdFlowModels::amewoo
+  d <- runif(n = n_active(bf))
+  m <- matrix(NA, nrow = nrow(bf), ncol = ncol(bf))
+  m[as.matrix(i_to_rc(seq_len(n_active(bf)), bf))] <- d
   d2 <- flatten_raster(m, bf)
   expect_equal(d, d2)
 })

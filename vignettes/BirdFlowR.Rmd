@@ -149,7 +149,7 @@ r <- rast(bf, c(1, 26))  # 1st, and 26th timesteps.
 plot(r)
 ```
 
-BirdFlowR provides some convenience wrappers to functions in rnaturalearth that load vector data and then crop and reproject it to make it suitable for plotting with BirdFlow output.
+BirdFlowR provides some convenience wrappers to functions in rnaturalearth that load vector data and then crop and transform it to make it suitable for plotting with BirdFlow output.
 
 ```{r }
 r <- rast(bf, species_info(bf, "prebreeding_migration_start"))
@@ -221,15 +221,9 @@ end <- 26          # ending timestep (summer)
 First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly resulting in a matrix in which each column has a single 1 representing the sampled location.
 ```{r starting locations}
 d <- get_distr(bf, start)
-locations  <- sample_distr(d, n = n_positions)
-```
-
-Collapse the locations down to a vector of the index of each
-non-zero value and then convert to x and y coordinates.
-```{r starting locations as row and column}
-ind <- apply(locations, 2, function(x) which(as.logical(x)))
-x <- i_to_x(ind, bf)
-y <- i_to_y(ind, bf)
+locations  <- sample_distr(d, n = n_positions, bf, format = "xy")
+x <- locations[, 1]
+y <- locations[, 2]
 ```
 
 Plot the starting (winter) distribution and sampled locations
@@ -253,7 +247,7 @@ head(rts$points, 4)
 
 ## Plot routes 
 Plot the route lines over the summer distribution along with points at the starting and ending positions.
-```{r plot routes}
+```{r plot routes with base R}
 d <- get_distr(bf, end)
 summer <- rasterize_distr(d, bf)
 
@@ -268,4 +262,10 @@ points(x = end_pts$x, y = end_pts$y,
        cex = 0.4, pch = 12, col = pt_col)
 
 title(main = species(bf))
+```
+Or use `plot_routes()` to visualize time  as a color gradient. 
+
+```{r plot routes}
+plot_routes(rts, bf)
+
 ```
