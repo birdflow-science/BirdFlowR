@@ -15,9 +15,9 @@
 #'  indicating what format the sample should be returned in.
 #'@return One or more location samples from the distributions in `distr` the
 #'format changes with the value of`format`:
-#'\item{`distr`}{(Default) return an object with the same dimensions as
-#'   `distr` (but see `n`) in which all the weight in each distribution in
-#'  `distr` is assigned to a single location (containing a 1) while the
+#'\item{`distr`}{Default. Return an object with the same dimensions as
+#'   `distr` in which all the weight in each distribution in
+#'  `distr` is assigned to a single location containing a 1 and
 #'  remaining locations have 0's.}
 #'\item{`xy`}{`x` and `y` coordinates of locations, usually as data frame but
 #' with 3D input it will be an array.}
@@ -25,7 +25,7 @@
 #' WGS 1984 for the sampled locations, usually as a data frame but with 3D
 #' input it will be an array. }
 #'\item{`i`}{return location index for the sampled locations}
-#'}
+#'
 #'
 #'@export
 #'

@@ -25,9 +25,9 @@ indicating what format the sample should be returned in.}
 \value{
 One or more location samples from the distributions in \code{distr} the
 format changes with the value of\code{format}:
-\item{\code{distr}}{(Default) return an object with the same dimensions as
-\code{distr} (but see \code{n}) in which all the weight in each distribution in
-\code{distr} is assigned to a single location (containing a 1) while the
+\item{\code{distr}}{Default. Return an object with the same dimensions as
+\code{distr} in which all the weight in each distribution in
+\code{distr} is assigned to a single location containing a 1 and
 remaining locations have 0's.}
 \item{\code{xy}}{\code{x} and \code{y} coordinates of locations, usually as data frame but
 with 3D input it will be an array.}
@@ -35,7 +35,6 @@ with 3D input it will be an array.}
 WGS 1984 for the sampled locations, usually as a data frame but with 3D
 input it will be an array. }
 \item{\code{i}}{return location index for the sampled locations}
-}
 }
 \description{
 Probabilistically sample one or more locations from a set of distributions.
