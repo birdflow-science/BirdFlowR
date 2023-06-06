@@ -50,16 +50,16 @@ xy_to_latlon(x, y, bf)
 \arguments{
 \item{x, y}{x and y coordinates in the BirdFlow model's CRS.
 This typically represents an easting and northing in meters. For functions
-that require both \code{x} and \code{y} a two column matrix containing \code{x} and \code{y}
-columns in that order can be passed to \code{x} in which case \code{y} should be
-omitted.}
+that require both \code{x} and \code{y} a two column matrix or data.frame
+containing \code{x} and \code{y} columns in that order can be passed to \code{x} in
+which case \code{y} should be omitted.}
 
 \item{bf}{a BirdFlow model}
 
 \item{row, col}{The row and column index of a cell in the BirdFlow model and
-associated raster data. Alternatively, a two column matrix containing row
-and column indices in columns 1 and 2 respectively can be passed to
-\code{row} in which case the \code{col} argument should be omitted.}
+associated raster data. Alternatively, a two column matrix or data.frame
+containing row and column indices in columns 1 and 2 respectively can be
+passed to \code{row} in which case the \code{col} argument should be omitted.}
 
 \item{i}{The index along a state vector that contains the data for
 unmasked cells.}

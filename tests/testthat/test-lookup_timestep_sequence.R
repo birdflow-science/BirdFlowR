@@ -129,7 +129,7 @@ test_that("lookup_timestep_sequence() works with character date input", {
   expect_error(lookup_timestep_sequence(bf, d1, d2, direction = "backward"))
   expect_error(lookup_timestep_sequence(bf, d2, d1, direction = "forward"))
 
-  ### Crossing year boudary
+  ### Crossing year boundary
   d1 <- "2023-12-25"
   d2 <- "2024-1-12"
   t1 <- lookup_timestep(d1, bf)

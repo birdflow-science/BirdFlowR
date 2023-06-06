@@ -94,9 +94,8 @@ test_that("col_to_x works", {
 
 test_that("i_to_rc works", {
   expect_equal(i_to_rc(vect, bf),
-               cbind(i_to_row(vect, bf), i_to_col(vect, bf)),
-               ignore_attr = TRUE )
-  expect_equal(full[i_to_rc(vect, bf)], vect)
+               data.frame(row = i_to_row(vect, bf), col = i_to_col(vect, bf)))
+  expect_equal(full[as.matrix(i_to_rc(vect, bf))], vect)
 })
 
 test_that("i_to_col, i_to_row work", {
@@ -113,8 +112,8 @@ test_that("i_to_x, i_to_y work", {
 
 test_that("i_to_xy works", {
   expect_equal(i_to_xy(vect, bf),
-               cbind(i_to_x(vect, bf), i_to_y(vect, bf)),
-               ignore_attr = TRUE)
+               data.frame(x = i_to_x(vect, bf),
+                          y =  i_to_y(vect, bf)))
 })
 
 rc <- matrix(c(1, 2, 3, 2, 5, 3), ncol = 2, byrow = T)
@@ -146,18 +145,18 @@ test_that("latlon_to_xy works", {
 
   # Two arguments
   expect_no_error(xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf))
-  expect_equal(as.matrix(xy), xy2)
+  expect_equal(xy, xy2)
 
   # One argument with names (and columns reversed)
   xy3 <- latlon_to_xy(pts, bf = bf)
-  expect_equal(as.matrix(xy), xy3)
+  expect_equal(xy, xy3)
 
   # One argument no column names
   pts <- pts[ , c("lat", "lon")]
   pts <- as.matrix(pts)
   names(pts) <- NULL
   xy4 <- latlon_to_xy(pts, bf = bf)
-  expect_equal(as.matrix(xy), xy4)
+  expect_equal(xy, xy4)
 
 })
 
@@ -172,13 +171,15 @@ test_that("latlon_to_xy and xy_to_latlon are consistant", {
     sf::st_coordinates() |>
     as.data.frame()
   names(pts) <- c("lon", "lat")
+  pts <- pts[, c(2, 1)] # lat, lon
+
 
   # Two arguments
   expect_no_error(xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf))
 
   # one argument
   expect_no_error(latlon <- xy_to_latlon(x = xy2, bf = bf))
-  expect_equal(latlon, as.matrix(pts))
+  expect_equal(latlon, pts)
 
 })
 
@@ -207,7 +208,7 @@ test_that("latlon_to_xy returns NA for out of range and NA input values", {
 
   expect_no_error( xy2 <- latlon_to_xy(lat = pts$lat, lon = pts$lon, bf) )
 
-  expect_equal(xy2[1, ], as.matrix(xy)[1, ])
+  expect_equal(xy2[1, ], xy[1, ])
   expect_true(all(is.na(xy2[2:5, ])))
 
 })

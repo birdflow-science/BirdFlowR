@@ -23,13 +23,13 @@
 #'
 #'@param x,y x and y coordinates in the BirdFlow model's CRS.
 #'  This typically represents an easting and northing in meters. For functions
-#'  that require both `x` and `y` a two column matrix containing `x` and `y`
-#'  columns in that order can be passed to `x` in which case `y` should be
-#'  omitted.
+#'  that require both `x` and `y` a two column matrix or data.frame
+#'  containing `x` and `y` columns in that order can be passed to `x` in
+#'  which case `y` should be omitted.
 #'@param row,col The row and column index of a cell in the BirdFlow model and
-#'  associated raster data. Alternatively, a two column matrix containing row
-#'  and column indices in columns 1 and 2 respectively can be passed to
-#'  `row` in which case the `col` argument should be omitted.
+#'  associated raster data. Alternatively, a two column matrix or data.frame
+#'  containing row and column indices in columns 1 and 2 respectively can be
+#'  passed to `row` in which case the `col` argument should be omitted.
 #'@param lat,lon The latitude and longitude in WGS 1984 (EPSG:4326). A two
 #'  column matrix or data frame can also be passed to lat.
 #'@param i The index along a state vector that contains the data for
@@ -122,9 +122,7 @@ i_to_rc <- function(i, bf){
   col <- col(mask)
   rows <- t(row)[t(mask)][i]
   cols <- t(col)[t(mask)][i]
-  m <- matrix(c(rows, cols), nrow = length(i), ncol = 2)
-  colnames(m) <- c("row", "col")
-  return(m)
+  return(data.frame(row = rows, col = cols))
 }
 
 #' @rdname index_conversions
@@ -163,10 +161,8 @@ i_to_y <- function(i, bf){
 #' @rdname index_conversions
 #' @export
 i_to_xy <- function(i, bf){
-  m <- cbind(i_to_x(i, bf),
-             i_to_y(i, bf))
-  colnames(m) <- c("x", "y")
-  return(m)
+  data.frame(x = i_to_x(i, bf),
+             y = i_to_y(i, bf))
 }
 
 #' @rdname index_conversions
@@ -252,7 +248,7 @@ latlon_to_xy <- function(lat, lon, bf){
 
   all_pts[sv, ] <- pts
   colnames(all_pts) <- c("x", "y")
-  return(all_pts)
+  return(as.data.frame(all_pts))
 }
 
 
@@ -288,7 +284,6 @@ xy_to_latlon <- function(x, y, bf){
 
   all_pts[sv, ] <- pts
   colnames(all_pts) <- c("lon", "lat")
-  all_pts[, c(2, 1)]
-  return(all_pts)
+  return(as.data.frame(all_pts[, c(2, 1), drop = FALSE]))  # lat, lon
 }
 
