@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,14 +99,11 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The two primary functions are <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> to project distributions and <code><a href="reference/route.html">route()</a></code> to generate synthetic routes.</p>
+<p>The two primary functions are <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> to project distributions and <code><a href="reference/route.html">route()</a></code> to generate synthetic routes.</p>
 <p><code><a href="reference/route_migration.html">route_migration()</a></code> is a wrapper to <code><a href="reference/route.html">route()</a></code> which automates sampling locations from the a distribution for the start of the migration and setting the start and end dates to route for the migration window. We can use it to create synthetic routes for a species.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://birdflow-science.github.io/BirdFlowR/">BirdFlowR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'terra' was built under R version 4.2.3</span></span>
-<span><span class="co">#&gt; terra 1.7.29</span></span>
 <span></span>
 <span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="va">amewoo</span> </span>
 <span></span>
@@ -130,7 +127,7 @@
 </h2>
 <ul>
 <li>
-<code><a href="articles/BirdFlowR.html">vignette("BirdFlowR")</a></code> has a longer introduction to the package, and how to use <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="reference/route.html">route()</a></code> to project bird distributions and movement.</li>
+<code><a href="articles/BirdFlowR.html">vignette("BirdFlowR")</a></code> has a longer introduction to the package, and how to use <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and <code><a href="reference/route.html">route()</a></code> to project bird distributions and movement.</li>
 <li>
 <code><a href="articles/Installation.html">vignette("Installation")</a></code> for detailed installation instructions.</li>
 <li>

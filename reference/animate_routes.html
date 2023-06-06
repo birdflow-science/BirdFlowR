@@ -12,7 +12,7 @@ producing a dynamic version of plot_routes()."><!-- mathjax --><script src="http
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ FALSE. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/v
     
 
 <p>a <code>gganim</code> object. <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> will plot it with default
-options, or use <code><a href="https://rdrr.io/pkg/terra/man/animate.html" class="external-link">animate()</a></code> to set the options. See the example for
+options, or use <code>animate()</code> to set the options. See the example for
 recommended settings.</p>
     </div>
     <div class="section level2">
@@ -128,7 +128,7 @@ one point per route, resulting in a message:
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># example render</span></span></span>
-<span class="r-in"><span>  <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">gif</span> <span class="op">&lt;-</span> <span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">anim</span>,</span></span>
 <span class="r-in"><span>                            device <span class="op">=</span> <span class="st">"ragg_png"</span>, <span class="co"># ragg_png is fast and pretty</span></span></span>
 <span class="r-in"><span>                            width <span class="op">=</span> <span class="fl">7</span>, height <span class="op">=</span> <span class="fl">6</span>,</span></span>

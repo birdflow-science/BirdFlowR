@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,28 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9017" id="birdflowr-0109017">BirdflowR 0.1.0.9017<a class="anchor" aria-label="anchor" href="#birdflowr-0109017"></a></h2>
+<p>2023-06-05</p>
+<div class="section level4">
+<h4 id="revamping-performance-metrics-0-1-0-9017">Revamping performance metrics<a class="anchor" aria-label="anchor" href="#revamping-performance-metrics-0-1-0-9017"></a></h4>
+<ul><li>DEPRECATED <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> is now deprecated. Use <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> instead.</li>
+<li>NEW <code>distribution_perfomance()</code> replaces <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> and has several differences.
+<ul><li>
+<code>traverse_cor</code>is replaced by two very similar metrics <code>st_traverse_cor</code> and <code>md_traverse_cor</code>. The first is a bug free version of the old <code>traverse_cor()</code>. The second is identical except it makes the predictions starting with a marginal rather than a status and trends distribution.</li>
+<li>
+<code>*_traverse_cor</code> metrics now utilize the dynamic mask to filter which cells are used in the correlation calculation.</li>
+<li>
+<code>...</code> arguments are passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> to allow calculating metrics for just part of the year.</li>
+</ul></li>
+<li>
+<code><a href="../reference/sparsify.html">sparsify()</a></code> (which still isn’t updated for dynamic masking) now uses <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> instead of <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code>.</li>
+<li>
+<code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code> (private function) now has only one formal argument (x) all other arguments are now passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> via <code>...</code> those other arguments are unchanged though so calling it shouldn’t change.</li>
+<li>
+<code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now has a default value <code>start = "all"</code> previously there was no default. This is mostly to make use in other functions via <code>...</code> easier as <code>all</code> is the most common default in calling functions.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9016" id="birdflowr-0109016">BirdflowR 0.1.0.9016<a class="anchor" aria-label="anchor" href="#birdflowr-0109016"></a></h2>
 <p>2023-06-03</p>
