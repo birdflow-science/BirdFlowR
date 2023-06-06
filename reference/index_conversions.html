@@ -110,9 +110,9 @@ in a BirdFlow object's coordinate reference system (CRS).</p>
     <dl><dt>x, y</dt>
 <dd><p>x and y coordinates in the BirdFlow model's CRS.
 This typically represents an easting and northing in meters. For functions
-that require both <code>x</code> and <code>y</code> a two column matrix containing <code>x</code> and <code>y</code>
-columns in that order can be passed to <code>x</code> in which case <code>y</code> should be
-omitted.</p></dd>
+that require both <code>x</code> and <code>y</code> a two column matrix or data.frame
+containing <code>x</code> and <code>y</code> columns in that order can be passed to <code>x</code> in
+which case <code>y</code> should be omitted.</p></dd>
 
 
 <dt>bf</dt>
@@ -121,9 +121,9 @@ omitted.</p></dd>
 
 <dt>row, col</dt>
 <dd><p>The row and column index of a cell in the BirdFlow model and
-associated raster data. Alternatively, a two column matrix containing row
-and column indices in columns 1 and 2 respectively can be passed to
-<code>row</code> in which case the <code>col</code> argument should be omitted.</p></dd>
+associated raster data. Alternatively, a two column matrix or data.frame
+containing row and column indices in columns 1 and 2 respectively can be
+passed to <code>row</code> in which case the <code>col</code> argument should be omitted.</p></dd>
 
 
 <dt>i</dt>

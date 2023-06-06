@@ -55,7 +55,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9017" id="birdflowr-0109017">BirdflowR 0.1.0.9017<a class="anchor" aria-label="anchor" href="#birdflowr-0109017"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.901" id="birdflowr-010901">BirdFlowR 0.1.0.901<a class="anchor" aria-label="anchor" href="#birdflowr-010901"></a></h2>
+<p>2023-06-06</p>
+<ul><li>
+<code><a href="../reference/sample_distr.html">sample_distr()</a></code> has a new argument <code>format</code> that allows specifying <code>distr</code>, <code>xy</code>, <code>latlon</code>, or <code>i</code> (location index) as the output format.<br>
+The default is <code>distr</code> which mimics previous behavior. This is in response to <a href="https://github.com/birdflow-science/BirdFlowR/issues/88#issuecomment-1544401203" class="external-link">a comment</a> in issue <a href="https://github.com/birdflow-science/BirdFlowR/issues/88" class="external-link">#88</a>, the <code>"xy"</code> return format greatly simplifies calling <code><a href="../reference/route.html">route()</a></code> with a sample from a distribution.</li>
+<li>BirdFlow vignette updated to use <code>sample_distr(format = "xy")</code> and to use <code><a href="../reference/plot_routes.html">plot_routes()</a></code>.</li>
+<li>Bug fixed in <code>xy_to_latlong()</code> where column order in returned object was backwards.</li>
+<li>Index conversion functions that previously returned a two column matrix now return a two column data.frame: <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code>, <code><a href="../reference/index_conversions.html">latlon_to_xy()</a></code>, <code><a href="../reference/index_conversions.html">i_to_rc()</a></code>, and <code><a href="../reference/index_conversions.html">i_to_xy()</a></code>. I found that most often I wanted to refer to columns by name making the data.frame format easier.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9017" id="birdflowr-0109017">BirdFlowR 0.1.0.9017<a class="anchor" aria-label="anchor" href="#birdflowr-0109017"></a></h2>
 <p>2023-06-05</p>
 <div class="section level4">
 <h4 id="revamping-performance-metrics-0-1-0-9017">Revamping performance metrics<a class="anchor" aria-label="anchor" href="#revamping-performance-metrics-0-1-0-9017"></a></h4>
@@ -77,7 +87,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9016" id="birdflowr-0109016">BirdflowR 0.1.0.9016<a class="anchor" aria-label="anchor" href="#birdflowr-0109016"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9016" id="birdflowr-0109016">BirdFlowR 0.1.0.9016<a class="anchor" aria-label="anchor" href="#birdflowr-0109016"></a></h2>
 <p>2023-06-03</p>
 <ul><li>Edited Contributing guide</li>
 <li>
@@ -85,11 +95,11 @@
 <li>Additional tests for<code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> for error conditions and to test file output.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9015" id="birdflowr-0109015">BirdflowR 0.1.0.9015<a class="anchor" aria-label="anchor" href="#birdflowr-0109015"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9015" id="birdflowr-0109015">BirdFlowR 0.1.0.9015<a class="anchor" aria-label="anchor" href="#birdflowr-0109015"></a></h2>
 <p>2023-06-02 * Added tests for <code><a href="../reference/add_dynamic_mask.html">add_dynamic_mask()</a></code> <a href="https://github.com/birdflow-science/BirdFlowR/issues/101" class="external-link">#101</a> * Added RMarkdown README. <a href="https://github.com/birdflow-science/BirdFlowR/issues/104" class="external-link">#104</a> * Now the README.md file is generated from the README.Rmd file (edit the .Rmd) * Added example plots to README. * Added contributing guide. <a href="https://github.com/birdflow-science/BirdFlowR/issues/97" class="external-link">#97</a></p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9014" id="birdflowr-0109014">BirdflowR 0.1.0.9014<a class="anchor" aria-label="anchor" href="#birdflowr-0109014"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9014" id="birdflowr-0109014">BirdFlowR 0.1.0.9014<a class="anchor" aria-label="anchor" href="#birdflowr-0109014"></a></h2>
 <p>2023-05-25</p>
 <ul><li>Updated <code><a href="../reference/plot_routes.html">plot_routes()</a></code>
 <ul><li>Works over year boundary</li>
@@ -100,7 +110,7 @@ use_seasonal_colors, pal, barheight</li>
 <li>Updated animate_routes() added … argument that is passed onto <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to control of appearance.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9013" id="birdflowr-0109013">BirdflowR 0.1.0.9013<a class="anchor" aria-label="anchor" href="#birdflowr-0109013"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9013" id="birdflowr-0109013">BirdFlowR 0.1.0.9013<a class="anchor" aria-label="anchor" href="#birdflowr-0109013"></a></h2>
 <p>2023-05-22</p>
 <ul><li>New <code><a href="../reference/animate_routes.html">animate_routes()</a></code> <a href="https://github.com/birdflow-science/BirdFlowR/issues/93" class="external-link">#93</a></li>
 <li>Updated <code><a href="../reference/plot_routes.html">plot_routes()</a></code>
@@ -110,7 +120,7 @@ use_seasonal_colors, pal, barheight</li>
 <li>Updated documentation of [route()] and [route_migration()] to full describe additional columns added in 0.1.0.9012</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9012" id="birdflowr-0109012">BirdflowR 0.1.0.9012<a class="anchor" aria-label="anchor" href="#birdflowr-0109012"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9012" id="birdflowr-0109012">BirdFlowR 0.1.0.9012<a class="anchor" aria-label="anchor" href="#birdflowr-0109012"></a></h2>
 <p>2023-05-17</p>
 <ul><li>Fixed bug in <code><a href="../reference/route.html">route()</a></code> and <code><a href="../reference/route_migration.html">route_migration()</a></code> that prevented routing over year boundary.</li>
 <li>New:
@@ -136,23 +146,23 @@ use_seasonal_colors, pal, barheight</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9011" id="birdflowr-0109011">BirdflowR 0.1.0.9011<a class="anchor" aria-label="anchor" href="#birdflowr-0109011"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9011" id="birdflowr-0109011">BirdFlowR 0.1.0.9011<a class="anchor" aria-label="anchor" href="#birdflowr-0109011"></a></h2>
 <p>2023-05-11</p>
 <ul><li>Minor change to <code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> for clearer code and to avoid warning when tibbles are used.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9010" id="birdflowr-0109010">BirdflowR 0.1.0.9010<a class="anchor" aria-label="anchor" href="#birdflowr-0109010"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9010" id="birdflowr-0109010">BirdFlowR 0.1.0.9010<a class="anchor" aria-label="anchor" href="#birdflowr-0109010"></a></h2>
 <p>2023-05-09</p>
 <ul><li>Dockerfile: Bump rocker image to R 4.3.0 and error out of build on package installation failure</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9009" id="birdflowr-0109009">BirdflowR 0.1.0.9009<a class="anchor" aria-label="anchor" href="#birdflowr-0109009"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9009" id="birdflowr-0109009">BirdFlowR 0.1.0.9009<a class="anchor" aria-label="anchor" href="#birdflowr-0109009"></a></h2>
 <p>2023-05-09</p>
 <ul><li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now defaults the <code>res</code> parameter to NULL, making it easier to script around <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code></p></li>
 <li><p>Tweaked some tests to better run across different development environments</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9008" id="birdflowr-0109008">BirdflowR 0.1.0.9008<a class="anchor" aria-label="anchor" href="#birdflowr-0109008"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9008" id="birdflowr-0109008">BirdFlowR 0.1.0.9008<a class="anchor" aria-label="anchor" href="#birdflowr-0109008"></a></h2>
 <p>2023-05-09</p>
 <ul><li><p><code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> now converts logical hyperparameters masquerading as factors into logical. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/81" class="external-link">#81</a>.</p></li>
 <li>
@@ -164,21 +174,21 @@ use_seasonal_colors, pal, barheight</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9007" id="birdflowr-0109007">BirdflowR 0.1.0.9007<a class="anchor" aria-label="anchor" href="#birdflowr-0109007"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9007" id="birdflowr-0109007">BirdFlowR 0.1.0.9007<a class="anchor" aria-label="anchor" href="#birdflowr-0109007"></a></h2>
 <p>Fixed URL.</p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9006" id="birdflowr-0109006">BirdflowR 0.1.0.9006<a class="anchor" aria-label="anchor" href="#birdflowr-0109006"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9006" id="birdflowr-0109006">BirdFlowR 0.1.0.9006<a class="anchor" aria-label="anchor" href="#birdflowr-0109006"></a></h2>
 <p>Cleaned up bad formatting in _pkgdown.yml.</p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9005" id="birdflowr-0109005">BirdflowR 0.1.0.9005<a class="anchor" aria-label="anchor" href="#birdflowr-0109005"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9005" id="birdflowr-0109005">BirdFlowR 0.1.0.9005<a class="anchor" aria-label="anchor" href="#birdflowr-0109005"></a></h2>
 <p>Added argument <code>n</code> to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, an alternative to <code>end</code>, <code>n</code> indicates how many transitions should be in the resulting sequence. <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, and <code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code> all gained either an explicit <code>n</code> parameter or access to it via <code>...</code>.</p>
 <p><strong>Breaking change:</strong> The pre-existing <code>n</code> parameter to <code><a href="../reference/route.html">route()</a></code> was renamed <code>n_each</code> to avoid conflict with the new <code>n</code> parameter which is passed on to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>.</p>
 <p>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/76" class="external-link">#76</a>.</p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9004" id="birdflowr-0109004">BirdflowR 0.1.0.9004<a class="anchor" aria-label="anchor" href="#birdflowr-0109004"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9004" id="birdflowr-0109004">BirdFlowR 0.1.0.9004<a class="anchor" aria-label="anchor" href="#birdflowr-0109004"></a></h2>
 <p>Made changes to support pkgdown.</p>
 <ul><li>Added links to .yml</li>
 <li>Added BugReports field to DESCRIPTION file</li>
@@ -186,14 +196,14 @@ use_seasonal_colors, pal, barheight</li>
 <li>Switched development mode in .yml to <code>unreleased</code>. <code>auto</code> wasn’t working with version 0.0.1.x. When we have our first formal release it should be switched back to <code>auto</code>.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9003" id="birdflowr-0109003">BirdflowR 0.1.0.9003<a class="anchor" aria-label="anchor" href="#birdflowr-0109003"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9003" id="birdflowr-0109003">BirdFlowR 0.1.0.9003<a class="anchor" aria-label="anchor" href="#birdflowr-0109003"></a></h2>
 <ul><li>
 <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> is now exported.</li>
 <li>
 <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> now uses the dynamic mask when calculating correlations (excluding the masked out cells). This means a bunch of cells that were essentially forced to zero in both sides of the correlation aren’t included in the calculation. Correlations will get lower and the effect will be more pronounced with lower correlations.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9002" id="birdflowr-0109002">BirdflowR 0.1.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-0109002"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9002" id="birdflowr-0109002">BirdFlowR 0.1.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-0109002"></a></h2>
 <div class="section level4">
 <h4 id="added-movment-vector-visualizations-0-1-0-9002">Added movment vector visualizations<a class="anchor" aria-label="anchor" href="#added-movment-vector-visualizations-0-1-0-9002"></a></h4>
 <p>These functions calculate and visualize the average movement out of each cell in a BirdFlow model during a particular transition.</p>
@@ -207,7 +217,7 @@ use_seasonal_colors, pal, barheight</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9001" id="birdflowr-0109001">BirdflowR 0.1.0.9001<a class="anchor" aria-label="anchor" href="#birdflowr-0109001"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9001" id="birdflowr-0109001">BirdFlowR 0.1.0.9001<a class="anchor" aria-label="anchor" href="#birdflowr-0109001"></a></h2>
 <div class="section level3">
 <h3 id="switch-to-dynamic-masking-0-1-0-9001">Switch to Dynamic masking<a class="anchor" aria-label="anchor" href="#switch-to-dynamic-masking-0-1-0-9001"></a></h3>
 <div class="section level4">
@@ -270,12 +280,12 @@ use_seasonal_colors, pal, barheight</li>
 </div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9075" id="birdflowr-0009075">BirdflowR 0.0.0.9075<a class="anchor" aria-label="anchor" href="#birdflowr-0009075"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9075" id="birdflowr-0009075">BirdFlowR 0.0.0.9075<a class="anchor" aria-label="anchor" href="#birdflowr-0009075"></a></h2>
 <p>2023-04-18</p>
 <p>Added BirdFlow methods for generics defined in <strong>sf</strong> * <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs()</a></code> returns an object of class <code>crs</code> used by <strong>sf</strong> to define coordinate reference sytems (CRS). * <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox()</a></code> returns an object of class <code>bbox</code> containing both the extent and crs of a BirdFlow object. Can be passed to <code><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc()</a></code> to convert to a polygon.</p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9074" id="birdflowr-0009074">BirdflowR 0.0.0.9074<a class="anchor" aria-label="anchor" href="#birdflowr-0009074"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9074" id="birdflowr-0009074">BirdFlowR 0.0.0.9074<a class="anchor" aria-label="anchor" href="#birdflowr-0009074"></a></h2>
 <p>2023-04-13</p>
 <ul><li>Changed behavior
 <ul><li>
@@ -284,7 +294,7 @@ controlled by <code>match_extent</code>.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9073" id="birdflowr-0009073">BirdflowR 0.0.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0009073"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9073" id="birdflowr-0009073">BirdFlowR 0.0.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0009073"></a></h2>
 <p>2023-04-11</p>
 <ul><li>Changed behavior:
 <ul><li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> and timestep lookup throughout the package is now consistent with <code><a href="https://rdrr.io/pkg/ebirdst/man/date_to_st_week.html" class="external-link">ebirdst::date_to_st_week()</a></code> this wasn’t previously true. Some dates near the edges of the week breaks will end up classified into a different timestep than previously.</p></li>
@@ -310,7 +320,7 @@ controlled by <code>match_extent</code>.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9072" id="birdflowr-0009072">BirdflowR 0.0.0.9072<a class="anchor" aria-label="anchor" href="#birdflowr-0009072"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9072" id="birdflowr-0009072">BirdFlowR 0.0.0.9072<a class="anchor" aria-label="anchor" href="#birdflowr-0009072"></a></h2>
 <p>2023-04-11</p>
 <ul><li>Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of <code>ebirdst_runs</code> to character. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now defensively forces the columns that should be (and were) logical to logical, and numeric to numeric.</li>
 </ul></div>
@@ -426,7 +436,7 @@ This removes the documentation from the package manual and index, but it’s sti
 <ul><li>Added package down. Starting to use <a href="https://semver.org/" class="external-link">semantic versioning</a>.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9017" id="birdflowr-0009017-2023-02-27">BirdflowR 0.0.0.9017 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009017-2023-02-27"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9017" id="birdflowr-0009017-2023-02-27">BirdFlowR 0.0.0.9017 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009017-2023-02-27"></a></h2>
 <ul><li>Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra) <a href="https://github.com/birdflow-science/BirdFlowR/issues/17" class="external-link">#17</a>.</li>
 </ul></div>
     <div class="section level2">
