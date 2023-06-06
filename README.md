@@ -54,9 +54,6 @@ can use it to create synthetic routes for a species.
 ``` r
 library(BirdFlowR)
 library(BirdFlowModels)
-library(terra)
-#> Warning: package 'terra' was built under R version 4.2.3
-#> terra 1.7.29
 
 bf <- amewoo 
 

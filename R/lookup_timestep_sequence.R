@@ -77,7 +77,7 @@
 #' lookup_timestep_sequence(bf, "prebreeding_migration", season_buffer = 0,
 #'                          direction = "backward")
 #'
-lookup_timestep_sequence <- function (x, start, end, direction,
+lookup_timestep_sequence <- function (x, start = "all", end, direction,
                                       season_buffer, n) {
 
   stopifnot(inherits(x, "BirdFlow"))

@@ -4,7 +4,7 @@
 \alias{lookup_timestep_sequence}
 \title{Lookup a sequence of timesteps}
 \usage{
-lookup_timestep_sequence(x, start, end, direction, season_buffer, n)
+lookup_timestep_sequence(x, start = "all", end, direction, season_buffer, n)
 }
 \arguments{
 \item{x}{A BirdFlow object}

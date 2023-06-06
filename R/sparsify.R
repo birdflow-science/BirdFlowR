@@ -144,7 +144,7 @@ sparsify <- function(x, method, p, fix = TRUE){
 
   if(verbose)
     cat("Evaluating full model performance\n")
-  pre_sparsification_stats <- evaluate_performance(x)
+  pre_sparsification_stats <- distribution_performance(x)
   index <- x$marginals$index
   index <- index[index$direction == "forward", ]
   marginal_names <- index$marginal
@@ -328,7 +328,7 @@ sparsify <- function(x, method, p, fix = TRUE){
     mar <- Matrix(mar/s, sparse = TRUE)  # re-normalize
     standardized_bf$marginals[[marginal_names[i] ]] <- mar
   }
-  post_sparsification_stats <- evaluate_performance(standardized_bf)
+  post_sparsification_stats <- distribution_performance(standardized_bf)
 
   # Calculate density lost and and percent zero on the non-standardized version
   ms <- marginal_stats(x)
@@ -364,7 +364,7 @@ sparsify <- function(x, method, p, fix = TRUE){
       standardized_bf$marginals[[marginal_names[i] ]] <- mar
     }
 
-    post_fix_stats <- evaluate_performance(standardized_bf)
+    post_fix_stats <- distribution_performance(standardized_bf)
 
     # Add row to stats with the stats on the fixed version
     stats <- rbind(stats,
