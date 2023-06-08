@@ -9,9 +9,9 @@ lookup_season_timesteps(x, season, season_buffer = 1)
 \arguments{
 \item{x}{a BirdFlow object}
 
-\item{season}{the season to lookup timesteps for one of the four seasons
-returned by \code{\link[=species_info]{species_info()}}; one of the alternative  names listed  in
-details; or \code{"all"} for all timesteps in the model.}
+\item{season}{one of the seasons
+returned by \code{\link[=species_info]{species_info()}}, a season alias, or  or \code{"all"}
+for all timesteps in the model.}
 
 \item{season_buffer}{the number of extra timesteps to add to the beginning
 and end of the season.}
@@ -22,18 +22,23 @@ a series of integers indicating which timesteps correspond with the
 }
 \description{
 Retrieve the timesteps associated with a season for the species modeled by
-a BirdFlow object, possibly with a buffer (in timesteps) added on.
+a BirdFlow object, possibly with a buffer (in timesteps) added on. Seasons
+dates are from \link[ebirdst:ebirdst_runs]{ebirdst::ebirdst_runs} and are directly accessible
+with \code{\link[=species_info]{species_info()}}.
 }
-\details{
-\code{season} should be \code{'all'} one of the the four seasons or their
-alternate names listed below.\tabular{ll}{
-   season \tab alternate names \cr
+\section{Season names and aliases}{
+
+
+\code{season} can be \code{'all'}, one of the the four seasons, or an
+alias listed below.\tabular{ll}{
+   \strong{season} \tab \strong{aliases} \cr
    \code{prebreeding_migration} \tab \code{pre}, \code{prebreeding}, \code{spring} \cr
    \code{breeding} \tab \code{breed}, \code{summer} \cr
    \code{postbreeding_migration} \tab \code{post}, \code{postbreeding}, \code{fall} \cr
    \code{nonbreeding} \tab \code{non}, \code{winter} \cr
 }
 }
+
 \examples{
 bf <- BirdFlowModels::rewbla
 lookup_season_timesteps(bf, "breeding", season_buffer = 0)

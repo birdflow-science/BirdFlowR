@@ -1,14 +1,12 @@
 #' Predict bird distributions
 #'
 #' `predict()` projects bird distributions into the future or past. Given an
-#'  initial distribution, and a start and end timestep or date, `predict()`
-#'  generates probability distributions for each timestep between the start
-#'  and end.
+#'  initial distribution and time period specified via `...`, `predict()`
+#'  generates probability distributions for each timestep.
 #'
 #' @param object A BirdFlow model object
 #' @param distr  a starting distribution
-#' @inheritParams lookup_timestep_sequence
-#' @param ... required for consistency with generic method, but is not used.
+#' @inheritDotParams lookup_timestep_sequence -x
 #' @return If multiple starting distributions are input in a matrix the result
 #'  will be an array with dimensions: location, distribution, and time. With one
 #'  input distribution the result will be a matrix with dimensions: location
@@ -24,8 +22,7 @@
 #'   (`start`, `end`, `direction`, and `season_buffer`)
 #' * [route()] and [route_migration()] are similar to `predict()` but
 #'    generate routes instead of distributions.
-predict.BirdFlow <- function(object, distr, start, end,
-                             direction, season_buffer, n, ...) {
+predict.BirdFlow <- function(object, distr, ...) {
 
 
   ### BACK COMPATABILITY CODE
@@ -46,10 +43,10 @@ predict.BirdFlow <- function(object, distr, start, end,
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(object, start, end,
-                                    direction, season_buffer)
-  timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
-                            gsub("^.*-", "", transitions)))
+  transitions <- lookup_transitions(object, ...)
+  timesteps <- lookup_timestep_sequence(object, ...)
+  start <- timesteps[1]
+
 
   current_dm <- dyn_mask[, start]
 

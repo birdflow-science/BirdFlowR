@@ -44,7 +44,8 @@ test_that("interval_log_likelihood returns expected values", {
   # Pull single step log likelihood directly from the transition matrices
   expected_ll <- rep(NA_real_, nsteps)
   for (j in 1:nsteps) {
-    t_id <- lookup_transitions(bf, start + j -1 ,  start + j, "forward")
+    t_id <- lookup_transitions(bf, start = start + j -1 ,
+                               end =  start + j, direction =  "forward")
     t <- get_transition(bf, t_id)
     i1 <- observations$i[j]  # start location index
     i2 <- observations$i[j + 1] # end location index

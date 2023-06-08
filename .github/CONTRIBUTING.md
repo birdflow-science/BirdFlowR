@@ -37,7 +37,9 @@ We've documented our complete process but given our small size and paucity of pu
 
 * **Increment version** in the `DESCRIPTION` file.
 
-* **Add news bullets** to the top of `NEWS.md` under a new heading for the current version.
+* **Add news bullets** to the top of `NEWS.md` under a new heading for the 
+  current version.  It's a good idea to use the "preview" button at the top
+  of the code to verify that it is rendered correctly.
 
 * **Lint** the function with for example `lintr::lint("R/function_name.R")`. Please 
 do not lint unrelated code as that will make it harder to see what your pull

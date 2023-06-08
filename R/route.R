@@ -12,7 +12,7 @@
 #' @param row,col One or more row and column indices to begin routing from.
 #' These are an alternative to `x_coord` and `y_coord` and both sets of
 #' parameters should not be used at the same time.
-#' @inheritParams lookup_timestep_sequence
+#' @inheritDotParams lookup_timestep_sequence -x
 #' @return This will likely change. Currently returns a list with:
 #' \item{points}{A dataframe with columns:
 #' \describe{
@@ -34,8 +34,7 @@
 #' @importFrom rlang .data
 #' @seealso [route_migration()]
 route <- function(x, x_coord, y_coord, n_each,
-                  row, col, start, end, direction,
-                  season_buffer, n) {
+                  row, col, ...) {
 
   ### BACK COMPATABILITY CODE
   x <- add_dynamic_mask(x)  # To ease transition pain
@@ -74,9 +73,8 @@ route <- function(x, x_coord, y_coord, n_each,
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(x, start, end, direction, season_buffer, n)
-  timesteps <- as.numeric(c(gsub("^T_|-[[:digit:]]+$", "", transitions[1]),
-                            gsub("^.*-", "", transitions)))
+  transitions <- lookup_transitions(x, ...)
+  timesteps <-  lookup_timestep_sequence(x, ...)
 
   # Re-define start and end as timesteps (if they aren't already)
   start <- timesteps[1]

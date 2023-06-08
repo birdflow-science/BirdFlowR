@@ -11,7 +11,7 @@
 #' @details Transitions are named "T_\[from\]-\[to\]" where \[from\] and \[to\]
 #'   are timesteps padded with zeros. Direction is important; "T_03-04"
 #'   represents a transition backward in time.
-#' @inheritDotParams lookup_timestep_sequence start end direction season_buffer n
+#' @inheritDotParams lookup_timestep_sequence -x
 #'
 #' @return A character vector with the named transitions required to get between
 #'   `start` and  `end`

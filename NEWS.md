@@ -1,5 +1,63 @@
-# BirdFlowR 0.1.0.901
-2023-06-06
+# BirdFlowR 0.1.0.9019
+2023-06-07
+
+### BREAKING CHANGES to timstep sequence arguments 
+ 
+  * `lookup_timestep_sequence()` gains new `season` parameter as 
+  its second argument. Previously season could be specified via `start` but it 
+  was confusing, especially when called via `...` from other functions.  
+  * `lookup_timestep_sequence()` `n` argument renamed to `n_steps`.
+  * All functions that allow specifying a sequence of timesteps (or date range)
+  now use `...` passed to `lookup_timestep_sequence()` to do so.  Previously 
+  for `predict()` and `route()` some of these were explicit arguments that
+  were then passed individually to `lookup_timestep_sequence()`
+  
+  **Affected functions**
+  
+  This impacts calls to functions that pass arguments on to 
+  `lookup_timestep_sequence()`:
+
+  * `lookup_timestep_sequence()` (directly)
+  * `lookup_transitions()` 
+  * `predict()`
+  * `route()`
+  * `distribution_performance()`
+  * `animate_movement_vectors()`
+  
+  **Broken usage**
+  
+  *  Code that passed season names explicitly to `start` will be broken: 
+  `lookup_timestep_sequence(bf, start = "prebreeding"`) .
+  * Code that relied on the position of `start` and `end` to pass dates or
+  timesteps will also fail: `lookup_timestep_sequence(bf, 1, 5)`.
+  * Use of the `n` argument, will need to be updated to `n_steps`
+  
+  **Unaffected usage**
+  
+  * Passing dates or timesteps to `start` and `end` by name should be
+  unaffected: `lookup_timestep_sequence(bf, start = 1, end = 5)`.
+  * Passing a season by position works both before and after changes:
+  `lookup_timestep_sequence(bf, "prebreeding")`
+  
+  As a general rule going forward use argument names beyond the first two 
+  arguments (`x` and `season`).
+  
+  **Default values** 
+  
+  * Default values in `lookup_timestep_sequence()` were switched from missing to
+  NULL - similar to changes made to `preprocess_species()` in 
+  [BirdFlowR 0.1.0.9009]. This shouldn't affect most users but will make 
+  setting arguments programatically slightly easier.
+  
+  * If no arguments other than the BirdFlow object are passed to 
+  `lookup_timestep_sequence()` it will return all timesteps.  This is consistent
+  with the change in [BirdFlowR 0.1.0.9017]. This default is now inherited by
+  all the affected functions listed above. For some of the affected functions
+  this is a change from the prior behavior of throwing an error if the time
+  sequence was not specified. This is unlikely to affect existing code.
+
+# BirdFlowR 0.1.0.9018
+2023-06-06  
 
 * `sample_distr()` has a new argument `format` that allows specifying 
  `distr`, `xy`, `latlon`, or `i` (location index) as the output format.  

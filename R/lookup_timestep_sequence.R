@@ -1,138 +1,165 @@
 #'
 #' Lookup a sequence of timesteps
 #'
-#' `lookup_timestep_sequence()` returns an ordered vector of timesteps possibly
+#' `lookup_timestep_sequence()` returns an ordered vector of timesteps, possibly
 #' crossing over the year boundary.
 #'
-#' `start` and `end` will fall into one of four categories which are treated
-#'   differently:
-#'
-#'  1. If `start` and `end` are numeric than they are treated as timesteps and
-#'  `direction` is used to route either forward (default) or backwards between
-#'  them, possibly passing over the year boundary.
-#'
-#'  2. If `start` and `end` are date objects or both characters they are
-#'  treated as dates, and the direction is determined from the dates:"forward"
-#'  if in chronological order, "backwards" otherwise.  If the `direction`
-#'  argument is used along with date input and it is not consistent with the
-#'  implicit direction from the dates, than an error will be thrown.
-#'
-#'  3. If `start` is a character and `end` is missing than it is assumed that
-#'  `start` is a key word that is either "all" for all timesteps, or a season
-#'  name. Season names are passed to [lookup_season_timesteps()] along with
-#'  `season_buffer`. `direction` will be followed and will default to "forward".
-#'
-#'  4. If `start` is a timestep or date, `end` is missing, and `n` is not
-#'   missing than `n` transitions from start are added to the sequence in
-#'   `direction` which defaults to "forward". This results in `n + 1` timesteps
-#'   in the sequence.  The sequence will wrap around the year boundary when
-#'   appropriate if `x` is cyclical.
-#
 #' @param x A BirdFlow object
-#' @param start The starting points in time specified as
-#' timesteps, character dates, or date objects; or  may be set to "all" or a
-#' season name to be interpreted by [lookup_season_timesteps()].
-#' @param end If start is a timestep or date `end` should be a timestep or date
-#' indicating the ending point in time.
-#' @param direction Either "forward" or "backward".
-#'
-#'   If `start` and `end`
-#'   represent dates and `direction` is used an error will
-#'   be thrown if `direction` isn't consistent with direction indicated by the
-#'   dates.
-#'
-#'   If `start` and `end` are not dates, `direction` defaults to "forward" and
-#'   `start` and `end` should either both be timesteps (numeric); or
-#'   `end` should be omitted and start should be "all" or a season name.
-#'
-#'   If `start` is a timestep or date, `end` is omitted, and `n` is an integer
-#'   than `direction` defaults to "forward".
-#'
-#' @param season_buffer Only used if `start` is a season. `season_buffer` is
+#' @param season a season name, season alias, or "all".  See
+#' [lookup_season_timesteps()] for options.
+#' @param start The starting point in time specified as a
+#' timestep, character date, or date object.
+#' @param end  The ending point in time as a date or timestep.
+#' @param direction Either "forward" or "backward" defaults to
+#'   `"forward"` if not processing dates.  If using date input `direction` is
+#'   optional and is only used to verify the direction implicit in the dates.
+#' @param season_buffer Only used with `season` input. `season_buffer` is
 #'   passed to [lookup_season_timesteps()] and defaults to 1; it is the number
 #'   of timesteps to extend the season by at each end.
-#' @param n Alternative to `end` for specifying when a sequence should end.
-#' `n` indicates how many transitions should be in the sequence in `direction`
-#'  which defaults to "forward" if `n` is used.  The sequence will have `n + 1`
-#'  timesteps.
+#' @param n_steps Alternative to `end` for specifying when a sequence should
+#' end `n_steps` indicates how many timesteps the sequence will progress in
+#' `direction` from `start` The sequence will have `n_steps + 1` timesteps.
 #' @return An integer sequence of timesteps.
 #' @export
+#' @details
+#'
+#' `lookup_timestep_sequence()` is unlikely to be called directly but it's
+#'  arguments will likely be passed from other functions like [predict()] and
+#'  [route()].
+#'
+#'  Whether called directly or via another function `lookup_timestep_sequence()`
+#'  is a flexible function that allows several ways of defining the sequence.
+#'
+#'  1. **Dates**.  Input character dates (eg "2023-06-21") or date objects to
+#'  both `start` and `end`. The direction will be determined from the dates so
+#'  `direction` is optional.  If `direction` is used an error will be thrown if
+#'  it doesn't conform with the direction implicit in the dates.
+#'
+#'  2. **Timesteps**.  Use numeric `start` and `end` to indicate a starting and
+#'  ending timestep.  Since many models are circular `direction` is used to
+#'  determine whether to go forward or backwards from `start` to `end`;
+#'  `direction` will default to forward.
+#'
+#'  3. **Season**. Input a season name (or alias) into `season`.  `"all"` can
+#'  also be used to indicate all timesteps.  If `season` is used
+#'  `season_bufffer` indicates the number of timesteps to
+#'  extend the season by.  The default of 1 means that the sequence will start
+#'  1 timestep (week) before and end 1 timestep after the dates for the season
+#'  returned by `[species_info()]`. `direction` is followed and defaulta to
+#'  forward.
+#'
+#'  4. **Start and offset**. Use `start` with a timestep or date input and
+#'  `n_steps` to create a sequence that starts at `start` and then proceeds
+#'  `n_steps` in `direction` which default to "forward". The returned
+#'   object will have `n_steps + 1` timesteps in the sequence.
+#'
+#'  5. **Default** If `season` and `start` are both NULL (or omitted) the
+#'  default is to return all timesteps in the model, equivallent to
+#'  `season = "all".`
+#'
 #' @examples
 #' bf <- BirdFlowModels::rewbla
 #'
-#' # Using timesteps - direction defaults to "forward"
-#' lookup_timestep_sequence(bf, 50, 3)  # c(50:52, 1:3)
-#' lookup_timestep_sequence(bf, 50, 3, direction = "backward") # 50:3
+#' # 1. Dates - order of dates determines direction
+#' lookup_timestep_sequence(bf, start = "2023-12-1", end = "2024-01-20")
+#' lookup_timestep_sequence(bf, start = "2024-01-20", end = "2023-12-1")
 #'
-#' # Using dates - order of dates determines direction
-#' lookup_timestep_sequence(bf, "2023-12-1", "2024-01-20")
-#' lookup_timestep_sequence(bf, "2024-01-20", "2023-12-1")
+#' # 2. Timesteps - direction defaults to "forward"
+#' lookup_timestep_sequence(bf, start = 50, end = 3)
+#' lookup_timestep_sequence(bf, start = 50, end = 3, direction = "backward")
 #'
-#' # "all" - direction defaults to "forward"
-#' lookup_timestep_sequence(bf, "all")
-#' lookup_timestep_sequence(bf, "all", direction = "backward")
-#'
-#' # Season - direction defaults to "forward", season_buffer defaults to 1
+#' # 3. Season - direction defaults to "forward", season_buffer defaults to 1
 #' lookup_timestep_sequence(bf, "prebreeding_migration")
 #' lookup_timestep_sequence(bf, "prebreeding_migration", season_buffer = 0,
 #'                          direction = "backward")
 #'
-lookup_timestep_sequence <- function (x, start = "all", end, direction,
-                                      season_buffer, n) {
+#' # 4. start & n_steps  (start can be date or timestep)
+#' lookup_timestep_sequence(bf, start = "2022-04-11", n_steps = 5)
+#' lookup_timestep_sequence(bf, start = 10, n_steps = 5)
+#'
+#' # 5.  No time arguments, equivalent to season = "all"
+#' lookup_timestep_sequence(bf)
+#' lookup_timestep_sequence(bf, season = "all", direction = "backward")
+#'
+lookup_timestep_sequence <- function (x,
+                                      season = NULL,
+                                      start = NULL,
+                                      end = NULL,
+                                      direction = NULL,
+                                      season_buffer = 1,
+                                       n_steps = NULL) {
+
+  # Throw useful error if old usage (season passed vis start) is used
+  # Changed on 6/8/2023.  Delete this code after three months.
+  season_values <- c(
+    "all", "prebreeding_migration", "breeding", "postbreeding_migration",
+    "nonbreeding", "pre","post","spring", "fall", "winter",  "nonbreeding",
+    "summer", "breeding", "prebreeding", "postbreeding", "breed", "non" )
+  if(is.character(start) && length(start) == 1 && start %in% season_values){
+    stop("It looks like you are supplying a season name to start. Use season argument instead.")
+  }
 
   stopifnot(inherits(x, "BirdFlow"))
   dates <- x$dates
 
-  if(!missing(direction))
-    direction <- match.arg(direction, c("forward", "backward"))
+  no_direction <- is.null(direction)
+  if(is.null(direction))
+    direction <- "forward"
+  direction <- match.arg(direction, c("forward", "backward"))
 
-  if(!missing(end) && !missing(n))
-    stop("end and n and mutually exclusive.  Use only one of these arguments.")
 
-  # Handle special cases where start is "all" or a season name
-  if(is.character(start) && missing(end) && missing(n)){
-    stopifnot(length(start) == 1)
-    if(missing(direction))
-      direction <- "forward"
-    if(missing(season_buffer))
-      season_buffer <- 1
 
-    s <- lookup_season_timesteps(x, start, season_buffer)
+  # Check for valid combinations of arguments
+  if(!is.null(end) && !is.null(n_steps))
+    stop("end and n_steps are mutually exclusive. ",
+         "Use only one of these arguments.")
+
+  if(is.null(start)){
+    stopifnot("end should not be used without start" = is.null(end),
+              "n_steps should not be used without start" = is.null(n_steps))
+  }
+
+
+  # Season defaults to "all" if both "start" and "season" are omitted.
+  # Because function defaults to all timesteps
+  if(is.null(season) && is.null(start)){
+    season = "all"
+  }
+
+  # Handle season input
+  if(!is.null(season)){
+    # Input validation is done in lookup_season_timesteps()
+    s <- lookup_season_timesteps(x, season, season_buffer)
 
     if(direction == "backward")
       s <-  rev(s)
     return(s)
   }
 
-  if(!missing(season_buffer))
-    warning("season_buffer is only used if start is a season name",
-         "and end is missing.")
 
-  # Handle start and offset (n)
-  if(!missing(start) && missing(end) && !missing(n)){
-    if(missing(direction))
-      direction <- "forward"
-    if(n > n_timesteps(x))
-      stop("n must be less than n_timesteps(x)")
+  # Handle start and offset (n_steps)
+  if(!is.null(start) && is.null(end) && !is.null(n_steps)){
+    if(n_steps > n_timesteps(x))
+      stop("n_steps must be less than n_timesteps(x)")
 
     start <- lookup_timestep(start, bf = x)
     stopifnot(direction %in% c("forward", "backward"))
     if (direction == "forward") {
-      end <- start + n
+      end <- start + n_steps
       if (end > n_timesteps(x)) {
         if (!is_cyclical(x))
-          stop("x is not cyclical and n is large enough to extend beyond the",
+          stop("x is not cyclical and n_steps is large enough to extend beyond the",
                " last timestep.")
         end <- end - n_timesteps(x)
       }
     }
     if (direction == "backward") {
-      end <- start - n
+      end <- start - n_steps
       if (end < 1) {
         if (!is_cyclical(x))
-          stop("x is not cyclical and n is large enough to extend back past ",
+          stop("x is not cyclical and n_steps is large enough to extend back past ",
                "the first timestep.")
-        end <- n_timesteps(x) + start - n
+        end <- n_timesteps(x) + start - n_steps
       }
     }
   }
@@ -155,7 +182,7 @@ lookup_timestep_sequence <- function (x, start = "all", end, direction,
   # Process date input (in any of it's forms)
   if(lubridate::is.Date(start)){
     implicit_direction <- ifelse(end > start, "forward", "backward")
-    if(missing(direction)){
+    if(no_direction){
       direction <- implicit_direction
     } else if(implicit_direction != direction){
         stop("Implicit direction in start and end dates (", implicit_direction,
@@ -172,30 +199,18 @@ lookup_timestep_sequence <- function (x, start = "all", end, direction,
             length(start) == 1,
             length(end) == 1 )
 
-  # Direction still might not be set if there is timestep input
-  if(missing(direction))
-    direction <- "forward"
-  stopifnot(direction %in% c("forward", "backward"))
-
-  if(!start %in% dates$interval)
-    stop("Start resolved to timestep", start, "which isn't a modeled timestep.")
-  if(!end %in% dates$interval)
-    stop("Start resolved to timestep", start, "which isn't a modeled timestep.")
-  if(start == end)
+ if(start == end)
     stop("Start and stop resolved to same timestep (", start, ")")
-
 
   # loops is a flag that indicates we pass over the year boundary from last
   # timestep to first or from first to last
   is_backward <- direction == "backward"
-  loops <- start == end | ( start < end & is_backward) |
-    start > end & !is_backward
+  loops <- ( start < end & is_backward) | (start > end & !is_backward)
 
-  # circular is a flag that indicates whether the model is circular
-  circular <- n_timesteps(x) == n_transitions(x)
-  if(loops && !circular)
-    stop("Input indicates crossing the year boundary but the model",
-         " does not support that.")
+
+  if(loops && !is_cyclical(x))
+    stop("Input indicates a connection between the last and first timestep ",
+        "(probably crossing the year boundary) but the model is not cyclical.")
 
   step <- ifelse(is_backward, -1, 1)
   if(loops){
@@ -216,12 +231,16 @@ lookup_timestep_sequence <- function (x, start = "all", end, direction,
 #' Lookup breeding, non-breeding, or migration season timesteps
 #'
 #' Retrieve the timesteps associated with a season for the species modeled by
-#' a BirdFlow object, possibly with a buffer (in timesteps) added on.
+#' a BirdFlow object, possibly with a buffer (in timesteps) added on. Seasons
+#'  dates are from [ebirdst::ebirdst_runs] and are directly accessible
+#' with [species_info()].
 #'
-#'  `season` should be `'all'` one of the the four seasons or their
-#'  alternate names listed below.
+#' @section Season names and aliases:
 #'
-#'  | season | alternate names |
+#'  `season` can be `'all'`, one of the the four seasons, or an
+#'  alias listed below.
+#'
+#'  | **season** | **aliases** |
 #'  |--------|----------------|
 #'  |`prebreeding_migration` | `pre`, `prebreeding`, `spring`|
 #'  | `breeding` | `breed`, `summer` |
@@ -229,9 +248,9 @@ lookup_timestep_sequence <- function (x, start = "all", end, direction,
 #'  | `nonbreeding` | `non`, `winter` |
 #'
 #' @param x a BirdFlow object
-#' @param season the season to lookup timesteps for one of the four seasons
-#' returned by [species_info()]; one of the alternative  names listed  in
-#' details; or `"all"` for all timesteps in the model.
+#' @param season one of the seasons
+#' returned by [species_info()], a season alias, or  or `"all"`
+#' for all timesteps in the model.
 #' @param season_buffer the number of extra timesteps to add to the beginning
 #' and end of the season.
 #' @return a series of integers indicating which timesteps correspond with the
@@ -244,6 +263,10 @@ lookup_timestep_sequence <- function (x, start = "all", end, direction,
 #'
 lookup_season_timesteps <- function (x, season, season_buffer = 1) {
   stopifnot("x must be a BirdFlow object" = inherits(x, "BirdFlow"))
+  stopifnot("season should not be NULL " = !is.null(season),
+            "season must not be NA" = !is.na(season),
+            "season must be character" = is.character(season),
+            "season must have one element" = length(season) == 1)
   season <- tolower(season)
   season = switch(season,
                   "pre" = "prebreeding_migration",
@@ -259,10 +282,18 @@ lookup_season_timesteps <- function (x, season, season_buffer = 1) {
                   season)
 
 
-  if(tolower(season) == "all"){
+  if( season == "all"){
     return(seq_len(n_timesteps(x)))
   }
 
+
+  stopifnot(!is.null(season_buffer),
+            length(season_buffer) == 1,
+            !is.na(season_buffer),
+            is.numeric(season_buffer))
+
+  season_buffer <- round(season_buffer)
+  stopifnot(season_buffer >= 0)
 
 
   stopifnot(season %in% c("prebreeding_migration",

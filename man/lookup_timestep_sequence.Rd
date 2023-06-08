@@ -4,89 +4,100 @@
 \alias{lookup_timestep_sequence}
 \title{Lookup a sequence of timesteps}
 \usage{
-lookup_timestep_sequence(x, start = "all", end, direction, season_buffer, n)
+lookup_timestep_sequence(
+  x,
+  season = NULL,
+  start = NULL,
+  end = NULL,
+  direction = NULL,
+  season_buffer = 1,
+  n_steps = NULL
+)
 }
 \arguments{
 \item{x}{A BirdFlow object}
 
-\item{start}{The starting points in time specified as
-timesteps, character dates, or date objects; or  may be set to "all" or a
-season name to be interpreted by \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
+\item{season}{a season name, season alias, or "all".  See
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} for options.}
 
-\item{end}{If start is a timestep or date \code{end} should be a timestep or date
-indicating the ending point in time.}
+\item{start}{The starting point in time specified as a
+timestep, character date, or date object.}
 
-\item{direction}{Either "forward" or "backward".
+\item{end}{The ending point in time as a date or timestep.}
 
-If \code{start} and \code{end}
-represent dates and \code{direction} is used an error will
-be thrown if \code{direction} isn't consistent with direction indicated by the
-dates.
+\item{direction}{Either "forward" or "backward" defaults to
+\code{"forward"} if not processing dates.  If using date input \code{direction} is
+optional and is only used to verify the direction implicit in the dates.}
 
-If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
-\code{start} and \code{end} should either both be timesteps (numeric); or
-\code{end} should be omitted and start should be "all" or a season name.
-
-If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
-than \code{direction} defaults to "forward".}
-
-\item{season_buffer}{Only used if \code{start} is a season. \code{season_buffer} is
+\item{season_buffer}{Only used with \code{season} input. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
 
-\item{n}{Alternative to \code{end} for specifying when a sequence should end.
-\code{n} indicates how many transitions should be in the sequence in \code{direction}
-which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
-timesteps.}
+\item{n_steps}{Alternative to \code{end} for specifying when a sequence should
+end \code{n_steps} indicates how many timesteps the sequence will progress in
+\code{direction} from \code{start} The sequence will have \code{n_steps + 1} timesteps.}
 }
 \value{
 An integer sequence of timesteps.
 }
 \description{
-\code{lookup_timestep_sequence()} returns an ordered vector of timesteps possibly
+\code{lookup_timestep_sequence()} returns an ordered vector of timesteps, possibly
 crossing over the year boundary.
 }
 \details{
-\code{start} and \code{end} will fall into one of four categories which are treated
-differently:
+\code{lookup_timestep_sequence()} is unlikely to be called directly but it's
+arguments will likely be passed from other functions like \code{\link[=predict]{predict()}} and
+\code{\link[=route]{route()}}.
+
+Whether called directly or via another function \code{lookup_timestep_sequence()}
+is a flexible function that allows several ways of defining the sequence.
 \enumerate{
-\item If \code{start} and \code{end} are numeric than they are treated as timesteps and
-\code{direction} is used to route either forward (default) or backwards between
-them, possibly passing over the year boundary.
-\item If \code{start} and \code{end} are date objects or both characters they are
-treated as dates, and the direction is determined from the dates:"forward"
-if in chronological order, "backwards" otherwise.  If the \code{direction}
-argument is used along with date input and it is not consistent with the
-implicit direction from the dates, than an error will be thrown.
-\item If \code{start} is a character and \code{end} is missing than it is assumed that
-\code{start} is a key word that is either "all" for all timesteps, or a season
-name. Season names are passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} along with
-\code{season_buffer}. \code{direction} will be followed and will default to "forward".
-\item If \code{start} is a timestep or date, \code{end} is missing, and \code{n} is not
-missing than \code{n} transitions from start are added to the sequence in
-\code{direction} which defaults to "forward". This results in \code{n + 1} timesteps
-in the sequence.  The sequence will wrap around the year boundary when
-appropriate if \code{x} is cyclical.
+\item \strong{Dates}.  Input character dates (eg "2023-06-21") or date objects to
+both \code{start} and \code{end}. The direction will be determined from the dates so
+\code{direction} is optional.  If \code{direction} is used an error will be thrown if
+it doesn't conform with the direction implicit in the dates.
+\item \strong{Timesteps}.  Use numeric \code{start} and \code{end} to indicate a starting and
+ending timestep.  Since many models are circular \code{direction} is used to
+determine whether to go forward or backwards from \code{start} to \code{end};
+\code{direction} will default to forward.
+\item \strong{Season}. Input a season name (or alias) into \code{season}.  \code{"all"} can
+also be used to indicate all timesteps.  If \code{season} is used
+\code{season_bufffer} indicates the number of timesteps to
+extend the season by.  The default of 1 means that the sequence will start
+1 timestep (week) before and end 1 timestep after the dates for the season
+returned by \verb{[species_info()]}. \code{direction} is followed and defaulta to
+forward.
+\item \strong{Start and offset}. Use \code{start} with a timestep or date input and
+\code{n_steps} to create a sequence that starts at \code{start} and then proceeds
+\code{n_steps} in \code{direction} which default to "forward". The returned
+object will have \code{n_steps + 1} timesteps in the sequence.
+\item \strong{Default} If \code{season} and \code{start} are both NULL (or omitted) the
+default is to return all timesteps in the model, equivallent to
+\verb{season = "all".}
 }
 }
 \examples{
 bf <- BirdFlowModels::rewbla
 
-# Using timesteps - direction defaults to "forward"
-lookup_timestep_sequence(bf, 50, 3)  # c(50:52, 1:3)
-lookup_timestep_sequence(bf, 50, 3, direction = "backward") # 50:3
+# 1. Dates - order of dates determines direction
+lookup_timestep_sequence(bf, start = "2023-12-1", end = "2024-01-20")
+lookup_timestep_sequence(bf, start = "2024-01-20", end = "2023-12-1")
 
-# Using dates - order of dates determines direction
-lookup_timestep_sequence(bf, "2023-12-1", "2024-01-20")
-lookup_timestep_sequence(bf, "2024-01-20", "2023-12-1")
+# 2. Timesteps - direction defaults to "forward"
+lookup_timestep_sequence(bf, start = 50, end = 3)
+lookup_timestep_sequence(bf, start = 50, end = 3, direction = "backward")
 
-# "all" - direction defaults to "forward"
-lookup_timestep_sequence(bf, "all")
-lookup_timestep_sequence(bf, "all", direction = "backward")
-
-# Season - direction defaults to "forward", season_buffer defaults to 1
+# 3. Season - direction defaults to "forward", season_buffer defaults to 1
 lookup_timestep_sequence(bf, "prebreeding_migration")
 lookup_timestep_sequence(bf, "prebreeding_migration", season_buffer = 0,
                          direction = "backward")
+
+# 4. start & n_steps  (start can be date or timestep)
+lookup_timestep_sequence(bf, start = "2022-04-11", n_steps = 5)
+lookup_timestep_sequence(bf, start = 10, n_steps = 5)
+
+# 5.  No time arguments, equivalent to season = "all"
+lookup_timestep_sequence(bf)
+lookup_timestep_sequence(bf, season = "all", direction = "backward")
 
 }

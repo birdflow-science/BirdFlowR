@@ -4,40 +4,28 @@
 \alias{animate_movement_vectors}
 \title{Animate movement vectors}
 \usage{
-animate_movement_vectors(bf, start = "all", ...)
+animate_movement_vectors(bf, ...)
 }
 \arguments{
 \item{bf}{a BirdFlow object}
 
-\item{start}{The starting points in time specified as
-timesteps, character dates, or date objects; or  may be set to "all" or a
-season name to be interpreted by \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}}.}
-
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
   \describe{
-    \item{\code{end}}{If start is a timestep or date \code{end} should be a timestep or date
-indicating the ending point in time.}
-    \item{\code{direction}}{Either "forward" or "backward".
-
-If \code{start} and \code{end}
-represent dates and \code{direction} is used an error will
-be thrown if \code{direction} isn't consistent with direction indicated by the
-dates.
-
-If \code{start} and \code{end} are not dates, \code{direction} defaults to "forward" and
-\code{start} and \code{end} should either both be timesteps (numeric); or
-\code{end} should be omitted and start should be "all" or a season name.
-
-If \code{start} is a timestep or date, \code{end} is omitted, and \code{n} is an integer
-than \code{direction} defaults to "forward".}
-    \item{\code{season_buffer}}{Only used if \code{start} is a season. \code{season_buffer} is
+    \item{\code{season}}{a season name, season alias, or "all".  See
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} for options.}
+    \item{\code{start}}{The starting point in time specified as a
+timestep, character date, or date object.}
+    \item{\code{end}}{The ending point in time as a date or timestep.}
+    \item{\code{direction}}{Either "forward" or "backward" defaults to
+\code{"forward"} if not processing dates.  If using date input \code{direction} is
+optional and is only used to verify the direction implicit in the dates.}
+    \item{\code{season_buffer}}{Only used with \code{season} input. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
-    \item{\code{n}}{Alternative to \code{end} for specifying when a sequence should end.
-\code{n} indicates how many transitions should be in the sequence in \code{direction}
-which defaults to "forward" if \code{n} is used.  The sequence will have \code{n + 1}
-timesteps.}
+    \item{\code{n_steps}}{Alternative to \code{end} for specifying when a sequence should
+end \code{n_steps} indicates how many timesteps the sequence will progress in
+\code{direction} from \code{start} The sequence will have \code{n_steps + 1} timesteps.}
   }}
 }
 \value{
@@ -64,10 +52,8 @@ Thicker lines and less transparency (darker shading) indicate higher density
 in the eBird S&T distribution for the beginning timestep of the displayed
 transition.
 
-I'm undecided as to whether the \code{gganimate()} call from the example
-should be part of the function, making it return a "gif_image" object
-instead. It would make it easier to use but hard to adjust the rendering
-parameters. The output object might change in a future revision.
+I recommend using the "ragg_png" device when rendering animations as in the
+example code.
 }
 \examples{
 

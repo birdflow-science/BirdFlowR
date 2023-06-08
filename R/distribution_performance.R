@@ -22,7 +22,7 @@
 #' @param x A BirdFlow object
 #' @param metrics If NULL calculate all metrics.  Otherwise set to a subset of
 #'   the metric names to calculate only those metrics.
-#' @inheritDotParams lookup_timestep_sequence start end direction season_buffer
+#' @inheritDotParams lookup_timestep_sequence -x
 #'   n
 #' @return
 #' \describe{
@@ -60,7 +60,7 @@
 #' distribution_performance(bf)
 #'
 #' # Just for prebreeding_migration
-#' distribution_performance(bf, start = "prebreeding_migration")
+#' distribution_performance(bf, season = "prebreeding_migration")
 #'
 #' @export
 distribution_performance <- function(x, metrics = NULL, ...) {
