@@ -17,14 +17,12 @@
 #' in the eBird S&T distribution for the beginning timestep of the displayed
 #' transition.
 #'
-#' I'm undecided as to whether the `gganimate()` call from the example
-#' should be part of the function, making it return a "gif_image" object
-#' instead. It would make it easier to use but hard to adjust the rendering
-#' parameters. The output object might change in a future revision.
+#' I recommend using the "ragg_png" device when rendering animations as in the
+#' example code.
 #'
 #' @param bf a BirdFlow object
 #' @inheritParams lookup_timestep_sequence
-#' @inheritDotParams lookup_timestep_sequence end direction season_buffer n
+#' @inheritDotParams lookup_timestep_sequence -x
 #'
 #' @return a `gganim` object. `print()` will plot it with default
 #' options, or use [animate()] to set the options. See the example for
@@ -53,10 +51,11 @@
 #' file.remove(gif_file) # cleanup
 #' }
 #'
-animate_movement_vectors <- function(bf, start = "all", ...) {
+animate_movement_vectors <- function(bf, ...) {
 
-  timesteps <- lookup_timestep_sequence(bf, start = start, ...)
-  transitions <- lookup_transitions(bf, start = start, ...)
+  timesteps <- lookup_timestep_sequence(bf, ...)
+  transitions <- lookup_transitions(bf, ...)
+  start = timesteps[1]
 
   diff <- timesteps[2] -  timesteps[1]
   if (diff %in% c(1, -1)) {

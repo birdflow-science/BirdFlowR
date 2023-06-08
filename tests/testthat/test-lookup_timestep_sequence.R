@@ -1,16 +1,23 @@
+test_that("lookup_timestep_sequence() throws useful error with start = season", {
+  bf <- BirdFlowModels::amewoo
+  expect_error(lookup_timestep_sequence(bf, start = "prebreeding"),
+               "It looks like you are supplying a season name to start.")
+
+})
+
 test_that("lookup_timestep_sequence() works with timestep input", {
   bf <- BirdFlowModels::rewbla
 
   # Not over boundary
-  expect_equal(lookup_timestep_sequence(bf, 1, 5), 1:5) # Forward
-  expect_equal(lookup_timestep_sequence(bf, 5, 1, direction = "backward"), 5:1)
+  expect_equal(lookup_timestep_sequence(bf, start = 1, end = 5), 1:5) # Forward
+  expect_equal(lookup_timestep_sequence(bf, start = 5, end = 1, direction = "backward"), 5:1)
 
   # Forward over year boundary
-  s <- lookup_timestep_sequence(bf, 50, 3, direction = "forward")
+  s <- lookup_timestep_sequence(bf, start = 50, end =  3, direction = "forward")
   expect_equal(s, c(50:52, 1:3))
 
   # Backward over year boundary
-  s <- lookup_timestep_sequence(bf, 3, 50, direction = "backward")
+  s <- lookup_timestep_sequence(bf, start = 3, end = 50, direction = "backward")
   expect_equal(s, c(3:1, 52:50))
 
 })
@@ -26,20 +33,22 @@ test_that("lookup_timestep_sequence() works with date input", {
   t2 <- lookup_timestep(d2, bf)
 
   # With appropriate direction argument
-  s1 <-   lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s1 <-   lookup_timestep_sequence(bf, start = d1, end = d2, direction = "forward")
   expect_equal(s1, t1:t2) # Forward
-  s2 <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s2 <- lookup_timestep_sequence(bf, start = d2, end = d1, direction = "backward")
   expect_equal(s2, t2:t1)
 
   # With no direction argument
-  s3 <-   lookup_timestep_sequence(bf, d1, d2)
+  s3 <-   lookup_timestep_sequence(bf, start = d1, end = d2)
   expect_equal(s3, t1:t2) # Forward
-  s4 <- lookup_timestep_sequence(bf, d2, d1)
+  s4 <- lookup_timestep_sequence(bf, start = d2, end = d1)
   expect_equal(s4, t2:t1)
 
   # With conflicting direction argument (expect errors)
-  expect_error(lookup_timestep_sequence(bf, d1, d2, direction = "backward"))
-  expect_error(lookup_timestep_sequence(bf, d2, d1, direction = "forward"))
+  expect_error(lookup_timestep_sequence(bf, start = d1, end = d2,
+                                        direction = "backward"))
+  expect_error(lookup_timestep_sequence(bf, start = d2, end =  d1,
+                                        direction = "forward"))
 
   ### Crossing year boudary
   d1 <- as.Date("2023-12-25")
@@ -49,11 +58,13 @@ test_that("lookup_timestep_sequence() works with date input", {
 
 
   # Forward over year boundary
-  s <- lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s <- lookup_timestep_sequence(bf, start = d1, end = d2,
+                                direction = "forward")
   expect_equal(s, c(t1:52, 1:t2))
 
   # Backward over year boundary
-  s <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                direction = "backward")
   expect_equal(s, c(t2:1, 52:t1))
 
 })
@@ -70,20 +81,24 @@ test_that("lookup_timestep_sequence() works with POSIX date input", {
   t2 <- lookup_timestep(d2, bf)
 
   # With appropriate direction argument
-  s1 <-   lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s1 <-   lookup_timestep_sequence(bf, start = d1, end = d2,
+                                   direction = "forward")
   expect_equal(s1, t1:t2) # Forward
-  s2 <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s2 <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                 direction = "backward")
   expect_equal(s2, t2:t1)
 
   # With no direction argument
-  s3 <-   lookup_timestep_sequence(bf, d1, d2)
+  s3 <-   lookup_timestep_sequence(bf, start = d1, end = d2)
   expect_equal(s3, t1:t2) # Forward
-  s4 <- lookup_timestep_sequence(bf, d2, d1)
+  s4 <- lookup_timestep_sequence(bf, start = d2, end = d1)
   expect_equal(s4, t2:t1)
 
   # With conflicting direction argument (expect errors)
-  expect_error(lookup_timestep_sequence(bf, d1, d2, direction = "backward"))
-  expect_error(lookup_timestep_sequence(bf, d2, d1, direction = "forward"))
+  expect_error(lookup_timestep_sequence(bf, start = d1, end =  d2,
+                                        direction = "backward"))
+  expect_error(lookup_timestep_sequence(bf, start = d2, end = d1,
+                                        direction = "forward"))
 
   ### Crossing year boundary
   d1 <- as.POSIXct("2023-12-25")
@@ -93,11 +108,12 @@ test_that("lookup_timestep_sequence() works with POSIX date input", {
 
 
   # Forward over year boundary
-  s <- lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s <- lookup_timestep_sequence(bf, start = d1, end = d2, direction = "forward")
   expect_equal(s, c(t1:52, 1:t2))
 
   # Backward over year boundary
-  s <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                direction = "backward")
   expect_equal(s, c(t2:1, 52:t1))
 
 })
@@ -114,20 +130,24 @@ test_that("lookup_timestep_sequence() works with character date input", {
   t2 <- lookup_timestep(d2, bf)
 
   # With appropriate direction argument
-  s1 <-   lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s1 <-   lookup_timestep_sequence(bf, start = d1, end = d2,
+                                   direction = "forward")
   expect_equal(s1, t1:t2) # Forward
-  s2 <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s2 <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                 direction = "backward")
   expect_equal(s2, t2:t1)
 
   # With no direction argument
-  s3 <-   lookup_timestep_sequence(bf, d1, d2)
+  s3 <-   lookup_timestep_sequence(bf, start = d1, end = d2)
   expect_equal(s3, t1:t2) # Forward
-  s4 <- lookup_timestep_sequence(bf, d2, d1)
+  s4 <- lookup_timestep_sequence(bf, start = d2, end = d1)
   expect_equal(s4, t2:t1)
 
   # With conflicting direction argument (expect errors)
-  expect_error(lookup_timestep_sequence(bf, d1, d2, direction = "backward"))
-  expect_error(lookup_timestep_sequence(bf, d2, d1, direction = "forward"))
+  expect_error(lookup_timestep_sequence(bf, start = d1, end =  d2,
+                                        direction = "backward"))
+  expect_error(lookup_timestep_sequence(bf, start = d2, end = d1,
+                                        direction = "forward"))
 
   ### Crossing year boundary
   d1 <- "2023-12-25"
@@ -137,11 +157,12 @@ test_that("lookup_timestep_sequence() works with character date input", {
 
 
   # Forward over year boundary
-  s <- lookup_timestep_sequence(bf, d1, d2, direction = "forward")
+  s <- lookup_timestep_sequence(bf, start = d1, end = d2, direction = "forward")
   expect_equal(s, c(t1:52, 1:t2))
 
   # Backward over year boundary
-  s <- lookup_timestep_sequence(bf, d2, d1, direction = "backward")
+  s <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                direction = "backward")
   expect_equal(s, c(t2:1, 52:t1))
 
 })
@@ -226,12 +247,12 @@ test_that("lookup_timestep() works with start and n input", {
   bf <- BirdFlowModels::rewbla
 
   # Forward over year boundary
-  expect_no_error( a <- lookup_timestep_sequence(bf, start = 50, n = 10))
+  expect_no_error( a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10))
   expect_equal(a, c(50:52, 1:8))
   expect_equal(length(a), 11)
 
   # Backward over year boundary
-  expect_no_error( a <- lookup_timestep_sequence(bf, start = 3, n = 5,
+  expect_no_error( a <- lookup_timestep_sequence(bf, start = 3, n_steps = 5,
                                                  direction = "backward"))
   expect_equal(a, c(3:1, 52:50))
   expect_equal(length(a), 6)
@@ -240,11 +261,11 @@ test_that("lookup_timestep() works with start and n input", {
 test_that("lookup_timestep() throws expected errors with non-cyclical models", {
   bf <- BirdFlowModels::amewoo
   expect_false(is_cyclical(bf))
-  expect_error(a <- lookup_timestep_sequence(bf, start = 50, n = 10),
-               regexp = "x is not cyclical and n is large enough")
-  expect_error(a <- lookup_timestep_sequence(bf, start = 3, n = 10,
+  expect_error(a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10),
+               regexp = "x is not cyclical and n_steps is large enough")
+  expect_error(a <- lookup_timestep_sequence(bf, start = 3, n_steps = 10,
                                              direction = "backward"),
-               regexp = "x is not cyclical and n is large enough")
+               regexp = "x is not cyclical and n_steps is large enough")
 })
 
 

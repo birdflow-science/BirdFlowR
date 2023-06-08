@@ -1,7 +1,7 @@
 test_that("animate_movement_vectors runs cleanly", {
   skip_on_cran()
   bf <- BirdFlowModels::amewoo
-  expect_no_error(a <- animate_movement_vectors(bf, 1, 4))
+  expect_no_error(a <- animate_movement_vectors(bf, start = 1, end = 4))
   t_dir <- tempdir()
   on.exit({
     # file cleanup from file_renderer

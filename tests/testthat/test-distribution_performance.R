@@ -13,7 +13,7 @@ test_that("distribution_performance works", {
 
   # Migration season
   expect_no_error(
-    stats3 <- distribution_performance(bf,start = "prebreeding_migration"))
+    stats3 <- distribution_performance(bf, season = "prebreeding_migration"))
 
   a <- cbind(unlist(stats), unlist(stats3)) |> as.data.frame() |> round(4)
   colnames(a) <- c("year", "spring-migration")
@@ -41,10 +41,6 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
                                 end = end, direction = "forward")
     end_dm <- BirdFlowR::get_dynamic_mask(x, end)
     end_traverse_cor <- stats::cor(end_distr_ebirdst[end_dm], projected[end_dm, ncol(projected)])
-    # get_distr(bf, start, TRUE) |> rasterize_distr(bf) |> terra::plot()
-    # get_distr(bf, start, FALSE) |> rasterize_distr(bf) |> terra::plot()
-    # get_distr(bf, end, TRUE) |> rasterize_distr(bf) |> terra::plot()
-    # get_distr(bf, end, FALSE) |> rasterize_distr(bf) |> terra::plot()
     list(start_cor = start_cor,
          end_traverse_cor = end_traverse_cor)
   }
@@ -55,12 +51,12 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
 
   # Full model
   a <- evaluate_performance_route(bf, season = "all")
-  b <- distribution_performance(bf, start = "all")
+  b <- distribution_performance(bf, season = "all")
   expect_equal(a$end_traverse_cor, b$md_traverse_cor)
 
   # prebreeding_migration only
   a  <- evaluate_performance_route(bf, season = "prebreeding_migration")
-  b <- distribution_performance(bf, start = "prebreeding_migration")
+  b <- distribution_performance(bf, season = "prebreeding_migration")
   expect_equal(a$end_traverse_cor, b$md_traverse_cor)
 
 })

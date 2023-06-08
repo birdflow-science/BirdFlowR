@@ -4,13 +4,13 @@ test_that("predicting preserves distribution over 5 weeks", {
     bf <- BirdFlowR:::add_dynamic_mask(bf)
 
   d1 <- get_distr(bf, 1)
-  p <- predict(bf, d1, 1, 5)
+  p <- predict(bf, d1, start = 1, end = 5)
   pred_d5 <- p[, 5]
   d5 <- get_distr(bf, 5)
 
   expect_gt(cor(d5, pred_d5), expected = .97)
 
-  p <- predict(bf, d5, 5, 1, "backward")
+  p <- predict(bf, d5, start = 5, end = 1, direction = "backward")
   pred_d1 <- p[, 5]
 
   expect_gt(cor(d1, pred_d1), expected = .97)
