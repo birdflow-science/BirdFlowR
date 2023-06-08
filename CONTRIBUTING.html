@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@
 </li>
 <li><p><strong>Rebuild documentation</strong> either using the “Document” item in the “More” menu within the “Build” tab in RStudio.. Ctr+Shift+D, or with <code>devtools::document()</code>. This will convert the Roxygen comments into .Rd files within “man/”. The .Rd files should never be edited directly.</p></li>
 <li><p><strong>Increment version</strong> in the <code>DESCRIPTION</code> file.</p></li>
-<li><p><strong>Add news bullets</strong> to the top of <code>NEWS.md</code> under a new heading for the current version.</p></li>
+<li><p><strong>Add news bullets</strong> to the top of <code>NEWS.md</code> under a new heading for the current version. It’s a good idea to use the “preview” button at the top of the code to verify that it is rendered correctly.</p></li>
 <li><p><strong>Lint</strong> the function with for example <code>lintr::lint("R/function_name.R")</code>. Please do not lint unrelated code as that will make it harder to see what your pull request is doing.</p></li>
 <li><p><strong>Check</strong> the package with <code>devtools::check()</code>.</p></li>
 <li><p><strong>Commit</strong> to git, and then <strong>create a pull request</strong>. One way of doing this is running <code>usethis::pr_push()</code>, and following the prompts in your browser. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>

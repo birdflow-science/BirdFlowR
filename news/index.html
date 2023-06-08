@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,42 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.901" id="birdflowr-010901">BirdFlowR 0.1.0.901<a class="anchor" aria-label="anchor" href="#birdflowr-010901"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9019" id="birdflowr-0109019">BirdFlowR 0.1.0.9019<a class="anchor" aria-label="anchor" href="#birdflowr-0109019"></a></h2>
+<p>2023-06-07</p>
+<div class="section level4">
+<h4 id="breaking-changes-to-timstep-sequence-arguments-0-1-0-9019">BREAKING CHANGES to timstep sequence arguments<a class="anchor" aria-label="anchor" href="#breaking-changes-to-timstep-sequence-arguments-0-1-0-9019"></a></h4>
+<ul><li>
+<code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> gains new <code>season</code> parameter as its second argument. Previously season could be specified via <code>start</code> but it was confusing, especially when called via <code>...</code> from other functions.<br></li>
+<li>
+<code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> <code>n</code> argument renamed to <code>n_steps</code>.</li>
+<li>All functions that allow specifying a sequence of timesteps (or date range) now use <code>...</code> passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> to do so. Previously for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> some of these were explicit arguments that were then passed individually to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>
+</li>
+</ul><p><strong>Affected functions</strong></p>
+<p>This impacts calls to functions that pass arguments on to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>:</p>
+<ul><li>
+<code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> (directly)</li>
+<li><code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code></li>
+<li><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code></li>
+<li><code><a href="../reference/route.html">route()</a></code></li>
+<li><code><a href="../reference/distribution_performance.html">distribution_performance()</a></code></li>
+<li><code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code></li>
+</ul><p><strong>Broken usage</strong></p>
+<ul><li>Code that passed season names explicitly to <code>start</code> will be broken: <code>lookup_timestep_sequence(bf, start = "prebreeding"</code>) .</li>
+<li>Code that relied on the position of <code>start</code> and <code>end</code> to pass dates or timesteps will also fail: <code>lookup_timestep_sequence(bf, 1, 5)</code>.</li>
+<li>Use of the <code>n</code> argument, will need to be updated to <code>n_steps</code>
+</li>
+</ul><p><strong>Unaffected usage</strong></p>
+<ul><li>Passing dates or timesteps to <code>start</code> and <code>end</code> by name should be unaffected: <code>lookup_timestep_sequence(bf, start = 1, end = 5)</code>.</li>
+<li>Passing a season by position works both before and after changes: <code>lookup_timestep_sequence(bf, "prebreeding")</code>
+</li>
+</ul><p>As a general rule going forward use argument names beyond the first two arguments (<code>x</code> and <code>season</code>).</p>
+<p><strong>Default values</strong></p>
+<ul><li><p>Default values in <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> were switched from missing to NULL - similar to changes made to <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> in <a href="#birdflowr-0109009">BirdFlowR 0.1.0.9009</a>. This shouldn’t affect most users but will make setting arguments programatically slightly easier.</p></li>
+<li><p>If no arguments other than the BirdFlow object are passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> it will return all timesteps. This is consistent with the change in <a href="#birdflowr-0109017">BirdFlowR 0.1.0.9017</a>. This default is now inherited by all the affected functions listed above. For some of the affected functions this is a change from the prior behavior of throwing an error if the time sequence was not specified. This is unlikely to affect existing code.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9018" id="birdflowr-0109018">BirdFlowR 0.1.0.9018<a class="anchor" aria-label="anchor" href="#birdflowr-0109018"></a></h2>
 <p>2023-06-06</p>
 <ul><li>
 <code><a href="../reference/sample_distr.html">sample_distr()</a></code> has a new argument <code>format</code> that allows specifying <code>distr</code>, <code>xy</code>, <code>latlon</code>, or <code>i</code> (location index) as the output format.<br>

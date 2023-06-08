@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><!-- mat
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9017</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9019</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,19 +64,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  <span class="va">x_coord</span>,</span>
-<span>  <span class="va">y_coord</span>,</span>
-<span>  <span class="va">n_each</span>,</span>
-<span>  <span class="va">row</span>,</span>
-<span>  <span class="va">col</span>,</span>
-<span>  <span class="va">start</span>,</span>
-<span>  <span class="va">end</span>,</span>
-<span>  <span class="va">direction</span>,</span>
-<span>  <span class="va">season_buffer</span>,</span>
-<span>  <span class="va">n</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span><span class="va">x</span>, <span class="va">x_coord</span>, <span class="va">y_coord</span>, <span class="va">n_each</span>, <span class="va">row</span>, <span class="va">col</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -102,41 +90,35 @@ These are an alternative to <code>x_coord</code> and <code>y_coord</code> and bo
 parameters should not be used at the same time.</p></dd>
 
 
-<dt>start</dt>
-<dd><p>The starting points in time specified as
-timesteps, character dates, or date objects; or  may be set to "all" or a
-season name to be interpreted by <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code>.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed on to <code><a href="lookup_timestep_sequence.html">lookup_timestep_sequence</a></code></p><dl><dt><code>season</code></dt>
+<dd><p>a season name, season alias, or "all".  See
+<code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code> for options.</p></dd>
 
+    <dt><code>start</code></dt>
+<dd><p>The starting point in time specified as a
+timestep, character date, or date object.</p></dd>
 
-<dt>end</dt>
-<dd><p>If start is a timestep or date <code>end</code> should be a timestep or date
-indicating the ending point in time.</p></dd>
+    <dt><code>end</code></dt>
+<dd><p>The ending point in time as a date or timestep.</p></dd>
 
+    <dt><code>direction</code></dt>
+<dd><p>Either "forward" or "backward" defaults to
+<code>"forward"</code> if not processing dates.  If using date input <code>direction</code> is
+optional and is only used to verify the direction implicit in the dates.</p></dd>
 
-<dt>direction</dt>
-<dd><p>Either "forward" or "backward".</p>
-<p>If <code>start</code> and <code>end</code>
-represent dates and <code>direction</code> is used an error will
-be thrown if <code>direction</code> isn't consistent with direction indicated by the
-dates.</p>
-<p>If <code>start</code> and <code>end</code> are not dates, <code>direction</code> defaults to "forward" and
-<code>start</code> and <code>end</code> should either both be timesteps (numeric); or
-<code>end</code> should be omitted and start should be "all" or a season name.</p>
-<p>If <code>start</code> is a timestep or date, <code>end</code> is omitted, and <code>n</code> is an integer
-than <code>direction</code> defaults to "forward".</p></dd>
-
-
-<dt>season_buffer</dt>
-<dd><p>Only used if <code>start</code> is a season. <code>season_buffer</code> is
+    <dt><code>season_buffer</code></dt>
+<dd><p>Only used with <code>season</code> input. <code>season_buffer</code> is
 passed to <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()</a></code> and defaults to 1; it is the number
 of timesteps to extend the season by at each end.</p></dd>
 
+    <dt><code>n_steps</code></dt>
+<dd><p>Alternative to <code>end</code> for specifying when a sequence should
+end <code>n_steps</code> indicates how many timesteps the sequence will progress in
+<code>direction</code> from <code>start</code> The sequence will have <code>n_steps + 1</code> timesteps.</p></dd>
 
-<dt>n</dt>
-<dd><p>Alternative to <code>end</code> for specifying when a sequence should end.
-<code>n</code> indicates how many transitions should be in the sequence in <code>direction</code>
-which defaults to "forward" if <code>n</code> is used.  The sequence will have <code>n + 1</code>
-timesteps.</p></dd>
+  
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
