@@ -3,6 +3,13 @@
 * Fixed bug in `distribution_performance()` that caused an error with
 `metrics = "md_traverse_cor"` and added tests.
 
+* Removed tests/testthat/Rplots.pdf from version control and added it
+to .gitignore.
+
+* Added gifki to imports, and moved rnaturalearthdata from suggests to 
+imports. This should make installation smoother and prevent gganimate::animate from writing lots of image files in the working directory.  Closes #102.
+
+
 
 # BirdFlowR 0.1.0.9019
 2023-06-07
