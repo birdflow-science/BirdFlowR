@@ -45,7 +45,6 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
          end_traverse_cor = end_traverse_cor)
   }
 
-  # Note currently distribution_performance()
 
   bf <- BirdFlowModels::amewoo
 
@@ -60,3 +59,23 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
   expect_equal(a$end_traverse_cor, b$md_traverse_cor)
 
 })
+
+test_that("distribution_performance works accross year boundary", {
+  bf <- BirdFlowModels::rewbla
+  expect_no_error(a <- distribution_performance(bf, season = "winter"))
+})
+
+
+test_that("distribution_performance works with individual metrics", {
+  bf <- BirdFlowModels::amewoo
+  all <-  distribution_performance(bf, metrics = "md_traverse_cor",
+                                   start = 1, end = 5)
+  for(metric in names(all)){
+    expect_no_error(
+      a <- distribution_performance(bf, metrics = metric,
+                                    start = 1, end = 5))
+    expect_equal(names(a), metric)
+    expect_equal(a[[metric]], all[[metric]])
+  }
+})
+

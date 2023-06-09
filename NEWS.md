@@ -1,3 +1,9 @@
+# BirdFlowR 0.1.0.9020
+
+* Fixed bug in `distribution_performance()` that caused an error with
+`metrics = "md_traverse_cor"` and added tests.
+
+
 # BirdFlowR 0.1.0.9019
 2023-06-07
 
