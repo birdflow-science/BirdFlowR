@@ -97,6 +97,7 @@ interval_log_likelihood <- function(intervals, observations, bf,
   retained_new_columns <-
     c("log_likelihood", "null_ll", "lag", "exclude", "not_active",
       "dynamic_mask", "sparse", "same_timestep", "bad_date")
+  new_column_types <- c(rep(list(numeric(0)), 3), rep(list(logical(0)), 6))
 
   if (any(retained_new_columns %in% names(intervals))) {
     conflicts <- intersect(retained_new_columns, names(intervals))
@@ -107,6 +108,15 @@ interval_log_likelihood <- function(intervals, observations, bf,
 
   obs <- observations
   intv <- intervals
+
+  if (nrow(obs) == 0 || nrow(intv) == 0) {
+    # Catch zero row input and return zero row output
+    for (i in seq_along(retained_new_columns)) {
+      intv[[retained_new_columns[i]]] <- new_column_types[[i]]
+    }
+    return(intv)
+  }
+
 
   if (!all(intv$from %in% obs$id))
     stop("Not all `from` values are in the id column of observations")

@@ -1,5 +1,7 @@
 # BirdFlowR 0.1.0.9020
 
+This update is mostly bug fixes and cleaning things up.  It shouldn't break any existing code.
+
 * Fixed bug in `distribution_performance()` that caused an error with
 `metrics = "md_traverse_cor"` and added tests.
 
@@ -9,7 +11,9 @@ to .gitignore.
 * Added gifki to imports, and moved rnaturalearthdata from suggests to 
 imports. This should make installation smoother and prevent gganimate::animate from writing lots of image files in the working directory.  Closes #102.
 
-
+* `interval_log_likelihood()` now returns a zero row data.frame if `intervals` 
+or `observations` have zero rows. Care is taken to return the same column names and data types as would be returned with data.  Previously zero row input 
+resulted in an unhelpful error. Closes #95.
 
 # BirdFlowR 0.1.0.9019
 2023-06-07
