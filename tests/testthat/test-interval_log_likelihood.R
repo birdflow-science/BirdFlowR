@@ -155,7 +155,27 @@ test_that( "interval_log_likelihood() throws warning if overwriting columns", {
   })
 
 
+test_that("Interval log likelihood handles empty input gracefully", {
+  #  #95  https://github.com/birdflow-science/BirdFlowR/issues/95
+  bf <- BirdFlowModels::rewbla
+  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
+  intervals_empty <- intervals[rep(FALSE, nrow(intervals)), , drop = FALSE]
+  observations <- BirdFlowModels::rewbla_observations
 
+  # Pre fix:
+  # interval_log_likelihood(intervals_empty, observations, bf)
+  # Error in `$<-.data.frame`(`*tmp*`, "lag", value = NA_integer_) :
+  # replacement has 1 row, data has 0
 
+  expect_no_error(
+    ll <- interval_log_likelihood(intervals_empty, observations, bf)
+  )
+  expect_equal(nrow(ll), 0)
 
+  ll2 <- interval_log_likelihood(intervals, observations, bf)
 
+  # Check that column names and classes are identical with or without data
+  expect_equal(colnames(ll), colnames(ll2))
+  expect_equal(sapply(ll, class), sapply(ll2, class))
+
+})

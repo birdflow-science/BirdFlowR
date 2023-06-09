@@ -161,12 +161,12 @@ distribution_performance <- function(x, metrics = NULL, ...) {
     md_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 2])
   } # end traverse
 
-  result <- list(mean_step_cor = mean(single_step_cor),
-                 min_step_cor = min(single_step_cor),
+  result <- list(mean_step_cor = mean_step_cor,
+                 min_step_cor =  min_step_cor,
                  st_traverse_cor = st_traverse_cor,
                  md_traverse_cor = md_traverse_cor,
-                 mean_distr_cor = mean(distr_cor),
-                 min_distr_cor = min(distr_cor))
+                 mean_distr_cor = mean_distr_cor,
+                 min_distr_cor = min_distr_cor)
 
   return(result[metrics])
 

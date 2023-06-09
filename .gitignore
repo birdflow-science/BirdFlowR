@@ -42,3 +42,6 @@ inst/doc
 /doc/
 /Meta/
 docs
+
+# Annoying Rplot.pdf file that gets created while testing
+/tests/testthat/Rplots.pdf
