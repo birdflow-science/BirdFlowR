@@ -120,9 +120,9 @@ report on raster dimensions associated with the model.
 <code>n_active</code> is the total number of cells that the BirdFlow
 model can route birds through and is a subset of the cells in the
 raster.<br><code><a href="../reference/dimensions.html">n_transitions()</a></code> and <code><a href="../reference/dimensions.html">n_distr()</a></code> report on
-temporal dimensions. If the model is circular than they will be equal,
-for temporally linear models than <code><a href="../reference/dimensions.html">n_distr()</a></code> will be one
-more than <code><a href="../reference/dimensions.html">n_transitions()</a></code>.</p>
+temporal dimensions. If the model is circular, they will be equal; for
+temporally linear models, <code><a href="../reference/dimensions.html">n_distr()</a></code> will be one more than
+<code><a href="../reference/dimensions.html">n_transitions()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Methods for base R functions:</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
@@ -251,8 +251,8 @@ BirdFlow model, is needed for the spatial information it contains.</p>
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">26</span><span class="op">)</span><span class="op">)</span> <span class="co"># winter and summer</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to SpatRaster</span></span></code></pre></div>
 <p>Alternatively convert directly from BirdFlow to SpatRast with
-<code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> the second, optional, argument <code>which</code>
-accepts the same inputs a as <code>which</code> in
+<code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code>. The second (optional) argument <code>which</code>
+accepts the same inputs as <code>which</code> in
 <code><a href="../reference/get_distr.html">get_distr()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co"># all distributions</span></span>
@@ -277,9 +277,9 @@ make it suitable for plotting with BirdFlow output.</p>
 <h2 id="forecasting">Forecasting<a class="anchor" aria-label="anchor" href="#forecasting"></a>
 </h2>
 <p>In this section we will sample a single starting location from the
-winter distribution and project it forward to generate a distribution of
-predicted breeding grounds for birds that wintered at the starting
-location.</p>
+winter distribution and project it forward. We will generate a
+distribution of predicted breeding grounds for birds that wintered at
+the starting location.</p>
 <p>Set predict parameters.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">start</span> <span class="op">&lt;-</span> <span class="fl">1</span>     <span class="co">#  winter</span></span>
@@ -289,7 +289,7 @@ location.</p>
 </h3>
 <p><code><a href="../reference/sample_distr.html">sample_distr()</a></code> will sample from one or more input
 distribution to select a single location per distribution. The result is
-one or moe distributions with ones in the selected location(s) and zero
+one or more distributions with ones in the selected location(s) and zero
 elsewhere.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
@@ -316,9 +316,9 @@ progress.</p>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/predict-1.png" width="100%"></p>
-<p>Alternatively we can calculate the difference between the projected
-distribution for bird’s wintering at that particular location and the
-distribution of the species as a whole at the same timestep.</p>
+<p>Additionally, we can calculate the difference between the projected
+distribution and the distribution of the species as a whole at the same
+timestep.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">]</span>  <span class="co"># last projected distribution</span></span>
 <span><span class="va">diff</span> <span class="op">&lt;-</span>  <span class="va">projected</span> <span class="op">-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">end</span><span class="op">)</span></span>
@@ -342,14 +342,15 @@ distribution and then generate routes to their summer grounds.</p>
 </h3>
 <p>First extract the winter distribution, then use
 <code>sample_locations()</code> with <code>n = n_positions</code> to
-sample the input distribution repeatedly resulting in a matrix in which
-each column has a single 1 representing the sampled location.</p>
+sample the input distribution repeatedly. The result is a matrix in
+which each column has a single ‘1’ representing the sampled
+location.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
 <span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span>, <span class="va">bf</span>, format <span class="op">=</span> <span class="st">"xy"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></code></pre></div>
-<p>Plot the starting (winter) distribution and sampled locations</p>
+<p>Plot the starting (winter) distribution and sampled locations.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">winter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">winter</span><span class="op">)</span></span>
@@ -399,8 +400,8 @@ at the starting and ending positions.</p>
 <span>       cex <span class="op">=</span> <span class="fl">0.4</span>, pch <span class="op">=</span> <span class="fl">12</span>, col <span class="op">=</span> <span class="va">pt_col</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="BirdFlowR_files/figure-html/plot%20routes%20with%20base%20R-1.png" width="65%">
-Or use <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to visualize time as a color
+<p><img src="BirdFlowR_files/figure-html/plot%20routes%20with%20base%20R-1.png" width="65%"></p>
+<p>Or use <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to visualize time as a color
 gradient.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_routes.html">plot_routes</a></span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
