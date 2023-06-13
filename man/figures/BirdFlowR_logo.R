@@ -19,8 +19,6 @@
 #
 #------------------------------------------------------------------------------#
 
-
-
 library(hexSticker)
 library(shadowtext)
 library(BirdFlowModels)
@@ -29,9 +27,9 @@ library(svglite)  # unstated dependency of hexSticker?
 library(ggplot2)
 library(magick)
 library(usethis)
+library(ggthemes)
 
 png_file <- "man/figures/BirdFlowR.png"  # white background
-
 
 transparent_png_file <- "man/figures/BirdFlow_transparent.png"  # transparent background
 make_transparent_copy <- FALSE
@@ -41,26 +39,63 @@ bf <- BirdFlowModels::amewoo
 set.seed(1)
 rts <- route_migration(bf, n = 10)$points
 
-# I picked the text color from the year pallete I used
+# I picked the text color from the year palette I used
 # in plot_routes
 pal <- ggthemes::tableau_color_pal("Classic Cyclic")
 year_cols <- pal(13)
 text_color <- year_cols[12]
 
-# And then decided to make it a little darker
-text_color <- col2rgb(text_color)
-text_color <- round(text_color * .8)
-text_color <- do.call(rgb, args = as.list(text_color[ , 1]/255))
 
-# This is the end result but set directly
+rgb2col <- function(x) do.call(rgb, args = as.list(x[ , 1]/255))
+col_adjust <- function(x, factor) round(x * factor)
+
+# And then decided to make it a little darker
+text_color <- col2rgb(year_cols[12]) |> col_adjust(0.65) |> rgb2col()
+"#6E4D8D"  # 0.8  # First merged logo
+"#61437B"  # 0.7  #
+"#533A6A"  # 0.6  # Chosen
+"#453058"  # 0.5
+
+
+border_color <-  year_cols[3] |> col2rgb() |> col_adjust(0.7) |> rgb2col()
+"#87B13F"  # First merged logo (hexSticker default h_color)
+"#238026"  # 0.8
+"#1A601D"  # 0.6   # V2
+"#165018"  # 0.5
+"#18581A"  # 0.55
+
+
+# Version 1
 text_color <- "#6E4D8D"
+border_color <- "#87B13F" # default
+h_size = 1.2  # default
+
+# Version 2
+text_color <-"#533A6A"  # 0.6
+border_color <- "#1A601D"  #0.6
+h_size = 2
+
+# Version 3
+text_color <-"#61437B"  # 0.7
+border_color <- "#87B13F"   # # default
+h_size = 1.5
+
+# Version 4
+text_color <-"#61437B"  # 0.7
+border_color <- "#238026"   # # default
+h_size = 1.5
+
+
+font_family = "Aller_Rg"  # "Aller_Rg" is default for hexSticker
+font_face = "bold"
+
 
 # ggplot2 plot object with route plots
 p <- plot_routes(rts, bf)
 
 # Make sticker
-# Note I don't want this to write a file yet but it does
-# it gets overwritten later though
+# This writes a file that I overwrite below; I couldn't figure out how to skip
+# the write.
 s <- sticker(p,
              p_color =  text_color,
              p_size = 25,
@@ -70,10 +105,13 @@ s <- sticker(p,
              s_width = 5,
              s_height = 5,
              white_around_sticker = TRUE,
-             p_fontface = "plain",
+             p_family = font_family,
+             p_fontface = font_face,
              filename = png_file,
              s_x = 1.2,
-             s_y = 0.8
+             s_y = 0.8,
+             h_color = border_color,
+             h_size = h_size
 )
 
 
@@ -84,9 +122,10 @@ s <- sticker(p,
 s2 <- s + geom_shadowtext(data = data.frame(x = 1, y = 1.25, label
                                             = "BirdFlowR"),
                           mapping = aes(x = x, y = y, label = label),
-                          family = "Aller_Rg", fontface = "bold",
+                          family = font_family,
+                          fontface = font_face,
                           color = text_color, size = 25,
-                          bg.color = rgb(.875, .875, .875), bg.r = .06)
+                          bg.color = rgb(.875, .875, .875), bg.r = .05)
 
 
 # Drop original "BirdFlowR" text layer created by sticker()
