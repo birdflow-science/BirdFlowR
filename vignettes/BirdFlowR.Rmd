@@ -47,7 +47,7 @@ bf <- amewoo  # from BirdFlowModels
 
 `dim()`, `nrow()`, and `ncol()` all report on raster dimensions associated with the model.
 `n_active` is the total number of cells that the BirdFlow model can route birds through and is a subset of the cells in the raster.  
-`n_transitions()` and `n_distr()` report on temporal dimensions. If the model is circular than they will be equal, for temporally linear models than `n_distr()` will be one more than `n_transitions()`.
+`n_transitions()` and `n_distr()` report on temporal dimensions. If the model is circular, they will be equal; for temporally linear models, `n_distr()` will be one more than `n_transitions()`.
 
 
 ```{r access}
@@ -141,7 +141,7 @@ d <- get_distr(bf, c(1, 26)) # winter and summer
 r <- rasterize_distr(d, bf) # convert to SpatRaster
 ```
 
-Alternatively convert directly from BirdFlow to SpatRast with `rast()` the  second, optional, argument `which` accepts the same inputs a as `which` in `get_distr()`.
+Alternatively convert directly from BirdFlow to SpatRast with `rast()`. The second (optional) argument `which` accepts the same inputs as `which` in `get_distr()`.
 
 ```{r rast, fig.width=8, fig.height=4, out.width='100%'}
 r <- rast(bf) # all distributions
@@ -159,7 +159,7 @@ plot(coast, add = TRUE)
 ```
 
 # Forecasting
-In this section we will sample a single starting location from the winter distribution and project it forward to generate a distribution of predicted breeding grounds for birds that wintered at the starting location.
+In this section we will sample a single starting location from the winter distribution and project it forward. We will generate a distribution of predicted breeding grounds for birds that wintered at the starting location.
 
 Set predict parameters.
 ```{r predict parameters}
@@ -169,7 +169,7 @@ Set predict parameters.
 
 ## Sample starting distribution
 `sample_distr()` will sample from one or more input distribution to select a 
-single location per distribution. The result is one or moe distributions 
+single location per distribution. The result is one or more distributions 
 with ones in the selected location(s) and zero elsewhere.  
 ```{r starting location}
 set.seed(0)
@@ -195,9 +195,8 @@ r <- rasterize_distr(f[, c(1, 7, 14, 19)], bf)
 plot(r)
 ```
 
-Alternatively we can calculate the difference between the projected distribution
-for bird's wintering at that particular location and the distribution of the 
-species as a whole at the same timestep.
+Additionally, we can calculate the difference between the projected distribution and the distribution of the 
+species as a whole at the same timestep. 
 ```{r probability over time}
 projected <- f[, ncol(f)]  # last projected distribution
 diff <-  projected - get_distr(bf, end)
@@ -218,7 +217,7 @@ end <- 26          # ending timestep (summer)
 ```
 
 ## Generate starting locations 
-First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly resulting in a matrix in which each column has a single 1 representing the sampled location.
+First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly. The result is a matrix in which each column has a single '1' representing the sampled location.
 ```{r starting locations}
 d <- get_distr(bf, start)
 locations  <- sample_distr(d, n = n_positions, bf, format = "xy")
@@ -226,7 +225,7 @@ x <- locations[, 1]
 y <- locations[, 2]
 ```
 
-Plot the starting (winter) distribution and sampled locations
+Plot the starting (winter) distribution and sampled locations.
 ```{r plot starting distribution}
 winter <- rasterize_distr(d, bf)
 plot(winter)
@@ -263,7 +262,8 @@ points(x = end_pts$x, y = end_pts$y,
 
 title(main = species(bf))
 ```
-Or use `plot_routes()` to visualize time  as a color gradient. 
+
+Or use `plot_routes()` to visualize time as a color gradient. 
 
 ```{r plot routes}
 plot_routes(rts, bf)
