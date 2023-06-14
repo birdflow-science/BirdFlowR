@@ -22,13 +22,13 @@
 #' bf <- add_dynamic_mask(BirdFlowModels::amewoo)
 #'
 add_dynamic_mask <- function(bf, dummy_mask = FALSE){
+  if(has_dynamic_mask(bf))
+    return(bf)
+
   if(!has_marginals(bf))
     stop("bf must have marginals to add a dynamic mask.")
   if(!has_distr(bf))
     stop("bf must have distributions to add a dynamic mask.")
-
-  if(has_dynamic_mask(bf))
-    return(bf)
 
   had_transitions <- has_transitions(bf)
   if(had_transitions)

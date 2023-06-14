@@ -1,13 +1,25 @@
 
-#' Plot routes
-#'
+#' @rdname plot_routes
+#' @title Plot Routes:
+#' @description
 #' Plot routes as lines with color indicating the passage of time and dot size
 #' indicating the length of stay at each stop.
+#' @details plot.BirdflowRoutes calls plot_routes().
 #'
-#' @param routes The output of [route()] or
-#' [route_migration()].  The `$point` component of such an object will also
-#' work.
-#' @param bf A BirdFlow object
+#' As of 6/13/2023 route() returns an object of class `BirdFlowRoutes`
+#' that is a data frame with some extra attributes tacked on.
+#'
+#' That `route()` returns a data frame like object that contains the data
+#' formerly in the `points` component with columns as described here is, I think
+#' finalized.
+#'
+#' However, whether we keep it an S3 class and whether we keep the extra
+#' attributes is experimental. If you want to be defensive and not use the
+#' experimental aspects then call `as.data.frame(rts)` to convert to a standard
+#' data.frame.
+#'
+#' @param routes The output of [route()] or a similarly structured data frame.
+#' @param bf A BirdFlow object used for reference, o
 #' @param facet if TRUE then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
 #' @param max_stay_len Used to scale the stay length dots. If NULL
@@ -23,6 +35,11 @@
 #' [ggplot2::guide_colorbar()] as `barheight` argument. Depending on the output
 #' resolution and plot size this may need to be adjusted. Can take a number or
 #' the output from [ggplot2::unit()].
+#' @param route_linewidth Line width used for routes.
+#' @param coast_linewidth Line width used for coastlines.
+#' @param dot_sizes Two numbers indicating the smallest and largest dot sizes
+#'  used to represent stay length.
+#'
 #' @return a ggplot object. Use [print()] to display it.
 #' @export
 #' @importFrom rlang .data
@@ -30,7 +47,7 @@
 #'bf <- BirdFlowModels::amewoo
 #'n <- 10
 #'rts <- route_migration(bf, n)$points
-#'
+#
 #'# Multiple routes on one plot
 #'plot_routes(rts, bf)
 #'
@@ -54,7 +71,10 @@
 #'}
 plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
                         use_seasonal_colors = TRUE, pal = NULL,
-                        barheight = 8) {
+                        barheight = 8,
+                        route_linewidth = .85,
+                        dot_sizes = c(1.1, 3.5),
+                        coast_linewidth =  .25) {
 
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range
@@ -86,6 +106,30 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
 
   #----------------------------------------------------------------------------#
+  # Make psuedo BirdFlow object
+  #
+  # This is a little bit of hack.  As of 6/13/2023 I've added some components
+  # of the BirdFlow object to the attributes of the routes produced by
+  # `route()` this extracts those and puts them back into a new BirdFlow
+  # object that can used as a reference where needed by this function.  Note,
+  # however, that it doesn't contain many key components of a normal BirdFlow
+  # object.
+  #
+  # If we like having the BirdFlowRoutes class - and putting all this extra
+  # stuff in it, we might want to make methods for a lot of the called functions
+  # that work directly with the routes object instead of making a fake BirdFlow
+  # object to use locally.
+  #
+  #----------------------------------------------------------------------------#
+  if(missing(bf) && inherits(routes, "BirdFlowRoutes")){
+    bf <- new_BirdFlow()
+    bf$dates <- attr(routes, "dates")
+    bf$geom <- attr(routes, "geom")
+    bf$metadata <- attr(routes, "metadata")
+    bf$species <- attr(routes, "species")
+  }
+
+  #----------------------------------------------------------------------------#
   # Data reformatting and preparation
   #----------------------------------------------------------------------------#
 
@@ -115,13 +159,13 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   # Calculate Elapsed time at location - used by animate_routes()
   routes <- routes |>
-    dplyr::group_by(.data$route, .data$stay_id) |>
+    dplyr::group_by(.data$route_id, .data$stay_id) |>
     dplyr::mutate(elapsed_stay = dplyr::row_number()) |>
     as.data.frame()
 
   # Calculate year number (input to HPY calculation)
   routes <- routes |>
-    dplyr::group_by(.data$route) |>
+    dplyr::group_by(.data$route_id) |>
     dplyr::mutate(year_number = calc_year_number(.data$timestep, nt)) |>
     as.data.frame()
   if(!all(routes$year_number %in% c(1, 2)))
@@ -133,8 +177,9 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   routes$hpy <- 0.5 * routes$pyear + 0.5 * (routes$year_number - 1)
 
   # Make raster showing which cells are active in the model
-  rast <- rasterize_distr(get_distr(bf, 1), bf, format = "dataframe")
-  rast$value <- !is.na(rast$density)
+  rast <- rasterize_distr(rep(TRUE, n_active(bf)), bf, format = "dataframe")
+  rast$density[is.na(rast$density)] <- FALSE
+  rast$value <- rast$density
 
   # Coastline for this model
   coast <- get_coastline(bf)
@@ -160,7 +205,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   # Set subtitle based on unique date ranges in the data
   date_ranges <- routes |>
-    dplyr::group_by(.data$route) |>
+    dplyr::group_by(.data$route_id) |>
     dplyr::summarize(first = dplyr::first(.data$hpy),
                      last = dplyr::last(.data$hpy)) |>
     dplyr::mutate(first = format_pyear(.data$first),
@@ -200,14 +245,14 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   inactive_cell_color <- rgb(.95, .95, .95, .5)
 
   # Set coast appearance
-  coast_linewidth <- .25
+
   coast_color <- grDevices::grey(.5)
 
   # Set route appearance
-  route_linewidth <- .85
+
 
   # Set dot size (smallest, largest)
-  dot_sizes <- c(1.1, 3.5)
+
 
   #----------------------------------------------------------------------------#
   # Assemble the plot
@@ -238,7 +283,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
     # Add route lines
     ggplot2::geom_path(ggplot2::aes(color = .data$hpy,
-                                    group = .data$route),
+                                    group = .data$route_id),
                        linewidth = route_linewidth,
                        lineend = "round") +
 
@@ -278,7 +323,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   if (facet) {
     p <- p +
-      ggplot2::facet_wrap(~.data$route) +
+      ggplot2::facet_wrap(~.data$route_id) +
 
       # Remove axis labels and ticks
       # facet plot is cluttered if you leave these in.
@@ -307,3 +352,12 @@ calc_year_number <- function(x, nt){
   year_number <- c(1, year_number[-length(year_number)])
   return(year_number)
 }
+
+
+#' @rdname plot_routes
+#' @method plot BirdFlowRoutes
+#' @export
+plot.BirdFlowRoutes <- function(x, ...){
+  plot_routes(x, ...)
+}
+

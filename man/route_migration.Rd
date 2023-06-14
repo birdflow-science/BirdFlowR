@@ -2,7 +2,7 @@
 % Please edit documentation in R/route_migration.R
 \name{route_migration}
 \alias{route_migration}
-\title{Generate migration routes from a BirdFlow model}
+\title{Deprecated function to generate migration routes from a BirdFlow model}
 \usage{
 route_migration(bf, n, migration = "prebreeding", season_buffer = 1)
 }
@@ -21,9 +21,7 @@ before the metadata suggests the season starts and continue one week past
 the end.}
 }
 \value{
-This will likely change. Currently returns a list with:
-\item{points}{A dataframe with columns:
-\describe{
+A BirdFlowRoutes object with columns:
 \item{\code{x}, \code{y}}{coordinates of point along route}
 \item{\code{date}}{date associated with that point}
 \item{\code{timestep}}{timestep associated with point}
@@ -32,36 +30,25 @@ This will likely change. Currently returns a list with:
 \item{\code{stay_id}}{within each route a sequential id for locations}
 \item{\code{stay_len}}{how many timesteps was the Bird at that point during
 the stay (minumum of 1)}
+It also has \strong{experimental} attributes:
+\describe{
+\item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates} components
+of the BirdFlow object the routes are derived from.}
+\item{\code{metadata}}{The \code{metadata} component of the parent BirdFlow object, with
+one additional item \code{route_type = "synthetic"}}
 }
-}
-\item{lines}{a \link[sf:sf]{sf} object containing one line per route.}
 }
 \description{
-Create stochastic migration routes for a species by sampling appropriate
-starting locations and then \link[=route]{routing} for the
-duration of the migration window.
-}
-\details{
-The two migration periods are defined based on the species information in the
-BirdFlow model:
-\describe{
-\item{\code{prebreeding}}{ migration starts at \code{species_info("nonbreeding_end")}
-and ends at \code{species_info("breeding_start")}}
-\item{\code{postbreeding}}{ migration starts at \code{species_info("breeding_end")}
-and ends at \code{species_info("nonbreeding_start")}}
-}
-}
-\examples{
-  bf <-  BirdFlowModels::amewoo
-  rts <- route_migration(bf, 2)
-  plot(rts$lines)
-  head(rts$points)
-
+This function is now deprecated and will eventually be deleted. Please
+transition to using  \code{route()} which can now both generate starting locations
+by sampling the distributions in \code{bf} and use a season name to specify the
+time period to route over.  The only adjustment that needs to be made is to
+use the \code{season} argument to \code{route()} in place of the \code{migration} argument
+to \code{route_migration()}.
 }
 \seealso{
 \itemize{
-\item \code{\link[=route]{route()}} allows setting the starting locations explicitly.
-\item \link[=predict.BirdFlow]{predict(BirdFlow)} projects future or past
-\item \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} does what its name suggests.
+\item \code{\link[=route]{route()}} should be used instead of this function.
 }
 }
+\keyword{internal}

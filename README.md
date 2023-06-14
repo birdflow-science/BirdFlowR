@@ -60,8 +60,8 @@ bf <- amewoo
 species(bf)
 #> [1] "American Woodcock"
 
-# Generate migration routes
-rts <- route_migration(bf, 10, "prebreeding")
+# Generate routes for the prebreeding migration 
+rts <- route(bf, n = 10, season = "prebreeding")
 
 # Plot routes
 plot_routes(rts, bf)

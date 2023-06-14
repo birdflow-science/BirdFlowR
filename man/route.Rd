@@ -4,21 +4,22 @@
 \alias{route}
 \title{Generate BirdFlow routes}
 \usage{
-route(x, x_coord, y_coord, n_each, row, col, ...)
+route(bf, n = 1, x_coord = NULL, y_coord = NULL, from_marginals = FALSE, ...)
 }
 \arguments{
-\item{x}{A BirdFlow object}
+\item{bf}{A BirdFlow object}
 
-\item{x_coord, y_coord}{One or more sets of coordinates identifying starting
-positions.}
+\item{n}{If sampling starting positions (x_coord, and y_coord are NULL).
+Generate this many samples.  Otherwsise the \code{x_coord} and \code{y_coord} positions
+will each be duplicated \code{n} times.}
 
-\item{n_each}{Optional, if provided each starting position will be
-duplicated this many times. \code{n_each} can be a single integer or a vector
-with one integer per starting position.}
+\item{x_coord, y_coord}{Optional, if NULL starting points will be drawn from
+the species distribution at the initial timestep.}
 
-\item{row, col}{One or more row and column indices to begin routing from.
-These are an alternative to \code{x_coord} and \code{y_coord} and both sets of
-parameters should not be used at the same time.}
+\item{from_marginals}{If sampling to create starting positions
+\code{from_marginals} is passed on to \code{\link[=get_distr]{get_distr()}} to control whether the
+sampled distribution is from the model marginals or (the default) from the
+eBird Status and Trends distribution.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
@@ -34,15 +35,13 @@ optional and is only used to verify the direction implicit in the dates.}
     \item{\code{season_buffer}}{Only used with \code{season} input. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
-    \item{\code{n_steps}}{Alternative to \code{end} for specifying when a sequence should
-end \code{n_steps} indicates how many timesteps the sequence will progress in
-\code{direction} from \code{start} The sequence will have \code{n_steps + 1} timesteps.}
+    \item{\code{n_steps}}{Alternative to \code{end}  The end will be \code{n_steps} away from
+\code{start} in \code{direction}; and the resulting sequence will have \code{n_step}
+transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-This will likely change. Currently returns a list with:
-\item{points}{A dataframe with columns:
-\describe{
+A BirdFlowRoutes object with columns:
 \item{\code{x}, \code{y}}{coordinates of point along route}
 \item{\code{date}}{date associated with that point}
 \item{\code{timestep}}{timestep associated with point}
@@ -51,14 +50,27 @@ This will likely change. Currently returns a list with:
 \item{\code{stay_id}}{within each route a sequential id for locations}
 \item{\code{stay_len}}{how many timesteps was the Bird at that point during
 the stay (minumum of 1)}
+It also has \strong{experimental} attributes:
+\describe{
+\item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates} components
+of the BirdFlow object the routes are derived from.}
+\item{\code{metadata}}{The \code{metadata} component of the parent BirdFlow object, with
+one additional item \code{route_type = "synthetic"}}
 }
-}
-\item{lines}{a \link[sf:sf]{sf} object containing one line per route.}
 }
 \description{
 \code{route()} projects bird positions over time based on the probabilities
 embedded in a BirdFlow model. The output is linear, stochastic routes.
 }
+\examples{
+bf <- BirdFlowModels::amewoo
+rts <- route(bf, 10, season = "prebreeding")
+
+\dontrun{
+plot_routes(rts)
+}
+
+}
 \seealso{
-\code{\link[=route_migration]{route_migration()}}
+\code{\link[=plot_routes]{plot_routes()}}, \code{\link[=animate_routes]{animate_routes()}}
 }

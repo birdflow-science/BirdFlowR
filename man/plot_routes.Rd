@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot_routes.R
 \name{plot_routes}
 \alias{plot_routes}
-\title{Plot routes}
+\alias{plot.BirdFlowRoutes}
+\title{Plot Routes:}
 \usage{
 plot_routes(
   routes,
@@ -11,15 +12,18 @@ plot_routes(
   max_stay_len = NULL,
   use_seasonal_colors = TRUE,
   pal = NULL,
-  barheight = 8
+  barheight = 8,
+  route_linewidth = 0.85,
+  dot_sizes = c(1.1, 3.5),
+  coast_linewidth = 0.25
 )
+
+\method{plot}{BirdFlowRoutes}(x, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or
-\code{\link[=route_migration]{route_migration()}}.  The \verb{$point} component of such an object will also
-work.}
+\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
-\item{bf}{A BirdFlow object}
+\item{bf}{A BirdFlow object used for reference, o}
 
 \item{facet}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -40,6 +44,13 @@ FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
 \code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colorbar()}} as \code{barheight} argument. Depending on the output
 resolution and plot size this may need to be adjusted. Can take a number or
 the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
+
+\item{route_linewidth}{Line width used for routes.}
+
+\item{dot_sizes}{Two numbers indicating the smallest and largest dot sizes
+used to represent stay length.}
+
+\item{coast_linewidth}{Line width used for coastlines.}
 }
 \value{
 a ggplot object. Use \code{\link[=print]{print()}} to display it.
@@ -48,11 +59,25 @@ a ggplot object. Use \code{\link[=print]{print()}} to display it.
 Plot routes as lines with color indicating the passage of time and dot size
 indicating the length of stay at each stop.
 }
+\details{
+plot.BirdflowRoutes calls plot_routes().
+
+As of 6/13/2023 route() returns an object of class \code{BirdFlowRoutes}
+that is a data frame with some extra attributes tacked on.
+
+That \code{route()} returns a data frame like object that contains the data
+formerly in the \code{points} component with columns as described here is, I think
+finalized.
+
+However, whether we keep it an S3 class and whether we keep the extra
+attributes is experimental. If you want to be defensive and not use the
+experimental aspects then call \code{as.data.frame(rts)} to convert to a standard
+data.frame.
+}
 \examples{
 bf <- BirdFlowModels::amewoo
 n <- 10
 rts <- route_migration(bf, n)$points
-
 # Multiple routes on one plot
 plot_routes(rts, bf)
 

@@ -23,9 +23,9 @@ optional and is only used to verify the direction implicit in the dates.}
     \item{\code{season_buffer}}{Only used with \code{season} input. \code{season_buffer} is
 passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
 of timesteps to extend the season by at each end.}
-    \item{\code{n_steps}}{Alternative to \code{end} for specifying when a sequence should
-end \code{n_steps} indicates how many timesteps the sequence will progress in
-\code{direction} from \code{start} The sequence will have \code{n_steps + 1} timesteps.}
+    \item{\code{n_steps}}{Alternative to \code{end}  The end will be \code{n_steps} away from
+\code{start} in \code{direction}; and the resulting sequence will have \code{n_step}
+transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{

@@ -7,11 +7,9 @@
 animate_routes(routes, bf, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or
-\code{\link[=route_migration]{route_migration()}}.  The \verb{$point} component of such an object will also
-work.}
+\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
-\item{bf}{A BirdFlow object}
+\item{bf}{A BirdFlow object used for reference, o}
 
 \item{...}{
   Arguments passed on to \code{\link[=plot_routes]{plot_routes}}

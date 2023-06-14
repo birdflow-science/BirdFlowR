@@ -1,18 +1,13 @@
 
-#' Generate migration routes from a BirdFlow model
+#' Deprecated function to generate migration routes from a BirdFlow model
 #'
-#' Create stochastic migration routes for a species by sampling appropriate
-#' starting locations and then [routing][route()] for the
-#' duration of the migration window.
+#' This function is now deprecated and will eventually be deleted. Please
+#' transition to using  `route()` which can now both generate starting locations
+#' by sampling the distributions in `bf` and use a season name to specify the
+#' time period to route over.  The only adjustment that needs to be made is to
+#' use the `season` argument to `route()` in place of the `migration` argument
+#' to `route_migration()`.
 #'
-#' The two migration periods are defined based on the species information in the
-#' BirdFlow model:
-#' \describe{
-#'  \item{`prebreeding`}{ migration starts at `species_info("nonbreeding_end")`
-#'  and ends at `species_info("breeding_start")`}
-#'  \item{`postbreeding`}{ migration starts at `species_info("breeding_end")`
-#'   and ends at `species_info("nonbreeding_start")`}
-#'}
 #' @param bf `BirdFlow` model
 #' @param n the number of routes to generate
 #' @param migration "prebreeding", "pre", or "spring" for the prebreeding
@@ -24,38 +19,17 @@
 #'   the end.
 #' @inherit route return
 #' @seealso
-#' * [route()] allows setting the starting locations explicitly.
-#' * [predict(BirdFlow)][predict.BirdFlow()] projects future or past
-#    distributions based on a starting location or distribution.
-#' * [lookup_season_timesteps()] does what its name suggests.
+#' * [route()] should be used instead of this function.
 #' @export
-#' @examples
-#'   bf <-  BirdFlowModels::amewoo
-#'   rts <- route_migration(bf, 2)
-#'   plot(rts$lines)
-#'   head(rts$points)
-#'
+#' @keywords internal
 route_migration <- function(bf, n, migration = "prebreeding",
                             season_buffer = 1) {
 
-  timesteps <- lookup_season_timesteps(bf, migration, season_buffer)
-  start <- timesteps[1]
-  end <- dplyr::last(timesteps)
+  warning("route_migration() is deprecated please transition to route() instead. ",
+          "Change the migration argument to season.")
 
-  # Sample starting positions from distributions and convert to
-  # xy coordinates
-  locations  <- sample_distr(get_distr(bf, start, from_marginals = TRUE), n = n)
-  if (n == 1) {
-    ind <- which(as.logical(locations))
-  } else {
-    ind <- apply(locations, 2, function(x) which(as.logical(x)))
-  }
-  x <- i_to_x(ind, bf)
-  y <- i_to_y(ind, bf)
-
-  # Generate n routes with both the full and sparse models
-  rts <- route(bf, x_coord = x, y_coord = y, start = start,
-                end = end)
+  rts <- route(bf = bf, n = n, season = migration,
+               season_buffer = season_buffer)
 
   return(rts)
 }
