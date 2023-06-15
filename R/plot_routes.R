@@ -156,7 +156,6 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   routes$date <- lubridate::as_date(routes$date)
   routes$pyear <- proportion_of_year(routes$date)
-  nt <- n_timesteps(bf)
 
   # Calculate Elapsed time at location - used by animate_routes()
   routes <- routes |>
