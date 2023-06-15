@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9021</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9022</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -334,7 +334,6 @@ distribution and then generate routes to their summer grounds.</p>
 <p>Set route parameters.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_positions</span> <span class="op">&lt;-</span>  <span class="fl">15</span> <span class="co"># number of starting positions</span></span>
-<span><span class="va">n_each</span> <span class="op">&lt;-</span> <span class="fl">1</span>        <span class="co"># how many birds to start at each</span></span>
 <span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fl">1</span>         <span class="co"># starting timestep (winter)</span></span>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fl">26</span>          <span class="co"># ending timestep (summer)</span></span></code></pre></div>
 <div class="section level3">
@@ -347,9 +346,9 @@ which each column has a single ‘1’ representing the sampled
 location.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">start</span><span class="op">)</span></span>
-<span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span>, <span class="va">bf</span>, format <span class="op">=</span> <span class="st">"xy"</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></code></pre></div>
+<span><span class="va">locations</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span>, n <span class="op">=</span> <span class="va">n_positions</span>, bf <span class="op">=</span> <span class="va">bf</span>, format <span class="op">=</span> <span class="st">"xy"</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">locations</span><span class="op">$</span><span class="va">y</span></span></code></pre></div>
 <p>Plot the starting (winter) distribution and sampled locations.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">winter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span></span>
@@ -371,17 +370,12 @@ each route</li>
 <code>lines</code> sf object containing a line for each route</li>
 </ul>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, x_coord <span class="op">=</span> <span class="va">x</span>, y_coord <span class="op">=</span> <span class="va">y</span>, start <span class="op">=</span> <span class="va">start</span>,</span>
-<span>             end <span class="op">=</span> <span class="va">end</span>, n_each <span class="op">=</span> <span class="va">n_each</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, x_coord <span class="op">=</span> <span class="va">x</span>, y_coord <span class="op">=</span> <span class="va">y</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          x       y route timestep       date    i stay_id stay_len</span></span>
-<span><span class="co">#&gt; 1 714921.5 4222081     1        1 2019-01-04 1260       1        4</span></span>
-<span><span class="co">#&gt; 2 714921.5 4222081     1        2 2019-01-11 1260       1        4</span></span>
-<span><span class="co">#&gt; 3 714921.5 4222081     1        3 2019-01-18 1260       1        4</span></span>
-<span><span class="co">#&gt; 4 714921.5 4222081     1        4 2019-01-25 1260       1        4</span></span></code></pre></div>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="plot-routes">Plot routes<a class="anchor" aria-label="anchor" href="#plot-routes"></a>
+<h3 id="using-base-r-plotting-to-plot-routes">Using base R plotting to plot routes<a class="anchor" aria-label="anchor" href="#using-base-r-plotting-to-plot-routes"></a>
 </h3>
 <p>Plot the route lines over the summer distribution along with points
 at the starting and ending positions.</p>
@@ -394,16 +388,36 @@ at the starting and ending positions.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">summer</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, cex <span class="op">=</span> <span class="fl">.4</span>, col <span class="op">=</span> <span class="va">pt_col</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="co"># starting points</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">lines</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="va">line_col</span><span class="op">)</span>  <span class="co"># routes</span></span>
-<span><span class="va">end_pts</span> <span class="op">&lt;-</span> <span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">[</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span> <span class="op">==</span> <span class="va">end</span>, <span class="op">]</span>  <span class="co"># end points</span></span>
+<span></span>
+<span><span class="va">lines</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">rts</span>, type <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span>  <span class="co"># convert to sf lines</span></span>
+<span><span class="co">#&gt; Set crs based on geom attribute.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lines</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="va">line_col</span><span class="op">)</span>  <span class="co"># routes</span></span>
+<span></span>
+<span><span class="va">end_pts</span> <span class="op">&lt;-</span> <span class="va">rts</span><span class="op">[</span><span class="va">rts</span><span class="op">$</span><span class="va">timestep</span> <span class="op">==</span> <span class="va">end</span>, <span class="op">]</span>  <span class="co"># end points</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/lines.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_pts</span><span class="op">$</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">end_pts</span><span class="op">$</span><span class="va">y</span>,</span>
 <span>       cex <span class="op">=</span> <span class="fl">0.4</span>, pch <span class="op">=</span> <span class="fl">12</span>, col <span class="op">=</span> <span class="va">pt_col</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/plot%20routes%20with%20base%20R-1.png" width="65%"></p>
-<p>Or use <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to visualize time as a color
-gradient.</p>
+</div>
+<div class="section level3">
+<h3 id="simplified-route-work-flow">Simplified route() work flow<a class="anchor" aria-label="anchor" href="#simplified-route-work-flow"></a>
+</h3>
+<p><code><a href="../reference/route.html">route()</a></code> will sample the eBirdstatus and trends
+distribution for the starting timestep to generate the locations if
+<code>x_coord</code> and <code>y_coord</code> are NULL.</p>
+<p>Additionally, time can be specified with the <code>season</code>
+argument possibly along with <code>season_buffer</code>. This uses eBird
+Status and Trends metadata stored in the BirdFlow object to determine
+the start and ending dates.</p>
+<p>The code below generates 10 routes for the prebreeding migration
+season using the default season buffer of 1 week - extending 1 week
+before and after the named season.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="fl">10</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/plot_routes.html">plot_routes()</a></code> will visualize time as a color gradient
+using <strong>ggplot2</strong>.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_routes.html">plot_routes</a></span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/plot%20routes-1.png" width="65%"></p>
 </div>

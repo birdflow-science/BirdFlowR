@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9021</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9022</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,30 +64,31 @@ embedded in a BirdFlow model. The output is linear, stochastic routes.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span><span class="va">x</span>, <span class="va">x_coord</span>, <span class="va">y_coord</span>, <span class="va">n_each</span>, <span class="va">row</span>, <span class="va">col</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">route</span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="fl">1</span>, x_coord <span class="op">=</span> <span class="cn">NULL</span>, y_coord <span class="op">=</span> <span class="cn">NULL</span>, from_marginals <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt>bf</dt>
 <dd><p>A BirdFlow object</p></dd>
 
 
+<dt>n</dt>
+<dd><p>If sampling starting positions (x_coord, and y_coord are NULL).
+Generate this many samples.  Otherwsise the <code>x_coord</code> and <code>y_coord</code> positions
+will each be duplicated <code>n</code> times.</p></dd>
+
+
 <dt>x_coord, y_coord</dt>
-<dd><p>One or more sets of coordinates identifying starting
-positions.</p></dd>
+<dd><p>Optional, if NULL starting points will be drawn from
+the species distribution at the initial timestep.</p></dd>
 
 
-<dt>n_each</dt>
-<dd><p>Optional, if provided each starting position will be
-duplicated this many times. <code>n_each</code> can be a single integer or a vector
-with one integer per starting position.</p></dd>
-
-
-<dt>row, col</dt>
-<dd><p>One or more row and column indices to begin routing from.
-These are an alternative to <code>x_coord</code> and <code>y_coord</code> and both sets of
-parameters should not be used at the same time.</p></dd>
+<dt>from_marginals</dt>
+<dd><p>If sampling to create starting positions
+<code>from_marginals</code> is passed on to <code><a href="get_distr.html">get_distr()</a></code> to control whether the
+sampled distribution is from the model marginals or (the default) from the
+eBird Status and Trends distribution.</p></dd>
 
 
 <dt>...</dt>
@@ -113,9 +114,9 @@ passed to <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()
 of timesteps to extend the season by at each end.</p></dd>
 
     <dt><code>n_steps</code></dt>
-<dd><p>Alternative to <code>end</code> for specifying when a sequence should
-end <code>n_steps</code> indicates how many timesteps the sequence will progress in
-<code>direction</code> from <code>start</code> The sequence will have <code>n_steps + 1</code> timesteps.</p></dd>
+<dd><p>Alternative to <code>end</code>  The end will be <code>n_steps</code> away from
+<code>start</code> in <code>direction</code>; and the resulting sequence will have <code>n_step</code>
+transitions and <code>n_steps + 1</code>  timesteps.</p></dd>
 
   
 </dl></dd>
@@ -125,9 +126,8 @@ end <code>n_steps</code> indicates how many timesteps the sequence will progress
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>This will likely change. Currently returns a list with:</p>
-<dl><dt>points</dt>
-<dd><p>A dataframe with columns:</p><dl><dt><code>x</code>, <code>y</code></dt>
+<p>A BirdFlowRoutes object with columns:</p>
+<dl><dt><code>x</code>, <code>y</code></dt>
 <dd><p>coordinates of point along route</p></dd>
 
 <dt><code>date</code></dt>
@@ -149,18 +149,32 @@ end <code>n_steps</code> indicates how many timesteps the sequence will progress
 <dd><p>how many timesteps was the Bird at that point during
 the stay (minumum of 1)</p></dd>
 
+</dl><p>It also has <strong>experimental</strong> attributes:</p><dl><dt><code>geom</code>, <code>species</code>, <code>dates</code></dt>
+<dd><p>The <code>geom</code>, <code>species</code>, and <code>dates</code> components
+of the BirdFlow object the routes are derived from.</p></dd>
 
-</dl></dd>
+<dt><code>metadata</code></dt>
+<dd><p>The <code>metadata</code> component of the parent BirdFlow object, with
+one additional item <code>route_type = "synthetic"</code></p></dd>
 
-<dt>lines</dt>
-<dd><p>a <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> object containing one line per route.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="route_migration.html">route_migration()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="plot_routes.html">plot_routes()</a></code>, <code><a href="animate_routes.html">animate_routes()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu">route</span><span class="op">(</span><span class="va">bf</span>, <span class="fl">10</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_routes.html">plot_routes</a></span><span class="op">(</span><span class="va">rts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

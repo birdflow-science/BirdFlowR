@@ -12,7 +12,7 @@ Status and Trend distributions used to train the BirdFlow model."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9021</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9022</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,9 +101,9 @@ passed to <code><a href="lookup_season_timesteps.html">lookup_season_timesteps()
 of timesteps to extend the season by at each end.</p></dd>
 
     <dt><code>n_steps</code></dt>
-<dd><p>Alternative to <code>end</code> for specifying when a sequence should
-end <code>n_steps</code> indicates how many timesteps the sequence will progress in
-<code>direction</code> from <code>start</code> The sequence will have <code>n_steps + 1</code> timesteps.</p></dd>
+<dd><p>Alternative to <code>end</code>  The end will be <code>n_steps</code> away from
+<code>start</code> in <code>direction</code>; and the resulting sequence will have <code>n_step</code>
+transitions and <code>n_steps + 1</code>  timesteps.</p></dd>
 
   
 </dl></dd>

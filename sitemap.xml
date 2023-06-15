@@ -58,6 +58,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_number.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc>
   </url>
   <url>
@@ -173,6 +176,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlowRoutes.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc>
