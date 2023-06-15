@@ -246,14 +246,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   inactive_cell_color <- rgb(.95, .95, .95, .5)
 
   # Set coast appearance
-
   coast_color <- grDevices::grey(.5)
-
-  # Set route appearance
-
-
-  # Set dot size (smallest, largest)
-
 
   #----------------------------------------------------------------------------#
   # Assemble the plot
@@ -336,23 +329,6 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   }
 
   return(p)
-}
-
-
-
-# Based on a sequence of timesteps starting with year one
-# assign a year to each observation based on whether the sequence
-# has passed over the year boundary
-calc_year_number <- function(x, nt){
-  # example:
-  # x <- c(48:52, 1:5)
-  # calc_year(x, 52) should be  c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2)
-  is_last <- x == nt
-  year_number <- cumsum(is_last) + 1
-  # the above makes the transition one value too soon
-  # so move every number back one
-  year_number <- c(1, year_number[-length(year_number)])
-  return(year_number)
 }
 
 

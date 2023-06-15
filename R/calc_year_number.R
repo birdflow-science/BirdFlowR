@@ -1,12 +1,11 @@
 #' Calculate year number from a sequence of timesteps
 #'
-#' This internal function assign a sequential year to each
+#' This internal function assigns a sequential year to each
 #' observation based on whether the sequence has passed over a presumed year
 #' boundary and started over. If the sequence is backwards and passes over the
 #' boundary the result will start at 2 (later year) and end at 1 (earlier year).
 #'
-#' This function assists in calculating half proportional years for route
-#' plotting
+#' It is used by plot_routes() when calculating half proportional years.
 #'
 #' @param x a sequence of integers representing timesteps.
 #'
