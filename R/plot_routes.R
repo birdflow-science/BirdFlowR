@@ -167,7 +167,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   # Calculate year number (input to HPY calculation)
   routes <- routes |>
     dplyr::group_by(.data$route_id) |>
-    dplyr::mutate(year_number = calc_year_number(.data$timestep, nt)) |>
+    dplyr::mutate(year_number = calc_year_number(.data$timestep)) |>
     as.data.frame()
   if(!all(routes$year_number %in% c(1, 2)))
     stop("Track passes through parts of three distinct years and",
