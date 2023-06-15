@@ -10,9 +10,9 @@
 #'  This will possibly be repeated while individuals remain in one location.
 #'  It can be safely ignored. The error is thrown while rendering and not
 #'  from within `animate_routes()` where I could suppress it.
-#'
+#' @param bf A BirdFlow object
 #' @inheritParams plot_routes
-#' @inheritDotParams plot_routes facet max_stay_len use_seasonal_colors pal
+#' @inheritDotParams plot_routes -routes -bf
 #'
 #' @inherit animate_movement_vectors return
 #' @export
@@ -55,12 +55,13 @@ animate_routes <- function(routes, bf, ... ){
     ggplot2::geom_point(
                size = ring_size,
                shape = 1,
-               mapping = ggplot2::aes(group = .data$route,
+               mapping = ggplot2::aes(group = .data$route_id,
                              color = .data$hpy)) +
 
     # Animate and add dynamic subtitle
     gganimate::transition_reveal(.data$hpy) +
-    ggplot2::labs(title = "{species(bf)}", subtitle = "{format_pyear(frame_along)}" )
+    ggplot2::labs(title = "{species(bf)}",
+                  subtitle = "{format_pyear(frame_along)}" )
 
   return(a)
 }

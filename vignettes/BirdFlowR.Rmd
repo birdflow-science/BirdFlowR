@@ -211,7 +211,6 @@ distribution and then generate routes to their summer grounds.
 Set route parameters.
 ```{r route parameters}
 n_positions <-  15 # number of starting positions
-n_each <- 1        # how many birds to start at each
 start <- 1         # starting timestep (winter)
 end <- 26          # ending timestep (summer)
 ```
@@ -220,9 +219,9 @@ end <- 26          # ending timestep (summer)
 First extract the winter distribution, then use `sample_locations()` with `n = n_positions` to sample the input distribution repeatedly. The result is a matrix in which each column has a single '1' representing the sampled location.
 ```{r starting locations}
 d <- get_distr(bf, start)
-locations  <- sample_distr(d, n = n_positions, bf, format = "xy")
-x <- locations[, 1]
-y <- locations[, 2]
+locations  <- sample_distr(d, n = n_positions, bf = bf, format = "xy")
+x <- locations$x
+y <- locations$y
 ```
 
 Plot the starting (winter) distribution and sampled locations.
@@ -239,13 +238,13 @@ Currently `route()` returns a list with two items (this may change):
 * `points` a data.frame with a row for each timestep of each route
 * `lines` sf object containing a line for each route
 ```{r route, fig.show='hide'}
-rts <- route(bf, x_coord = x, y_coord = y, start = start,
-             end = end, n_each = n_each)
+rts <- route(bf, x_coord = x, y_coord = y, start = start, end = end)
 head(rts$points, 4)
 ```
 
-## Plot routes 
-Plot the route lines over the summer distribution along with points at the starting and ending positions.
+## Using base R plotting to plot routes 
+Plot the route lines over the summer distribution along with points at the 
+starting and ending positions. 
 ```{r plot routes with base R}
 d <- get_distr(bf, end)
 summer <- rasterize_distr(d, bf)
@@ -255,17 +254,36 @@ pt_col <- rgb(0, 0, 0, .5)
 
 plot(summer)
 points(x, y, cex = .4, col = pt_col, pch = 16) # starting points
-plot(rts$lines, add = TRUE, col = line_col)  # routes
-end_pts <- rts$points[rts$points$timestep == end, ]  # end points
+
+lines <- sf::st_as_sf(rts, type = "line")  # convert to sf lines
+plot(lines, add = TRUE, col = line_col)  # routes
+
+end_pts <- rts[rts$timestep == end, ]  # end points
 points(x = end_pts$x, y = end_pts$y,
        cex = 0.4, pch = 12, col = pt_col)
 
 title(main = species(bf))
 ```
 
-Or use `plot_routes()` to visualize time as a color gradient. 
+## Simplified route() work flow
+
+`route()` will sample the eBirdstatus and trends distribution for the starting
+timestep to generate the locations if `x_coord` and `y_coord` are NULL. 
+
+Additionally, time can be specified with the `season` argument 
+possibly along with `season_buffer`. This uses eBird Status and Trends metadata
+stored in the BirdFlow object to determine the start and ending dates.
+
+The code below generates 10 routes for the prebreeding migration season using 
+the default season buffer of 1 week - extending 1 week before and after the 
+named season.
+
+```{r simple route}
+rts <- route(bf, n = 10, season = "prebreeding")
+```
+
+`plot_routes()` will visualize time as a color gradient using **ggplot2**. 
 
 ```{r plot routes}
 plot_routes(rts, bf)
-
 ```

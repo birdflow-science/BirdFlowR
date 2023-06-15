@@ -7,9 +7,7 @@
 animate_routes(routes, bf, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or
-\code{\link[=route_migration]{route_migration()}}.  The \verb{$point} component of such an object will also
-work.}
+\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
 \item{bf}{A BirdFlow object}
 
@@ -27,6 +25,14 @@ mapping of dates to colors regardless of the range of dates plotted.
 If FALSE then the data will be plotted using the full color scale.}
     \item{\code{pal}}{The color palette to use for plotting whe \code{use_seasonal_cols} is
 FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
+    \item{\code{barheight}}{The height of the color gradient legend bar.  Passed to
+\code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colorbar()}} as \code{barheight} argument. Depending on the output
+resolution and plot size this may need to be adjusted. Can take a number or
+the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
+    \item{\code{route_linewidth}}{Line width used for routes.}
+    \item{\code{coast_linewidth}}{Line width used for coastlines.}
+    \item{\code{dot_sizes}}{Two numbers indicating the smallest and largest dot sizes
+used to represent stay length.}
   }}
 }
 \value{

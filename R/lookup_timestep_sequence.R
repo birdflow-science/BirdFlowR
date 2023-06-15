@@ -16,9 +16,9 @@
 #' @param season_buffer Only used with `season` input. `season_buffer` is
 #'   passed to [lookup_season_timesteps()] and defaults to 1; it is the number
 #'   of timesteps to extend the season by at each end.
-#' @param n_steps Alternative to `end` for specifying when a sequence should
-#' end `n_steps` indicates how many timesteps the sequence will progress in
-#' `direction` from `start` The sequence will have `n_steps + 1` timesteps.
+#' @param n_steps Alternative to `end`  The end will be `n_steps` away from
+#' `start` in `direction`; and the resulting sequence will have `n_step`
+#' transitions and `n_steps + 1`  timesteps.
 #' @return An integer sequence of timesteps.
 #' @export
 #' @details
