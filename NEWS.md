@@ -1,3 +1,100 @@
+# BirdFlowR 0.1.0.9022
+2023-06-15
+
+### Overview
+
+This update merges `route_migration()` into `route()` which can now do 
+everything either of these functions previously did and at least one thing they
+couldn't ([#88](https://github.com/birdflow-science/BirdFlowR/issues/88)). 
+
+The returned object from `route()` is also changed: `$lines` are 
+dropped and `$points` are now returned in a new S3 class `BirdFlowRoutes`. With
+`plot_routes()` I don't think returning the lines is as useful as it was.  The 
+lines can be recreated with `sf:st_as_sf(rts)`.
+
+This closes [#103](https://github.com/birdflow-science/BirdFlowR/issues/103) and
+[#88](https://github.com/birdflow-science/BirdFlowR/issues/88)
+
+Details follow.
+
+### BREAKING CHANGES to `route()`
+- Dropped `row` and `col` arguments. `x_coord` and  `y_coord` are sufficient 
+  and I think preferred by users.
+- Renamed `n_each` argument to `n`. 
+- Renamed `x` argument to `bf`.
+- Changed order of arguments.
+- Added `from_marginals = TRUE` argument that controls which distributions are
+  used when sampling starting locations; I expect most users not to use this 
+  argument.
+- Specifying starting locations (via `x_coord` and `y_coord`) is now optional.
+  If those arguments are NULL (the default) then `n` starting positions will be 
+  sampled from the species distribution for the starting timestep. This 
+  sampling  was previously done only in `route_migration()`.
+- Changes to the returned object for both `route()` and `route_migration()`
+    * `route()` now returns a`BirdFlowRoutes` object, which is an extension of 
+      a data frame and almost always behaves like a data frame. 
+    * The `$lines` component of the previously returned list has been dropped,
+      and a modified version of what was `$points`  is returned. Use the
+      new `st_as_sf()` method for the`BirdFlowRoutes` object to produce the 
+      **sf** lines.
+    * The old `points$route` column has been renamed`route_id` 
+    * **Experimental** the returned `BirdFlowRoutes` object has attributes that 
+      contain much of the ancillary data in the parent BirdFlow object:  `geom`, 
+      `species`, `metadata`, and `dates`.  Additionally, a new item is added to 
+      `metadata`: `route_type = "synthetic"`.  This may be useful if we also
+      create `BirdFlowRoute` objects from tracking data. If you want to 
+      insulate yourself from the experimental aspects of this call 
+      `as.data.frame()` on the returned routes.
+    
+### Non-breaking changes
+  * Edits to vignettes and readme.
+  * `route_migration()` is deprecated. Its arguments are unchanged and it will
+    work but now throws a warning. Please transition to using `route()` with
+    the `season` argument. The returned object is changed - see changes to
+    `route()` above.
+  * A new method for `st_as_sf()` convert `BirdFlowRoutes` objects to **sf**
+    objects with either points or lines.  Use `st_as_sf(rts)` for lines or
+   `st_as_sf(rts, type = "point")` to convert to an *sf* points object.
+  * New `plot()` method for `BirdFlowRoutes` objects dispatches to 
+   `plot_routes()`.
+  * **Experimental:** `plot_route()` and `plot(BirdFlowRoutes)` now do not 
+    require the BirdFlow object - as long as the attributes added by `route()` 
+    are present.  If the `bf` argument is used it supersedes the route 
+    attributes so including it will make your code less likely to break if we 
+    change the `BirdFlowRoutes` class.
+    This is kind of nice though:
+      `route(bf, 5, season = "prebreeding") |> plot()` 
+  * A new print method for `BirdFlowRoutes` is there mostly to hide the
+    attributes while printing - but also has a new header line that states what
+    the species and object is.
+  * `plot_routes()` gains additional arguments to control line widths and dot 
+    sizing.  `animate_routes()` has access to them via `...`. 
+    
+### A note about the new `BirdFlowRoutes` class. 
+This class is very much a work in progress.  Here's where we stand.
+
+ * I'm committed to `route()` returning a data frame like object that contains
+   the data formerly in`rts$points` and I think the columns are fairly stable at 
+  this point.
+ * I'm fairly committed to making it an S3 "BirdFlowRoutes" object and, at a
+   minimum, including the CRS somewhere in the attributes. 
+ * I'm less committed to including all the other additional attributes. @slager
+   is working on making BirdFlowRoutes like objects 
+   from tracking data and I hope that together we can figure out what data this 
+   object should look like. 
+
+Right now the extra information in this class is used in only three places:
+
+  * `plot_routes()` and related `plot(BirdFlowRoutes)` 
+  * `st_as_sf(BirdFlowRoutes)`
+  * `print(BirdFlowRoutes)`
+  
+In all other ways it should behave like a data frame. Some data frame 
+manipulations will preserve attributes and class. Many will result in a standard
+data.frame.
+
+
+
 # BirdFlowR 0.1.0.9021
 
 * Added logo

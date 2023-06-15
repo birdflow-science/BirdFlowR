@@ -24,14 +24,14 @@ test_that("interval_log_likelihood returns expected values", {
   start <- 6
   end <- start + nsteps
   i <- get_distr(bf, start) |> sample_distr() |> as.logical() |> which()
-  rt <- route(bf, x_coord = i_to_x(i, bf), y_coord = i_to_y(i, bf),
+  observations <- route(bf, x_coord = i_to_x(i, bf), y_coord = i_to_y(i, bf),
               start = start, end = end)
-  observations <- rt$points
   observations$id <- 1:nrow(observations)
   sf_obs <- sf::st_as_sf(observations, coords= c("x", "y"))
   sf::st_crs(sf_obs) <- crs(bf)
   wgs <- sf::st_transform(sf_obs, sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
+  wgs <- wgs[, 1:2]
   colnames(wgs) <- c("lon", "lat")
   observations <- cbind(observations, wgs)
   observations$i <- xy_to_i(x = observations$x, y = observations$y, bf)

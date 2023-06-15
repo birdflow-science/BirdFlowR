@@ -15,7 +15,7 @@ test_that("route() works with a single distribution", {
   expect_no_error(pts <- route(bf, x_coord = loc$x, y_coord = loc$y,
                                start = start, end = end))
   pts <- as.data.frame(pts)
-  pts <- head(pts[!duplicated(pts[, c("route", "stay_id")]), ], 4)
+  pts <- head(pts[!duplicated(pts[, c("route_id", "stay_id")]), ], 4)
 
   expect_snapshot(pts)
 

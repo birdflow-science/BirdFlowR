@@ -23,7 +23,7 @@ plot_routes(
 \arguments{
 \item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
-\item{bf}{A BirdFlow object used for reference, o}
+\item{bf, x}{A BirdFlow object.}
 
 \item{facet}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -51,6 +51,8 @@ the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
 used to represent stay length.}
 
 \item{coast_linewidth}{Line width used for coastlines.}
+
+\item{...}{Passed to \code{plot_routes()}}
 }
 \value{
 a ggplot object. Use \code{\link[=print]{print()}} to display it.
@@ -77,12 +79,13 @@ data.frame.
 \examples{
 bf <- BirdFlowModels::amewoo
 n <- 10
-rts <- route_migration(bf, n)$points
+rts <- route(bf, n, season = "prebreeding")
+
 # Multiple routes on one plot
 plot_routes(rts, bf)
 
 # One panel per route
-plot_routes(rts[rts$route \%in\% 1:4, ], bf, facet = TRUE)
+plot_routes(rts[rts$route_id \%in\% 1:4, ], bf, facet = TRUE)
 
 # Returned plot object can be edited
 # Here we change the title and add an additional sf

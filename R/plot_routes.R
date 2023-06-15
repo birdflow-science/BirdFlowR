@@ -19,7 +19,7 @@
 #' data.frame.
 #'
 #' @param routes The output of [route()] or a similarly structured data frame.
-#' @param bf A BirdFlow object used for reference, o
+#' @param bf,x A BirdFlow object.
 #' @param facet if TRUE then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
 #' @param max_stay_len Used to scale the stay length dots. If NULL
@@ -39,6 +39,7 @@
 #' @param coast_linewidth Line width used for coastlines.
 #' @param dot_sizes Two numbers indicating the smallest and largest dot sizes
 #'  used to represent stay length.
+#' @param ... Passed to `plot_routes()`
 #'
 #' @return a ggplot object. Use [print()] to display it.
 #' @export
@@ -46,13 +47,13 @@
 #' @examples
 #'bf <- BirdFlowModels::amewoo
 #'n <- 10
-#'rts <- route_migration(bf, n)$points
-#
+#'rts <- route(bf, n, season = "prebreeding")
+#'
 #'# Multiple routes on one plot
 #'plot_routes(rts, bf)
 #'
 #'# One panel per route
-#'plot_routes(rts[rts$route %in% 1:4, ], bf, facet = TRUE)
+#'plot_routes(rts[rts$route_id %in% 1:4, ], bf, facet = TRUE)
 #'
 #'# Returned plot object can be edited
 #'# Here we change the title and add an additional sf
@@ -336,6 +337,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   return(p)
 }
+
 
 
 # Based on a sequence of timesteps starting with year one
