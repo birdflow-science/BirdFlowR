@@ -31,6 +31,15 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
 
   expect_snapshot(b)
 
+  # Snapshot added to verify that treat_na_as_zero = FALSE recreates old
+  # behavior.  Snapshot created before function changes.
+  # It shows row index and density for all non-zero cells at timestep 5
+  d <- get_distr(b, 5)
+  df <- data.frame(i = 1:length(d), density = d)
+  df <- df[!df$density == 0, ]
+  rownames(df) <- NULL
+  expect_snapshot(df)
+
   created_files <- list.files(dir)
   expected_files <- c("example_data_2021_50km.hdf5",
                       "example_data_2021_50km.tif",
