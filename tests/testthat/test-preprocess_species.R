@@ -5,6 +5,9 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE, tiff = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
+  expect_true(all((ext(a)[,] %% xres(a)) == 0))  # Test if origin is at 0, 0
+
+
 })
 
 
@@ -28,6 +31,10 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
                             res = 50,
                             out_dir = dir,
                             ))
+
+  # Check if origin is at 0,0  - failed prior to 6/20/2023
+  expect_true(all((ext(b)[,] %% xres(b)) == 0))
+
 
   expect_snapshot(b)
 
@@ -143,6 +150,10 @@ test_that("preprocess_species() works with clip", {
   })
 
 })
+
+
+
+
 
 
 

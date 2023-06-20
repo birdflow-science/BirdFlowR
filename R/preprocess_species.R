@@ -194,7 +194,6 @@ preprocess_species <- function(species,
   er <- ebirdst::ebirdst_runs
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
-
   if (verbose)
     cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n",
         sep = "")
@@ -558,16 +557,16 @@ preprocess_species <- function(species,
 
   mask <- make_mask(mask)  # re-crop to data in new projection
 
-  # Add leading rows and columns to maintain origin of 0 after aggregation
-  # (extent / resolution will be an integer in model)
+  # Add leading rows and columns to maintain origin of 0, 0 after aggregation.
+  #  extent / resolution will be an integer in model.
   e <- ext(mask)
   new_ext <- e
-  if (!isTRUE(all.equal(e[1] %% res, 0, check.attributes = FALSE))) {
+  if (!isTRUE(all.equal(e[1] %% res_m, 0, check.attributes = FALSE))) {
     # n_to_add is the number of columns to add on the left
-    n_to_add <- factor - round((e[1] %% res_m) / reproject_res)
+    n_to_add <- round((e[1] %% res_m) / reproject_res)
     new_ext[1] <- e[1] - n_to_add * reproject_res
   }
-  if (!isTRUE(all.equal(e[4] %% res, 0, check.attributes = FALSE))) {
+  if (!isTRUE(all.equal(e[4] %% res_m, 0, check.attributes = FALSE))) {
     # n_to_add is the number of rows to add at the top
     n_to_add <- factor - round((as.numeric(e[4]) %% res_m) / reproject_res)
     new_ext[4] <- e[4] + n_to_add * reproject_res
