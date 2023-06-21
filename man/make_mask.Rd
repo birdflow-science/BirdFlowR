@@ -2,15 +2,20 @@
 % Please edit documentation in R/make_mask.R
 \name{make_mask}
 \alias{make_mask}
-\title{function to determine the extent of a SpatRaster}
+\title{Internal function to determine the extent of data in eBird rasters.}
 \usage{
-make_mask(x, count = FALSE)
+make_mask(x, count = FALSE, assume_no_na = FALSE)
 }
 \arguments{
 \item{x}{a SpatRaster, typically it's multilayered and containins the
 distribution of a species over time.}
 
-\item{count}{= FALSE}
+\item{count}{if TRUE the returned value will be the count of non-zero cells
+at the raster location (accross timesteps).
+Otherwise a logical is returned, with TRUE to indicate any non-zero value.}
+
+\item{assume_no_na}{Set to TRUE if there aren't any NA values in the raster
+for a slight efficiency improvement.}
 }
 \value{
 a single layer SpatRaster with the same CRS, alignment, and
@@ -27,7 +32,6 @@ NA does not count as non-zero.  The result is cropped to the extent of the
 data in \code{x}. It's used in Birdflow to preprocess data.
 }
 \details{
-\code{get_data_mask} is currently a public function but may be made private in
-future versions of the package.
+\code{make_mask} is a private function.
 }
 \keyword{internal}

@@ -55,7 +55,7 @@
 #'   will be chosen that yields this many fitted parameters. See `gpu_ram` for
 #'   the default way of setting `max_params` and `res`.
 #' @param gpu_ram Gigabytes of ram on GPU machine that will fit the models.
-#'   If `res` is NULL and `max_params` is missing this is used to estimate
+#'   If `res` is NULL and `max_params` is NULL this is used to estimate
 #'   `max_params`which is, in turn, used to determine the resolution. Ignored
 #'   if either` res` or `max_params` is set.
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
@@ -64,10 +64,26 @@
 #' @param dummy_dynamic_mask set to TRUE to force all cells in the dynamic mask
 #'   to TRUE. This creates a BirdFlow object with a dynamic mask component
 #'   that is compatible with the current BirdFlowR package but that mimics the
-#'   older  predynamic mask BirdFlow models.  If fit the resulting object will
+#'   older  pre-dynamic mask BirdFlow models.  If fit the resulting object will
 #'   have transitions at every timestep among all active cells.  The only
 #'   reason to set this to TRUE is for comparsion testing and quality control
 #'   during the transition, and this parameter may eventually be dropped.
+#' @param treat_na_as_zero If TRUE than NA in eBird status and trends data is
+#'   converted to zero and bilinear interpolation is used during transformation.
+#'   Otherwise NA is kept as NA and nearest neighbor is used during
+#'   interpolation and NA's are ignored when calculating the average value for
+#'   a coarse cell from constituent finer cells. This argument was added
+#'   June 2023 to address
+#'   [Issue #12](https://github.com/birdflow-science/BirdFlowR/issues/12); it
+#'   allows comparison between the new default (TRUE) and the old behavior
+#'   which is reproduced with `FALSE`.  We switched to treating NA as zero
+#'   because NA frequently represents very dissimilar habitat to
+#'   nearby non-NA values, but in the calculations using NA assumest that the NA
+#'   cells are similar to nearby values.
+#'   `dummy_dynamic_mask` this is here primarily for testing during the
+#'   transition and may also eventually be dropped.
+#'
+#'
 #'
 #' @return returns a BirdFlow model object that lacks marginals, but is
 #'   otherwise complete.
@@ -101,18 +117,19 @@
 #' }
 # nolint end
 # nolint start: cyclocomp_linter.
-preprocess_species <- function(species,
-                               out_dir,
+preprocess_species <- function(species = NULL,
+                               out_dir = NULL,
                                res = NULL,
                                hdf5 = TRUE,
                                tiff = FALSE,
                                overwrite = TRUE,
-                               crs,
-                               clip,
-                               max_params,
+                               crs = NULL,
+                               clip = NULL,
+                               max_params = NULL,
                                gpu_ram = 12,
                                skip_quality_checks = FALSE,
-                               dummy_dynamic_mask = FALSE
+                               dummy_dynamic_mask = FALSE,
+                               treat_na_as_zero = TRUE
 
 ) {
   # ebirdst is listed under suggests so may not be installed.
@@ -126,7 +143,6 @@ preprocess_species <- function(species,
   }
 
   # Validate inputs
-
   if (is.null(species))
     stop("species cannot be NULL")
 
@@ -137,9 +153,9 @@ preprocess_species <- function(species,
     stop("species cannot be NA")
 
   stopifnot(is.logical(tiff),
-             is.logical(hdf5),
-             length(tiff) == 1,
-             length(hdf5) == 1)
+            is.logical(hdf5),
+            length(tiff) == 1,
+            length(hdf5) == 1)
 
   # Handle "example_data" as a species
   # use "example_data" when downloading, loading raster, and writing files
@@ -171,6 +187,8 @@ preprocess_species <- function(species,
   verbose <- birdflow_options("verbose")
   any_output <- hdf5 || tiff
   max_param_per_gb <- birdflow_options("max_param_per_gpu_gb")
+  project_method <- ifelse(treat_na_as_zero, "bilinear", "near")
+
 
   # Create empty BirdFlow object
   # This is a nested list of all the components but most are NA.
@@ -181,7 +199,7 @@ preprocess_species <- function(species,
 
   # Check for output directories.
   if (any_output) {
-    if (missing(out_dir))
+    if (is.null(out_dir))
       stop("Need an output directory. Please set out_dir.")
     out_dir <- gsub("/$|\\\\$", "", out_dir) # drop trailing slash
     if (!dir.exists(out_dir))
@@ -193,7 +211,6 @@ preprocess_species <- function(species,
   #----------------------------------------------------------------------------#
   er <- ebirdst::ebirdst_runs
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
-
 
   if (verbose)
     cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n",
@@ -282,14 +299,14 @@ preprocess_species <- function(species,
 
   # Load map parameters and set crs
   mp <- ebirdst::load_fac_map_parameters(path = sp_path)
-  if (missing(crs)) {
+  if (is.null(crs)) {
     crs <- terra::crs(mp$custom_projection)
   } else {
     crs <- terra::crs(crs)
   }
 
   # Format and reproject clip
-  if (!missing(clip)) {
+  if (!is.null(clip)) {
     if (!inherits(clip, "SpatVector")) {
       clip <- terra::vect(clip)
     }
@@ -322,7 +339,7 @@ preprocess_species <- function(species,
   #----------------------------------------------------------------------------#
   if (is.null(res)) {
 
-    if (missing(max_params)) {
+    if (is.null(max_params)) {
       stopifnot(is.numeric(gpu_ram),
                 length(gpu_ram) == 1,
                 !is.na(gpu_ram),
@@ -339,13 +356,23 @@ preprocess_species <- function(species,
     # time (active_sq_m)
     abunds <- ebirdst::load_raster("abundance",
                                    path = sp_path, resolution = "lr")
-    mask <- make_mask(x = abunds)
 
-    if (!missing(clip)) {
+    if(treat_na_as_zero){
+      v <- terra::values(abunds)
+      v[is.na(v)] <- 0
+      terra::values(abunds) <- v
+    }
+
+    mask <- make_mask(x = abunds, assume_no_na = treat_na_as_zero)
+
+    if (!is.null(clip)) {
       clip2 <- terra::project(clip, terra::crs(mask))
       mask <- terra::mask(mask, clip2)
       mask[is.na(mask)] <- FALSE
       abunds <- terra::mask(abunds, clip2)
+
+
+
 
       if (verbose) {
         # Calculate percent of density lost
@@ -378,12 +405,10 @@ preprocess_species <- function(species,
 
     # Iteratively attempt to set resolution
     # there's some inherent slop in the predictions because not all
-    # the course cells fully overlap fine cells that have data
+    # the coarse cells fully overlap fine cells that have data
     for (i in 1:n_attempts) {
       # Calculate target resolution
       f <- function(res) (predict_params(a_stats, res) - target_params)^2
-      #o <- optim(par = list(res = a_stats$res), fn = f, method = "Brent",
-      #           lower = 1, upper = 1000)
       o <- stats::optimize(f = f, interval = c(1, 1000))
 
       res <-  o$minimum
@@ -394,18 +419,15 @@ preprocess_species <- function(species,
         cat("  (", round(res, 3), "km chosen)\n", sep = "")
       }
 
-      # It's still possible to overshoot  - I think because along
-      # edges single values at a fine resolution may map to a large cell
-
       # Trial transformation
       initial_res <- mean(res(abunds))
       factor <- round(res_m / initial_res)
       if (factor < 1)
         factor <- 1
       reproject_res <- res_m / factor
-      trial_ref <-  terra::project(mask, crs, method = "near", origin = 0,
-                                   res = reproject_res)
-      trial <- terra::project(abunds, trial_ref)
+      trial_ref <-  terra::project(mask, crs, method = project_method,
+                                   origin = 0, res = reproject_res)
+      trial <- terra::project(abunds, trial_ref, method = project_method)
 
       if (factor != 1) {
         trial <- terra::aggregate(trial,
@@ -436,7 +458,7 @@ preprocess_species <- function(species,
 
     if (pct_of_target > 100 || pct_of_target < 90)
       cat("  Failed to find a resolution that resulted in > 90% and < 100 % of",
-      "the target parameters.\n")
+          "the target parameters.\n")
 
     # Round
     breaks <-  c(-Inf, 2.5,  5,  300, 600, Inf)  # in km
@@ -446,12 +468,12 @@ preprocess_species <- function(species,
     if (verbose)
       cat("Rounded to", res, "km final resolution.\n")
 
-    if (!missing(clip) && verbose) {
+    if (!is.null(clip) && verbose) {
       cat("Clipping removed ", format(pct_lost, nsmall = 2),
           "% of the total density\n", sep = "")
       rm(pct_lost)
     }
-  }  # End if missing res
+  }  # End if NULL res
 
   if (download_species == "example_data" && res < 30) {
     if (verbose)
@@ -467,7 +489,7 @@ preprocess_species <- function(species,
   if (any_output) {
     out_base <-
       file.path(out_dir, paste0(download_species, "_", st_year, "_", res, "km"))
-    if (!missing(clip))
+    if (!is.null(clip))
       out_base <- paste0(out_base, "_clip")
 
     paths <- list()
@@ -531,13 +553,24 @@ preprocess_species <- function(species,
                                      path = sp_path,
                                      resolution = load_res)
 
+  if (treat_na_as_zero) {
+    # Overwrite NA with zero in three abundance
+    for(name in c("abunds", "abunds_lci", "abunds_uci")) {
+      r <- get(name)
+      v <- terra::values(r)
+      v[is.na(v)] <- 0
+      terra::values(r) <- v
+      assign(name, r)
+    }
+  }
+
   if (verbose)
     cat("Creating mask in target resolution and projection\n")
 
   # Make mask in original coordinate system
   # TRUE if a cell has non-zero data in any layer (timestep) and
   # will be cropped to extent of TRUE cells
-  mask <- make_mask(abunds)
+  mask <- make_mask(abunds, assume_no_na = treat_na_as_zero)
 
   # Re-project mask and re-crop to extent of data in new projection
   # set output resolution to be a factor of the target resolution so that
@@ -547,9 +580,10 @@ preprocess_species <- function(species,
   if (factor < 1)
     factor <- 1
   reproject_res <- res_m / factor
-  mask <- terra::project(mask, crs, method = "near", origin = 0,
-                        res = reproject_res)
-  if (!missing(clip)) {
+
+  mask <- terra::project(mask, crs, method = project_method, origin = 0,
+                         res = reproject_res)
+  if (!is.null(clip)) {
     # Note locally mask is a SpatRast that indicates which cells
     # have data (at any timestep). The terra mask function
     #  sets cells to NA if they are outside the polygon.
@@ -558,16 +592,16 @@ preprocess_species <- function(species,
 
   mask <- make_mask(mask)  # re-crop to data in new projection
 
-  # Add leading rows and columns to maintain origin of 0 after aggregation
-  # (extent / resolution will be an integer in model)
+  # Add leading rows and columns to maintain origin of 0, 0 after aggregation.
+  #  extent / resolution will be an integer in model.
   e <- ext(mask)
   new_ext <- e
-  if (!isTRUE(all.equal(e[1] %% res, 0, check.attributes = FALSE))) {
+  if (!isTRUE(all.equal(e[1] %% res_m, 0, check.attributes = FALSE))) {
     # n_to_add is the number of columns to add on the left
-    n_to_add <- factor - round((e[1] %% res_m) / reproject_res)
+    n_to_add <- round((e[1] %% res_m) / reproject_res)
     new_ext[1] <- e[1] - n_to_add * reproject_res
   }
-  if (!isTRUE(all.equal(e[4] %% res, 0, check.attributes = FALSE))) {
+  if (!isTRUE(all.equal(e[4] %% res_m, 0, check.attributes = FALSE))) {
     # n_to_add is the number of rows to add at the top
     n_to_add <- factor - round((as.numeric(e[4]) %% res_m) / reproject_res)
     new_ext[4] <- e[4] + n_to_add * reproject_res
@@ -579,15 +613,17 @@ preprocess_species <- function(species,
   # Reproject data and crop to mask
   if (verbose)
     cat("Reprojecting and cropping to mask:\n\tabundance")
-  abunds <- terra::project(abunds, mask, method = "near")
+  abunds <- terra::project(abunds, mask, method = project_method)
   if (verbose)
     cat(" done.\n\tUpper CI")
-  abunds_uci <- terra::project(abunds_uci, mask, method = "near")
+  abunds_uci <- terra::project(abunds_uci, mask, method =  project_method)
   if (verbose)
     cat(" done.\n\tLower CI")
-  abunds_lci <- terra::project(abunds_lci, mask, method = "near")
+  abunds_lci <- terra::project(abunds_lci, mask, method =  project_method)
   if (verbose)
     cat(" done.\n")
+
+
 
   # aggregate to target resolution
   if (factor != 1) {
@@ -730,7 +766,7 @@ preprocess_species <- function(species,
     cat("Model has:\n\t",
         sum(m), " active cells,\n\t", n_transitions, " transitions, and\n\t",
         format(n_params, big.mark = ","), " parameters", sep = "")
-    if (!missing(max_params)) {
+    if (!is.null(max_params)) {
       pct_max_params <- n_params / max_params * 100
       cat(", ", round(pct_max_params, 1), "% of maximum parameters\n", sep = "")
     } else {

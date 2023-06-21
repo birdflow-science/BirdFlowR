@@ -5,18 +5,19 @@
 \title{prepare eBird Status and Trends data for BirdFlow model fitting}
 \usage{
 preprocess_species(
-  species,
-  out_dir,
+  species = NULL,
+  out_dir = NULL,
   res = NULL,
   hdf5 = TRUE,
   tiff = FALSE,
   overwrite = TRUE,
-  crs,
-  clip,
-  max_params,
+  crs = NULL,
+  clip = NULL,
+  max_params = NULL,
   gpu_ram = 12,
   skip_quality_checks = FALSE,
-  dummy_dynamic_mask = FALSE
+  dummy_dynamic_mask = FALSE,
+  treat_na_as_zero = TRUE
 )
 }
 \arguments{
@@ -54,7 +55,7 @@ will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}.}
 
 \item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
-If \code{res} is NULL and \code{max_params} is missing this is used to estimate
+If \code{res} is NULL and \code{max_params} is NULL this is used to estimate
 \code{max_params}which is, in turn, used to determine the resolution. Ignored
 if either\code{ res} or \code{max_params} is set.}
 
@@ -65,10 +66,25 @@ not all of four ranges are modeled (based on
 \item{dummy_dynamic_mask}{set to TRUE to force all cells in the dynamic mask
 to TRUE. This creates a BirdFlow object with a dynamic mask component
 that is compatible with the current BirdFlowR package but that mimics the
-older  predynamic mask BirdFlow models.  If fit the resulting object will
+older  pre-dynamic mask BirdFlow models.  If fit the resulting object will
 have transitions at every timestep among all active cells.  The only
 reason to set this to TRUE is for comparsion testing and quality control
 during the transition, and this parameter may eventually be dropped.}
+
+\item{treat_na_as_zero}{If TRUE than NA in eBird status and trends data is
+converted to zero and bilinear interpolation is used during transformation.
+Otherwise NA is kept as NA and nearest neighbor is used during
+interpolation and NA's are ignored when calculating the average value for
+a coarse cell from constituent finer cells. This argument was added
+June 2023 to address
+\href{https://github.com/birdflow-science/BirdFlowR/issues/12}{Issue #12}; it
+allows comparison between the new default (TRUE) and the old behavior
+which is reproduced with \code{FALSE}.  We switched to treating NA as zero
+because NA frequently represents very dissimilar habitat to
+nearby non-NA values, but in the calculations using NA assumest that the NA
+cells are similar to nearby values.
+\code{dummy_dynamic_mask} this is here primarily for testing during the
+transition and may also eventually be dropped.}
 }
 \value{
 returns a BirdFlow model object that lacks marginals, but is

@@ -61,11 +61,12 @@ ending timestep.  Since many models are circular \code{direction} is used to
 determine whether to go forward or backwards from \code{start} to \code{end};
 \code{direction} will default to forward.
 \item \strong{Season}. Input a season name (or alias) into \code{season}.  \code{"all"} can
-also be used to indicate all timesteps.  If \code{season} is used
-\code{season_bufffer} indicates the number of timesteps to
+also be used to indicate all timesteps, in which case with cyclical models
+the last timestep will match the first.  If \code{season} is used
+(and isn't \verb{"all}) \code{season_bufffer} indicates the number of timesteps to
 extend the season by.  The default of 1 means that the sequence will start
 1 timestep (week) before and end 1 timestep after the dates for the season
-returned by \verb{[species_info()]}. \code{direction} is followed and defaulta to
+returned by \verb{[species_info()]}. \code{direction} is followed and defaults to
 forward.
 \item \strong{Start and offset}. Use \code{start} with a timestep or date input and
 \code{n_steps} to create a sequence that starts at \code{start} and then proceeds

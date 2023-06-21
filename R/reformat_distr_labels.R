@@ -43,10 +43,13 @@ reformat_distr_labels <- function( x, bf){
     if(is.null(dn))
       return(x)
 
-    time_dimension <- which(names(dn) %in%  c("timestep", "time")) # as of 3/18 should be "time" older models used "timestep"
+    time_dimension <- which(names(dn) %in%  c("timestep", "time"))[1] # as of 3/18 should be "time" older models used "timestep"
+
     if(length(time_dimension) == 0 )
       return(x)
 
+    # back compatability code:
+    names(dn)[time_dimension] <- "time"
 
     # Check for timestep column names
     if(!all(grepl("^t[[:digit:]]+$", dn[[time_dimension]]) ) )
@@ -55,7 +58,6 @@ reformat_distr_labels <- function( x, bf){
     time_labels <- reformat_timestep(dn[[time_dimension]], bf)
 
     dn[[time_dimension]] <- time_labels
-    names(dn)[2] <- "time"  # standardize old labels
 
     dimnames(x) <- dn
 

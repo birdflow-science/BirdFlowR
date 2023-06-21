@@ -41,11 +41,12 @@
 #'  `direction` will default to forward.
 #'
 #'  3. **Season**. Input a season name (or alias) into `season`.  `"all"` can
-#'  also be used to indicate all timesteps.  If `season` is used
-#'  `season_bufffer` indicates the number of timesteps to
+#'  also be used to indicate all timesteps, in which case with cyclical models
+#'  the last timestep will match the first.  If `season` is used
+#'  (and isn't `"all`) `season_bufffer` indicates the number of timesteps to
 #'  extend the season by.  The default of 1 means that the sequence will start
 #'  1 timestep (week) before and end 1 timestep after the dates for the season
-#'  returned by `[species_info()]`. `direction` is followed and defaulta to
+#'  returned by `[species_info()]`. `direction` is followed and defaults to
 #'  forward.
 #'
 #'  4. **Start and offset**. Use `start` with a timestep or date input and
@@ -123,7 +124,7 @@ lookup_timestep_sequence <- function (x,
   # Season defaults to "all" if both "start" and "season" are omitted.
   # Because function defaults to all timesteps
   if(is.null(season) && is.null(start)){
-    season = "all"
+    season <- "all"
   }
 
   # Handle season input
@@ -199,13 +200,15 @@ lookup_timestep_sequence <- function (x,
             length(start) == 1,
             length(end) == 1 )
 
- if(start == end)
-    stop("Start and stop resolved to same timestep (", start, ")")
+
+  is_backward <- direction == "backward"
 
   # loops is a flag that indicates we pass over the year boundary from last
   # timestep to first or from first to last
-  is_backward <- direction == "backward"
-  loops <- ( start < end & is_backward) | (start > end & !is_backward)
+  loops <- ( start < end & is_backward) ||
+    (start > end & !is_backward) ||
+    start == end
+
 
 
   if(loops && !is_cyclical(x))
@@ -250,7 +253,7 @@ lookup_timestep_sequence <- function (x,
 #' @param x a BirdFlow object
 #' @param season one of the seasons
 #' returned by [species_info()], a season alias, or  or `"all"`
-#' for all timesteps in the model.
+#' for all timesteps in the model
 #' @param season_buffer the number of extra timesteps to add to the beginning
 #' and end of the season.
 #' @return a series of integers indicating which timesteps correspond with the
@@ -283,7 +286,10 @@ lookup_season_timesteps <- function (x, season, season_buffer = 1) {
 
 
   if( season == "all"){
-    return(seq_len(n_timesteps(x)))
+    s <- seq_len(n_timesteps(x))
+    if(is_cyclical(x))
+      s <- c(s, 1)
+    return(s)
   }
 
 

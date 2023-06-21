@@ -5,6 +5,9 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE, tiff = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
+  expect_true(all((ext(a)[,] %% xres(a)) == 0))  # Test if origin is at 0, 0
+
+
 })
 
 
@@ -27,9 +30,23 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
                             tiff = TRUE,
                             res = 50,
                             out_dir = dir,
+                            treat_na_as_zero = FALSE
                             ))
 
+  # Check if origin is at 0,0  - failed prior to 6/20/2023
+  expect_true(all((ext(b)[,] %% xres(b)) == 0))
+
+
   expect_snapshot(b)
+
+  # Snapshot added to verify that treat_na_as_zero = FALSE recreates old
+  # behavior.  Snapshot created before function changes.
+  # It shows row index and density for all non-zero cells at timestep 5
+  d <- get_distr(b, 5)
+  df <- data.frame(i = 1:length(d), density = d)
+  df <- df[!df$density == 0, ]
+  rownames(df) <- NULL
+  expect_snapshot(df)
 
   created_files <- list.files(dir)
   expected_files <- c("example_data_2021_50km.hdf5",
@@ -134,6 +151,10 @@ test_that("preprocess_species() works with clip", {
   })
 
 })
+
+
+
+
 
 
 
