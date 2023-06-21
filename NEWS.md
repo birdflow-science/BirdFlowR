@@ -1,3 +1,50 @@
+# BirdFlowR 0.1.0.9023
+2023-06-05
+
+### Overview
+
+  This update shouldn't break anything but it will change default behaviors of
+  a few functions:
+   1. `preprocess_species()`  Models preprocessed after this update will 
+  be different then older models. 
+  
+   2. `lookup_timestep_sequence()` now allows looking up a cyclical
+   sequence that represents a full year of transitions and `season = all` 
+   returns the one more timestep then it used to `c(1:52, 1)`). 
+   
+   3. The code in `distribution_performance()` is unchanged but its default 
+   behavior is affected by the change in `lookup_timestep_sequence()`. It now
+   includes the transition from the last to first timesteps in the calculations 
+   with the default time arguments.
+   
+### Details
+
+* Fixed bug in `preprocess_species()` that caused it to sometimes create
+  BirdFlow models where the pixels didn't align with the origin.  There's 
+  nothing wrong with the previous behavior from a modelling standpoint
+  but always aligning to the origin has some logistical benefits and was the
+  original intent. 
+
+* Fixed bug in `reformat_distribution_labels()` with 3 dimensional 
+  input it would erroneously change the second dimension name to `"time"`.
+  This caused `predict()` to produce confusing dimension lables when called on 
+  multiple distributions at once.
+
+* `lookup_timestep_sequence()` now allows full cycle sequence and returns 
+  full cycle sequences with `season = "all"`.  This means including all 
+  timesteps and then repeating the first timestep.  This also allows setting
+  `start`  and `end` to the same timestep as well (to loop through a whole year).
+  This will change results from `distr_performance()` for whole year models.
+  
+* `preprocess_species()` gains a new argument and default behavior.  It now 
+   replaces NA values in the distributions with zero prior to transforming 
+   and changing the resolution, and uses bilinear interpolation in place of 
+   nearest neighbor.  Set `treat_na_as_zero` to `FALSE` for old behavior. 
+   The new way seems better though.  See 
+   detailed explanation in 
+   [Issue #12](https://github.com/birdflow-science/BirdFlowR/issues/12).
+  
+
 # BirdFlowR 0.1.0.9022
 2023-06-15
 

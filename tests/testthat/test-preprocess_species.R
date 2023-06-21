@@ -30,6 +30,7 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
                             tiff = TRUE,
                             res = 50,
                             out_dir = dir,
+                            treat_na_as_zero = FALSE
                             ))
 
   # Check if origin is at 0,0  - failed prior to 6/20/2023

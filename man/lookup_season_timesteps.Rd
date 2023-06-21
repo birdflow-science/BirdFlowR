@@ -11,7 +11,7 @@ lookup_season_timesteps(x, season, season_buffer = 1)
 
 \item{season}{one of the seasons
 returned by \code{\link[=species_info]{species_info()}}, a season alias, or  or \code{"all"}
-for all timesteps in the model.}
+for all timesteps in the model}
 
 \item{season_buffer}{the number of extra timesteps to add to the beginning
 and end of the season.}

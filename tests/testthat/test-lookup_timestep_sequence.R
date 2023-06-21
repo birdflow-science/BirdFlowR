@@ -174,11 +174,11 @@ test_that("lookup_timestep_sequence() works with 'all'", {
 
   # Forward
   s <- lookup_timestep_sequence(bf, "all")
-  expect_equal(s, 1:52)
+  expect_equal(s, c(1:52, 1))
 
   # Backward
   s <- lookup_timestep_sequence(bf, "all", direction = "backward")
-  expect_equal(s, 52:1)
+  expect_equal(s, c(1, 52:1))
 
 })
 
