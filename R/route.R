@@ -9,10 +9,11 @@
 #' will each be duplicated `n` times.
 #' @param x_coord,y_coord  Optional, if NULL starting points will be drawn from
 #'  the species distribution at the initial timestep.
-#' @param from_marginals If sampling to create starting positions
-#' `from_marginals` is passed on to [get_distr()] to control whether the
-#' sampled distribution is from the model marginals or (the default) from the
-#' eBird Status and Trends distribution.
+#' @param from_marginals Use `FALSE` (the default) to use
+#' distributions derived directly from eBird Status and Trends when sampling
+#' starting locations. Set to `TRUE` to
+#' sample from distributions derived from the fitted model parameters stored in
+#' the marginals. Passed to [get_distr()].
 #' @inheritDotParams lookup_timestep_sequence -x
 #' @return A BirdFlowRoutes object with columns:
 #'    \item{`x`, `y`}{coordinates of point along route}

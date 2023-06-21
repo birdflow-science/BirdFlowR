@@ -16,10 +16,11 @@ will each be duplicated \code{n} times.}
 \item{x_coord, y_coord}{Optional, if NULL starting points will be drawn from
 the species distribution at the initial timestep.}
 
-\item{from_marginals}{If sampling to create starting positions
-\code{from_marginals} is passed on to \code{\link[=get_distr]{get_distr()}} to control whether the
-sampled distribution is from the model marginals or (the default) from the
-eBird Status and Trends distribution.}
+\item{from_marginals}{Use \code{FALSE} (the default) to use
+distributions derived directly from eBird Status and Trends when sampling
+starting locations. Set to \code{TRUE} to
+sample from distributions derived from the fitted model parameters stored in
+the marginals. Passed to \code{\link[=get_distr]{get_distr()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
