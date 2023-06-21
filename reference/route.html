@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9022</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9023</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,10 +85,11 @@ the species distribution at the initial timestep.</p></dd>
 
 
 <dt>from_marginals</dt>
-<dd><p>If sampling to create starting positions
-<code>from_marginals</code> is passed on to <code><a href="get_distr.html">get_distr()</a></code> to control whether the
-sampled distribution is from the model marginals or (the default) from the
-eBird Status and Trends distribution.</p></dd>
+<dd><p>Use <code>FALSE</code> (the default) to use
+distributions derived directly from eBird Status and Trends when sampling
+starting locations. Set to <code>TRUE</code> to
+sample from distributions derived from the fitted model parameters stored in
+the marginals. Passed to <code><a href="get_distr.html">get_distr()</a></code>.</p></dd>
 
 
 <dt>...</dt>

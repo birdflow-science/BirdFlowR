@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9022</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9023</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,23 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9023" id="birdflowr-0109023">BirdFlowR 0.1.0.9023<a class="anchor" aria-label="anchor" href="#birdflowr-0109023"></a></h2>
+<p>2023-06-05</p>
+<div class="section level4">
+<h4 id="overview-0-1-0-9023">Overview<a class="anchor" aria-label="anchor" href="#overview-0-1-0-9023"></a></h4>
+<p>This update shouldn’t break anything but it will change default behaviors of a few functions: 1. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> Models preprocessed after this update will be different then older models.</p>
+<ol start="2" style="list-style-type: decimal"><li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now allows looking up a cyclical sequence that represents a full year of transitions and <code>season = all</code> returns the one more timestep then it used to <code>c(1:52, 1)</code>).</p></li>
+<li><p>The code in <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> is unchanged but its default behavior is affected by the change in <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>. It now includes the transition from the last to first timesteps in the calculations with the default time arguments.</p></li>
+</ol></div>
+<div class="section level4">
+<h4 id="details-0-1-0-9023">Details<a class="anchor" aria-label="anchor" href="#details-0-1-0-9023"></a></h4>
+<ul><li><p>Fixed bug in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> that caused it to sometimes create BirdFlow models where the pixels didn’t align with the origin. There’s nothing wrong with the previous behavior from a modelling standpoint but always aligning to the origin has some logistical benefits and was the original intent.</p></li>
+<li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> to produce confusing dimension lables when called on multiple distributions at once.</p></li>
+<li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now allows full cycle sequence and returns full cycle sequences with <code>season = "all"</code>. This means including all timesteps and then repeating the first timestep. This also allows setting <code>start</code> and <code>end</code> to the same timestep as well (to loop through a whole year). This will change results from <code>distr_performance()</code> for whole year models.</p></li>
+<li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a new argument and default behavior. It now replaces NA values in the distributions with zero prior to transforming and changing the resolution, and uses bilinear interpolation in place of nearest neighbor. Set <code>treat_na_as_zero</code> to <code>FALSE</code> for old behavior. The new way seems better though. See detailed explanation in <a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">Issue </a><a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">#12</a>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9022" id="birdflowr-0109022">BirdFlowR 0.1.0.9022<a class="anchor" aria-label="anchor" href="#birdflowr-0109022"></a></h2>
 <p>2023-06-15</p>
