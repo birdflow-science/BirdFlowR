@@ -692,6 +692,7 @@ preprocess_species <- function(species = NULL,
   # Update metadata
   export$metadata$n_active <- sum(m)
   export$metadata$n_transitions <- n_transitions <- ncol(distr)
+  export$metadata$timestep_padding <- nchar(n_transitions)
 
   # Append first column onto end so we have full cycle of transitions
   distr <- cbind(distr, distr[, 1, drop = FALSE])

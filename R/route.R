@@ -55,8 +55,8 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL, from_marginals = F
   from_coordinates <- !is.null(x_coord) && !is.null(y_coord)
 
   # Time
-  transitions <- lookup_transitions(bf, ...)
   timesteps <-  lookup_timestep_sequence(bf, ...)
+  transitions <- as_transitions(timesteps, bf)
   start <- timesteps[1]
   end <-  timesteps[length(timesteps)]
 

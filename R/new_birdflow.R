@@ -48,6 +48,7 @@ new_BirdFlow <- function(){
                    n_transitions = NA_integer_,
                    n_active = NA_integer_,
                    n_timesteps = NA_integer_,
+                   timestep_padding = NA_integer_,
                    ebird_version_year = NA_integer_,
                    ebird_release_year = NA_integer_,
                    ebird_access_end_date = NA,

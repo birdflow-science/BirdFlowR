@@ -166,6 +166,8 @@ import_birdflow_v3 <- function(hdf5) {
     stringr::str_pad(x, width = nchar(nt), pad = 0)
   }
   nt <- length(marg)
+  bf$metadata$n_transitions <- nt
+  bf$metadata$timestep_padding <- nchar(nt)
   circular <- nt == length(unique(dates$date))
   bf$marginals <- vector(mode = "list", length = nt)
 
@@ -181,7 +183,6 @@ import_birdflow_v3 <- function(hdf5) {
     names(bf$marginals)[i] <- label
   }
   bf$metadata$has_marginals <- TRUE
-  bf$metadata$n_transitions <- nt
 
   # Save distributions
   bf$distr <- h5read(hdf5, "distr", native = TRUE)
@@ -217,34 +218,8 @@ import_birdflow_v3 <- function(hdf5) {
   dimnames(dm) <- list(i = NULL, time = paste0("t", bf$dates$interval))
   bf$geom$dynamic_mask <- dm
 
-  # Save marginal index - allows looking up a marginal, and direction from
-  # a transition code
-  # Columns:
-  #   from : timstep
-  #    to : timestemp
-  #    direction : forward or backward
-  #    transition : transition code e.g. ("T_01-02", is directional)
-  #    marginal : marginal code e.g. "M_01-02", order follows
-  #      forward transition order, so smaller number is generally first
-  #      except with the last marginal in a circular model eg "M_52-01"
-  if (circular) {
-    index <- data.frame(from = 1:n_timesteps(bf), to = c(2:n_timesteps(bf), 1),
-                        direction = "forward")
-  } else {
-    index <- data.frame(from = 1:(n_timesteps(bf) - 1), to = 2:n_timesteps(bf),
-                        direction = "forward")
-  }
-  index <- rbind(index, data.frame(from = index$to, to = index$from,
-                                   direction = "backward"))
-  index$transition <- paste0("T_", pad(index$from), "-", pad(index$to))
-  index$marginal <- NA
-  sv <- index$direction == "forward" # selection vector
-  index$marginal[sv] <-
-    paste0("M_", pad(index$from[sv]), "-", pad(index$to[sv]))
-  sv <- index$direction == "backward"
-  index$marginal[sv] <-
-    paste0("M_", pad(index$to[sv]), "-", pad(index$from[sv]))
-  bf$marginals$index <- index
+  # Make and save marginal index
+  bf$marginals$index <- make_marginal_index(bf)
 
   return(bf)
 }
