@@ -43,6 +43,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_routes.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/as_transitions.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc>
   </url>
   <url>
@@ -106,6 +109,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_timestep_padding.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_transition.html</loc>
   </url>
   <url>
@@ -146,6 +152,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_transitions.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_marginal_index.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_mask.html</loc>
@@ -209,6 +218,12 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/transition_from_marginal.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/ts_info.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/validate_BirdFlow.html</loc>

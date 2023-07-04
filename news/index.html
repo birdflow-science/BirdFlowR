@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9023</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9024</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,8 +55,24 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9024" id="birdflowr-0109024">BirdFlowR 0.1.0.9024<a class="anchor" aria-label="anchor" href="#birdflowr-0109024"></a></h2>
+<p>2023-07-03</p>
+<p>Most of this update was focused on allowing partial year models (<a href="https://github.com/birdflow-science/BirdFlowR/issues/39" class="external-link">#39</a>). The bulk of the work required for that goal is done, however, it is not integrated with <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, so in practice it’s not very useful yet.</p>
+<p>I’ve also split some internal code into additional helper functions which makes the package code a little cleaner but doesn’t affect users.</p>
+<p>The one change that might affect users is the ability to subset a fitted model to a date range with <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>.</p>
+<ul><li>New function <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code> truncates the dates a BirdFlow model covers. It works with both fitted and preprocessed models, but is not yet integrated with preprocessing, so logistically currently is only useful for fitted models.</li>
+<li>New function <code><a href="../reference/as_transitions.html">as_transitions()</a></code> converts an ordered sequence of timesteps into the names of the transitions that connect them. Used in <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
+</li>
+<li>New public,<code><a href="../reference/get_dates.html">get_dates()</a></code> returns the <code>$dates</code> component of a BirdFlow object, replacing an old private function that was no longer used. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/121" class="external-link">#121</a>.</li>
+<li>New metadata item <code>timestep_padding</code> tracks how much timesteps are padded in transition and marginal names. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/new_BirdFlow.html">new_BirdFlow()</a></code> are updated to produce it.<br></li>
+<li>New internal function <code><a href="../reference/get_timestep_padding.html">get_timestep_padding()</a></code> retreives the above or, for older models figures it out from the model structure.</li>
+<li>New internal function <code><a href="../reference/make_marginal_index.html">make_marginal_index()</a></code> derived from code previously in <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> is used by both <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
+</li>
+<li>New internal function <code><a href="../reference/ts_info.html">ts_info()</a></code> determines if a timestep sequence is forward or backwards and whether it crosses the year boundary.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9023" id="birdflowr-0109023">BirdFlowR 0.1.0.9023<a class="anchor" aria-label="anchor" href="#birdflowr-0109023"></a></h2>
-<p>2023-06-05</p>
+<p>2023-06-20</p>
 <div class="section level4">
 <h4 id="overview-0-1-0-9023">Overview<a class="anchor" aria-label="anchor" href="#overview-0-1-0-9023"></a></h4>
 <p>This update shouldn’t break anything but it will change default behaviors of a few functions: 1. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> Models preprocessed after this update will be different then older models.</p>
@@ -66,7 +82,7 @@
 <div class="section level4">
 <h4 id="details-0-1-0-9023">Details<a class="anchor" aria-label="anchor" href="#details-0-1-0-9023"></a></h4>
 <ul><li><p>Fixed bug in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> that caused it to sometimes create BirdFlow models where the pixels didn’t align with the origin. There’s nothing wrong with the previous behavior from a modelling standpoint but always aligning to the origin has some logistical benefits and was the original intent.</p></li>
-<li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> to produce confusing dimension lables when called on multiple distributions at once.</p></li>
+<li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> to produce confusing dimension labels when called on multiple distributions at once.</p></li>
 <li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now allows full cycle sequence and returns full cycle sequences with <code>season = "all"</code>. This means including all timesteps and then repeating the first timestep. This also allows setting <code>start</code> and <code>end</code> to the same timestep as well (to loop through a whole year). This will change results from <code>distr_performance()</code> for whole year models.</p></li>
 <li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a new argument and default behavior. It now replaces NA values in the distributions with zero prior to transforming and changing the resolution, and uses bilinear interpolation in place of nearest neighbor. Set <code>treat_na_as_zero</code> to <code>FALSE</code> for old behavior. The new way seems better though. See detailed explanation in <a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">Issue </a><a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">#12</a>.</p></li>
 </ul></div>
