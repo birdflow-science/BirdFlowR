@@ -20,10 +20,6 @@ lookup_transitions <- function(x, ...){
 
   stopifnot(inherits(x, "BirdFlow"))
   steps <- lookup_timestep_sequence(x = x, ...)
-
-  nc <- nchar(n_timesteps(x))
-  pad <- function(x) stringr::str_pad(x, width = nc, pad = "0")
-
-  return( paste0("T_", pad(steps[-length(steps)]), "-", pad(steps[-1]) ) )
+  return(as_transitions(steps, x))
 
 }

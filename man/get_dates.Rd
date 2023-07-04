@@ -2,29 +2,29 @@
 % Please edit documentation in R/get_dates.R
 \name{get_dates}
 \alias{get_dates}
-\title{internal function to calculate the date of each BirdFlow timestep.}
+\title{Retrieve dates component of a BirdFlow model}
 \usage{
-get_dates(year, n = 52)
+get_dates(bf)
 }
 \arguments{
-\item{year}{the year for which dates are calculated}
-
-\item{n}{the year is broken into this many even intervals.}
+\item{bf}{a BirdFlow object to retrieve dates from.}
 }
 \value{
-a \code{data.frame} with
-\item{doy}{The day of year associated with the midpoint of each interval.}
-\item{interval}{The interval ID; it will range from 1 to n.}
+a data frame with
+\item{interval}{The interval or timestep associated with each date.
+It will range from 1 to \code{\link[=n_timesteps]{n_timesteps()}}.  With full models this is
+equivalent to the week of the year but with truncated models may
+not be.}
 \item{date}{The date associated with the interval's midpoint}
+\item{midpoint, star, end}{The midpoint, start, and end of each interval
+as a proportion of the total year that has elapsed.}
+\item{doy}{The day of year associated with the midpoint of each interval.}
 }
 \description{
-`get_dates() is mostly copied from st_week_dates() in the BirdFlowForescast
-Shiny application, but generalized to work with various interval lengths,
-but for now intervals are weeks and n = 52.
+\code{get_dates()} retrieves the dates component of a BirdFlow model.  Most of
+the resulting data is derived from \link[ebirdst:ebirdst_weeks]{ebirdst::ebirdst_weeks} and added
+to the model object by   \code{\link[=preprocess_species]{preprocess_species()}}.  \code{\link[=truncate_birdflow]{truncate_birdflow()}}
+creates models with a subset of the intervals and renames them
+\verb{1:[n_timesteps()]} of the truncated model so if it has been used the
+data may differ from \code{\link[ebirdst:ebirdst_weeks]{ebirdst::ebirdst_weeks()}}.
 }
-\details{
-By necessity one week ends up longer - 52 weeks = 264 days.  Ultimately, I'd
-like to retain the date information from the eBird status and trends data
-rather than regenerate it after fitting the model.
-}
-\keyword{internal}

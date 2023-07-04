@@ -43,8 +43,8 @@ predict.BirdFlow <- function(object, distr, ...) {
   }
 
   # This is a sequence of transition codes to progress through
-  transitions <- lookup_transitions(object, ...)
   timesteps <- lookup_timestep_sequence(object, ...)
+  transitions <- as_transitions(timesteps, object)
   start <- timesteps[1]
 
 

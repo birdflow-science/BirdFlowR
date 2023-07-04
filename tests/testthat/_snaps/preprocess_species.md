@@ -7,7 +7,7 @@
         dimensions   : 15, 15, 53  (nrow, ncol, ntimesteps)
         resolution   : 50000, 50000  (x, y)
         active cells : 108
-        size         : 234.2 Kb
+        size         : 234.4 Kb
 
 ---
 

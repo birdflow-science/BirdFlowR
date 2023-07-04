@@ -1,5 +1,38 @@
+# BirdFlowR 0.1.0.9024
+2023-07-03
+
+Most of this update was focused on allowing partial year models (#39).  The bulk 
+of the work required for that goal is done, however, it is not  integrated with
+`preprocess_species()`, so in practice it's not very useful yet. 
+
+I've also split some internal code into additional helper functions which makes
+the package code a little cleaner but doesn't affect users.
+
+The one change that might affect users is the ability to subset a fitted 
+model to a date range with `truncate_birdflow()`.
+
+* New function `truncate_birdflow()` truncates the dates a BirdFlow model 
+  covers. It works with both fitted and preprocessed models, 
+  but is not yet integrated with preprocessing, so logistically currently is
+  only useful for fitted models.
+* New function `as_transitions()` converts an ordered sequence of timesteps
+  into the names of the transitions that connect them.  Used in `predict()`, 
+  `route()`,  `lookup_transitions()`, and `truncate_birdflow()`
+* New public,`get_dates()` returns the `$dates` component of a BirdFlow
+  object, replacing an old private function that was no longer used. Fixes #121.
+* New metadata item `timestep_padding` tracks how much timesteps are padded in 
+  transition and marginal names. `preprocess_species()` and `new_BirdFlow()` 
+  are updated to produce it.  
+* New internal function `get_timestep_padding()` retreives the above or, for 
+  older models figures it out from the model structure.
+* New internal function `make_marginal_index()` derived from code previously in 
+ `import_birdflow()` is used by both `import_birdflow()` and 
+ `truncate_birdflow()`
+* New internal function `ts_info()` determines if a timestep sequence is forward
+  or backwards and whether it crosses the year boundary.  
+  
 # BirdFlowR 0.1.0.9023
-2023-06-05
+2023-06-20
 
 ### Overview
 
@@ -27,7 +60,7 @@
 
 * Fixed bug in `reformat_distribution_labels()` with 3 dimensional 
   input it would erroneously change the second dimension name to `"time"`.
-  This caused `predict()` to produce confusing dimension lables when called on 
+  This caused `predict()` to produce confusing dimension labels when called on 
   multiple distributions at once.
 
 * `lookup_timestep_sequence()` now allows full cycle sequence and returns 
