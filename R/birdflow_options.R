@@ -1,11 +1,20 @@
 
 # Create .birdflow_config environment to hold options
 .birdflow_config <- new.env()
+
+# Defualt collection url (for downloading species) should end in "/"
+.birdflow_config$collection_url =
+  "http://doppler.cs.umass.edu/birdflow/Species/"
+
 .birdflow_config$verbose <- TRUE
 .birdflow_config$time_format = "month_day"
 
 # Relationship between parameters and GPU_ram
 .birdflow_config$max_param_per_gpu_gb = 23224801
+
+# Local cache (no trailing delimiter - will use with file.path())
+.birdflow_config$cache <- tools::R_user_dir("BirdFlowR", "data") |>
+  base::normalizePath(winslash = "/", mustWork = FALSE)
 
 
 #' Set and retrieve BirdFlowR options
@@ -30,12 +39,29 @@
 #'
 #' \item{verbose}{Defaults to `TRUE` for printing of progress and information
 #' about the process of functions.  Set to `FALSE` to turn off printing. }
+#' }
 #'
+#' \item{max_param_per_gpu_gb}{
+#'   Controls how many parameters can be fit by BirdFlowPy per gigabyte of
+#'   GPU Ram.  This is a conservative estimate based on empirical testing.  See
+#'   [preprocess_species()]
+#' }
+#'
+#' \item{cache}{
+#'   The local directory to store downloaded model files.  Defaults to
+#'   `tools::R_user_dir("BirdFlowR", "data")`. This is the base cache directory
+#'   within which there will be one or more collection specific
+#'   directories, which in turn will hold BirdFlow model files and an index.
+#' }
+#' \item{collection_url}{
+#'   This is the base URL of a collection of model files and its associated
+#'   index.  The default is for the standard BirdFlowR model collection.
 #' }
 #'
 #'
+#'
 #' @param ... One of: (1) one or more named arguments where the name is a
-#'   an option and the value its new settting e.g. `verbose = FALSE` ; (2) a
+#'   an option and the value its new setting e.g. `verbose = FALSE` ; (2) a
 #'   single unnamed argument stating an option to retrieve e.g. `"verbose"`
 #'   with an option to retrieve; or (3) No arguments, indicating that all
 #'   options and their current settings should be returned in a list.
@@ -57,7 +83,9 @@
 birdflow_options <- function(...){
   args <- list(...)
   if(length(args) == 0){
-    return(as.list(.birdflow_config))
+    o <- as.list(.birdflow_config)
+    o <- o[order(names(o))]
+    return(o)
   }
 
   # Process single unamed arguments by returning the relevant option(s)
@@ -107,12 +135,33 @@ birdflow_options <- function(...){
 
   if("max_param_per_gpu_gb" %in% names(args)){
     mp <- args[["max_param_per_gpu_gb"]]
-    if(!(is.numeric(mp) && length(mp) == 1 %% !is.na(mp) %% mp > 1000)){
+    if(!(is.numeric(mp) && length(mp) == 1 && !is.na(mp) && mp > 1000)){
       stop("max_param_per_gpu_gb must be a single numeric greater than 1000" )
     }
     .birdflow_config$max_param_per_gpu_gb <- mp
   }
 
+  if("collection_url" %in% names(args)){
+    url <- args[["collection_url"]]
+    if(!(!is_null(url) && is.character(url) &&
+         length(url) == 1 && !is.na(url))){
+      stop("Invalid collection_url" )
+    }
+    url <- gsub("/*$", "/", url) # enforce trailing slash
+
+    .birdflow_config$collection_url <- url
+  }
+
+  if("cache" %in% names(args)){
+    lc <- args[["cache"]]
+    if(!(!is_null(lc) && is.character(lc) &&
+         length(lc) == 1 && !is.na(lc))){
+      stop("Invalid cache" )
+    }
+    lc <- gsub("(/|\\\\)*$", base::.Platform$file.sep, lc) # enforce trailing slash
+
+    .birdflow_config$cache <- lc
+  }
 
 }
 
