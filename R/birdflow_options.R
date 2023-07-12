@@ -2,9 +2,9 @@
 # Create .birdflow_config environment to hold options
 .birdflow_config <- new.env()
 
-# Defualt collection url (for downloading species) should end in "/"
+# Default collection URL (for downloading species) should end in "/"
 .birdflow_config$collection_url =
-  "http://doppler.cs.umass.edu/birdflow/Species/"
+  "https://birdflow-science.s3.amazonaws.com/collection/"
 
 .birdflow_config$verbose <- TRUE
 .birdflow_config$time_format = "month_day"
@@ -39,7 +39,7 @@
 #'
 #' \item{verbose}{Defaults to `TRUE` for printing of progress and information
 #' about the process of functions.  Set to `FALSE` to turn off printing. }
-#' }
+#'
 #'
 #' \item{max_param_per_gpu_gb}{
 #'   Controls how many parameters can be fit by BirdFlowPy per gigabyte of
@@ -57,7 +57,7 @@
 #'   This is the base URL of a collection of model files and its associated
 #'   index.  The default is for the standard BirdFlowR model collection.
 #' }
-#'
+#'}
 #'
 #'
 #' @param ... One of: (1) one or more named arguments where the name is a
@@ -88,7 +88,7 @@ birdflow_options <- function(...){
     return(o)
   }
 
-  # Process single unamed arguments by returning the relevant option(s)
+  # Process single unnamed arguments by returning the relevant option(s)
   if(length(args) == 1 && is.null(names(args)) ){
     if(length(args[[1]]) > 1){
       stop("You can only retreive one option by name. Use birdflow_options() (no arguments) to retreive all options.")
@@ -143,7 +143,7 @@ birdflow_options <- function(...){
 
   if("collection_url" %in% names(args)){
     url <- args[["collection_url"]]
-    if(!(!is_null(url) && is.character(url) &&
+    if(!(!is.null(url) && is.character(url) &&
          length(url) == 1 && !is.na(url))){
       stop("Invalid collection_url" )
     }
@@ -154,7 +154,7 @@ birdflow_options <- function(...){
 
   if("cache" %in% names(args)){
     lc <- args[["cache"]]
-    if(!(!is_null(lc) && is.character(lc) &&
+    if(!(!is.null(lc) && is.character(lc) &&
          length(lc) == 1 && !is.na(lc))){
       stop("Invalid cache" )
     }

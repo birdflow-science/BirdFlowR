@@ -39,7 +39,6 @@ month followed by the day of the month e.g. "November 23"  }
 
 \item{verbose}{Defaults to \code{TRUE} for printing of progress and information
 about the process of functions.  Set to \code{FALSE} to turn off printing. }
-}
 
 \item{max_param_per_gpu_gb}{
 Controls how many parameters can be fit by BirdFlowPy per gigabyte of
@@ -56,6 +55,7 @@ directories, which in turn will hold BirdFlow model files and an index.
 \item{collection_url}{
 This is the base URL of a collection of model files and its associated
 index.  The default is for the standard BirdFlowR model collection.
+}
 }
 }
 \examples{

@@ -1,0 +1,132 @@
+---
+title: "BirdFlowR Model Collection"
+output: html_document
+params:
+  index: ""
+  collection_url: "https:/example_url/"
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+index <- params$index
+collection_url <- params$collection_url
+
+if(!is.data.frame(index)){
+ index <- readRDS(system.file("markdown_templates/index_example.Rds", package = "BirdFlowR"))
+}
+# Add links to ebird species information
+   #e.g.:  https://science.ebird.org/en/status-and-trends/species/amewoo/abundance-map-weekly?week=1
+index$species_code <- paste0("[", index$species_code, 
+                             "](https://science.ebird.org/en/status-and-trends/species/", 
+                             index$species_code, "/abundance-map-weekly?week=1)")
+
+
+
+# Add links to species reports (where they exist)
+if(is.null(index$report_exists)) 
+  sv <- rep(FALSE, nrow(index)) # fallback for development
+
+sv <- index$report_exists
+index$model[sv] <- paste0("[", index$model[sv], "](./",
+                          index$model[sv], ".html)")
+
+# List names are column names values are what we want to display them as
+# order here will be used
+displayed_columns <-  c(`Common name` = "common_name", 
+                        Model = "model", 
+                        `Release date` = "release_date",
+                        `Scientific name` = "scientific_name", 
+                        `eBird S&T code` = "species_code", 
+                        `Version` = "version")
+
+# Rename and reorder to match above
+index <- dplyr::rename(index, all_of(displayed_columns))
+index <- index[, names(displayed_columns), drop = FALSE]
+
+logo_url <- "./logo.png"
+
+
+# Alternate url for testing
+alt_logo_url <-  "../../man/figures/logo.png"
+if(!file.exists(logo_url) & file.exists(alt_logo_url) )  
+  logo_url <- alt_logo_url
+
+
+
+```
+
+<a href="https://birdflow-science.github.io/BirdFlowR/"><img src="`r logo_url`" align="right" height="139" /></a>
+
+<br><br><br>
+   
+----
+
+## Overview
+
+This BirdFlow model collection contains fitted models of bird movement
+trained from 
+[eBird Status and Trends (S&T)](https://science.ebird.org/en/status-and-trends) 
+weekly distributions. They can be
+used with the 
+[BirdFlowR R Package](https://birdflow-science.github.io/BirdFlowR/) to generate
+synthetic migration routes or to 
+predict where birds at a known location and time are likely to be at another 
+point in time. 
+
+**eBird S&T code** links to eBird information on the species.  
+**Model** links to a report on the model.
+
+----
+
+## Models
+
+
+```{r table}
+knitr::kable(index)
+```
+
+
+## Usage
+
+```{r usage, eval = FALSE, echo = TRUE}
+
+library(BirdFlowR)
+
+if(!require("remotes"))
+  install.packages("remotes") 
+if(!require("BirdFlowR"))
+  remotes::install_github("birdflow-science/BirdFlowR")
+
+# Set collection_url (only necessary if this isn't the default collection)
+birdflow_options(collection_url = "[collection_url]")
+
+# Print index              
+index <- load_collection_index()
+print(index)
+
+# Select a model
+model <- "[model]"
+
+# Load and use the model
+bf <- load_model(model)
+rts <- route(bf, 5, season = "prebreeding")
+plot(rts)
+
+```
+
+## Learn more
+
+----
+
+- [BirdFlow project](https://birdflow-science.github.io/)  
+- [BirdFlowR package](https://birdflow-science.github.io/BirdFlowR/) ([source](https://github.com/birdflow-science/BirdFlowR))
+- [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy)
+- [BirdFlow: Learning Seasonal Bird M Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1) Miguel Fuentes, Benjamin M. Van Doren, Daniel Fink, Daniel Sheldon bioRxiv 2022.04.12.488057; doi: https://doi.org/10.1101/2022.04.12.488057
+
+
+----
+
+Collection URL: `r collection_url`  
+Last updated: `r lubridate::today(tzone = "EST")`
+

@@ -4,18 +4,25 @@
 \alias{load_collection_index}
 \title{Load the index to a remote model collection}
 \usage{
-load_collection_index(update = TRUE)
+load_collection_index(
+  update = TRUE,
+  collection_url = birdflow_options("collection_url")
+)
 }
 \arguments{
-\item{update}{If TRUE (the default) then both the index and cached model file
-are verified against the server's version to make sure they are up-to-date.
-If FALSE then neither the index or the model will be checked. Set to FALSE
-after downloading the model(s) you need if you want to make sure the model
-does not change during your analysis (even if updated on the server); or
-if working offline.}
+\item{update}{If \code{TRUE} (the default) then both the index and cached model file
+are checked against the server's version to make sure they are up-to-date and
+downloaded again if they are not.
+If \code{FALSE} then neither the index nor the model will be checked.
+Set to \code{FALSE} after downloading the model(s) you need if you want to make
+sure the model does not change during your analysis (even if updated on
+the server); or if working offline.}
+
+\item{collection_url}{The url of a collection. Should be the path to
+the base directory (not an index.html file).}
 }
 \value{
-A data frame with the a row for every model in the collection.
+A data frame with a row for every model in the collection.
 }
 \description{
 Load the collection index for the current model collection.  This function
@@ -25,9 +32,8 @@ up-to-date.
 }
 \details{
 The collection will default to the main BirdFlow model collection and most
-users will not need to set it, but it can be changed for the current R
-session with
-\href{birdflow_options()}{birdflow_options(collection_url = "new url")}
+users will not need to set it.
+
 The local cache directory (for all collections) defaults to
 \href{birdflow_otions()}{birdflow_options("cache")} the cache directory for the
 current collection will be in a subdirectory.  Both of the above options

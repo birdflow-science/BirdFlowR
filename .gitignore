@@ -45,3 +45,6 @@ docs
 
 # Annoying Rplot.pdf file that gets created while testing
 /tests/testthat/Rplots.pdf
+
+# Rendered html from rmarkdown template
+inst/markdown_templates/collection_index.html

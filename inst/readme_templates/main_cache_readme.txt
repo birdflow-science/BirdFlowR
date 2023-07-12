@@ -1,5 +1,6 @@
 This directory was created by the R BirdFlowR Package to cache models
-downloaded from remote collections so they do not have to be re-downloaded every time they are used.
+downloaded from remote collections so they do not have to be redownloaded every
+time they are used.
 
 It is safe to delete with two caveots:
   1. You will need to redownload models if you use them again - not a big deal.
@@ -15,8 +16,8 @@ For more information consult the manual for BirdFlowR available online:
   https://birdflow-science.github.io/BirdFlowR/
 
 Last collection updated:
-  Url: [collection_url]
-  Dir: [cache_path]
+  Collection URL: [collection_url]
+  Cache directory: [cache_path]
 
 Cache last updated on:
   [date]

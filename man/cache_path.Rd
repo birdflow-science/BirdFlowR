@@ -5,7 +5,11 @@
 \title{Internal function to get the local path to the cache for the current
 model collection.}
 \usage{
-cache_path()
+cache_path(collection_url)
+}
+\arguments{
+\item{collection_url}{The url of a collection. Should be the path to
+the base directory (not an index.html file).}
 }
 \value{
 Path to the local cache for the current collection including a

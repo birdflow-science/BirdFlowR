@@ -1,7 +1,7 @@
 This directory was created by the R BirdFlowR Package to cache models
 downloaded from a specific remote collection:
   [collection_url]
-so they do not have to be re-downloaded every time they are used.
+so they do not have to be redownloaded every time they are used.
 
 It is safe to delete with two caveots:
   1. You will need to redownload models if you use them again - not a big deal.

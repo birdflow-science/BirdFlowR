@@ -1,9 +1,8 @@
 #' Load BirdFlow models from a collection
 #'
 #' Load a named model from the current (likely the default) model collection.
-#' If the model is not cached locally it will be downloaded. If the model
-#' doesn't exist in the local cache or isn't up-to-date the the cache will be
-#' updated prior to loading.
+#' If the model doesn't exist in the local cache or isn't up-to-date the the
+#' cache will be updated prior to loading.
 #'
 #' @param model The model name to load
 #' @param update If `TRUE` (the default) then both the index and cached model file
@@ -13,23 +12,37 @@
 #'  Set to `FALSE` after downloading the model(s) you need if you want to make
 #' sure the model does not change during your analysis (even if updated on
 #' the server); or if working offline.
+#' @param collection_url The url of a collection. Should be the path to
+#' the base directory (not an index.html file).
 #' @return The designated BirdFlow model is returned.
 #' @seealso [load_collection_index()]
+#' @examples
+#' \dontrun{
+#'
+#'  index <- load_collection_index()
+#'  bf <- load_model(index$model[1])
+#'
+#' }
+#'
 #' @export
-load_model <- function(model, update = TRUE){
+load_model <- function(model, update = TRUE,
+                       collection_url = birdflow_options("collection_url")){
+
+  verbose <- birdflow_options("verbose")
+
   stopifnot(!is.null(model), !is.na(model), is.character(model),
             length(model) == 1)
-  index <- load_collection_index(update = update)
-  if(!model %in% index$model_name){
+  index <- load_collection_index(update = update, collection_url = collection_url)
+  if(!model %in% index$model){
     stop('"', model, '" is not in the current collection. ',
          'Run "load_collection_index()" for information on available models.')
   }
-  r <- which(index$model_name == model)[1] # row associated with model
+  r <- which(index$model == model)[1] # row associated with model
 
   file_name <- index$file[r]
 
-  local_path <- paste0(cache_path(), file_name)
-  remote_url <- paste0(birdflow_options("collection_url"), file_name)
+  local_path <- paste0(cache_path(collection_url), file_name)
+  remote_url <- paste0(collection_url, file_name)
   up_to_date <- FALSE
 
   if(update && file.exists(local_path)){
@@ -39,11 +52,19 @@ load_model <- function(model, update = TRUE){
   }
 
   if (update && !up_to_date){
-    download.file(remote_url, local_path)
+    if(verbose){
+      cat("Downloading ", model, "\n\tFrom:", remote_url, "\n\tTo:",
+          local_path, "\n", sep = "")
+    }
+
+
+    utils::download.file(remote_url, local_path, quiet = TRUE)
+    make_cache_readme(collection_url)
   }
 
   if(!file.exists(local_path)){
-    stop("Do no set update to FALSE unless you have already downloaded your model")
+    stop("Do not set update to FALSE unless you have already downloaded",
+         "the model")
   }
 
   return(readRDS(local_path))
