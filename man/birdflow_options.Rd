@@ -8,7 +8,7 @@ birdflow_options(...)
 }
 \arguments{
 \item{...}{One of: (1) one or more named arguments where the name is a
-an option and the value its new settting e.g. \code{verbose = FALSE} ; (2) a
+an option and the value its new setting e.g. \code{verbose = FALSE} ; (2) a
 single unnamed argument stating an option to retrieve e.g. \code{"verbose"}
 with an option to retrieve; or (3) No arguments, indicating that all
 options and their current settings should be returned in a list.}
@@ -40,6 +40,22 @@ month followed by the day of the month e.g. "November 23"  }
 \item{verbose}{Defaults to \code{TRUE} for printing of progress and information
 about the process of functions.  Set to \code{FALSE} to turn off printing. }
 
+\item{max_param_per_gpu_gb}{
+Controls how many parameters can be fit by BirdFlowPy per gigabyte of
+GPU Ram.  This is a conservative estimate based on empirical testing.  See
+\code{\link[=preprocess_species]{preprocess_species()}}
+}
+
+\item{cache}{
+The local directory to store downloaded model files.  Defaults to
+\code{tools::R_user_dir("BirdFlowR", "data")}. This is the base cache directory
+within which there will be one or more collection specific
+directories, which in turn will hold BirdFlow model files and an index.
+}
+\item{collection_url}{
+This is the base URL of a collection of model files and its associated
+index.  The default is for the standard BirdFlowR model collection.
+}
 }
 }
 \examples{
