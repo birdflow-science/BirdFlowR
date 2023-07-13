@@ -52,7 +52,13 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/build_collection_index.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/cache_path.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc>
@@ -142,6 +148,12 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/load_collection_index.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/load_model.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.html</loc>
   </url>
   <url>
@@ -152,6 +164,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_transitions.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_cache_readme.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_marginal_index.html</loc>

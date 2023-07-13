@@ -14,7 +14,7 @@ more named arguments to set options."><meta property="og:image" content="https:/
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9024</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9025</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ more named arguments to set options.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
 <dd><p>One of: (1) one or more named arguments where the name is a
-an option and the value its new settting e.g. <code>verbose = FALSE</code> ; (2) a
+an option and the value its new setting e.g. <code>verbose = FALSE</code> ; (2) a
 single unnamed argument stating an option to retrieve e.g. <code>"verbose"</code>
 with an option to retrieve; or (3) No arguments, indicating that all
 options and their current settings should be returned in a list.</p></dd>
@@ -109,6 +109,22 @@ month followed by the day of the month e.g. "November 23"</p></dd>
 about the process of functions.  Set to <code>FALSE</code> to turn off printing.</p></dd>
 
 
+<dt>max_param_per_gpu_gb</dt>
+<dd><p>Controls how many parameters can be fit by BirdFlowPy per gigabyte of
+GPU Ram.  This is a conservative estimate based on empirical testing.  See
+<code><a href="preprocess_species.html">preprocess_species()</a></code></p></dd>
+
+
+<dt>cache</dt>
+<dd><p>The local directory to store downloaded model files.  Defaults to
+<code>tools::R_user_dir("BirdFlowR", "data")</code>. This is the base cache directory
+within which there will be one or more collection specific
+directories, which in turn will hold BirdFlow model files and an index.</p></dd>
+
+<dt>collection_url</dt>
+<dd><p>This is the base URL of a collection of model files and its associated
+index.  The default is for the standard BirdFlowR model collection.</p></dd>
+
 
 </dl></div>
 
@@ -116,6 +132,12 @@ about the process of functions.  Set to <code>FALSE</code> to turn off printing.
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="fu">birdflow_options</span><span class="op">(</span><span class="op">)</span> <span class="co"># print current settings</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cache</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/.local/share/R/BirdFlowR"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $collection_url</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://birdflow-science.s3.amazonaws.com/collection/"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $max_param_per_gpu_gb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 23224801</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
