@@ -6,8 +6,10 @@
 #' @returns Nothing is returned
 #'
 #' @keywords internal
-make_cache_readme <- function(collection_url){
-  main_readme_path <- file.path(collection_url, "readme.txt")
+make_cache_readme <-
+  function(collection_url = birdflow_options("collection_url")){
+
+  main_readme_path <- file.path(birdflow_options("cache"), "readme.txt")
   collection_readme_path <- paste0(cache_path(collection_url), "readme.txt")
 
   main <- system.file("readme_templates/main_cache_readme.txt",
@@ -18,7 +20,7 @@ make_cache_readme <- function(collection_url){
 
   # Local objects that exactly match field names in templates
   # eg "[date]" is a field in the template
-  date <- as.character(lubridate::today())
+  date <-  lubridate::today() |> as.character()
   cache_path <- cache_path(collection_url) # local variable for the code below
 
   # For each text object in memory and for each field
