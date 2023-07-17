@@ -21,13 +21,15 @@
 #' @keywords internal
 #'
 build_collection_index <- function(dir, collection_url){
-   # https://science.ebird.org/en/status-and-trends/species/amewoo/abundance-map-weekly?week=1
+
+  verbose <- birdflow_options("verbose")
+     # https://science.ebird.org/en/status-and-trends/species/amewoo/abundance-map-weekly?week=1
   index_path <- file.path(dir, "index.Rds")
   index_md5_path <- file.path(dir, "index_md5.txt")
 
   model_extension <- "Rds"
   cols <- c("model", "species_code", "scientific_name", "common_name",
-            "file", "release_date", "md5", "version")
+            "file", "release_date", "md5", "version", "size")
   species_cols <- c("species_code", "scientific_name", "common_name")
 
    # List model files in directory
@@ -47,10 +49,21 @@ build_collection_index <- function(dir, collection_url){
   # Merge in data (if any) from old index
   if (file.exists(index_path)) {
     old_index <- readRDS(index_path)
-    new_index <-
-      rbind(old_index[ tolower(old_index$file) %in% tolower(files),  , drop = FALSE],
-            index[ !index$files %in% old_index$files, , drop = FALSE])
-    stopifnot(setequal(tolower(new_index$file), tolower(files)))
+    old_index <- old_index[ tolower(old_index$file) %in% tolower(files), , drop = FALSE]
+    old_cols <- colnames(old_index)
+    if(setequal(old_cols, cols) && all(old_cols == cols) &&
+       any(old_index$file %in% files)){
+      if(all(files %in% old_index$file)){
+        new_index <- old_index
+      } else {
+        new_index <-
+          rbind(old_index,
+                index[ !index$files %in% old_index$files, , drop = FALSE])
+
+      }
+      stopifnot(setequal(tolower(new_index$file), tolower(files)))
+      index <- new_index
+    }
   }
 
   index <- index[order(tolower(index$file)), , drop = FALSE]
@@ -58,11 +71,14 @@ build_collection_index <- function(dir, collection_url){
 
   index$error <- FALSE # temporary col to track errors
 
+
   for(i in seq_len(nrow(index))){
     f <- file.path(dir, index$file[i])
     md5 <- as.character(tools::md5sum(f))
 
     if(is.na(index$md5[i]) || index$md5[i] != md5){ # if new or changed model
+      if(verbose)
+        cat("Reading metadata for ", index$model[i], "\n", sep = "")
       index$md5[i] <- md5
       bf <- readRDS(f)
       if (!inherits(bf, "BirdFlow")) {
@@ -73,7 +89,7 @@ build_collection_index <- function(dir, collection_url){
         index[[col]][i] <- bf$species[[col]]
       }
       index$release_date[i] <- as.character(lubridate::today())
-
+      index$size[i] <-file.size(f) / (1000^2)
     } # end new or changed
   } # end loop through models
   if (any(index$error)) {

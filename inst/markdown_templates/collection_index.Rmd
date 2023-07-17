@@ -31,6 +31,10 @@ sv <- index$report_exists
 index$model[sv] <- paste0("[", index$model[sv], "](./",
                           index$model[sv], ".html)")
 
+# Round size in MB
+index$size <- round(index$size, 2)
+
+
 # List names are column names values are what we want to display them as
 # order here will be used
 displayed_columns <-  c(`Common name` = "common_name", 
@@ -38,7 +42,8 @@ displayed_columns <-  c(`Common name` = "common_name",
                         `Release date` = "release_date",
                         `Scientific name` = "scientific_name", 
                         `eBird S&T code` = "species_code", 
-                        `Version` = "version")
+                        `Version` = "version",
+                        `Size (MB)` = "size")
 
 # Rename and reorder to match above
 index <- dplyr::rename(index, all_of(displayed_columns))

@@ -10,7 +10,7 @@ make_cache_readme <-
   function(collection_url = birdflow_options("collection_url")){
 
   main_readme_path <- file.path(birdflow_options("cache"), "readme.txt")
-  collection_readme_path <- paste0(cache_path(collection_url), "readme.txt")
+  collection_readme_path <- file.path(cache_path(collection_url), "readme.txt")
 
   main <- system.file("readme_templates/main_cache_readme.txt",
                       package = "BirdFlowR") |>  readLines()

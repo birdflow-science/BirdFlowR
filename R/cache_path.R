@@ -10,7 +10,7 @@
 #' trailing delimiter.
 #' @keywords internal
 #'
-cache_path <- function(collection_url){
+cache_path <- function(collection_url = birdflow_options("collection_url")){
   # Return path to cache directory for the current  collection
   # url with a trailing delimiter
   url = collection_url |> tolower()

@@ -21,7 +21,9 @@ load_collection_index <-
   function(update = TRUE,
            collection_url = birdflow_options("collection_url")){
 
-  local_index <- paste0(cache_path(collection_url), "index.Rds")
+  local_index <- file.path(cache_path(collection_url), "index.Rds")
+
+  collection_url <- gsub("/*$", "/", collection_url)  # force trailing slash
 
   if(!update){
     if(!file.exists(local_index)){
@@ -43,8 +45,10 @@ load_collection_index <-
   }
 
   if(!up_to_date){
+    if(birdflow_options("verbose"))
+      cat("Downloading collection index\n")
     dir.create(dirname(local_index), recursive = TRUE, showWarnings = FALSE)
-    utils::download.file(index_url, local_index)
+    utils::download.file(index_url, local_index, mode = "wb")
     make_cache_readme(collection_url)
   }
   return(readRDS(local_index))
