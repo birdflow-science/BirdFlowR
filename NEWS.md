@@ -1,6 +1,17 @@
-# BirdFlowR 0.1.0.9026
-2023-07-14
+# BirdFlowR 0.1.0.9027
 
+2023-07-17
+
+Added size column to collection index.
+Made model downloal explicitly binary (for windows).
+`load_model()` and related functions now work with or without trailing slash in 
+collection URL. 
+`build_collection_url()` re-uses metadata if the .Rds file hasn't changed
+and thus retains the same release date.
+
+# BirdFlowR 0.1.0.9026
+
+2023-07-14
 Fixed bug in make_cache_readme()
 
 # BirdFlowR 0.1.0.9025
