@@ -5,7 +5,7 @@
 \title{Internal function to create or update readme files within the local
 BirdFlow model cache.}
 \usage{
-make_cache_readme(collection_url)
+make_cache_readme(collection_url = birdflow_options("collection_url"))
 }
 \value{
 Nothing is returned

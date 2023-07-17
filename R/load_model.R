@@ -28,11 +28,14 @@
 load_model <- function(model, update = TRUE,
                        collection_url = birdflow_options("collection_url")){
 
+
+  collection_url <- gsub("/*$", "/", collection_url ) # force trailing slash
   verbose <- birdflow_options("verbose")
 
   stopifnot(!is.null(model), !is.na(model), is.character(model),
             length(model) == 1)
   index <- load_collection_index(update = update, collection_url = collection_url)
+
   if(!model %in% index$model){
     stop('"', model, '" is not in the current collection. ',
          'Run "load_collection_index()" for information on available models.')
@@ -41,7 +44,7 @@ load_model <- function(model, update = TRUE,
 
   file_name <- index$file[r]
 
-  local_path <- paste0(cache_path(collection_url), file_name)
+  local_path <- file.path(cache_path(collection_url), file_name)
   remote_url <- paste0(collection_url, file_name)
   up_to_date <- FALSE
 
@@ -51,21 +54,24 @@ load_model <- function(model, update = TRUE,
     up_to_date <- local_md5 == remote_md5
   }
 
-  if (update && !up_to_date){
+  if (update && (is.na(up_to_date) || !up_to_date)) {
     if(verbose){
       cat("Downloading ", model, "\n\tFrom:", remote_url, "\n\tTo:",
           local_path, "\n", sep = "")
     }
-
-
-    utils::download.file(remote_url, local_path, quiet = TRUE)
+    utils::download.file(remote_url, local_path, quiet = TRUE, mode = "wb")
     make_cache_readme(collection_url)
   }
 
   if(!file.exists(local_path)){
+    if(update == FALSE){
     stop("Do not set update to FALSE unless you have already downloaded",
-         "the model")
+         "the model")}
+
+    stop("Model file download failed.")
+
   }
+
 
   return(readRDS(local_path))
 
