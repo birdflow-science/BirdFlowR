@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9027</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9028</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/BirdFlowOverview.html">BirdFlow Model Overview, Uses, and Limitations</a>
     <a class="dropdown-item" href="../articles/Installation.html">Detailed installation instructions</a>
     <a class="dropdown-item" href="../articles/Preprocess.html">Preprocess and sparsify</a>
   </div>
@@ -55,38 +56,47 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9028" id="birdflowr-0109028">BirdFlowR 0.1.0.9028<a class="anchor" aria-label="anchor" href="#birdflowr-0109028"></a></h2>
+<p>2023-07-18</p>
+<ul><li>Added BirdFlowOverview vignette from <a href="https://github.com/dsheldon" class="external-link">@dsheldon</a>.</li>
+<li>Minor udates to BirdFlowR vignette.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9027" id="birdflowr-0109027">BirdFlowR 0.1.0.9027<a class="anchor" aria-label="anchor" href="#birdflowr-0109027"></a></h2>
 <p>2023-07-17</p>
-<p>Added size column to collection index. Made model downloal explicitly binary (for windows). <code><a href="../reference/load_model.html">load_model()</a></code> and related functions now work with or without trailing slash in collection URL. <code>build_collection_url()</code> re-uses metadata if the .Rds file hasn’t changed and thus retains the same release date.</p>
-</div>
+<ul><li>Added size column to collection index.</li>
+<li>Made model download explicitly binary (for windows).</li>
+<li>
+<code><a href="../reference/load_model.html">load_model()</a></code> and related functions now work with or without trailing slash in collection URL.</li>
+<li>
+<code>build_collection_url()</code> re-uses metadata if the .Rds file hasn’t changed and thus retains the same release date.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9026" id="birdflowr-0109026">BirdFlowR 0.1.0.9026<a class="anchor" aria-label="anchor" href="#birdflowr-0109026"></a></h2>
-<p>2023-07-14 Fixed bug in make_cache_readme()</p>
+<p>2023-07-14 Fixed bug in ‘make_cache_readme()’</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9025" id="birdflowr-0109025">BirdFlowR 0.1.0.9025<a class="anchor" aria-label="anchor" href="#birdflowr-0109025"></a></h2>
 <p>2023-07-11</p>
 <p>Added support for model collections</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>New Functions<span class="sc">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_model</span>() User facing <span class="cf">function</span> to load  a model from the</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    cache <span class="sc">-</span> downloading it first <span class="cf">if</span> necessary.</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">build_collection_index</span>()  Run on a directory with model files</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    to  add index files and convert the directory into a collection.</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cache_path</span>()  helper function. Returns the path to <span class="fu">the</span> (local)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    cache directory where model files are saved.  It is specific</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    to the c_ollection_url.</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_cache_readme</span>() helper <span class="cf">function</span> to make readme files <span class="cf">in</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    both the collection specific cache directory and it<span class="st">'s parent</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">    BirdFlowR cache directory. It writes the date of the last</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">    cache update as well so is run anytime new files are saved</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">    to  the cache.</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">Updated:</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">  birdflow_options() has two new values:</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">    collection_url: the base url for the collection.</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">    cache:  the URL for the BirdFlowR cache directory which holds</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">      the collection specific cache directories.</span></span></code></pre></div>
-</div>
+<p>New Functions:</p>
+<ul><li>
+<code><a href="../reference/load_model.html">load_model()</a></code> User facing function to load a model from the cache - downloading it first if necessary.</li>
+<li>
+<code><a href="../reference/build_collection_index.html">build_collection_index()</a></code> Run on a directory with model files to add index files and convert the directory into a collection.</li>
+<li>
+<code><a href="../reference/cache_path.html">cache_path()</a></code> helper function. Returns the path to the (local) cache directory where model files are saved. It is specific to the c_ollection_url.</li>
+<li>
+<code><a href="../reference/make_cache_readme.html">make_cache_readme()</a></code> helper function to make readme files in both the collection specific cache directory and it’s parent BirdFlowR cache directory. It writes the date of the last cache update as well so is run anytime new files are saved to the cache.</li>
+</ul><p>Updated:</p>
+<ul><li>
+<code><a href="../reference/birdflow_options.html">birdflow_options()</a></code> has two new values:
+<ul><li>
+<code>collection_url</code>: the base url for the collection.</li>
+<li>
+<code>cache</code>: the URL for the BirdFlowR cache directory which holds the collection specific cache directories.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9024" id="birdflowr-0109024">BirdFlowR 0.1.0.9024<a class="anchor" aria-label="anchor" href="#birdflowr-0109024"></a></h2>
 <p>2023-07-03</p>
