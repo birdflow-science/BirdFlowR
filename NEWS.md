@@ -1,43 +1,52 @@
+# BirdFlowR 0.1.0.9028
+
+2023-07-18
+
+* Added BirdFlowOverview vignette from @dsheldon.
+* Minor udates to BirdFlowR vignette.  
+
 # BirdFlowR 0.1.0.9027
 
 2023-07-17
 
-Added size column to collection index.
-Made model downloal explicitly binary (for windows).
-`load_model()` and related functions now work with or without trailing slash in 
-collection URL. 
-`build_collection_url()` re-uses metadata if the .Rds file hasn't changed
-and thus retains the same release date.
+* Added size column to collection index.
+* Made model download explicitly binary (for windows).
+* `load_model()` and related functions now work with or without trailing slash in 
+   collection URL. 
+* `build_collection_url()` re-uses metadata if the .Rds file hasn't changed
+  and thus retains the same release date.
 
 # BirdFlowR 0.1.0.9026
 
 2023-07-14
-Fixed bug in make_cache_readme()
+Fixed bug in 'make_cache_readme()'
 
 # BirdFlowR 0.1.0.9025
 2023-07-11
 
  Added support for model collections
     
-    New Functions:
-      load_model() User facing function to load  a model from the
-        cache - downloading it first if necessary.
-      build_collection_index()  Run on a directory with model files
-        to  add index files and convert the directory into a collection.
-      cache_path()  helper function. Returns the path to the (local)
-        cache directory where model files are saved.  It is specific
-        to the c_ollection_url.
-      make_cache_readme() helper function to make readme files in
-        both the collection specific cache directory and it's parent
-        BirdFlowR cache directory. It writes the date of the last
-        cache update as well so is run anytime new files are saved
-        to  the cache.
+ New Functions:
+ 
+ * `load_model()` User facing function to load  a model from the
+   cache - downloading it first if necessary.
+ * `build_collection_index()`  Run on a directory with model files
+   to  add index files and convert the directory into a collection.
+ * `cache_path()`  helper function. Returns the path to the (local)
+   cache directory where model files are saved.  It is specific
+   to the c_ollection_url.
+ * `make_cache_readme()` helper function to make readme files in
+   both the collection specific cache directory and it's parent
+   BirdFlowR cache directory. It writes the date of the last
+   cache update as well so is run anytime new files are saved
+   to  the cache.
         
-    Updated:
-      birdflow_options() has two new values:
-        collection_url: the base url for the collection.
-        cache:  the URL for the BirdFlowR cache directory which holds
-          the collection specific cache directories.
+  Updated:
+  
+  * `birdflow_options()` has two new values:
+      * `collection_url`: the base url for the collection.
+      * `cache`:  the URL for the BirdFlowR cache directory which holds
+        the collection specific cache directories.
 
 # BirdFlowR 0.1.0.9024
 2023-07-03
