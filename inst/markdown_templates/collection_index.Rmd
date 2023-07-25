@@ -96,12 +96,12 @@ knitr::kable(index)
 
 ```{r usage, eval = FALSE, echo = TRUE}
 
-library(BirdFlowR)
-
 if(!require("remotes"))
   install.packages("remotes") 
 if(!require("BirdFlowR"))
   remotes::install_github("birdflow-science/BirdFlowR")
+
+library(BirdFlowR)
 
 # Set collection_url (only necessary if this isn't the default collection)
 birdflow_options(collection_url = "[collection_url]")
@@ -127,7 +127,7 @@ plot(rts)
 - [BirdFlow project](https://birdflow-science.github.io/)  
 - [BirdFlowR package](https://birdflow-science.github.io/BirdFlowR/) ([source](https://github.com/birdflow-science/BirdFlowR))
 - [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy)
-- [BirdFlow: Learning Seasonal Bird M Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1) Miguel Fuentes, Benjamin M. Van Doren, Daniel Fink, Daniel Sheldon bioRxiv 2022.04.12.488057; doi: https://doi.org/10.1101/2022.04.12.488057
+- [BirdFlow: Learning Seasonal Bird Movements from Citizen Science Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1) Miguel Fuentes, Benjamin M. Van Doren, Daniel Fink, Daniel Sheldon bioRxiv 2022.04.12.488057; doi: https://doi.org/10.1101/2022.04.12.488057
 
 
 ----

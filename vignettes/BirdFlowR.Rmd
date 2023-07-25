@@ -193,7 +193,7 @@ that load vector data and then crop and transform it to make it suitable for plo
 
 ***Note:** until **rnaturalearth** has fully transitioned
 away from legacy packages you may see a warning about them, but **BirdFlowR** 
-does not use the legacy packages r data formats itself.*
+does not use the legacy packages or data formats itself.*
 
 ```{r }
 r <- rast(bf, species_info(bf, "prebreeding_migration_start"))
@@ -294,17 +294,17 @@ The `route()` function can sample starting locations from the distribution for
 the starting timestep so the following is equivalent to the preceeding two sections.
 
 ```{r route with sample}
-rts <- route(bf,  n = n_positions,  start = start, end = end )
+rts2 <- route(bf,  n = n_positions,  start = start, end = end )
 
 ```
 
 We can specify the date range with any arguments supported by
 `lookup_timestep_sequence()` so an alternative to the above with slightly
-different start and end dates) is to use the season argument.  Here we route
+different start and end dates is to use the season argument.  Here we route
 during the prebreeding migration. 
 
 ```{r route with season}
-rts <- route(bf, n = n_positions, season = "prebreeding")
+rts3 <- route(bf, n = n_positions, season = "prebreeding")
 ```
 
 ## Using base R plotting to plot routes 
