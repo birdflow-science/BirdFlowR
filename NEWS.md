@@ -1,3 +1,9 @@
+# BirdFlowR 0.1.0.9029
+
+2023-07-25
+
+Minor edits to vignettes and collection index.
+
 # BirdFlowR 0.1.0.9028
 
 2023-07-18
