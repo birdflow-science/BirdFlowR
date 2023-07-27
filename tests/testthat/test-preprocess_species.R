@@ -7,6 +7,16 @@ test_that("preprocess_species runs on test dataset", {
   expect_error(validate_BirdFlow(a))
   expect_true(all((ext(a)[,] %% xres(a)) == 0))  # Test if origin is at 0, 0
 
+  # Snapshot test of first 12 non-zero values in the 5th distribibution
+  d <- get_distr(a, 5)
+  df <- data.frame(i = 1:length(d), density = d)
+  df <- df[!df$density == 0, ]
+  df <- df[1:12, ]
+  rownames(df) <- NULL
+  expect_snapshot(df)
+
+  expect_snapshot(ext(a))
+  expect_snapshot(res(a))
 
 })
 
