@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9028</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9029</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,11 +132,9 @@ includes reports on each species.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">index</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"common_name"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                model        common_name</span></span>
 <span><span class="co">#&gt; 1 amewoo_prebreeding  American Woodcock</span></span>
-<span><span class="co">#&gt; 2 brwhaw_prebreeding  Broad-winged Hawk</span></span>
 <span><span class="co">#&gt; 3 buwtea_prebreeding   Blue-winged Teal</span></span>
 <span><span class="co">#&gt; 4 lobcur_prebreeding Long-billed Curlew</span></span>
-<span><span class="co">#&gt; 5 swahaw_prebreeding    Swainson's Hawk</span></span>
-<span><span class="co">#&gt; 6 woothr_prebreeding        Wood Thrush</span></span></code></pre></div>
+<span><span class="co">#&gt; 5 swahaw_prebreeding    Swainson's Hawk</span></span></code></pre></div>
 <p>And we can load a model from the collection based on the
 <code>model</code> column from the index.<br><strong>Note:</strong> in the vignette this block isn’t executed.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -310,7 +308,7 @@ accepts the same inputs as <code>which</code> in
 transform it to make it suitable for plotting with BirdFlow output.</p>
 <p><em><strong>Note:</strong> until <strong>rnaturalearth</strong> has
 fully transitioned away from legacy packages you may see a warning about
-them, but <strong>BirdFlowR</strong> does not use the legacy packages r
+them, but <strong>BirdFlowR</strong> does not use the legacy packages or
 data formats itself.</em></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="../reference/species_info.html">species_info</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"prebreeding_migration_start"</span><span class="op">)</span><span class="op">)</span></span>
@@ -426,13 +424,13 @@ the BirdFlow object.</p>
 the distribution for the starting timestep so the following is
 equivalent to the preceeding two sections.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>,  n <span class="op">=</span> <span class="va">n_positions</span>,  start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span> <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>,  n <span class="op">=</span> <span class="va">n_positions</span>,  start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span> <span class="op">)</span></span></code></pre></div>
 <p>We can specify the date range with any arguments supported by
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> so an alternative to the above
-with slightly different start and end dates) is to use the season
+with slightly different start and end dates is to use the season
 argument. Here we route during the prebreeding migration.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="va">n_positions</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rts3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="va">n_positions</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-base-r-plotting-to-plot-routes">Using base R plotting to plot routes<a class="anchor" aria-label="anchor" href="#using-base-r-plotting-to-plot-routes"></a>
