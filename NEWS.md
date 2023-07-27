@@ -5,14 +5,12 @@
 Minor edits to vignettes and collection index.
 
 # BirdFlowR 0.1.0.9028
-
 2023-07-18
 
 * Added BirdFlowOverview vignette from @dsheldon.
-* Minor udates to BirdFlowR vignette.  
+* Minor updates to BirdFlowR vignette.  
 
 # BirdFlowR 0.1.0.9027
-
 2023-07-17
 
 * Added size column to collection index.
@@ -23,8 +21,8 @@ Minor edits to vignettes and collection index.
   and thus retains the same release date.
 
 # BirdFlowR 0.1.0.9026
-
 2023-07-14
+
 Fixed bug in 'make_cache_readme()'
 
 # BirdFlowR 0.1.0.9025
@@ -79,7 +77,7 @@ model to a date range with `truncate_birdflow()`.
 * New metadata item `timestep_padding` tracks how much timesteps are padded in 
   transition and marginal names. `preprocess_species()` and `new_BirdFlow()` 
   are updated to produce it.  
-* New internal function `get_timestep_padding()` retreives the above or, for 
+* New internal function `get_timestep_padding()` retrieves the above or, for 
   older models figures it out from the model structure.
 * New internal function `make_marginal_index()` derived from code previously in 
  `import_birdflow()` is used by both `import_birdflow()` and 

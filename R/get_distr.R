@@ -38,7 +38,7 @@ get_distr <- function(x, which = "all", from_marginals = FALSE) {
     if(length(which) == 1){
       attr(d, "time") <- paste0("t", which)
     }
-    return(reformat_distr_labels( d, x) )
+    return(reformat_distr_labels(d, x))
 
   } else {
     # Or calculate from marginals

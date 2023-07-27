@@ -59,10 +59,7 @@ test_that("preprocess_species runs with pre-set resolution and matches prior res
   expect_snapshot(df)
 
   created_files <- list.files(dir)
-  expected_files <- c("example_data_2021_50km.hdf5",
-                      "example_data_2021_50km.tif",
-                      "example_data_2021_50km_lci.tif",
-                      "example_data_2021_50km_uci.tif" )
+  expected_files <- c("example_data_2021_50km.hdf5")
   expect_setequal(created_files, expected_files)
 
 
@@ -159,6 +156,15 @@ test_that("preprocess_species() works with clip", {
     ext(b)
     res(b)
   })
+
+})
+
+test_that("preprocess_species works with truncation",{
+  expect_no_error(bf <- preprocess_species("example_data",
+                                           res = 150,
+                                           season = "prebreeding",
+                                           hdf5 = FALSE))
+
 
 })
 
