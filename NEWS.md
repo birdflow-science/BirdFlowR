@@ -1,18 +1,79 @@
-# BirdFlowR 0.1.0.9029
+# BirdFlowR 0.1.0.9030
+2023-07-27
 
+## preprocess_species()
+
+This update is a major overhaul of `preprocess_species()` with two primary 
+goals.
+
+* Adding support for preprocessing truncated models - models that cover only 
+part of the year.   
+* Cleaning up and simplifying the code by dropping some outdated parameters 
+and breaking the function up into several functions.
+
+### Dropped arguments **Breaking change**
+
+ *  `tiff`  - Prior default of FALSE is now always used and TIFF export of
+ abundance data is no longer an option.
+ *  `treat_na_as_zero` prior default of TRUE is now always used.
+ *  `dummy_dynamic_mask` prior default of FALSE is now always used.  
+ 
+All three of these were a little anachronistic.  `TIFF` output original was 
+used in place of including the abundance data in the `hdf5`.  The other two
+arguments were added during updates to allow simulating the older behavior for
+testing the update, and in both cases we've decided we like the newer behavior.
+
+Although these are breaking changes in that previously supported arguments are
+dropped, the new behavior mimics the old default behavior and I expect in most cases the values were not set differently than the default.
+
+**Note:** Although TIFF output of abundances is no longer directly supported by
+preprocess species any model's abundance can be exported as TIFF with:
+```
+r <- rast(bf)
+terra::writeRaster(r, "abundance.tif")
+```
+
+### Refactoring 
+
+This shouldn't have any effect on users.
+
+`preprocess_species()` was broken into four functions.  The three new functions
+are all internal helper functions.  They are:
+
+ * `determine_resolution()` does the surprisingly tricky work of figuring
+ out what resolution yields the desired number of fitted parameters in the 
+ model.
+ * `process_rasters()` genarates the resampled and aggregated rasters used
+ by the model from the ebird S&T rasters.
+ * `export_birdflow()` exports a BirdFlow model as an hdf5 (or optionally .Rds)
+
+### Truncation **New**
+
+`preprocess_species()` gains a `...` argument that is used to determine model
+truncation, and combination of parameters supported by `lookup_timestep_sequence()` works here (eg `season = prebreeding` and `start = 5, end = 10`).  The result is a non-cyclical preprocessed mode that only covers
+the transitions for the given time period.  Truncation does not affect the 
+resolution determination - resolution is selected such that the full model 
+meets the desired number of parameters or GPU RAM. This means resolution isn't
+dependent on the truncation - facilitating possible later stitching back 
+together several truncated models from the same species.
+
+
+
+
+
+
+# BirdFlowR 0.1.0.9029
 2023-07-25
 
 Minor edits to vignettes and collection index.
 
 # BirdFlowR 0.1.0.9028
-
 2023-07-18
 
 * Added BirdFlowOverview vignette from @dsheldon.
-* Minor udates to BirdFlowR vignette.  
+* Minor updates to BirdFlowR vignette.  
 
 # BirdFlowR 0.1.0.9027
-
 2023-07-17
 
 * Added size column to collection index.
@@ -23,8 +84,8 @@ Minor edits to vignettes and collection index.
   and thus retains the same release date.
 
 # BirdFlowR 0.1.0.9026
-
 2023-07-14
+
 Fixed bug in 'make_cache_readme()'
 
 # BirdFlowR 0.1.0.9025
@@ -79,7 +140,7 @@ model to a date range with `truncate_birdflow()`.
 * New metadata item `timestep_padding` tracks how much timesteps are padded in 
   transition and marginal names. `preprocess_species()` and `new_BirdFlow()` 
   are updated to produce it.  
-* New internal function `get_timestep_padding()` retreives the above or, for 
+* New internal function `get_timestep_padding()` retrieves the above or, for 
   older models figures it out from the model structure.
 * New internal function `make_marginal_index()` derived from code previously in 
  `import_birdflow()` is used by both `import_birdflow()` and 

@@ -73,7 +73,7 @@ forward.
 \code{n_steps} in \code{direction} which default to "forward". The returned
 object will have \code{n_steps + 1} timesteps in the sequence.
 \item \strong{Default} If \code{season} and \code{start} are both NULL (or omitted) the
-default is to return all timesteps in the model, equivallent to
+default is to return all timesteps in the model, equivalent to
 \verb{season = "all".}
 }
 }

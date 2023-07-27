@@ -9,22 +9,20 @@ preprocess_species(
   out_dir = NULL,
   res = NULL,
   hdf5 = TRUE,
-  tiff = FALSE,
   overwrite = TRUE,
   crs = NULL,
   clip = NULL,
   max_params = NULL,
   gpu_ram = 12,
   skip_quality_checks = FALSE,
-  dummy_dynamic_mask = FALSE,
-  treat_na_as_zero = TRUE
+  ...
 )
 }
 \arguments{
 \item{species}{a species in any format accepted by \code{\link[ebirdst:get_species]{ebirdst::get_species()}}}
 
 \item{out_dir}{output directory, files will be written here. Required unless
-both \code{tiff} and \code{hdf5} are TRUE.  File names created here will incorporate
+\code{hdf5} is FALSE.  File names created here will incorporate
 the species code, resolution, and eBird version year.}
 
 \item{res}{the target resolution of the BirdFlow model in kilometers. If
@@ -33,9 +31,6 @@ parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.}
 
 \item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
-
-\item{tiff}{set to TRUE to export geoTIFF files. They are not needed to fit
-the BirdFlow model.}
 
 \item{overwrite}{if TRUE (default) any pre-existing output files will be
 overwritten. If FALSE pre-existing files will result in an error.}
@@ -47,12 +42,14 @@ projection eBird has assigned to this species - see
 
 \item{clip}{a polygon or the path to a file containing a polygon. It must
 have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object
-or or produce one when called with \link[terra:vect]{vect(clip)}}
+or produce one when called with \link[terra:vect]{vect(clip)}}
 
 \item{max_params}{the maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
-the default way of setting \code{max_params} and \code{res}.}
+the default way of setting \code{max_params} and \code{res}. Note: the reduction in
+paramters resulting from truncation (see \code{...}) is not factored into the
+calculation.}
 
 \item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
 If \code{res} is NULL and \code{max_params} is NULL this is used to estimate
@@ -63,37 +60,34 @@ if either\code{ res} or \code{max_params} is set.}
 not all of four ranges are modeled (based on
 \link[ebirdst:ebirdst_runs]{ebirdst_runs()}).}
 
-\item{dummy_dynamic_mask}{set to TRUE to force all cells in the dynamic mask
-to TRUE. This creates a BirdFlow object with a dynamic mask component
-that is compatible with the current BirdFlowR package but that mimics the
-older  pre-dynamic mask BirdFlow models.  If fit the resulting object will
-have transitions at every timestep among all active cells.  The only
-reason to set this to TRUE is for comparsion testing and quality control
-during the transition, and this parameter may eventually be dropped.}
-
-\item{treat_na_as_zero}{If TRUE than NA in eBird status and trends data is
-converted to zero and bilinear interpolation is used during transformation.
-Otherwise NA is kept as NA and nearest neighbor is used during
-interpolation and NA's are ignored when calculating the average value for
-a coarse cell from constituent finer cells. This argument was added
-June 2023 to address
-\href{https://github.com/birdflow-science/BirdFlowR/issues/12}{Issue #12}; it
-allows comparison between the new default (TRUE) and the old behavior
-which is reproduced with \code{FALSE}.  We switched to treating NA as zero
-because NA frequently represents very dissimilar habitat to
-nearby non-NA values, but in the calculations using NA assumest that the NA
-cells are similar to nearby values.
-\code{dummy_dynamic_mask} this is here primarily for testing during the
-transition and may also eventually be dropped.}
+\item{...}{
+  Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
+  \describe{
+    \item{\code{season}}{a season name, season alias, or "all".  See
+\code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} for options.}
+    \item{\code{start}}{The starting point in time specified as a
+timestep, character date, or date object.}
+    \item{\code{end}}{The ending point in time as a date or timestep.}
+    \item{\code{direction}}{Either "forward" or "backward" defaults to
+\code{"forward"} if not processing dates.  If using date input \code{direction} is
+optional and is only used to verify the direction implicit in the dates.}
+    \item{\code{season_buffer}}{Only used with \code{season} input. \code{season_buffer} is
+passed to \code{\link[=lookup_season_timesteps]{lookup_season_timesteps()}} and defaults to 1; it is the number
+of timesteps to extend the season by at each end.}
+    \item{\code{n_steps}}{Alternative to \code{end}  The end will be \code{n_steps} away from
+\code{start} in \code{direction}; and the resulting sequence will have \code{n_step}
+transitions and \code{n_steps + 1}  timesteps.}
+  }}
 }
 \value{
 returns a BirdFlow model object that lacks marginals, but is
-otherwise complete.
+otherwise complete.  It is suitable for fitting with
+\href{https://github.com/birdflow-science/BirdFlowPy}{BirdFlowPy}.
 }
 \description{
 Write a template BirdFlow object to an hdf5 file based on distribution data
 downloaded with \pkg{ebirdst}. The object is complete except for marginals
-and transitions.
+and transitions.  Use \code{...} to truncate the model to part of the year.
 }
 \section{{Maximum number of parameters}}{
 
