@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9029</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9030</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,47 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9030" id="birdflowr-0109030">BirdFlowR 0.1.0.9030<a class="anchor" aria-label="anchor" href="#birdflowr-0109030"></a></h2>
+<p>2023-07-27</p>
+<div class="section level3">
+<h3 id="preprocess_species-0-1-0-9030">preprocess_species()<a class="anchor" aria-label="anchor" href="#preprocess_species-0-1-0-9030"></a></h3>
+<p>This update is a major overhaul of <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> with two primary goals.</p>
+<ul><li>Adding support for preprocessing truncated models - models that cover only part of the year.<br></li>
+<li>Cleaning up and simplifying the code by dropping some outdated parameters and breaking the function up into several functions.</li>
+</ul><div class="section level4">
+<h4 id="dropped-arguments-breaking-change-0-1-0-9030">Dropped arguments <strong>Breaking change</strong>
+<a class="anchor" aria-label="anchor" href="#dropped-arguments-breaking-change-0-1-0-9030"></a></h4>
+<ul><li>
+<code>tiff</code> - Prior default of FALSE is now always used and TIFF export of abundance data is no longer an option.</li>
+<li>
+<code>treat_na_as_zero</code> prior default of TRUE is now always used.</li>
+<li>
+<code>dummy_dynamic_mask</code> prior default of FALSE is now always used.</li>
+</ul><p>All three of these were a little anachronistic. <code>TIFF</code> output original was used in place of including the abundance data in the <code>hdf5</code>. The other two arguments were added during updates to allow simulating the older behavior for testing the update, and in both cases we’ve decided we like the newer behavior.</p>
+<p>Although these are breaking changes in that previously supported arguments are dropped, the new behavior mimics the old default behavior and I expect in most cases the values were not set differently than the default.</p>
+<p><strong>Note:</strong> Although TIFF output of abundances is no longer directly supported by preprocess species any model’s abundance can be exported as TIFF with:</p>
+<pre><code><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></span><span class="op">(</span><span class="va">r</span>, <span class="st">"abundance.tif"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level4">
+<h4 id="refactoring-0-1-0-9030">Refactoring<a class="anchor" aria-label="anchor" href="#refactoring-0-1-0-9030"></a></h4>
+<p>This shouldn’t have any effect on users.</p>
+<p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> was broken into four functions. The three new functions are all internal helper functions. They are:</p>
+<ul><li>
+<code><a href="../reference/determine_resolution.html">determine_resolution()</a></code> does the surprisingly tricky work of figuring out what resolution yields the desired number of fitted parameters in the model.</li>
+<li>
+<code><a href="../reference/process_rasters.html">process_rasters()</a></code> genarates the resampled and aggregated rasters used by the model from the ebird S&amp;T rasters.</li>
+<li>
+<code>export_birdflow()</code> exports a BirdFlow model as an hdf5 (or optionally .Rds)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="truncation-new-0-1-0-9030">Truncation <strong>New</strong>
+<a class="anchor" aria-label="anchor" href="#truncation-new-0-1-0-9030"></a></h4>
+<p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a <code>...</code> argument that is used to determine model truncation, and combination of parameters supported by <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> works here (eg <code>season = prebreeding</code> and <code>start = 5, end = 10</code>). The result is a non-cyclical preprocessed mode that only covers the transitions for the given time period. Truncation does not affect the resolution determination - resolution is selected such that the full model meets the desired number of parameters or GPU RAM. This means resolution isn’t dependent on the truncation - facilitating possible later stitching back together several truncated models from the same species.</p>
+</div>
+</div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9029" id="birdflowr-0109029">BirdFlowR 0.1.0.9029<a class="anchor" aria-label="anchor" href="#birdflowr-0109029"></a></h2>
 <p>2023-07-25</p>
 <p>Minor edits to vignettes and collection index.</p>
@@ -64,7 +105,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0.9028" id="birdflowr-0109028">BirdFlowR 0.1.0.9028<a class="anchor" aria-label="anchor" href="#birdflowr-0109028"></a></h2>
 <p>2023-07-18</p>
 <ul><li>Added BirdFlowOverview vignette from <a href="https://github.com/dsheldon" class="external-link">@dsheldon</a>.</li>
-<li>Minor udates to BirdFlowR vignette.</li>
+<li>Minor updates to BirdFlowR vignette.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9027" id="birdflowr-0109027">BirdFlowR 0.1.0.9027<a class="anchor" aria-label="anchor" href="#birdflowr-0109027"></a></h2>
@@ -78,7 +119,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9026" id="birdflowr-0109026">BirdFlowR 0.1.0.9026<a class="anchor" aria-label="anchor" href="#birdflowr-0109026"></a></h2>
-<p>2023-07-14 Fixed bug in ‘make_cache_readme()’</p>
+<p>2023-07-14</p>
+<p>Fixed bug in ‘make_cache_readme()’</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9025" id="birdflowr-0109025">BirdFlowR 0.1.0.9025<a class="anchor" aria-label="anchor" href="#birdflowr-0109025"></a></h2>
@@ -113,7 +155,7 @@
 </li>
 <li>New public,<code><a href="../reference/get_dates.html">get_dates()</a></code> returns the <code>$dates</code> component of a BirdFlow object, replacing an old private function that was no longer used. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/121" class="external-link">#121</a>.</li>
 <li>New metadata item <code>timestep_padding</code> tracks how much timesteps are padded in transition and marginal names. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/new_BirdFlow.html">new_BirdFlow()</a></code> are updated to produce it.<br></li>
-<li>New internal function <code><a href="../reference/get_timestep_padding.html">get_timestep_padding()</a></code> retreives the above or, for older models figures it out from the model structure.</li>
+<li>New internal function <code><a href="../reference/get_timestep_padding.html">get_timestep_padding()</a></code> retrieves the above or, for older models figures it out from the model structure.</li>
 <li>New internal function <code><a href="../reference/make_marginal_index.html">make_marginal_index()</a></code> derived from code previously in <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> is used by both <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
 </li>
 <li>New internal function <code><a href="../reference/ts_info.html">ts_info()</a></code> determines if a timestep sequence is forward or backwards and whether it crosses the year boundary.</li>
