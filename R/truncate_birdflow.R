@@ -51,7 +51,7 @@ truncate_birdflow <- function(bf, ...){
     stop("You must truncate to less than a full year.")
   new_timesteps <- 1:length(old_timesteps)
 
-  # Define the retained transtions both by their old and new names
+  # Define the retained transtitions both by their old and new names
   # (forward only)
   old_transitions <- as_transitions(old_timesteps, bf)
   new_transitions <- as_transitions(new_timesteps, bf)
@@ -124,7 +124,7 @@ truncate_birdflow <- function(bf, ...){
   bf$distr <- d
 
   # Subset and rename columns of dynamic mask
-  # Resuse d_cw as it's the same for both objects
+  # Reuse d_cw as it's the same for both objects
   if(has_dynamic_mask(bf)){
     dm <- bf$geom$dynamic_mask
     stopifnot(all(d_cw$old %in% colnames(dm)))

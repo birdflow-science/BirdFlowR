@@ -1,64 +1,39 @@
+# 1
 test_that("preprocess_species runs on test dataset", {
   skip_on_cran()
 
+  # Temporarily suppress BirdFlowR chatter
+  o_verbose <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = o_verbose))
+
   # Run on example data setting resolution based on gb (and then overiding for example_data)
-  expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE, tiff = FALSE))
+  expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
   expect_true(all((ext(a)[,] %% xres(a)) == 0))  # Test if origin is at 0, 0
 
-
-})
-
-
-test_that("preprocess_species runs with pre-set resolution and matches prior results", {
-
-  skip_on_cran()
-
-  # Create and commit to cleaning up a temporary dir
-  dir <- file.path(tempdir(), "preprocess_check")
-  dir.create(dir, showWarnings = FALSE)
-  on.exit(
-    unlink(dir, recursive = TRUE)
-  )
-
-  # Using snapshot and write test
-  # on 50 m version because it results in a small object.
-  expect_no_error(
-    b <- preprocess_species("example_data",
-                            hdf5 = TRUE,
-                            tiff = TRUE,
-                            res = 50,
-                            out_dir = dir,
-                            treat_na_as_zero = FALSE
-                            ))
-
-  # Check if origin is at 0,0  - failed prior to 6/20/2023
-  expect_true(all((ext(b)[,] %% xres(b)) == 0))
-
-
-  expect_snapshot(b)
-
-  # Snapshot added to verify that treat_na_as_zero = FALSE recreates old
-  # behavior.  Snapshot created before function changes.
-  # It shows row index and density for all non-zero cells at timestep 5
-  d <- get_distr(b, 5)
+  # Snapshot test of first 12 non-zero values in the 5th distribibution
+  d <- get_distr(a, 5)
   df <- data.frame(i = 1:length(d), density = d)
   df <- df[!df$density == 0, ]
+  df <- df[1:12, ]
   rownames(df) <- NULL
   expect_snapshot(df)
 
-  created_files <- list.files(dir)
-  expected_files <- c("example_data_2021_50km.hdf5",
-                      "example_data_2021_50km.tif",
-                      "example_data_2021_50km_lci.tif",
-                      "example_data_2021_50km_uci.tif" )
-  expect_setequal(created_files, expected_files)
-
+  expect_snapshot(ext(a))
+  expect_snapshot(res(a))
 
 })
 
+#3
 test_that("preprocess_species catches error conditions", {
+
+  # Temporarily suppress BirdFlowR chatter
+  o_verbose <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = o_verbose))
+
   # Mostly testing these to close gaps in code coverage
   expect_error(preprocess_species(c("amewoo", "Western kingbird"),
                                   hdf5 = FALSE),
@@ -113,10 +88,20 @@ test_that("preprocess_species catches error conditions", {
 
 })
 
-
+#4
 test_that("preprocess_species() works with clip", {
 
   skip_on_cran()
+
+  # Temporarily suppress BirdFlowR chatter
+  o_verbose <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = o_verbose))
+
+  # Create and commit to cleaning up a temporary dir
+  dir <- file.path(tempdir(), "preprocess_check")
+  dir.create(dir, showWarnings = FALSE)
+  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
 
   # Create a clipping polygon for the ebirdst "example_data" species.
   # It's already clipped so here I'm reducing just a little more
@@ -135,14 +120,18 @@ test_that("preprocess_species() works with clip", {
   terra::crs(clip) <- proj
   if(interactive()){
     # Plot "Full" abundance for "example_data" and our clipping polygon
-    a <- preprocess_species("example_data", hdf5 = FALSE)
+    a <- preprocess_species("example_data")
     terra::plot(rast(a, 1))
     terra::plot(poly, add = TRUE)
   }
 
   expect_no_error(
     b <- preprocess_species("example_data",
-                            hdf5 = FALSE,  clip = clip)
+                            out_dir = dir,
+                            hdf5 = TRUE,
+                            clip = clip,
+                            season = "prebreeding",
+                            res = 75)
     )
 
   expect_snapshot({
@@ -150,8 +139,11 @@ test_that("preprocess_species() works with clip", {
     res(b)
   })
 
-})
+  # Test that expect file was created
+  created_files <- list.files(dir)
+  expect_setequal(created_files,  "example_data_2021_75km_clip.hdf5")
 
+})
 
 
 

@@ -4,7 +4,7 @@
 \alias{calc_abundance_stats}
 \title{Calculate stats from a spatRaster with abundances for each timestep}
 \usage{
-calc_abundance_stats(x, circular = TRUE, dummy_dynamic_mask = FALSE)
+calc_abundance_stats(x, circular = TRUE)
 }
 \arguments{
 \item{x}{a multilayer spatRaster with relative abundances for each timestep}

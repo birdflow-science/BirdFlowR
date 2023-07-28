@@ -16,19 +16,16 @@
 #'   \item{area}{ a vector of area (sq m) that is in included cells for each
 #'   timestep} \item{res}{ the resolution of the raster in km}
 #' @keywords internal
-calc_abundance_stats <- function(x, circular = TRUE, dummy_dynamic_mask = FALSE){
+calc_abundance_stats <- function(x, circular = TRUE){
 
   m <- terra::values(x, mat = TRUE)
   m[ is.na(m)] <- 0
   m <-  as.logical(m)
   a <- array(m, dim = dim(x)) # dims:  x, y, timestep/week
   # counts is the number of unmasked cells for each timestep
-  if(dummy_dynamic_mask){
-    mask <- apply(a, c(1, 2), any )
-    cts <- rep(sum(mask), dim(a)[3])
-  } else {
-    cts <- apply(a, 3, sum)
-  }
+
+  cts <- apply(a, 3, sum)
+
 
   if(circular)
     cts <- c(cts, cts[1])

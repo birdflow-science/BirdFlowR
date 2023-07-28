@@ -28,6 +28,6 @@ If there are more than one distribution they are stored as a matrix and
 the colnames store the time associated with each distribution.
 
 This function currently returns the input object as is if it cannot resolve
-labels because it is unlabled or doesn't have the expected label format.
+labels.
 }
 \keyword{internal}

@@ -55,7 +55,7 @@
 #'   object will have `n_steps + 1` timesteps in the sequence.
 #'
 #'  5. **Default** If `season` and `start` are both NULL (or omitted) the
-#'  default is to return all timesteps in the model, equivallent to
+#'  default is to return all timesteps in the model, equivalent to
 #'  `season = "all".`
 #'
 #' @examples
