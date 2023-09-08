@@ -259,11 +259,11 @@ xy_to_latlon <- function(x, y, bf){
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(x)
     if(!is.null(nc) && !is.na(nc) && nc == 2){
-      if(all(c("x", "y") %in% names(x))){
-        xy <- x[, c("x", "y")]
-      } else { # no names or other names assume first col is x, second is y
-        xy <- x
-      }
+      xy <- x
+    } else if (all(c("x", "y") %in% names(x))){
+      xy <- x[, c("x", "y")]
+    } else {
+      stop("if y is missing x should contain x and y columns.")
     }
   } else {
     xy <- cbind(x, y)
