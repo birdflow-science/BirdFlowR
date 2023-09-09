@@ -1,3 +1,19 @@
+# BirdFlowR 0.1.0.9031
+2023-09-08
+
+* New function `as_distr()` converts raster (`terra::SpatRaster`) and point 
+(`sf::sf`or data frames) data into distributions. Rasters will be projected
+into cells that align with the BirdFlow object's cells and then cropped
+and masked. With default settings the resulting values will be 
+normalized to sum to 1 and any NA values will be replaced with 0.  POints are 
+converted into a distribution for each point in which all the 
+density is placed in the cell corresponding to the point. Projection of `sf`
+and `SpatRasters` is done automatically. Data in dataframes is assumed to 
+match the coordinate reference system (CRS) of the BirdFlow object unless
+the `crs` argument is used to define the CRS. Addresses #116.
+
+* bug fix in `xy_to_latlon()` that caused it to fail when `y` was omitted.
+
 # BirdFlowR 0.1.0.9030
 2023-07-27
 
