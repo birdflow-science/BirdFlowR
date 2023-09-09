@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9030</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9031</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,12 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9031" id="birdflowr-0109031">BirdFlowR 0.1.0.9031<a class="anchor" aria-label="anchor" href="#birdflowr-0109031"></a></h2>
+<p>2023-09-08</p>
+<ul><li><p>New function <code><a href="../reference/as_distr.html">as_distr()</a></code> converts raster (<code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>) and point (<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code>or data frames) data into distributions. Rasters will be projected into cells that align with the BirdFlow object’s cells and then cropped and masked. With default settings the resulting values will be normalized to sum to 1 and any NA values will be replaced with 0. POints are converted into a distribution for each point in which all the density is placed in the cell corresponding to the point. Projection of <code>sf</code> and <code>SpatRasters</code> is done automatically. Data in dataframes is assumed to match the coordinate reference system (CRS) of the BirdFlow object unless the <code>crs</code> argument is used to define the CRS. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/116" class="external-link">#116</a>.</p></li>
+<li><p>bug fix in <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> that caused it to fail when <code>y</code> was omitted.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9030" id="birdflowr-0109030">BirdFlowR 0.1.0.9030<a class="anchor" aria-label="anchor" href="#birdflowr-0109030"></a></h2>
 <p>2023-07-27</p>
