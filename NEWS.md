@@ -1,3 +1,12 @@
+# BirdFlowR 0.1.0.9032  (in progress)
+
+New functions:
+`plot_distr()`
+`animate_distr()` 
+Are functional but not finalized.  Arguments are likely to change or be added. 
+
+
+
 # BirdFlowR 0.1.0.9031
 2023-09-08
 
