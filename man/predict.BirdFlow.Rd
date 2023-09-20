@@ -2,6 +2,7 @@
 % Please edit documentation in R/predict.R
 \name{predict.BirdFlow}
 \alias{predict.BirdFlow}
+\alias{predict}
 \title{Predict bird distributions}
 \usage{
 \method{predict}{BirdFlow}(object, distr, ...)

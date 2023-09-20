@@ -3,7 +3,7 @@
 #' `predict()` projects bird distributions into the future or past. Given an
 #'  initial distribution and time period specified via `...`, `predict()`
 #'  generates probability distributions for each timestep.
-#'
+#' @aliases predict
 #' @param object A BirdFlow model object
 #' @param distr  a starting distribution
 #' @inheritDotParams lookup_timestep_sequence -x

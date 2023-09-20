@@ -7,18 +7,58 @@
 animate_distr(distr, bf, title = species(bf), ...)
 }
 \arguments{
-\item{distr}{A set of distributions it should be a matrix with \code{n_active(bf)} rows
-and a column for each distribution. The animation will proceed in the order}
+\item{distr}{A set of distributions it should be a matrix with \code{n_active(bf)}
+rowsand a column for each distribution. The animation will proceed in the
+in column order and column names will be used a subtitles in the plot.}
 
 \item{bf}{The BirdFlow object that \code{distr} is associated with.}
 
-\item{title}{The title to use for the animation. The defualt is
+\item{title}{The title to use for the animation. The default is
 the common name of the species.}
 
 \item{...}{
   Arguments passed on to \code{\link[=plot_distr]{plot_distr}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{subset}}{Defines an optional subset of \code{distr} that should be plotted.
+Use either column numbers, column names, or a logical vector.}
+    \item{\code{show_mask}}{If \code{TRUE} (the default) the static mask that indicates which
+cells are active in the model at any timestep will be shown.}
+    \item{\code{show_dynamic_mask}}{Defaults to \code{FALSE}. Set to \code{TRUE} to visualize the
+dynamic mask. This is achieved by overwriting cells that are dynamically
+masked with NA. For \code{show_dynamic_mask = TRUE} to work the column names in
+\code{distr} should all be in \code{colnames(get_distr(bf))}.  This is
+true for distributions returned by \href{predict.BirdFlowR}{\code{predict()}}
+and \code{\link[=get_distr]{get_distr()}}.}
+    \item{\code{limits}}{The range of density values to map \code{gradient_colors} to. The
+default is the range of the values in \code{distr} after applying \code{subset}. If
+you want to standardize the range across multiple models of a single
+species you might want to set to \code{c(0, max)} where \code{max} is the maximum
+observed value across all models. Alternatively if the range is highly
+variable among the columns in \code{distr} as when density spreads out from a
+single point in the results of \href{predict.BirdFlowR}{\code{predict(bf)}} you may
+want to set this smaller than the full range in which case the values will
+be trunctated to the limits (see examples).}
+    \item{\code{dynamic_scale}}{Set to \code{TRUE} to have the range of the data in each
+distribution mapped to the full color gradient. This allows visualizing the
+full range of values within each timestep optimally at the cost of
+consistency in the color scale among the facets - or animation frames
+if using \code{\link[=animate_distr]{animate_distr()}}.}
+    \item{\code{coast_linewidth}}{The line width to use when plotting the coast. Default
+is \code{0.25}.  If \code{NULL} the coast will not be plotted.}
+    \item{\code{coast_color}}{The color to use for plotting the coastline. If \code{NULL} the
+coast will not be plotted.}
+    \item{\code{gradient_colors}}{A color gradient that will be used to plot the density
+values. Leave or set to \code{NULL} for the default of
+\href{ebirdst::abundance_palette()}{ebirdst::abundance_palette(10, season = "weekly")}.}
+    \item{\code{active_cell_color}}{The background color for active cells in the
+landscape. Only used if \code{show_mask} is \code{TRUE}. These cells will only be
+visible if there are \code{NA} values in \code{distr} or if \code{show_dynamic_mask}
+is \code{TRUE}.}
+    \item{\code{inactive_cell_color}}{The color to use for inactive cells in the landscape.
+These are cells that are always masked. Only relevant when
+\code{show_mask = TRUE}.}
+    \item{\code{value_label}}{The label used for the values in the distribution.
+Defaults to "Density"}
   }}
 }
 \value{
@@ -29,24 +69,51 @@ or \code{gganimate::animate()}.  See example for how to export to a file.
 Animate distributions as produced by \code{get_distr()},
 \code{as_distr()}, or \code{predict()}.  The distributions will be displayed
 in the column order in \code{distr} and column labels will be used as
-plot subtitles.
+plot subtitle.
 }
 \examples{
 
+# Animate distributions from BirdFlow object - derived from
+# eBird Status and Trends:
+
 bf <- BirdFlowModels::amewoo
-distr <- get_distr(bf, lookup_timestep_sequence(bf, season = "prebreeding"))
-anim <- animate_distr(distr, bf)
+ts <- lookup_timestep_sequence(bf, season = "prebreeding")
+distr <- get_distr(bf, ts)
+anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
+
+anim
+
+### Project a distribution
+
+# Make starting distribution
+# Since we define the point in WGS84 (not crs(bf)) we also have to provide
+# the crs.
+point <- data.frame(x = -90, y = 35)
+d1 <- as_distr(point, bf, crs = "EPSG:4326" )
+
+# Project - density will spread over type resulting in a vastly different
+# range of values
+density_spread <- predict(bf, d1, season = "prebreeding")
+
+# Have the color gradient rescaled to the range of data in each
+# individual frame  - density scaling is dynamic.
+spread_anim <- animate_distr(density_spread, bf,   dynamic_scale= TRUE)
+
+# Or put in values to use for the limits of the color scale - values outside
+# of the limits will be truncated
+spread_anim <- animate_distr(density_spread, bf,  limit = c(0, 0.05))
+
 
 \dontrun{
-  # example render
-  gif <- gganimate::animate(anim,
+  # example render fo file
+  gif <- gganimate::animate(spread_anim,
                             device = "ragg_png", # ragg_png is fast and pretty
                             width = 7, height = 6,
                             res = 150, units = "in")
   # Display
   print(gif)
 
-  # Save
+  # mv
   gif_file <- tempfile("animation", fileext = ".gif")
   gganimate::save_animation(gif, gif_file)
   file.remove(gif_file) # cleanup

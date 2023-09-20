@@ -4,10 +4,9 @@
 \alias{rasterize}
 \alias{rasterize_distr}
 \alias{rast,BirdFlow-method}
-\title{Functions to convert a BirdFlow object or distribution into a
-SpatRaster}
+\title{Convert a BirdFlow distribution into a raster}
 \usage{
-rasterize_distr(distr, bf, format = "SpatRast")
+rasterize_distr(distr, bf, format = "SpatRaster")
 
 \S4method{rast}{BirdFlow}(x, which = "all")
 }
@@ -29,11 +28,34 @@ e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;    or \code{"a
 return distributions for all timesteps.}
 }
 \value{
-A \link[terra:SpatRaster-class]{terra::SpatRaster} object.
+For \code{rasterize_distr()} the return type depends on the \code{format} argument:
+\itemize{
+\item \code{"SpatRaster"} (the default) returns a \link[terra:SpatRaster-class]{terra::SpatRaster} object.
+\item \code{"numeric"} returns a matrix (one distribution) or array (multiple
+distributions).  In either case the first two dimensions will be y (rows),
+and x (columns).
+\item \code{"dataframe"} will return the raster information in a data frame with a
+row for every value (long format) with columns:
+\itemize{
+\item \code{x}, \code{y} the x and y coordinates of the cell center.
+\item \code{i} the location index (in \code{bf}) of the cell.
+\item \code{label} The label associated with the distribution, taken from column
+names of \code{distr} - typically it indicates time. It is an ordered factor
+with the level order matching the order of the distribution in \code{distr}.
+The ordered factor is helpful when animating.
+\item \code{value}  The cell value, typically density
+\item \code{order}  The column index of the distribution in \code{distr} or if only one
+distribution \code{1}.
+The object is suitable for plotting with [\link[ggplot2:geom_tile]{ggplot2::geom_raster}].
+}
+}
+
+\code{rast()} returns a \link[terra:SpatRaster-class]{terra::SpatRaster}
 }
 \description{
-\code{rasterize_distr()} creates a \link[terra:SpatRaster-class]{SpatRaster}
-similar to those created by \code{\link[terra:rast]{terra::rast()}} from one or more distributions
-in their compact vector form. \code{rast()} converts a BirdFlow object directly
+\code{rast()} converts a BirdFlow object directly
 to a \link[terra:SpatRaster-class]{SpatRaster}.
+\code{rasterize_distr()} converts a \href{as_distr}{distribution} into a
+\link[terra:SpatRaster-class]{SpatRaster}, numeric matrix or array, or a raster data
+frame.
 }

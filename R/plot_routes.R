@@ -178,8 +178,8 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   # Make raster showing which cells are active in the model
   rast <- rasterize_distr(rep(TRUE, n_active(bf)), bf, format = "dataframe")
-  rast$density[is.na(rast$density)] <- FALSE
-  rast$value <- rast$density
+  rast$value[is.na(rast$value)] <- FALSE
+  rast$value <- rast$value
 
   # Coastline for this model
   coast <- get_coastline(bf)

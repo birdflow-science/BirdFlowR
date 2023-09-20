@@ -30,18 +30,18 @@ test_that("rasterize_distr() with data.frame output", {
   expect_no_error(df <- rasterize_distr(get_distr(bf, 1), bf, format = "data.frame"))
   expect_false(any(is.na(df$x)))
   expect_false(any(is.na(df$y)))
-  hdf <- head(df[!is.na(df$density) & df$density != 0, ], 3)
+  hdf <- head(df[!is.na(df$value) & df$value != 0, ], 3)
   expect_snapshot(hdf)
   # Convert back to distribution and compare
   vals <- df[!is.na(df$i), ]
-  vals <- vals$density[order(vals$i)]
+  vals <- vals$value[order(vals$i)]
   expect_equal(vals, as.numeric(get_distr(bf,1)))
 
   # Multiple distributions
-  expect_no_error(df <- rasterize_distr(get_distr(bf, 1:3), bf, format = "data.frame"))
+  expect_no_error(df <- rasterize_distr(get_distr(bf, 1:3), bf, format = "dataframe"))
   expect_false(any(is.na(df$x)))
   expect_false(any(is.na(df$y)))
-  hdf <- head(df[!is.na(df$density) & df$density != 0, ], 3)
+  hdf <- head(df[!is.na(df$value) & df$value != 0, ], 3)
   expect_snapshot(hdf)
 })
 
@@ -80,7 +80,7 @@ test_that("rasterize_distr() to dataframe works", {
   d <- get_distr(bf, 1)
   expect_no_error(df <- rasterize_distr(d, bf = bf, format =  "dataframe"))
 
-  d <- head(df[!df$density == 0 & !is.na(df), ], 3)
+  d <- head(df[!df$value == 0 & !is.na(df$value), ], 3)
   expect_snapshot(d)
 })
 

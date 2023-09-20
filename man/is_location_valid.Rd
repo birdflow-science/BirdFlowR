@@ -44,7 +44,7 @@ For \code{is_location_valid()} there are 2 ways of inputting locations. Only
 one should be used: either \code{i} a vector of location indices
 (see \code{\link[=xy_to_i]{xy_to_i()}}), or \code{x} and \code{y}.
 
-For both functions time shold be input either as \code{timestep} or \code{date}.
+For both functions time should be input either as \code{timestep} or \code{date}.
 
 The number of timesteps or dates should either be 1 or match to the number
 of locations or distributions; if singular it will be applied to all.
