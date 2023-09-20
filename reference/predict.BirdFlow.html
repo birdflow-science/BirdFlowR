@@ -14,7 +14,7 @@ generates probability distributions for each timestep."><meta property="og:image
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9032</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,15 +61,15 @@ generates probability distributions for each timestep."><meta property="og:image
     </div>
 
     <div class="ref-description section level2">
-    <p><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> projects bird distributions into the future or past. Given an
-initial distribution and time period specified via <code>...</code>, <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>
+    <p><code>predict()</code> projects bird distributions into the future or past. Given an
+initial distribution and time period specified via <code>...</code>, <code>predict()</code>
 generates probability distributions for each timestep.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for BirdFlow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">distr</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">predict</span><span class="op">(</span><span class="va">object</span>, <span class="va">distr</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -127,7 +127,7 @@ and time.</p>
     <div class="dont-index">
 <ul><li><p><code><a href="lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> processes the time inputs
 (<code>start</code>, <code>end</code>, <code>direction</code>, and <code>season_buffer</code>)</p></li>
-<li><p><code><a href="route.html">route()</a></code> and <code><a href="route_migration.html">route_migration()</a></code> are similar to <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> but
+<li><p><code><a href="route.html">route()</a></code> and <code><a href="route_migration.html">route_migration()</a></code> are similar to <code>predict()</code> but
 generate routes instead of distributions.</p></li>
 </ul></div>
     </div>

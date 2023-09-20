@@ -40,6 +40,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.html</loc>
   </url>
   <url>
@@ -191,6 +194,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.html</loc>

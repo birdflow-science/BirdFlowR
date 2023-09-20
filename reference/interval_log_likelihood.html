@@ -16,7 +16,7 @@ the same."><meta property="og:image" content="https://birdflow-science.github.io
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9032</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,7 +175,7 @@ partial model and the date falls in the uncovered portion of the year</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The core of this function is calling <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> on a distribution that has
+    <p>The core of this function is calling <code><a href="predict.BirdFlow.html">predict()</a></code> on a distribution that has
 the starting location hot (value of 1) and all other locations zero and then
 extracting the probability of the ending week and location. The
 log of this probability is returned in the <code>log_likelihood</code> column. The null

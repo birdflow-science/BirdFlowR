@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9032</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,18 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9032" id="birdflowr-0109032">BirdFlowR 0.1.0.9032<a class="anchor" aria-label="anchor" href="#birdflowr-0109032"></a></h2>
+<p>2023-09-20</p>
+<ul><li>BREAKING change to column names in data frame returned by <code>rasterize_distr(format = "dataframe")</code>
+<ul><li>Old <code>"time"</code> is now <code>"label"</code> and is an ordered factor it is derived from the column names in the distribution which are often but not always dates.</li>
+<li>Old <code>density</code> is now value.</li>
+</ul></li>
+<li>New functions to visualize distributions:
+<ul><li><code><a href="../reference/plot_distr.html">plot_distr()</a></code></li>
+<li><code><a href="../reference/animate_distr.html">animate_distr()</a></code></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9031" id="birdflowr-0109031">BirdFlowR 0.1.0.9031<a class="anchor" aria-label="anchor" href="#birdflowr-0109031"></a></h2>
 <p>2023-09-08</p>
@@ -157,7 +169,7 @@
 <p>I’ve also split some internal code into additional helper functions which makes the package code a little cleaner but doesn’t affect users.</p>
 <p>The one change that might affect users is the ability to subset a fitted model to a date range with <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>.</p>
 <ul><li>New function <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code> truncates the dates a BirdFlow model covers. It works with both fitted and preprocessed models, but is not yet integrated with preprocessing, so logistically currently is only useful for fitted models.</li>
-<li>New function <code><a href="../reference/as_transitions.html">as_transitions()</a></code> converts an ordered sequence of timesteps into the names of the transitions that connect them. Used in <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
+<li>New function <code><a href="../reference/as_transitions.html">as_transitions()</a></code> converts an ordered sequence of timesteps into the names of the transitions that connect them. Used in <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
 </li>
 <li>New public,<code><a href="../reference/get_dates.html">get_dates()</a></code> returns the <code>$dates</code> component of a BirdFlow object, replacing an old private function that was no longer used. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/121" class="external-link">#121</a>.</li>
 <li>New metadata item <code>timestep_padding</code> tracks how much timesteps are padded in transition and marginal names. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/new_BirdFlow.html">new_BirdFlow()</a></code> are updated to produce it.<br></li>
@@ -178,7 +190,7 @@
 <div class="section level4">
 <h4 id="details-0-1-0-9023">Details<a class="anchor" aria-label="anchor" href="#details-0-1-0-9023"></a></h4>
 <ul><li><p>Fixed bug in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> that caused it to sometimes create BirdFlow models where the pixels didn’t align with the origin. There’s nothing wrong with the previous behavior from a modelling standpoint but always aligning to the origin has some logistical benefits and was the original intent.</p></li>
-<li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> to produce confusing dimension labels when called on multiple distributions at once.</p></li>
+<li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> to produce confusing dimension labels when called on multiple distributions at once.</p></li>
 <li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now allows full cycle sequence and returns full cycle sequences with <code>season = "all"</code>. This means including all timesteps and then repeating the first timestep. This also allows setting <code>start</code> and <code>end</code> to the same timestep as well (to loop through a whole year). This will change results from <code>distr_performance()</code> for whole year models.</p></li>
 <li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a new argument and default behavior. It now replaces NA values in the distributions with zero prior to transforming and changing the resolution, and uses bilinear interpolation in place of nearest neighbor. Set <code>treat_na_as_zero</code> to <code>FALSE</code> for old behavior. The new way seems better though. See detailed explanation in <a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">Issue </a><a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">#12</a>.</p></li>
 </ul></div>
@@ -262,14 +274,14 @@
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> gains new <code>season</code> parameter as its second argument. Previously season could be specified via <code>start</code> but it was confusing, especially when called via <code>...</code> from other functions.<br></li>
 <li>
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> <code>n</code> argument renamed to <code>n_steps</code>.</li>
-<li>All functions that allow specifying a sequence of timesteps (or date range) now use <code>...</code> passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> to do so. Previously for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> some of these were explicit arguments that were then passed individually to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>
+<li>All functions that allow specifying a sequence of timesteps (or date range) now use <code>...</code> passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> to do so. Previously for <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> some of these were explicit arguments that were then passed individually to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>
 </li>
 </ul><p><strong>Affected functions</strong></p>
 <p>This impacts calls to functions that pass arguments on to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>:</p>
 <ul><li>
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> (directly)</li>
 <li><code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code></li>
-<li><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code></li>
+<li><code><a href="../reference/predict.BirdFlow.html">predict()</a></code></li>
 <li><code><a href="../reference/route.html">route()</a></code></li>
 <li><code><a href="../reference/distribution_performance.html">distribution_performance()</a></code></li>
 <li><code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code></li>
@@ -417,7 +429,7 @@ use_seasonal_colors, pal, barheight</li>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9005" id="birdflowr-0109005">BirdFlowR 0.1.0.9005<a class="anchor" aria-label="anchor" href="#birdflowr-0109005"></a></h2>
-<p>Added argument <code>n</code> to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, an alternative to <code>end</code>, <code>n</code> indicates how many transitions should be in the resulting sequence. <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, and <code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code> all gained either an explicit <code>n</code> parameter or access to it via <code>...</code>.</p>
+<p>Added argument <code>n</code> to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, an alternative to <code>end</code>, <code>n</code> indicates how many transitions should be in the resulting sequence. <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code>, <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, and <code><a href="../reference/animate_movement_vectors.html">animate_movement_vectors()</a></code> all gained either an explicit <code>n</code> parameter or access to it via <code>...</code>.</p>
 <p><strong>Breaking change:</strong> The pre-existing <code>n</code> parameter to <code><a href="../reference/route.html">route()</a></code> was renamed <code>n_each</code> to avoid conflict with the new <code>n</code> parameter which is passed on to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>.</p>
 <p>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/76" class="external-link">#76</a>.</p>
 </div>
@@ -458,7 +470,7 @@ use_seasonal_colors, pal, barheight</li>
 <h4 id="summary-0-1-0-9001">Summary<a class="anchor" aria-label="anchor" href="#summary-0-1-0-9001"></a></h4>
 <p>Dynamic masking is a major overhaul of the package in which the cells the model acts on will change over time and be limited to cells with non-zero value in the eBird S&amp;T distributions. This means that the marginal dimensions will vary over time, and they will often not be square.</p>
 <p>The intent is to isolate the user and from the changes. In particular the output and input distribution objects will still contain all the active cells and most public function arguments are unchanged.</p>
-<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamicly masked distributions that conform to the marginal dimensions. <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
+<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamicly masked distributions that conform to the marginal dimensions. <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
 <p>BirdFlow objects gained a great circle distance and a dynamic mask, both created in preprocessing, and variable marginals and transitions dimensions. The great circle distance is used by python and then dropped (in python) from the fitted model, as it’s fairly large and easy to recalculate with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</p>
 </div>
 <div class="section level4">
@@ -497,7 +509,7 @@ use_seasonal_colors, pal, barheight</li>
 <li>
 <code><a href="../reference/get_distr.html">get_distr()</a></code> with <code>from_marginals = TRUE</code> now has to expand the truncated distribution calculated from the marginal out to a full distribution.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> have to map from full distributions, to truncated distributions before applying the transition and then, expand back to full for output.</li>
+<code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> have to map from full distributions, to truncated distributions before applying the transition and then, expand back to full for output.</li>
 <li>
 <code>validate_birdflow()</code> now checks the dimensions of the marginals and transition matrices against the dynamic mask cell counts for each timestep.</li>
 <li>
@@ -542,7 +554,7 @@ controlled by <code>match_extent</code>.</li>
 <ul><li><code><a href="../reference/lookup_transitions.html">lookup_transitions()</a></code></li>
 <li><code><a href="../reference/route.html">route()</a></code></li>
 <li><code><a href="../reference/route_migration.html">route_migration()</a></code></li>
-<li><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code></li>
+<li><code><a href="../reference/predict.BirdFlow.html">predict()</a></code></li>
 </ul></li>
 <li>Updated functions to use <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code>
 <ul><li><code><a href="../reference/get_distr.html">get_distr()</a></code></li>
@@ -576,7 +588,7 @@ controlled by <code>match_extent</code>.</li>
 <ul><li><p>New interval_loglikelihood() calculates log likelihood for banding and tracking data given a BirdFlow model.</p></li>
 <li><p>new supporting functions:</p></li>
 <li><p><code><a href="../reference/build_transitions.html">drop_transitions()</a></code></p></li>
-<li><p><code><a href="../reference/is_location_valid.html">is_location_valid()</a></code>, <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> test whether locations and distributions are valid inputs for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code></p></li>
+<li><p><code><a href="../reference/is_location_valid.html">is_location_valid()</a></code>, <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> test whether locations and distributions are valid inputs for <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code></p></li>
 <li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code></p></li>
 </ul></div>
     <div class="section level2">
@@ -590,17 +602,17 @@ controlled by <code>match_extent</code>.</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9044" id="birdflowr-0009044">BirdFlowR 0.0.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0009044"></a></h2>
 <ul><li><p>new function <code>build_transitions(x)</code> will populate <code>x$transitions</code> with both forward and backwards transitions. This is recommended before repeated <code>forecast()</code> or predict calls as it avoids repeatedly making transitions on the fly. It does triple the memory usage for the BirdFlow object so should probably only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse.</p></li>
-<li><p>previously <code>transitions_from_marginal()</code> produced a standard matrix. Now, if the mariginal is a sparse the conversion is done on and preserves the sparse matrix. Similarly, if the transition matrix is sparse <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> both calculate on sparse objects. This should speed those two functions up significantly.</p></li>
+<li><p>previously <code>transitions_from_marginal()</code> produced a standard matrix. Now, if the mariginal is a sparse the conversion is done on and preserves the sparse matrix. Similarly, if the transition matrix is sparse <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> both calculate on sparse objects. This should speed those two functions up significantly.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9036" id="birdflowr-0009036">BirdFlowR 0.0.0.9036<a class="anchor" aria-label="anchor" href="#birdflowr-0009036"></a></h2>
-<ul><li>replaced <code>forecast()</code> with a BirdFlow method for <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>.</li>
+<ul><li>replaced <code>forecast()</code> with a BirdFlow method for <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9033" id="birdflowr-0009033">BirdFlowR 0.0.0.9033<a class="anchor" aria-label="anchor" href="#birdflowr-0009033"></a></h2>
 <p>The end result of all the time stuff enumerated below is that (1) you can set the time format, (2) as before when possible the time associated with each distribution is stored in dim names, (3) when it’s a single distribution and thus not possible to store the time in the dim names a new <code>"time"</code> attribute is added to the object to store the time associated with the distribution.</p>
 <ul><li><p>new <code><a href="../reference/birdflow_options.html">birdflow_options()</a></code> allows setting global options that persist for the session. Currently there are two options <code>verbose</code> and <code>time_format</code>.</p></li>
-<li><p>The <code>time_format</code> option controls the labeling of distributions either in column names if there are more than 1 distribution or via the “time” attribute (See below) if there’s a single distribution. This affects <code><a href="../reference/get_distr.html">get_distr()</a></code>, <code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code>, and <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code>.</p></li>
+<li><p>The <code>time_format</code> option controls the labeling of distributions either in column names if there are more than 1 distribution or via the “time” attribute (See below) if there’s a single distribution. This affects <code><a href="../reference/get_distr.html">get_distr()</a></code>, <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, and <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code>.</p></li>
 <li><p><code><a href="../reference/get_distr.html">get_distr()</a></code> now adds an attribute <code>"time"</code> when returning a single distribution as a vector. Multiple distributions already used matrix column names to record the time associated with each distribution.</p></li>
 <li><p>Similarly, <code><a href="../reference/expand_distr.html">expand_distr()</a></code> when called on a single distribution will preserve the <code>"time"</code> attribute in its output matrix, and <code><a href="../reference/flatten_raster.html">flatten_raster()</a></code> called on a single distribution’s raster (a matrix) will also preserve the “time” attribute in its output vector.</p></li>
 <li><p><code><a href="../reference/rasterize.html">rasterize_distr()</a></code> and thus also <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> now convert the <code>"time"</code> attribute to a layer name in the output raster when there is a single distribution. They previously and still do this with the distribution column names for multiple distributions.</p></li>

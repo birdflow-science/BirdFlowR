@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9031</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9032</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -355,14 +355,14 @@ elsewhere.</p>
 <div class="section level3">
 <h3 id="project-forward-from-this-location-to-summer">Project forward from this location to summer<a class="anchor" aria-label="anchor" href="#project-forward-from-this-location-to-summer"></a>
 </h3>
-<p><code><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict()</a></code> returns the distribution over time as a matrix
+<p><code><a href="../reference/predict.BirdFlow.html">predict()</a></code> returns the distribution over time as a matrix
 with one column per timestep.</p>
 <p>The plot shows where birds that winter at a particular location are
 likely to be as the year progresses and ultimately where they might
 spend their summer. The probability density spreads as the weeks
 progress.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span>,</span>
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict.BirdFlow.html">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span>,</span>
 <span>             direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span><span class="op">)</span></span>
