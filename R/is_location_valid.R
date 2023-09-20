@@ -10,7 +10,7 @@
 #' one should be used: either `i` a vector of location indices
 #' (see [xy_to_i()]), or `x` and `y`.
 #'
-#' For both functions time shold be input either as `timestep` or `date`.
+#' For both functions time should be input either as `timestep` or `date`.
 #'
 #' The number of timesteps or dates should either be 1 or match to the number
 #' of locations or distributions; if singular it will be applied to all.
