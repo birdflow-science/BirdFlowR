@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_distr.R
 \name{plot_distr}
 \alias{plot_distr}
-\title{Plot distributions with ggplot2}
+\title{Plot distributions}
 \usage{
 plot_distr(
   distr,
@@ -64,7 +64,7 @@ coast will not be plotted.}
 
 \item{gradient_colors}{A color gradient that will be used to plot the density
 values. Leave or set to \code{NULL} for the default of
-\href{ebirdst::abundance_palette()}{ebirdst::abundance_palette(10, season = "weekly")}.}
+\code{ebirdst::abundance_palette(10, season = "weekly")}.}
 
 \item{active_cell_color}{The background color for active cells in the
 landscape. Only used if \code{show_mask} is \code{TRUE}. These cells will only be
@@ -85,7 +85,7 @@ Defaults to "Density"}
 \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object.  Use \code{print()} to render it.
 }
 \description{
-Return a \href{ggplot2::ggplot}{ggplot} object with plots of one or more
+Return a \link[ggplot2:ggplot]{ggplot2::ggplot} object with plots of one or more
 distributions.
 }
 \details{

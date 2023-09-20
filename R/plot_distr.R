@@ -1,5 +1,5 @@
 
-#' Plot distributions with ggplot2
+#' Plot distributions
 #'
 #' Return a [ggplot2::ggplot] object with plots of one or more
 #' distributions.
@@ -74,7 +74,7 @@
 #'   coast will not be plotted.
 #' @param gradient_colors A color gradient that will be used to plot the density
 #'   values. Leave or set to `NULL` for the default of
-#'   `ebirdst::abundance_palette(10, season = "weekly"`.
+#'   `ebirdst::abundance_palette(10, season = "weekly")`.
 #' @param active_cell_color The background color for active cells in the
 #'   landscape. Only used if `show_mask` is `TRUE`. These cells will only be
 #'   visible if there are `NA` values in `distr` or if `show_dynamic_mask`

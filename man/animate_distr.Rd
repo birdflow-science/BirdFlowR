@@ -49,7 +49,7 @@ is \code{0.25}.  If \code{NULL} the coast will not be plotted.}
 coast will not be plotted.}
     \item{\code{gradient_colors}}{A color gradient that will be used to plot the density
 values. Leave or set to \code{NULL} for the default of
-\href{ebirdst::abundance_palette()}{ebirdst::abundance_palette(10, season = "weekly")}.}
+\code{ebirdst::abundance_palette(10, season = "weekly")}.}
     \item{\code{active_cell_color}}{The background color for active cells in the
 landscape. Only used if \code{show_mask} is \code{TRUE}. These cells will only be
 visible if there are \code{NA} values in \code{distr} or if \code{show_dynamic_mask}
