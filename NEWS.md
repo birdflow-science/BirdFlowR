@@ -1,10 +1,18 @@
+
+# BirdFlowR 0.1.0.9033
+2023-10-10
+
+* Minor update to build_collection_index.R so it works regardless of whether 
+  BirdFlowR is loaded with `devtools::load_all()` or `library(BirdFlowR)`.
+  
+
 # BirdFlowR 0.1.0.9032
 2023-09-20
 
 * BREAKING change to column names in data frame returned by `rasterize_distr(format = "dataframe")` 
   * Old `"time"` is now `"label"` and is an ordered factor it is derived from
   the column names in the distribution which are often but not always dates.
-  * Old `density` is now value. 
+  * Old `"density"` is now `"value"`. 
   
 * New functions to visualize distributions:
   * `plot_distr()` 

@@ -107,10 +107,12 @@ build_collection_index <- function(dir, collection_url){
   # Save index .Rds
   saveRDS(index, index_path)
 
-  # Copy logo
-  file.copy(system.file("man/figures/logo.png", package = "BirdFlowR"),
-            file.path(dir, "logo.png"))
-
+  # Download logo
+  logo_file <-   file.path(dir, "logo.png")
+  if(!file.exists(logo_file)){
+    download.file("https://birdflow-science.github.io/BirdFlowR/logo.png",
+                  destfile = logo_file, method = "wget")
+  }
   # Save index.htm
   model <- index$model[1]
 
