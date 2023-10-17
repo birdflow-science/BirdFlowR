@@ -1,5 +1,4 @@
-
-
+# nolint start: cyclocomp_linter.
 #' process_rasters
 #'
 #' Internal function to process rasters from ebirds status and trends for use
@@ -30,7 +29,7 @@ process_rasters <- function(res,
                             sp_path,
                             clip,
                             project_method,
-                            download_patterns){
+                            download_patterns) {
 
 
   res_m <- res * 1000
@@ -79,7 +78,7 @@ process_rasters <- function(res,
   # More often than not the NA represents very different habitat
   # than nearby non-na values so is usually more appropriately t
   # treated as non-habitat (zero) than as unkown.
-  for(name in c("abunds", "abunds_lci", "abunds_uci")) {
+  for (name in c("abunds", "abunds_lci", "abunds_uci")) {
     r <- get(name)
     v <- terra::values(r)
     v[is.na(v)] <- 0
@@ -218,3 +217,4 @@ process_rasters <- function(res,
               mask = mask))
 
 }
+# nolint end

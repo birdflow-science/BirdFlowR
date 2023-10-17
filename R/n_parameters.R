@@ -1,5 +1,4 @@
 
-
 #' @rdname dimensions
 #' @export
 #' @return `n_parameters()` the number of of parameters that the BirdFlow model
