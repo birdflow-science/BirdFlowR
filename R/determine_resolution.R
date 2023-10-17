@@ -1,3 +1,4 @@
+# nolint start: cyclocomp_linter.
 #' Determine BirdFlow model resolution                                     ####
 #'
 #'  Internal function to determine the resolution to use when creating a
@@ -8,9 +9,9 @@
 #'  creating the model.
 #'
 #'  If the `res` argument is `NULL` the heuristic here attempts to set a
-#   resolution that will result in close to `max_params` (but stay under it)
+#   resolution that will result in close to but always under `max_params` -
 #   the total number of fitted parameters in the model. It rounds the
-#   resolution variably - rounding more for larger values.
+#   resolution variably: rounding more for larger values.
 #
 #   If `res` and `max_params` are both `NULL` than `max_params` is calculated
 #'  from the `gpu_ram` parameter which specifies the the GB of ram available on
@@ -20,17 +21,20 @@
 #'  contain data after a resolution change. The code estimates by
 #'  calculating the area of the non-zero cells in the current resolution
 #'  and then figures out the resolution where the number of cells required
-#'  to cover that area matches our target number of parameters. However,
-#'  it's a poor estimate because it ignores the fact that coarse cells along
-#'  the edges overlap fine cells that contain a mix of no data and data.
+#'  to cover that area matches our target number of parameters.
 #'
-#'  The code here makes the estimate applies a correction factor to adjust the
-#'  estimate for the bias, resamples to the estimate, evaluates the new
-#'  number of non-zero cells (and thus parameters), and repeats until the
-#'  estimate converges on a number of parameters between 90 and 100 % of the
-#'  target number. This results in a rather precise resolution that can be fit
-#'  given the number of parameters which is then rounded up (reducing
-#'  parameters) to a cleaner number.
+#'  However, it's a poor estimate because it ignores the fact that coarse cells
+#'  along the edges overlap fine cells that contain a mix of no data and data.
+#   Therefore, the initial estimate is adjusted with a correction factor to
+#'  reduce the bias.
+#'
+#'  Next it resamples to the estimated resolution, evaluates the new number of
+#'  non-zero cells (and thus parameters), and makes a new estimate, repeating
+#'  the process until the realized number of parameters from the resolution
+#'  converges on 90 to 100 % of the target. This results in a fairly precise
+#'  maximum resolution that can be fit given the number of parameters.
+#'
+#'  The last step is to round up (reducing parameters) to a cleaner number.
 #'
 #' @inheritParams preprocess_species
 #' @param sp_path The species path used with ebirdst to download and load data
@@ -50,10 +54,10 @@ determine_resolution <- function(sp_path,
                                  clip,
                                  crs,
                                  download_species,
-                                 project_method){
+                                 project_method) {
 
 
-  verbose <- birdflow_options("verbose" )
+  verbose <- birdflow_options("verbose")
   max_param_per_gb <- birdflow_options("max_param_per_gpu_gb")
 
   if (!is.null(res)) {
@@ -203,3 +207,4 @@ determine_resolution <- function(sp_path,
   return(res)
 
 }
+# nolint end

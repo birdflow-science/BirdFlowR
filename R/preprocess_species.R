@@ -72,10 +72,10 @@
 #' @examples
 #' \dontrun{
 #'
-#'  bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
-#'  plot(rasterize_distr(get_distr( bf, c(1, 26)), bf))
+#'  bf <- preprocess_species("amewoo", hdf5 = FALSE )
+#'  plot_distr(get_distr(bf, c(1, 26)), bf = bf)
 #'
-#' # Create clip polgyon as an sf object
+#' # Create clip polygon as an sf object
 #' # Use the extent rectangle but with western edge moved in
 #' # The clip can be anything that terra::vect will process into a polygon
 #' e <- ext(bf)
@@ -85,13 +85,12 @@
 #'                    e[2], e[4],
 #'                    e[2], e[3],
 #'                    e[1], e[3]), ncol = 2, byrow = TRUE)
-#' sfc <- st_sfc(st_polygon(list(coords)), crs = crs(bf))
-#' clip <- st_sf(data.frame(id = 1, geom = sfc))
+#' sfc <- sf::st_sfc(sf::st_polygon(list(coords)), crs = crs(bf))
+#' clip <- sf::st_sf(data.frame(id = 1, geom = sfc))
 #'
-#' bfc <- preprocess_species("amewoo", tiff = FALSE,
-#'                          hdf5 = FALSE, clip = clip ) # clipped bird flow
+#' bfc <- preprocess_species("amewoo", hdf5 = FALSE, clip = clip ) # with clip
 #'
-#'  plot(rasterize_distr(get_distr(bfc, 1), bfc))
+#'  plot_distr(get_distr(bfc, 1), bfc)
 #'
 #'
 #' }
@@ -145,7 +144,7 @@ preprocess_species <- function(species = NULL,
   # use "example_data" when downloading, loading raster, and writing files
   # but "yebsap" for looking up species information
   if (species == "example_data") {
-    if(verbose)
+    if (verbose)
       cat("The example datset does not represet a complete species range so\n",
           "should only used for demonstrating package functions.\n", sep = "")
     download_species <- "example_data"
@@ -304,7 +303,6 @@ preprocess_species <- function(species = NULL,
                               crs = crs,
                               download_species = download_species,
                               project_method = project_method)
-  res_m <- 1000 * res # target resolution in meters (res argument uses KM)
 
   #----------------------------------------------------------------------------#
   # Set output paths  (depends on resolution)                               ####
@@ -375,6 +373,7 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
 
   # Reformat and export dates
+
   dates <- as.data.frame(ebirdst::ebirdst_weeks)
   names(dates)[names(dates) == "week_number"] <- "interval"
   dates$doy <- lubridate::yday(dates$date) + 0.5
@@ -382,6 +381,10 @@ preprocess_species <- function(species = NULL,
 
   # Rename ("week_" columns by dropping preffix )
   names(dates) <- gsub("^week_", "", names(dates))
+
+  # Duplicate interval column as week so that week number is preserved
+  # in truncated models
+  dates$week <- dates$interval
 
   # Save to export object
   export$dates <- dates
@@ -431,11 +434,11 @@ preprocess_species <- function(species = NULL,
     colnames(export$distr) <- colnames(export$geom$dynamic_mask) <-
     paste0("t", seq_len(ncol(export$distr)))
 
-  if(truncated){
+  if (truncated) {
     truncated <- TRUE
     export <- truncate_birdflow(export, ...)
 
-    if(verbose){
+    if (verbose) {
       cat("After truncation model has:",  n_parameters(export), "parameters\n")
     }
 
@@ -451,12 +454,13 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   # Duplicate first distribution and corresponding dates so full cycle is fit
   # Skip if truncated because truncated models cannot be cyclical.
-  if(!truncated){
+  if (!truncated) {
 
     # Dates
     dates <- export$dates
+    # Extract first date and resinsert as interval 53
     first <- dates[1, , drop = FALSE]
-    first$interval <- dates$interval[nrow(dates)] + 1
+    first$interval <- dates$interval[nrow(dates)] + 1  # interval 53, week 1
     dates <- rbind(dates, first)
     export$dates <- dates
     export$metadata$n_timesteps <- length(unique(dates$date))

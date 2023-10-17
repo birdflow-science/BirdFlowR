@@ -3,7 +3,7 @@
 #' Calculate great circle distances among BirdFlow object cells
 #'
 #' This function calculates a square, distance matrix with `n_active()` cells
-#' on each side. Each cell represents the distance between the it's
+#' on each side. Each cell represents the distance between its
 #' row index and colum index treated as locations in the state space; e.g.
 #' The cell  `[3, 8]` represents the distance between locations 3 and 8 in the
 #' state space vector.
@@ -44,9 +44,9 @@
 #' plot(rasterize_distr(as.numeric(max_error), bf))
 #' title(main = "Max proportional error")
 #' matlines(xs, ys, col = rgb(0, 0, 0, .25), lty = 1, lwd = 1)
-#' mtext("lines connect cells to the cell for there is the greatest proportional error in distance",
-#'      line = 0, cex = 0.7)
-great_circle_distances <- function(bf){
+#' mtext(paste0("lines connect cells to the cell which have greatest",
+#' " proportional error in distance"), line = 0, cex = 0.7)
+great_circle_distances <- function(bf) {
   i <- seq_len(n_active(bf))
   xy <- as.data.frame(i_to_xy(i, bf))
 
