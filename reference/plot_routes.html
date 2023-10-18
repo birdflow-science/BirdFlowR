@@ -12,7 +12,7 @@ indicating the length of stay at each stop."><meta property="og:image" content="
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9033</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,10 +104,10 @@ Set it manually to keep the dot scaling consistent across multiple plots.</p></d
 
 
 <dt>use_seasonal_colors</dt>
-<dd><p>If TRUE a color scale that uses blues, greens, yellows,
-reds, for winter, spring, summer, and fall will be used with a consistent
-mapping of dates to colors regardless of the range of dates plotted.
-If FALSE then the data will be plotted using the full color scale.</p></dd>
+<dd><p>If TRUE a color scale that uses blues, greens,
+yellows, reds, for winter, spring, summer, and fall will be used with a
+consistent mapping of dates to colors regardless of the range of dates
+plotted. If FALSE then the data will be plotted using the full color scale.</p></dd>
 
 
 <dt>pal</dt>
@@ -189,7 +189,8 @@ data.frame.</p>
 <span class="r-in"><span><span class="co"># Use alternate color palettes</span></span></span>
 <span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span>,  use_seasonal_colors <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span>, use_seasonal_colors <span class="op">=</span> <span class="cn">FALSE</span>, pal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"yellow"</span>, <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span>, use_seasonal_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>            pal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"yellow"</span>, <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

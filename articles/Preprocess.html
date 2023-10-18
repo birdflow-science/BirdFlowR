@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9033</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,7 @@ an ebirdst access code</a>.</p>
 <p>You’ll also have to setup a destination folder for the purpose of the
 vignette I’m going to use a temporary folder.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>You could optionally set to a directory of your choice that is
 somewhere more permanent and accessible. The code below should add a
 BirdFlowModels directory to your home directory, to use for model
@@ -166,7 +166,7 @@ is zero. Those states are thus removed from the model.</p>
 use it later. Here we write it as a serialized R object which is fast
 and efficient but not at all portable to other software.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sparse_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"sparse.Rds"</span><span class="op">)</span>  <span class="co"># change </span></span>
+<code class="sourceCode R"><span><span class="va">sparse_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"sparse.Rds"</span><span class="op">)</span>  <span class="co"># change</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bf</span>, file <span class="op">=</span> <span class="va">sparse_file</span><span class="op">)</span></span></code></pre></div>
 <p>In a later session we could then read it with.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">

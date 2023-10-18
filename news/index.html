@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9033</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,9 +56,15 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9034" id="birdflowr-0109034">BirdFlowR 0.1.0.9034<a class="anchor" aria-label="anchor" href="#birdflowr-0109034"></a></h2>
+<p>2023-10-17</p>
+<ul><li><p><code>preprocess_species</code> now adds a <code>week</code> column to <code>$dates</code> component of BirdFlow objects. Initially this is identical to the <code>interval</code> column. However, after truncation intervals will be renumbered to <code>1:n_active()</code> but weeks will always reference the week of the year. Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/132" class="external-link">#132</a>.</p></li>
+<li><p>linted package - fixed most issues flagged by <code>lintr::lint_package()</code></p></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9033" id="birdflowr-0109033">BirdFlowR 0.1.0.9033<a class="anchor" aria-label="anchor" href="#birdflowr-0109033"></a></h2>
 <p>2023-10-10</p>
-<ul><li>Minor update to build_collection_index.R so it works regardless of whether BirdFlowR is loaded with <code>devtools::load_all()</code> or <code><a href="https://birdflow-science.github.io/BirdFlowR/">library(BirdFlowR)</a></code>.</li>
+<ul><li>Minor update to <code><a href="../reference/build_collection_index.html">build_collection_index()</a></code> so it works regardless of whether BirdFlowR is loaded with <code>devtools::load_all()</code> or <code><a href="https://birdflow-science.github.io/BirdFlowR/">library(BirdFlowR)</a></code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9032" id="birdflowr-0109032">BirdFlowR 0.1.0.9032<a class="anchor" aria-label="anchor" href="#birdflowr-0109032"></a></h2>

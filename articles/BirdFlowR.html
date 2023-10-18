@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9033</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9034</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://birdflow-science.github.io/BirdFlowR/">BirdFlowR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.7.46</span></span>
+<span><span class="co">#&gt; terra 1.7.55</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span></code></pre></div>
 </div>
@@ -129,7 +129,7 @@ includes reports on each species.</p>
 <code class="sourceCode R"><span><span class="co"># Load and print index</span></span>
 <span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_collection_index.html">load_collection_index</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Downloading collection index</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">index</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"common_name"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">index</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"common_name"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                model        common_name</span></span>
 <span><span class="co">#&gt; 1 amewoo_prebreeding  American Woodcock</span></span>
 <span><span class="co">#&gt; 3 buwtea_prebreeding   Blue-winged Teal</span></span>
@@ -245,7 +245,7 @@ models with each other and with terra objects.</p>
 <span><span class="co">#&gt; [1] -1564958  2514827  2822154  6421967</span></span>
 <span></span>
 <span><span class="co"># Compare geometries - do they have the same CRS, extent, and cell size</span></span>
-<span><span class="fu"><a href="../reference/compareGeom-BirdFlow.html">compareGeom</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="../reference/compareGeom-BirdFlow.html">compareGeom</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>BirdFlow objects also play nicely with the <em>sf</em> package.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -314,12 +314,6 @@ data formats itself.</em></p>
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="../reference/species_info.html">species_info</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"prebreeding_migration_start"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
 <span><span class="va">coast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_naturalearth.html">get_coastline</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># lines</span></span>
-<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
-<span><span class="co">#&gt; which was just loaded, were retired in October 2023.</span></span>
-<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
-<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
-<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
-<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">coast</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/unnamed-chunk-2-1.png" width="65%"></p>
 </div>
@@ -422,7 +416,7 @@ the BirdFlow object.</p>
 the distribution for the starting timestep so the following is
 equivalent to the preceeding two sections.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>,  n <span class="op">=</span> <span class="va">n_positions</span>,  start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span> <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>,  n <span class="op">=</span> <span class="va">n_positions</span>,  start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span><span class="op">)</span></span></code></pre></div>
 <p>We can specify the date range with any arguments supported by
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> so an alternative to the above
 with slightly different start and end dates is to use the season
