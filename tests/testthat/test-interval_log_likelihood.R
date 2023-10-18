@@ -1,4 +1,5 @@
-test_that("interval_log_likelihood produces identical results with one_at_a_time = TRUE", {
+test_that(paste0("interval_log_likelihood produces identical results with ",
+                 "one_at_a_time = TRUE"), {
   intervals <- BirdFlowModels::rewbla_intervals
   observations <- BirdFlowModels::rewbla_observations
   intervals <- intervals[1:60, ]
@@ -26,8 +27,8 @@ test_that("interval_log_likelihood returns expected values", {
   i <- get_distr(bf, start) |> sample_distr() |> as.logical() |> which()
   observations <- route(bf, x_coord = i_to_x(i, bf), y_coord = i_to_y(i, bf),
               start = start, end = end)
-  observations$id <- 1:nrow(observations)
-  sf_obs <- sf::st_as_sf(observations, coords= c("x", "y"))
+  observations$id <- seq_len(nrow(observations))
+  sf_obs <- sf::st_as_sf(observations, coords = c("x", "y"))
   sf::st_crs(sf_obs) <- crs(bf)
   wgs <- sf::st_transform(sf_obs, sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
@@ -44,7 +45,7 @@ test_that("interval_log_likelihood returns expected values", {
   # Pull single step log likelihood directly from the transition matrices
   expected_ll <- rep(NA_real_, nsteps)
   for (j in 1:nsteps) {
-    t_id <- lookup_transitions(bf, start = start + j -1 ,
+    t_id <- lookup_transitions(bf, start = start + j - 1,
                                end =  start + j, direction =  "forward")
     t <- get_transition(bf, t_id)
     i1 <- observations$i[j]  # start location index
@@ -75,15 +76,15 @@ test_that(
   # 1. Valid.  Leave as is.
 
   # 2. dynamically masked
-  r = 2
+  r <- 2
   obs_id <- intervals$from[r]
   obs_row <- which(observations$id == obs_id)
-  t = lookup_timestep(observations$date[obs_row], bf)
+  t <- lookup_timestep(observations$date[obs_row], bf)
   d <- get_distr(bf, t)
   i <- which(d == 0)[1]
   xy <- i_to_xy(i, bf) |> as.data.frame()
   pt <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
-    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_transform(crs = "EPSG:4326") |>
     sf::st_coordinates() |>
     as.data.frame()
   names(pt) <- c("lon", "lat")
@@ -91,7 +92,7 @@ test_that(
   observations$lat[obs_row] <- pt$lat
 
   # 3. Not active (but in extent)
-  r = 3
+  r <- 3
   obs_id <- intervals$from[r]
   obs_row <- which(observations$id == obs_id)
   mask <- bf$geom$mask
@@ -102,7 +103,7 @@ test_that(
   y <- col_to_x(c, bf)
   pt <- data.frame(x = x, y = y) |>
     sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
-    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_transform(crs = "EPSG:4326") |>
     sf::st_coordinates() |>
     as.data.frame()
   names(pt) <- c("lon", "lat")
@@ -110,21 +111,21 @@ test_that(
   observations$lat[obs_row] <- pt$lat
 
   # 4. Not in extent
-  r = 4
+  r <- 4
   obs_id <- intervals$from[r]
   obs_row <- which(observations$id == obs_id)
   x <- xmax(bf) + 1000
   y <- ymax(bf) + 1000
   pt <- data.frame(x = x, y = y) |>
     sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
-    sf::st_transform( crs = "EPSG:4326") |>
+    sf::st_transform(crs = "EPSG:4326") |>
     sf::st_coordinates() |>
     as.data.frame()
   names(pt) <- c("lon", "lat")
   observations$lon[obs_row] <- pt$lon
   observations$lat[obs_row] <- pt$lat
 
-  expect_no_error( a <- interval_log_likelihood(intervals, observations, bf) )
+  expect_no_error(a <- interval_log_likelihood(intervals, observations, bf))
 
   expect_equal(a$exclude, c(FALSE, TRUE, TRUE, TRUE))
   expect_equal(a$not_active, c(FALSE, FALSE, TRUE, TRUE))
@@ -134,7 +135,7 @@ test_that(
 })
 
 
-test_that( "interval_log_likelihood() throws warning if overwriting columns", {
+test_that("interval_log_likelihood() throws warning if overwriting columns", {
 
   # Also test that it works fine with verbose = FALSE
   original_verbose <- birdflow_options("verbose")
@@ -156,16 +157,11 @@ test_that( "interval_log_likelihood() throws warning if overwriting columns", {
 
 
 test_that("Interval log likelihood handles empty input gracefully", {
-  #  #95  https://github.com/birdflow-science/BirdFlowR/issues/95
+  #  Checks issue 95  https://github.com/birdflow-science/BirdFlowR/issues/95
   bf <- BirdFlowModels::rewbla
   intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
   intervals_empty <- intervals[rep(FALSE, nrow(intervals)), , drop = FALSE]
   observations <- BirdFlowModels::rewbla_observations
-
-  # Pre fix:
-  # interval_log_likelihood(intervals_empty, observations, bf)
-  # Error in `$<-.data.frame`(`*tmp*`, "lag", value = NA_integer_) :
-  # replacement has 1 row, data has 0
 
   expect_no_error(
     ll <- interval_log_likelihood(intervals_empty, observations, bf)

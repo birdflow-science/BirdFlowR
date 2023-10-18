@@ -48,8 +48,8 @@ distribution for the projected timestep.}
 the training distributions. The mean correlation between the training
 distributions and distributions calculated from the marginals.}
 \item{min_distr_cor}{Indicates how well the poorest marginal preserves the
-training distribution. The minimum observed correlation between a marginal and
-training distribution.}
+training distribution. The minimum observed correlation between a marginal
+and training distribution.}
 \item{st_traverse_cor, md_traverse_cor}{Indicates how well the model
 projects a distribution through multiple timesteps. They are the correlation
 between last distributionin a series projected iteratively forward from the

@@ -71,8 +71,8 @@ landscape. Only used if \code{show_mask} is \code{TRUE}. These cells will only b
 visible if there are \code{NA} values in \code{distr} or if \code{show_dynamic_mask}
 is \code{TRUE}.}
 
-\item{inactive_cell_color}{The color to use for inactive cells in the landscape.
-These are cells that are always masked. Only relevant when
+\item{inactive_cell_color}{The color to use for inactive cells in the
+landscape. These are cells that are always masked. Only relevant when
 \code{show_mask = TRUE}.}
 
 \item{title}{The title for the plot. It defaults to the common name of the

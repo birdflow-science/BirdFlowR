@@ -55,7 +55,7 @@
 #' dm2 <- expand_distance_matrix(a)
 #' all.equal(dm, dm2, check.attributes = FALSE)
 #' }
-shorten_distance_matrix <- function(dm){
+shorten_distance_matrix <- function(dm) {
   stopifnot(isTRUE(all.equal(t(dm), dm)))
   stopifnot(all(diag(dm) == 0))
   return(dm[lower.tri(dm)])
@@ -63,8 +63,8 @@ shorten_distance_matrix <- function(dm){
 
 #' @rdname shorten_distance_matrix
 #' @keywords internal
-expand_distance_matrix <- function(vals){
-  n <- (1 + sqrt(1 + 8 * length(vals)))/2 # from:  length(vals) = (n^2 - n) / 2
+expand_distance_matrix <- function(vals) {
+  n <- (1 + sqrt(1 + 8 * length(vals))) / 2
   m <- matrix(NA, n, n)
   m[lower.tri(m)] <- vals
   m[!lower.tri(m)] <- 0

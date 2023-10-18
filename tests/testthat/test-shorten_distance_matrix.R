@@ -10,5 +10,3 @@ test_that("shortening then expanding a distance matrix reproduces original", {
   expect_equal(dm, dm2, ignore_attr = TRUE)
 
 })
-
-

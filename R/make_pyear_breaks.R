@@ -16,21 +16,21 @@
 #'
 #' @return a sequence of break points in pyear units.
 #' @keywords internal
-make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE){
+make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE) {
   stopifnot(is.numeric(range), !is.na(range))
 
   # Super small helper functions
 
   # Return subset that are in range
-  select_in_range <- function(values, range){
+  select_in_range <- function(values, range) {
     values[values >= range[1] & values <= range[2]]
   }
 
   # Convert py breakpoints to hpy breakpoints
   # this roughly doubles the number of (potential) breakpoints
   # as hpy represents two years so each breakpoint occurs twice
-  py_to_hpy<- function(pv){
-    sort(unique(c( pv * 0.5, pv * 0.5 + 0.5)))
+  py_to_hpy <- function(pv) {
+    sort(unique(c(pv * 0.5, pv * 0.5 + 0.5)))
   }
   #----------------------------------------------------------------------------#
   # Define proportion of year breakpoints under various schemes
@@ -57,7 +57,7 @@ make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE){
 
   # if necessary convert proportion of year to half proportion of year
   # (repeating each sequence twice)
-  if(hpy){
+  if (hpy) {
     schemes <- lapply(schemes, py_to_hpy)
 
     # For quarters in pyear the end and start date are basically equivallent
@@ -79,5 +79,3 @@ make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE){
   return(schemes[[which.min(diffs)]])
 
 }
-
-

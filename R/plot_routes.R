@@ -25,10 +25,10 @@
 #' @param max_stay_len Used to scale the stay length dots. If NULL
 #' (the default) it will be set to the maximum "stay_len" value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
-#' @param use_seasonal_colors If TRUE a color scale that uses blues, greens, yellows,
-#' reds, for winter, spring, summer, and fall will be used with a consistent
-#' mapping of dates to colors regardless of the range of dates plotted.
-#' If FALSE then the data will be plotted using the full color scale.
+#' @param use_seasonal_colors If TRUE a color scale that uses blues, greens,
+#' yellows, reds, for winter, spring, summer, and fall will be used with a
+#' consistent mapping of dates to colors regardless of the range of dates
+#' plotted. If FALSE then the data will be plotted using the full color scale.
 #' @param pal The color palette to use for plotting whe `use_seasonal_cols` is
 #' FALSE. Defaults to [viridisLite::viridis(n = 5)][viridisLite::viridis()].
 #' @param barheight The height of the color gradient legend bar.  Passed to
@@ -68,7 +68,8 @@
 #'# Use alternate color palettes
 #' plot_routes(rts, bf,  use_seasonal_colors = FALSE )
 #'
-#' plot_routes(rts, bf, use_seasonal_colors = FALSE, pal = c("red", "yellow", "blue"))
+#' plot_routes(rts, bf, use_seasonal_colors = FALSE,
+#'             pal = c("red", "yellow", "blue"))
 #'}
 plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
                         use_seasonal_colors = TRUE, pal = NULL,
@@ -122,7 +123,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   # object to use locally.
   #
   #----------------------------------------------------------------------------#
-  if(missing(bf) && inherits(routes, "BirdFlowRoutes")){
+  if (missing(bf) && inherits(routes, "BirdFlowRoutes")) {
     bf <- new_BirdFlow()
     bf$dates <- attr(routes, "dates")
     bf$geom <- attr(routes, "geom")
@@ -168,7 +169,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
     dplyr::group_by(.data$route_id) |>
     dplyr::mutate(year_number = calc_year_number(.data$timestep)) |>
     as.data.frame()
-  if(!all(routes$year_number %in% c(1, 2)))
+  if (!all(routes$year_number %in% c(1, 2)))
     stop("Track passes through parts of three distinct years and",
          " so cannot be plotted.")
 
@@ -224,7 +225,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   #         additional argument to scale_color_gradient() otherwise
   #         the legend won't have the alpha
   #         See https://github.com/tidyverse/ggplot2/issues/3103
-  if(use_seasonal_colors){
+  if (use_seasonal_colors) {
     pal <- ggthemes::tableau_color_pal("Classic Cyclic")
     year_cols <- pal(13)
     year_cols <- c(year_cols, year_cols, year_cols[1]) # two cycles
@@ -234,7 +235,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
     rescaler <- scales::rescale_none
 
   } else {
-    if(is.null(pal)){
+    if (is.null(pal)) {
       pal <- viridisLite::viridis(n = 5)
     }
     rescaler <- scales::rescale
@@ -326,15 +327,12 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
                      axis.ticks.y = ggplot2::element_blank()
       )
   }
-
   return(p)
 }
-
 
 #' @rdname plot_routes
 #' @method plot BirdFlowRoutes
 #' @export
-plot.BirdFlowRoutes <- function(x, ...){
+plot.BirdFlowRoutes <- function(x, ...) {
   plot_routes(x, ...)
 }
-

@@ -28,7 +28,7 @@
 #'   # example render
 #'   timesteps <- unique(rts$points$timestep)
 #'   gif <- gganimate::animate(anim,
-#'                             device = "ragg_png", # ragg_png is fast and pretty
+#'                             device = "ragg_png", # is fast and pretty
 #'                             width = 7, height = 6,
 #'                             res = 150, units = "in",
 #'                             nframes = length(timesteps) * 4, fps = 8)
@@ -43,7 +43,7 @@
 #
 #' }
 #'
-animate_routes <- function(routes, bf, ... ){
+animate_routes <- function(routes, bf, ...) {
   p <- plot_routes(routes, bf, ...)
 
 
@@ -61,7 +61,7 @@ animate_routes <- function(routes, bf, ... ){
     # Animate and add dynamic subtitle
     gganimate::transition_reveal(.data$hpy) +
     ggplot2::labs(title = "{species(bf)}",
-                  subtitle = "{format_pyear(frame_along)}" )
+                  subtitle = "{format_pyear(frame_along)}")
 
   return(a)
 }

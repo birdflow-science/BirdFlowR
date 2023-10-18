@@ -10,9 +10,9 @@ get_distr(x, which = "all", from_marginals = FALSE)
 \item{x}{a BirdFlow model}
 
 \item{which}{indicates which timesteps to return. Can be one or more
-integers indicating timesteps; character dates in the format year-month-day
-e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;    or \code{"all"} which will
-return distributions for all timesteps.}
+integers indicating timesteps; character dates in the format
+year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
+or \code{"all"} which will return distributions for all timesteps.}
 
 \item{from_marginals}{if TRUE and \code{x} has marginals the distribution will be
 from the marginals even if \code{x} also has distributions.}
@@ -35,8 +35,9 @@ The training distributions and the distributions calculated from the marginal
 are very similar.
 }
 \seealso{
-Distributions can be passed to \link[=predict.BirdFlow]{predict()} or converted to rasters
-with \code{\link[=expand_distr]{expand_distr()}} or converted to \link[terra:rast]{SpatRaster} with
-\code{\link[=rasterize_distr]{rasterize_distr()}}.  \code{\link[=sample_distr]{sample_distr()}} will convert one cell to 1 and the rest
-to 0 probabilistically based on the densities in the distribution.
+Distributions can be passed to \link[=predict.BirdFlow]{predict()} or
+converted to rasters with \code{\link[=expand_distr]{expand_distr()}} or converted to
+\link[terra:rast]{SpatRaster} with
+\code{\link[=rasterize_distr]{rasterize_distr()}}.  \code{\link[=sample_distr]{sample_distr()}} will convert one cell to 1 and the
+rest to 0 probabilistically based on the densities in the distribution.
 }

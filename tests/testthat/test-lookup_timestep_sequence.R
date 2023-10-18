@@ -1,4 +1,4 @@
-test_that("lookup_timestep_sequence() throws useful error with start = season", {
+test_that("lookup_timestep_sequence() throws useful error if start = season", {
   bf <- BirdFlowModels::amewoo
   expect_error(lookup_timestep_sequence(bf, start = "prebreeding"),
                "It looks like you are supplying a season name to start.")
@@ -10,7 +10,8 @@ test_that("lookup_timestep_sequence() works with timestep input", {
 
   # Not over boundary
   expect_equal(lookup_timestep_sequence(bf, start = 1, end = 5), 1:5) # Forward
-  expect_equal(lookup_timestep_sequence(bf, start = 5, end = 1, direction = "backward"), 5:1)
+  expect_equal(lookup_timestep_sequence(bf, start = 5, end = 1,
+                                        direction = "backward"), 5:1)
 
   # Forward over year boundary
   s <- lookup_timestep_sequence(bf, start = 50, end =  3, direction = "forward")
@@ -33,9 +34,11 @@ test_that("lookup_timestep_sequence() works with date input", {
   t2 <- lookup_timestep(d2, bf)
 
   # With appropriate direction argument
-  s1 <-   lookup_timestep_sequence(bf, start = d1, end = d2, direction = "forward")
+  s1 <-   lookup_timestep_sequence(bf, start = d1, end = d2,
+                                   direction = "forward")
   expect_equal(s1, t1:t2) # Forward
-  s2 <- lookup_timestep_sequence(bf, start = d2, end = d1, direction = "backward")
+  s2 <- lookup_timestep_sequence(bf, start = d2, end = d1,
+                                 direction = "backward")
   expect_equal(s2, t2:t1)
 
   # With no direction argument
@@ -215,10 +218,11 @@ test_that("lookup_timestep_sequence() works with season input", {
   winter <- c(start:n_timesteps(bf), 1:end)
 
   # Forward
-  expect_equal(lookup_timestep_sequence(bf, "winter", season_buffer = buffer), winter)
+  expect_equal(lookup_timestep_sequence(bf, "winter", season_buffer = buffer),
+               winter)
 
   # Backward
-  s <-lookup_timestep_sequence(bf, "winter", season_buffer = buffer,
+  s <- lookup_timestep_sequence(bf, "winter", season_buffer = buffer,
                                direction = "backward")
   expect_equal(s, rev(winter))
 
@@ -247,12 +251,12 @@ test_that("lookup_timestep() works with start and n input", {
   bf <- BirdFlowModels::rewbla
 
   # Forward over year boundary
-  expect_no_error( a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10))
+  expect_no_error(a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10))
   expect_equal(a, c(50:52, 1:8))
   expect_equal(length(a), 11)
 
   # Backward over year boundary
-  expect_no_error( a <- lookup_timestep_sequence(bf, start = 3, n_steps = 5,
+  expect_no_error(a <- lookup_timestep_sequence(bf, start = 3, n_steps = 5,
                                                  direction = "backward"))
   expect_equal(a, c(3:1, 52:50))
   expect_equal(length(a), 6)
@@ -267,5 +271,3 @@ test_that("lookup_timestep() throws expected errors with non-cyclical models", {
                                              direction = "backward"),
                regexp = "x is not cyclical and n_steps is large enough")
 })
-
-

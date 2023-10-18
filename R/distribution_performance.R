@@ -41,8 +41,8 @@
 #' the training distributions. The mean correlation between the training
 #' distributions and distributions calculated from the marginals.}
 #'  \item{min_distr_cor}{Indicates how well the poorest marginal preserves the
-#'  training distribution. The minimum observed correlation between a marginal and
-#'  training distribution.}
+#'  training distribution. The minimum observed correlation between a marginal
+#'  and training distribution.}
 #'  \item{st_traverse_cor, md_traverse_cor}{Indicates how well the model
 #'  projects a distribution through multiple timesteps. They are the correlation
 #'  between last distributionin a series projected iteratively forward from the
@@ -72,17 +72,17 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   if (!has_dynamic_mask(x))
     x <- add_dynamic_mask(x)
 
-  all_metrics <- c( "min_step_cor",
-                    "mean_step_cor",
-                    "min_distr_cor",
-                    "mean_distr_cor",
-                    "st_traverse_cor",
-                    "md_traverse_cor")
+  all_metrics <- c("min_step_cor",
+                   "mean_step_cor",
+                   "min_distr_cor",
+                   "mean_distr_cor",
+                   "st_traverse_cor",
+                   "md_traverse_cor")
 
-  if(is.null(metrics))
+  if (is.null(metrics))
     metrics <- all_metrics
 
-  if(!all(metrics %in% all_metrics)){
+  if (!all(metrics %in% all_metrics)) {
     stop('Metrics should be NULL or one or more of:, "',
          paste(all_metrics, collapse = '", "'), '"')
   }
@@ -107,7 +107,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   end <- timesteps[length(timesteps)]
 
   # Calculate single step and distr metrics
-  if(do_distr || do_step){
+  if (do_distr || do_step) {
 
     distr_cor <- single_step_cor <- numeric(length(transitions))
 
@@ -122,7 +122,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
 
       # Calculate single step projection correlations
-      if(do_step){
+      if (do_step) {
         end_distr <- get_distr(x, to, from_marginals = FALSE)
         projected <- predict(x, distr = start_distr, start = from, end = to)
         end_dm <- get_dynamic_mask(x, to) # end dynamic mask
@@ -131,18 +131,18 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       }
     } # end loop through transitions
 
-    if(do_step){
-      mean_step_cor = mean(single_step_cor)
-      min_step_cor = min(single_step_cor)
+    if (do_step) {
+      mean_step_cor <- mean(single_step_cor)
+      min_step_cor <- min(single_step_cor)
     }
-    if(do_distr){
-      mean_distr_cor = mean(distr_cor)
-      min_distr_cor = min(distr_cor)
+    if (do_distr) {
+      mean_distr_cor <- mean(distr_cor)
+      min_distr_cor <- min(distr_cor)
     }
   } # end distr and step
 
   # Calculate Traverse Correlation
-  if(do_traverse){
+  if (do_traverse) {
 
     start_distr <- cbind(get_distr(x, start, from_marginals = FALSE), # st_
                          get_distr(x, start, from_marginals = TRUE))  # md_
@@ -152,7 +152,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
     projected <- predict(x, distr =  start_distr, start =  start,
                          end =  end, direction =  "forward")
 
-    projected <- projected[, , dim(projected)[3] ] # subset to last timestep
+    projected <- projected[, , dim(projected)[3]] # subset to last timestep
     end_dm <- get_dynamic_mask(x, end)
     # Two traverse correlations
     # "st_" starts with eBird S&T distribution

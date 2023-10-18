@@ -1,3 +1,5 @@
+# Don't flag S3 methods as having bad names when linting:
+# nolint start: object_name_linter.
 #' Function to validate a BirdFlow object
 #'
 #' Throw an error if a BirdFlow object is malformed or incomplete.
@@ -33,10 +35,11 @@
 #' Otherwise, if there are no problems a similar data.frame with no rows is
 #' returned invisibly.
 #' @export
-validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
+validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   # problem types:
   #   error: BirdFlow object is malformed
-  # incomplete: BirdFlow object is missing core components necessary for predicting
+  #   incomplete: BirdFlow object is missing core components necessary for
+  #     predicting
 
   # Note: compare_list_item_names() currently doesn't pay any attention to
   #   the order of items.
@@ -44,10 +47,9 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   stopifnot(error %in% c(TRUE, FALSE),
             allow_incomplete %in% c(TRUE, FALSE))
 
-
   # Look for problems in nested list names, and items by comparing
   # to canonical BirdFlow object returned by new_BirdFlow
-  diff <- compare_list_item_names(x, new_BirdFlow() )
+  diff <- compare_list_item_names(x, new_BirdFlow())
   problems <- paste(diff$where, diff$differences)
   # new_BirdFlow doesn't populate these lists so these aren't actually problems
   problems <- setdiff(
@@ -57,7 +59,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       "x$transitions should not be a list", # ok to have transitions
       "x extra:uci, lci",  # Ok to have these (included in preprocessing output)
       "x extra:lci, uci",  # ok in this order too
-      "x missing:marginals" ,# ok to be missing marginals
+      "x missing:marginals", # ok to be missing marginals
       "x missing:marginals, distances",
       "x missing:distances",
       "x$metadata$sparse_stats should not be a list",  # Having them is fine
@@ -65,76 +67,77 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       "x$metadata missing:birdflow_version",
       "x$metadata extra:hyperparameters",
       "x$metadata extra:hyperparameters, loss_values"
-    ) )
+    ))
 
-  p <- data.frame(problem = problems, type = rep("error", length(problems)) )
+  p <- data.frame(problem = problems, type = rep("error", length(problems)))
 
-  add_prob <- function(problem, type, problems){
+  add_prob <- function(problem, type, problems) {
     stopifnot(type %in% c("error", "incomplete"))
     return(rbind(problems, data.frame(problem = problem, type = type)))
   }
 
   # Check class
-  if(!inherits(x, "BirdFlow"))
+  if (!inherits(x, "BirdFlow"))
     p <- add_prob("x is not a BirdFlow object", "error", p)
 
   # check consistancy of has_ (transitions, marginals, distr)
 
 
   components <- c("transitions", "marginals", "distr")
-  for(i in seq_along(components)){
+  for (i in seq_along(components)) {
     has <- x$metadata[[paste0("has_", components[i])]]
-    if(!is.logical(has) || is.na(has) || length(has) != 1)
+    if (!is.logical(has) || is.na(has) || length(has) != 1)
       p <- add_prob(paste0("has_", components[i], " is not TRUE or FALSE"),
                     "error", p)
   }
-  if(has_distr(x)){
-    if(!is.matrix(x$distr))
+  if (has_distr(x)) {
+    if (!is.matrix(x$distr))
       p <- add_prob("distr is not a matrix", "error", p)
   }
-  if(has_dynamic_mask(x)){
-    if(!is.matrix(x$geom$dynamic_mask))
+  if (has_dynamic_mask(x)) {
+    if (!is.matrix(x$geom$dynamic_mask))
       p <- add_prob("dynamic mask is not a matrix", "error", p)
   }
 
-  if(has_marginals(x)){
-    if(!is.list(x$marginals))
+  if (has_marginals(x)) {
+    if (!is.list(x$marginals))
       p <- add_prob("marginals is not a list", "error", p)
   }
-  if(has_transitions(x)){
-    if(!is.list(x$transitions))
+  if (has_transitions(x)) {
+    if (!is.list(x$transitions))
       p <- add_prob("transitions is not a list", "error", p)
   }
 
   # Completeness
-  if(!has_transitions(x) && !has_marginals(x))
-    p <- add_prob("model has neither transitions nor marginals", "incomplete", p)
+  if (!has_transitions(x) && !has_marginals(x))
+    p <- add_prob("model has neither transitions nor marginals",
+                  "incomplete", p)
 
-  if(!has_distr(x) && !has_marginals(x) )
+  if (!has_distr(x) && !has_marginals(x))
     p <- add_prob("model hs neither distr nor marginals", "incomplete", p)
 
   # Consistent in number of transitions
   nt <- x$metadata$n_transitions
-  if(is.na(nt)){
-    if( (has_transitions(x)) || (has_marginals(x)) ){
+  if (is.na(nt)) {
+    if ((has_transitions(x)) || (has_marginals(x))) {
       p <- add_prob(
         "model has transitions or marginals but n_transitions is NA",
-        "error",p)
+        "error", p)
     }
   } else {  # number of transitions is not NA
 
-    if(!is.numeric(nt) || !length(nt) == 1 || is.na(nt) || is.infinite(nt) ||
-       !isTRUE(all.equal(as.numeric(nt) %% 1, 0))|| !nt > 0){
+    if (!is.numeric(nt) || !length(nt) == 1 || is.na(nt) || is.infinite(nt) ||
+       !isTRUE(all.equal(as.numeric(nt) %% 1, 0)) || !nt > 0) {
       p <- add_prob("metadata$n_transitions not a single postive integer value",
                     "error", p)
     }
-    if(has_transitions(x)){
-      if(length(x$transitions) != nt * 2)
+    if (has_transitions(x)) {
+      if (length(x$transitions) != nt * 2)
         p <- add_prob("number of transitions not equal to n_transitions()",
                       "error", p)
     }
-    if(has_marginals(x)){
-      if(length(setdiff(names(x$marginals), "index" ) ) != nt)
+    if (has_marginals(x)) {
+      if (length(setdiff(names(x$marginals), "index")) != nt)
         p <- add_prob(
           "number of stored marginals is not equal to n_transitions()",
           "error", p)
@@ -142,8 +145,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   }  # end consistency checks on n_transitions
 
   # consistency on n_active
-  if(is.na(n_active(x))){
-    md <- x$metadata
+  if (is.na(n_active(x))) {
     if (has_transitions(x) || has_marginals(x) || has_distr(x) ||
         !is.na(x$geom$mask)) {
       p <- add_prob(
@@ -151,7 +153,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
         "error", p)
     }
   } else {  # n_active not NA
-    if( has_distr(x)  && !dim(x$distr)[1] == n_active(x) ) {
+    if (has_distr(x)  && !dim(x$distr)[1] == n_active(x)) {
       p <- add_prob("distr is not consistent with n_active", "error", p)
     }
 
@@ -159,7 +161,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       p <- add_prob("dynamic mask is not consistent with n_active", "error", p)
     }
 
-    if (has_marginals(x) & !has_dynamic_mask(x)) {
+    if (has_marginals(x) && !has_dynamic_mask(x)) {
       # Check marginal dimensions if there's no dynamic mask
       items <- setdiff(names(x$marginals), "index")
       correct_dim <- rep(NA, length(items))
@@ -172,7 +174,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       }
     }
 
-    if (has_marginals(x) & has_dynamic_mask(x)) {
+    if (has_marginals(x) && has_dynamic_mask(x)) {
       items <- setdiff(names(x$marginals), "index")
       # Index of just forward transitions (each marginal in forward order)
       f_index <- x$marginals$index[x$marginals$index$direction == "forward", ]
@@ -182,26 +184,26 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       # dm_cells: number of cells in dynamic mask for each timestep
       dm_cells <- apply(get_dynamic_mask(x), 2, sum)
       dim_is_correct <- rep(NA, length(items))
-      for(i in seq_along(items) ){
+      for (i in seq_along(items)) {
         index_row <- which(f_index$marginal == items[i])
-        from = f_index$from[index_row]  # from timestep
-        to = f_index$to[index_row]   # to timestep
+        from <- f_index$from[index_row]  # from timestep
+        to <- f_index$to[index_row]   # to timestep
         expected_dim <- dm_cells[c(from, to)]
         dim_is_correct[i] <- all(dim(x$marginals[[items[i]]]) == expected_dim)
       }
-      if(!all(dim_is_correct)){
+      if (!all(dim_is_correct)) {
         p <- add_prob("marginal dimensions inconsistent with dynamic_mask",
                       "error", p)
       }
     }
 
-    if(has_transitions(x) && !has_dynamic_mask(x)){
+    if (has_transitions(x) && !has_dynamic_mask(x)) {
       items <- names(x$transitions)
       correct_dim <- rep(NA, length(items))
-      for(i in seq_along(items) ){
+      for (i in seq_along(items)) {
         correct_dim[i] <- all(dim(x$transitions[[items[i]]]) == n_active(x))
       }
-      if(!all(correct_dim)){
+      if (!all(correct_dim)) {
         p <- add_prob("transition dimensions inconsistent with n_active",
                       "error", p)
       }
@@ -216,14 +218,14 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
       # dm_cells: number of cells in dynamic mask for each timestep
       dm_cells <- apply(get_dynamic_mask(x), 2, sum)
       dim_is_correct <- rep(NA, length(items))
-      for(i in seq_along(items) ){
+      for (i in seq_along(items)) {
         index_row <- which(f_index$transition == items[i])
-        from = f_index$from[index_row]  # from timestep
-        to = f_index$to[index_row]   # to timestep
+        from <- f_index$from[index_row]  # from timestep
+        to <- f_index$to[index_row]   # to timestep
         expected_dim <- dm_cells[c(from, to)]
         dim_is_correct[i] <- all(dim(x$marginals[[items[i]]]) == expected_dim)
       }
-      if(!all(dim_is_correct)){
+      if (!all(dim_is_correct)) {
         p <- add_prob(
           "transition matrix dimensions inconsistent with dynamic_mask",
           "error", p)
@@ -232,32 +234,32 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   } # end n_active consistency check
 
   # check geometry
-  if(!is.list(x$geom)){
+  if (!is.list(x$geom)) {
     p <- add_prob("x$geom is not a list", "error", p)
   } else {
-    expected.names <- setdiff(names(new_BirdFlow()$geom), "dynamic_mask")
-    if(!all(expected.names %in% names(x$geom) )) {
+    expected_names <- setdiff(names(new_BirdFlow()$geom), "dynamic_mask")
+    if (!all(expected_names %in% names(x$geom))) {
       p <- add_prob(paste0("x$geom is missing: ",
-                           paste(setdiff(expected.names, names(x$geom)),
-                                 collapse = ", ") ), "error", p)
+                           paste(setdiff(expected_names, names(x$geom)),
+                                 collapse = ", ")), "error", p)
     } else {  # has geom list with complete set of names
-      if(!is.matrix(x$geom$mask)){
+      if (!is.matrix(x$geom$mask)) {
         p <- add_prob("x$geom$mask is not a matrix", "error", p)
       } else { # mask is matrix
-        if(!is.logical(x$geom$mas))
+        if (!is.logical(x$geom$mas))
           p <- add_prob("mask isn't logical", "error", p)
-        if(is.na(n_active(x)) || !n_active(x) == sum(x$geom$mask))
+        if (is.na(n_active(x)) || !n_active(x) == sum(x$geom$mask))
           p <- add_prob("mask isn't consistent with n_active", "error", p)
-        if(is.null(nrow(x))){
+        if (is.null(nrow(x))) {
           p <- add_prob("nrow(x) is NULL", "error", p)
         } else {
-          if(is.na(nrow(x)) || ! nrow(x) == nrow(x$geom$mask))
+          if (is.na(nrow(x)) || ! nrow(x) == nrow(x$geom$mask))
             p <- add_prob("nrow(mask) not equal to nrow(x)", "error", p)
         }
-        if(is.null(ncol(x))){
+        if (is.null(ncol(x))) {
           p <- add_prob("ncol(x) is NULL", "error", p)
         } else {
-          if(is.na(ncol(x)) || !ncol(x) == ncol(x$geom$mask))
+          if (is.na(ncol(x)) || !ncol(x) == ncol(x$geom$mask))
             p <- add_prob
         }
       }
@@ -266,21 +268,21 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
   } # end geom is list
 
   # check dates
-  if( !"dates" %in% names(x) || !is.data.frame(x$dates)){
+  if (!"dates" %in% names(x) || !is.data.frame(x$dates)) {
     p <- add_prob("x$dates is missing, NA or not a dataframe", "error", p)
   } else { # dates exists and is data.frame
 
-    required.cols <- c( "interval", "date", "doy", "start", "midpoint", "end")
-    if( !all( required.cols  %in% names( x$dates ) ) ){
-      p <- add_prob( paste0("dates is missing columns:",
-                            paste(setdiff(required.cols, names(x$dates)))),
+    required_cols <- c("interval", "date", "doy", "start", "midpoint", "end")
+    if (!all(required_cols  %in% names(x$dates))) {
+      p <- add_prob(paste0("dates is missing columns:",
+                            paste(setdiff(required_cols, names(x$dates)))),
                      "error", p)
     } # end if dates missing columns
-    rm( required.cols )
+    rm(required_cols)
 
-    if("distr" %in% names(x) && is.data.frame(x$distr)){
-      if( nrow(x$dates) != ncol(x$distr)){
-        p <- add_prob( "x$dates")
+    if ("distr" %in% names(x) && is.data.frame(x$distr)) {
+      if (nrow(x$dates) != ncol(x$distr)) {
+        p <- add_prob("x$dates")
       }
     }
 
@@ -288,43 +290,35 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete=FALSE){
 
 
   # check marginal names and index
-  if( "marginals" %in% names(x) && is.list(x$marginals) ){
-
+  if ("marginals" %in% names(x) && is.list(x$marginals)) {
     mn <- setdiff(names(x$marginals), "index")
     index <- x$marginals$index
-    if(!all(mn %in%  index$marginal))
+    if (!all(mn %in%  index$marginal))
       p <- add_prob("Not all marginals are indexed.", "error", p)
-    if(!all(index$marginal %in% mn))
+    if (!all(index$marginal %in% mn))
       p <- add_prob("Not all marginals in index exist", "error", p)
 
     # Check that all marginals sum to 1
-    marginal_sums <- as.numeric(sapply(mn, function(m) sum(x$marginals[[m]] ) ))
+    marginal_sums <- as.numeric(sapply(mn, function(m) sum(x$marginals[[m]])))
     sums_to_one <- sapply(marginal_sums,
                           function(s) isTRUE(all.equal(s, 1, tolerance = 1e-5)))
-    if(!all(sums_to_one))
+    if (!all(sums_to_one))
       p <- add_prob("Not all marginals have a sum of one.", "error", p)
   }
 
-  if(error){
-    if(allow_incomplete){
-      if(any(p$type == "error"))
-        stop("Problems found:", paste(p$problem[p$type == "error"], collapse ="; "))
+  if (error) {
+    if (allow_incomplete) {
+      if (any(p$type == "error"))
+        stop("Problems found:",
+             paste(p$problem[p$type == "error"], collapse = "; "))
     } else { # Don't allow incomplete:
-      if(nrow(p) > 0)
-        stop("Problems found:\n\t", paste(p$problem, collapse ="; \n\t"))
+      if (nrow(p) > 0)
+        stop("Problems found:\n\t", paste(p$problem, collapse = "; \n\t"))
     }
   }
 
-  if(error == TRUE) return(invisible(p))
+  if (error == TRUE) return(invisible(p))
   return(p)
 
 } # end validation function
-
-
-
-
-
-
-
-
-
+# nolint end

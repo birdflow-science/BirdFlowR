@@ -119,10 +119,10 @@ a slightly larger resolution (fewer parameters).
 \examples{
 \dontrun{
 
- bf <- preprocess_species("amewoo", tiff = FALSE, hdf5 = FALSE )
- plot(rasterize_distr(get_distr( bf, c(1, 26)), bf))
+ bf <- preprocess_species("amewoo", hdf5 = FALSE )
+ plot_distr(get_distr(bf, c(1, 26)), bf = bf)
 
-# Create clip polgyon as an sf object
+# Create clip polygon as an sf object
 # Use the extent rectangle but with western edge moved in
 # The clip can be anything that terra::vect will process into a polygon
 e <- ext(bf)
@@ -132,13 +132,12 @@ coords <- matrix(c(e[1], e[3],
                    e[2], e[4],
                    e[2], e[3],
                    e[1], e[3]), ncol = 2, byrow = TRUE)
-sfc <- st_sfc(st_polygon(list(coords)), crs = crs(bf))
-clip <- st_sf(data.frame(id = 1, geom = sfc))
+sfc <- sf::st_sfc(sf::st_polygon(list(coords)), crs = crs(bf))
+clip <- sf::st_sf(data.frame(id = 1, geom = sfc))
 
-bfc <- preprocess_species("amewoo", tiff = FALSE,
-                         hdf5 = FALSE, clip = clip ) # clipped bird flow
+bfc <- preprocess_species("amewoo", hdf5 = FALSE, clip = clip ) # with clip
 
- plot(rasterize_distr(get_distr(bfc, 1), bfc))
+ plot_distr(get_distr(bfc, 1), bfc)
 
 
 }

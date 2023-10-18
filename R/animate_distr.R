@@ -53,7 +53,7 @@
 #' \dontrun{
 #'   # example render fo file
 #'   gif <- gganimate::animate(spread_anim,
-#'                             device = "ragg_png", # ragg_png is fast and pretty
+#'                             device = "ragg_png", # fast and pretty
 #'                             width = 7, height = 6,
 #'                             res = 150, units = "in")
 #'   # Display
@@ -64,7 +64,7 @@
 #'   gganimate::save_animation(gif, gif_file)
 #'   file.remove(gif_file) # cleanup
 #'   }
-animate_distr <- function(distr, bf, title = species(bf), ...){
+animate_distr <- function(distr, bf, title = species(bf), ...) {
 
    p <- plot_distr(distr, bf, ...)
 

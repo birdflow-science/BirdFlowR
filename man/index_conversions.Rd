@@ -124,7 +124,7 @@ and are first, first, and second in argument order.
 \item \code{\link[=expand_distr]{expand_distr()}} converts a vector distribution into it's raster (matrix)
 equivalent or a matrix (representing multiple distributions) into an array
 equivalent.
-\item \code{\link[=rasterize_distr]{rasterize_distr()}} converts a vector distribution into a \link[terra:SpatRaster-class]{terra::SpatRaster} -
-similar to those created by \code{\link[terra:rast]{terra::rast()}}.
+\item \code{\link[=rasterize_distr]{rasterize_distr()}} converts a vector distribution into a
+\link[terra:SpatRaster-class]{terra::SpatRaster} - similar to those created by \code{\link[terra:rast]{terra::rast()}}.
 }
 }

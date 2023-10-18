@@ -28,13 +28,13 @@
 #' bf <- BirdFlowModels::amewoo
 #' lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
 #'
-lookup_timestep <- function(x, bf){
+lookup_timestep <- function(x, bf) {
   stopifnot(inherits(bf, "BirdFlow"))
   dates <- bf$dates
   original_x <- x
 
   # Special case "all" returns all timesteps in order
-  if(length(x) == 1 && is.character(x) &&  tolower(x) == "all")
+  if (length(x) == 1 && is.character(x) &&  tolower(x) == "all")
     return(bf$dates$interval)
 
   # timesteps e.g. "t1" "t2"
@@ -44,26 +44,26 @@ lookup_timestep <- function(x, bf){
   }
 
   # convert date like things to dates
-  if(is.character(x) || inherits(x, "POSIXt")){
+  if (is.character(x) || inherits(x, "POSIXt")) {
     x <- lubridate::as_date(x)
   }
 
-  if(lubridate::is.Date(x)) {
+  if (lubridate::is.Date(x)) {
 
     # Calculate the proportion of the year that has passed at each date.
     # using 366 for all years as that's what ebirdst::date_to_st_week does
 
     # Support old models with a different naming convention
-    if(any(grepl("^weeks_", names(dates))))
+    if (any(grepl("^weeks_", names(dates))))
       names(dates) <- gsub("^weeks_", "", names(dates))
 
-    if(all(c("start", "end") %in% names(bf$dates))){
+    if (all(c("start", "end") %in% names(bf$dates))) {
       # Note POSIXct$yday starts at 0   lubridate::doy()  starts at 1
       py <- proportion_of_year(x)
       breaks <- c(dates$start[1], dates$end)
       x <- findInterval(py, vec = breaks, all.inside = TRUE)
 
-    }  else {   #  SHOULD be DROPPED when we complete switch to dynamic masking
+    } else {   #  SHOULD be DROPPED when we complete switch to dynamic masking
       # Support very old models that don't have columns eith "start" and "end";
       # or "week_start" and "week_end"
 

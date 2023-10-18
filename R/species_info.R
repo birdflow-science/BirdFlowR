@@ -64,15 +64,15 @@
 #'| `resident_start` | For resident species, the year-round start date |
 #'| `resident_end` | For resident species, the year-round end date |
 #' @export
-species_info <- function(x, what){
+species_info <- function(x, what) {
   stopifnot(class(x) == "BirdFlow")
 
-  if(missing(what))
+  if (missing(what))
     what <- "all"
 
   what <- tolower(what)
 
-  if(what == "all")
+  if (what == "all")
     return(x$species)
 
   # Allow for non standard input
@@ -85,7 +85,7 @@ species_info <- function(x, what){
                  what)
   options <- c(names(x$species), "all")
 
-  if(!what %in% options){
+  if (!what %in% options) {
     stop("what should be one of: ", paste(options, collapse = ", "))
   }
   return(x$species[[what]])
@@ -93,8 +93,8 @@ species_info <- function(x, what){
 
 #' @rdname species_info
 #' @export
-species <- function(x, what){
-  if(missing(what))
+species <- function(x, what) {
+  if (missing(what))
     what <- "common_name"
   return(species_info(x, what))
 }

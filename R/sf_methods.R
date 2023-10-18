@@ -21,23 +21,24 @@ st_bbox.BirdFlow <- function(obj, ...) {
 #' @importFrom sf st_as_sf
 #' @method st_as_sf BirdFlowRoutes
 #' @export
-st_as_sf.BirdFlowRoutes <- function(x, type = "line", crs = NULL, ...){
+st_as_sf.BirdFlowRoutes <- function(x, type = "line", crs = NULL, ...) {
   type <- match.arg(type, c("line", "point"))
 
-  if(is.null(crs)){
+  if (is.null(crs)) {
     a <- attributes(x)
-    if("geom" %in% names(a)){
+    if ("geom" %in% names(a)) {
       crs <- a$geom$crs
       cat("Set crs based on geom attribute.\n")
-    } else if ("crs" %in%  names(a)){
+    } else if ("crs" %in%  names(a)) {
       crs <- a$crs
     }
   }
-  if(is.null(crs)){
-    stop("The coordinate reference system must be defined in the object attributes or via the crs argument.")
+  if (is.null(crs)) {
+    stop("The coordinate reference system must be defined in the object ",
+         "attributes or via the crs argument.")
   }
   crs <- sf::st_crs(crs)
-  if(type == "line"){
+  if (type == "line") {
     lines <-   x |>
       dplyr::group_by(.data$route_id) |>
       dplyr::summarize(
@@ -47,22 +48,15 @@ st_as_sf.BirdFlowRoutes <- function(x, type = "line", crs = NULL, ...){
     sf::st_crs(lines) <- crs
     return(lines)
   }
-  if(type == "point"){
+  if (type == "point") {
     x <- as.data.frame(x)
-    points <-  sf::st_as_sf(x, coords = c("x", "y"), crs = crs )
+    points <-  sf::st_as_sf(x, coords = c("x", "y"), crs = crs)
     return(points)
   }
 }
-
-
-
-
 
 # Internal helper function to
 # Make x and y vectors into lines
 convert_to_lines <- function(x, y) {
   sf::st_linestring(cbind(x, y), "XY")
 }
-
-
-

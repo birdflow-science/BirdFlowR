@@ -48,4 +48,3 @@ birdflow_crs <-
         SCOPE["Not known."],
         AREA["World."],
         BBOX[-90,-180,90,180]]]'
-

@@ -21,23 +21,23 @@
 #' @examples
 #' bf <- add_dynamic_mask(BirdFlowModels::amewoo)
 #'
-add_dynamic_mask <- function(bf, dummy_mask = FALSE){
-  if(has_dynamic_mask(bf))
+add_dynamic_mask <- function(bf, dummy_mask = FALSE) {
+  if (has_dynamic_mask(bf))
     return(bf)
 
-  if(!has_marginals(bf))
+  if (!has_marginals(bf))
     stop("bf must have marginals to add a dynamic mask.")
-  if(!has_distr(bf))
+  if (!has_distr(bf))
     stop("bf must have distributions to add a dynamic mask.")
 
   had_transitions <- has_transitions(bf)
-  if(had_transitions)
+  if (had_transitions)
     bf <- drop_transitions(bf)
 
   # make dynamic mask
   dyn_mask <- bf$distr != 0 # Avoid get_distr() here - might change col names
-  if(dummy_mask){
-    dyn_mask[ , ] <- TRUE
+  if (dummy_mask) {
+    dyn_mask[, ] <- TRUE
   }
   bf$geom$dynamic_mask <- dyn_mask
 
@@ -46,11 +46,11 @@ add_dynamic_mask <- function(bf, dummy_mask = FALSE){
   index <- index[index$direction == "forward", ]
   marginal_names <- index$marginal
   stopifnot(all(marginal_names %in% names(bf$marginals)))
-  if(any(duplicated(marginal_names)))
+  if (any(duplicated(marginal_names)))
     stop("Shouldn't have duplicated marginals in index")
 
   # Subset marginals to transitions among unmasked cells.
-  for(i in seq_along(marginal_names)){
+  for (i in seq_along(marginal_names)) {
     m_name <- marginal_names[i]
     mar <- bf$marginals[[m_name]]
 
@@ -61,7 +61,7 @@ add_dynamic_mask <- function(bf, dummy_mask = FALSE){
     bf$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
   } # end marginal loop
 
-  if(had_transitions)
+  if (had_transitions)
     bf <- build_transitions(bf)
 
   return(bf)

@@ -55,7 +55,7 @@ animate_movement_vectors <- function(bf, ...) {
 
   timesteps <- lookup_timestep_sequence(bf, ...)
   transitions <- lookup_transitions(bf, ...)
-  start = timesteps[1]
+  start <- timesteps[1]
 
   diff <- timesteps[2] -  timesteps[1]
   if (diff %in% c(1, -1)) {

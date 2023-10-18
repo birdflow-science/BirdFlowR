@@ -1,3 +1,5 @@
+# Don't flag S3 methods as having bad names when linting:
+# nolint start: object_name_linter.
 #' @rdname dimensions
 #' @name BirdFlow dimensions
 #' @title Dimensions of a BirdFlow object
@@ -8,7 +10,8 @@
 #' @aliases nrow ncol dim ext
 #' @param x A BirdFlow object
 #' @inheritParams terra::crs
-#' @return `nrow()` returns the number of rows in the raster extent of the BirdFlow model
+#' @return `nrow()` returns the number of rows in the raster extent of the
+#'   BirdFlow model
 #' @method nrow BirdFlow
 #' @seealso
 #' \pkg{terra} defines the S4 generics for [crs()][terra::crs()],
@@ -17,7 +20,7 @@
 #'
 #' [get_distr()] returns distributions from a `BirdFlow` object.
 #' @export
-nrow.BirdFlow <- function(x){
+nrow.BirdFlow <- function(x) {
   x$geom$nrow
 }
 
@@ -25,7 +28,7 @@ nrow.BirdFlow <- function(x){
 #' @method ncol BirdFlow
 #' @export
 #' @return `ncol()` number of columns in the raster extent
-ncol.BirdFlow <- function(x){
+ncol.BirdFlow <- function(x) {
   x$geom$ncol
 }
 
@@ -33,7 +36,7 @@ ncol.BirdFlow <- function(x){
 #' @method dim BirdFlow
 #' @export
 #' @return `dim()` number of rows and columns in the raster extent.
-dim.BirdFlow <- function(x){
+dim.BirdFlow <- function(x) {
   c(x$geom$nrow, x$geom$ncol)
 }
 
@@ -41,30 +44,29 @@ dim.BirdFlow <- function(x){
 #' @export
 #' @return `n_timesteps()` number of timesteps
 #'  distributions.
-n_timesteps <- function(x){
+n_timesteps <- function(x) {
   x$metadata$n_timesteps
 }
 
 #' @rdname dimensions
 #' @export
 #' @return `n_distr()` number of distributions
-n_distr <- function(x){
+n_distr <- function(x) {
   ncol(x$distr)
 }
-
 
 #' @rdname dimensions
 #' @export
 #' @return `n_transitions()` number of transitions, if the model is circular in
 #' time this will equal `n_timesteps()`.
-n_transitions <- function(x){
+n_transitions <- function(x) {
   x$metadata$n_transitions
 }
 
 #' @rdname dimensions
 #' @export
 #' @return `n_active()` number of active cells (locations).
-n_active <- function(x){
+n_active <- function(x) {
   x$metadata$n_active
 }
 
@@ -75,7 +77,7 @@ n_active <- function(x){
 #  setOldClass("BirdFlow") allows S4 dispatch on S3 BirdFlow objects.
 methods::setOldClass("BirdFlow")
 
-crs.BirdFlow <- function(x, proj=FALSE, describe=FALSE, parse=FALSE){
+crs.BirdFlow <- function(x, proj = FALSE, describe = FALSE, parse = FALSE) {
   terra::crs(x$geom$crs, proj, describe, parse)
 }
 #' @rdname dimensions
@@ -84,7 +86,7 @@ crs.BirdFlow <- function(x, proj=FALSE, describe=FALSE, parse=FALSE){
 #' text (wkt) by default, but see arguments.
 setMethod(crs, "BirdFlow", crs.BirdFlow)
 
-ext.BirdFlow <- function(x){
+ext.BirdFlow <- function(x) {
   terra::ext(x$geom$ext)
 }
 #' @rdname dimensions
@@ -93,7 +95,7 @@ ext.BirdFlow <- function(x){
 #' which contains the xmin, xmax, ymin, and ymax of the extent.
 setMethod(ext, "BirdFlow", ext.BirdFlow)
 
-res.BirdFlow <- function(x){
+res.BirdFlow <- function(x) {
   x$geom$res
 }
 #' @rdname dimensions
@@ -101,7 +103,7 @@ res.BirdFlow <- function(x){
 #' @export
 setMethod(res, "BirdFlow", res.BirdFlow)
 
-xres.BirdFlow <- function(x){
+xres.BirdFlow <- function(x) {
   x$geom$res[1]
 }
 #' @rdname dimensions
@@ -109,7 +111,7 @@ xres.BirdFlow <- function(x){
 #' @export
 setMethod(xres, "BirdFlow", xres.BirdFlow)
 
-yres.BirdFlow <- function(x){
+yres.BirdFlow <- function(x) {
   x$geom$res[2]
 }
 #' @rdname dimensions
@@ -118,7 +120,7 @@ yres.BirdFlow <- function(x){
 setMethod(yres, "BirdFlow", yres.BirdFlow)
 
 
-xmin.BirdFlow <- function(x){
+xmin.BirdFlow <- function(x) {
   xmin(ext(x))
 }
 #' @rdname dimensions
@@ -126,17 +128,17 @@ xmin.BirdFlow <- function(x){
 #' @export
 setMethod(xmin, "BirdFlow", xmin.BirdFlow)
 
-ymin.BirdFlow <- function(x){
+ymin.BirdFlow <- function(x) {
   ymin(ext(x))
 }
 #' @rdname dimensions
 #' @return `ymin()` minimum y coordinate of extent.
 #' @export
-setMethod(ymin,"BirdFlow", ymin.BirdFlow)
+setMethod(ymin, "BirdFlow", ymin.BirdFlow)
 
 
 
-xmax.BirdFlow <- function(x){
+xmax.BirdFlow <- function(x) {
   xmax(ext(x))
 }
 #' @rdname dimensions
@@ -144,7 +146,7 @@ xmax.BirdFlow <- function(x){
 #' @export
 setMethod(xmax, "BirdFlow", xmax.BirdFlow)
 
-ymax.BirdFlow <- function(x){
+ymax.BirdFlow <- function(x) {
   ymax(ext(x))
 }
 #' @rdname dimensions
@@ -156,7 +158,7 @@ setMethod(ymax, "BirdFlow", ymax.BirdFlow)
 #' @return `is_cyclical()` returns TRUE if the BirdFlow model has a transition
 #' from the last timestep to the first and FALSE otherwise.
 #' @export
-is_cyclical <- function(x){
+is_cyclical <- function(x) {
   n_timesteps(x) == n_transitions(x)
 }
-
+# nolint end

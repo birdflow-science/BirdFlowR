@@ -11,8 +11,8 @@
 #' does not.}
 #'
 #' @keywords internal
-ts_info  <- function(ts){
-  if(length(ts) == 1)
+ts_info  <- function(ts) {
+  if (length(ts) == 1)
     return(list(loops = FALSE, direction = NA))
   diffs <- ts[-1] - ts[-(length(ts))]
 
@@ -22,15 +22,15 @@ ts_info  <- function(ts){
   # Determine direction
   direction <- NULL
   diff <- diffs[1]
-  if(diff == 1)
+  if (diff == 1)
     direction <- "forward"
-  if(diff == -1)
+  if (diff == -1)
     direction <- "backward"
-  if(diff > 1)  # diff is large positive if backwards across year boundary
+  if (diff > 1)  # diff is large positive if backwards across year boundary
     direction <- "backward"
-  if(diff < -1)
+  if (diff < -1)
     direction <- "forward" #  eg -51 at year boundary
-  if(is.null(direction))
+  if (is.null(direction))
     stop("Direction couldn't be resolved from sequence")
 
   return(list(loops = loops, direction = direction))

@@ -7,7 +7,7 @@
 #'
 #' @keywords internal
 make_cache_readme <-
-  function(collection_url = birdflow_options("collection_url")){
+  function(collection_url = birdflow_options("collection_url")) {
 
   main_readme_path <- file.path(birdflow_options("cache"), "readme.txt")
   collection_readme_path <- file.path(cache_path(collection_url), "readme.txt")
@@ -27,7 +27,7 @@ make_cache_readme <-
   # replace the field alias with it's value.
   for (obj_name in c("main", "collection")) {
     text <- get(obj_name)
-    for(field in c("date", "collection_url", "cache_path")){
+    for (field in c("date", "collection_url", "cache_path")) {
       text <- gsub(paste0("[", field, "]"), get(field), text, fixed = TRUE)
     }
     assign(obj_name, text)

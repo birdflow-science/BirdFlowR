@@ -39,8 +39,8 @@
 #' the training distributions. The mean correlation between the training
 #' distributions and distributions calculated from the marginals.}
 #'  \item{min_distr_cor}{Indicates how well the poorest marginal preserves the
-#'  training distribution. The minimum observed correlation between a marginal and
-#'  training distribution.}
+#'  training distribution. The minimum observed correlation between a marginal
+#'  and training distribution.}
 #' }
 #' @keywords internal
 #' @examples
@@ -54,7 +54,7 @@ evaluate_performance <- function(x, distr_only = FALSE) {
   warning("evaluate_performance is deprecated. ",
           "Please use distribution_performance() instead.")
 
-  if(distr_only){
+  if (distr_only) {
     res <- distribution_performance(x, metrics = c("mean_distr_cor",
                                                    "min_distr_cor"))
     return(res[c("mean_distr_cor", "min_distr_cor")])

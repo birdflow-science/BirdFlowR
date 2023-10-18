@@ -10,13 +10,12 @@
 #' trailing delimiter.
 #' @keywords internal
 #'
-cache_path <- function(collection_url = birdflow_options("collection_url")){
+cache_path <- function(collection_url = birdflow_options("collection_url")) {
   # Return path to cache directory for the current  collection
   # url with a trailing delimiter
-  url = collection_url |> tolower()
+  url <- collection_url |> tolower()
   url <- gsub("/*$", "/", url) # enforce trailing slash
   cache_dir <- birdflow_options("cache")
   subdir <- digest::digest(tolower(url), serialize = FALSE) |> substr(1, 6)
   return(file.path(cache_dir, subdir, ""))
 }
-

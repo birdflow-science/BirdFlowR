@@ -31,7 +31,7 @@ species <- "example_data"  # optionally, set species here
 
 You'll also have to setup a destination folder for the purpose of the vignette I'm going to use a temporary folder.
 ```{r tempdir }
-dir <- tempdir() 
+dir <- tempdir()
 ```
 You could optionally set to a directory of your choice that is somewhere more permanent and accessible.  The code below should add a BirdFlowModels directory to your home directory, to use for model output. This block is not run when building the vignette.
 ```{r dir, eval = FALSE}
@@ -78,7 +78,7 @@ bf <- sparsify(bf, method = "state")
 
 Saving the sparse model will save time and disk space if we want to use it later. Here we write it as a serialized R object which is fast and efficient but not at all portable to other software.
 ```{r save, eval = FALSE}
-sparse_file <- file.path(dir, "sparse.Rds")  # change 
+sparse_file <- file.path(dir, "sparse.Rds")  # change
 saveRDS(bf, file = sparse_file)
 ```
 In a later session we could then read it with.

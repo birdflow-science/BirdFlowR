@@ -7,15 +7,16 @@ test_that("preprocess_species runs on test dataset", {
   birdflow_options(verbose = FALSE)
   on.exit(birdflow_options(verbose = o_verbose))
 
-  # Run on example data setting resolution based on gb (and then overiding for example_data)
+  # Run on example data setting resolution based on gb (and then overriding for
+  # example_data)
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
-  expect_true(all((ext(a)[,] %% xres(a)) == 0))  # Test if origin is at 0, 0
+  expect_true(all((ext(a)[, ] %% xres(a)) == 0))  # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribibution
   d <- get_distr(a, 5)
-  df <- data.frame(i = 1:length(d), density = d)
+  df <- data.frame(i = seq_along(d), density = d)
   df <- df[!df$density == 0, ]
   df <- df[1:12, ]
   rownames(df) <- NULL
@@ -65,7 +66,7 @@ test_that("preprocess_species catches error conditions", {
   species <- runs$common_name[i]
   err <- paste0(
     "eBird status and trends models do not cover the full range for ",
-    species, " (", code, ")" )
+    species, " (", code, ")")
   expect_error(preprocess_species(code, hdf5 = FALSE), err, fixed = TRUE)
 
   # Issue #106  (bad species input)
@@ -80,11 +81,11 @@ test_that("preprocess_species catches error conditions", {
 
   expect_error(
     preprocess_species(species = "example_data", hdf5 = FALSE, res = 2),
-    'res must be at least 27 when working with the low resolution example_data')
+    "res must be at least 27 when working with the low resolution example_data")
 
   expect_error(
     preprocess_species(species = "amewoo", hdf5 = FALSE, res = 2),
-    'Resolution cannot be less than 3 km')
+    "Resolution cannot be less than 3 km")
 
 })
 
@@ -109,16 +110,17 @@ test_that("preprocess_species() works with clip", {
   ymin <-  665000
   xmax <-  1550000
   ymax <-  1300000
-  poly <- matrix(c( xmin, xmin, xmax, xmax, xmin,
-                    ymin, ymax, ymax, ymin, ymin), ncol = 2 ) |>
+  poly <- matrix(c(xmin, xmin, xmax, xmax, xmin,
+                    ymin, ymax, ymax, ymin, ymin), ncol = 2) |>
     list() |>
     sf::st_polygon()
 
   clip <- terra::vect(poly)
   sp_path <- ebirdst::get_species_path("example_data")
-  proj  <- terra::crs(ebirdst::load_fac_map_parameters(sp_path)$custom_projection)
+  proj  <- terra::crs(
+    ebirdst::load_fac_map_parameters(sp_path)$custom_projection)
   terra::crs(clip) <- proj
-  if(interactive()){
+  if (interactive()) {
     # Plot "Full" abundance for "example_data" and our clipping polygon
     a <- preprocess_species("example_data")
     terra::plot(rast(a, 1))
@@ -144,10 +146,3 @@ test_that("preprocess_species() works with clip", {
   expect_setequal(created_files,  "example_data_2021_75km_clip.hdf5")
 
 })
-
-
-
-
-
-
-

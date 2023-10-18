@@ -10,9 +10,9 @@ get_dynamic_mask(x, which = "all")
 \item{x}{a BirdFlow object}
 
 \item{which}{indicates which timesteps to return. Can be one or more
-integers indicating timesteps; character dates in the format year-month-day
-e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;    or \code{"all"} which will
-return distributions for all timesteps.}
+integers indicating timesteps; character dates in the format
+year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
+or \code{"all"} which will return distributions for all timesteps.}
 }
 \value{
 a vector or matrix with elements or rows corresponding to active

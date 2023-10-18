@@ -43,12 +43,12 @@ as_distr <- function(x, bf, ...) {
 #' in.  If NULL the function will assume coordinates are in the same CRS as
 #' `bf`.
 #' @export
-as_distr.data.frame <- function(x, bf, crs = NULL, ...){
-  if(!all(c("x", "y") %in% names(x)))
+as_distr.data.frame <- function(x, bf, crs = NULL, ...) {
+  if (!all(c("x", "y") %in% names(x)))
     stop("the data.frame x should have columns 'x' and 'y'")
 
   # transform x and y if crs is set
-  if(!is.null(crs)){
+  if (!is.null(crs)) {
     x_sf <- sf::st_as_sf(x, coords = c("x", "y"), crs = sf::st_crs(crs))
     x_sf <-   sf::st_transform(x_sf, crs = crs(bf))
     coords <- sf::st_coordinates(x_sf)
@@ -58,7 +58,7 @@ as_distr.data.frame <- function(x, bf, crs = NULL, ...){
 
   i <- xy_to_i(x$x, x$y, bf)  # cell index
 
-  if(any(is.na(i)))
+  if (any(is.na(i)))
     warning(paste0(
       "Not all locations in x are within the BirdFlow mask. ",
       "Problem rows: ", paste(which(is.na(i)), collapse = ", "),
@@ -68,10 +68,10 @@ as_distr.data.frame <- function(x, bf, crs = NULL, ...){
 
   distr <-  matrix(0, ncol = length(i), nrow = n_active(bf))
   distr[cbind(i, seq_along(i))] <- 1
-  if(any(is.na(i)))
+  if (any(is.na(i)))
     distr[, is.na(i)] <- NA
 
-  if(length(i) == 1)
+  if (length(i) == 1)
     distr <- as.vector(distr)
 
   return(distr)
@@ -81,28 +81,28 @@ as_distr.data.frame <- function(x, bf, crs = NULL, ...){
 #' @param normalize if `TRUE` normalize each distribuiton to sum to 1
 #' @param zero_na  if `TRUE` replace `NA` values with `0`.
 #' @export
-as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...){
+as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
 
   cropped_sum <- NULL
   message <- ""
   raster_names <- names(x)
 
-  if(!terra::compareGeom(x, bf, stopOnError = FALSE)){
+  if (!terra::compareGeom(x, bf, stopOnError = FALSE)) {
     x <- terra::project(x, rast(bf, 1), method = "average", align = TRUE)
 
     reprojected_sum <- sum(terra::values(x), na.rm = TRUE)
     x <- terra::crop(x, rast(bf, 1))
-    x <- terra::extend(x ,rast(bf, 1))
+    x <- terra::extend(x, rast(bf, 1))
 
     cropped_sum <- sum(terra::values(x), na.rm = TRUE)
     extent_loss  <- reprojected_sum  - cropped_sum
-    if(extent_loss != 0)
-      message <- paste0(message, round(extent_loss/reprojected_sum * 100, 2),
-                        " of the initial value in the raster was lost while cropping to the bf extent.")
+    if (extent_loss != 0)
+      message <- paste0(message, round(extent_loss / reprojected_sum * 100, 2),
+                        " of the initial value in the raster was lost while ",
+                        "cropping to the bf extent.")
   }
 
-
-  if(is.null(cropped_sum)){
+  if (is.null(cropped_sum)) {
     cropped_sum <- reprojected_sum <- sum(terra::values(x), na.rm = TRUE)
   }
 
@@ -111,27 +111,27 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...){
   x <- flatten_raster(x, bf)
   inactive_loss <- cropped_sum - sum(x, na.rm = TRUE)
 
-  if(inactive_loss != 0){
-    new_message <-   paste0(round(inactive_loss/reprojected_sum * 100, 2),
-                            " of the initial value in the raster was lost ",
-                            " while masking inactive cells.")
+  if (inactive_loss != 0) {
+    new_message <- paste0(round(inactive_loss / reprojected_sum * 100, 2),
+                          " of the initial value in the raster was lost ",
+                          " while masking inactive cells.")
 
-    message <- paste(message, new_message,sep ="\n")
+    message <- paste(message, new_message, sep = "\n")
   }
 
-  if(zero_na){
+  if (zero_na) {
     x[is.na(x)] <- 0
   }
 
-  if(normalize){
-    if(is.matrix(x)){
+  if (normalize) {
+    if (is.matrix(x)) {
       x <- apply(x, 2, function(x) x / sum(x, na.rm = TRUE))
     } else {
-      x <- x/sum(x, na.rm = TRUE)
+      x <- x / sum(x, na.rm = TRUE)
     }
   }
 
-  if(message != "")
+  if (message != "")
     warning(message)
 
   return(x)
@@ -140,9 +140,9 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...){
 
 #' @rdname as_distr
 #' @export
-as_distr.sf <- function(x, bf, ...){
+as_distr.sf <- function(x, bf, ...) {
 
-  if(!all(sf::st_geometry_type(x) == "POINT"))
+  if (!all(sf::st_geometry_type(x) == "POINT"))
     stop("as_distr() works with sf objects that have only POINTS/ ",
          "x is sf but contains other geometery types")
 
@@ -154,5 +154,3 @@ as_distr.sf <- function(x, bf, ...){
   as_distr(x, bf)
 
 }
-
-

@@ -1,2 +1,7 @@
-linters: linters_with_defaults() # see vignette("lintr")
+linters: linters_with_defaults(cyclocomp_linter = NULL) # drop cyclocomp linter
 encoding: "UTF-8"
+exclusions: list( # dropping rendered version of vignettes, .Rmd still ckecked
+    "vignettes/BirdFlowR.R",
+    "vignettes/Preprocess.R",
+    "vignettes/Installation.R"
+  )

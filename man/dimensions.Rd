@@ -72,7 +72,8 @@ n_parameters(x)
 \item{parse}{logical. If \code{TRUE}, wkt parts are parsed into a vector (each line becomes an element)}
 }
 \value{
-\code{nrow()} returns the number of rows in the raster extent of the BirdFlow model
+\code{nrow()} returns the number of rows in the raster extent of the
+BirdFlow model
 
 \code{ncol()} number of columns in the raster extent
 

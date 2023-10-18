@@ -18,8 +18,8 @@ x with update column labels, as dictated by
 }
 \description{
 given a vector of timestep labels provide a vector of formatted labels based
-on the value of \link[=birdflow_options]{birdflow_options("time_format")} (see that function for
-options.)
+on the value of \link[=birdflow_options]{birdflow_options("time_format")} (see
+that function for options.)
 }
 \details{
 Internally distributions are labled with "t" and the timestep integer.

@@ -1,8 +1,18 @@
 
+# BirdFlowR 0.1.0.9034
+2023-10-17
+
+* `preprocess_species` now adds a `week` column to `$dates` component of 
+  BirdFlow objects. Initially this is identical to the `interval` column. 
+  However, after truncation intervals will be renumbered to `1:n_active()` but
+  weeks will always reference the week of the year.  Closes #132.
+  
+* linted package - fixed most issues flagged by `lintr::lint_package()`  
+
 # BirdFlowR 0.1.0.9033
 2023-10-10
 
-* Minor update to build_collection_index.R so it works regardless of whether 
+* Minor update to `build_collection_index()` so it works regardless of whether 
   BirdFlowR is loaded with `devtools::load_all()` or `library(BirdFlowR)`.
   
 
