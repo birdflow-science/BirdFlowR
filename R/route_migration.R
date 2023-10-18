@@ -25,8 +25,8 @@
 route_migration <- function(bf, n, migration = "prebreeding",
                             season_buffer = 1) {
 
-  warning("route_migration() is deprecated please transition to route() instead. ",
-          "Change the migration argument to season.")
+  warning("route_migration() is deprecated please transition to route()",
+            "and change the migration argument to season.")
 
   rts <- route(bf = bf, n = n, season = migration,
                season_buffer = season_buffer)

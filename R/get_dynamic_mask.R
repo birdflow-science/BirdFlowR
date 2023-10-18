@@ -27,18 +27,18 @@
 #' r <- rasterize_distr(dm, bf)
 #' plot(r, legend = FALSE, mar = c(1.3, 1.3, 1.3, .3)  )
 #'
-get_dynamic_mask <- function (x, which = "all") {
+get_dynamic_mask <- function(x, which = "all") {
 
   # Resolve timestep
   which <- lookup_timestep(which, bf = x)
 
-  if(!has_dynamic_mask(x))
+  if (!has_dynamic_mask(x))
     stop("'x' must have a dynamic mask to return the dynamic mask.")
 
   d <- x$geom$dynamic_mask[, which]
-  if(length(which) == 1){
+  if (length(which) == 1) {
     attr(d, "time") <- paste0("t", which)
   }
-  return(reformat_distr_labels( d, x) )
+  return(reformat_distr_labels(d, x))
 
 }

@@ -68,7 +68,7 @@ test_that("sample_distr() works with multiple distributions", {
   expect_equal(colnames(latlon), c("lat", "lon"))
 
   # Compare
-  expect_equal(apply(s, 2, function(x) which(as.logical(x))),i)
+  expect_equal(apply(s, 2, function(x) which(as.logical(x))), i)
   expect_equal(xy_to_i(xy, bf = bf), as.vector(i))
   expect_equal(latlon_to_xy(latlon, bf = bf), xy)
 })
@@ -77,7 +77,7 @@ test_that("sample_distr() works with multiple distributions", {
 
 test_that("sample_distr() works with 3D input", {
   bf <- BirdFlowModels::amewoo
-  d <- get_distr(bf, c(1,1))
+  d <- get_distr(bf, c(1, 1))
   d <- predict(bf, distr = d, start = 1, end = 3)
 
 
@@ -111,8 +111,8 @@ test_that("sample_distr() works with 3D input", {
   expect_equal(dimnames(latlon)[[3]], c("lat", "lon"))
 
   # Compare
-  expect_equal(apply(s, 2:3, function(x) which(as.logical(x))),i)
-  expect_equal(xy_to_i(x = as.vector(xy[, , 1]), y = as.vector(xy[ ,  , 2]),
+  expect_equal(apply(s, 2:3, function(x) which(as.logical(x))), i)
+  expect_equal(xy_to_i(x = as.vector(xy[, , 1]), y = as.vector(xy[,  , 2]),
                        bf = bf), as.vector(i))
   xy2 <- data.frame(x = as.vector(xy[, , 1]), y = as.vector(xy[, , 2]))
   expect_equal(latlon_to_xy(lat = as.vector(latlon[, , 1]),

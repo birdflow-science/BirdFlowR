@@ -16,10 +16,10 @@
 #'   \item{area}{ a vector of area (sq m) that is in included cells for each
 #'   timestep} \item{res}{ the resolution of the raster in km}
 #' @keywords internal
-calc_abundance_stats <- function(x, circular = TRUE){
+calc_abundance_stats <- function(x, circular = TRUE) {
 
   m <- terra::values(x, mat = TRUE)
-  m[ is.na(m)] <- 0
+  m[is.na(m)] <- 0
   m <-  as.logical(m)
   a <- array(m, dim = dim(x)) # dims:  x, y, timestep/week
   # counts is the number of unmasked cells for each timestep
@@ -27,13 +27,13 @@ calc_abundance_stats <- function(x, circular = TRUE){
   cts <- apply(a, 3, sum)
 
 
-  if(circular)
+  if (circular)
     cts <- c(cts, cts[1])
 
   return(list(n_params = sum(cts[-length(cts)] * cts[-1], cts[1]),
               count = cts,
               area = cts * xres(x) * yres(x),  # sq m
-              res = mean(xres(x), yres(x)) / 1000 )) # km
+              res = mean(xres(x), yres(x)) / 1000)) # km
 }
 
 
@@ -74,8 +74,8 @@ calc_abundance_stats <- function(x, circular = TRUE){
 #' @param adjustment  This is used
 #' @return The estimated number of parameters given a resolution of `res`
 #' @keywords internal
-predict_params <- function(a_stats, res, adjustment = 0.4){
-  if(adjustment < 0 || adjustment > 0.5)
+predict_params <- function(a_stats, res, adjustment = 0.4) {
+  if (adjustment < 0 || adjustment > 0.5)
     stop("adjustment should be between 0 and 0.5")
 
 
@@ -89,12 +89,8 @@ predict_params <- function(a_stats, res, adjustment = 0.4){
   # add the adjustment x proportional change x the prediction
   # proportional change is positive when increasing and negative when
   # decreasing
-  change <- (res - a_stats$res) / a_stats$res  # proportional change in resolution
+  change <- (res - a_stats$res) / a_stats$res  # proportional res change
   # change has a theoretical range from -1 to inf.
   adj_pred <- pred  + pred * change * adjustment
   return(adj_pred)
 }
-
-
-
-

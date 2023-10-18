@@ -24,18 +24,17 @@
 #' @return An integer indicating how much to pad the numbers in transtion
 #' names.
 #' @keywords internal
-get_timestep_padding <- function(bf){
+get_timestep_padding <- function(bf) {
   padding <- bf$metadata$timestep_padding
 
-
   # 1. Use metadata value
-  if(!is.null(padding))
+  if (!is.null(padding))
     return(padding)
 
   # The rest of this function is for back compatibility
 
   # 2. Determine padding from the current padding in marginal names
-  if(has_marginals(bf)){
+  if (has_marginals(bf)) {
     mn <- bf$marginals$index$marginal[1]
     padding <- gsub("^M_([[:digit:]]+).*$", "\\1", mn, perl = TRUE) |>
       nchar()
@@ -44,9 +43,9 @@ get_timestep_padding <- function(bf){
 
   # 3. Determine padding from the current padding in transition names
   # This is for the rare model that has transitions but not marginals.
-  if(has_transitions(bf)){
+  if (has_transitions(bf)) {
     tn <- names(bf$transitions)[1]
-    padding <- gsub("^M_([[:digit:]]+).*$", "\\1", mn, perl = TRUE) |>
+    padding <- gsub("^M_([[:digit:]]+).*$", "\\1", tn, perl = TRUE) |>
       nchar()
     return(padding)
   }

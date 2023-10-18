@@ -34,7 +34,7 @@ test_that("flatten_raster is consistent with i_to_rc() subset", {
 # SpatRaster input
 #------------------------------------------------------------------------------#
 
-test_that("rasterize_distr and flatten_raster are reversable - SpatRasters",{
+test_that("rasterize_distr and flatten_raster are reversable - SpatRasters", {
 
   # Single distribution
   bf <- BirdFlowModels::amewoo
@@ -50,5 +50,3 @@ test_that("rasterize_distr and flatten_raster are reversable - SpatRasters",{
   expect_true(all.equal(r, r2))
 
 })
-
-

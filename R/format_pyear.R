@@ -7,7 +7,7 @@
 # Month and Day associated with the input values.
 format_pyear <- function(x, hpy = TRUE) {
 
-  if(hpy){ # convert hpy to py if necessary
+  if (hpy) { # convert hpy to py if necessary
     x <- (x * 2) %% 1  # double and take remainder
   }
 

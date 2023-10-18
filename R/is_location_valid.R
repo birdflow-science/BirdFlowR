@@ -58,22 +58,22 @@
 #' i <- sample(which(distr == 0), 2)
 #' is_location_valid(bf, i, timestep = timestep)
 #'
-is_location_valid <- function(bf, i, x, y, timestep, date){
+is_location_valid <- function(bf, i, x, y, timestep, date) {
 
   if (missing(i) && (missing(x) || missing(y)))
     stop("Either use argument 'i', or both 'x' and 'y'.")
-  if(!missing(i) && (!missing(x) || !missing(y)))
+  if (!missing(i) && (!missing(x) || !missing(y)))
     stop("Use only one way of specifying locations (i, or x and y).")
-  if(!missing(x) || !missing(y))
+  if (!missing(x) || !missing(y))
     i <- xy_to_i(x, y, bf)
 
   if (missing(timestep)) {
-    if(missing(date))
+    if (missing(date))
       stop("Need argument 'date' or 'timestep'")
     timestep <- lookup_timestep(date, bf)
   }
 
-  if(length(timestep) == 1)
+  if (length(timestep) == 1)
     timestep <- rep(timestep, length(i))
   stopifnot(length(i) == length(timestep))
   stopifnot(all(is.na(i) | i %in% 1:n_active(bf)))
@@ -98,13 +98,13 @@ is_location_valid <- function(bf, i, x, y, timestep, date){
 
 #' @export
 #' @rdname is_location_valid
-is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE){
+is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE) {
 
   if (!is.matrix(distr))
     distr <- matrix(distr, ncol = 1)
 
   if (missing(timestep)) {
-    if(missing(date))
+    if (missing(date))
       stop("Need argument 'date' or 'timestep'")
     timestep <- lookup_timestep(date, bf)
   }
@@ -118,7 +118,7 @@ is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE){
 
   valid <- rep(TRUE, length(timestep)) # will hold result
   valid[is.na(timestep)] <- FALSE
-  valid[ apply(distr, 2, anyNA)] <- FALSE
+  valid[apply(distr, 2, anyNA)] <- FALSE
 
   # Here we evaluate whether every cell of the input distribution that has value
   # (isn't zero) corresponds to a cell that has value in the BirdFlow
@@ -135,18 +135,17 @@ is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE){
     mask[, sv] <- bf_has_value
   }
 
-  if(return_mask){
-    if(ncol(mask) == 1)
+  if (return_mask) {
+    if (ncol(mask) == 1)
       mask <- as.vector(mask)
     return(mask)
   }
 
-  # Here as well the objects have the same dimwensions as distr with corresponding cells
+  # These objects have the same dimensions as distr with corresponding cells
   distr_has_value <- distr != 0 # TRUE if cell in the distr has value
   valid_cells <- matrix(TRUE, nrow = nrow(distr), ncol = ncol(distr))
-  valid_cells[distr_has_value & !mask ] <- FALSE
+  valid_cells[distr_has_value & !mask] <- FALSE
   valid <- apply(valid_cells, 2, all)
 
   return(valid)
 }
-

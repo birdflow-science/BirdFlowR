@@ -12,41 +12,44 @@
 #' @return data frame with where and difference columns will have 0 rows if no
 #' differences found.
 #' @keywords internal
-compare_list_item_names <- function(x, y, map ="x", differences){
-  if(missing(differences))
+compare_list_item_names <- function(x, y, map = "x", differences) {
+  if (missing(differences))
     differences <- data.frame(where = character(0), difference = character(0))
-  if(!is.list(x) & !is.list(y)) return(differences)
-  if(sum(is.list(x), is.list(y) ) == 1){ # only one is a list
-    if(is.list(x))
+  if (!is.list(x) && !is.list(y))
+    return(differences)
+  if (sum(is.list(x), is.list(y)) == 1) { # only one is a list
+    if (is.list(x))
       return(rbind(differences,
                    data.frame(where = map,
-                              differences = "should not be a list") ) )
-    if(is.list(y))
+                              differences = "should not be a list")))
+    if (is.list(y))
       return(rbind(differences,
                    data.frame(where = map,
-                              differences = "should be a list") ) )
+                              differences = "should be a list")))
   }
-  if(!setequal(names(x), names(y))){
+  if (!setequal(names(x), names(y))) {
     lost <- setdiff(names(x), names(y))
     gained <- setdiff(names(y), names(x))
-    if(length(lost) != 0)
+    if (length(lost) != 0)
       differences <- rbind(
         differences,
         data.frame(where = map,
-                   differences = paste0("extra:", paste0(lost, collapse = ", ") ) ) )
-    if(length(gained) != 0)
+                   differences = paste0("extra:",
+                                        paste0(lost, collapse = ", "))))
+    if (length(gained) != 0)
       differences <- rbind(
         differences,
         data.frame(where = map,
-                   differences = paste0("missing:", paste0(gained, collapse = ", ") ) ) )
+                   differences = paste0("missing:",
+                                        paste0(gained, collapse = ", "))))
     return(differences)
   }
 
-  if(!all(names(x) == names(y)))
+  if (!all(names(x) == names(y)))
     return(rbind(differences,
-                 data.frame( where = map, differences = "Wrong order") ) )
+                 data.frame(where = map, differences = "Wrong order")))
 
-  for(n in names(x)){
+  for (n in names(x)) {
     differences <- compare_list_item_names(x[[n]],
                                            y[[n]],
                                            map = paste0(map, "$", n),

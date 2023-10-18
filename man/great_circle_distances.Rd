@@ -15,7 +15,7 @@ every active cell in the BirdFlow object.
 }
 \description{
 This function calculates a square, distance matrix with \code{n_active()} cells
-on each side. Each cell represents the distance between the it's
+on each side. Each cell represents the distance between its
 row index and colum index treated as locations in the state space; e.g.
 The cell  \verb{[3, 8]} represents the distance between locations 3 and 8 in the
 state space vector.
@@ -50,7 +50,7 @@ ys <- t(cbind(i_to_y(mel$i1, bf), i_to_y(mel$i2, bf)))
 plot(rasterize_distr(as.numeric(max_error), bf))
 title(main = "Max proportional error")
 matlines(xs, ys, col = rgb(0, 0, 0, .25), lty = 1, lwd = 1)
-mtext("lines connect cells to the cell for there is the greatest proportional error in distance",
-     line = 0, cex = 0.7)
+mtext(paste0("lines connect cells to the cell which have greatest",
+" proportional error in distance"), line = 0, cex = 0.7)
 }
 \keyword{internal}

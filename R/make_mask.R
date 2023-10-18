@@ -26,11 +26,11 @@ make_mask <- function(x, count = FALSE, assume_no_na = FALSE) {
   # Clips to extent of the non-zero data
   m <- terra::values(x, mat = TRUE)
 
-  if(!assume_no_na){
+  if (!assume_no_na) {
     m[is.nan(m)] <- 0
   }
   mask <- apply(m, 1, function(x) sum(x != 0, na.rm = TRUE))
-  if(!count){
+  if (!count) {
     mask <- as.logical(mask)  # TRUE if cell has data at any timestep
   }
   mask_mat <- matrix(mask, nrow = nrow(x), ncol = ncol(x), byrow = TRUE)

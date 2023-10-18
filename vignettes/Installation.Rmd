@@ -33,22 +33,22 @@ This uses R and RStudio installed directly on your system if you have both of th
   Open RStudio and run the following in the console.
     ```{r Install Packages with remotes, eval=FALSE, include = TRUE}
 installed <- rownames(installed.packages())
-if(!"remotes" %in% installed)
+if (!"remotes" %in% installed)
   install.packages("remotes")
-if(!"rnaturalearthdata" %in% installed)
+if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")  
+remotes::install_github("birdflow-science/BirdFlowModels")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
     ```
    Package dependencies can be a pain. If the above doesn't work you can also try the alternative method below, also executed in the RStudio console.
     ```{r Install Packages with pak, eval=FALSE, include = TRUE}
     installed <- rownames(installed.packages())
-    if(!"pak" %in% installed)
+    if (!"pak" %in% installed)
       install.packages("pak")
-    
+
     pak::pkg_install("rnaturalearthdata", ask = FALSE)
     pak::pkg_install("birdflow-science/BirdFlowModels", ask = FALSE, )
-    pak::pkg_install("birdflow-science/BirdFlowR", ask = FALSE, 
+    pak::pkg_install("birdflow-science/BirdFlowR", ask = FALSE,
                      dependencies = TRUE)
     ```
    If neither of those methods work a last option to try with specific 

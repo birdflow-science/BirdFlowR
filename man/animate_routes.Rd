@@ -19,10 +19,10 @@ out into a separate subplot.}
     \item{\code{max_stay_len}}{Used to scale the stay length dots. If NULL
 (the default) it will be set to the maximum "stay_len" value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
-    \item{\code{use_seasonal_colors}}{If TRUE a color scale that uses blues, greens, yellows,
-reds, for winter, spring, summer, and fall will be used with a consistent
-mapping of dates to colors regardless of the range of dates plotted.
-If FALSE then the data will be plotted using the full color scale.}
+    \item{\code{use_seasonal_colors}}{If TRUE a color scale that uses blues, greens,
+yellows, reds, for winter, spring, summer, and fall will be used with a
+consistent mapping of dates to colors regardless of the range of dates
+plotted. If FALSE then the data will be plotted using the full color scale.}
     \item{\code{pal}}{The color palette to use for plotting whe \code{use_seasonal_cols} is
 FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
     \item{\code{barheight}}{The height of the color gradient legend bar.  Passed to
@@ -60,7 +60,7 @@ anim <- animate_routes(rts, bf)
   # example render
   timesteps <- unique(rts$points$timestep)
   gif <- gganimate::animate(anim,
-                            device = "ragg_png", # ragg_png is fast and pretty
+                            device = "ragg_png", # is fast and pretty
                             width = 7, height = 6,
                             res = 150, units = "in",
                             nframes = length(timesteps) * 4, fps = 8)

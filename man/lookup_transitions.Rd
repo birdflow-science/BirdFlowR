@@ -31,12 +31,12 @@ A character vector with the named transitions required to get between
 \code{start} and  \code{end}
 }
 \description{
-The private function\code{lookup_transitions()} returns an ordered vector of transition names that
-connect start to end. If \code{start} and \code{end} are dates than their order
-determines whether the transitions flow forward or backward in time.  If they
-are timesteps than the \code{direction} argument should be used to indicate
-whether to project "forward" or "backward" in time possibly passing the year
-boundary.
+The private function\code{lookup_transitions()} returns an ordered vector of
+transition names that connect start to end. If \code{start} and \code{end} are dates
+than their order determines whether the transitions flow forward or backward
+in time.  If they are timesteps than the \code{direction} argument should be used
+to indicate whether to project "forward" or "backward" in time possibly
+passing the year boundary.
 }
 \details{
 Transitions are named "T_[from]-[to]" where [from] and [to]

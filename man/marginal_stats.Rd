@@ -23,7 +23,8 @@ zero.}
 
 \code{sum_marginals()} returns the sum of all marginals.
 
-\code{calc_pct_zero()} returns the percent of marginal values that are zero
+\code{calc_pct_zero()} returns the percent of marginal values that are
+zero
 }
 \description{
 Internal functions to calculate the sum of all marginals and the

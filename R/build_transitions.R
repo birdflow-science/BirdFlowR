@@ -1,10 +1,9 @@
-if(FALSE){
-  full_bf <- import_birdflow("../Models/Visualization/original/batch1/round1/robgro_2021_80km.hdf5")
+if (FALSE) {
+  full_bf <- import_birdflow(
+    "../Models/Visualization/original/batch1/round1/robgro_2021_80km.hdf5")
   sparse_bf <- sparsify(full_bf, "state+conditional", p = .99)
   bf <-  build_transitions(sparse_bf)
 }
-
-
 
 #' add or drop transition matrices
 #'
@@ -28,15 +27,15 @@ if(FALSE){
 #' bf3 <- drop_transitions(bf2)
 #' bf3
 #' }
-build_transitions <- function(x, rebuild = FALSE){
-  if(has_transitions(x) && !rebuild)
+build_transitions <- function(x, rebuild = FALSE) {
+  if (has_transitions(x) && !rebuild)
     stop("x already has transitions.")
-  if(!has_marginals(x))
+  if (!has_marginals(x))
     stop("marginals are missing and necessary to build transitions.")
   mi <- x$marginals$index
   tl <- vector(mode = "list", length = nrow(mi))
   names(tl) <- mi$transition
-  for(i in 1:nrow(mi)){
+  for (i in seq_len(nrow(mi))) {
     tl[[i]] <- get_transition(x, mi$transition[i])
   }
   x$transitions <- tl
@@ -47,11 +46,10 @@ build_transitions <- function(x, rebuild = FALSE){
 #' @rdname build_transitions
 #' @aliases drop_transitions
 #' @export
-drop_transitions <- function(x){
-  if(!has_marginals(x))
+drop_transitions <- function(x) {
+  if (!has_marginals(x))
     stop("Cannot drop transitions from a BirdFlow object that lacks marginals.")
   x$transitions <- NA
   x$metadata$has_transitions <- FALSE
   return(x)
 }
-

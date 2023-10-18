@@ -24,11 +24,11 @@
 #' @return A BirdFlow modelthat only contains information about transitions
 #' for a subset of the year as specified by `...`.
 #' @export
-truncate_birdflow <- function(bf, ...){
+truncate_birdflow <- function(bf, ...) {
 
   # Add timestep_padding metadata if it doesn't exist
   # (back compatability code)
-  if(is.null(bf$metadata$timestep_padding)){
+  if (is.null(bf$metadata$timestep_padding)) {
     ts_padding <- get_timestep_padding(bf)
     bf$metadata$timestep_padding <- ts_padding
   }
@@ -39,17 +39,17 @@ truncate_birdflow <- function(bf, ...){
   # This is an abnormal state to trick the python code into fitting a transition
   # from the last to the first timestep, but it messes things up when
   # truncating.
-  if(bf$dates$date[1] == bf$dates$date[nrow(bf$dates)]){
+  if (bf$dates$date[1] == bf$dates$date[nrow(bf$dates)]) {
     bf$dates <- bf$dates[-nrow(bf$dates), ]
-    bf$distr <- bf$distr[ , -ncol(bf$distr)]
+    bf$distr <- bf$distr[, -ncol(bf$distr)]
   }
 
   # Define the retained timesteps both by their old index (in the full model)
   # and their new index (in the truncated model)
   old_timesteps <- lookup_timestep_sequence(bf, ...)
-  if(any(duplicated(old_timesteps)))
+  if (any(duplicated(old_timesteps)))
     stop("You must truncate to less than a full year.")
-  new_timesteps <- 1:length(old_timesteps)
+  new_timesteps <- seq_along(old_timesteps)
 
   # Define the retained transtitions both by their old and new names
   # (forward only)
@@ -63,7 +63,7 @@ truncate_birdflow <- function(bf, ...){
   d <- bf$dates
   mv <- match(ts_cw$old, d$interval) # (mv = match vector)
   d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
-  d$interval <- 1:nrow(d)
+  d$interval <- seq_len(nrow(d))
   bf$dates <- d
 
   # Metadata
@@ -71,7 +71,7 @@ truncate_birdflow <- function(bf, ...){
   bf$metadata$n_transitions <- nrow(bf$dates) - 1
 
   # Marginals
-  if(has_marginals(bf)){
+  if (has_marginals(bf)) {
     mi <- bf$marginals$index
     stopifnot(all(old_transitions %in% mi$transition))
 
@@ -93,17 +93,16 @@ truncate_birdflow <- function(bf, ...){
   }
 
 
-  if(has_transitions(bf)){
+  if (has_transitions(bf)) {
     # If there are transitions we need to rename them based on the new
     # timesteps.
 
-    rev <- function(x) x[length(x):1]
     # Make transition cross walk
     # include all possible forward and backwards transitions
     t_cw <- rbind(
       data.frame(old = old_transitions, new = new_transitions),
-      data.frame(old = as_transitions(rev(old_timesteps), bf),
-                new = as_transitions(rev(new_timesteps), bf)))
+      data.frame(old = as_transitions(base::rev(old_timesteps), bf),
+                new = as_transitions(base::rev(new_timesteps), bf)))
 
     t <- bf$transitions
     stopifnot(all(names(t) %in% t_cw$old))
@@ -125,7 +124,7 @@ truncate_birdflow <- function(bf, ...){
 
   # Subset and rename columns of dynamic mask
   # Reuse d_cw as it's the same for both objects
-  if(has_dynamic_mask(bf)){
+  if (has_dynamic_mask(bf)) {
     dm <- bf$geom$dynamic_mask
     stopifnot(all(d_cw$old %in% colnames(dm)))
     mv <- match(d_cw$old, colnames(dm))
@@ -137,4 +136,3 @@ truncate_birdflow <- function(bf, ...){
 
   return(bf)
 }
-

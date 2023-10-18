@@ -56,7 +56,8 @@ calc_movement_vectors <- function(bf, start, direction = "forward") {
   }
   end <- lookup_timestep(end, bf)
 
-  trans_name <- lookup_transitions(bf, start = start, end = end, direction = direction)
+  trans_name <- lookup_transitions(bf, start = start, end = end,
+                                   direction = direction)
   stopifnot(length(trans_name) == 1)
 
   trans <- get_transition(bf, trans_name)

@@ -24,7 +24,7 @@
 #'     except with the last marginal in a circular model eg "M_52-01"}
 #'
 #' @keywords internal
-make_marginal_index <- function(bf){
+make_marginal_index <- function(bf) {
   # n_timesteps and n_transitions should be properly set in bf
   # Marginals do not need to exist.
 

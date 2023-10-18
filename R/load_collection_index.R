@@ -19,33 +19,34 @@
 #' @export
 load_collection_index <-
   function(update = TRUE,
-           collection_url = birdflow_options("collection_url")){
+           collection_url = birdflow_options("collection_url")) {
 
   local_index <- file.path(cache_path(collection_url), "index.Rds")
 
   collection_url <- gsub("/*$", "/", collection_url)  # force trailing slash
 
-  if(!update){
-    if(!file.exists(local_index)){
-      stop("Do no set update to FALSE unless you have already downloaded your model")
+  if (!update) {
+    if (!file.exists(local_index)) {
+      stop("Do no set update to FALSE unless you have already downloaded your ",
+      "model")
     }
     return(readRDS(local_index))
   }
 
 
   md5_url <- paste0(collection_url, "index_md5.txt")
-  index_url <- paste0(collection_url, "index.Rds" )
+  index_url <- paste0(collection_url, "index.Rds")
 
   up_to_date <- FALSE
 
-  if(file.exists(local_index)){
+  if (file.exists(local_index)) {
     local_md5 <- tools::md5sum(local_index)
     remote_md5 <- base::readLines(md5_url)
     up_to_date <- local_md5 == remote_md5
   }
 
-  if(!up_to_date){
-    if(birdflow_options("verbose"))
+  if (!up_to_date) {
+    if (birdflow_options("verbose"))
       cat("Downloading collection index\n")
     dir.create(dirname(local_index), recursive = TRUE, showWarnings = FALSE)
     utils::download.file(index_url, local_index, mode = "wb")

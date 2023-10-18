@@ -1,8 +1,10 @@
+# Don't flag S3 methods as having bad names when linting:
+# nolint start: object_name_linter.
 #' Private function to create the empty shell of a BirdFlow object
 #'
 #' @return An empty BirdFlow object
 #' @keywords internal
-new_BirdFlow <- function(){
+new_BirdFlow <- function() {
   structure(list(geom = list(nrow = NA_integer_,
                              ncol = NA_integer_,
                              res = rep(NA_real_, 2),
@@ -20,7 +22,7 @@ new_BirdFlow <- function(){
                    species_code = NA_character_,
                    scientific_name = NA_character_,
                    common_name = NA_character_,
-            #       resident = NA,
+            #      resident = NA,
                    breeding_quality = NA_integer_,
             #       breeding_range_modeled = NA,
                    breeding_start = NA,
@@ -59,9 +61,10 @@ new_BirdFlow <- function(){
                      as.character(utils::packageVersion("BirdFlowR")),
                    is_sparse = FALSE,
                    sparse = NA
-                  ) ),
+                  )),
             class = "BirdFlow")
 
 
 
 }
+# nolint end

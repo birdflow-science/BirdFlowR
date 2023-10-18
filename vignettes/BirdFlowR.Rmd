@@ -51,7 +51,7 @@ We can also access the collection index through the package.
 ```{r load index}
 # Load and print index
 index <- load_collection_index()
-print(index[ , c("model", "common_name")])
+print(index[, c("model", "common_name")])
 ```
 
 And we can load a model from the collection based on the `model` column from 
@@ -135,7 +135,7 @@ ext(bf)
 c(xmin(bf), xmax(bf), ymin(bf), ymax(bf)) # same as ext(bf)
 
 # Compare geometries - do they have the same CRS, extent, and cell size
-compareGeom(bf, rast(bf))  
+compareGeom(bf, rast(bf))
 ```
 
 BirdFlow objects also play nicely with the *sf* package. 
@@ -294,7 +294,7 @@ The `route()` function can sample starting locations from the distribution for
 the starting timestep so the following is equivalent to the preceeding two sections.
 
 ```{r route with sample}
-rts2 <- route(bf,  n = n_positions,  start = start, end = end )
+rts2 <- route(bf,  n = n_positions,  start = start, end = end)
 
 ```
 

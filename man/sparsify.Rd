@@ -71,9 +71,9 @@ pooled and then a threshold is chosen for that entire model such that zeroing
 values below the threshold results in the target proportion, \code{p}, of the
 model's density remaining.}
 
-\item{\code{marginal}}{A threshold is chosen and applied separately to each marginal
-in the model.  Ultimately, \code{p} is achieved for the model as a whole but the
-threshold below which cells are set to zero varies across marginals.
+\item{\code{marginal}}{A threshold is chosen and applied separately to each
+marginal in the model.  Ultimately, \code{p} is achieved for the model as a whole
+but the threshold below which cells are set to zero varies across marginals.
 }
 
 \item{\code{conditional}}{ This method targets (1 - p) of both the forward and

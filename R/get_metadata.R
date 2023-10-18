@@ -49,19 +49,20 @@
 #'get_metadata(amewoo)
 #'get_metadata(amewoo, "is_sparse")
 #'
-get_metadata <- function(x, what){
-  if(missing(what)) what <- "all"
+get_metadata <- function(x, what) {
+  if (missing(what))
+    what <- "all"
   what <- tolower(what)
   nbf <- new_BirdFlow()
-  valid_metatdata_names  <- c( "all", names(nbf$metadata) )
+  valid_metatdata_names  <- c("all", names(nbf$metadata))
 
-  if(!what %in% c(valid_metatdata_names)){
-    stop("what should be one of ", paste(valid_metatdata_names, collapse = ", "))
+  if (!what %in% c(valid_metatdata_names)) {
+    stop("what should be one of ",
+         paste(valid_metatdata_names, collapse = ", "))
   }
 
-  if(what == "all")
+  if (what == "all")
     return(x$metadata)
 
   return(x$metadata[[what]])
-
 }

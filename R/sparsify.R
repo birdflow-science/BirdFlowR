@@ -40,9 +40,9 @@
 #' values below the threshold results in the target proportion, `p`, of the
 #' model's density remaining.}
 #'
-#' \item{`marginal`}{A threshold is chosen and applied separately to each marginal
-#' in the model.  Ultimately, `p` is achieved for the model as a whole but the
-#' threshold below which cells are set to zero varies across marginals.
+#' \item{`marginal`}{A threshold is chosen and applied separately to each
+#' marginal in the model.  Ultimately, `p` is achieved for the model as a whole
+#' but the threshold below which cells are set to zero varies across marginals.
 #' }
 #'
 #' \item{`conditional`}{ This method targets (1 - p) of both the forward and
@@ -97,43 +97,45 @@
 #' bf <- import_birdflow(hdf5_path)
 #' sbf <- sparsify(bf, method = "marginal+state", p = 0.99)
 #' }
-sparsify <- function(x, method, p, fix = TRUE){
+sparsify <- function(x, method, p, fix = TRUE) {
 
-  if(has_dynamic_mask(x))
+  if (has_dynamic_mask(x))
     stop("sparsify() has not yet been updated to work with dynamic masks.")
   supported_methods <- c("model", "marginal", "conditional", "state")
   proportional_methods <- setdiff(supported_methods, "state")
 
-  # allow for specifying multiple methods in single string e.g.
-  #  "conditional+state"
-  if(grepl("+", method, fixed = TRUE))
+  # allow for specifying multiple methods in single string
+  # e.g. "conditional+state"
+  if (grepl("+", method, fixed = TRUE))
     method <- strsplit(method, "+", fixed = TRUE)[[1]]
 
-  if(! all(method %in% supported_methods)){
+  if (!all(method %in% supported_methods)) {
     invalid <- setdiff(method, supported_methods)
     stop(paste(invalid, collapse = ", "),
          ifelse(length(invalid) == 1, " is not a valid mathod.",
-                " are not valid methods.")  )
+                " are not valid methods."))
   }
-  if(length(method) > 1 && sum(method %in% proportional_methods) > 1)
+
+  if (length(method) > 1 && sum(method %in% proportional_methods) > 1)
     stop("You can not combine proportional methods.")
 
   validate_BirdFlow(x)
-  if(!has_marginals(x))
+  if (!has_marginals(x))
     stop("Currently implemented sparsification only works with marginals")
-  if(!has_distr(x))
+  if (!has_distr(x))
     stop("Distributions required to evaluate model")
 
-  if(!setequal(method, "state")){
-    if( missing(p) )
+  if (!setequal(method, "state")) {
+    if (missing(p))
       stop("p is required for for all methods except 'state'")
-    if( length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1){
-      stop("p should be a single numeric greater than zero and less than or equal to 1.")
+    if (length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1) {
+      stop("p should be a single numeric greater than zero and less than or ",
+           "equal to 1.")
     }
-    if(missing(fix))
-      fix = TRUE
+    if (missing(fix))
+      fix <- TRUE
   } else {
-    fix = FALSE
+    fix <- FALSE
   }
 
   #----------------------------------------------------------------------------#
@@ -142,14 +144,14 @@ sparsify <- function(x, method, p, fix = TRUE){
 
   verbose <- birdflow_options("verbose")
 
-  if(verbose)
+  if (verbose)
     cat("Evaluating full model performance\n")
   pre_sparsification_stats <- distribution_performance(x)
   index <- x$marginals$index
   index <- index[index$direction == "forward", ]
   marginal_names <- index$marginal
   stopifnot(all(marginal_names %in% names(x$marginals)))
-  if(any(duplicated(marginal_names)))
+  if (any(duplicated(marginal_names)))
     stop("Shouldn't have duplicated marginals in index")
 
   #----------------------------------------------------------------------------#
@@ -174,40 +176,34 @@ sparsify <- function(x, method, p, fix = TRUE){
   #  cells.  Because cells are zeroed out for both rows and columns we will
   #  likely overshoot our target and end up with a greater pct zero.
   #----------------------------------------------------------------------------#
-  if(any(method == "conditional")){
-    if(verbose)
+  if (any(method == "conditional")) {
+    if (verbose)
       cat("Starting conditional sparsification with p= ", p, "\n\t", sep = "")
-    for(i in seq_along(marginal_names)){
+    for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
       to_zero <- matrix(FALSE, nrow = nrow(mar), ncol = ncol(mar))
 
       # Calculate which cells need to be zeroed based on retaining p of each row
       row_thresholds <- apply(mar, 1, find_threshold, p = p)
-      for(j in 1:nrow(mar)){
-        sv <- mar[j , ] < row_thresholds[j]
+      for (j in seq_len(nrow(mar))) {
+        sv <- mar[j, ] < row_thresholds[j]
         to_zero[j, sv] <- TRUE
       }
 
-      #  to_zero_r <- mapply(function(m, thresh) m < thresh, m = mar, thresh = row_thresholds)
-      #  to_zero_r <- matrix(to_zero_r, nrow = nrow(mar), ncol = ncol(mar))
-
       # Calculate which cells need to be zeroed based on retaining p of each col
       col_thresholds <- apply(mar, 2, find_threshold, p = p)
-      for(j in 1:ncol(mar)){
-        sv <- mar[ , j ] < col_thresholds[j]
-        to_zero[ sv , j ] <- TRUE
+      for (j in seq_len(ncol(mar))) {
+        sv <- mar[, j] < col_thresholds[j]
+        to_zero[sv, j] <- TRUE
       }
 
-      #  to_zero_c <- mapply(function(m, thresh) m < thresh, m = t(mar), thresh = col_thresholds )
-      #  to_zero_c <- t(matrix(to_zero_c, nrow = nrow(mar), ncol = ncol(mar)))
-      #   mar[to_zero_c | to_zero_r] <- 0
-      mar[to_zero ] <- 0
+      mar[to_zero] <- 0
 
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if(verbose) cat(".")
+      if (verbose) cat(".")
     }
-    if(verbose) cat(" Done.\n")
+    if (verbose) cat(" Done.\n")
   }
 
 
@@ -215,18 +211,18 @@ sparsify <- function(x, method, p, fix = TRUE){
   # marginal
   #  p determines what proportion of each marginal's density to retain
   #----------------------------------------------------------------------------#
-  if(any(method == "marginal")){
-    if(verbose)
+  if (any(method == "marginal")) {
+    if (verbose)
       cat("Starting marginal sparsification with p= ", p, "\n\t", sep = "")
-    for(i in seq_along(marginal_names)){
+    for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
       threshold <- find_threshold(mar, p = p)
       mar[mar < threshold] <- 0
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if(verbose) cat(".")
+      if (verbose) cat(".")
     }
-    if(verbose) cat(" Done.\n")
+    if (verbose) cat(" Done.\n")
   }
 
   #----------------------------------------------------------------------------#
@@ -234,8 +230,8 @@ sparsify <- function(x, method, p, fix = TRUE){
   #  p determines what proportion of the total model's density to retain
   #  (one threshold is used for all marginals)
   #----------------------------------------------------------------------------#
-  if(any(method == "model")){
-    if(verbose)
+  if (any(method == "model")) {
+    if (verbose)
       cat("Starting model sparsification with p= ", p, "\n\t", sep = "")
 
     # Aggregate all the values from all the marginals into one matrix
@@ -244,34 +240,34 @@ sparsify <- function(x, method, p, fix = TRUE){
     sample_freq <- 2 # set to positive integer. 1/sample.freq = sample rate
     # a value of one means sample every value
     all <- 1:n_active(x)^2
-    sv <- all[all%%sample_freq == 0]
+    sv <- all[all %% sample_freq == 0]
 
     values <- matrix(NA_real_, nrow = length(sv),
-                     ncol =  length(marginal_names) )
+                     ncol =  length(marginal_names))
 
-    if(sample_freq == 1){ # slightly more efficient version if using all values
-      for(i in seq_along(marginal_names)){
+    if (sample_freq == 1) { # more efficient version if using all values
+      for (i in seq_along(marginal_names)) {
         m_name <- marginal_names[i]
         values[, i] <- as.vector(x$marginals[[m_name]])
       }
     } else {
-      for(i in seq_along(marginal_names)){
+      for (i in seq_along(marginal_names)) {
         m_name <- marginal_names[i]
-        values[ , i] <- as.vector(x$marginals[[m_name]])[sv]
+        values[, i] <- as.vector(x$marginals[[m_name]])[sv]
       }
     }
     threshold <- find_threshold(values, p = p)
     rm(values)
     gc(verbose = FALSE)
 
-    for(i in seq_along(marginal_names)){
+    for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
       mar[mar < threshold] <- 0
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if(verbose) cat(".")
+      if (verbose) cat(".")
     }
-    if(verbose) cat(" Done.\n")
+    if (verbose) cat(" Done.\n")
   } # Done model sparsification
 
   #----------------------------------------------------------------------------#
@@ -285,21 +281,21 @@ sparsify <- function(x, method, p, fix = TRUE){
   # transitions into or out of the locations (in time and space) that are
   # zero in the the training (ebirdst) distributions.
   #----------------------------------------------------------------------------#
-  if(any(method == "state")){
+  if (any(method == "state")) {
     d <- get_distr(x)
     d_is_zero  <- d == 0
 
-    if(verbose){
+    if (verbose) {
       cat("Starting state based sparsification.\n", sep = "")
     }
-    for(i in seq_along(marginal_names)){
+    for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
 
-      from  <-  index$from[index$marginal == m_name] # previous distribution index
+      from  <-  index$from[index$marginal == m_name] # previous distr. index
       to <- index$to[index$marginal == m_name] # next distribution index
-      mar[d_is_zero[, from], ] <- 0 # zero out rows where previous distribution is zero
-      mar[ , d_is_zero[, to] ] <- 0 # zero out columns where next distribution is zero
+      mar[d_is_zero[, from], ] <- 0 # zero out rows when previous distr. is zero
+      mar[, d_is_zero[, to]] <- 0 # zero out cols when next distr. is zero
 
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
 
@@ -317,51 +313,51 @@ sparsify <- function(x, method, p, fix = TRUE){
   # we also fix dead ends we want to calculate the density lost based
   # on the non-standardized object.
 
-  if(verbose)
+  if (verbose)
     cat("Evaluating post-sparsification performance\n")
 
   # Make standardized version
   standardized_bf <- x
-  for(i in seq_along(marginal_names)){
-    mar <- standardized_bf$marginals[[marginal_names[i] ]]
+  for (i in seq_along(marginal_names)) {
+    mar <- standardized_bf$marginals[[marginal_names[i]]]
     s <- sum(mar)
-    mar <- Matrix(mar/s, sparse = TRUE)  # re-normalize
-    standardized_bf$marginals[[marginal_names[i] ]] <- mar
+    mar <- Matrix(mar / s, sparse = TRUE)  # re-normalize
+    standardized_bf$marginals[[marginal_names[i]]] <- mar
   }
   post_sparsification_stats <- distribution_performance(standardized_bf)
 
   # Calculate density lost and and percent zero on the non-standardized version
   ms <- marginal_stats(x)
-  pct_zero = ms$pct_zero
-  pct_density_lost = (n_transitions(x) - ms$sum ) / n_transitions(x) * 100
+  pct_zero <- ms$pct_zero
+  pct_density_lost <- (n_transitions(x) - ms$sum) / n_transitions(x) * 100
 
   # Assemble all the stats in one table
   stats <- cbind(data.frame(model = c("full", "sparse"),
                             pct_zero = c(0, ms$pct_zero),
-                            pct_density_lost = c(0, pct_density_lost) ),
+                            pct_density_lost = c(0, pct_density_lost)),
                  rbind(as.data.frame(pre_sparsification_stats),
-                       as.data.frame(post_sparsification_stats) ) )
+                       as.data.frame(post_sparsification_stats)))
 
-  if(fix){
-    if(verbose)
+  if (fix) {
+    if (verbose)
       cat("Fixing dead ends\n")
 
     x <- fix_dead_ends(x)
 
-    if(verbose)
+    if (verbose)
       cat("Evaluating post-fix performance\n")
 
     ms <- marginal_stats(x)
     pct_zero <- ms$pct_zero
-    pct_density_lost = (n_transitions(x) - ms$sum ) / n_transitions(x) * 100
+    pct_density_lost <- (n_transitions(x) - ms$sum) / n_transitions(x) * 100
 
     # Update standardized version
     standardized_bf <- x
-    for(i in seq_along(marginal_names)){
-      mar <- standardized_bf$marginals[[marginal_names[i] ]]
+    for (i in seq_along(marginal_names)) {
+      mar <- standardized_bf$marginals[[marginal_names[i]]]
       s <- sum(mar)
-      mar <- Matrix(mar/s, sparse = TRUE)  # re-normalize
-      standardized_bf$marginals[[marginal_names[i] ]] <- mar
+      mar <- Matrix(mar / s, sparse = TRUE)  # re-normalize
+      standardized_bf$marginals[[marginal_names[i]]] <- mar
     }
 
     post_fix_stats <- distribution_performance(standardized_bf)
@@ -371,13 +367,13 @@ sparsify <- function(x, method, p, fix = TRUE){
                    cbind(data.frame(model = "fixed",
                                     pct_zero = pct_zero,
                                     pct_density_lost = pct_density_lost),
-                         as.data.frame(post_fix_stats) )  )
+                         as.data.frame(post_fix_stats)))
   }
 
   # Update object to latest standardized version
   x <- standardized_bf
 
-  if(verbose)
+  if (verbose)
     cat("\t", format(pct_zero, digits = 3), "% zero\n\t",
         format(pct_density_lost, digits = 3), "% density lost\n\t",
         "traverse correlation:\n\t\t",
@@ -391,21 +387,20 @@ sparsify <- function(x, method, p, fix = TRUE){
 
   # Build list of used arguments (other than x and method)
   args <- list()
-  if(!missing(p))
+  if (!missing(p))
     args <- c(args, list(p = p))
 
-  if(length(args) == 0)
+  if (length(args) == 0)
     args <- NA
 
   x$metadata$is_sparse <- TRUE
-  if(is.na(x$metadata$sparse))
+  if (is.na(x$metadata$sparse))
     x$metadata$sparse <- list()
   x$metadata$sparse$method  <- method
   x$metadata$sparse$arguments <-  args
-  x$metadata$sparse$stats = stats
-  x$metadata$sparse$pct_zero = pct_zero
-  x$metadata$sparse$pct_density_lost = pct_density_lost
-
+  x$metadata$sparse$stats <- stats
+  x$metadata$sparse$pct_zero <- pct_zero
+  x$metadata$sparse$pct_density_lost <- pct_density_lost
 
   validate_BirdFlow(x)  # still good?
 

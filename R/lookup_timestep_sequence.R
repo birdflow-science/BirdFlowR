@@ -82,65 +82,66 @@
 #' lookup_timestep_sequence(bf)
 #' lookup_timestep_sequence(bf, season = "all", direction = "backward")
 #'
-lookup_timestep_sequence <- function (x,
-                                      season = NULL,
-                                      start = NULL,
-                                      end = NULL,
-                                      direction = NULL,
-                                      season_buffer = 1,
-                                       n_steps = NULL) {
+lookup_timestep_sequence <- function(x,
+                                     season = NULL,
+                                     start = NULL,
+                                     end = NULL,
+                                     direction = NULL,
+                                     season_buffer = 1,
+                                     n_steps = NULL) {
 
   # Throw useful error if old usage (season passed vis start) is used
   # Changed on 6/8/2023.  Delete this code after three months.
   season_values <- c(
     "all", "prebreeding_migration", "breeding", "postbreeding_migration",
-    "nonbreeding", "pre","post","spring", "fall", "winter",  "nonbreeding",
-    "summer", "breeding", "prebreeding", "postbreeding", "breed", "non" )
-  if(is.character(start) && length(start) == 1 && start %in% season_values){
-    stop("It looks like you are supplying a season name to start. Use season argument instead.")
+    "nonbreeding", "pre", "post", "spring", "fall", "winter",  "nonbreeding",
+    "summer", "breeding", "prebreeding", "postbreeding", "breed", "non")
+  if (is.character(start) && length(start) == 1 && start %in% season_values) {
+    stop("It looks like you are supplying a season name to start. ",
+         "Use season argument instead.")
   }
 
   stopifnot(inherits(x, "BirdFlow"))
   dates <- x$dates
 
   no_direction <- is.null(direction)
-  if(is.null(direction))
+  if (is.null(direction))
     direction <- "forward"
   direction <- match.arg(direction, c("forward", "backward"))
 
 
 
   # Check for valid combinations of arguments
-  if(!is.null(end) && !is.null(n_steps))
+  if (!is.null(end) && !is.null(n_steps)) {
     stop("end and n_steps are mutually exclusive. ",
          "Use only one of these arguments.")
+  }
 
-  if(is.null(start)){
+  if (is.null(start)) {
     stopifnot("end should not be used without start" = is.null(end),
               "n_steps should not be used without start" = is.null(n_steps))
   }
 
-
   # Season defaults to "all" if both "start" and "season" are omitted.
   # Because function defaults to all timesteps
-  if(is.null(season) && is.null(start)){
+  if (is.null(season) && is.null(start)) {
     season <- "all"
   }
 
   # Handle season input
-  if(!is.null(season)){
+  if (!is.null(season)) {
     # Input validation is done in lookup_season_timesteps()
     s <- lookup_season_timesteps(x, season, season_buffer)
 
-    if(direction == "backward")
+    if (direction == "backward")
       s <-  rev(s)
     return(s)
   }
 
 
   # Handle start and offset (n_steps)
-  if(!is.null(start) && is.null(end) && !is.null(n_steps)){
-    if(n_steps > n_timesteps(x))
+  if (!is.null(start) && is.null(end) && !is.null(n_steps)) {
+    if (n_steps > n_timesteps(x))
       stop("n_steps must be less than n_timesteps(x)")
 
     start <- lookup_timestep(start, bf = x)
@@ -149,8 +150,8 @@ lookup_timestep_sequence <- function (x,
       end <- start + n_steps
       if (end > n_timesteps(x)) {
         if (!is_cyclical(x))
-          stop("x is not cyclical and n_steps is large enough to extend beyond the",
-               " last timestep.")
+          stop("x is not cyclical and n_steps is large enough to extend ",
+               "beyond the last timestep.")
         end <- end - n_timesteps(x)
       }
     }
@@ -158,34 +159,34 @@ lookup_timestep_sequence <- function (x,
       end <- start - n_steps
       if (end < 1) {
         if (!is_cyclical(x))
-          stop("x is not cyclical and n_steps is large enough to extend back past ",
-               "the first timestep.")
+          stop("x is not cyclical and n_steps is large enough to extend ",
+               "back past the first timestep.")
         end <- n_timesteps(x) + start - n_steps
       }
     }
   }
 
-  if(is.integer(start))
+  if (is.integer(start))
     start <- as.numeric(start)
-  if(is.integer(end))
+  if (is.integer(end))
     end <- as.numeric(end)
 
-  if((is.numeric(start) && !is.numeric(end)) ||
+  if ((is.numeric(start) && !is.numeric(end)) ||
      (is.numeric(end) && !is.numeric(start)))
     stop("start and end must both be timesteps or both be dates.")
 
 
-  if(!is.numeric(start)){
+  if (!is.numeric(start)) {
     start <- lubridate::as_date(start)
     end <- lubridate::as_date(end)
   }
 
   # Process date input (in any of it's forms)
-  if(lubridate::is.Date(start)){
+  if (lubridate::is.Date(start)) {
     implicit_direction <- ifelse(end > start, "forward", "backward")
-    if(no_direction){
+    if (no_direction) {
       direction <- implicit_direction
-    } else if(implicit_direction != direction){
+    } else if (implicit_direction != direction) {
         stop("Implicit direction in start and end dates (", implicit_direction,
              ") is in conflict with direction argument (", direction, ").")
     }
@@ -198,25 +199,25 @@ lookup_timestep_sequence <- function (x,
   stopifnot(is.numeric(start),
             is.numeric(end),
             length(start) == 1,
-            length(end) == 1 )
+            length(end) == 1)
 
 
   is_backward <- direction == "backward"
 
   # loops is a flag that indicates we pass over the year boundary from last
   # timestep to first or from first to last
-  loops <- ( start < end & is_backward) ||
+  loops <- (start < end & is_backward) ||
     (start > end & !is_backward) ||
     start == end
 
 
 
-  if(loops && !is_cyclical(x))
+  if (loops && !is_cyclical(x))
     stop("Input indicates a connection between the last and first timestep ",
         "(probably crossing the year boundary) but the model is not cyclical.")
 
   step <- ifelse(is_backward, -1, 1)
-  if(loops){
+  if (loops) {
     last_ts <- n_timesteps(x)
     edge1 <- ifelse(is_backward, 1, last_ts)
     edge2 <- ifelse(is_backward, last_ts, 1)
@@ -228,8 +229,6 @@ lookup_timestep_sequence <- function (x,
 
   return(steps)
 }
-
-
 
 #' Lookup breeding, non-breeding, or migration season timesteps
 #'
@@ -264,14 +263,14 @@ lookup_timestep_sequence <- function (x,
 #' bf <- BirdFlowModels::rewbla
 #' lookup_season_timesteps(bf, "breeding", season_buffer = 0)
 #'
-lookup_season_timesteps <- function (x, season, season_buffer = 1) {
+lookup_season_timesteps <- function(x, season, season_buffer = 1) {
   stopifnot("x must be a BirdFlow object" = inherits(x, "BirdFlow"))
   stopifnot("season should not be NULL " = !is.null(season),
             "season must not be NA" = !is.na(season),
             "season must be character" = is.character(season),
             "season must have one element" = length(season) == 1)
   season <- tolower(season)
-  season = switch(season,
+  season <- switch(season,
                   "pre" = "prebreeding_migration",
                   "post" = "postbreeding_migration",
                   "spring" = "prebreeding_migration",
@@ -285,13 +284,12 @@ lookup_season_timesteps <- function (x, season, season_buffer = 1) {
                   season)
 
 
-  if( season == "all"){
+  if (season == "all") {
     s <- seq_len(n_timesteps(x))
-    if(is_cyclical(x))
+    if (is_cyclical(x))
       s <- c(s, 1)
     return(s)
   }
-
 
   stopifnot(!is.null(season_buffer),
             length(season_buffer) == 1,
@@ -305,38 +303,38 @@ lookup_season_timesteps <- function (x, season, season_buffer = 1) {
   stopifnot(season %in% c("prebreeding_migration",
                           "postbreeding_migration",
                           "breeding",
-                          "nonbreeding") )
+                          "nonbreeding"))
 
-  start = species_info(x, paste0(season, "_start")) |> lookup_timestep(x)
-  end = species_info(x, paste0(season, "_end")) |> lookup_timestep(x)
+  start <- species_info(x, paste0(season, "_start")) |> lookup_timestep(x)
+  end <- species_info(x, paste0(season, "_end")) |> lookup_timestep(x)
 
   circular <- n_timesteps(x) == n_transitions(x)
 
-  if(circular){
+  if (circular) {
 
     # Buffered season should at most add up to n_timesteps
     n <- ifelse(end > start, end - start + 1, n_timesteps(x) - start + 1 + end)
-    if((n + 2 * season_buffer) > n_timesteps(x))
+    if ((n + 2 * season_buffer) > n_timesteps(x))
       stop("season_buffer is too large.")
 
     # Add season buffer to start and end
     start <-  start - season_buffer
-    if(start <= 0){
-      start = n_timesteps(x) - start
+    if (start <= 0) {
+      start <- n_timesteps(x) - start
     }
     end <- end + season_buffer
-    if(end > n_timesteps(x)){
+    if (end > n_timesteps(x)) {
       end <- end - n_timesteps(x)
     }
   } else {
-    if(end < start)
+    if (end < start)
       stop("Cannot resolve timesteps for ", season,
            " for non-circular BirdFlow model.")
     start <- max(1, start - season_buffer)
     end <- min(end + season_buffer, n_timesteps(x))
   }
 
-  if(start < end){
+  if (start < end) {
     s <- start:end
   } else {
     s <- c(start:n_timesteps(x), 1:end)
@@ -345,10 +343,3 @@ lookup_season_timesteps <- function (x, season, season_buffer = 1) {
 
   return(s)
 }
-
-
-
-
-
-
-

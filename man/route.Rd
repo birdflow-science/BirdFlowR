@@ -53,10 +53,10 @@ A BirdFlowRoutes object with columns:
 the stay (minumum of 1)}
 It also has \strong{experimental} attributes:
 \describe{
-\item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates} components
-of the BirdFlow object the routes are derived from.}
-\item{\code{metadata}}{The \code{metadata} component of the parent BirdFlow object, with
-one additional item \code{route_type = "synthetic"}}
+\item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates}
+components of the BirdFlow object the routes are derived from.}
+\item{\code{metadata}}{The \code{metadata} component of the parent BirdFlow object,
+with one additional item \code{route_type = "synthetic"}}
 }
 }
 \description{

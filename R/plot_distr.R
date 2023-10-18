@@ -79,8 +79,8 @@
 #'   landscape. Only used if `show_mask` is `TRUE`. These cells will only be
 #'   visible if there are `NA` values in `distr` or if `show_dynamic_mask`
 #'   is `TRUE`.
-#' @param inactive_cell_color The color to use for inactive cells in the landscape.
-#'   These are cells that are always masked. Only relevant when
+#' @param inactive_cell_color The color to use for inactive cells in the
+#'   landscape. These are cells that are always masked. Only relevant when
 #'   `show_mask = TRUE`.
 #' @param title The title for the plot. It defaults to the common name of the
 #'   species (`species(bf)`).
@@ -112,31 +112,32 @@ plot_distr <- function(distr,
                        active_cell_color = rgb(1, 1, 1, .3),
                        inactive_cell_color = rgb(0, 0, 0, .2),
                        title = species(bf),
-                       value_label = "Density"){
+                       value_label = "Density") {
 
-  if(dynamic_scale){
-    distr <- apply(distr, 2, function(x) x / max(x, na.rm = TRUE) )
+  if (dynamic_scale) {
+    distr <- apply(distr, 2, function(x) x / max(x, na.rm = TRUE))
   }
 
 
-  if(!missing(subset)){
-    if(is.null(dim(distr)) || length(dim(distr)) != 2 ){
-      stop("subset should only be used if distr contains multiple distributions")
+  if (!missing(subset)) {
+    if (is.null(dim(distr)) || length(dim(distr)) != 2) {
+      stop("subset should only be used if distr contains multiple ",
+           "distributions")
     }
 
     # Apply subset
     distr <- distr[, subset, drop = FALSE]
 
     # If a single distr drop dimensions and add attributes
-    if(ncol(distr) == 1){
+    if (ncol(distr) == 1) {
       name <- colnames(distr)
       distr <- as.vector(distr)
-      attr(distr, "time")<- name
+      attr(distr, "time") <- name
     }
   }
 
 
-  if(is.null(limits)){
+  if (is.null(limits)) {
     limits <- range(distr, na.rm = TRUE)
   } else {
     stopifnot(is.numeric(limits), length(limits) == 2, all(!is.na(limits)),
@@ -146,13 +147,13 @@ plot_distr <- function(distr,
     distr[distr > limits[2]] <- limits[2]
   }
 
-  if(show_dynamic_mask){
+  if (show_dynamic_mask) {
     bf <- add_dynamic_mask(bf)
     dm <- get_dynamic_mask(bf)
 
     multiple <- is.matrix(distr) || is.array(distr)
-    if(multiple){
-      if(!all(colnames(distr) %in% colnames(dm)))
+    if (multiple) {
+      if (!all(colnames(distr) %in% colnames(dm)))
         stop(" Cannot apply dynamic mask. ",
              "Not all column labels in distr match time labels from bf.")
       dm <- dm[, match(colnames(distr), colnames(dm))]
@@ -160,7 +161,7 @@ plot_distr <- function(distr,
       distr[!dm] <- NA
     } else {
       label <- attr(distr, "time")
-      if(is.null(label) || !label %in% colnames(dm))
+      if (is.null(label) || !label %in% colnames(dm))
         stop(" Cannot apply dynamic mask. ",
              "distr label is missing or not a time label from bf")
 
@@ -169,8 +170,7 @@ plot_distr <- function(distr,
     }
   }
 
-
-  r <- rasterize_distr(distr, bf, format = "dataframe" )
+  r <- rasterize_distr(distr, bf, format = "dataframe")
   multiple <- length(unique(r$order)) > 1
 
   names(r)[names(r) == "value"] <- value_label
@@ -180,16 +180,17 @@ plot_distr <- function(distr,
   # Note: if you use the column names directly to create the facets then
   # they end up in alphabetical order, not the order in the the distr
   # object.
-  if(multiple){
-    order <- data.frame(order = 1:ncol(distr), label = colnames(distr))
+  if (multiple) {
+    order <- data.frame(order = seq_len(ncol(distr)), label = colnames(distr))
     order_to_label <- function(x) {
-      order$label[match(as.character(x), as.character(order$order))]}
+      order$label[match(as.character(x), as.character(order$order))]
+    }
     order_labeller  <-  ggplot2::as_labeller(order_to_label)
   }
 
   coast <- get_coastline(bf)
 
-  if(is.null(gradient_colors))
+  if (is.null(gradient_colors))
     gradient_colors <- ebirdst::abundance_palette(10, season = "weekly")
 
   p <-
@@ -199,7 +200,7 @@ plot_distr <- function(distr,
     ggplot2::geom_raster()
 
 
-  if(dynamic_scale){
+  if (dynamic_scale) {
     p <- p +  ggplot2::scale_fill_gradientn(colors = gradient_colors,
                                             na.value = active_cell_color,
                                             limits = limits,
@@ -211,7 +212,7 @@ plot_distr <- function(distr,
                                            limits = limits)
   }
 
-  if(!is.null(coast_color) && !is.null(coast_linewidth)){
+  if (!is.null(coast_color) && !is.null(coast_linewidth)) {
 
     p  <- p +
       ggplot2::geom_sf(data = coast,
@@ -230,11 +231,11 @@ plot_distr <- function(distr,
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank())
 
-  if(multiple) {
+  if (multiple) {
     p <- p +
       ggplot2::facet_wrap(facets = ggplot2::vars(order),
-                          labeller = order_labeller ) +
-      ggplot2::ggtitle( label = title )
+                          labeller = order_labeller) +
+      ggplot2::ggtitle(label = title)
 
   } else {
     subtitle <- r$label[1]
@@ -243,7 +244,7 @@ plot_distr <- function(distr,
 
   }
 
-  if(show_mask){
+  if (show_mask) {
     # This adds
 
     # Note you can't have more than one geom_raster layer in a ggplot, but
@@ -269,10 +270,9 @@ plot_distr <- function(distr,
 
     # Move the new annotation layer to the first layer so it draws under others
     n_layers <- length(p$layers)
-    p$layers <- p$layers[c(n_layers, seq_len(n_layers - 1 ))]
+    p$layers <- p$layers[c(n_layers, seq_len(n_layers - 1))]
   }
 
   return(p)
 
 }
-

@@ -26,10 +26,10 @@
 #'    the stay (minumum of 1)}
 #' It also has **experimental** attributes:
 #' \describe{
-#' \item{`geom`, `species`, `dates`}{The `geom`, `species`, and `dates` components
-#'  of the BirdFlow object the routes are derived from.}
-#' \item{`metadata`}{The `metadata` component of the parent BirdFlow object, with
-#' one additional item `route_type = "synthetic"`}
+#' \item{`geom`, `species`, `dates`}{The `geom`, `species`, and `dates`
+#'   components of the BirdFlow object the routes are derived from.}
+#' \item{`metadata`}{The `metadata` component of the parent BirdFlow object,
+#'   with one additional item `route_type = "synthetic"`}
 #' }
 #' @examples
 #' bf <- BirdFlowModels::amewoo
@@ -45,7 +45,8 @@
 #' @importClassesFrom Matrix Matrix sparseMatrix
 #' @importFrom rlang .data
 #' @seealso [plot_routes()], [animate_routes()]
-route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL, from_marginals = FALSE, ...) {
+route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
+                  from_marginals = FALSE, ...) {
 
   ### BACK COMPATABILITY CODE
   bf <- add_dynamic_mask(bf)  # To ease transition pain
@@ -58,7 +59,7 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL, from_marginals = F
   timesteps <-  lookup_timestep_sequence(bf, ...)
   transitions <- as_transitions(timesteps, bf)
   start <- timesteps[1]
-  end <-  timesteps[length(timesteps)]
+  end <- timesteps[length(timesteps)]
 
 
   # Convert x and y coordinates input into row and col
@@ -82,11 +83,12 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL, from_marginals = F
 
   } else {
     # Full starting coordinates not supplied
-    if(!is.null(x_coord) || !is.null(y_coord)){
+    if (!is.null(x_coord) || !is.null(y_coord)) {
         stop("If starting from coordinates use both x_coord and y_coord, ",
              "if not both should be NULL")
     }
-    loc <- get_distr(bf, start, from_marginals = from_marginals) |> sample_distr(n = n, format = "i", bf = bf)
+    loc <- get_distr(bf, start, from_marginals = from_marginals) |>
+      sample_distr(n = n, format = "i", bf = bf)
     row <- i_to_row(loc, bf)
     col <- i_to_col(loc, bf)
   }
@@ -170,7 +172,8 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   route_id <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
   date <- bf$dates$date[timestep]
 
-  points <- data.frame(x, y, route_id, timestep, date, i = as.vector(trajectory))
+  points <- data.frame(x, y, route_id, timestep, date,
+                       i = as.vector(trajectory))
 
   add_stay_id <- function(df) {
     # Benjamin's function

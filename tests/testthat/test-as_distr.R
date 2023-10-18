@@ -5,10 +5,10 @@ test_that("as_distr() works with data frames", {
   df$i <- 1:5
 
   # No CRS
-  expect_no_error( d1 <- as_distr(df, bf) )
+  expect_no_error(d1 <- as_distr(df, bf))
 
   # bf CRS
-  expect_no_error( d2 <- as_distr(df, bf, crs = crs(bf)) )
+  expect_no_error(d2 <- as_distr(df, bf, crs = crs(bf)))
 
   # Different CRS
   ll <-  xy_to_latlon(df, bf = bf)
@@ -46,8 +46,8 @@ test_that("as_distr works with raster objects", {
     sf::st_transform(crs = "EPSG:4326") |> terra::ext()
 
   # Create new Raster
-  r <- terra::rast(matrix( 1:20, 20, 20), ext = e)
-  terra::values(r) <- terra::values(r)/sum(terra::values(r))
+  r <- terra::rast(matrix(1:20, 20, 20), ext = e)
+  terra::values(r) <- terra::values(r) / sum(terra::values(r))
   terra::crs(r) <- "EPSG:4326"
 
   # Convert to distribution
@@ -56,7 +56,7 @@ test_that("as_distr works with raster objects", {
 
   # Multiple layers
   r2 <- c(r, r, r)
-  expect_warning(d2 <- as_distr(r2, bf)) # value lost both to cropping and masking
+  expect_warning(d2 <- as_distr(r2, bf)) # value lost to cropping and masking
   expect_true(all(apply(d2, 2, sum) == 1))
   expect_equal(nrow(d2), n_active(bf))
   expect_equal(ncol(d2), 3)
@@ -75,7 +75,7 @@ test_that("as_distr() works with sf points", {
   sf::st_crs(pts) <- terra::crs(bf)
 
   # Same CRS
-  expect_no_error( d1 <- as_distr(pts, bf) )
+  expect_no_error(d1 <- as_distr(pts, bf))
 
   # Different CRS
   pts2 <- sf::st_transform(pts, "EPSG:4326")

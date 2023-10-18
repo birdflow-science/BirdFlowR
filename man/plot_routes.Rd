@@ -32,10 +32,10 @@ out into a separate subplot.}
 (the default) it will be set to the maximum "stay_len" value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
 
-\item{use_seasonal_colors}{If TRUE a color scale that uses blues, greens, yellows,
-reds, for winter, spring, summer, and fall will be used with a consistent
-mapping of dates to colors regardless of the range of dates plotted.
-If FALSE then the data will be plotted using the full color scale.}
+\item{use_seasonal_colors}{If TRUE a color scale that uses blues, greens,
+yellows, reds, for winter, spring, summer, and fall will be used with a
+consistent mapping of dates to colors regardless of the range of dates
+plotted. If FALSE then the data will be plotted using the full color scale.}
 
 \item{pal}{The color palette to use for plotting whe \code{use_seasonal_cols} is
 FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
@@ -100,6 +100,7 @@ p
 # Use alternate color palettes
 plot_routes(rts, bf,  use_seasonal_colors = FALSE )
 
-plot_routes(rts, bf, use_seasonal_colors = FALSE, pal = c("red", "yellow", "blue"))
+plot_routes(rts, bf, use_seasonal_colors = FALSE,
+            pal = c("red", "yellow", "blue"))
 }
 }

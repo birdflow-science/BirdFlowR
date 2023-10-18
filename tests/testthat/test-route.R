@@ -25,7 +25,7 @@ test_that("route() works with a single distribution", {
 
 test_that("route() works over year boundary", {
   bf <- BirdFlowModels::rewbla
-  if(!has_dynamic_mask(bf))
+  if (!has_dynamic_mask(bf))
     bf <- add_dynamic_mask(bf)
   n <- 5
   start <- 50
@@ -33,9 +33,10 @@ test_that("route() works over year boundary", {
   sd <- get_distr(bf, start)
   set.seed(1)
   loc <- sample_distr(sd, n = n) |>
-    apply( MARGIN = 2, FUN = function(x) which(as.logical(x))) |>
+    apply(MARGIN = 2, FUN = function(x) which(as.logical(x))) |>
     i_to_xy(bf) |> as.data.frame()
-  expect_no_error(rts <- route(bf, x_coord = loc$x, y_coord = loc$y, start = start, end = end))
+  expect_no_error(rts <- route(bf, x_coord = loc$x, y_coord = loc$y,
+                               start = start, end = end))
 
 
   set.seed(1)
@@ -44,7 +45,8 @@ test_that("route() works over year boundary", {
     as.logical() |>
     which() |>
     i_to_xy(bf) |> as.data.frame()
-  expect_no_error(rt <- route(bf, x_coord = loc$x, y_coord = loc$y, start = start, end = end))
+  expect_no_error(rt <- route(bf, x_coord = loc$x, y_coord = loc$y,
+                              start = start, end = end))
 
 })
 
@@ -64,7 +66,7 @@ test_that("route() works with full (not sparse) marginals", {
   y <- i_to_y(i, bf)
 
   # single
-  expect_no_error(rts <- route( bf, x_coord = x, y_coord = y,
+  expect_no_error(rts <- route(bf, x_coord = x, y_coord = y,
                                 n = 1, start = 1, end = 5))
 
   # multiple
@@ -72,7 +74,7 @@ test_that("route() works with full (not sparse) marginals", {
              function(x) which(as.logical(x)))
   x <- i_to_x(i, bf)
   y <- i_to_y(i, bf)
-  expect_no_error(rts <- route( bf,x_coord = x, y_coord = y,
+  expect_no_error(rts <- route(bf, x_coord = x, y_coord = y,
                                 n = 1, start = 1, end = 5))
 
 })

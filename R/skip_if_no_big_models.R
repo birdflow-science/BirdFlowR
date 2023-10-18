@@ -9,7 +9,7 @@
 skip_if_no_big_models <- function() {
   # testthat helper function
   # see testthat:  vignette("skipping")
-  if(!file.exists("../Models/run_big_tests.txt"))
+  if (!file.exists("../Models/run_big_tests.txt"))
 
   testthat::skip("Large model files are not available")
 

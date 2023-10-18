@@ -38,10 +38,11 @@ row and columns zeroed out. If successful it will have no dead ends. It
 also adds a data.frame  \code{fix_stats} to \code{bf$metadata$sparse}.
 }
 \description{
-With sparsification (\code{\link[=sparsify]{sparsify()}}) it's possible to create models that
-have dead ends -  states that can be entered but not exited. This occurs when
-one marginal encodes transitions into a state for which the next marginal
-has no transitions out. These functions find and fix those states.
+With sparsification (\code{\link[=sparsify]{sparsify()}}) it's possible to create
+models that have dead ends -  states that can be entered but not exited.
+This occurs when one marginal encodes transitions into a state for which
+the next marginal has no transitions out. These functions find and fix
+those states.
 }
 \details{
 Consider two adjacent marginals; the rows of the second and the columns of
@@ -51,17 +52,18 @@ four possibilities (1) the first marginal's column has non-zero values and
 the second marginal's row is all zero: there is a forward transition into
 that state but no forward transition out and it's a forward dead end; (2)
 the situation is reversed and the first marginals column is all zeros and
-the second marginal's corresponding row has non-zero values, a backward dead
-end (encountered when projecting backwards in time); (3) if they both have
-only zeros: the model is fine but that state is dropped; and (4) if they
-both have non-zero values than the corresponding state is valid and can be
-reached and exited when projecting forward or backwards.
+the second marginal's corresponding row has non-zero values, a backward
+dead end (encountered when projecting backwards in time); (3) if they both
+have only zeros: the model is fine but that state is dropped; and (4) if
+they both have non-zero values than the corresponding state is valid and
+can be reached and exited when projecting forward or backwards.
 
-Dead ends result in lost density with \link[=predict.BirdFlow]{predict()} and errors when they are
-entered with \code{\link[=route]{route()}}. Based on initial testing the transitions into the
-dead end are often low probability so routing may work most of the time but
-occasionally fail. The error will occur with the subsequent iteration when
-attempting to sample from a bunch of zero probability states.
+Dead ends result in lost density with \link[=predict.BirdFlow]{predict()} and
+errors when they are entered with \code{\link[=route]{route()}}. Based on initial testing the
+transitions into the dead end are often low probability so routing may work
+most of the time but occasionally fail. The error will occur with the
+subsequent iteration when attempting to sample from a bunch of zero
+probability states.
 }
 \seealso{
 \code{\link[=sparsify]{sparsify()}} calls \code{fix_dead_ends()}, which in turn calls

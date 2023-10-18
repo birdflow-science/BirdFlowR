@@ -71,16 +71,18 @@ It turned out to be really hard to anticipate how many cells would
 contain data after a resolution change. The code estimates by
 calculating the area of the non-zero cells in the current resolution
 and then figures out the resolution where the number of cells required
-to cover that area matches our target number of parameters. However,
-it's a poor estimate because it ignores the fact that coarse cells along
-the edges overlap fine cells that contain a mix of no data and data.
+to cover that area matches our target number of parameters.
 
-The code here makes the estimate applies a correction factor to adjust the
-estimate for the bias, resamples to the estimate, evaluates the new
-number of non-zero cells (and thus parameters), and repeats until the
-estimate converges on a number of parameters between 90 and 100 \% of the
-target number. This results in a rather precise resolution that can be fit
-given the number of parameters which is then rounded up (reducing
-parameters) to a cleaner number.
+However, it's a poor estimate because it ignores the fact that coarse cells
+along the edges overlap fine cells that contain a mix of no data and data.
+reduce the bias.
+
+Next it resamples to the estimated resolution, evaluates the new number of
+non-zero cells (and thus parameters), and makes a new estimate, repeating
+the process until the realized number of parameters from the resolution
+converges on 90 to 100 \% of the target. This results in a fairly precise
+maximum resolution that can be fit given the number of parameters.
+
+The last step is to round up (reducing parameters) to a cleaner number.
 }
 \keyword{internal}

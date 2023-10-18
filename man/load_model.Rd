@@ -13,9 +13,9 @@ load_model(
 \arguments{
 \item{model}{The model name to load}
 
-\item{update}{If \code{TRUE} (the default) then both the index and cached model file
-are checked against the server's version to make sure they are up-to-date and
-downloaded again if they are not.
+\item{update}{If \code{TRUE} (the default) then both the index and cached model
+file are checked against the server's version to make sure they are
+up-to-date and downloaded again if they are not.
 If \code{FALSE} then neither the index nor the model will be checked.
 Set to \code{FALSE} after downloading the model(s) you need if you want to make
 sure the model does not change during your analysis (even if updated on

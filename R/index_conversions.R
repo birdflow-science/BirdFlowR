@@ -72,51 +72,52 @@
 #' * [expand_distr()] converts a vector distribution into it's raster (matrix)
 #'   equivalent or a matrix (representing multiple distributions) into an array
 #'   equivalent.
-#' * [rasterize_distr()] converts a vector distribution into a [terra::SpatRaster] -
-#'   similar to those created by [terra::rast()].
+#' * [rasterize_distr()] converts a vector distribution into a
+#'   [terra::SpatRaster] - similar to those created by [terra::rast()].
 #'
 NULL # required object for above roxygen2 page documentation
 # shared by functions below
 
 #' @rdname index_conversions
 #' @export
-x_to_col <- function(x, bf){
+x_to_col <- function(x, bf) {
   # Cell boundary belongs to the the higher column index
-  # but xmax (eastern most cell boundary) belongs to last column (the lower index)
+  # but xmax (eastern most cell boundary) belongs to last column (the lower
+  # index)
   sv <- !is.na(x) & x >= xmin(bf)  &  x <= xmax(bf)
   r <- rep(NA_real_, length(x))
-  r[sv] <- floor((x[sv] - xmin(bf))/xres(bf)) + 1
+  r[sv] <- floor((x[sv] - xmin(bf)) / xres(bf)) + 1
   r[x == xmax(bf)] <- ncol(bf)
   return(r)
 }
 
 #' @rdname index_conversions
 #' @export
-y_to_row <- function(y, bf){
+y_to_row <- function(y, bf) {
   # Cell boundary belong to the higher row index
   # but ymin belongs to last cell.
   sv <- !is.na(y) & y >= ymin(bf) & y <= ymax(bf)
   r <- rep(NA_real_, length(y))
-  r[sv] <- floor(1 + (ymax(bf) - y[sv])/yres(bf))
+  r[sv] <- floor(1 + (ymax(bf) - y[sv]) / yres(bf))
   r[y == ymin(bf)] <- nrow(bf)
   return(r)
 }
 
 #' @rdname index_conversions
 #' @export
-row_to_y <- function(row, bf){
-  return( ymax(bf) - (row - 0.5) * yres(bf) )
+row_to_y <- function(row, bf) {
+  return(ymax(bf) - (row - 0.5) * yres(bf))
 }
 
 #' @rdname index_conversions
 #' @export
-col_to_x <- function(col, bf){
-  return( (col - 0.5) * xres(bf) + xmin(bf) )
+col_to_x <- function(col, bf) {
+  return((col - 0.5) * xres(bf) + xmin(bf))
 }
 
 #' @rdname index_conversions
 #' @export
-i_to_rc <- function(i, bf){
+i_to_rc <- function(i, bf) {
   mask <- bf$geom$mask
   row <- row(mask)
   col <- col(mask)
@@ -127,16 +128,16 @@ i_to_rc <- function(i, bf){
 
 #' @rdname index_conversions
 #' @export
-i_to_row <- function(i, bf){
-  if("geom" %in% names(bf)) # allow passing full BirdFlow object
+i_to_row <- function(i, bf) {
+  if ("geom" %in% names(bf)) # allow passing full BirdFlow object
     bf <- bf$geom
   row <- row(bf$mask)
-  return( t(row)[t(bf$mask)][i] )
+  return(t(row)[t(bf$mask)][i])
 }
 #' @rdname index_conversions
 #' @export
-i_to_col <- function(i, bf){
-  if("geom" %in% names(bf)) # allow passing full BirdFlow object
+i_to_col <- function(i, bf) {
+  if ("geom" %in% names(bf)) # allow passing full BirdFlow object
     bf <- bf$geom
   col_matrix <- col(bf$mask)
   return(t(col_matrix)[t(bf$mask)][i])
@@ -144,7 +145,7 @@ i_to_col <- function(i, bf){
 
 #' @rdname index_conversions
 #' @export
-i_to_x <- function(i, bf){
+i_to_x <- function(i, bf) {
   col <- i_to_col(i, bf)
   x <- col_to_x(col, bf)
   return(x)
@@ -152,7 +153,7 @@ i_to_x <- function(i, bf){
 
 #' @rdname index_conversions
 #' @export
-i_to_y <- function(i, bf){
+i_to_y <- function(i, bf) {
   row <- i_to_row(i, bf)
   y <- row_to_y(row, bf)
   return(y)
@@ -160,19 +161,19 @@ i_to_y <- function(i, bf){
 
 #' @rdname index_conversions
 #' @export
-i_to_xy <- function(i, bf){
+i_to_xy <- function(i, bf) {
   data.frame(x = i_to_x(i, bf),
              y = i_to_y(i, bf))
 }
 
 #' @rdname index_conversions
 #' @export
-rc_to_i <- function(row, col, bf){
+rc_to_i <- function(row, col, bf) {
   # allow passing to row a matrix with two columns to be used as row and col
-  if(missing(col)){
+  if (missing(col)) {
     nc <- ncol(row)
-    if(!is.null(nc) && !is.na(nc) && nc ==2){
-      if(all(c("row", "col") %in% colnames(row))){
+    if (!is.null(nc) && !is.na(nc) && nc == 2) {
+      if (all(c("row", "col") %in% colnames(row))) {
         rc <- row[, c("row", "col")]
       } else {
         rc <- row
@@ -199,11 +200,12 @@ rc_to_i <- function(row, col, bf){
 
 #' @rdname index_conversions
 #' @export
-xy_to_i <- function(x, y, bf){
-  if(missing(y)){
+xy_to_i <- function(x, y, bf) {
+  if (missing(y)) {
     # allow passing a matrix with two columns as x and y
     nc <- ncol(x)
-    if(!is.null(nc) && !is.na(nc) && nc ==2)   rc <- x
+    if (!is.null(nc) && !is.na(nc) && nc == 2)
+      rc <- x
   } else {
     rc <- cbind(x, y)
   }
@@ -214,12 +216,12 @@ xy_to_i <- function(x, y, bf){
 
 #' @rdname index_conversions
 #' @export
-latlon_to_xy <- function(lat, lon, bf){
-  if(missing(lon)){
+latlon_to_xy <- function(lat, lon, bf) {
+  if (missing(lon)) {
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(lat)
-    if(!is.null(nc) && !is.na(nc) && nc ==2){
-      if(all(c("lat", "lon") %in% names(lat))){
+    if (!is.null(nc) && !is.na(nc) && nc == 2) {
+      if (all(c("lat", "lon") %in% names(lat))) {
         latlon <- lat[, c("lat", "lon")]
       } else { # no names or other names assume first col is lat, second is lon
         latlon <- lat
@@ -243,7 +245,7 @@ latlon_to_xy <- function(lat, lon, bf){
   pts <-
     sf::st_as_sf(latlon[sv, , drop = FALSE], coords = c("lon", "lat"),
                  crs = sf::st_crs("EPSG:4326")) |>
-    sf::st_transform( crs = sf::st_crs(crs(bf))) |>
+    sf::st_transform(crs = sf::st_crs(crs(bf))) |>
     sf::st_coordinates()
 
   all_pts[sv, ] <- pts
@@ -254,13 +256,13 @@ latlon_to_xy <- function(lat, lon, bf){
 
 #' @rdname index_conversions
 #' @export
-xy_to_latlon <- function(x, y, bf){
-  if(missing(y)){
+xy_to_latlon <- function(x, y, bf) {
+  if (missing(y)) {
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(x)
-    if(!is.null(nc) && !is.na(nc) && nc == 2){
+    if (!is.null(nc) && !is.na(nc) && nc == 2) {
       xy <- x
-    } else if (all(c("x", "y") %in% names(x))){
+    } else if (all(c("x", "y") %in% names(x))) {
       xy <- x[, c("x", "y")]
     } else {
       stop("if y is missing x should contain x and y columns.")
@@ -279,11 +281,10 @@ xy_to_latlon <- function(x, y, bf){
   pts <-
     sf::st_as_sf(xy[sv, , drop = FALSE], coords = c("x", "y"),
                  crs = sf::st_crs(crs(bf))) |>
-    sf::st_transform( crs = sf::st_crs("EPSG:4326")) |>
+    sf::st_transform(crs = sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
 
   all_pts[sv, ] <- pts
   colnames(all_pts) <- c("lon", "lat")
   return(as.data.frame(all_pts[, c(2, 1), drop = FALSE]))  # lat, lon
 }
-

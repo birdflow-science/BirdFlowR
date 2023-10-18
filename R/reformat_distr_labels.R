@@ -19,19 +19,19 @@
 #'
 #' @return `x` with (potentially) new labels
 #' @keywords internal
-reformat_distr_labels <- function( x, bf){
+reformat_distr_labels <- function(x, bf) {
 
   time_format <- birdflow_options("time_format")
-  if(time_format == "timestep")
+  if (time_format == "timestep")
     return(x)
 
   d <- dim(x)
   ndim <- ifelse(is.null(d), 1, length(d))
 
   # single, vector distribution
-  if(ndim == 1){
+  if (ndim == 1) {
     timestep <- attr(x, "time")
-    if(is.null(timestep))
+    if (is.null(timestep))
       return(x)  # cannot update missing dimnames, return as is
     attr(x, "time") <- reformat_timestep(timestep, bf)
     return(x)
@@ -40,12 +40,12 @@ reformat_distr_labels <- function( x, bf){
   # Matrix  or array update names for time dimension
   dn <- dimnames(x)
 
-  if(is.null(dn))
+  if (is.null(dn))
     return(x)
 
-  time_dimension <- which(names(dn) %in%  c("timestep", "time"))[1] # as of 3/18 should be "time" older models used "timestep"
-
-  if(length(time_dimension) == 0 || is.na(time_dimension)){
+  # as of 3/18 should be "time" older models used "timestep"
+  time_dimension <- which(names(dn) %in%  c("timestep", "time"))[1]
+  if (length(time_dimension) == 0 || is.na(time_dimension)) {
     # in preprocessed models the second dimension has "t1"... labels
     # but the dimension itself doesn't have a name.
     # I don't want to change this because it would detriment the
@@ -59,7 +59,7 @@ reformat_distr_labels <- function( x, bf){
   names(dn)[time_dimension] <- "time"
 
   # Check for timestep column names
-  if(!all(grepl("^t[[:digit:]]+$", dn[[time_dimension]])) &&
+  if (!all(grepl("^t[[:digit:]]+$", dn[[time_dimension]])) &&
      !is.null(dn[[time_dimension]]))
     return(x)
 

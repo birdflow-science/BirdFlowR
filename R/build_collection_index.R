@@ -20,10 +20,9 @@
 #' @export
 #' @keywords internal
 #'
-build_collection_index <- function(dir, collection_url){
+build_collection_index <- function(dir, collection_url) {
 
   verbose <- birdflow_options("verbose")
-     # https://science.ebird.org/en/status-and-trends/species/amewoo/abundance-map-weekly?week=1
   index_path <- file.path(dir, "index.Rds")
   index_md5_path <- file.path(dir, "index_md5.txt")
 
@@ -37,11 +36,12 @@ build_collection_index <- function(dir, collection_url){
                   ignore.case = TRUE)
   files <- files[!tolower(files) %in% "index.rds"]
 
-  if(length(files) == 0)
+  if (length(files) == 0)
     stop("No model files detected.")
 
   # Create an empty index table
-  index <- matrix(nrow = length(files), ncol = length(cols), dimnames = list(NULL, cols)) |>
+  index <- matrix(nrow = length(files), ncol = length(cols),
+                  dimnames = list(NULL, cols)) |>
     as.data.frame()
   index$file <- files
   index$model <- gsub("\\.Rds", "", files, ignore.case = TRUE)
@@ -49,16 +49,17 @@ build_collection_index <- function(dir, collection_url){
   # Merge in data (if any) from old index
   if (file.exists(index_path)) {
     old_index <- readRDS(index_path)
-    old_index <- old_index[ tolower(old_index$file) %in% tolower(files), , drop = FALSE]
+    old_index <- old_index[tolower(old_index$file) %in% tolower(files), ,
+                           drop = FALSE]
     old_cols <- colnames(old_index)
-    if(setequal(old_cols, cols) && all(old_cols == cols) &&
-       any(old_index$file %in% files)){
-      if(all(files %in% old_index$file)){
+    if (setequal(old_cols, cols) && all(old_cols == cols) &&
+       any(old_index$file %in% files)) {
+      if (all(files %in% old_index$file)) {
         new_index <- old_index
       } else {
         new_index <-
           rbind(old_index,
-                index[ !index$files %in% old_index$files, , drop = FALSE])
+                index[!index$files %in% old_index$files, , drop = FALSE])
 
       }
       stopifnot(setequal(tolower(new_index$file), tolower(files)))
@@ -68,16 +69,14 @@ build_collection_index <- function(dir, collection_url){
 
   index <- index[order(tolower(index$file)), , drop = FALSE]
 
-
   index$error <- FALSE # temporary col to track errors
 
-
-  for(i in seq_len(nrow(index))){
+  for (i in seq_len(nrow(index))) {
     f <- file.path(dir, index$file[i])
     md5 <- as.character(tools::md5sum(f))
 
-    if(is.na(index$md5[i]) || index$md5[i] != md5){ # if new or changed model
-      if(verbose)
+    if (is.na(index$md5[i]) || index$md5[i] != md5) { # if new or changed model
+      if (verbose)
         cat("Reading metadata for ", index$model[i], "\n", sep = "")
       index$md5[i] <- md5
       bf <- readRDS(f)
@@ -89,7 +88,7 @@ build_collection_index <- function(dir, collection_url){
         index[[col]][i] <- bf$species[[col]]
       }
       index$release_date[i] <- as.character(lubridate::today())
-      index$size[i] <-file.size(f) / (1000^2)
+      index$size[i] <- file.size(f) / (1000^2)
     } # end new or changed
   } # end loop through models
   if (any(index$error)) {
@@ -109,20 +108,23 @@ build_collection_index <- function(dir, collection_url){
 
   # Download logo
   logo_file <-   file.path(dir, "logo.png")
-  if(!file.exists(logo_file)){
-    download.file("https://birdflow-science.github.io/BirdFlowR/logo.png",
-                  destfile = logo_file, method = "wget")
+  if (!file.exists(logo_file)) {
+    utils::download.file(
+      "https://birdflow-science.github.io/BirdFlowR/logo.png",
+      destfile = logo_file, method = "wget")
   }
   # Save index.htm
   model <- index$model[1]
 
   rmd_file <- file.path(dir, "index_template.Rmd")
 
-  # Edit text in rmd to reference this specific collection url and the first model in it
+  # Edit text in rmd to reference this specific collection url and the first
+  # model in it
   # I couldn't figure out how to do inline text within a code block - the
   # reverse of inline code in the document text so I'm editing the .Rmd
   # here
-  text <- readLines(system.file("markdown_templates/collection_index.Rmd",  package = "BirdFlowR"))
+  text <- readLines(system.file("markdown_templates/collection_index.Rmd",
+                                package = "BirdFlowR"))
   text <- gsub("[collection_url]", collection_url, text, fixed = TRUE)
   text <- gsub("[model]", model, text, fixed = TRUE)
   writeLines(text, rmd_file)
@@ -144,6 +146,3 @@ build_collection_index <- function(dir, collection_url){
   index_md5 <- as.character(tools::md5sum(index_path))
   writeLines(index_md5, index_md5_path)
 }
-
-
-

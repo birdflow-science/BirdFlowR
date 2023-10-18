@@ -14,38 +14,39 @@
 #'  \item{pct_zero}{the percent of the values across all marginals that are
 #'  zero.}
 #' @keywords internal
-marginal_stats <- function(bf){
+marginal_stats <- function(bf) {
   marginal_zeros <- marginal_sums <- rep(0, n_transitions(bf))
   mar_names <- unique(bf$marginals$index$marginal)
-  for(i in seq_along(mar_names)){
+  for (i in seq_along(mar_names)) {
     marginal_sums[i] <- sum(bf$marginals[[mar_names[i]]])
     marginal_zeros[i] <- sum(bf$marginals[[mar_names[i]]] == 0)
   }
-  pct_zero <- sum(marginal_zeros)/(n_active(bf)^2 * n_transitions(bf) ) * 100
+  pct_zero <- sum(marginal_zeros) / (n_active(bf)^2 * n_transitions(bf)) * 100
   return(list(sum = sum(marginal_sums), pct_zero = pct_zero))
 }
 
 #' @rdname marginal_stats
 #' @return `sum_marginals()` returns the sum of all marginals.
 #' @keywords internal
-sum_marginals <- function(bf){
+sum_marginals <- function(bf) {
   marginal_sums <- rep(0, n_transitions(bf))
   mar_names <- unique(bf$marginals$index$marginal)
-  for(i in seq_along(mar_names)){
+  for (i in seq_along(mar_names)) {
     marginal_sums[i] <- sum(bf$marginals[[mar_names[i]]])
   }
   return(sum(marginal_sums))
 }
 
 #' @rdname marginal_stats
-#' @return `calc_pct_zero()` returns the percent of marginal values that are zero
+#' @return `calc_pct_zero()` returns the percent of marginal values that are
+#' zero
 #' @keywords internal
-calc_pct_zero <- function(bf){
+calc_pct_zero <- function(bf) {
   marginal_zeros <- rep(0, n_transitions(bf))
   mar_names <- unique(bf$marginals$index$marginal)
-  for(i in seq_along(mar_names)){
+  for (i in seq_along(mar_names)) {
     marginal_zeros[i] <- sum(bf$marginals[[mar_names[i]]] == 0)
   }
-  return( sum(marginal_zeros)/(n_active(bf)^2 * n_transitions(bf) ) * 100 )
+  return(sum(marginal_zeros) / (n_active(bf)^2 * n_transitions(bf)) * 100)
 
 }

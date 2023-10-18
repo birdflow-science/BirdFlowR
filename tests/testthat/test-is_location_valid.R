@@ -17,9 +17,9 @@ test_that("distr_is_valid() returns FALSE when it should", {
 
   # Several
   distr <- get_distr(bf, 1:2, from_marginals = TRUE)
-  a_zero_cell <- which(distr[ , 1] == 0)[1]
-  distr[ 1, 1] <- .001
-  distr[ , 1] <- distr[ , 1] / sum(distr[, 1]) # restandarize
+  a_zero_cell <- which(distr[, 1] == 0)[1]
+  distr[1, 1] <- .001
+  distr[, 1] <- distr[, 1] / sum(distr[, 1]) # restandarize
   expect_no_error(valid <- is_distr_valid(bf, distr = distr, timestep = 1:2))
   expect_equal(valid, c(FALSE, TRUE))
 
@@ -64,30 +64,29 @@ test_that("is_location_valid() returns TRUE for valid inputs", {
   date <- bf$dates$date[bf$dates$interval == timestep]
 
   # i , timestep
-  expect_no_error( a <- is_location_valid(bf, i = i, timestep = timestep))
+  expect_no_error(a <- is_location_valid(bf, i = i, timestep = timestep))
   expect_true(all(a))
-  expect_no_error( b <- is_location_valid(bf, i = i[1], timestep = timestep))
+  expect_no_error(b <- is_location_valid(bf, i = i[1], timestep = timestep))
   expect_true(b)
 
 
   # xy,  timestep
-  expect_no_error( a <- is_location_valid(bf, x = x, y = y, timestep = timestep))
+  expect_no_error(a <- is_location_valid(bf, x = x, y = y, timestep = timestep))
   expect_true(all(a))
-  expect_no_error( b <- is_location_valid(bf, x = x[1], y = y[1], timestep = timestep))
+  expect_no_error(b <- is_location_valid(bf, x = x[1], y = y[1],
+                                         timestep = timestep))
   expect_true(b)
 
 
   # i, date
-  expect_no_error( c <- is_location_valid(bf, i = i, date = date))
+  expect_no_error(c <- is_location_valid(bf, i = i, date = date))
   expect_true(all(c))
 
   # x, y, date
-  expect_no_error( d <- is_location_valid(bf, x = x, y = y, date = date))
+  expect_no_error(d <- is_location_valid(bf, x = x, y = y, date = date))
   expect_true(all(d))
 
 })
-
-
 
 test_that("is_location_valid() returns FALSE when it should", {
   bf <- BirdFlowModels::amewoo
@@ -102,20 +101,20 @@ test_that("is_location_valid() returns FALSE when it should", {
   date <- bf$dates$date[bf$dates$interval == timestep]
 
   # i , timestep
-  expect_no_error( a <-  is_location_valid(bf, i = i, timestep = timestep))
+  expect_no_error(a <-  is_location_valid(bf, i = i, timestep = timestep))
   expect_false(any(a))
 
   # xy,  timestep
-  expect_no_error( a <- is_location_valid(bf, x = x, y = y, timestep = timestep))
+  expect_no_error(a <- is_location_valid(bf, x = x, y = y,
+                                          timestep = timestep))
   expect_false(any(a))
 
   # i, date
-  expect_no_error( a <- is_location_valid(bf, i = i, date = date))
+  expect_no_error(a <- is_location_valid(bf, i = i, date = date))
   expect_false(any(a))
 
   # x, y, date
-  expect_no_error( a <- is_location_valid(bf, x = x, y = y, date = date))
+  expect_no_error(a <- is_location_valid(bf, x = x, y = y, date = date))
   expect_false(any(a))
 
 })
-

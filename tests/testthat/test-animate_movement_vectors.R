@@ -5,7 +5,7 @@ test_that("animate_movement_vectors runs cleanly", {
   t_dir <- tempdir()
   on.exit({
     # file cleanup from file_renderer
-    l <- list.files(path = t_dir, pattern = '^gganim_plot', full.names = TRUE)
+    l <- list.files(path = t_dir, pattern = "^gganim_plot", full.names = TRUE)
     for (f in l){
       file.remove(f)
     }
