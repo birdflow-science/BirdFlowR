@@ -25,7 +25,9 @@
 #'
 #' @keywords internal
 make_marginal_index <- function(bf) {
-  # n_timesteps and n_transitions should be properly set in bf
+  # n_timesteps, n_transitions, and metadata$timestep_padding should be
+  # properly set in bf
+
   # Marginals do not need to exist.
 
   # Save marginal index - allows looking up a marginal, and direction from
@@ -48,19 +50,18 @@ make_marginal_index <- function(bf) {
   index <- rbind(index, data.frame(from = index$to, to = index$from,
                                    direction = "backward"))
 
-  padding <- get_timestep_padding(bf)
-  pad <- function(x) {
-    stringr::str_pad(x, width = padding, pad = 0)
-  }
 
-  index$transition <- paste0("T_", pad(index$from), "-", pad(index$to))
+  index$transition <- paste0("T_", pad_timestep(index$from, bf), "-",
+                             pad_timestep(index$to, bf))
   index$marginal <- NA
   sv <- index$direction == "forward" # selection vector
   index$marginal[sv] <-
-    paste0("M_", pad(index$from[sv]), "-", pad(index$to[sv]))
+    paste0("M_", pad_timestep(index$from[sv], bf), "-",
+           pad_timestep(index$to[sv], bf))
   sv <- index$direction == "backward"
   index$marginal[sv] <-
-    paste0("M_", pad(index$to[sv]), "-", pad(index$from[sv]))
+    paste0("M_", pad_timestep(index$to[sv], bf), "-",
+           pad_timestep(index$from[sv], bf))
 
   return(index)
 }
