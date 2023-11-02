@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9034</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,13 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9035" id="birdflowr-0109035">BirdFlowR 0.1.0.9035<a class="anchor" aria-label="anchor" href="#birdflowr-0109035"></a></h2>
+<p>2023-11-01</p>
+<p>Existing code should not be affected in any way by this update.</p>
+<ul><li><p>New function<code>export_tif()</code> facilitates exporting tif files of a BirdFlow model’s distributions and dynamic masks. Could be used to replace functionality that used to be in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, my motivation for adding it is for use with Avian Flu modeling.</p></li>
+<li><p>New function <code><a href="../reference/pad_timestep.html">pad_timestep()</a></code> converts a numeric timestep into a character padded with leading zeros if appropriate. Given <code>1</code> it returns <code>"01"</code>. It is now used internally anywhere timestep or marginal names are padded. It’s also used by <code>export_tif()</code> for file naming if exporting single band TIFF files.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9034" id="birdflowr-0109034">BirdFlowR 0.1.0.9034<a class="anchor" aria-label="anchor" href="#birdflowr-0109034"></a></h2>
 <p>2023-10-17</p>
