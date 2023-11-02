@@ -161,13 +161,10 @@ import_birdflow_v3 <- function(hdf5) {
 
   # Save marginals into list
   marg <- h5read(hdf5, "marginals", native = TRUE)
-  nt <- dim(marg)[3]
-  pad <- function(x) {
-    stringr::str_pad(x, width = nchar(nt), pad = 0)
-  }
   nt <- length(marg)
   bf$metadata$n_transitions <- nt
-  bf$metadata$timestep_padding <- nchar(nt)
+  if(is.null(bf$metadata$timestep_padding))
+    bf$metadata$timestep_padding <- nchar(nt)
   circular <- nt == length(unique(dates$date))
   bf$marginals <- vector(mode = "list", length = nt)
 
@@ -175,9 +172,9 @@ import_birdflow_v3 <- function(hdf5) {
   for (i in seq_len(nt)) {
     python_label <- paste0("Week", i, "_to_", i + 1)
     if (circular && i == nt) {
-      label <- paste0("M_", pad(i), "-", pad(1))
+      label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(1, bf))
     } else {
-      label <- paste0("M_", pad(i), "-", pad(i + 1))
+      label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(i + 1, bf))
     }
     bf$marginals[[i]] <- marg[[python_label]]
     names(bf$marginals)[i] <- label

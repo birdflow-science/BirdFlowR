@@ -1,4 +1,20 @@
 
+# BirdFlowR 0.1.0.9035
+2023-11-01
+
+Existing code should not be affected in any way by this update.
+
+* New function`export_tif()` facilitates exporting tif files of a BirdFlow 
+model's distributions and dynamic masks. Could be used to replace 
+functionality that used to be in `preprocess_species()`, my motivation for 
+adding it is for use with Avian Flu modeling. 
+
+* New function `pad_timestep()` converts a numeric timestep into a character 
+padded with leading zeros if appropriate.  Given `1` it returns `"01"`. It is 
+now used internally anywhere timestep or marginal names are padded. It's also
+used by `export_tif()` for file naming if exporting single band TIFF files.
+
+
 # BirdFlowR 0.1.0.9034
 2023-10-17
 
