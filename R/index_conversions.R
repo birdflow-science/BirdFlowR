@@ -11,14 +11,14 @@
 #'  convert between WGS 1984 latitude and longitude and x and y coordinates
 #'  in a BirdFlow object's coordinate reference system (CRS).
 #'
-#' @details In general I've made these functions mirror NA input in output; and
+#' @details In general, these functions mirror NA input in output; and
 #' functions that return rows, columns, or the index (`i`) will return NA
 #' if the input isn't within the extent; or for (`i`) within the active cells.
 #'
 #' For most CRSs longitude translates to the x coordinate and
 #' latitude to the y coordinate. The traditional order of coordinates
 #' lat and lon; row and col, and x and y are not consistent, but that is
-#' still what I've used here, i.e. lat, row, and y are generally correlated,
+#' still what is used here, i.e. lat, row, and y are generally correlated,
 #' and are first, first, and second in argument order.
 #'
 #'@param x,y x and y coordinates in the BirdFlow model's CRS.
@@ -34,37 +34,37 @@
 #'  column matrix or data frame can also be passed to lat.
 #'@param i The index along a state vector that contains the data for
 #'  unmasked cells.
-#'@param bf a BirdFlow model
+#'@param bf A BirdFlow model.
 #'
 #'@return \describe{
 #'
-#'  \item{`x_to_col(x, bf)` and `y_to_row(y, bf)`}{return the column or row
+#'  \item{`x_to_col(x, bf)` and `y_to_row(y, bf)`}{Return the column or row
 #'  index that each `x` or `y` coordinate falls within.}
 #'
-#'  \item{`row_to_y(row, bf)` and `col_to_x(col, bf)`}{return the y or x
+#'  \item{`row_to_y(row, bf)` and `col_to_x(col, bf)`}{Return the y or x
 #'  coordinate of the center each row or column. }
 #'
-#'  \item{`i_to_row(i, bf)` and `i_to_col(i, bf)`}{return the row or column
+#'  \item{`i_to_row(i, bf)` and `i_to_col(i, bf)`}{Return the row or column
 #'  index corresponding to the vector state index, `i`.}
 #'
-#'  \item{`i_to_rc(i, bf)`}{returns a two column matrix of the row and column
+#'  \item{`i_to_rc(i, bf)`}{Returns a two column matrix of the row and column
 #'  index in the raster corresponding to the index, `i` of the vector state.}
 #'
-#'  \item{`i_to_x(i, bf)` and `i_to_y(i, bf)`}{return the x or y coordinate
+#'  \item{`i_to_x(i, bf)` and `i_to_y(i, bf)`}{Return the x or y coordinate
 #'  from the vector state index, `i`.}
 #'
-#'  \item{`i_to_xy(i, bf)`}{returns a two column matrix of the x and y
+#'  \item{`i_to_xy(i, bf)`}{Returns a two column matrix of the x and y
 #'  coordinates corresponding to the index, `i` of the vector state space.}
 #'
-#'  \item{`rc_to_i(row, col, bf)` and `xy_to_i(x, y, bf)`}{return the state
+#'  \item{`rc_to_i(row, col, bf)` and `xy_to_i(x, y, bf)`}{Return the state
 #'  space index corresponding to x and y coordinates or row and column indices.}
 #'  }
 #'
-#'  \item{`latlon_to_xy(lat, lon, bf)`}{returns a two column matrix of the x
+#'  \item{`latlon_to_xy(lat, lon, bf)`}{Returns a two column matrix of the x
 #'  and y coordinates corresponding to the supplied latitude and longitude. The
 #'  output is in the CRS of `bf` (`crs(bf)`).}
 #'
-#'  \item{`xy_to_latlon(x, y, bf)`}{returns a two column matrix of the
+#'  \item{`xy_to_latlon(x, y, bf)`}{Returns a two column matrix of the
 #'  latitude and longitude of points in WGS84 given their coordinates in the
 #'  BirdFlow object's CRS.}
 #'

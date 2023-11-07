@@ -11,10 +11,10 @@
 #' are part of the model (for the given timestep).
 #'
 #'
-#' @param x a BirdFlow object
+#' @param x A BirdFlow object
 #' @inheritParams get_distr
 #'
-#' @return a vector or matrix with elements or rows corresponding to active
+#' @return A vector or matrix with elements or rows corresponding to active
 #' cells in the model indicating whether a cell is included in the model for the
 #' given timestep.
 #'
