@@ -3,7 +3,7 @@
 #' `route()` projects bird positions over time based on the probabilities
 #' embedded in a BirdFlow model. The output is linear, stochastic routes.
 #'
-#' @param bf A BirdFlow object
+#' @param bf A BirdFlow object.
 #' @param n If sampling starting positions (x_coord, and y_coord are NULL).
 #' Generate this many samples.  Otherwsise the `x_coord` and `y_coord` positions
 #' will each be duplicated `n` times.
@@ -16,20 +16,20 @@
 #' the marginals. Passed to [get_distr()].
 #' @inheritDotParams lookup_timestep_sequence -x
 #' @return A BirdFlowRoutes object with columns:
-#'    \item{`x`, `y`}{coordinates of point along route}
-#'    \item{`date`}{date associated with that point}
-#'    \item{`timestep`}{timestep associated with point}
-#'    \item{`route`}{unique id for that route or individual}
-#'    \item{`i`}{location index for the point (see [i_to_xy()])}
-#'    \item{`stay_id`}{within each route a sequential id for locations}
-#'    \item{`stay_len`}{how many timesteps was the Bird at that point during
-#'    the stay (minumum of 1)}
+#'    \item{`x`, `y`}{Coordinates of point along route.}
+#'    \item{`date`}{Date associated with that point.}
+#'    \item{`timestep`}{Timestep associated with point.}
+#'    \item{`route`}{Unique ID for that route or individual.}
+#'    \item{`i`}{Location index for the point (see [i_to_xy()]).}
+#'    \item{`stay_id`}{Within each route a sequential id for locations.}
+#'    \item{`stay_len`}{How many timesteps was the Bird at that point during
+#'    the stay (minumum of 1).}
 #' It also has **experimental** attributes:
 #' \describe{
 #' \item{`geom`, `species`, `dates`}{The `geom`, `species`, and `dates`
 #'   components of the BirdFlow object the routes are derived from.}
 #' \item{`metadata`}{The `metadata` component of the parent BirdFlow object,
-#'   with one additional item `route_type = "synthetic"`}
+#'   with one additional item `route_type = "synthetic"`.}
 #' }
 #' @examples
 #' bf <- BirdFlowModels::amewoo

@@ -19,9 +19,9 @@
 #' from such a model will not plot correctly so it's not recommended;
 #' see [issue #120](https://github.com/birdflow-science/BirdFlowR/issues/120).
 #'
-#' @param bf a BirdFlow object
+#' @param bf A BirdFlow object.
 #' @inheritDotParams lookup_timestep_sequence -x
-#' @return A BirdFlow modelthat only contains information about transitions
+#' @return A BirdFlow model that only contains information about transitions
 #' for a subset of the year as specified by `...`.
 #' @export
 truncate_birdflow <- function(bf, ...) {

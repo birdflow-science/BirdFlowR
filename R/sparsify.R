@@ -25,7 +25,7 @@
 #' \describe{
 #' \item{`state`}{State based sparsification eliminates states (in time and
 #' space) that are zero in the training, ebirdst, distributions, from
-#'  from the marginals
+#'  from the marginals.
 #'
 #'  For each marginal rows are zeroed out that correspond to zeroes in the
 #'  preceding timestep's distribution and columns are zeroed out that correspond
@@ -72,7 +72,7 @@
 #' sparsification is done second as it is not affected by the values in the
 #' marginal.
 #'
-#' @param x A BirdFlow model
+#' @param x A BirdFlow model.
 #' @param method One of `"state"`, `"conditional"`, `"marginal"`, or `"model"`;
 #'  or `"state"` paired with one of the other methods in a character
 #'   vector (`c("state", "marginal")`) or a single string
@@ -80,7 +80,7 @@
 #' @param p Required unless `method = "state"` to control the proportion of the
 #'   probability density retained in the sparsification process. See "Methods"
 #'   below.
-#' @param fix if TRUE call [fix_dead_ends()] to eliminate dead ends
+#' @param fix If TRUE call [fix_dead_ends()] to eliminate dead ends
 #'   in the sparse model. Defaults to TRUE, unless the method is "state" in
 #'   which case it will be forced to FALSE as the state method does not
 #'   create dead ends.

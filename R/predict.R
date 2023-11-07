@@ -4,8 +4,8 @@
 #'  initial distribution and time period specified via `...`, `predict()`
 #'  generates probability distributions for each timestep.
 #' @aliases predict
-#' @param object A BirdFlow model object
-#' @param distr  a starting distribution
+#' @param object A BirdFlow model object.
+#' @param distr  A starting distribution.
 #' @inheritDotParams lookup_timestep_sequence -x
 #' @return If multiple starting distributions are input in a matrix the result
 #'  will be an array with dimensions: location, distribution, and time. With one

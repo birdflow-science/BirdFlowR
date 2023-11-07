@@ -1,5 +1,5 @@
 
-#' lookup timestep
+#' Lookup timestep
 #'
 #'  This function returns the timestep or timesteps associated with `x` in a
 #'  particular BirdFlow model, where `x` represents dates or timesteps in
@@ -16,13 +16,13 @@
 #'  when using this function internally to resolve arguments to other
 #'  functions like [route()], [predict()], and [get_distr()].
 #'
-#' @param x a character object representing date as year-month-day e.g.
+#' @param x A character object representing date as year-month-day e.g.
 #'  "2023-03-29", date object ([`Date`][base::Dates],
 #'  [`POSIXct`][base::DateTimeClasses], or [`POSIXlt`][base::DateTimeClasses]),
 #'  a numeric timestep, a character representing a timestep e.g. "t1", or "all"
 #'  for all timesteps in the model.
-#' @param bf a BirdFlow object
-#' @return a vector of timesteps corresponding to elements in `x`
+#' @param bf A BirdFlow object.
+#' @return A vector of timesteps corresponding to elements in `x`.
 #' @export
 #' @examples
 #' bf <- BirdFlowModels::amewoo

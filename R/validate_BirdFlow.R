@@ -19,18 +19,18 @@
 #' Currently dead end transitions are permitted.  See [find_dead_ends()] for
 #' checking for those.
 #'
-#' @param x a BirdFlow object
-#' @param error if TRUE throw an error if there are problems if FALSE return
+#' @param x A BirdFlow object.
+#' @param error If TRUE throw an error if there are problems if FALSE return
 #' any problems as a data.frame.
-#' @param allow_incomplete if TRUE allow the BirdFlow object to be missing
+#' @param allow_incomplete If TRUE allow the BirdFlow object to be missing
 #' both marginals and transitions (but not other components). This allows
 #' checking the output of [preprocess_species()].
 #'
 #' @return  If `error = FALSE` the function returns
 #'  a data.frame describing any errors with columns:
 #' \describe{
-#' \item{problem}{a character description of any problems}
-#' \item{type}{the problem type, either "error" or "incomplete"}
+#' \item{problem}{A character description of any problems.}
+#' \item{type}{The problem type, either "error" or "incomplete."}
 #' }
 #' Otherwise, if there are no problems a similar data.frame with no rows is
 #' returned invisibly.

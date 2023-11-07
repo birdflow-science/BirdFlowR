@@ -3,10 +3,10 @@
 #' This is a print method for BirdFlowRouteq
 #'  objects.
 #
-#' @param x A BirdFlowRoutes object
+#' @param x A BirdFlowRoutes object.
 #' @param ... arguments passed from other methods
 #'
-#' @return x is returned invisibly and unchanged
+#' @return X is returned invisibly and unchanged.
 #' @method print BirdFlowRoutes
 #' @export
 print.BirdFlowRoutes <- function(x, ...) {

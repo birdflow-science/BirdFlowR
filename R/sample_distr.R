@@ -2,7 +2,7 @@
 #'
 #'Probabilistically sample one or more locations from a set of distributions.
 #'
-#'@param distr a vector representing a single distribution; a matrix
+#'@param distr A vector representing a single distribution; a matrix
 #' representing one distribution per column, or (unlikely) an  array in which
 #' the first dimension represents locations. The values in `distr` are
 #' treated as the relative probability of the species being in each position.
@@ -21,10 +21,10 @@
 #'  remaining locations have 0's.}
 #'\item{`xy`}{`x` and `y` coordinates of locations, usually as data frame but
 #' with 3D input it will be an array.}
-#'\item{`latlon`}{return latitude (`lat`) and longitude (`lon`) coordinates in
+#'\item{`latlon`}{Return latitude (`lat`) and longitude (`lon`) coordinates in
 #' WGS 1984 for the sampled locations, usually as a data frame but with 3D
 #' input it will be an array. }
-#'\item{`i`}{return location index for the sampled locations}
+#'\item{`i`}{Return location index for the sampled locations.}
 #'
 #'
 #'@export

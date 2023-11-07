@@ -1,6 +1,6 @@
 
 #' @rdname plot_routes
-#' @title Plot Routes:
+#' @title Plot Routes
 #' @description
 #' Plot routes as lines with color indicating the passage of time and dot size
 #' indicating the length of stay at each stop.
@@ -20,7 +20,7 @@
 #'
 #' @param routes The output of [route()] or a similarly structured data frame.
 #' @param bf,x A BirdFlow object.
-#' @param facet if TRUE then use [ggplot2::facet_wrap()] to show each route
+#' @param facet If TRUE then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
 #' @param max_stay_len Used to scale the stay length dots. If NULL
 #' (the default) it will be set to the maximum "stay_len" value in `routes`.
@@ -41,7 +41,7 @@
 #'  used to represent stay length.
 #' @param ... Passed to `plot_routes()`
 #'
-#' @return a ggplot object. Use [print()] to display it.
+#' @return A ggplot object. Use [print()] to display it.
 #' @export
 #' @importFrom rlang .data
 #' @examples
