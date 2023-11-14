@@ -14,7 +14,7 @@ time (column) is included in the model."><meta property="og:image" content="http
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,14 +74,14 @@ time (column) is included in the model.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>bf</dt>
-<dd><p>a BirdFlow object</p></dd>
+<dd><p>A BirdFlow object</p></dd>
 
 
 <dt>dummy_mask</dt>
-<dd><p>if TRUE a mask is addded to the object, but the mask is
+<dd><p>If TRUE a mask is addded to the object, but the mask is
 TRUE for every cell. This yields a BirdFlow object that works with the
 current mask dependent version of the package but mimics and old BirdFlow
-model.  Note if the old model included state based sparsification the
+model. Note if the old model included state based sparsification the
 predictions should be identical even with <code>dummy_mask = FALSE</code> (the default).</p></dd>
 
 </dl></div>
@@ -89,7 +89,7 @@ predictions should be identical even with <code>dummy_mask = FALSE</code> (the d
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a BirdFlow object that has a dynamic_mask component and in which
+<p>A BirdFlow object that has a dynamic_mask component and in which
 the marginals only includes transitions between cells that are not
 dynamically masked.</p>
     </div>

@@ -14,7 +14,7 @@ but is complicated enough to justify being it's own function."><meta property="o
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,14 +87,14 @@ but is complicated enough to justify being it's own function.</p>
 
 
 <dt>res</dt>
-<dd><p>the target resolution of the BirdFlow model in kilometers. If
+<dd><p>The target resolution of the BirdFlow model in kilometers. If
 <code>res</code> is NULL (default) then a resolution that results in less than <code>max_params</code>
 parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.</p></dd>
 
 
 <dt>max_params</dt>
-<dd><p>the maximum number of fitted parameters that the BirdFlow
+<dd><p>The maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if <code>res</code> is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See <code>gpu_ram</code> for
 the default way of setting <code>max_params</code> and <code>res</code>. Note: the reduction in
@@ -110,13 +110,13 @@ if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 
 
 <dt>clip</dt>
-<dd><p>a polygon or the path to a file containing a polygon. It must
+<dd><p>A polygon or the path to a file containing a polygon. It must
 have a CRS and should either be a <a href="https://rdrr.io/pkg/terra/man/SpatVector-class.html" class="external-link">SpatVector()</a> object
 or produce one when called with <a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect(clip)</a></p></dd>
 
 
 <dt>crs</dt>
-<dd><p>coordinate reference system (CRS) to use.  Defaults to the custom
+<dd><p>Coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
 <code><a href="https://rdrr.io/pkg/ebirdst/man/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
 <code><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>

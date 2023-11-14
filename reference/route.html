@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>bf</dt>
-<dd><p>A BirdFlow object</p></dd>
+<dd><p>A BirdFlow object.</p></dd>
 
 
 <dt>n</dt>
@@ -130,26 +130,26 @@ transitions and <code>n_steps + 1</code>  timesteps.</p></dd>
 
 <p>A BirdFlowRoutes object with columns:</p>
 <dl><dt><code>x</code>, <code>y</code></dt>
-<dd><p>coordinates of point along route</p></dd>
+<dd><p>Coordinates of point along route.</p></dd>
 
 <dt><code>date</code></dt>
-<dd><p>date associated with that point</p></dd>
+<dd><p>Date associated with that point.</p></dd>
 
 <dt><code>timestep</code></dt>
-<dd><p>timestep associated with point</p></dd>
+<dd><p>Timestep associated with point.</p></dd>
 
 <dt><code>route</code></dt>
-<dd><p>unique id for that route or individual</p></dd>
+<dd><p>Unique ID for that route or individual.</p></dd>
 
 <dt><code>i</code></dt>
-<dd><p>location index for the point (see <code><a href="index_conversions.html">i_to_xy()</a></code>)</p></dd>
+<dd><p>Location index for the point (see <code><a href="index_conversions.html">i_to_xy()</a></code>).</p></dd>
 
 <dt><code>stay_id</code></dt>
-<dd><p>within each route a sequential id for locations</p></dd>
+<dd><p>Within each route a sequential id for locations.</p></dd>
 
 <dt><code>stay_len</code></dt>
-<dd><p>how many timesteps was the Bird at that point during
-the stay (minumum of 1)</p></dd>
+<dd><p>How many timesteps was the Bird at that point during
+the stay (minumum of 1).</p></dd>
 
 </dl><p>It also has <strong>experimental</strong> attributes:</p><dl><dt><code>geom</code>, <code>species</code>, <code>dates</code></dt>
 <dd><p>The <code>geom</code>, <code>species</code>, and <code>dates</code>
@@ -157,7 +157,7 @@ components of the BirdFlow object the routes are derived from.</p></dd>
 
 <dt><code>metadata</code></dt>
 <dd><p>The <code>metadata</code> component of the parent BirdFlow object,
-with one additional item <code>route_type = "synthetic"</code></p></dd>
+with one additional item <code>route_type = "synthetic"</code>.</p></dd>
 
 
 </dl></div>

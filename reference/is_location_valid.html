@@ -18,7 +18,7 @@ probability is in cells for which movement is modeled."><meta property="og:image
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,36 +82,36 @@ probability is in cells for which movement is modeled.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>bf</dt>
-<dd><p>a BirdFlow object</p></dd>
+<dd><p>A BirdFlow object.</p></dd>
 
 
 <dt>i</dt>
-<dd><p>state space index (location)</p></dd>
+<dd><p>State space index (location).</p></dd>
 
 
 <dt>x</dt>
-<dd><p>x coordinates in the <code>bf</code>'s CRS (<a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs(bf)</a>)</p></dd>
+<dd><p>X coordinates in the <code>bf</code>'s CRS (<a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs(bf)</a>).</p></dd>
 
 
 <dt>y</dt>
-<dd><p>y coordinate</p></dd>
+<dd><p>T coordinate.</p></dd>
 
 
 <dt>timestep</dt>
-<dd><p>the timestep</p></dd>
+<dd><p>The timestep.</p></dd>
 
 
 <dt>date</dt>
-<dd><p>date in any format accepted by <code><a href="lookup_timestep.html">lookup_timestep()</a></code></p></dd>
+<dd><p>Date in any format accepted by <code><a href="lookup_timestep.html">lookup_timestep()</a></code>.</p></dd>
 
 
 <dt>distr</dt>
-<dd><p>one or more distributions in vector or matrix form representing
+<dd><p>One or more distributions in vector or matrix form representing
 a probability for each active cell in the model.</p></dd>
 
 
 <dt>return_mask</dt>
-<dd><p>if TRUE return a mask with the same dimensions as <code>distr</code>
+<dd><p>If TRUE return a mask with the same dimensions as <code>distr</code>
 which is TRUE for all cells that can have valid non-zero values. This is
 conditioned on the timestep associated with each distribution.</p></dd>
 
@@ -120,7 +120,7 @@ conditioned on the timestep associated with each distribution.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a logical vector, 'TRUE<code>if valid</code>FALSE<code>otherwise with values for each input location or distribution. See</code>return_mask` for an exception.</p>
+<p>A logical vector, 'TRUE<code>if valid</code>FALSE<code>otherwise with values for each input location or distribution. See</code>return_mask` for an exception.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -130,7 +130,7 @@ one should be used: either <code>i</code> a vector of location indices
 <p>For both functions time should be input either as <code>timestep</code> or <code>date</code>.</p>
 <p>The number of timesteps or dates should either be 1 or match to the number
 of locations or distributions; if singular it will be applied to all.</p>
-<p>A location is invalid if any of the following apply:</p><ol><li><p>The location isn't in the model extent</p></li>
+<p>A location is invalid if any of the following apply:</p><ol><li><p>The location isn't in the model extent.</p></li>
 <li><p>The location doesn't correspond to an active cell in the model;
 it's masked out by the static mask.</p></li>
 <li><p>The location isn't a valid state at the given timestep or date; it's

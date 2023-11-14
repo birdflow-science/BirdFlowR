@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A BirdFlow model</p></dd>
+<dd><p>A BirdFlow model.</p></dd>
 
 
 <dt>method</dt>
@@ -85,7 +85,7 @@ below.</p></dd>
 
 
 <dt>fix</dt>
-<dd><p>if TRUE call <code><a href="fix_dead_ends.html">fix_dead_ends()</a></code> to eliminate dead ends
+<dd><p>If TRUE call <code><a href="fix_dead_ends.html">fix_dead_ends()</a></code> to eliminate dead ends
 in the sparse model. Defaults to TRUE, unless the method is "state" in
 which case it will be forced to FALSE as the state method does not
 create dead ends.</p></dd>
@@ -123,7 +123,7 @@ components (<code>conditional</code>, <code>marginal</code>).</p>
 <dl><dt><code>state</code></dt>
 <dd><p>State based sparsification eliminates states (in time and
 space) that are zero in the training, ebirdst, distributions, from
-from the marginals</p>
+from the marginals.</p>
 <p>For each marginal rows are zeroed out that correspond to zeroes in the
 preceding timestep's distribution and columns are zeroed out that correspond
 to zeroes in the following timestep's distribution.  Thus all the cells in

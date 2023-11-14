@@ -20,7 +20,7 @@ in a BirdFlow object's coordinate reference system (CRS)."><meta property="og:im
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +117,7 @@ which case <code>y</code> should be omitted.</p></dd>
 
 
 <dt>bf</dt>
-<dd><p>a BirdFlow model</p></dd>
+<dd><p>A BirdFlow model.</p></dd>
 
 
 <dt>row, col</dt>
@@ -142,61 +142,61 @@ column matrix or data frame can also be passed to lat.</p></dd>
     
 
 <dl><dt><code>x_to_col(x, bf)</code> and <code>y_to_row(y, bf)</code></dt>
-<dd><p>return the column or row
+<dd><p>Return the column or row
 index that each <code>x</code> or <code>y</code> coordinate falls within.</p></dd>
 
 
 <dt><code>row_to_y(row, bf)</code> and <code>col_to_x(col, bf)</code></dt>
-<dd><p>return the y or x
+<dd><p>Return the y or x
 coordinate of the center each row or column.</p></dd>
 
 
 <dt><code>i_to_row(i, bf)</code> and <code>i_to_col(i, bf)</code></dt>
-<dd><p>return the row or column
+<dd><p>Return the row or column
 index corresponding to the vector state index, <code>i</code>.</p></dd>
 
 
 <dt><code>i_to_rc(i, bf)</code></dt>
-<dd><p>returns a two column matrix of the row and column
+<dd><p>Returns a two column matrix of the row and column
 index in the raster corresponding to the index, <code>i</code> of the vector state.</p></dd>
 
 
 <dt><code>i_to_x(i, bf)</code> and <code>i_to_y(i, bf)</code></dt>
-<dd><p>return the x or y coordinate
+<dd><p>Return the x or y coordinate
 from the vector state index, <code>i</code>.</p></dd>
 
 
 <dt><code>i_to_xy(i, bf)</code></dt>
-<dd><p>returns a two column matrix of the x and y
+<dd><p>Returns a two column matrix of the x and y
 coordinates corresponding to the index, <code>i</code> of the vector state space.</p></dd>
 
 
 <dt><code>rc_to_i(row, col, bf)</code> and <code>xy_to_i(x, y, bf)</code></dt>
-<dd><p>return the state
+<dd><p>Return the state
 space index corresponding to x and y coordinates or row and column indices.</p></dd>
 
 
 </dl><dl><dt><code>latlon_to_xy(lat, lon, bf)</code></dt>
-<dd><p>returns a two column matrix of the x
+<dd><p>Returns a two column matrix of the x
 and y coordinates corresponding to the supplied latitude and longitude. The
 output is in the CRS of <code>bf</code> (<code>crs(bf)</code>).</p></dd>
 
 
 <dt><code>xy_to_latlon(x, y, bf)</code></dt>
-<dd><p>returns a two column matrix of the
+<dd><p>Returns a two column matrix of the
 latitude and longitude of points in WGS84 given their coordinates in the
 BirdFlow object's CRS.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>In general I've made these functions mirror NA input in output; and
+    <p>In general, these functions mirror NA input in output; and
 functions that return rows, columns, or the index (<code>i</code>) will return NA
 if the input isn't within the extent; or for (<code>i</code>) within the active cells.</p>
 <p>For most CRSs longitude translates to the x coordinate and
 latitude to the y coordinate. The traditional order of coordinates
 lat and lon; row and col, and x and y are not consistent, but that is
-still what I've used here, i.e. lat, row, and y are generally correlated,
+still what is used here, i.e. lat, row, and y are generally correlated,
 and are first, first, and second in argument order.</p>
     </div>
     <div class="section level2">

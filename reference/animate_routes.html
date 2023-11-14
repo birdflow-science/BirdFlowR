@@ -12,7 +12,7 @@ producing a dynamic version of plot_routes()."><meta property="og:image" content
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ producing a dynamic version of <code><a href="plot_routes.html">plot_routes()</a
 
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="plot_routes.html">plot_routes</a></code></p><dl><dt><code>facet</code></dt>
-<dd><p>if TRUE then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
+<dd><p>If TRUE then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
 out into a separate subplot.</p></dd>
 
     <dt><code>max_stay_len</code></dt>
@@ -122,7 +122,7 @@ used to represent stay length.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a <code>gganim</code> object. <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> will plot it with default
+<p>A <code>gganim</code> object. <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> will plot it with default
 options, or use <code>animate()</code> to set the options. See the example for
 recommended settings.</p>
     </div>
@@ -130,7 +130,7 @@ recommended settings.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
-"geom_path()<code>: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within </code>animate_routes()` where I could suppress it.</p>
+"geom_path()<code>: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within </code>animate_routes()` where it could not be suppressed.</p>
     </div>
 
     <div class="section level2">

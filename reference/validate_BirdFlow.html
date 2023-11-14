@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9035</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +68,16 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>a BirdFlow object</p></dd>
+<dd><p>A BirdFlow object.</p></dd>
 
 
 <dt>error</dt>
-<dd><p>if TRUE throw an error if there are problems if FALSE return
+<dd><p>If TRUE throw an error if there are problems if FALSE return
 any problems as a data.frame.</p></dd>
 
 
 <dt>allow_incomplete</dt>
-<dd><p>if TRUE allow the BirdFlow object to be missing
+<dd><p>If TRUE allow the BirdFlow object to be missing
 both marginals and transitions (but not other components). This allows
 checking the output of <code><a href="preprocess_species.html">preprocess_species()</a></code>.</p></dd>
 
@@ -88,10 +88,10 @@ checking the output of <code><a href="preprocess_species.html">preprocess_specie
 
 <p>If <code>error = FALSE</code> the function returns
 a data.frame describing any errors with columns:</p><dl><dt>problem</dt>
-<dd><p>a character description of any problems</p></dd>
+<dd><p>A character description of any problems.</p></dd>
 
 <dt>type</dt>
-<dd><p>the problem type, either "error" or "incomplete"</p></dd>
+<dd><p>The problem type, either "error" or "incomplete."</p></dd>
 
 
 </dl><p>Otherwise, if there are no problems a similar data.frame with no rows is
