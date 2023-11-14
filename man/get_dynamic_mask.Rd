@@ -7,15 +7,15 @@
 get_dynamic_mask(x, which = "all")
 }
 \arguments{
-\item{x}{a BirdFlow object}
+\item{x}{A BirdFlow object}
 
-\item{which}{indicates which timesteps to return. Can be one or more
+\item{which}{Indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format
 year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
 or \code{"all"} which will return distributions for all timesteps.}
 }
 \value{
-a vector or matrix with elements or rows corresponding to active
+A vector or matrix with elements or rows corresponding to active
 cells in the model indicating whether a cell is included in the model for the
 given timestep.
 }

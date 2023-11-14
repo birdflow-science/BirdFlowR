@@ -7,12 +7,12 @@
 \method{print}{BirdFlowRoutes}(x, ...)
 }
 \arguments{
-\item{x}{A BirdFlowRoutes object}
+\item{x}{A BirdFlowRoutes object.}
 
 \item{...}{arguments passed from other methods}
 }
 \value{
-x is returned invisibly and unchanged
+\code{x} is returned invisibly and unchanged.
 }
 \description{
 This is a print method for BirdFlowRouteq

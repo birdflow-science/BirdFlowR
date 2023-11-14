@@ -3,7 +3,7 @@
 \name{plot_routes}
 \alias{plot_routes}
 \alias{plot.BirdFlowRoutes}
-\title{Plot Routes:}
+\title{Plot Routes}
 \usage{
 plot_routes(
   routes,
@@ -25,7 +25,7 @@ plot_routes(
 
 \item{bf, x}{A BirdFlow object.}
 
-\item{facet}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
+\item{facet}{If TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
 
 \item{max_stay_len}{Used to scale the stay length dots. If NULL
@@ -55,7 +55,7 @@ used to represent stay length.}
 \item{...}{Passed to \code{plot_routes()}}
 }
 \value{
-a ggplot object. Use \code{\link[=print]{print()}} to display it.
+A ggplot object. Use \code{\link[=print]{print()}} to display it.
 }
 \description{
 Plot routes as lines with color indicating the passage of time and dot size

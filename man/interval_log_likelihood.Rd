@@ -2,34 +2,34 @@
 % Please edit documentation in R/interval_log_likelihood.R
 \name{interval_log_likelihood}
 \alias{interval_log_likelihood}
-\title{calculate log likelihoods of observed bird movements}
+\title{Calculate log likelihoods of observed bird movements}
 \usage{
 interval_log_likelihood(intervals, observations, bf, one_at_a_time = FALSE)
 }
 \arguments{
-\item{intervals}{a data.frame that describes intervals (movements or
+\item{intervals}{A data.frame that describes intervals (movements or
 stationary periods) for which log likelihood will be calculated by
 referencing the \code{id} column in \code{observations}.
 \describe{
-\item{\code{from}}{ observation id of the starting location and date}
-\item{ \code{to} }{ observation id of the ending location and date}
-\item{ ...  }{ any additional columns will be included in the returned
+\item{\code{from}}{ Observation ID of the starting location and date.}
+\item{ \code{to} }{ Observation ID of the ending location and date.}
+\item{ ...  }{ Any additional columns will be included in the returned
 object but not used by this function. It probably should include an
 interval ID.}
 }}
 
-\item{observations}{a data.frame describing observations of birds each row
+\item{observations}{A data.frame describing observations of birds each row
 should be an individual bird, at a location, and date.
 \describe{
-\item{\code{id}}{ Unique observation identifier }
-\item{\code{lon} , \code{lat}}{  longitude and latitude of observation in WGS84
+\item{\code{id}}{ Unique observation identifier. }
+\item{\code{lon} , \code{lat}}{  Longitude and latitude of observation in WGS84
 (EPSG:4326) }
-\item{ \code{date}}{ date associated with observation. See \code{\link[=lookup_timestep]{lookup_timestep()}} for
+\item{ \code{date}}{ Date associated with observation. See \code{\link[=lookup_timestep]{lookup_timestep()}} for
 valid formats.}
 \item{ ... }{ Other columns allowed, but will be ignored. }
 }}
 
-\item{bf}{a BirdFlow object}
+\item{bf}{A BirdFlow object.}
 
 \item{one_at_a_time}{Mainly here for debugging. If FALSE, the default, then
 all intervals that start at the same timestep are processed together,
@@ -38,27 +38,27 @@ TRUE uses less memory but is slower.}
 }
 \value{
 The intervals table is returned  along with new columns:
-\item{log_likelihood }{ The model derived log likelihood of the interval }
-\item{ null_ll }{ the log likelihood of the interval based on a null model
-that assumes the eBird S&T distribution for the species at the end point }
-\item{ lag }{ the number of timesteps (likely weeks) between the start and
-end of the interval }
+\item{log_likelihood }{ The model derived log likelihood of the interval. }
+\item{ null_ll }{ The log likelihood of the interval based on a null model
+that assumes the eBird S&T distribution for the species at the end point. }
+\item{ lag }{ The number of timesteps (likely weeks) between the start and
+end of the interval. }
 \item{  exclude }{ TRUE if the log likelihood couldn't be calculated for
 the interval, in which case there should also be a TRUE in one of the
 remaining columns indicating why. }
 \item{ not_active }{ If TRUE the start or end point is not within the model
 mask }
-\item{ dynamic_mask }{ If TRUE ebirds S&T has assigned zero probability to
+\item{ dynamic_mask }{ If TRUE ebirds' S&T has assigned zero probability to
 the the start or end point for the associated date and therefore it is
-excluded by the dynamic mask or state based sparsification }
+excluded by the dynamic mask or state based sparsification. }
 \item{ sparse }{ TRUE if the model assigned zero probability to the interval
 and it wasn't due to any of the other reasons. This is likely due to
 sparsification eliminating all possible routes between the start and
 end point.}
 \item{ same_timestep }{ TRUE if the start and end timesteps are the same, a
-lag of zero }
+lag of zero. }
 \item{ bad_date }{ TRUE if the date couldn't be parsed, or if \code{bf} is a
-partial model and the date falls in the uncovered portion of the year }
+partial model and the date falls in the uncovered portion of the year. }
 
 The returned table rows will have a 1:1 correspondence with the input
 \code{intervals} table.

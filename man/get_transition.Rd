@@ -7,12 +7,12 @@
 get_transition(x, transition)
 }
 \arguments{
-\item{x}{a BirdFlow object}
+\item{x}{A BirdFlow object}
 
-\item{transition}{a transition code, e.g. "T_01-02"}
+\item{transition}{A transition code, e.g. "T_01-02"}
 }
 \value{
-a transition matrix
+A transition matrix
 }
 \description{
 This function retrieves a transition matrix from a BirdFlow object,

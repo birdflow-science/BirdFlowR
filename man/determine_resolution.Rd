@@ -18,12 +18,12 @@ determine_resolution(
 \arguments{
 \item{sp_path}{The species path used with ebirdst to download and load data}
 
-\item{res}{the target resolution of the BirdFlow model in kilometers. If
+\item{res}{The target resolution of the BirdFlow model in kilometers. If
 \code{res} is NULL (default) then a resolution that results in less than \code{max_params}
 parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.}
 
-\item{max_params}{the maximum number of fitted parameters that the BirdFlow
+\item{max_params}{The maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}. Note: the reduction in
@@ -35,11 +35,11 @@ If \code{res} is NULL and \code{max_params} is NULL this is used to estimate
 \code{max_params}which is, in turn, used to determine the resolution. Ignored
 if either\code{ res} or \code{max_params} is set.}
 
-\item{clip}{a polygon or the path to a file containing a polygon. It must
+\item{clip}{A polygon or the path to a file containing a polygon. It must
 have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object
 or produce one when called with \link[terra:vect]{vect(clip)}}
 
-\item{crs}{coordinate reference system (CRS) to use.  Defaults to the custom
+\item{crs}{Coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
 \code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}

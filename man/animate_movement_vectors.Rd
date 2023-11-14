@@ -7,7 +7,7 @@
 animate_movement_vectors(bf, ...)
 }
 \arguments{
-\item{bf}{a BirdFlow object}
+\item{bf}{A BirdFlow object}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
@@ -29,7 +29,7 @@ transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-a \code{gganim} object. \code{print()} will plot it with default
+A \code{gganim} object. \code{print()} will plot it with default
 options, or use \code{\link[=animate]{animate()}} to set the options. See the example for
 recommended settings.
 }
@@ -52,7 +52,7 @@ Thicker lines and less transparency (darker shading) indicate higher density
 in the eBird S&T distribution for the beginning timestep of the displayed
 transition.
 
-I recommend using the "ragg_png" device when rendering animations as in the
+Use the "ragg_png" device when rendering animations as in the
 example code.
 }
 \examples{

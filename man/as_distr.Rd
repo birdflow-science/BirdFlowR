@@ -20,9 +20,9 @@ as_distr(x, bf, ...)
 indicating point locations, a \emph{sf} object containing points, or a raster
 object containing values to be treated as a distribution.}
 
-\item{bf}{a reference BirdFlow object}
+\item{bf}{A reference BirdFlow object.}
 
-\item{...}{arguments used by other methods}
+\item{...}{Arguments used by other methods:}
 
 \item{crs}{The coordinate reference system that the x and y coordinates are
 in.  If NULL the function will assume coordinates are in the same CRS as

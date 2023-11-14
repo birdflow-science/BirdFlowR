@@ -7,7 +7,7 @@
 sample_distr(distr, n = 1, bf, format = "distr")
 }
 \arguments{
-\item{distr}{a vector representing a single distribution; a matrix
+\item{distr}{A vector representing a single distribution; a matrix
 representing one distribution per column, or (unlikely) an  array in which
 the first dimension represents locations. The values in \code{distr} are
 treated as the relative probability of the species being in each position.}
@@ -31,10 +31,10 @@ format changes with the value of\code{format}:
 remaining locations have 0's.}
 \item{\code{xy}}{\code{x} and \code{y} coordinates of locations, usually as data frame but
 with 3D input it will be an array.}
-\item{\code{latlon}}{return latitude (\code{lat}) and longitude (\code{lon}) coordinates in
+\item{\code{latlon}}{Return latitude (\code{lat}) and longitude (\code{lon}) coordinates in
 WGS 1984 for the sampled locations, usually as a data frame but with 3D
 input it will be an array. }
-\item{\code{i}}{return location index for the sampled locations}
+\item{\code{i}}{Return location index for the sampled locations.}
 }
 \description{
 Probabilistically sample one or more locations from a set of distributions.

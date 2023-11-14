@@ -34,8 +34,8 @@ Default is "month_day".
 
 Valid values are: "timestep" which uses the timestep integer appended to "t"
 e.g. "t1");  "date" which uses a date in the format year-month-day
-(as numbers) e.g. "2022-11-23; and "month_day" which uses the name of the
-month followed by the day of the month e.g. "November 23"  }
+(as numbers) e.g. "2022-11-23"; and "month_day" which uses the name of the
+month followed by the day of the month e.g. "November 23."  }
 
 \item{verbose}{Defaults to \code{TRUE} for printing of progress and information
 about the process of functions.  Set to \code{FALSE} to turn off printing. }

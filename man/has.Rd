@@ -17,10 +17,10 @@ has_distr(x)
 has_dynamic_mask(x)
 }
 \arguments{
-\item{x}{a BirdFlow model}
+\item{x}{A BirdFlow model}
 }
 \value{
-logical indicating the BirdFlow model has the relevant element
+Logical indicating the BirdFlow model has the relevant element
 }
 \description{
 These functions return information about the contents of a

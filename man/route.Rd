@@ -7,7 +7,7 @@
 route(bf, n = 1, x_coord = NULL, y_coord = NULL, from_marginals = FALSE, ...)
 }
 \arguments{
-\item{bf}{A BirdFlow object}
+\item{bf}{A BirdFlow object.}
 
 \item{n}{If sampling starting positions (x_coord, and y_coord are NULL).
 Generate this many samples.  Otherwsise the \code{x_coord} and \code{y_coord} positions
@@ -43,20 +43,20 @@ transitions and \code{n_steps + 1}  timesteps.}
 }
 \value{
 A BirdFlowRoutes object with columns:
-\item{\code{x}, \code{y}}{coordinates of point along route}
-\item{\code{date}}{date associated with that point}
-\item{\code{timestep}}{timestep associated with point}
-\item{\code{route}}{unique id for that route or individual}
-\item{\code{i}}{location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}})}
-\item{\code{stay_id}}{within each route a sequential id for locations}
-\item{\code{stay_len}}{how many timesteps was the Bird at that point during
-the stay (minumum of 1)}
+\item{\code{x}, \code{y}}{Coordinates of point along route.}
+\item{\code{date}}{Date associated with that point.}
+\item{\code{timestep}}{Timestep associated with point.}
+\item{\code{route}}{Unique ID for that route or individual.}
+\item{\code{i}}{Location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}}).}
+\item{\code{stay_id}}{Within each route a sequential id for locations.}
+\item{\code{stay_len}}{How many timesteps was the Bird at that point during
+the stay (minumum of 1).}
 It also has \strong{experimental} attributes:
 \describe{
 \item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates}
 components of the BirdFlow object the routes are derived from.}
 \item{\code{metadata}}{The \code{metadata} component of the parent BirdFlow object,
-with one additional item \code{route_type = "synthetic"}}
+with one additional item \code{route_type = "synthetic"}.}
 }
 }
 \description{

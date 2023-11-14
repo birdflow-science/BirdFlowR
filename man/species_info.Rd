@@ -3,21 +3,21 @@
 \name{species_info}
 \alias{species_info}
 \alias{species}
-\title{retrieve species information from a BirdFlow model}
+\title{Retrieve species information from a BirdFlow model}
 \usage{
 species_info(x, what)
 
 species(x, what)
 }
 \arguments{
-\item{x}{\code{BirdFlow} model}
+\item{x}{A \code{BirdFlow} model.}
 
 \item{what}{\code{"all"} for all information (in a list) or the name (see details)
 of the desired information. If \code{what} is omitted \code{species()} defaults
 to \code{"common_name"} and \code{species_info()} defaults to \code{"all"}.}
 }
 \value{
-the element named by \code{what}, unless \code{what} is \code{"all"} in which case a
+The element named by \code{what}, unless \code{what} is \code{"all"} in which case a
 list of all the species information.  If \code{what} is omitted \code{species()} will
 return the common name of the species, and \code{species_info()} will return the
 complete list.

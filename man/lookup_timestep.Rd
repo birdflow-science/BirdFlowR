@@ -2,21 +2,21 @@
 % Please edit documentation in R/lookup_timestep.R
 \name{lookup_timestep}
 \alias{lookup_timestep}
-\title{lookup timestep}
+\title{Lookup timestep}
 \usage{
 lookup_timestep(x, bf)
 }
 \arguments{
-\item{x}{a character object representing date as year-month-day e.g.
+\item{x}{A character object representing date as year-month-day e.g.
 "2023-03-29", date object (\code{\link[base:Dates]{Date}},
 \code{\link[base:DateTimeClasses]{POSIXct}}, or \code{\link[base:DateTimeClasses]{POSIXlt}}),
 a numeric timestep, a character representing a timestep e.g. "t1", or "all"
 for all timesteps in the model.}
 
-\item{bf}{a BirdFlow object}
+\item{bf}{A BirdFlow object.}
 }
 \value{
-a vector of timesteps corresponding to elements in \code{x}
+A vector of timesteps corresponding to elements in \code{x}.
 }
 \description{
 This function returns the timestep or timesteps associated with \code{x} in a

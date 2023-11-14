@@ -22,10 +22,10 @@ plot_distr(
 )
 }
 \arguments{
-\item{distr}{a vector or matrix with distribution values corresponding to
+\item{distr}{A vector or matrix with distribution values corresponding to
 active cells in \code{bf}.}
 
-\item{bf}{A BirdFlow object}
+\item{bf}{A BirdFlow object.}
 
 \item{subset}{Defines an optional subset of \code{distr} that should be plotted.
 Use either column numbers, column names, or a logical vector.}

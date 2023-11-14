@@ -7,7 +7,7 @@
 truncate_birdflow(bf, ...)
 }
 \arguments{
-\item{bf}{a BirdFlow object}
+\item{bf}{A BirdFlow object.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}
@@ -29,7 +29,7 @@ transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-A BirdFlow modelthat only contains information about transitions
+A BirdFlow model that only contains information about transitions
 for a subset of the year as specified by \code{...}.
 }
 \description{
