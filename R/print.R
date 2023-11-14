@@ -5,7 +5,7 @@
 #' @param x A BirdFlow object.
 #' @param ... arguments passed from other methods
 #'
-#' @return X is returned invisibly and unchanged.
+#' @return `x` returned invisibly and unchanged.
 #' @method print BirdFlow
 #' @export
 print.BirdFlow <- function(x, ...) {

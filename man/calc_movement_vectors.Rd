@@ -7,15 +7,15 @@
 calc_movement_vectors(bf, start, direction = "forward")
 }
 \arguments{
-\item{bf}{a BirdFlow model}
+\item{bf}{A BirdFlow model}
 
 \item{start}{The starting timestep for the transition to be modeled}
 
-\item{direction}{"forward" by default. Set to "backward" to calculate
+\item{direction}{"Forward" by default. Set to "backward" to calculate
 vectors for a transition backwards in time.}
 }
 \value{
-a data frame with columns:
+A data frame with columns:
 \item{i}{The location index of the starting location.  This is the row in
 the distribution matrix that corresponds to the location.}
 \item{start}{The starting timestep of the transition.}

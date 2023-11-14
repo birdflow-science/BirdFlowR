@@ -5,7 +5,7 @@
 \alias{get_states}
 \alias{get_coastline}
 \alias{get_countries}
-\title{retrieve, crop, and transform Natural Earth data}
+\title{Retrieve, crop, and transform Natural Earth data}
 \usage{
 get_naturalearth(
   x,
@@ -66,11 +66,11 @@ of the extent of \code{x}.}
 \item{keep_attributes}{If \code{FALSE}, the default, attribute columns are dropped
 to facilitate clean plotting.}
 
-\item{country}{if retrieving states with \code{get_states()} or
+\item{country}{If retrieving states with \code{get_states()} or
 \code{get_naturalearth(type = "states")} this is used to select a country. If
 omitted, states from all countries are returned.}
 
-\item{keep_buffer}{if \code{FALSE}, the default, after transforming the Natural
+\item{keep_buffer}{If \code{FALSE}, the default, after transforming the Natural
 Earth data it will cropped to the precise extent of \code{x}. Set to  \code{TRUE}
 to keep the buffer - useful when overlaying Natural Earth data
 on an existing base R plot.}

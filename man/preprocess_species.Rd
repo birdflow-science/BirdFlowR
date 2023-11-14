@@ -2,7 +2,7 @@
 % Please edit documentation in R/preprocess_species.R
 \name{preprocess_species}
 \alias{preprocess_species}
-\title{prepare eBird Status and Trends data for BirdFlow model fitting}
+\title{Prepare eBird Status and Trends data for BirdFlow model fitting}
 \usage{
 preprocess_species(
   species = NULL,
@@ -19,32 +19,32 @@ preprocess_species(
 )
 }
 \arguments{
-\item{species}{a species in any format accepted by \code{\link[ebirdst:get_species]{ebirdst::get_species()}}}
+\item{species}{A species in any format accepted by \code{\link[ebirdst:get_species]{ebirdst::get_species()}}}
 
-\item{out_dir}{output directory, files will be written here. Required unless
+\item{out_dir}{Output directory, files will be written here. Required unless
 \code{hdf5} is FALSE.  File names created here will incorporate
 the species code, resolution, and eBird version year.}
 
-\item{res}{the target resolution of the BirdFlow model in kilometers. If
+\item{res}{The target resolution of the BirdFlow model in kilometers. If
 \code{res} is NULL (default) then a resolution that results in less than \code{max_params}
 parameters will be used, while also minimizing the resolution and limiting
 the number of significant digits.}
 
-\item{hdf5}{if TRUE (default) an hdf5 file will be exported.}
+\item{hdf5}{If TRUE (default) an hdf5 file will be exported.}
 
-\item{overwrite}{if TRUE (default) any pre-existing output files will be
+\item{overwrite}{If TRUE (default) any pre-existing output files will be
 overwritten. If FALSE pre-existing files will result in an error.}
 
-\item{crs}{coordinate reference system (CRS) to use.  Defaults to the custom
+\item{crs}{Coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
 \code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
-\item{clip}{a polygon or the path to a file containing a polygon. It must
+\item{clip}{A polygon or the path to a file containing a polygon. It must
 have a CRS and should either be a \link[terra:SpatVector-class]{SpatVector()} object
 or produce one when called with \link[terra:vect]{vect(clip)}}
 
-\item{max_params}{the maximum number of fitted parameters that the BirdFlow
+\item{max_params}{The maximum number of fitted parameters that the BirdFlow
 model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}. Note: the reduction in
@@ -80,7 +80,7 @@ transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-returns a BirdFlow model object that lacks marginals, but is
+Returns a BirdFlow model object that lacks marginals, but is
 otherwise complete.  It is suitable for fitting with
 \href{https://github.com/birdflow-science/BirdFlowPy}{BirdFlowPy}.
 }

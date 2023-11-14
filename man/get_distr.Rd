@@ -2,23 +2,23 @@
 % Please edit documentation in R/get_distr.R
 \name{get_distr}
 \alias{get_distr}
-\title{extract distributions from BirdFlow models}
+\title{Extract distributions from BirdFlow models}
 \usage{
 get_distr(x, which = "all", from_marginals = FALSE)
 }
 \arguments{
-\item{x}{a BirdFlow model}
+\item{x}{A BirdFlow model}
 
-\item{which}{indicates which timesteps to return. Can be one or more
+\item{which}{Indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format
 year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
 or \code{"all"} which will return distributions for all timesteps.}
 
-\item{from_marginals}{if TRUE and \code{x} has marginals the distribution will be
+\item{from_marginals}{If TRUE and \code{x} has marginals the distribution will be
 from the marginals even if \code{x} also has distributions.}
 }
 \value{
-either a vector with a distribution for a single timestep or a matrix
+Either a vector with a distribution for a single timestep or a matrix
 with a column for each distribution.
 }
 \description{

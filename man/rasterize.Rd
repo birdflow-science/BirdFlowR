@@ -11,7 +11,7 @@ rasterize_distr(distr, bf, format = "SpatRaster")
 \S4method{rast}{BirdFlow}(x, which = "all")
 }
 \arguments{
-\item{distr}{a distribution in its vector form or a
+\item{distr}{A distribution in its vector form or a
 matrix in which each column represents a different distribution.}
 
 \item{bf}{A BirdFlow object.}
@@ -20,9 +20,9 @@ matrix in which each column represents a different distribution.}
 \code{'numeric'} for a matrix or array, or\code{'dataframe'} for raster data
 suitable for plotting with \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}}
 
-\item{x}{A BirdFlow object}
+\item{x}{A BirdFlow object.}
 
-\item{which}{indicates which timesteps to return. Can be one or more
+\item{which}{Indicates which timesteps to return. Can be one or more
 integers indicating timesteps; character dates in the format
 year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
 or \code{"all"} which will return distributions for all timesteps.}

@@ -3,7 +3,7 @@
 \name{build_transitions}
 \alias{build_transitions}
 \alias{drop_transitions}
-\title{add or drop transition matrices}
+\title{Add or drop transition matrices}
 \usage{
 build_transitions(x, rebuild = FALSE)
 
@@ -12,7 +12,7 @@ drop_transitions(x)
 \arguments{
 \item{x}{BirdFlow object}
 
-\item{rebuild}{set to TRUE to rebuild transitions if they are already
+\item{rebuild}{Set to TRUE to rebuild transitions if they are already
 present.}
 }
 \value{

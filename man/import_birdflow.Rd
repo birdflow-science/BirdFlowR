@@ -12,7 +12,7 @@ import_birdflow(hdf5, ..., version)
 \item{...}{Arguments to be passed to a version specific internal function.
 Likely will only be used with
 version 1 which takes two additional arguments: \describe{
-\item{tiff}{Path to the model geotiff}
+\item{tiff}{Path to the model geotiff.}
 \item{species}{An eBird species code.  It should appear in the
 \code{species_code} column of the data.frame returned by
 \code{\link[auk:get_ebird_taxonomy]{auk::get_ebird_taxonomy()}}}
@@ -23,7 +23,7 @@ version. Normally, this will be determined from metadata in the HDF5
 file.}
 }
 \value{
-a BirdFlow object
+A BirdFlow object.
 }
 \description{
 This function imports a BirdFlow model from an HDF5

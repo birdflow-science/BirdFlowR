@@ -8,9 +8,9 @@
 \method{predict}{BirdFlow}(object, distr, ...)
 }
 \arguments{
-\item{object}{A BirdFlow model object}
+\item{object}{A BirdFlow model object.}
 
-\item{distr}{a starting distribution}
+\item{distr}{A starting distribution.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}

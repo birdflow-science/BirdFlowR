@@ -10,27 +10,27 @@ is_location_valid(bf, i, x, y, timestep, date)
 is_distr_valid(bf, distr, timestep, date, return_mask = FALSE)
 }
 \arguments{
-\item{bf}{a BirdFlow object}
+\item{bf}{A BirdFlow object.}
 
-\item{i}{state space index (location)}
+\item{i}{State space index (location).}
 
-\item{x}{x coordinates in the \code{bf}'s CRS (\link[terra:crs]{crs(bf)})}
+\item{x}{X coordinates in the \code{bf}'s CRS (\link[terra:crs]{crs(bf)}).}
 
-\item{y}{y coordinate}
+\item{y}{T coordinate.}
 
-\item{timestep}{the timestep}
+\item{timestep}{The timestep.}
 
-\item{date}{date in any format accepted by \code{\link[=lookup_timestep]{lookup_timestep()}}}
+\item{date}{Date in any format accepted by \code{\link[=lookup_timestep]{lookup_timestep()}}.}
 
-\item{distr}{one or more distributions in vector or matrix form representing
+\item{distr}{One or more distributions in vector or matrix form representing
 a probability for each active cell in the model.}
 
-\item{return_mask}{if TRUE return a mask with the same dimensions as \code{distr}
+\item{return_mask}{If TRUE return a mask with the same dimensions as \code{distr}
 which is TRUE for all cells that can have valid non-zero values. This is
 conditioned on the timestep associated with each distribution.}
 }
 \value{
-a logical vector, 'TRUE\verb{if valid}FALSE\verb{otherwise with values for each input location or distribution. See}return_mask` for an exception.
+A logical vector, 'TRUE\verb{if valid}FALSE\verb{otherwise with values for each input location or distribution. See}return_mask` for an exception.
 }
 \description{
 A location or and time is valid if the model has a non zero probability  of
@@ -51,7 +51,7 @@ of locations or distributions; if singular it will be applied to all.
 
 A location is invalid if any of the following apply:
 \enumerate{
-\item The location isn't in the model extent
+\item The location isn't in the model extent.
 \item The location doesn't correspond to an active cell in the model;
 it's masked out by the static mask.
 \item The location isn't a valid state at the given timestep or date; it's

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_metadata.R
 \name{get_metadata}
 \alias{get_metadata}
-\title{retrieve BirdFlow metadata}
+\title{Retrieve BirdFlow metadata}
 \usage{
 get_metadata(x, what)
 }
@@ -26,16 +26,16 @@ been sparsified,  etc.
    \code{has_marginals} \tab Logical, indicates whether the model has marginals.  Marginals encode forward and backward transitions, and distributions in an n by n matrix for each pair of adjacent timesteps. \cr
    \code{has_transitions} \tab Logical, indicates whether the model has stored transitions (separate from marginal) \cr
    \code{has_distr} \tab Logical, indicates whether the model has stored distributions (separate from marginals); if it does they are from \pkg{ebirdst} and are the distributions the model was trained on \cr
-   \code{n_transitions} \tab Number of transitions in the model \cr
+   \code{n_transitions} \tab Number of transitions in the model. \cr
    \code{n_active} \tab The number of active states in the model. This defines the dimensions of the marginals and transitions matrices and the number of columns in flattened distributions. In a full (not sparse) model all active states could be visited. \cr
    \code{n_timesteps} \tab The number of timesteps in the model. \cr
    \code{ebird_version_year} \tab The version year for the eBird Status and Trends Data the model was trained on see \link[ebirdst:ebirdst_version]{ebirdst_version()} \cr
    \code{ebird_release_year} \tab The year the eBird S & T data was released \link[ebirdst:ebirdst_version]{ebirdst_version()} \cr
-   \code{ebird_access_end_date} \tab The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model \cr
+   \code{ebird_access_end_date} \tab The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model. \cr
    \code{birdflow_preprocess_date} \tab The date the data was downloaded with \pkg{ebirdst} and formated for BirdFlow model fitting (see \code{\link[=preprocess_species]{preprocess_species()}} \cr
-   \code{birdflow_model_date} \tab The date the model was fitted and/or exported to hdf5 from python" \cr
+   \code{birdflow_model_date} \tab The date the model was fitted and/or exported to hdf5 from Python. \cr
    \code{is_sparse} \tab Logical, if \code{TRUE} the model is sparse. See \code{\link[=sparsify]{sparsify()}} \cr
-   \code{sparse_stats} \tab If the model is sparse this contains sparsification statistics (a list) \cr
+   \code{sparse_stats} \tab If the model is sparse this contains sparsification statistics (a list). \cr
 }
 }
 \examples{
@@ -52,8 +52,8 @@ get_metadata(amewoo, "is_sparse")
 represented in the model.
 
 \code{\link[ebirdst:ebirdst_version]{ebirdst::ebirdst_version()}} is called while assembling the model to set
-\code{ebird_version_year}, \code{ebird_release_year} and \code{ebird_access_end_date}
+\code{ebird_version_year}, \code{ebird_release_year} and \code{ebird_access_end_date}.
 
 \link[=nrow]{Dimensions} documents getting various attributes of a BirdFlow
-model, some of which overlap \code{get_metadata()}
+model, some of which overlap \code{get_metadata()}.
 }

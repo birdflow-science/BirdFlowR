@@ -11,7 +11,7 @@ plot_movement_vectors(bf, start = 1, direction = "forward", mv)
 
 \item{start}{The starting timestep for the transition to be modeled}
 
-\item{direction}{"forward" by default. Set to "backward" to calculate
+\item{direction}{"Forward" by default. Set to "backward" to calculate
 vectors for a transition backwards in time.}
 
 \item{mv}{This is optional and primarily for internal use by

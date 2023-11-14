@@ -14,7 +14,7 @@ animate_routes(routes, bf, ...)
 \item{...}{
   Arguments passed on to \code{\link[=plot_routes]{plot_routes}}
   \describe{
-    \item{\code{facet}}{if TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
+    \item{\code{facet}}{If TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
     \item{\code{max_stay_len}}{Used to scale the stay length dots. If NULL
 (the default) it will be set to the maximum "stay_len" value in \code{routes}.
@@ -36,7 +36,7 @@ used to represent stay length.}
   }}
 }
 \value{
-a \code{gganim} object. \code{print()} will plot it with default
+A \code{gganim} object. \code{print()} will plot it with default
 options, or use \code{\link[=animate]{animate()}} to set the options. See the example for
 recommended settings.
 }
@@ -47,7 +47,7 @@ producing a dynamic version of \code{\link[=plot_routes]{plot_routes()}}.
 \details{
 Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
-"geom_path()\verb{: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within }animate_routes()` where I could suppress it.
+"geom_path()\verb{: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within }animate_routes()` where it could not be suppressed.
 }
 \examples{
 

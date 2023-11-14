@@ -3,10 +3,10 @@
 \docType{data}
 \name{birdflow_crs}
 \alias{birdflow_crs}
-\title{birdflow_crs}
+\title{Define the coordinate reference system}
 \format{
 This is a string defining a custom mollweide projection
-centered on the western hemisphere with well known text
+centered on the western hemisphere with well known text.
 }
 \usage{
 birdflow_crs

@@ -7,7 +7,7 @@
 sparsify(x, method, p, fix = TRUE)
 }
 \arguments{
-\item{x}{A BirdFlow model}
+\item{x}{A BirdFlow model.}
 
 \item{method}{One of \code{"state"}, \code{"conditional"}, \code{"marginal"}, or \code{"model"};
 or \code{"state"} paired with one of the other methods in a character
@@ -18,7 +18,7 @@ vector (\code{c("state", "marginal")}) or a single string
 probability density retained in the sparsification process. See "Methods"
 below.}
 
-\item{fix}{if TRUE call \code{\link[=fix_dead_ends]{fix_dead_ends()}} to eliminate dead ends
+\item{fix}{If TRUE call \code{\link[=fix_dead_ends]{fix_dead_ends()}} to eliminate dead ends
 in the sparse model. Defaults to TRUE, unless the method is "state" in
 which case it will be forced to FALSE as the state method does not
 create dead ends.}
@@ -56,7 +56,7 @@ components (\code{conditional}, \code{marginal}).
 \describe{
 \item{\code{state}}{State based sparsification eliminates states (in time and
 space) that are zero in the training, ebirdst, distributions, from
-from the marginals
+from the marginals.
 
 For each marginal rows are zeroed out that correspond to zeroes in the
 preceding timestep's distribution and columns are zeroed out that correspond

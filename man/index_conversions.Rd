@@ -54,7 +54,7 @@ that require both \code{x} and \code{y} a two column matrix or data.frame
 containing \code{x} and \code{y} columns in that order can be passed to \code{x} in
 which case \code{y} should be omitted.}
 
-\item{bf}{a BirdFlow model}
+\item{bf}{A BirdFlow model.}
 
 \item{row, col}{The row and column index of a cell in the BirdFlow model and
 associated raster data. Alternatively, a two column matrix or data.frame
@@ -70,33 +70,33 @@ column matrix or data frame can also be passed to lat.}
 \value{
 \describe{
 
-\item{\code{x_to_col(x, bf)} and \code{y_to_row(y, bf)}}{return the column or row
+\item{\code{x_to_col(x, bf)} and \code{y_to_row(y, bf)}}{Return the column or row
 index that each \code{x} or \code{y} coordinate falls within.}
 
-\item{\code{row_to_y(row, bf)} and \code{col_to_x(col, bf)}}{return the y or x
+\item{\code{row_to_y(row, bf)} and \code{col_to_x(col, bf)}}{Return the y or x
 coordinate of the center each row or column. }
 
-\item{\code{i_to_row(i, bf)} and \code{i_to_col(i, bf)}}{return the row or column
+\item{\code{i_to_row(i, bf)} and \code{i_to_col(i, bf)}}{Return the row or column
 index corresponding to the vector state index, \code{i}.}
 
-\item{\code{i_to_rc(i, bf)}}{returns a two column matrix of the row and column
+\item{\code{i_to_rc(i, bf)}}{Returns a two column matrix of the row and column
 index in the raster corresponding to the index, \code{i} of the vector state.}
 
-\item{\code{i_to_x(i, bf)} and \code{i_to_y(i, bf)}}{return the x or y coordinate
+\item{\code{i_to_x(i, bf)} and \code{i_to_y(i, bf)}}{Return the x or y coordinate
 from the vector state index, \code{i}.}
 
-\item{\code{i_to_xy(i, bf)}}{returns a two column matrix of the x and y
+\item{\code{i_to_xy(i, bf)}}{Returns a two column matrix of the x and y
 coordinates corresponding to the index, \code{i} of the vector state space.}
 
-\item{\code{rc_to_i(row, col, bf)} and \code{xy_to_i(x, y, bf)}}{return the state
+\item{\code{rc_to_i(row, col, bf)} and \code{xy_to_i(x, y, bf)}}{Return the state
 space index corresponding to x and y coordinates or row and column indices.}
 }
 
-\item{\code{latlon_to_xy(lat, lon, bf)}}{returns a two column matrix of the x
+\item{\code{latlon_to_xy(lat, lon, bf)}}{Returns a two column matrix of the x
 and y coordinates corresponding to the supplied latitude and longitude. The
 output is in the CRS of \code{bf} (\code{crs(bf)}).}
 
-\item{\code{xy_to_latlon(x, y, bf)}}{returns a two column matrix of the
+\item{\code{xy_to_latlon(x, y, bf)}}{Returns a two column matrix of the
 latitude and longitude of points in WGS84 given their coordinates in the
 BirdFlow object's CRS.}
 }
@@ -109,14 +109,14 @@ convert between WGS 1984 latitude and longitude and x and y coordinates
 in a BirdFlow object's coordinate reference system (CRS).
 }
 \details{
-In general I've made these functions mirror NA input in output; and
+In general, these functions mirror NA input in output; and
 functions that return rows, columns, or the index (\code{i}) will return NA
 if the input isn't within the extent; or for (\code{i}) within the active cells.
 
 For most CRSs longitude translates to the x coordinate and
 latitude to the y coordinate. The traditional order of coordinates
 lat and lon; row and col, and x and y are not consistent, but that is
-still what I've used here, i.e. lat, row, and y are generally correlated,
+still what is used here, i.e. lat, row, and y are generally correlated,
 and are first, first, and second in argument order.
 }
 \seealso{

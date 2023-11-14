@@ -14,7 +14,7 @@ as_transitions(timesteps, bf)
 is needed around the timesteps.}
 }
 \value{
-A directional sequence of transitions that connect \code{timesteps}
+A directional sequence of transitions that connect \code{timesteps}.
 }
 \description{
 Convert a sequence of timesteps into a sequence of transition names

@@ -11,7 +11,7 @@ load_model(
 )
 }
 \arguments{
-\item{model}{The model name to load}
+\item{model}{The model name to load.}
 
 \item{update}{If \code{TRUE} (the default) then both the index and cached model
 file are checked against the server's version to make sure they are

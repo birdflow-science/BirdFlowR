@@ -7,12 +7,12 @@
 validate_BirdFlow(x, error = TRUE, allow_incomplete = FALSE)
 }
 \arguments{
-\item{x}{a BirdFlow object}
+\item{x}{A BirdFlow object.}
 
-\item{error}{if TRUE throw an error if there are problems if FALSE return
+\item{error}{If TRUE throw an error if there are problems if FALSE return
 any problems as a data.frame.}
 
-\item{allow_incomplete}{if TRUE allow the BirdFlow object to be missing
+\item{allow_incomplete}{If TRUE allow the BirdFlow object to be missing
 both marginals and transitions (but not other components). This allows
 checking the output of \code{\link[=preprocess_species]{preprocess_species()}}.}
 }
@@ -20,8 +20,8 @@ checking the output of \code{\link[=preprocess_species]{preprocess_species()}}.}
 If \code{error = FALSE} the function returns
 a data.frame describing any errors with columns:
 \describe{
-\item{problem}{a character description of any problems}
-\item{type}{the problem type, either "error" or "incomplete"}
+\item{problem}{A character description of any problems.}
+\item{type}{The problem type, either "error" or "incomplete."}
 }
 Otherwise, if there are no problems a similar data.frame with no rows is
 returned invisibly.
