@@ -2,10 +2,10 @@
 #'
 #' This is a print method for BirdFlow objects.
 #
-#' @param x A BirdFlow object
+#' @param x A BirdFlow object.
 #' @param ... arguments passed from other methods
 #'
-#' @return x is returned invisibly and unchanged
+#' @return X is returned invisibly and unchanged.
 #' @method print BirdFlow
 #' @export
 print.BirdFlow <- function(x, ...) {

@@ -1,15 +1,15 @@
-#' retrieve species information from a BirdFlow model
+#' Retrieve species information from a BirdFlow model
 #'
 #' `species_info()` and `species()` return species data stored in a BirdFlow
 #' model. They differ only in that `species()` returns the
 #' common name by default so provides a succinct way to get the species name.
 #'
 #'
-#' @param x `BirdFlow` model
+#' @param x A `BirdFlow` model.
 #' @param what `"all"` for all information (in a list) or the name (see details)
 #'   of the desired information. If `what` is omitted `species()` defaults
 #'   to `"common_name"` and `species_info()` defaults to `"all"`.
-#' @return the element named by `what`, unless `what` is `"all"` in which case a
+#' @return The element named by `what`, unless `what` is `"all"` in which case a
 #'   list of all the species information.  If `what` is omitted `species()` will
 #'   return the common name of the species, and `species_info()` will return the
 #'   complete list.

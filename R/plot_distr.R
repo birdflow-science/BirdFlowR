@@ -41,9 +41,9 @@
 #' `plot_distr(d[, 1, drop = FALSE], bf)`; and to add a label to a vector
 #' distribution use `d <- matrix(d, ncol = 1);  colnames(d) <- "new label"`
 #'
-#' @param distr a vector or matrix with distribution values corresponding to
+#' @param distr A vector or matrix with distribution values corresponding to
 #'   active cells in `bf`.
-#' @param bf A BirdFlow object
+#' @param bf A BirdFlow object.
 #' @param subset Defines an optional subset of `distr` that should be plotted.
 #'   Use either column numbers, column names, or a logical vector.
 #' @param show_mask If `TRUE` (the default) the static mask that indicates which

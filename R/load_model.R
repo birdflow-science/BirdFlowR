@@ -4,7 +4,7 @@
 #' If the model doesn't exist in the local cache or isn't up-to-date the the
 #' cache will be updated prior to loading.
 #'
-#' @param model The model name to load
+#' @param model The model name to load.
 #' @param update If `TRUE` (the default) then both the index and cached model
 #' file are checked against the server's version to make sure they are
 #' up-to-date and downloaded again if they are not.

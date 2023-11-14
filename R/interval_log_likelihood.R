@@ -1,5 +1,5 @@
 # nolint start: cyclocomp_linter.
-#' calculate log likelihoods of observed bird movements
+#' Calculate log likelihoods of observed bird movements
 #'
 #' This function calculates the log likelihoods of inferred bird movement
 #' based on two observation points (in time and space). The second point must
@@ -21,54 +21,54 @@
 #' there are a lot of choices to be made and this function leaves those
 #' decisions to the user.
 #'
-#' @param intervals  a data.frame that describes intervals (movements or
+#' @param intervals  A data.frame that describes intervals (movements or
 #' stationary periods) for which log likelihood will be calculated by
 #' referencing the `id` column in `observations`.
 #'  \describe{
-#'  \item{`from`}{ observation id of the starting location and date}
-#'  \item{ `to` }{ observation id of the ending location and date}
-#'  \item{ ...  }{ any additional columns will be included in the returned
+#'  \item{`from`}{ Observation ID of the starting location and date.}
+#'  \item{ `to` }{ Observation ID of the ending location and date.}
+#'  \item{ ...  }{ Any additional columns will be included in the returned
 #'  object but not used by this function. It probably should include an
 #'  interval ID.}
 #'  }
-#' @param observations a data.frame describing observations of birds each row
+#' @param observations A data.frame describing observations of birds each row
 #' should be an individual bird, at a location, and date.
 #'  \describe{
-#'  \item{`id`}{ Unique observation identifier }
-#'  \item{`lon` , `lat`}{  longitude and latitude of observation in WGS84
+#'  \item{`id`}{ Unique observation identifier. }
+#'  \item{`lon` , `lat`}{  Longitude and latitude of observation in WGS84
 #'  (EPSG:4326) }
-#' \item{ `date`}{ date associated with observation. See [lookup_timestep()] for
+#' \item{ `date`}{ Date associated with observation. See [lookup_timestep()] for
 #'  valid formats.}
 #' \item{ ... }{ Other columns allowed, but will be ignored. }
 #'  }
-#' @param bf a BirdFlow object
+#' @param bf A BirdFlow object.
 #' @param one_at_a_time Mainly here for debugging. If FALSE, the default, then
 #' all intervals that start at the same timestep are processed together,
 #' otherwise each interval is processed separately. Results should be identical,
 #' TRUE uses less memory but is slower.
 #'
 #' @return The intervals table is returned  along with new columns:
-#'  \item{log_likelihood }{ The model derived log likelihood of the interval }
-#'  \item{ null_ll }{ the log likelihood of the interval based on a null model
-#'  that assumes the eBird S&T distribution for the species at the end point }
-#'  \item{ lag }{ the number of timesteps (likely weeks) between the start and
-#'  end of the interval }
+#'  \item{log_likelihood }{ The model derived log likelihood of the interval. }
+#'  \item{ null_ll }{ The log likelihood of the interval based on a null model
+#'  that assumes the eBird S&T distribution for the species at the end point. }
+#'  \item{ lag }{ The number of timesteps (likely weeks) between the start and
+#'  end of the interval. }
 #'  \item{  exclude }{ TRUE if the log likelihood couldn't be calculated for
 #'  the interval, in which case there should also be a TRUE in one of the
 #'   remaining columns indicating why. }
 #'  \item{ not_active }{ If TRUE the start or end point is not within the model
 #'   mask }
-#'  \item{ dynamic_mask }{ If TRUE ebirds S&T has assigned zero probability to
+#'  \item{ dynamic_mask }{ If TRUE ebirds' S&T has assigned zero probability to
 #'  the the start or end point for the associated date and therefore it is
-#'  excluded by the dynamic mask or state based sparsification }
+#'  excluded by the dynamic mask or state based sparsification. }
 #'  \item{ sparse }{ TRUE if the model assigned zero probability to the interval
 #'  and it wasn't due to any of the other reasons. This is likely due to
 #'  sparsification eliminating all possible routes between the start and
 #'  end point.}
 #'  \item{ same_timestep }{ TRUE if the start and end timesteps are the same, a
-#'   lag of zero }
+#'   lag of zero. }
 #'  \item{ bad_date }{ TRUE if the date couldn't be parsed, or if `bf` is a
-#'   partial model and the date falls in the uncovered portion of the year }
+#'   partial model and the date falls in the uncovered portion of the year. }
 #'
 #'  The returned table rows will have a 1:1 correspondence with the input
 #'  `intervals` table.

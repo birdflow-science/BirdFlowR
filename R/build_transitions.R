@@ -5,7 +5,7 @@ if (FALSE) {
   bf <-  build_transitions(sparse_bf)
 }
 
-#' add or drop transition matrices
+#' Add or drop transition matrices
 #'
 #' Given a BirdFlow object with marginals and without transitions
 #' `build_transitions()` return a BirdFlow object with both marginals
@@ -13,7 +13,7 @@ if (FALSE) {
 #'
 #' @rdname build_transitions
 #' @param x BirdFlow object
-#' @param rebuild set to TRUE to rebuild transitions if they are already
+#' @param rebuild Set to TRUE to rebuild transitions if they are already
 #' present.
 #' @return BirdFlow object with transition matrices
 #' @export

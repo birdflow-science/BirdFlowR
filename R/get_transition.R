@@ -3,10 +3,10 @@
 #' This function retrieves a transition matrix from a BirdFlow object,
 #' possibly calculating it from a marginal.
 #'
-#' @param x a BirdFlow object
-#' @param transition a transition code, e.g. "T_01-02"
+#' @param x A BirdFlow object
+#' @param transition A transition code, e.g. "T_01-02"
 #'
-#' @return a transition matrix
+#' @return A transition matrix
 #'
 #' @details `get_transition()` will construct a transition matrix from the
 #'   marginals if `x` doesn't have transitions, or return the relevant stored

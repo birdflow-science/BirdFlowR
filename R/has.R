@@ -6,9 +6,9 @@
 #' BirdFlow object.
 #'
 #'
-#' @param x a BirdFlow model
+#' @param x A BirdFlow model
 #'
-#' @return logical indicating the BirdFlow model has the relevant element
+#' @return Logical indicating the BirdFlow model has the relevant element
 #' @export
 has_marginals <- function(x) {
   x$metadata$has_marginals

@@ -1,4 +1,4 @@
-#' retrieve, crop, and transform Natural Earth data
+#' Retrieve, crop, and transform Natural Earth data
 #'
 #' These are convenience wrappers to \pkg{rnaturalearth} functions. They
 #' retrieve, crop, format, and project
@@ -72,13 +72,13 @@
 #'   of the extent of `x`.
 #' @param keep_attributes If `FALSE`, the default, attribute columns are dropped
 #'   to facilitate clean plotting.
-#' @param country if retrieving states with `get_states()` or
+#' @param country If retrieving states with `get_states()` or
 #'  `get_naturalearth(type = "states")` this is used to select a country. If
 #'   omitted, states from all countries are returned.
 #' @param ... Other arguments to be passed to
 #'   [ne_download()][rnaturalearth::ne_download()]. Possibly you will
 #'   want to use `category = "physical"`.
-#' @param keep_buffer if `FALSE`, the default, after transforming the Natural
+#' @param keep_buffer If `FALSE`, the default, after transforming the Natural
 #'   Earth data it will cropped to the precise extent of `x`. Set to  `TRUE`
 #'   to keep the buffer - useful when overlaying Natural Earth data
 #'   on an existing base R plot.

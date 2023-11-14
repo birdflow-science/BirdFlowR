@@ -6,10 +6,10 @@
 #' [SpatRaster][terra::SpatRaster], numeric matrix or array, or a raster data
 #'  frame.
 #'
-#' @param distr a distribution in its vector form or a
+#' @param distr A distribution in its vector form or a
 #' matrix in which each column represents a different distribution.
 #' @param bf A BirdFlow object.
-#' @param x A BirdFlow object
+#' @param x A BirdFlow object.
 #' @param format One of `'SpatRast'` for a [terra::SpatRaster] object,
 #'   `'numeric'` for a matrix or array, or`'dataframe'` for raster data
 #'   suitable for plotting with [ggplot2::geom_raster()]

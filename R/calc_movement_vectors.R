@@ -12,11 +12,11 @@
 #' represented the expected average destination of all birds that start
 #' in the cell.
 #'
-#' @param bf a BirdFlow model
+#' @param bf A BirdFlow model
 #' @param start The starting timestep for the transition to be modeled
-#' @param direction "forward" by default. Set to "backward" to calculate
+#' @param direction "Forward" by default. Set to "backward" to calculate
 #' vectors for a transition backwards in time.
-#' @return a data frame with columns:
+#' @return A data frame with columns:
 #' \item{i}{The location index of the starting location.  This is the row in
 #' the distribution matrix that corresponds to the location.}
 #' \item{start}{The starting timestep of the transition.}

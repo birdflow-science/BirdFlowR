@@ -4,7 +4,7 @@
 #'  `lookup_timestep_sequence()`.
 #' @param bf A BirdFlowR model, used to determine how much padding
 #'   is needed around the timesteps.
-#' @return A directional sequence of transitions that connect `timesteps`
+#' @return A directional sequence of transitions that connect `timesteps`.
 #' @export
 as_transitions <- function(timesteps, bf) {
   return(paste0("T_", pad_timestep(timesteps[-length(timesteps)], bf),

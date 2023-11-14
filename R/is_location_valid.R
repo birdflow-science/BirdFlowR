@@ -16,7 +16,7 @@
 #' of locations or distributions; if singular it will be applied to all.
 #'
 #' A location is invalid if any of the following apply:
-#'  1. The location isn't in the model extent
+#'  1. The location isn't in the model extent.
 #'  2. The location doesn't correspond to an active cell in the model;
 #'   it's masked out by the static mask.
 #'  3. The location isn't a valid state at the given timestep or date; it's
@@ -29,18 +29,18 @@
 #' A distribution is invalid for similar reasons but applied to all the
 #' locations that have non-zero values.
 #'
-#' @param bf a BirdFlow object
-#' @param i state space index (location)
-#' @param distr one or more distributions in vector or matrix form representing
+#' @param bf A BirdFlow object.
+#' @param i State space index (location).
+#' @param distr One or more distributions in vector or matrix form representing
 #'   a probability for each active cell in the model.
-#' @param x x coordinates in the `bf`'s CRS ([crs(bf)][terra::crs()])
-#' @param y y coordinate
-#' @param timestep the timestep
-#' @param date date in any format accepted by [lookup_timestep()]
-#' @param return_mask if TRUE return a mask with the same dimensions as `distr`
+#' @param x X coordinates in the `bf`'s CRS ([crs(bf)][terra::crs()]).
+#' @param y T coordinate.
+#' @param timestep The timestep.
+#' @param date Date in any format accepted by [lookup_timestep()].
+#' @param return_mask If TRUE return a mask with the same dimensions as `distr`
 #' which is TRUE for all cells that can have valid non-zero values. This is
 #' conditioned on the timestep associated with each distribution.
-#' @return a logical vector, 'TRUE` if valid `FALSE` otherwise with values for
+#' @return A logical vector, 'TRUE` if valid `FALSE` otherwise with values for
 #' each input location or distribution. See `return_mask` for an exception.
 #' @export
 #' @examples

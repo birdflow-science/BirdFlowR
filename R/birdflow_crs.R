@@ -1,4 +1,4 @@
-#' birdflow_crs
+#' Define the coordinate reference system
 #'
 #' This defines the coordinate reference system (crs, AKA projection)
 #' used by default for BirdFlow models. It is a customized
@@ -12,7 +12,7 @@
 #'   have a longitude of origin of 0, centered on Greenwich, England.
 #' @export
 #' @format This is a string defining a custom mollweide projection
-#' centered on the western hemisphere with well known text
+#' centered on the western hemisphere with well known text.
 #' @references https://epsg.io/54009
 #' @examples
 #' cat(birdflow_crs)

@@ -1,5 +1,5 @@
 # nolint start: line_length_linter.
-#' prepare eBird Status and Trends data for BirdFlow model fitting
+#' Prepare eBird Status and Trends data for BirdFlow model fitting
 #'
 #' Write a template BirdFlow object to an hdf5 file based on distribution data
 #' downloaded with \pkg{ebirdst}. The object is complete except for marginals
@@ -30,25 +30,25 @@
 #'  the smallest resolution that doesn't exceed `max_params` and then rounds to
 #'  a slightly larger resolution (fewer parameters).
 #'
-#' @param species a species in any format accepted by [ebirdst::get_species()]
-#' @param out_dir output directory, files will be written here. Required unless
+#' @param species A species in any format accepted by [ebirdst::get_species()]
+#' @param out_dir Output directory, files will be written here. Required unless
 #'   `hdf5` is FALSE.  File names created here will incorporate
 #'   the species code, resolution, and eBird version year.
-#' @param res the target resolution of the BirdFlow model in kilometers. If
+#' @param res The target resolution of the BirdFlow model in kilometers. If
 #'   `res` is NULL (default) then a resolution that results in less than `max_params`
 #'   parameters will be used, while also minimizing the resolution and limiting
 #'   the number of significant digits.
-#' @param hdf5 if TRUE (default) an hdf5 file will be exported.
-#' @param overwrite if TRUE (default) any pre-existing output files will be
+#' @param hdf5 If TRUE (default) an hdf5 file will be exported.
+#' @param overwrite If TRUE (default) any pre-existing output files will be
 #'   overwritten. If FALSE pre-existing files will result in an error.
-#' @param crs coordinate reference system (CRS) to use.  Defaults to the custom
+#' @param crs Coordinate reference system (CRS) to use.  Defaults to the custom
 #'   projection eBird has assigned to this species - see
 #'   [ebirdst::load_fac_map_parameters()]). It will be interpreted by
 #'   [terra::crs()] to generate a well known text representation of the CRS.
-#' @param clip a polygon or the path to a file containing a polygon. It must
+#' @param clip A polygon or the path to a file containing a polygon. It must
 #'   have a CRS and should either be a [SpatVector()][terra::SpatVector] object
 #'   or produce one when called with [vect(clip)][terra::vect()]
-#' @param max_params the maximum number of fitted parameters that the BirdFlow
+#' @param max_params The maximum number of fitted parameters that the BirdFlow
 #'   model should contain. Ignored if `res` is not NULL.  Otherwise a resolution
 #'   will be chosen that yields this many fitted parameters. See `gpu_ram` for
 #'   the default way of setting `max_params` and `res`. Note: the reduction in
@@ -63,7 +63,7 @@
 #'   [ebirdst_runs()][ebirdst::ebirdst_runs()]).
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
-#' @return returns a BirdFlow model object that lacks marginals, but is
+#' @return Returns a BirdFlow model object that lacks marginals, but is
 #'   otherwise complete.  It is suitable for fitting with
 #'   [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy).
 #'

@@ -17,14 +17,14 @@
 #' in the eBird S&T distribution for the beginning timestep of the displayed
 #' transition.
 #'
-#' I recommend using the "ragg_png" device when rendering animations as in the
+#' Use the "ragg_png" device when rendering animations as in the
 #' example code.
 #'
-#' @param bf a BirdFlow object
+#' @param bf A BirdFlow object
 #' @inheritParams lookup_timestep_sequence
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
-#' @return a `gganim` object. `print()` will plot it with default
+#' @return A `gganim` object. `print()` will plot it with default
 #' options, or use [animate()] to set the options. See the example for
 #' recommended settings.
 #'

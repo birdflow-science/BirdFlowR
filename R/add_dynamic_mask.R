@@ -6,14 +6,14 @@
 #' for `bf` holding TRUE for cells where the corresponding location (row) and
 #' time (column) is included in the model.
 #'
-#' @param bf a BirdFlow object
-#' @param dummy_mask if TRUE a mask is addded to the object, but the mask is
+#' @param bf A BirdFlow object
+#' @param dummy_mask If TRUE a mask is addded to the object, but the mask is
 #' TRUE for every cell. This yields a BirdFlow object that works with the
 #' current mask dependent version of the package but mimics and old BirdFlow
-#' model.  Note if the old model included state based sparsification the
+#' model. Note if the old model included state based sparsification the
 #' predictions should be identical even with `dummy_mask = FALSE` (the default).
 #'
-#' @return a BirdFlow object that has a dynamic_mask component and in which
+#' @return A BirdFlow object that has a dynamic_mask component and in which
 #' the marginals only includes transitions between cells that are not
 #' dynamically masked.
 #'

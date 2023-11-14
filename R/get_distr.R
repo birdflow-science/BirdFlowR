@@ -1,4 +1,4 @@
-#' extract distributions from BirdFlow models
+#' Extract distributions from BirdFlow models
 #'
 #' `get_distr` will return one or more distributions in their flattened form. A
 #' single distribution will be returned as a vector; if multiple they will be
@@ -16,14 +16,14 @@
 #'   [SpatRaster][terra::rast] with
 #'   [rasterize_distr()].  [sample_distr()] will convert one cell to 1 and the
 #'   rest to 0 probabilistically based on the densities in the distribution.
-#' @param x a BirdFlow model
-#' @param which indicates which timesteps to return. Can be one or more
+#' @param x A BirdFlow model
+#' @param which Indicates which timesteps to return. Can be one or more
 #'   integers indicating timesteps; character dates in the format
 #'   year-month-day e.g. `"2019-02-25"`; [`Date`][base::Dates] objects;
 #'   or `"all"` which will return distributions for all timesteps.
-#' @param from_marginals if TRUE and `x` has marginals the distribution will be
+#' @param from_marginals If TRUE and `x` has marginals the distribution will be
 #'   from the marginals even if `x` also has distributions.
-#' @return either a vector with a distribution for a single timestep or a matrix
+#' @return Either a vector with a distribution for a single timestep or a matrix
 #'   with a column for each distribution.
 #' @export
 #'
