@@ -98,7 +98,7 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
     extent_loss  <- reprojected_sum  - cropped_sum
     if (extent_loss != 0)
       message <- paste0(message, round(extent_loss / reprojected_sum * 100, 2),
-                        " of the initial value in the raster was lost while ",
+                        "% of the initial value in the raster was lost while ",
                         "cropping to the bf extent.")
   }
 
@@ -113,7 +113,7 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
 
   if (inactive_loss != 0) {
     new_message <- paste0(round(inactive_loss / reprojected_sum * 100, 2),
-                          " of the initial value in the raster was lost ",
+                          "% of the initial value in the raster was lost ",
                           " while masking inactive cells.")
 
     message <- paste(message, new_message, sep = "\n")

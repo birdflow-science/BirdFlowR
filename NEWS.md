@@ -1,3 +1,8 @@
+# BirdFlowR 0.1.0.9037
+2023-11-14
+
+`export_tif()` renamed to `export_rasters()` and extended to export PNG as well as GeoTiff files and optionally to convert small floating point numbers into larger integers for export to integer datatypes. Unit tests added.
+
 # BirdFlowR 0.1.0.9036
 2023-11-14
 
