@@ -2,7 +2,7 @@ test_that("export_rasters() works with GeoTIFFs", {
   bf <- BirdFlowModels::amewoo
   bf <- add_dynamic_mask(bf) # Backwards compatibility
   dir <- file.path(tempdir(), "export_geotiff_test")
-  if(dir.exists(dir))
+  if (dir.exists(dir))
     unlink(dir, recursive = TRUE)
   dir.create(dir)
 
@@ -31,12 +31,12 @@ test_that("export_rasters() works with PNG and reprojection", {
   bf <- add_dynamic_mask(bf) # Backwards compatibility
   dir <- file.path(tempdir(), "export_png_test")
   crs <- "EPSG:4326"
-  if(dir.exists(dir))
+  if (dir.exists(dir))
     unlink(dir, recursive = TRUE)
   dir.create(dir)
 
   # PNG write
-  expect_no_error(export_rasters(bf, dir, filetype = "PNG", crs = crs ))
+  expect_no_error(export_rasters(bf, dir, filetype = "PNG", crs = crs))
 
   # Expected files
   png_export_files <- sort(list.files(dir))
@@ -45,7 +45,7 @@ test_that("export_rasters() works with PNG and reprojection", {
   # First exported distribution is very close to first distribution
   file <- file.path(dir, png_export_files[grep("distr", png_export_files)[1]])
   r <- terra::rast(file)
-  suppressWarnings(d1 <- as_distr(r, bf))  # this is transforming with "average" interpolation
+  suppressWarnings(d1 <- as_distr(r, bf)) # "average" interpolation
   d2 <- get_distr(bf, 1) # original distribution
 
   # Double transformation using nearest one way and average the other isn't

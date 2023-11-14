@@ -67,18 +67,18 @@ export_rasters <- function(bf,
                            overwrite = TRUE) {
   stopifnot(all(what %in% c("distr", "mask")))
 
-  integerize_fun <- function(x, factor){
+  integerize_fun <- function(x, factor) {
     x <- x * factor
-    x[x < 1 & x != 0 ] <- 1
+    x[x < 1 & x != 0] <- 1
     x[, ] <- as.integer(x)
     return(x)
   }
 
-  if(length(filetype) != 1)
+  if (length(filetype) != 1)
     stop("Only one filetype can be exported at a time.")
 
   # For convenience
-  if(filetype == "TIFF")
+  if (filetype == "TIFF")
     filetype == "GTiff"
 
   # Currently only supporting PNG and GTIFF
@@ -97,13 +97,13 @@ export_rasters <- function(bf,
     )
   }
 
-  if(as_integer && is.null(factor)){
+  if (as_integer && is.null(factor)) {
     dmax <- max(get_distr(bf))
 
     factor <- switch(filetype,
-                     "GTIFF" = 1/dmax * 1000,
-                     "JPEG" = 1/dmax * 255,
-                     "PNG" = 1/dmax * 255
+                     "GTIFF" = 1 / dmax * 1000,
+                     "JPEG" = 1 / dmax * 255,
+                     "PNG" = 1 / dmax * 255
     )
 
   }
@@ -129,11 +129,10 @@ export_rasters <- function(bf,
 
   for (i in seq_along(what)) {
 
-
     # Extract mask data
     if (what[i] == "mask") {
       r <- get_dynamic_mask(bf)
-      r[ , ] <- as.integer(r)
+      r[, ] <- as.integer(r)
       r <- rasterize_distr(r, bf = bf)
       datatype <- "INT1U"
     }
@@ -145,7 +144,7 @@ export_rasters <- function(bf,
         r <- integerize_fun(r, factor = factor)
         if (max(r) < 256) {
           datatype <- "INT1U"
-        } else if(max < 65536) {
+        } else if (max < 65536) {
           datatype <- "INT2U"
         } else {
           datatype <- "INT4u"
@@ -190,7 +189,7 @@ export_rasters <- function(bf,
   # Write extent as text file
   extent <- ext(r)
   text <- sapply(c("xmin", "xmax", "ymin", "ymax"),
-                 FUN = function(x){
+                 FUN = function(x) {
                    paste0(x, " = ",
                           do.call(x, args = list(x = extent)))
                  })
