@@ -32,13 +32,13 @@ This uses R and RStudio installed directly on your system if you have both of th
 1. Install required R packages.
   Open RStudio and run the following in the console.
     ```{r Install Packages with remotes, eval=FALSE, include = TRUE}
-installed <- rownames(installed.packages())
-if (!"remotes" %in% installed)
-  install.packages("remotes")
-if (!"rnaturalearthdata" %in% installed)
-  install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
-remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+    installed <- rownames(installed.packages())
+    if (!"remotes" %in% installed)
+      install.packages("remotes")
+    if (!"rnaturalearthdata" %in% installed)
+      install.packages("rnaturalearthdata")
+    remotes::install_github("birdflow-science/BirdFlowModels")
+    remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
     ```
    Package dependencies can be a pain. If the above doesn't work you can also try the alternative method below, also executed in the RStudio console.
     ```{r Install Packages with pak, eval=FALSE, include = TRUE}
@@ -63,13 +63,14 @@ Here's how one can use the Dockerfile in Linux/MacOS (Windows should be similar)
 
 1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-1. If your computer has an Apple Silicon chip (e.g., M1 or M2), in Docker Desktop go to Settings > General and ensure "Use Virtualization Framework" is checked, then go to Features in Development > and check "Use Rosetta for x86/amd64 emulation on Apple Silcon". Apply these settings and restart Docker Desktop as needed.
+1. If your computer has an Apple Silicon chip (e.g., M1 or M2), in Docker Desktop go to Settings > General and ensure "Use Virtualization Framework" is checked, then go to Features in Development > and check "Use Rosetta for x86/amd64 emulation on Apple Silicon". Apply these settings and restart Docker Desktop as needed.
 
 1. Ensure that Docker Desktop is running.
 
 1. Clone the [BirdFlowR package](https://github.com/birdflow-science/BirdFlowR) from GitHub.
 
-1. Go to the top level BirdFlowR directory, build the image from the Dockerfile, and tag the image as 'birdflow'.  It will take a long time the first time because it will need to download the rocker/geospatial:<version> image from Docker Hub, which is the starting point before we install our custom packages via the Dockerfile.  For future builds on the same machine, rocker/geospatial will already be cached by Docker, so all it needs to do to is re-install our custom packages. The build step really only needs to happen when you want to use a newer version of the BirdFlowR repo. See also: https://rocker-project.org/images/versioned/rstudio.html
+1. Go to the top level BirdFlowR directory, build the image from the Dockerfile, and tag the image as 'birdflow'.  It will take a long time the first time because it will need to download the rocker/geospatial:<version> image from Docker Hub, which is the starting point before we install our custom packages via the Dockerfile.  For future builds on the same machine, rocker/geospatial will already be cached by Docker, so all it needs to do to is re-install our custom packages. The build step really only needs to happen when you want to use a newer version of the BirdFlowR repo. See also the
+[Rocker RStudio images](https://rocker-project.org/images/versioned/rstudio.html). 
     ```{bash eval=FALSE, include=TRUE}
     cd ~/BirdFlowR
     docker build -t birdflow . --no-cache
@@ -86,7 +87,7 @@ Here's how one can use the Dockerfile in Linux/MacOS (Windows should be similar)
 
 1. When you're done, go back to the terminal window that started the docker services, and hit Control-C.  This will send a kill signal to the container that is supporting the RStudio server process.
 
-1. The Rocker webpage shows some ways to persist directories and settings between the container and host as well, so that you don't lose your Rstudio settings and local work each time you launch/close a container.
+1. The Rocker webpage shows some ways to persist directories and settings between the container and host as well, so that you don't lose your RStudio settings and local work each time you launch/close a container.
 
 ## ebirdst
 

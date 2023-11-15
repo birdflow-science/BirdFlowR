@@ -17,11 +17,11 @@ process_rasters(
 \arguments{
 \item{res}{Output resolution in kilometers}
 
-\item{download_species}{The species code used when downloading ebirds
+\item{download_species}{The species code used when downloading eBird
 S&T data, might be "example_data" but otherwise a standard species code.}
 
 \item{sp_path}{The path used when downloading the species data - passed to
-ebirdst functions.}
+\pkg{ebirdst} functions.}
 
 \item{clip}{polygon indicating the area to process or NULL to process entire
 species range.}
@@ -32,15 +32,15 @@ within \code{preprocess_species()}}
 \value{
 A list with
 \item{distr, uci, lci}{The are the species distribution, and upper and lower
-condfidence intervals on that distribution in their flattened form. Each
+confidence intervals on that distribution in their flattened form. Each
 timestep is stored in a column with values for unmasked cells only.}
 \item{m}{The mask stored as a logical matrix with TRUE representing active
 cells in the model}
 \item{mask}{The mask stored as a terra::SpatRaster}
 }
 \description{
-Internal function to process rasters from ebirds status and trends for use
-with a BirdFlow model. Called only from \code{preprocess_species()} but
+Internal function to process rasters from eBird Status and Trends
+for use with a BirdFlow model. Called only from \code{preprocess_species()} but
 sufficiently complicated to justify being a separate function.
 }
 \keyword{internal}

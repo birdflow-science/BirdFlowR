@@ -1,20 +1,20 @@
 #' Convert a directory of BirdFlow models into a collection
 #'
 #' A BirdFlow model collection consists of 1 or more BirdFlow objects each
-#' saved to a single .Rds file, an index.Rds file and index.html file and
-#' a index_md5.txt file. This function converts a directory with model .Rds
+#' saved to a single `.Rds` file, an `index.Rds` file, an `index.html` file and
+#' a `index_md5.txt` file. This function converts a directory with model `.Rds`
 #' files into a collection. It needs to be run locally to an R session so likely
-#' the resulting directory will be syncronized with a server after it is
+#' the resulting directory will be synchronized with a server after it is
 #' created.
 #'
 #' It is primarily intended for use by the BirdFlow team but is exported from
 #' the package so anyone can use it.
 #'
-#' @param dir A local directory for containing BirdFlow models saved as .Rds
+#' @param dir A local directory for containing BirdFlow models saved as `.Rds`
 #' files. The base file name will be used as the model name and other metadata
 #' will be extracted from the BirdFlow object.
 #'
-#' @param collection_url The final URL for the BirdFLow collection (where it
+#' @param collection_url The final URL for the BirdFlow collection (where it
 #' will be served).
 #'
 #' @export

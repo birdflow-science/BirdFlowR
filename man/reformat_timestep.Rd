@@ -7,7 +7,7 @@
 reformat_timestep(x, bf)
 }
 \arguments{
-\item{x}{one (vector) or more (matrix) distributions, with column lablels
+\item{x}{one (vector) or more (matrix) distributions, with column labels
 consisting of a "t" and the timestep.}
 
 \item{bf}{A BirdFlow object}
@@ -22,7 +22,7 @@ on the value of \link[=birdflow_options]{birdflow_options("time_format")} (see
 that function for options.)
 }
 \details{
-Internally distributions are labled with "t" and the timestep integer.
+Internally distributions are labeled with "t" and the timestep integer.
 When returning them to the user \code{\link[=reformat_distr_labels]{reformat_distr_labels()}} is called to change
 the format which in turn calls this function.
 }

@@ -37,8 +37,8 @@
 #'  The last step is to round up (reducing parameters) to a cleaner number.
 #'
 #' @inheritParams preprocess_species
-#' @param sp_path The species path used with ebirdst to download and load data
-#' @param download_species The species code used with ebirdst this might be
+#' @param sp_path The species path used with \pkg{ebirdst} to download and load data
+#' @param download_species The species code used with \pkg{ebirdst} this might be
 #'   "example_data" but otherwise will be a real species code.
 #' @param project_method This is the method used to reproject it is a local
 #' variable set within `preprocess_species`.

@@ -8,7 +8,7 @@ animate_distr(distr, bf, title = species(bf), ...)
 }
 \arguments{
 \item{distr}{A set of distributions it should be a matrix with \code{n_active(bf)}
-rowsand a column for each distribution. The animation will proceed in the
+rows and a column for each distribution. The animation will proceed in the
 in column order and column names will be used a subtitles in the plot.}
 
 \item{bf}{The BirdFlow object that \code{distr} is associated with.}
@@ -37,7 +37,7 @@ observed value across all models. Alternatively if the range is highly
 variable among the columns in \code{distr} as when density spreads out from a
 single point in the results of \href{predict.BirdFlowR}{\code{predict(bf)}} you may
 want to set this smaller than the full range in which case the values will
-be trunctated to the limits (see examples).}
+be truncated to the limits (see examples).}
     \item{\code{dynamic_scale}}{Set to \code{TRUE} to have the range of the data in each
 distribution mapped to the full color gradient. This allows visualizing the
 full range of values within each timestep optimally at the cost of

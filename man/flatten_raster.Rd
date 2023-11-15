@@ -32,7 +32,7 @@ export, import, and visualize the data.
 \item \code{\link[=rasterize_distr]{rasterize_distr()}} has replaced this function in the public API.  With
 \code{format = "numeric"} it returns an identical object to \code{expand_distr()} but
 by default (`format = "SpatRaster" it goes one step further and adds spatial
-metdata to make a \link[terra:SpatRaster-class]{terra::SpatRaster}.
+metadata to make a \link[terra:SpatRaster-class]{terra::SpatRaster}.
 \item \link{index_conversions} for ways to convert among indexes of the data in
 raster row and column, index along the flattened vector, and Cartesian space.
 }

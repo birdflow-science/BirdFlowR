@@ -1,8 +1,8 @@
 #' shorten and expand distance matrices
 #'
 #' These functions are to facilitate storing just the non-duplicated elements
-#' of a distace matrix in a vector to and hdf5 file.
-#' Since the distance matrix is symetrical and has zero's on the diagonal all
+#' of a distance matrix in a vector to and hdf5 file.
+#' Since the distance matrix is symmetrical and has zero's on the diagonal all
 #' the distances can be stored in a vector that contains fewer than half the
 #' values in the full matrix.
 #'
@@ -39,7 +39,7 @@
 #'
 #' @aliases expand_distance_matrix
 #' @rdname shorten_distance_matrix
-#' @param dm a distance matrix, a symetrical n x n, matrix which contains all
+#' @param dm a distance matrix, a symmetrical n x n, matrix which contains all
 #' the distances among n locations.
 #' @param values The values from a lower triangle of a distance matrix in row
 #' major order.

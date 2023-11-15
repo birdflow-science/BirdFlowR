@@ -10,10 +10,10 @@
 #'  `get_naturalearth()` does all the work and is called by the other functions.
 #'  There are two distinct calculation methods.
 #'
-#' 1. For Mollweid, Lambert Azimuthal Equal Area,  Albers Equal Area, and
+#' 1. For Mollweide, Lambert Azimuthal Equal Area,  Albers Equal Area, and
 #' Lambert Conformal Conic projections cut at the seam:
-#'    - Find the longitude of projection center (lon_0 in proj4 string) and from
-#'     it determine longitude of the seam.
+#'    - Find the longitude of projection center ("lon_0" in proj4 string) and
+#'     from it determine longitude of the seam.
 #'    - Clip a narrow (1 m) strip out of the Natural Earth data before
 #'     transforming (in WGS84) at the seam.
 #'    - Transform to the CRS of `x`. This is now an artifact free object

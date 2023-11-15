@@ -4,7 +4,7 @@
 #'
 #' This function calculates a square, distance matrix with `n_active()` cells
 #' on each side. Each cell represents the distance between its
-#' row index and colum index treated as locations in the state space; e.g.
+#' row index and column index treated as locations in the state space; e.g.
 #' The cell  `[3, 8]` represents the distance between locations 3 and 8 in the
 #' state space vector.
 #'

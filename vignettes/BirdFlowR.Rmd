@@ -180,7 +180,7 @@ d <- get_distr(bf, c(1, 26)) # winter and summer
 r <- rasterize_distr(d, bf) # convert to SpatRaster
 ```
 
-Alternatively convert directly from BirdFlow to SpatRast with `rast()`. The second (optional) argument `which` accepts the same inputs as `which` in `get_distr()`.
+Alternatively convert directly from BirdFlow to SpatRaster with `rast()`. The second (optional) argument `which` accepts the same inputs as `which` in `get_distr()`.
 
 ```{r rast, fig.width=8, fig.height=4, out.width='100%'}
 r <- rast(bf) # all distributions
@@ -281,7 +281,7 @@ points(x, y)
 
 ## Generate routes
 `route()` will generate synthetic routes for each starting position.
-`route()` returns a BirdFlowROutes object which is at it's core a data frame 
+`route()` returns a BirdFlowRoutes object which is at it's core a data frame 
 with a row for each timestep of each route, but also includes some additional
 spatial and temporal information from the BirdFlow object.
 
@@ -291,7 +291,7 @@ head(rts$points, 4)
 ```
 
 The `route()` function can sample starting locations from the distribution for
-the starting timestep so the following is equivalent to the preceeding two sections.
+the starting timestep so the following is equivalent to the preceding two sections.
 
 ```{r route with sample}
 rts2 <- route(bf,  n = n_positions,  start = start, end = end)

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 ### Load R packages and set species.  
-The "example_data" allows processing the ebirdst example data, which doesn't require an access code.
+The "example_data" allows processing the **ebirdst** example data, which doesn't require an access code.
 
 If you plan on preprocessing any other species be sure to [setup an ebirdst access code](https://cornelllabofornithology.github.io/ebirdst/articles/ebirdst.html#access).
 

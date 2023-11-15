@@ -163,7 +163,7 @@ import_birdflow_v3 <- function(hdf5) {
   marg <- h5read(hdf5, "marginals", native = TRUE)
   nt <- length(marg)
   bf$metadata$n_transitions <- nt
-  if(is.null(bf$metadata$timestep_padding))
+  if (is.null(bf$metadata$timestep_padding))
     bf$metadata$timestep_padding <- nchar(nt)
   circular <- nt == length(unique(dates$date))
   bf$marginals <- vector(mode = "list", length = nt)

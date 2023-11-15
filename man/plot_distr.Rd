@@ -48,7 +48,7 @@ observed value across all models. Alternatively if the range is highly
 variable among the columns in \code{distr} as when density spreads out from a
 single point in the results of \href{predict.BirdFlowR}{\code{predict(bf)}} you may
 want to set this smaller than the full range in which case the values will
-be trunctated to the limits (see examples).}
+be truncated to the limits (see examples).}
 
 \item{dynamic_scale}{Set to \code{TRUE} to have the range of the data in each
 distribution mapped to the full color gradient. This allows visualizing the
@@ -106,7 +106,7 @@ by the static mask are modeled within each timestep. It,like distributions,
 only has values for active cells. Thus the dimensions of objects returned
 by \href{get_dynamic_mask()}{get_dynamic_mask(bf)} and get
 \href{get_distr()}{get_distr(bf)} will be identical.
-The purposoe of the dynamic mask is to improve efficiency of fitting,
+The purpose of the dynamic mask is to improve efficiency of fitting,
 storing, and using BirdFlow models by eliminating unlikely locations
 in the model.  The dynamic mask includes cells that have a zero in the
 eBird S&T abundance for the associated week.

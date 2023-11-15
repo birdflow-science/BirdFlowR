@@ -12,7 +12,7 @@ import_birdflow(hdf5, ..., version)
 \item{...}{Arguments to be passed to a version specific internal function.
 Likely will only be used with
 version 1 which takes two additional arguments: \describe{
-\item{tiff}{Path to the model geotiff.}
+\item{tiff}{Path to the model GeoTIFF.}
 \item{species}{An eBird species code.  It should appear in the
 \code{species_code} column of the data.frame returned by
 \code{\link[auk:get_ebird_taxonomy]{auk::get_ebird_taxonomy()}}}
@@ -48,17 +48,17 @@ version is retained in the imported object.
 \item Version 1 predates \link[=preprocess_species]{BirdFlowR preprocessing} and only
 contains marginals and a few other python objects, importing it requires
 having an associated TIFF file that has the extent and distribution data.
-The version number (1) is kept in "/version" within the HDF5 file.
+The version number (1) is kept in \code{"/version"} within the HDF5 file.
 \item Version 2 is the first version that includes preprocessing in BirdFlowR.
 It does not include dynamic masking.  The version number (2) is stored
-in  "/metadata/birdflow_version".  Some version 2 files include
+in  \code{"/metadata/birdflow_version"}.  Some version 2 files include
 hyper parameters in the HDF5 but these are not read into R.
 \item Version 3 marks the transition to dynamic masking, the HDF5 created during
-preprocessing gained "/geom/dynamic_mask" and "/distances"  (great
+preprocessing gained \code{"/geom/dynamic_mask"} and \code{"/distances"}  (great
 circle distance matrix).  As in version 2 the version is
-stored in "/metadata/birdflow_version" but unlike previous versions the
+stored in \code{"/metadata/birdflow_version"} but unlike previous versions the
 R package version that did the preprocessing is saved in character
-format to "/metdata/birdflowr_version". When version 3 files are imported
+format to \code{"/metdata/birdflowr_version"}. When version 3 files are imported
 into R with model fits the hyperparameters are saved to
 \verb{$metadata$hyperparameters} (a list).
 }

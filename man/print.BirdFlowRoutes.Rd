@@ -15,6 +15,6 @@
 \code{x} is returned invisibly and unchanged.
 }
 \description{
-This is a print method for BirdFlowRouteq
+This is a print method for BirdFlowRoutes
 objects.
 }

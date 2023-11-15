@@ -7,19 +7,19 @@
 build_collection_index(dir, collection_url)
 }
 \arguments{
-\item{dir}{A local directory for containing BirdFlow models saved as .Rds
+\item{dir}{A local directory for containing BirdFlow models saved as \code{.Rds}
 files. The base file name will be used as the model name and other metadata
 will be extracted from the BirdFlow object.}
 
-\item{collection_url}{The final URL for the BirdFLow collection (where it
+\item{collection_url}{The final URL for the BirdFlow collection (where it
 will be served).}
 }
 \description{
 A BirdFlow model collection consists of 1 or more BirdFlow objects each
-saved to a single .Rds file, an index.Rds file and index.html file and
-a index_md5.txt file. This function converts a directory with model .Rds
+saved to a single \code{.Rds} file, an \code{index.Rds} file, an \code{index.html} file and
+a \code{index_md5.txt} file. This function converts a directory with model \code{.Rds}
 files into a collection. It needs to be run locally to an R session so likely
-the resulting directory will be syncronized with a server after it is
+the resulting directory will be synchronized with a server after it is
 created.
 }
 \details{

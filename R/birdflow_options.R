@@ -20,7 +20,7 @@
 #' Set and retrieve BirdFlowR options
 #'
 #' With no arguments all the BirdFlowR options will be returned as a list. Use a
-#' single character value to retreive the value of a single option. Use one or
+#' single character value to retrieve the value of a single option. Use one or
 #' more named arguments to set options.
 #'
 #' @details
@@ -91,8 +91,8 @@ birdflow_options <- function(...) {
   # Process single unnamed arguments by returning the relevant option(s)
   if (length(args) == 1 && is.null(names(args))) {
     if (length(args[[1]]) > 1) {
-      stop("You can only retreive one option by name. Use birdflow_options() ",
-           "(no arguments) to retreive all options.")
+      stop("You can only retrieve one option by name. Use birdflow_options() ",
+           "(no arguments) to retrieve all options.")
     }
     if (args[[1]] %in% names(.birdflow_config)) {
       return(.birdflow_config[[args[[1]]]])
@@ -105,7 +105,7 @@ birdflow_options <- function(...) {
 
 
   if (any(is.null(names(args))))
-    stop("You can not set and retreive options in the same call;",
+    stop("You can not set and retrieve options in the same call;",
          " an unamed argument must be the only argument.")
 
   if (!all(names(args) %in% names(.birdflow_config))) {

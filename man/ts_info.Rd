@@ -8,12 +8,12 @@ it crosses year boundary}
 ts_info(ts)
 }
 \arguments{
-\item{ts}{A sequence of timesteps}
+\item{ts}{A sequence of timesteps.}
 }
 \value{
 A list with:
-\item{direction}{Either "forward" or "backward"}
-\item{loops}{TRUE if the sequence crosses the year boudary, FALSE if it
+\item{direction}{Either \code{"forward"} or \code{"backward"}.}
+\item{loops}{\code{TRUE} if the sequence crosses the year boundary, \code{FALSE} if it
 does not.}
 }
 \description{

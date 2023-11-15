@@ -2,7 +2,7 @@
 % Please edit documentation in R/reformat_distr_labels.R
 \name{reformat_distr_labels}
 \alias{reformat_distr_labels}
-\title{reformatt distr time labels based on birdflow_options("time_format")}
+\title{reformat distr time labels based on birdflow_options("time_format")}
 \usage{
 reformat_distr_labels(x, bf)
 }

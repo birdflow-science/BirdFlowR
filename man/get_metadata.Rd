@@ -9,14 +9,14 @@ get_metadata(x, what)
 \arguments{
 \item{x}{BirdFlow model}
 
-\item{what}{Indicates what metadata to return. The defualt \code{"all"} returns
+\item{what}{Indicates what metadata to return. The default \code{"all"} returns
 the complete list. Options are described in details.}
 }
 \value{
 Metadata from the BirdFlow model. Potentially a list.
 }
 \description{
-\code{get_metadata} retreives information about the BirdFlow model: when it was
+\code{get_metadata} retrieves information about the BirdFlow model: when it was
 created, what version of eBird Status & Trends data was used, whether it has
 been sparsified,  etc.
 }
@@ -32,7 +32,7 @@ been sparsified,  etc.
    \code{ebird_version_year} \tab The version year for the eBird Status and Trends Data the model was trained on see \link[ebirdst:ebirdst_version]{ebirdst_version()} \cr
    \code{ebird_release_year} \tab The year the eBird S & T data was released \link[ebirdst:ebirdst_version]{ebirdst_version()} \cr
    \code{ebird_access_end_date} \tab The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model. \cr
-   \code{birdflow_preprocess_date} \tab The date the data was downloaded with \pkg{ebirdst} and formated for BirdFlow model fitting (see \code{\link[=preprocess_species]{preprocess_species()}} \cr
+   \code{birdflow_preprocess_date} \tab The date the data was downloaded with \pkg{ebirdst} and formatted for BirdFlow model fitting (see \code{\link[=preprocess_species]{preprocess_species()}} \cr
    \code{birdflow_model_date} \tab The date the model was fitted and/or exported to hdf5 from Python. \cr
    \code{is_sparse} \tab Logical, if \code{TRUE} the model is sparse. See \code{\link[=sparsify]{sparsify()}} \cr
    \code{sparse_stats} \tab If the model is sparse this contains sparsification statistics (a list). \cr

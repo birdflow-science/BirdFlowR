@@ -28,7 +28,7 @@ object containing values to be treated as a distribution.}
 in.  If NULL the function will assume coordinates are in the same CRS as
 \code{bf}.}
 
-\item{normalize}{if \code{TRUE} normalize each distribuiton to sum to 1}
+\item{normalize}{if \code{TRUE} normalize each distribution to sum to 1}
 
 \item{zero_na}{if \code{TRUE} replace \code{NA} values with \code{0}.}
 }
@@ -56,6 +56,6 @@ remaining values set to 0.
 If \code{x} is a \code{\link[terra:SpatRaster-class]{terra::SpatRaster()}} it will be projected to align with the
 cells in \code{bf} with \code{\link[terra:project]{terra::project()}} using \code{method = "average"} and then
 cropped and/or extended to match the extent of \code{bf}.  Warnings will be throw
-if some of the vvalue in \code{x} is lost due to cropping or do to masking out the
-inactive cells in \code{bf}.
+if some of the value in \code{x} is lost due to cropping or due to masking out the
+inactive cells.
 }

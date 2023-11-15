@@ -15,17 +15,17 @@ make_pyear_breaks(range, bf, target_n = 8, hpy = TRUE)
 
 \item{target_n}{The target number of breaks}
 
-\item{as_hpy}{if TRUE than treat range as HPY. If FALSE as PY.}
+\item{as_hpy}{if \code{TRUE} than treat range as HPY. If FALSE as PY.}
 }
 \value{
-a sequence of break points in pyear units.
+a sequence of break points in PY or HPY units.
 }
 \description{
 This internal function is used by \code{\link[=plot_routes]{plot_routes()}} to determine where to
 set the breaks (labels) in the color scale. The color corresponds to dates
 represented as a proportion of the year.  This functions picks breaks that
 map to quarters of the year, the first of the month, the first and fifteenth
-of the month, or ebirds S&T nominal weeks. Choosing from the above based on
+of the month, or eBird S&T nominal weeks. Choosing from the above based on
 which method is closest to the target number of breaks (\code{target_n}).
 }
 \keyword{internal}

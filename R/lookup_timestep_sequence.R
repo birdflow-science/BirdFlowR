@@ -30,7 +30,7 @@
 #'  Whether called directly or via another function `lookup_timestep_sequence()`
 #'  is a flexible function that allows several ways of defining the sequence.
 #'
-#'  1. **Dates**.  Input character dates (eg "2023-06-21") or date objects to
+#'  1. **Dates**.  Input character dates (e.g. "2023-06-21") or date objects to
 #'  both `start` and `end`. The direction will be determined from the dates so
 #'  `direction` is optional.  If `direction` is used an error will be thrown if
 #'  it doesn't conform with the direction implicit in the dates.

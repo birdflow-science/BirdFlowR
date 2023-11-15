@@ -2,7 +2,7 @@
 
 #' Retrieve BirdFlow metadata
 #'
-#' `get_metadata` retreives information about the BirdFlow model: when it was
+#' `get_metadata` retrieves information about the BirdFlow model: when it was
 #' created, what version of eBird Status & Trends data was used, whether it has
 #' been sparsified,  etc.
 #'
@@ -18,14 +18,14 @@
 #'|  `ebird_version_year` | The version year for the eBird Status and Trends Data the model was trained on see [ebirdst_version()][ebirdst::ebirdst_version()] |
 #'|  `ebird_release_year` | The year the eBird S & T data was released [ebirdst_version()][ebirdst::ebirdst_version()] |
 #'| `ebird_access_end_date` | The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model. |
-#'|  `birdflow_preprocess_date` | The date the data was downloaded with \pkg{ebirdst} and formated for BirdFlow model fitting (see [preprocess_species()] |
+#'|  `birdflow_preprocess_date` | The date the data was downloaded with \pkg{ebirdst} and formatted for BirdFlow model fitting (see [preprocess_species()] |
 #'| `birdflow_model_date` | The date the model was fitted and/or exported to hdf5 from Python. |
 #'| `is_sparse` | Logical, if `TRUE` the model is sparse. See [sparsify()] |
 #'|  `sparse_stats` | If the model is sparse this contains sparsification statistics (a list). |
 #'
 #'
 #' @param x BirdFlow model
-#' @param what Indicates what metadata to return. The defualt `"all"` returns
+#' @param what Indicates what metadata to return. The default `"all"` returns
 #' the complete list. Options are described in details.
 #'
 #' @return Metadata from the BirdFlow model. Potentially a list.

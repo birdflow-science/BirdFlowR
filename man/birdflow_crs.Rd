@@ -5,23 +5,24 @@
 \alias{birdflow_crs}
 \title{Define the coordinate reference system}
 \format{
-This is a string defining a custom mollweide projection
+This is a string defining a custom Mollweide projection
 centered on the western hemisphere with well known text.
 }
 \usage{
 birdflow_crs
 }
 \description{
-This defines the coordinate reference system (crs, AKA projection)
+This defines the coordinate reference system (CRS, AKA projection)
 used by default for BirdFlow models. It is a customized
 Mollweide projection, with the longitude of origin set to -90 deg.
 centering the western hemisphere.  St Louis, Missouri is very close to
-a longitude of -90 deg. The Mollweide projection preserves area, shapes
+a longitude of -90 deg. The Mollweide projection preserves area, shape
 distortion increases with distance from the longitude of origin.
 }
 \details{
 The projection is similar to:
-https://spatialreference.org/ref/sr-org/7399/ and crs("ESRI:54009) which
+\href{https://spatialreference.org/ref/sr-org/7399/}{SR-ORG:7399} and
+\href{https://epsg.io/54009}{ESRI:54009} which
 have a longitude of origin of 0, centered on Greenwich, England.
 }
 \examples{

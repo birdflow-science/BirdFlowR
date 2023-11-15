@@ -7,7 +7,7 @@
 #' time (column) is included in the model.
 #'
 #' @param bf A BirdFlow object
-#' @param dummy_mask If TRUE a mask is addded to the object, but the mask is
+#' @param dummy_mask If TRUE a mask is added to the object, but the mask is
 #' TRUE for every cell. This yields a BirdFlow object that works with the
 #' current mask dependent version of the package but mimics and old BirdFlow
 #' model. Note if the old model included state based sparsification the

@@ -5,16 +5,16 @@
 #' set the breaks (labels) in the color scale. The color corresponds to dates
 #'  represented as a proportion of the year.  This functions picks breaks that
 #'  map to quarters of the year, the first of the month, the first and fifteenth
-#'  of the month, or ebirds S&T nominal weeks. Choosing from the above based on
+#'  of the month, or eBird S&T nominal weeks. Choosing from the above based on
 #'  which method is closest to the target number of breaks (`target_n`).
 #'
 #' @param range A range in proportion of year (PY) or half proportion of year
 #'  (HPY) values over which breaks will be calculated.
 #' @param bf A BirdFlow object (just used for $dates component)
 #' @param target_n The target number of breaks
-#' @param as_hpy if TRUE than treat range as HPY. If FALSE as PY.
+#' @param as_hpy if `TRUE` than treat range as HPY. If FALSE as PY.
 #'
-#' @return a sequence of break points in pyear units.
+#' @return a sequence of break points in PY or HPY units.
 #' @keywords internal
 make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE) {
   stopifnot(is.numeric(range), !is.na(range))

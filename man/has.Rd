@@ -6,7 +6,7 @@
 \alias{has_transitions}
 \alias{has_distr}
 \alias{has_dynamic_mask}
-\title{Does a BirdFlow object have certain compoenents}
+\title{Does a BirdFlow object have certain components}
 \usage{
 has_marginals(x)
 

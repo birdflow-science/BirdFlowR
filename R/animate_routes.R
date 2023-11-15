@@ -5,11 +5,11 @@
 #'
 #' Note when rendering early frames (at a minimum the first) there will only
 #' one point per route, resulting in a message:
-#' "geom_path()`: Each group consists of only one observation.
+#' "geom_path(): Each group consists of only one observation.
 #'  ℹ Do you need to adjust the group aesthetic?"
 #'  This will possibly be repeated while individuals remain in one location.
 #'  It can be safely ignored. The error is thrown while rendering and not
-#'  from within `animate_routes()` where it could not be suppressed. 
+#'  from within `animate_routes()` where it could not be suppressed."
 #' @param bf A BirdFlow object
 #' @inheritParams plot_routes
 #' @inheritDotParams plot_routes -routes -bf

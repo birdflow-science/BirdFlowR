@@ -48,7 +48,7 @@ the interval, in which case there should also be a TRUE in one of the
 remaining columns indicating why. }
 \item{ not_active }{ If TRUE the start or end point is not within the model
 mask }
-\item{ dynamic_mask }{ If TRUE ebirds' S&T has assigned zero probability to
+\item{ dynamic_mask }{ If TRUE eBird S&T has assigned zero probability to
 the the start or end point for the associated date and therefore it is
 excluded by the dynamic mask or state based sparsification. }
 \item{ sparse }{ TRUE if the model assigned zero probability to the interval
@@ -74,7 +74,7 @@ The core of this function is calling \code{predict()} on a distribution that has
 the starting location hot (value of 1) and all other locations zero and then
 extracting the probability of the ending week and location. The
 log of this probability is returned in the \code{log_likelihood} column. The null
-model assumes that the ebird S&T distribution and thus the \code{null_ll} column
+model assumes that the eBird S&T distribution and thus the \code{null_ll} column
 contains the log of the probability density from the S&T distribution
 at the ending week and location.
 

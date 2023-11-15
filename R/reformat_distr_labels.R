@@ -1,4 +1,4 @@
-#' reformatt distr time labels based on birdflow_options("time_format")
+#' reformat distr time labels based on birdflow_options("time_format")
 #'
 #' This is an internal function to change the labels of an object containing
 #' distributions to match the time format the user has specified in the global

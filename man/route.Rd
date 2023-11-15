@@ -9,11 +9,11 @@ route(bf, n = 1, x_coord = NULL, y_coord = NULL, from_marginals = FALSE, ...)
 \arguments{
 \item{bf}{A BirdFlow object.}
 
-\item{n}{If sampling starting positions (x_coord, and y_coord are NULL).
-Generate this many samples.  Otherwsise the \code{x_coord} and \code{y_coord} positions
+\item{n}{If sampling starting positions (\code{x_coord}, and \code{y_coord} are NULL).
+Generate this many samples.  Otherwise the \code{x_coord} and \code{y_coord} positions
 will each be duplicated \code{n} times.}
 
-\item{x_coord, y_coord}{Optional, if NULL starting points will be drawn from
+\item{x_coord, y_coord}{Optional, if \code{NULL} starting points will be drawn from
 the species distribution at the initial timestep.}
 
 \item{from_marginals}{Use \code{FALSE} (the default) to use
@@ -50,7 +50,7 @@ A BirdFlowRoutes object with columns:
 \item{\code{i}}{Location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}}).}
 \item{\code{stay_id}}{Within each route a sequential id for locations.}
 \item{\code{stay_len}}{How many timesteps was the Bird at that point during
-the stay (minumum of 1).}
+the stay (minimum of 1).}
 It also has \strong{experimental} attributes:
 \describe{
 \item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates}

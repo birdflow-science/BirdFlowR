@@ -45,7 +45,7 @@ if (FALSE) {
 #'  - [rasterize_distr()] has replaced this function in the public API.  With
 #'  `format = "numeric"` it returns an identical object to `expand_distr()` but
 #'  by default (`format = "SpatRaster" it goes one step further and adds spatial
-#'   metdata to make a [terra::SpatRaster].
+#'   metadata to make a [terra::SpatRaster].
 #'  - [index_conversions] for ways to convert among indexes of the data in
 #' raster row and column, index along the flattened vector, and Cartesian space.
 #'

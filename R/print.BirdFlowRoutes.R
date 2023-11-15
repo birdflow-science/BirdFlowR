@@ -1,6 +1,6 @@
 #' Print BirdFlow routes
 #'
-#' This is a print method for BirdFlowRouteq
+#' This is a print method for BirdFlowRoutes
 #'  objects.
 #
 #' @param x A BirdFlowRoutes object.

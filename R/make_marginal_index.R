@@ -21,7 +21,7 @@
 #' \item{transition}{transition name e.g. "T_02-02"}
 #' \item{marginal}{marginal name e.g. "M_01-02", order matches
 #'      forward transition order, so smaller number is generally first
-#'     except with the last marginal in a circular model eg "M_52-01"}
+#'     except with the last marginal in a circular model e.g. "M_52-01"}
 #'
 #' @keywords internal
 make_marginal_index <- function(bf) {
@@ -39,7 +39,7 @@ make_marginal_index <- function(bf) {
   #    transition : transition code e.g. ("T_01-02", is directional)
   #    marginal : marginal code e.g. "M_01-02", order follows
   #      forward transition order, so smaller number is generally first
-  #      except with the last marginal in a circular model eg "M_52-01"
+  #      except with the last marginal in a circular model e.g. "M_52-01"
   if (is_cyclical(bf)) {
     index <- data.frame(from = 1:n_timesteps(bf), to = c(2:n_timesteps(bf), 1),
                         direction = "forward")

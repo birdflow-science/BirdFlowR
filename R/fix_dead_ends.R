@@ -1,8 +1,8 @@
 # Note most of the documentation for this is in find_dead_ends
 # which uses @rdname fix_dead_ends so is combined with the documentation here.
 
-#' @param bf BirdFlow model
-#' @param max_attempts The maximum number of iterations to try before giving up
+#' @param bf A BirdFlow model.
+#' @param max_attempts The maximum number of iterations to try before giving up.
 #'
 #' @return `fix_dead_ends()` returns a BirdFlow model with additional marginal
 #'   row and columns zeroed out. If successful it will have no dead ends. It
@@ -58,7 +58,7 @@ fix_dead_ends <- function(bf, max_attempts = 100) {
 
 #' Fix the dead ends currently present in the model
 #'
-#' THe internal function `fix_current_dead_ends()` zeros
+#' `fix_current_dead_ends()` zeros
 #' out the row or column of the marginal that leads into current dead ends,
 #' eliminating all transitions into the existing dead end states.  It tends to
 #' create new dead ends in the process so is called iteratively by

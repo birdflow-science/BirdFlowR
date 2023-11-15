@@ -19,8 +19,8 @@
 #' If `x` is a [terra::SpatRaster()] it will be projected to align with the
 #' cells in `bf` with [terra::project()] using `method = "average"` and then
 #' cropped and/or extended to match the extent of `bf`.  Warnings will be throw
-#' if some of the vvalue in `x` is lost due to cropping or do to masking out the
-#' inactive cells in `bf`.
+#' if some of the value in `x` is lost due to cropping or due to masking out the
+#' inactive cells.
 #'
 
 #' @param x An object to be converted either a data.frame with x and y columns
@@ -78,7 +78,7 @@ as_distr.data.frame <- function(x, bf, crs = NULL, ...) {
 }
 
 #' @rdname as_distr
-#' @param normalize if `TRUE` normalize each distribuiton to sum to 1
+#' @param normalize if `TRUE` normalize each distribution to sum to 1
 #' @param zero_na  if `TRUE` replace `NA` values with `0`.
 #' @export
 as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
@@ -98,7 +98,7 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
     extent_loss  <- reprojected_sum  - cropped_sum
     if (extent_loss != 0)
       message <- paste0(message, round(extent_loss / reprojected_sum * 100, 2),
-                        " of the initial value in the raster was lost while ",
+                        "% of the initial value in the raster was lost while ",
                         "cropping to the bf extent.")
   }
 
@@ -113,7 +113,7 @@ as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {
 
   if (inactive_loss != 0) {
     new_message <- paste0(round(inactive_loss / reprojected_sum * 100, 2),
-                          " of the initial value in the raster was lost ",
+                          "% of the initial value in the raster was lost ",
                           " while masking inactive cells.")
 
     message <- paste(message, new_message, sep = "\n")

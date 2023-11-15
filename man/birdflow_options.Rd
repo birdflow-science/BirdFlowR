@@ -21,7 +21,7 @@ arguments should indicate new option settings and nothing will be returned.
 }
 \description{
 With no arguments all the BirdFlowR options will be returned as a list. Use a
-single character value to retreive the value of a single option. Use one or
+single character value to retrieve the value of a single option. Use one or
 more named arguments to set options.
 }
 \details{

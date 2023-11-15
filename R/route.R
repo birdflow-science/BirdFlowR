@@ -4,10 +4,10 @@
 #' embedded in a BirdFlow model. The output is linear, stochastic routes.
 #'
 #' @param bf A BirdFlow object.
-#' @param n If sampling starting positions (x_coord, and y_coord are NULL).
-#' Generate this many samples.  Otherwsise the `x_coord` and `y_coord` positions
+#' @param n If sampling starting positions (`x_coord`, and `y_coord` are NULL).
+#' Generate this many samples.  Otherwise the `x_coord` and `y_coord` positions
 #' will each be duplicated `n` times.
-#' @param x_coord,y_coord  Optional, if NULL starting points will be drawn from
+#' @param x_coord,y_coord  Optional, if `NULL` starting points will be drawn from
 #'  the species distribution at the initial timestep.
 #' @param from_marginals Use `FALSE` (the default) to use
 #' distributions derived directly from eBird Status and Trends when sampling
@@ -23,7 +23,7 @@
 #'    \item{`i`}{Location index for the point (see [i_to_xy()]).}
 #'    \item{`stay_id`}{Within each route a sequential id for locations.}
 #'    \item{`stay_len`}{How many timesteps was the Bird at that point during
-#'    the stay (minumum of 1).}
+#'    the stay (minimum of 1).}
 #' It also has **experimental** attributes:
 #' \describe{
 #' \item{`geom`, `species`, `dates`}{The `geom`, `species`, and `dates`
