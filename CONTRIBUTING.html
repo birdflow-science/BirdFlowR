@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,19 +70,17 @@
 <li><p><strong>Install development dependencies</strong> with <code>devtools::install_dev_deps()</code>, and then make sure the package passes R CMD check by running <code>devtools::check()</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
 <li><p><strong>Create a Git branch</strong> for your pull request (PR). You can use: <code>usethis::pr_init("brief-description-of-change")</code> or your preferred git tools.</p></li>
 <li><p><strong>Edit the code</strong>. See also the <a href="#code-style">Code style</a> section below.</p></li>
-<li><p><strong>Create or update documentation</strong>. BirdFlowR uses <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a> to document functions in structured comments above the function code. If you are adding a new function start documenting (in RStudio) by positioning the cursor in the function body and then selecting “Insert Roxygen Skeleton” from the “Code” menu. Currently all functions except trivial helper functions should be documented with Roxygen comments. If the function is not meant to be public delete the “@export” from the Roxygen comment block and add “@keywords internal”.</p></li>
-<li>
-<p><strong>Add tests</strong>. Tests use the <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> package and are stored in “/tests/testhat/” with a file that starts with “test-” and the code’s file name (usually the function name). The easiest way to do this (in RStudio) is to have the new file open and active in the Source Editor Pane and then in the console run <code>usethis::usetest()</code> it will create the appropriate file and open it with an example test that you can then edit (or open the file if it already exists).</p>
-<p>If your pull request addresses a bug or issue you may want to creat a failing test that demonstrates the issue before you make any changes to the package.</p>
-<p>You can run all tests on the package with <code>devtools::test()</code> or (in RStudio) test the currently open file with the “Run Tests” button on the upper right of the source editor. Tests will also be run while checking the package.</p>
-</li>
-<li><p><strong>Rebuild documentation</strong> either using the “Document” item in the “More” menu within the “Build” tab in RStudio.. Ctr+Shift+D, or with <code>devtools::document()</code>. This will convert the Roxygen comments into .Rd files within “man/”. The .Rd files should never be edited directly.</p></li>
+<li><p><strong>Create or update documentation</strong>. BirdFlowR uses <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a> to document functions in structured comments above the function code. If you are adding a new function start documenting (in RStudio) by positioning the cursor in the function body and then selecting “Insert Roxygen Skeleton” from the “Code” menu. All functions except trivial helper functions should be documented with Roxygen comments. If the function is not meant to be public delete the “@export” from the Roxygen comment block and add “@keywords internal”.</p></li>
+<li><p><strong>Add tests</strong>. Tests use the <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> package and are stored in “/tests/testthat/” with a file that starts with “test-” and the code’s file name (usually the function name). The easiest way to do this (in RStudio) is to have the new file open and active in the Source Editor Pane and then in the console run <code>usethis::usetest()</code>. It will create the appropriate file and open it with an example test that you can then edit (or open the file if it already exists). If your pull request addresses a bug or issue you may want to create a failing test that demonstrates the issue before you make any changes to the package.<br>
+You can run all tests on the package with <code>devtools::test()</code> or (in RStudio) test the currently open file with the “Run Tests” button on the upper right of the source editor. Tests will also be run while checking the package.</p></li>
+<li><p><strong>Rebuild documentation</strong> either using the “Document” item in the “More” menu within the “Build” tab in RStudio; Ctr+Shift+D; or with <code>devtools::document()</code>. This will convert the Roxygen comments into <code>".Rd"</code> files within <code>"man/"</code>. The <code>".Rd"</code> files should never be edited directly.</p></li>
 <li><p><strong>Increment version</strong> in the <code>DESCRIPTION</code> file.</p></li>
 <li><p><strong>Add news bullets</strong> to the top of <code>NEWS.md</code> under a new heading for the current version. It’s a good idea to use the “preview” button at the top of the code to verify that it is rendered correctly.</p></li>
-<li><p><strong>Lint</strong> the function with for example <code>lintr::lint("R/function_name.R")</code>. Please do not lint unrelated code as that will make it harder to see what your pull request is doing.</p></li>
+<li><p><strong>Lint</strong> the function with, for example, <code>lintr::lint("R/function_name.R")</code>. Please do not lint unrelated code as that will make it harder to see what your pull request is doing.</p></li>
+<li><p><strong>Spell Check</strong> Use <code>devtools::spell_check()</code> to check the package for spelling errors. Do not correct errors unrelated to your pull request. If valid words are flagged as errors you may add them to <code>./inst/WORDLIST</code>.</p></li>
 <li><p><strong>Check</strong> the package with <code>devtools::check()</code>.</p></li>
 <li><p><strong>Commit</strong> to git, and then <strong>create a pull request</strong>. One way of doing this is running <code>usethis::pr_push()</code>, and following the prompts in your browser. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>
-<li><p>Optionally <strong>check code coverage</strong> About 10 minuntes after submitting your pull request your branch will appear near the top of the “Branch Context” drop down on the <a href="https://app.codecov.io/gh/birdflow-science/BirdFlowR" class="external-link">coverage page</a>. If your new code is not covered by tests consider adding additional tests and pushing a new commit to the pull request branch - this will update the pull request and rerun the coverage.</p></li>
+<li><p>Optionally <strong>check code coverage</strong>. About 10 minutes after submitting your pull request your branch will appear near the top of the “Branch Context” drop down on the <a href="https://app.codecov.io/gh/birdflow-science/BirdFlowR" class="external-link">coverage page</a>. If your new code is not covered by tests consider adding additional tests and pushing a new commit to the pull request branch - this will update the pull request and rerun the coverage.</p></li>
 </ul></div>
 <div class="section level2">
 <h2 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
@@ -90,6 +88,11 @@
 <li><p>In general each function is stored in a file that matches its name. This rule can be broken with closely related sets of exported functions and helper functions.</p></li>
 <li><p>We use <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a>, with <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html" class="external-link">Markdown syntax</a>, for documentation.</p></li>
 <li><p>We use <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> for unit tests. Contributions with test cases included are easier to accept.</p></li>
+</ul></div>
+<div class="section level2">
+<h2 id="markdown-style">Markdown style<a class="anchor" aria-label="anchor" href="#markdown-style"></a></h2>
+<ul><li>
+<a href="https://sembr.org" class="external-link">Semantic line breaks</a> are preferred.</li>
 </ul><hr><p>The first draft of this document was created by <code>usethis::use_tidy_contributing()</code>. It has been heavily edited but some of the text is still a direct copy of the resulting tidyverse contributing guidelines. Both <strong>usethis</strong> and <strong>BirdFlowR</strong> are released under an MIT license.</p>
 </div>
 </div>

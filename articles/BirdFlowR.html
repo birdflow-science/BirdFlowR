@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -294,7 +294,7 @@ BirdFlow model, is needed for the spatial information it contains.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">26</span><span class="op">)</span><span class="op">)</span> <span class="co"># winter and summer</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rasterize.html">rasterize_distr</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">bf</span><span class="op">)</span> <span class="co"># convert to SpatRaster</span></span></code></pre></div>
-<p>Alternatively convert directly from BirdFlow to SpatRast with
+<p>Alternatively convert directly from BirdFlow to SpatRaster with
 <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code>. The second (optional) argument <code>which</code>
 accepts the same inputs as <code>which</code> in
 <code><a href="../reference/get_distr.html">get_distr()</a></code>.</p>
@@ -404,7 +404,7 @@ location.</p>
 <h3 id="generate-routes">Generate routes<a class="anchor" aria-label="anchor" href="#generate-routes"></a>
 </h3>
 <p><code><a href="../reference/route.html">route()</a></code> will generate synthetic routes for each starting
-position. <code><a href="../reference/route.html">route()</a></code> returns a BirdFlowROutes object which is
+position. <code><a href="../reference/route.html">route()</a></code> returns a BirdFlowRoutes object which is
 at it’s core a data frame with a row for each timestep of each route,
 but also includes some additional spatial and temporal information from
 the BirdFlow object.</p>
@@ -414,7 +414,7 @@ the BirdFlow object.</p>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>The <code><a href="../reference/route.html">route()</a></code> function can sample starting locations from
 the distribution for the starting timestep so the following is
-equivalent to the preceeding two sections.</p>
+equivalent to the preceding two sections.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>,  n <span class="op">=</span> <span class="va">n_positions</span>,  start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span><span class="op">)</span></span></code></pre></div>
 <p>We can specify the date range with any arguments supported by

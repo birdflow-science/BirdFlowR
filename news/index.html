@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,20 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9037" id="birdflowr-0109037">BirdFlowR 0.1.0.9037<a class="anchor" aria-label="anchor" href="#birdflowr-0109037"></a></h2>
+<p>2023-11-14*</p>
+<ul><li>Spelling
+<ul><li>Checked spelling on package documentation and vignettes.</li>
+<li>Added wordlist (extending dictionary of valid words).</li>
+<li>To check package spelling use <code>devtools::spell_check()</code>
+</li>
+<li>Added section on spelling to <code>./.github/CONTRIBUTING.html</code>
+</li>
+</ul></li>
+<li>
+<code>export_tif()</code> renamed to <code><a href="../reference/export_rasters.html">export_rasters()</a></code> and extended to export PNG as well as GeoTIFF files and optionally to convert small floating point numbers into larger integers for export to integer datatypes. Unit tests added.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9036" id="birdflowr-0109036">BirdFlowR 0.1.0.9036<a class="anchor" aria-label="anchor" href="#birdflowr-0109036"></a></h2>
 <p>2023-11-14</p>
 <ul><li>Documentation editing.</li>
@@ -64,7 +78,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0.9035" id="birdflowr-0109035">BirdFlowR 0.1.0.9035<a class="anchor" aria-label="anchor" href="#birdflowr-0109035"></a></h2>
 <p>2023-11-01</p>
 <p>Existing code should not be affected in any way by this update.</p>
-<ul><li><p>New function<code>export_tif()</code> facilitates exporting tif files of a BirdFlow model’s distributions and dynamic masks. Could be used to replace functionality that used to be in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, my motivation for adding it is for use with Avian Flu modeling.</p></li>
+<ul><li><p>New function<code>export_tif()</code> facilitates exporting TIFF files of a BirdFlow model’s distributions and dynamic masks. Could be used to replace functionality that used to be in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, my motivation for adding it is for use with Avian Flu modeling.</p></li>
 <li><p>New function <code><a href="../reference/pad_timestep.html">pad_timestep()</a></code> converts a numeric timestep into a character padded with leading zeros if appropriate. Given <code>1</code> it returns <code>"01"</code>. It is now used internally anywhere timestep or marginal names are padded. It’s also used by <code>export_tif()</code> for file naming if exporting single band TIFF files.</p></li>
 </ul></div>
     <div class="section level2">
@@ -93,7 +107,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9031" id="birdflowr-0109031">BirdFlowR 0.1.0.9031<a class="anchor" aria-label="anchor" href="#birdflowr-0109031"></a></h2>
 <p>2023-09-08</p>
-<ul><li><p>New function <code><a href="../reference/as_distr.html">as_distr()</a></code> converts raster (<code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>) and point (<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code>or data frames) data into distributions. Rasters will be projected into cells that align with the BirdFlow object’s cells and then cropped and masked. With default settings the resulting values will be normalized to sum to 1 and any NA values will be replaced with 0. POints are converted into a distribution for each point in which all the density is placed in the cell corresponding to the point. Projection of <code>sf</code> and <code>SpatRasters</code> is done automatically. Data in dataframes is assumed to match the coordinate reference system (CRS) of the BirdFlow object unless the <code>crs</code> argument is used to define the CRS. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/116" class="external-link">#116</a>.</p></li>
+<ul><li><p>New function <code><a href="../reference/as_distr.html">as_distr()</a></code> converts raster (<code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>) and point (<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code>or data frames) data into distributions. Rasters will be projected into cells that align with the BirdFlow object’s cells and then cropped and masked. With default settings the resulting values will be normalized to sum to 1 and any NA values will be replaced with 0. Points are converted into a distribution for each point in which all the density is placed in the cell corresponding to the point. Projection of <code>sf</code> and <code>SpatRasters</code> is done automatically. Data in dataframes is assumed to match the coordinate reference system (CRS) of the BirdFlow object unless the <code>crs</code> argument is used to define the CRS. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/116" class="external-link">#116</a>.</p></li>
 <li><p>bug fix in <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> that caused it to fail when <code>y</code> was omitted.</p></li>
 </ul></div>
     <div class="section level2">
@@ -126,14 +140,14 @@
 <ul><li>
 <code><a href="../reference/determine_resolution.html">determine_resolution()</a></code> does the surprisingly tricky work of figuring out what resolution yields the desired number of fitted parameters in the model.</li>
 <li>
-<code><a href="../reference/process_rasters.html">process_rasters()</a></code> genarates the resampled and aggregated rasters used by the model from the ebird S&amp;T rasters.</li>
+<code><a href="../reference/process_rasters.html">process_rasters()</a></code> generates the resampled and aggregated rasters used by the model from the eBird S&amp;T rasters.</li>
 <li>
 <code>export_birdflow()</code> exports a BirdFlow model as an hdf5 (or optionally .Rds)</li>
 </ul></div>
 <div class="section level4">
 <h4 id="truncation-new-0-1-0-9030">Truncation <strong>New</strong>
 <a class="anchor" aria-label="anchor" href="#truncation-new-0-1-0-9030"></a></h4>
-<p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a <code>...</code> argument that is used to determine model truncation, and combination of parameters supported by <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> works here (eg <code>season = prebreeding</code> and <code>start = 5, end = 10</code>). The result is a non-cyclical preprocessed mode that only covers the transitions for the given time period. Truncation does not affect the resolution determination - resolution is selected such that the full model meets the desired number of parameters or GPU RAM. This means resolution isn’t dependent on the truncation - facilitating possible later stitching back together several truncated models from the same species.</p>
+<p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a <code>...</code> argument that is used to determine model truncation, and combination of parameters supported by <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> works here (e.g. <code>season = prebreeding</code> and <code>start = 5, end = 10</code>). The result is a non-cyclical preprocessed mode that only covers the transitions for the given time period. Truncation does not affect the resolution determination - resolution is selected such that the full model meets the desired number of parameters or GPU RAM. This means resolution isn’t dependent on the truncation - facilitating possible later stitching back together several truncated models from the same species.</p>
 </div>
 </div>
 </div>
@@ -173,7 +187,7 @@
 <li>
 <code><a href="../reference/build_collection_index.html">build_collection_index()</a></code> Run on a directory with model files to add index files and convert the directory into a collection.</li>
 <li>
-<code><a href="../reference/cache_path.html">cache_path()</a></code> helper function. Returns the path to the (local) cache directory where model files are saved. It is specific to the c_ollection_url.</li>
+<code><a href="../reference/cache_path.html">cache_path()</a></code> helper function. Returns the path to the (local) cache directory where model files are saved. It is specific to the collection url.</li>
 <li>
 <code><a href="../reference/make_cache_readme.html">make_cache_readme()</a></code> helper function to make readme files in both the collection specific cache directory and it’s parent BirdFlowR cache directory. It writes the date of the last cache update as well so is run anytime new files are saved to the cache.</li>
 </ul><p>Updated:</p>
@@ -212,7 +226,7 @@
 </ol></div>
 <div class="section level4">
 <h4 id="details-0-1-0-9023">Details<a class="anchor" aria-label="anchor" href="#details-0-1-0-9023"></a></h4>
-<ul><li><p>Fixed bug in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> that caused it to sometimes create BirdFlow models where the pixels didn’t align with the origin. There’s nothing wrong with the previous behavior from a modelling standpoint but always aligning to the origin has some logistical benefits and was the original intent.</p></li>
+<ul><li><p>Fixed bug in <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> that caused it to sometimes create BirdFlow models where the pixels didn’t align with the origin. There’s nothing wrong with the previous behavior from a modeling standpoint but always aligning to the origin has some logistical benefits and was the original intent.</p></li>
 <li><p>Fixed bug in <code>reformat_distribution_labels()</code> with 3 dimensional input it would erroneously change the second dimension name to <code>"time"</code>. This caused <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> to produce confusing dimension labels when called on multiple distributions at once.</p></li>
 <li><p><code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> now allows full cycle sequence and returns full cycle sequences with <code>season = "all"</code>. This means including all timesteps and then repeating the first timestep. This also allows setting <code>start</code> and <code>end</code> to the same timestep as well (to loop through a whole year). This will change results from <code>distr_performance()</code> for whole year models.</p></li>
 <li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> gains a new argument and default behavior. It now replaces NA values in the distributions with zero prior to transforming and changing the resolution, and uses bilinear interpolation in place of nearest neighbor. Set <code>treat_na_as_zero</code> to <code>FALSE</code> for old behavior. The new way seems better though. See detailed explanation in <a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">Issue </a><a href="https://github.com/birdflow-science/BirdFlowR/issues/12" class="external-link">#12</a>.</p></li>
@@ -284,7 +298,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0.9020" id="birdflowr-0109020">BirdFlowR 0.1.0.9020<a class="anchor" aria-label="anchor" href="#birdflowr-0109020"></a></h2>
 <p>This update fixes bugs and cleans things up. It shouldn’t break existing code.</p>
 <ul><li><p>Fixed bug in <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> that caused an error with <code>metrics = "md_traverse_cor"</code> and added tests.</p></li>
-<li><p>Removed tests/testthat/Rplots.pdf from version control and added it to .gitignore.</p></li>
+<li><p>Removed <code>tests/testthat/Rplots.pdf</code> from version control and added it to <code>.gitignore</code>.</p></li>
 <li><p>Added <strong>gifski</strong> to imports, and moved <strong>rnaturalearthdata</strong> from suggests to imports. This should make installation smoother and prevent gganimate::animate from writing lots of image files in the working directory. Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/102" class="external-link">#102</a>.</p></li>
 <li><p><code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> now returns a zero row data.frame if <code>intervals</code> or <code>observations</code> have zero rows. Care is taken to return the same column names and data types as would be returned with data. Previously zero row input resulted in an unhelpful error. Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/95" class="external-link">#95</a>.</p></li>
 </ul></div>
@@ -292,7 +306,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0.9019" id="birdflowr-0109019">BirdFlowR 0.1.0.9019<a class="anchor" aria-label="anchor" href="#birdflowr-0109019"></a></h2>
 <p>2023-06-07</p>
 <div class="section level4">
-<h4 id="breaking-changes-to-timstep-sequence-arguments-0-1-0-9019">BREAKING CHANGES to timstep sequence arguments<a class="anchor" aria-label="anchor" href="#breaking-changes-to-timstep-sequence-arguments-0-1-0-9019"></a></h4>
+<h4 id="breaking-changes-to-timestep-sequence-arguments-0-1-0-9019">BREAKING CHANGES to timestep sequence arguments<a class="anchor" aria-label="anchor" href="#breaking-changes-to-timestep-sequence-arguments-0-1-0-9019"></a></h4>
 <ul><li>
 <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> gains new <code>season</code> parameter as its second argument. Previously season could be specified via <code>start</code> but it was confusing, especially when called via <code>...</code> from other functions.<br></li>
 <li>
@@ -319,7 +333,7 @@
 </li>
 </ul><p>As a general rule going forward use argument names beyond the first two arguments (<code>x</code> and <code>season</code>).</p>
 <p><strong>Default values</strong></p>
-<ul><li><p>Default values in <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> were switched from missing to NULL - similar to changes made to <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> in <a href="#birdflowr-0109009">BirdFlowR 0.1.0.9009</a>. This shouldn’t affect most users but will make setting arguments programatically slightly easier.</p></li>
+<ul><li><p>Default values in <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> were switched from missing to NULL - similar to changes made to <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> in <a href="#birdflowr-0109009">BirdFlowR 0.1.0.9009</a>. This shouldn’t affect most users but will make setting arguments programmatically slightly easier.</p></li>
 <li><p>If no arguments other than the BirdFlow object are passed to <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> it will return all timesteps. This is consistent with the change in <a href="#birdflowr-0109017">BirdFlowR 0.1.0.9017</a>. This default is now inherited by all the affected functions listed above. For some of the affected functions this is a change from the prior behavior of throwing an error if the time sequence was not specified. This is unlikely to affect existing code.</p></li>
 </ul></div>
 </div>
@@ -339,7 +353,7 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
 <div class="section level4">
 <h4 id="revamping-performance-metrics-0-1-0-9017">Revamping performance metrics<a class="anchor" aria-label="anchor" href="#revamping-performance-metrics-0-1-0-9017"></a></h4>
 <ul><li>DEPRECATED <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> is now deprecated. Use <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> instead.</li>
-<li>NEW <code>distribution_perfomance()</code> replaces <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> and has several differences.
+<li>NEW <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> replaces <code><a href="../reference/evaluate_performance.html">evaluate_performance()</a></code> and has several differences.
 <ul><li>
 <code>traverse_cor</code>is replaced by two very similar metrics <code>st_traverse_cor</code> and <code>md_traverse_cor</code>. The first is a bug free version of the old <code>traverse_cor()</code>. The second is identical except it makes the predictions starting with a marginal rather than a status and trends distribution.</li>
 <li>
@@ -373,8 +387,8 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
 <ul><li>Updated <code><a href="../reference/plot_routes.html">plot_routes()</a></code>
 <ul><li>Works over year boundary</li>
 <li>Color bar only shows the used date range.</li>
-<li>Additional arguments to control appearance:<br>
-use_seasonal_colors, pal, barheight</li>
+<li>Additional arguments to control appearance:<br><code>use_seasonal_colors</code>, <code>pal</code>, <code>barheight</code>
+</li>
 </ul></li>
 <li>Updated animate_routes() added … argument that is passed onto <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to control of appearance.</li>
 </ul></div>
@@ -437,7 +451,7 @@ use_seasonal_colors, pal, barheight</li>
 <li>
 <p>Dropped legacy import functions:</p>
 <ul><li>
-<code>import_birdflow_v1()</code> for models that predate the R Package, this import required first converting a pickle file to an hdf5 and then importing from that and a .tif file with the distributions.<br></li>
+<code>import_birdflow_v1()</code> for models that predate the R Package, this import required first converting a pickle file to an hdf5 and then importing from that and a TIFF file with the distributions.<br></li>
 <li>
 <code>import_prototype()</code> for the models that were includes in the prototype shiny app.</li>
 </ul></li>
@@ -460,7 +474,7 @@ use_seasonal_colors, pal, barheight</li>
 <h2 class="pkg-version" data-toc-text="0.1.0.9004" id="birdflowr-0109004">BirdFlowR 0.1.0.9004<a class="anchor" aria-label="anchor" href="#birdflowr-0109004"></a></h2>
 <p>Made changes to support pkgdown.</p>
 <ul><li>Added links to .yml</li>
-<li>Added BugReports field to DESCRIPTION file</li>
+<li>Added “BugReports” field to DESCRIPTION file</li>
 <li>Added a second link to URL field in DESCRIPTION file linking to github repo</li>
 <li>Switched development mode in .yml to <code>unreleased</code>. <code>auto</code> wasn’t working with version 0.0.1.x. When we have our first formal release it should be switched back to <code>auto</code>.</li>
 </ul></div>
@@ -474,7 +488,7 @@ use_seasonal_colors, pal, barheight</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9002" id="birdflowr-0109002">BirdFlowR 0.1.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-0109002"></a></h2>
 <div class="section level4">
-<h4 id="added-movment-vector-visualizations-0-1-0-9002">Added movment vector visualizations<a class="anchor" aria-label="anchor" href="#added-movment-vector-visualizations-0-1-0-9002"></a></h4>
+<h4 id="added-movement-vector-visualizations-0-1-0-9002">Added movement vector visualizations<a class="anchor" aria-label="anchor" href="#added-movement-vector-visualizations-0-1-0-9002"></a></h4>
 <p>These functions calculate and visualize the average movement out of each cell in a BirdFlow model during a particular transition.</p>
 <p>New Functions</p>
 <ul><li>
@@ -493,14 +507,14 @@ use_seasonal_colors, pal, barheight</li>
 <h4 id="summary-0-1-0-9001">Summary<a class="anchor" aria-label="anchor" href="#summary-0-1-0-9001"></a></h4>
 <p>Dynamic masking is a major overhaul of the package in which the cells the model acts on will change over time and be limited to cells with non-zero value in the eBird S&amp;T distributions. This means that the marginal dimensions will vary over time, and they will often not be square.</p>
 <p>The intent is to isolate the user and from the changes. In particular the output and input distribution objects will still contain all the active cells and most public function arguments are unchanged.</p>
-<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamicly masked distributions that conform to the marginal dimensions. <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
+<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamically masked distributions that conform to the marginal dimensions. <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
 <p>BirdFlow objects gained a great circle distance and a dynamic mask, both created in preprocessing, and variable marginals and transitions dimensions. The great circle distance is used by python and then dropped (in python) from the fitted model, as it’s fairly large and easy to recalculate with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</p>
 </div>
 <div class="section level4">
 <h4 id="detailed-changes-0-1-0-9001">Detailed changes<a class="anchor" aria-label="anchor" href="#detailed-changes-0-1-0-9001"></a></h4>
 <ul><li>
 <strong>BirdFlow object format changes</strong>
-<ul><li>New <code>/distances/</code> constains values from a distance matrix of great circle distances in km between each pair of locations - converted to a vector of non duplicated values by <code><a href="../reference/shorten_distance_matrix.html">shorten_distance_matrix()</a></code> full matrix can be recreated with <code><a href="../reference/shorten_distance_matrix.html">expand_distance_matrix()</a></code> this is added to the export HDF5 by <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> but not retained in the fitted models, the distances can be recreated with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</li>
+<ul><li>New <code>/distances/</code> contains values from a distance matrix of great circle distances in km between each pair of locations - converted to a vector of non duplicated values by <code><a href="../reference/shorten_distance_matrix.html">shorten_distance_matrix()</a></code> full matrix can be recreated with <code><a href="../reference/shorten_distance_matrix.html">expand_distance_matrix()</a></code> this is added to the export HDF5 by <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> but not retained in the fitted models, the distances can be recreated with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</li>
 <li>New <code>/geom/dynamic_mask</code> this is a matrix with a row for each active cell in the model (see <code><a href="../reference/dimensions.html">n_active()</a></code>) and a column for each timestep. The cells have a one to one relationship with the cells in `/distr’ and are TRUE if the cell is included in the model for the timestep and FALSE otherwise.</li>
 <li>
 <code>/metadata/birdflow_version</code> is now 3.<br></li>
@@ -540,7 +554,7 @@ use_seasonal_colors, pal, barheight</li>
 <ul><li>now calls <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code> and <code><a href="../reference/shorten_distance_matrix.html">shorten_distance_matrix()</a></code>to create “/distances” component of the HDF5</li>
 <li>adds “geom/dynamic_mask” which is a logical matrix indicating which cells of “/distr” are non-zero for each timestep.</li>
 <li>Has updated heuristic to set resolution based on the number of parameters given dynamic masking.</li>
-<li>new argument <code>dummy_dynamic_mask()</code> adds a dynamic mask that is all TRUE to force fitting of the prior style of birdflow object.</li>
+<li>new argument <code>dummy_dynamic_mask()</code> adds a dynamic mask that is all TRUE to force fitting of the prior style of BirdFlow object.</li>
 </ul></li>
 <li>
 <code><a href="../reference/sparsify.html">sparsify()</a></code> has not been updated to work with dynamic masks, but will now throw an error telling you that if you try to use it on a BirdFlow object with a dynamic mask.</li>
@@ -551,7 +565,7 @@ use_seasonal_colors, pal, barheight</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9075" id="birdflowr-0009075">BirdFlowR 0.0.0.9075<a class="anchor" aria-label="anchor" href="#birdflowr-0009075"></a></h2>
 <p>2023-04-18</p>
-<p>Added BirdFlow methods for generics defined in <strong>sf</strong> * <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs()</a></code> returns an object of class <code>crs</code> used by <strong>sf</strong> to define coordinate reference sytems (CRS). * <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox()</a></code> returns an object of class <code>bbox</code> containing both the extent and crs of a BirdFlow object. Can be passed to <code><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc()</a></code> to convert to a polygon.</p>
+<p>Added BirdFlow methods for generics defined in <strong>sf</strong> * <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs()</a></code> returns an object of class <code>crs</code> used by <strong>sf</strong> to define coordinate reference systems (CRS). * <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox()</a></code> returns an object of class <code>bbox</code> containing both the extent and CRS of a BirdFlow object. Can be passed to <code><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc()</a></code> to convert to a polygon.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9074" id="birdflowr-0009074">BirdFlowR 0.0.0.9074<a class="anchor" aria-label="anchor" href="#birdflowr-0009074"></a></h2>
@@ -591,7 +605,7 @@ controlled by <code>match_extent</code>.</li>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9072" id="birdflowr-0009072">BirdFlowR 0.0.0.9072<a class="anchor" aria-label="anchor" href="#birdflowr-0009072"></a></h2>
 <p>2023-04-11</p>
-<ul><li>Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of <code>ebirdst_runs</code> to character. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now defensively forces the columns that should be (and were) logical to logical, and numeric to numeric.</li>
+<ul><li>Fixed bug introduced when <strong>ebirdst</strong> 2.2021.1 converted all columns of <code>ebirdst_runs</code> to character. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now defensively forces the columns that should be (and were) logical to logical, and numeric to numeric.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9071" id="birdflowr-0009071">BirdFlowR 0.0.0.9071<a class="anchor" aria-label="anchor" href="#birdflowr-0009071"></a></h2>
@@ -618,14 +632,14 @@ controlled by <code>match_extent</code>.</li>
 <h2 class="pkg-version" data-toc-text="0.0.0.9022" id="birdflowr-0009022">BirdFlowR 0.0.0.9022<a class="anchor" aria-label="anchor" href="#birdflowr-0009022"></a></h2>
 <p>2023-03-27</p>
 <ul><li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> and related functions now throw a helpful warning if the extent is empty, and, as before, return an empty <code>sf</code> object.</p></li>
-<li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has an improved, more robust way of processing the vector data that works for specific projections. Currently it is used only for Mollweide (“moll”) and Lambert equal area (“laea”) based CRSs.</p></li>
+<li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has an improved, more robust way of processing the vector data that works for specific projections. Currently it is used only for Mollweide (“moll”) and Lambert Equal Area (“laea”) based CRSs.</p></li>
 <li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has a new argument <code>match_extent</code> which if set to <code>TRUE</code> causes the result to be clipped to the precise extent of the input object (<code>x</code>). Use <code>TRUE</code> when plotting with ggplot2 so that the Natural Earth data doesn’t result in an expanded plot extent. The default, <code>FALSE</code> is appropriate for base R plotting so that the Natural Earth Data runs up to and beyond the edge of the plot regardless of whether the aspect ratio of <code>x</code> matches the plot window’s.</p></li>
 <li><p><code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> has a new argument <code>use_old_method</code> which, if TRUE forces the less robust method regardless of projection. It is there only for testing the function and should be left at the default for all other uses.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9044" id="birdflowr-0009044">BirdFlowR 0.0.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0009044"></a></h2>
 <ul><li><p>new function <code>build_transitions(x)</code> will populate <code>x$transitions</code> with both forward and backwards transitions. This is recommended before repeated <code>forecast()</code> or predict calls as it avoids repeatedly making transitions on the fly. It does triple the memory usage for the BirdFlow object so should probably only be done with sparse BirdFlow models. It currently will work on any but throws a warning if the BirdFlow model is not sparse.</p></li>
-<li><p>previously <code>transitions_from_marginal()</code> produced a standard matrix. Now, if the mariginal is a sparse the conversion is done on and preserves the sparse matrix. Similarly, if the transition matrix is sparse <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> both calculate on sparse objects. This should speed those two functions up significantly.</p></li>
+<li><p>previously <code>transitions_from_marginal()</code> produced a standard matrix. Now, if the marginal is sparse the conversion uses and preserves the sparse matrix. Similarly, if the transition matrix is sparse <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and <code><a href="../reference/route.html">route()</a></code> both calculate on sparse objects. This should speed those two functions up significantly.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9036" id="birdflowr-0009036">BirdFlowR 0.0.0.9036<a class="anchor" aria-label="anchor" href="#birdflowr-0009036"></a></h2>
@@ -680,7 +694,7 @@ sparsification</p></li>
 <h2 class="pkg-version" data-toc-text="0.0.0.9019" id="birdflowr-0009019-2023-03-01">BirdFlowR 0.0.0.9019 2023-03-01<a class="anchor" aria-label="anchor" href="#birdflowr-0009019-2023-03-01"></a></h2>
 <ul><li>Nomenclature cleanup (round 1)
 <ul><li>collapse_distr(x, bf) -&gt; collapse_raster(raster, bf)</li>
-<li>evaluate_perfomance(bf) -&gt; evaluate_performance(x)</li>
+<li>evaluate_performance(bf) -&gt; evaluate_performance(x)</li>
 <li>expand_distr(x, bf) -&gt; expand_distr(distr, bf)</li>
 <li>get_distr(which, bf, from_marginals) -&gt; get_distr(x, which, from_marginals)</li>
 <li>get_transition(x, bf) -&gt; get_transition(x, transition)</li>
@@ -706,7 +720,7 @@ This removes the documentation from the package manual and index, but it’s sti
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9017" id="birdflowr-0009017-2023-02-27">BirdFlowR 0.0.0.9017 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009017-2023-02-27"></a></h2>
-<ul><li>Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra) <a href="https://github.com/birdflow-science/BirdFlowR/issues/17" class="external-link">#17</a>.</li>
+<ul><li>Fix bug introduced by <strong>ebirdst</strong> 2.2021.0 (switch from <strong>raster</strong> to <strong>terra</strong>) <a href="https://github.com/birdflow-science/BirdFlowR/issues/17" class="external-link">#17</a>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9003" id="birdflowr-0009003-2023-02-27">BirdFlowR 0.0.0.9003 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009003-2023-02-27"></a></h2>
@@ -716,8 +730,8 @@ This removes the documentation from the package manual and index, but it’s sti
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9002" id="birdflowr-0009002-2023-02-23">BirdFlowR 0.0.0.9002 2023-02-23<a class="anchor" aria-label="anchor" href="#birdflowr-0009002-2023-02-23"></a></h2>
 <ul><li><p>Added “biocViews:” before “Imports:” in DESCRIPTION so that devtools can find and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR needs. <a href="https://github.com/birdflow-science/BirdFlowR/issues/13" class="external-link">#13</a></p></li>
-<li><p>Vignette now attempts to load rnaturalearthdata with utils::install.packages() instead of devtools::install_cran() in attempt to fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/11" class="external-link">#11</a></p></li>
-<li><p>Updated get_naturalearth() so that it handles some cases in which it previously failed. In particular extents that span more than 180 deg of longitude, and extents that cross the 180 deg. meridian that defines the edge of the WGS84 projection both now work. The function still doesn’t handle polar projections or global extents in most projections. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/14" class="external-link">#14</a></p></li>
+<li><p>Vignette now attempts to load rnaturalearthdata with utils::install.packages() instead of <code>devtools::install_cran()</code> in attempt to fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/11" class="external-link">#11</a></p></li>
+<li><p>Updated <code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> so that it handles some cases in which it previously failed. In particular extents that span more than 180 deg of longitude, and extents that cross the 180 deg. meridian that defines the edge of the WGS84 projection both now work. The function still doesn’t handle polar projections or global extents in most projections. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/14" class="external-link">#14</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9001" id="birdflowr-0009001-2023-02-21">BirdFlowR 0.0.0.9001 2023-02-21<a class="anchor" aria-label="anchor" href="#birdflowr-0009001-2023-02-21"></a></h2>

@@ -12,7 +12,7 @@ producing a dynamic version of plot_routes()."><meta property="og:image" content
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,26 +80,26 @@ producing a dynamic version of <code><a href="plot_routes.html">plot_routes()</a
 
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="plot_routes.html">plot_routes</a></code></p><dl><dt><code>facet</code></dt>
-<dd><p>If TRUE then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
+<dd><p>If <code>TRUE</code> then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
 out into a separate subplot.</p></dd>
 
     <dt><code>max_stay_len</code></dt>
-<dd><p>Used to scale the stay length dots. If NULL
-(the default) it will be set to the maximum "stay_len" value in <code>routes</code>.
+<dd><p>Used to scale the stay length dots. If <code>NULL</code>
+(the default) it will be set to the maximum <code>"stay_len"</code> value in <code>routes</code>.
 Set it manually to keep the dot scaling consistent across multiple plots.</p></dd>
 
     <dt><code>use_seasonal_colors</code></dt>
-<dd><p>If TRUE a color scale that uses blues, greens,
+<dd><p>If <code>TRUE</code> a color scale that uses blues, greens,
 yellows, reds, for winter, spring, summer, and fall will be used with a
 consistent mapping of dates to colors regardless of the range of dates
-plotted. If FALSE then the data will be plotted using the full color scale.</p></dd>
+plotted. If <code>FALSE</code> then the data will be plotted using the full color scale.</p></dd>
 
     <dt><code>pal</code></dt>
-<dd><p>The color palette to use for plotting whe <code>use_seasonal_cols</code> is
-FALSE. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridisLite::viridis(n = 5)</a>.</p></dd>
+<dd><p>The color palette to use for plotting when <code>use_seasonal_cols</code> is
+<code>FALSE</code>. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridisLite::viridis(n = 5)</a>.</p></dd>
 
     <dt><code>barheight</code></dt>
-<dd><p>The height of the color gradient legend bar.  Passed to
+<dd><p>The height of the color gradient legend bar. Passed to
 <code><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">ggplot2::guide_colorbar()</a></code> as <code>barheight</code> argument. Depending on the output
 resolution and plot size this may need to be adjusted. Can take a number or
 the output from <code><a href="https://ggplot2.tidyverse.org/reference/reexports.html" class="external-link">ggplot2::unit()</a></code>.</p></dd>
@@ -130,7 +130,11 @@ recommended settings.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
-"geom_path()<code>: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within </code>animate_routes()` where it could not be suppressed.</p>
+"geom_path(): Each group consists of only one observation.
+ℹ Do you need to adjust the group aesthetic?"
+This will possibly be repeated while individuals remain in one location.
+It can be safely ignored. The error is thrown while rendering and not
+from within <code>animate_routes()</code> where it could not be suppressed."</p>
     </div>
 
     <div class="section level2">

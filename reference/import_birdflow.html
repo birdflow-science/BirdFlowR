@@ -20,7 +20,7 @@ finally import the model with import_birdflow()."><meta property="og:image" cont
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ finally import the model with <code>import_birdflow()</code>.</p>
 <dd><p>Arguments to be passed to a version specific internal function.
 Likely will only be used with
 version 1 which takes two additional arguments:</p><dl><dt>tiff</dt>
-<dd><p>Path to the model geotiff.</p></dd>
+<dd><p>Path to the model GeoTIFF.</p></dd>
 
 <dt>species</dt>
 <dd><p>An eBird species code.  It should appear in the
@@ -129,17 +129,17 @@ incremented on major changes to the HDF5 file structure. The file
 version is retained in the imported object.</p><ul><li><p>Version 1 predates <a href="preprocess_species.html">BirdFlowR preprocessing</a> and only
 contains marginals and a few other python objects, importing it requires
 having an associated TIFF file that has the extent and distribution data.
-The version number (1) is kept in "/version" within the HDF5 file.</p></li>
+The version number (1) is kept in <code>"/version"</code> within the HDF5 file.</p></li>
 <li><p>Version 2 is the first version that includes preprocessing in BirdFlowR.
 It does not include dynamic masking.  The version number (2) is stored
-in  "/metadata/birdflow_version".  Some version 2 files include
+in  <code>"/metadata/birdflow_version"</code>.  Some version 2 files include
 hyper parameters in the HDF5 but these are not read into R.</p></li>
 <li><p>Version 3 marks the transition to dynamic masking, the HDF5 created during
-preprocessing gained "/geom/dynamic_mask" and "/distances"  (great
+preprocessing gained <code>"/geom/dynamic_mask"</code> and <code>"/distances"</code>  (great
 circle distance matrix).  As in version 2 the version is
-stored in "/metadata/birdflow_version" but unlike previous versions the
+stored in <code>"/metadata/birdflow_version"</code> but unlike previous versions the
 R package version that did the preprocessing is saved in character
-format to "/metdata/birdflowr_version". When version 3 files are imported
+format to <code>"/metdata/birdflowr_version"</code>. When version 3 files are imported
 into R with model fits the hyperparameters are saved to
 <code>$metadata$hyperparameters</code> (a list).</p></li>
 </ul></div>

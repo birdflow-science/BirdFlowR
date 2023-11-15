@@ -20,7 +20,7 @@ same coordinate reference system (CRS) and extent as x."><meta property="og:imag
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -183,9 +183,9 @@ CRS as <code>x</code>.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>get_naturalearth()</code> does all the work and is called by the other functions.
-There are two distinct calculation methods.</p><ol><li><p>For Mollweid, Lambert Azimuthal Equal Area,  Albers Equal Area, and
-Lambert Conformal Conic projections cut at the seam:</p><ul><li><p>Find the longitude of projection center (lon_0 in proj4 string) and from
-it determine longitude of the seam.</p></li>
+There are two distinct calculation methods.</p><ol><li><p>For Mollweide, Lambert Azimuthal Equal Area,  Albers Equal Area, and
+Lambert Conformal Conic projections cut at the seam:</p><ul><li><p>Find the longitude of projection center ("lon_0" in proj4 string) and
+from it determine longitude of the seam.</p></li>
 <li><p>Clip a narrow (1 m) strip out of the Natural Earth data before
 transforming (in WGS84) at the seam.</p></li>
 <li><p>Transform to the CRS of <code>x</code>. This is now an artifact free object

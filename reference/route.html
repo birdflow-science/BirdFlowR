@@ -12,7 +12,7 @@ embedded in a BirdFlow model. The output is linear, stochastic routes."><meta pr
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,13 +75,13 @@ embedded in a BirdFlow model. The output is linear, stochastic routes.</p>
 
 
 <dt>n</dt>
-<dd><p>If sampling starting positions (x_coord, and y_coord are NULL).
-Generate this many samples.  Otherwsise the <code>x_coord</code> and <code>y_coord</code> positions
+<dd><p>If sampling starting positions (<code>x_coord</code>, and <code>y_coord</code> are NULL).
+Generate this many samples.  Otherwise the <code>x_coord</code> and <code>y_coord</code> positions
 will each be duplicated <code>n</code> times.</p></dd>
 
 
 <dt>x_coord, y_coord</dt>
-<dd><p>Optional, if NULL starting points will be drawn from
+<dd><p>Optional, if <code>NULL</code> starting points will be drawn from
 the species distribution at the initial timestep.</p></dd>
 
 
@@ -149,7 +149,7 @@ transitions and <code>n_steps + 1</code>  timesteps.</p></dd>
 
 <dt><code>stay_len</code></dt>
 <dd><p>How many timesteps was the Bird at that point during
-the stay (minumum of 1).</p></dd>
+the stay (minimum of 1).</p></dd>
 
 </dl><p>It also has <strong>experimental</strong> attributes:</p><dl><dt><code>geom</code>, <code>species</code>, <code>dates</code></dt>
 <dd><p>The <code>geom</code>, <code>species</code>, and <code>dates</code>

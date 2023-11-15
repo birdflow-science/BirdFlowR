@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,7 +158,7 @@ time this will equal <code>n_timesteps()</code>.</p>
 
 
 <p><code>crs()</code> the coordinate reference system, a character with well known
-text (wkt) by default, but see arguments.</p>
+text (WKT) by default, but see arguments.</p>
 
 
 <p><code>ext()</code> a <a href="https://rdrr.io/pkg/terra/man/SpatExtent-class.html" class="external-link">SpatExtent</a> object,
@@ -186,14 +186,14 @@ which contains the xmin, xmax, ymin, and ymax of the extent.</p>
 <p><code>ymax()</code> maximum y coordinate of extent.</p>
 
 
-<p><code>is_cyclical()</code> returns TRUE if the BirdFlow model has a transition
-from the last timestep to the first and FALSE otherwise.</p>
+<p><code>is_cyclical()</code> returns <code>TRUE</code> if the BirdFlow model has a transition
+from the last timestep to the first and <code>FALSE</code> otherwise.</p>
 
 
 <p><code>n_parameters()</code> the number of of parameters that the BirdFlow model
 contains or will contain. This is the number of cells in the marginal
 matrices + the sum of the dynamic mask for the first timestep (number of
-un masked cells at the first timestep).  If the model isn't dynamically
+unmasked cells at the first timestep).  If the model isn't dynamically
 masked this is equivalent to <code>n_active(x)^2 * n_transitons(x) + n_active(x)</code></p>
 
 

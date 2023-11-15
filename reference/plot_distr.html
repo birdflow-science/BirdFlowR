@@ -12,7 +12,7 @@ distributions."><meta property="og:image" content="https://birdflow-science.gith
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,7 +122,7 @@ observed value across all models. Alternatively if the range is highly
 variable among the columns in <code>distr</code> as when density spreads out from a
 single point in the results of <a href="predict.BirdFlowR"><code>predict(bf)</code></a> you may
 want to set this smaller than the full range in which case the values will
-be trunctated to the limits (see examples).</p></dd>
+be truncated to the limits (see examples).</p></dd>
 
 
 <dt>dynamic_scale</dt>
@@ -198,7 +198,7 @@ by the static mask are modeled within each timestep. It,like distributions,
 only has values for active cells. Thus the dimensions of objects returned
 by <a href="get_dynamic_mask()">get_dynamic_mask(bf)</a> and get
 <a href="get_distr()">get_distr(bf)</a> will be identical.
-The purposoe of the dynamic mask is to improve efficiency of fitting,
+The purpose of the dynamic mask is to improve efficiency of fitting,
 storing, and using BirdFlow models by eliminating unlikely locations
 in the model.  The dynamic mask includes cells that have a zero in the
 eBird S&amp;T abundance for the associated week.</p></li>

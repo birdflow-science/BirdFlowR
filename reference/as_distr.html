@@ -16,7 +16,7 @@ be treated as a "one hot" distribution containing mostly 0 and a single
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,7 @@ in.  If NULL the function will assume coordinates are in the same CRS as
 
 
 <dt>normalize</dt>
-<dd><p>if <code>TRUE</code> normalize each distribuiton to sum to 1</p></dd>
+<dd><p>if <code>TRUE</code> normalize each distribution to sum to 1</p></dd>
 
 
 <dt>zero_na</dt>
@@ -133,8 +133,8 @@ remaining values set to 0.</p>
 <p>If <code>x</code> is a <code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster()</a></code> it will be projected to align with the
 cells in <code>bf</code> with <code><a href="https://rdrr.io/pkg/terra/man/project.html" class="external-link">terra::project()</a></code> using <code>method = "average"</code> and then
 cropped and/or extended to match the extent of <code>bf</code>.  Warnings will be throw
-if some of the vvalue in <code>x</code> is lost due to cropping or do to masking out the
-inactive cells in <code>bf</code>.</p>
+if some of the value in <code>x</code> is lost due to cropping or due to masking out the
+inactive cells.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

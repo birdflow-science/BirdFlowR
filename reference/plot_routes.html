@@ -12,7 +12,7 @@ indicating the length of stay at each stop."><meta property="og:image" content="
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,30 +93,30 @@ indicating the length of stay at each stop.</p>
 
 
 <dt>facet</dt>
-<dd><p>If TRUE then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
+<dd><p>If <code>TRUE</code> then use <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code> to show each route
 out into a separate subplot.</p></dd>
 
 
 <dt>max_stay_len</dt>
-<dd><p>Used to scale the stay length dots. If NULL
-(the default) it will be set to the maximum "stay_len" value in <code>routes</code>.
+<dd><p>Used to scale the stay length dots. If <code>NULL</code>
+(the default) it will be set to the maximum <code>"stay_len"</code> value in <code>routes</code>.
 Set it manually to keep the dot scaling consistent across multiple plots.</p></dd>
 
 
 <dt>use_seasonal_colors</dt>
-<dd><p>If TRUE a color scale that uses blues, greens,
+<dd><p>If <code>TRUE</code> a color scale that uses blues, greens,
 yellows, reds, for winter, spring, summer, and fall will be used with a
 consistent mapping of dates to colors regardless of the range of dates
-plotted. If FALSE then the data will be plotted using the full color scale.</p></dd>
+plotted. If <code>FALSE</code> then the data will be plotted using the full color scale.</p></dd>
 
 
 <dt>pal</dt>
-<dd><p>The color palette to use for plotting whe <code>use_seasonal_cols</code> is
-FALSE. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridisLite::viridis(n = 5)</a>.</p></dd>
+<dd><p>The color palette to use for plotting when <code>use_seasonal_cols</code> is
+<code>FALSE</code>. Defaults to <a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridisLite::viridis(n = 5)</a>.</p></dd>
 
 
 <dt>barheight</dt>
-<dd><p>The height of the color gradient legend bar.  Passed to
+<dd><p>The height of the color gradient legend bar. Passed to
 <code><a href="https://ggplot2.tidyverse.org/reference/guide_colourbar.html" class="external-link">ggplot2::guide_colorbar()</a></code> as <code>barheight</code> argument. Depending on the output
 resolution and plot size this may need to be adjusted. Can take a number or
 the output from <code><a href="https://ggplot2.tidyverse.org/reference/reexports.html" class="external-link">ggplot2::unit()</a></code>.</p></dd>
@@ -147,8 +147,8 @@ used to represent stay length.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>plot.BirdflowRoutes calls plot_routes().</p>
-<p>As of 6/13/2023 route() returns an object of class <code>BirdFlowRoutes</code>
+    <p><code>plot.BirdFlowRoutes()</code> calls <code>plot_routes()</code>.</p>
+<p>As of 6/13/2023 <code><a href="route.html">route()</a></code> returns an object of class <code>BirdFlowRoutes</code>
 that is a data frame with some extra attributes tacked on.</p>
 <p>That <code><a href="route.html">route()</a></code> returns a data frame like object that contains the data
 formerly in the <code>points</code> component with columns as described here is, I think

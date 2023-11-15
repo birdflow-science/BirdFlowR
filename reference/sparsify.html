@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,13 +117,13 @@ does not use any parameters and eliminates model states entirely.</p>
 amount of sparsification; where <code>p</code> is the target
 proportion of the density to retain after eliminating all values below a
 (calculated) threshold.</p>
-<p>In the different proprtional methods the thresholds are calculated and
+<p>In the different proportional methods the thresholds are calculated and
 applied either to the whole model (<code>model</code>)  or repeatedly to its
 components (<code>conditional</code>, <code>marginal</code>).</p>
 <dl><dt><code>state</code></dt>
 <dd><p>State based sparsification eliminates states (in time and
-space) that are zero in the training, ebirdst, distributions, from
-from the marginals.</p>
+space) that are zero in the training, eBird Status and Trends, distributions
+from from the marginals.</p>
 <p>For each marginal rows are zeroed out that correspond to zeroes in the
 preceding timestep's distribution and columns are zeroed out that correspond
 to zeroes in the following timestep's distribution.  Thus all the cells in

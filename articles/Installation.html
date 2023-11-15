@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,7 +146,7 @@ Desktop</a>.</p></li>
 <li><p>If your computer has an Apple Silicon chip (e.g., M1 or M2), in
 Docker Desktop go to Settings &gt; General and ensure “Use
 Virtualization Framework” is checked, then go to Features in Development
-&gt; and check “Use Rosetta for x86/amd64 emulation on Apple Silcon”.
+&gt; and check “Use Rosetta for x86/amd64 emulation on Apple Silicon”.
 Apply these settings and restart Docker Desktop as needed.</p></li>
 <li><p>Ensure that Docker Desktop is running.</p></li>
 <li><p>Clone the <a href="https://github.com/birdflow-science/BirdFlowR" class="external-link">BirdFlowR
@@ -160,7 +160,8 @@ point before we install our custom packages via the Dockerfile. For
 future builds on the same machine, rocker/geospatial will already be
 cached by Docker, so all it needs to do to is re-install our custom
 packages. The build step really only needs to happen when you want to
-use a newer version of the BirdFlowR repo. See also: <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link uri">https://rocker-project.org/images/versioned/rstudio.html</a></version></p>
+use a newer version of the BirdFlowR repo. See also the <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link">Rocker
+RStudio images</a>.</version></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/BirdFlowR</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow . <span class="at">--no-cache</span></span></code></pre></div>
 </li>
@@ -183,7 +184,7 @@ docker services, and hit Control-C. This will send a kill signal to the
 container that is supporting the RStudio server process.</p></li>
 <li><p>The Rocker webpage shows some ways to persist directories and
 settings between the container and host as well, so that you don’t lose
-your Rstudio settings and local work each time you launch/close a
+your RStudio settings and local work each time you launch/close a
 container.</p></li>
 </ol>
 </div>

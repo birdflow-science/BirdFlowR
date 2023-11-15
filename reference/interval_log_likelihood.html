@@ -16,7 +16,7 @@ the same."><meta property="og:image" content="https://birdflow-science.github.io
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9036</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,7 +151,7 @@ remaining columns indicating why.</p></dd>
 mask</p></dd>
 
 <dt> dynamic_mask </dt>
-<dd><p>If TRUE ebirds' S&amp;T has assigned zero probability to
+<dd><p>If TRUE eBird S&amp;T has assigned zero probability to
 the the start or end point for the associated date and therefore it is
 excluded by the dynamic mask or state based sparsification.</p></dd>
 
@@ -179,7 +179,7 @@ partial model and the date falls in the uncovered portion of the year.</p></dd>
 the starting location hot (value of 1) and all other locations zero and then
 extracting the probability of the ending week and location. The
 log of this probability is returned in the <code>log_likelihood</code> column. The null
-model assumes that the ebird S&amp;T distribution and thus the <code>null_ll</code> column
+model assumes that the eBird S&amp;T distribution and thus the <code>null_ll</code> column
 contains the log of the probability density from the S&amp;T distribution
 at the ending week and location.</p>
 <p>The observations and intervals are separated into two tables to allow
