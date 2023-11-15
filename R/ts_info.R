@@ -4,10 +4,10 @@
 #' It assumes that all lags between adjacent steps that don't cross the year
 #'  boundary are either -1 or 1.
 #'
-#' @param ts A sequence of timesteps
+#' @param ts A sequence of timesteps.
 #' @return A list with:
-#' \item{direction}{Either "forward" or "backward"}
-#' \item{loops}{TRUE if the sequence crosses the year boudary, FALSE if it
+#' \item{direction}{Either `"forward"` or `"backward"`.}
+#' \item{loops}{`TRUE` if the sequence crosses the year boundary, `FALSE` if it
 #' does not.}
 #'
 #' @keywords internal

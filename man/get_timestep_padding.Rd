@@ -11,7 +11,7 @@ get_timestep_padding(bf)
 \item{bf}{}
 }
 \value{
-An integer indicating how much to pad the numbers in transtion
+An integer indicating how much to pad the numbers in transition
 names.
 }
 \description{

@@ -11,7 +11,7 @@
 #' the starting location hot (value of 1) and all other locations zero and then
 #' extracting the probability of the ending week and location. The
 #' log of this probability is returned in the `log_likelihood` column. The null
-#' model assumes that the ebird S&T distribution and thus the `null_ll` column
+#' model assumes that the eBird S&T distribution and thus the `null_ll` column
 #' contains the log of the probability density from the S&T distribution
 #' at the ending week and location.
 #'
@@ -58,7 +58,7 @@
 #'   remaining columns indicating why. }
 #'  \item{ not_active }{ If TRUE the start or end point is not within the model
 #'   mask }
-#'  \item{ dynamic_mask }{ If TRUE ebirds' S&T has assigned zero probability to
+#'  \item{ dynamic_mask }{ If TRUE eBird S&T has assigned zero probability to
 #'  the the start or end point for the associated date and therefore it is
 #'  excluded by the dynamic mask or state based sparsification. }
 #'  \item{ sparse }{ TRUE if the model assigned zero probability to the interval

@@ -15,7 +15,7 @@ fix_current_dead_ends(bf, de)
 a BirdFlow model with selected marginal rows and columns zeroed out.
 }
 \description{
-THe internal function \code{fix_current_dead_ends()} zeros
+\code{fix_current_dead_ends()} zeros
 out the row or column of the marginal that leads into current dead ends,
 eliminating all transitions into the existing dead end states.  It tends to
 create new dead ends in the process so is called iteratively by

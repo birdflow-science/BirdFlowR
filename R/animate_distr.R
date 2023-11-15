@@ -6,7 +6,7 @@
 #' plot subtitle.
 #'
 #' @param distr A set of distributions it should be a matrix with `n_active(bf)`
-#' rowsand a column for each distribution. The animation will proceed in the
+#' rows and a column for each distribution. The animation will proceed in the
 #' in column order and column names will be used a subtitles in the plot.
 #' @param bf The BirdFlow object that `distr` is associated with.
 #' @param title The title to use for the animation. The default is

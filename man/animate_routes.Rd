@@ -14,18 +14,18 @@ animate_routes(routes, bf, ...)
 \item{...}{
   Arguments passed on to \code{\link[=plot_routes]{plot_routes}}
   \describe{
-    \item{\code{facet}}{If TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
+    \item{\code{facet}}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
-    \item{\code{max_stay_len}}{Used to scale the stay length dots. If NULL
-(the default) it will be set to the maximum "stay_len" value in \code{routes}.
+    \item{\code{max_stay_len}}{Used to scale the stay length dots. If \code{NULL}
+(the default) it will be set to the maximum \code{"stay_len"} value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
-    \item{\code{use_seasonal_colors}}{If TRUE a color scale that uses blues, greens,
+    \item{\code{use_seasonal_colors}}{If \code{TRUE} a color scale that uses blues, greens,
 yellows, reds, for winter, spring, summer, and fall will be used with a
 consistent mapping of dates to colors regardless of the range of dates
-plotted. If FALSE then the data will be plotted using the full color scale.}
-    \item{\code{pal}}{The color palette to use for plotting whe \code{use_seasonal_cols} is
-FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
-    \item{\code{barheight}}{The height of the color gradient legend bar.  Passed to
+plotted. If \code{FALSE} then the data will be plotted using the full color scale.}
+    \item{\code{pal}}{The color palette to use for plotting when \code{use_seasonal_cols} is
+\code{FALSE}. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
+    \item{\code{barheight}}{The height of the color gradient legend bar. Passed to
 \code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colorbar()}} as \code{barheight} argument. Depending on the output
 resolution and plot size this may need to be adjusted. Can take a number or
 the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
@@ -47,7 +47,11 @@ producing a dynamic version of \code{\link[=plot_routes]{plot_routes()}}.
 \details{
 Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
-"geom_path()\verb{: Each group consists of only one observation. ℹ Do you need to adjust the group aesthetic?" This will possibly be repeated while individuals remain in one location. It can be safely ignored. The error is thrown while rendering and not from within }animate_routes()` where it could not be suppressed.
+"geom_path(): Each group consists of only one observation.
+ℹ Do you need to adjust the group aesthetic?"
+This will possibly be repeated while individuals remain in one location.
+It can be safely ignored. The error is thrown while rendering and not
+from within \code{animate_routes()} where it could not be suppressed."
 }
 \examples{
 

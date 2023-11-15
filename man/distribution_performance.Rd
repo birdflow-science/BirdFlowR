@@ -52,8 +52,8 @@ training distribution. The minimum observed correlation between a marginal
 and training distribution.}
 \item{st_traverse_cor, md_traverse_cor}{Indicates how well the model
 projects a distribution through multiple timesteps. They are the correlation
-between last distributionin a series projected iteratively forward from the
-fist distribution; and the ebird Status and Trends (training) distribution
+between last distribution in a series projected iteratively forward from the
+fist distribution; and the eBird Status and Trends (training) distribution
 for the last timestep. \code{st_traverse_cor} starts with the first timestep
 Status and Trends (st) distribution, while \code{md_traverse_cor} starts with a
 the marginal distribution for the same timestep;  both versions compare the

@@ -1,12 +1,11 @@
-
 #' @rdname plot_routes
 #' @title Plot Routes
 #' @description
 #' Plot routes as lines with color indicating the passage of time and dot size
 #' indicating the length of stay at each stop.
-#' @details plot.BirdflowRoutes calls plot_routes().
+#' @details `plot.BirdFlowRoutes()` calls `plot_routes()`.
 #'
-#' As of 6/13/2023 route() returns an object of class `BirdFlowRoutes`
+#' As of 6/13/2023 `route()` returns an object of class `BirdFlowRoutes`
 #' that is a data frame with some extra attributes tacked on.
 #'
 #' That `route()` returns a data frame like object that contains the data
@@ -20,18 +19,18 @@
 #'
 #' @param routes The output of [route()] or a similarly structured data frame.
 #' @param bf,x A BirdFlow object.
-#' @param facet If TRUE then use [ggplot2::facet_wrap()] to show each route
+#' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
-#' @param max_stay_len Used to scale the stay length dots. If NULL
-#' (the default) it will be set to the maximum "stay_len" value in `routes`.
+#' @param max_stay_len Used to scale the stay length dots. If `NULL`
+#' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
-#' @param use_seasonal_colors If TRUE a color scale that uses blues, greens,
+#' @param use_seasonal_colors If `TRUE` a color scale that uses blues, greens,
 #' yellows, reds, for winter, spring, summer, and fall will be used with a
 #' consistent mapping of dates to colors regardless of the range of dates
-#' plotted. If FALSE then the data will be plotted using the full color scale.
-#' @param pal The color palette to use for plotting whe `use_seasonal_cols` is
-#' FALSE. Defaults to [viridisLite::viridis(n = 5)][viridisLite::viridis()].
-#' @param barheight The height of the color gradient legend bar.  Passed to
+#' plotted. If `FALSE` then the data will be plotted using the full color scale.
+#' @param pal The color palette to use for plotting when `use_seasonal_cols` is
+#'`FALSE`. Defaults to [viridisLite::viridis(n = 5)][viridisLite::viridis()].
+#' @param barheight The height of the color gradient legend bar. Passed to
 #' [ggplot2::guide_colorbar()] as `barheight` argument. Depending on the output
 #' resolution and plot size this may need to be adjusted. Can take a number or
 #' the output from [ggplot2::unit()].

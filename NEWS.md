@@ -1,7 +1,15 @@
 # BirdFlowR 0.1.0.9037
-2023-11-14
+2023-11-14*
 
-`export_tif()` renamed to `export_rasters()` and extended to export PNG as well as GeoTiff files and optionally to convert small floating point numbers into larger integers for export to integer datatypes. Unit tests added.
+* Spelling
+  * Checked spelling on package documentation and vignettes. 
+  * Added wordlist (extending dictionary of valid words). 
+  * To check package spelling use `devtools::spell_check()`
+  * Added section on spelling to  `./.github/CONTRIBUTING.html` 
+
+* `export_tif()` renamed to `export_rasters()` and extended to export PNG as 
+well as GeoTIFF files and optionally to convert small floating point numbers 
+into larger integers for export to integer datatypes. Unit tests added.
 
 # BirdFlowR 0.1.0.9036
 2023-11-14
@@ -13,7 +21,7 @@
 
 Existing code should not be affected in any way by this update.
 
-* New function`export_tif()` facilitates exporting tif files of a BirdFlow 
+* New function`export_tif()` facilitates exporting TIFF files of a BirdFlow 
 model's distributions and dynamic masks. Could be used to replace 
 functionality that used to be in `preprocess_species()`, my motivation for 
 adding it is for use with Avian Flu modeling. 
@@ -44,7 +52,8 @@ used by `export_tif()` for file naming if exporting single band TIFF files.
 # BirdFlowR 0.1.0.9032
 2023-09-20
 
-* BREAKING change to column names in data frame returned by `rasterize_distr(format = "dataframe")` 
+* BREAKING change to column names in data frame returned by 
+`rasterize_distr(format = "dataframe")` 
   * Old `"time"` is now `"label"` and is an ordered factor it is derived from
   the column names in the distribution which are often but not always dates.
   * Old `"density"` is now `"value"`. 
@@ -60,7 +69,7 @@ used by `export_tif()` for file naming if exporting single band TIFF files.
 (`sf::sf`or data frames) data into distributions. Rasters will be projected
 into cells that align with the BirdFlow object's cells and then cropped
 and masked. With default settings the resulting values will be 
-normalized to sum to 1 and any NA values will be replaced with 0.  POints are 
+normalized to sum to 1 and any NA values will be replaced with 0.  Points are 
 converted into a distribution for each point in which all the 
 density is placed in the cell corresponding to the point. Projection of `sf`
 and `SpatRasters` is done automatically. Data in dataframes is assumed to 
@@ -95,7 +104,8 @@ arguments were added during updates to allow simulating the older behavior for
 testing the update, and in both cases we've decided we like the newer behavior.
 
 Although these are breaking changes in that previously supported arguments are
-dropped, the new behavior mimics the old default behavior and I expect in most cases the values were not set differently than the default.
+dropped, the new behavior mimics the old default behavior and I expect in most 
+cases the values were not set differently than the default.
 
 **Note:** Although TIFF output of abundances is no longer directly supported by
 preprocess species any model's abundance can be exported as TIFF with:
@@ -114,24 +124,21 @@ are all internal helper functions.  They are:
  * `determine_resolution()` does the surprisingly tricky work of figuring
  out what resolution yields the desired number of fitted parameters in the 
  model.
- * `process_rasters()` genarates the resampled and aggregated rasters used
- by the model from the ebird S&T rasters.
+ * `process_rasters()` generates the resampled and aggregated rasters used
+ by the model from the eBird S&T rasters.
  * `export_birdflow()` exports a BirdFlow model as an hdf5 (or optionally .Rds)
 
 ### Truncation **New**
 
 `preprocess_species()` gains a `...` argument that is used to determine model
-truncation, and combination of parameters supported by `lookup_timestep_sequence()` works here (eg `season = prebreeding` and `start = 5, end = 10`).  The result is a non-cyclical preprocessed mode that only covers
-the transitions for the given time period.  Truncation does not affect the 
-resolution determination - resolution is selected such that the full model 
-meets the desired number of parameters or GPU RAM. This means resolution isn't
-dependent on the truncation - facilitating possible later stitching back 
+truncation, and combination of parameters supported by 
+`lookup_timestep_sequence()` works here (e.g. `season = prebreeding` and 
+`start = 5, end = 10`).  The result is a non-cyclical preprocessed mode that 
+only covers the transitions for the given time period.  Truncation does not 
+affect the resolution determination - resolution is selected such that the full
+model meets the desired number of parameters or GPU RAM. This means resolution 
+isn't dependent on the truncation - facilitating possible later stitching back 
 together several truncated models from the same species.
-
-
-
-
-
 
 # BirdFlowR 0.1.0.9029
 2023-07-25
@@ -172,7 +179,7 @@ Fixed bug in 'make_cache_readme()'
    to  add index files and convert the directory into a collection.
  * `cache_path()`  helper function. Returns the path to the (local)
    cache directory where model files are saved.  It is specific
-   to the c_ollection_url.
+   to the collection url.
  * `make_cache_readme()` helper function to make readme files in
    both the collection specific cache directory and it's parent
    BirdFlowR cache directory. It writes the date of the last
@@ -242,7 +249,7 @@ model to a date range with `truncate_birdflow()`.
 
 * Fixed bug in `preprocess_species()` that caused it to sometimes create
   BirdFlow models where the pixels didn't align with the origin.  There's 
-  nothing wrong with the previous behavior from a modelling standpoint
+  nothing wrong with the previous behavior from a modeling standpoint
   but always aligning to the origin has some logistical benefits and was the
   original intent. 
 
@@ -374,8 +381,8 @@ This update fixes bugs and cleans things up.  It shouldn't break existing code.
 * Fixed bug in `distribution_performance()` that caused an error with
 `metrics = "md_traverse_cor"` and added tests.
 
-* Removed tests/testthat/Rplots.pdf from version control and added it
-to .gitignore.
+* Removed `tests/testthat/Rplots.pdf` from version control and added it
+to `.gitignore`.
 
 * Added **gifski** to imports, and moved **rnaturalearthdata** from suggests to 
 imports. This should make installation smoother and prevent gganimate::animate
@@ -389,7 +396,7 @@ resulted in an unhelpful error. Closes #95.
 # BirdFlowR 0.1.0.9019
 2023-06-07
 
-### BREAKING CHANGES to timstep sequence arguments 
+### BREAKING CHANGES to timestep sequence arguments 
  
   * `lookup_timestep_sequence()` gains new `season` parameter as 
   its second argument. Previously season could be specified via `start` but it 
@@ -435,7 +442,7 @@ resulted in an unhelpful error. Closes #95.
   * Default values in `lookup_timestep_sequence()` were switched from missing to
   NULL - similar to changes made to `preprocess_species()` in 
   [BirdFlowR 0.1.0.9009]. This shouldn't affect most users but will make 
-  setting arguments programatically slightly easier.
+  setting arguments programmatically slightly easier.
   
   * If no arguments other than the BirdFlow object are passed to 
   `lookup_timestep_sequence()` it will return all timesteps.  This is consistent
@@ -469,7 +476,7 @@ resulted in an unhelpful error. Closes #95.
 ### Revamping performance metrics
 
 * DEPRECATED `evaluate_performance()` is now deprecated. Use  `distribution_performance()` instead.
-* NEW `distribution_perfomance()` replaces `evaluate_performance()` and has several differences.
+* NEW `distribution_performance()` replaces `evaluate_performance()` and has several differences.
   * `traverse_cor`is replaced by two very similar metrics `st_traverse_cor` and `md_traverse_cor`. The first is a bug free version of the old `traverse_cor()`. The second is identical except it makes the predictions starting with a marginal rather than a status and trends distribution. 
   * `*_traverse_cor` metrics now utilize the dynamic mask to filter which cells are used in the correlation calculation.
   * `...` arguments are passed to `lookup_timestep_sequence()` to allow
@@ -506,7 +513,7 @@ previously there was no default. This is mostly to make use in other functions v
   * Works over year boundary
   * Color bar only shows the used date range.
   * Additional arguments to control appearance:    
-     use_seasonal_colors, pal, barheight
+     `use_seasonal_colors`, `pal`, `barheight`
   
 * Updated animate_routes() added ... argument that is passed onto
   `plot_routes()` to control of appearance. 
@@ -570,7 +577,7 @@ easier to script around `preprocess_species()`
 * Dropped legacy import functions:
   - `import_birdflow_v1()` for models that predate the R Package, this import
   required first converting a pickle file to an hdf5 and then importing from 
-  that and a .tif file with the distributions.  
+  that and a TIFF file with the distributions.  
   - `import_prototype()` for the models that were includes in the prototype 
   shiny app.
 
@@ -597,7 +604,7 @@ Closes #76.
 Made changes to support pkgdown.
 
 * Added links to .yml
-* Added BugReports field to DESCRIPTION file
+* Added "BugReports" field to DESCRIPTION file
 * Added a second link to URL field in DESCRIPTION file linking to github repo
 * Switched development mode in .yml to `unreleased`.  `auto` wasn't working with
   version 0.0.1.x.  When we have our first formal release it should
@@ -615,7 +622,7 @@ be more pronounced with lower correlations.
 
 # BirdFlowR 0.1.0.9002
 
-### Added movment vector visualizations
+### Added movement vector visualizations
 
 These functions calculate and visualize the average movement out of each cell 
 in a BirdFlow model during a particular transition.
@@ -645,9 +652,9 @@ particular the output and input distribution objects will still contain all
 the active cells and most public function arguments are unchanged. 
 
 Functions that interact with the marginals now have to convert internally 
-between standard distributions covering all active cells, and the the dynamicly
-masked distributions that conform to the marginal dimensions. `predict()`, 
-`route()`, and `import_birdflow()` all had substantial updates.
+between standard distributions covering all active cells, and the the 
+dynamically masked distributions that conform to the marginal dimensions. 
+`predict()`, `route()`, and `import_birdflow()` all had substantial updates.
 
 BirdFlow objects gained a great circle distance and a dynamic mask, both created
 in preprocessing, and variable marginals and transitions dimensions.  The great
@@ -659,7 +666,7 @@ model, as it's fairly large and easy to recalculate with
 ### Detailed changes
 
  * **BirdFlow object format changes**
-    - New `/distances/` constains values from a distance matrix of
+    - New `/distances/` contains values from a distance matrix of
       great circle distances in km between each pair of locations - converted 
       to a vector of non duplicated values by `shorten_distance_matrix()` full 
       matrix can be recreated with `expand_distance_matrix()` this is added to 
@@ -709,7 +716,7 @@ model, as it's fairly large and easy to recalculate with
        - Has updated heuristic to set resolution based on the number of
          parameters given dynamic masking.
        - new argument `dummy_dynamic_mask()` adds a dynamic mask that is all
-         TRUE to force fitting of the prior style of birdflow object.
+         TRUE to force fitting of the prior style of BirdFlow object.
    - `sparsify()` has not been updated to work with dynamic masks, but will now
       throw an error telling you that if you try to use it on a BirdFlow object
       with a dynamic mask.
@@ -719,9 +726,9 @@ model, as it's fairly large and easy to recalculate with
 
 Added BirdFlow methods for generics defined in **sf**
 * `st_crs()`  returns an object of class `crs` used by **sf** to define 
-  coordinate reference sytems (CRS).
+  coordinate reference systems (CRS).
 * `st_bbox()` returns an object of class `bbox` containing both the extent and
-  crs of a BirdFlow object.  Can be passed to `st_as_sfc()` to convert to a 
+  CRS of a BirdFlow object.  Can be passed to `st_as_sfc()` to convert to a 
   polygon.
 
 
@@ -779,7 +786,7 @@ Added BirdFlow methods for generics defined in **sf**
 # BirdFlowR 0.0.0.9072
 2023-04-11
 
-* Fixed bug introduced when ebirdst 2.2021.1 converted all coljumns of
+* Fixed bug introduced when **ebirdst** 2.2021.1 converted all columns of
  `ebirdst_runs` to character. `preprocess_species()` now defensively forces the 
   columns that should be (and were) logical to logical, and numeric to numeric. 
 
@@ -828,7 +835,7 @@ the extent is empty, and, as before, return an empty `sf` object.
 
 * `get_naturalearth()` has an improved, more robust way of processing the vector
 data that works for specific projections. Currently it is used only for 
-Mollweide ("moll") and Lambert equal area ("laea") based CRSs.
+Mollweide ("moll") and Lambert Equal Area ("laea") based CRSs.
 
 * `get_naturalearth()` has a new argument `match_extent` which if set to `TRUE`
 causes the result to be clipped to the precise extent of the input object (`x`).
@@ -851,7 +858,7 @@ only be done with sparse BirdFlow models. It currently will work on any but
 throws a warning if the BirdFlow model is not sparse. 
 
 * previously `transitions_from_marginal()` produced a standard matrix. Now, if 
-the mariginal is a sparse the conversion is done on and preserves the sparse 
+the marginal is sparse the conversion uses and preserves the sparse 
 matrix.  Similarly, if the transition matrix is sparse `predict()` and `route()`
 both calculate on sparse objects.  This should speed those two functions up
 significantly.
@@ -948,7 +955,7 @@ it is `TRUE`.
 
 * Nomenclature cleanup (round 1)
   - collapse_distr(x, bf) -> collapse_raster(raster, bf)
-  - evaluate_perfomance(bf) -> evaluate_performance(x) 
+  - evaluate_performance(bf) -> evaluate_performance(x) 
   - expand_distr(x, bf) -> expand_distr(distr, bf)
   - get_distr(which, bf, from_marginals) -> get_distr(x, which, from_marginals) 
   - get_transition(x, bf) -> get_transition(x, transition) 
@@ -977,8 +984,8 @@ it is `TRUE`.
 
 # BirdFlowR 0.0.0.9017  2023-02-27
 
-* Fix bug introduced by ebirdst 2.2021.0 (switch from raster to terra)
-[#17](https://github.com/birdflow-science/BirdFlowR/issues/17).
+* Fix bug introduced by **ebirdst** 2.2021.0 (switch from **raster** to 
+**terra**) [#17](https://github.com/birdflow-science/BirdFlowR/issues/17).
 
 # BirdFlowR 0.0.0.9003  2023-02-27
 
@@ -995,10 +1002,10 @@ and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR
 needs. [#13](https://github.com/birdflow-science/BirdFlowR/issues/13) 
 
 * Vignette now attempts to load rnaturalearthdata with utils::install.packages() 
-  instead of devtools::install_cran() in attempt to fix
+  instead of `devtools::install_cran()` in attempt to fix
   [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
 
-* Updated get_naturalearth() so that it handles some cases in which it 
+* Updated `get_naturalearth()` so that it handles some cases in which it 
   previously failed.  In particular extents that span more than 180 deg of 
   longitude, and extents that cross the 180 deg. meridian that defines the edge 
   of the WGS84 projection both now work. The function still doesn't handle 

@@ -18,7 +18,7 @@ names.  It has columns:
 \item{transition}{transition name e.g. "T_02-02"}
 \item{marginal}{marginal name e.g. "M_01-02", order matches
 forward transition order, so smaller number is generally first
-except with the last marginal in a circular model eg "M_52-01"}
+except with the last marginal in a circular model e.g. "M_52-01"}
 }
 \description{
 \code{make_marginal_index()} is called by \verb{[import_birdflow()]}

@@ -5,11 +5,11 @@
 #' on the value of [birdflow_options("time_format")][birdflow_options()] (see
 #' that function for options.)
 #'
-#' Internally distributions are labled with "t" and the timestep integer.
+#' Internally distributions are labeled with "t" and the timestep integer.
 #' When returning them to the user [reformat_distr_labels()] is called to change
 #' the format which in turn calls this function.
 #'
-#' @param x  one (vector) or more (matrix) distributions, with column lablels
+#' @param x  one (vector) or more (matrix) distributions, with column labels
 #'   consisting of a "t" and the timestep.
 #' @param bf A BirdFlow object
 #' @keywords internal

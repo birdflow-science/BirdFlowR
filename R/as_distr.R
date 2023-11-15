@@ -19,8 +19,8 @@
 #' If `x` is a [terra::SpatRaster()] it will be projected to align with the
 #' cells in `bf` with [terra::project()] using `method = "average"` and then
 #' cropped and/or extended to match the extent of `bf`.  Warnings will be throw
-#' if some of the vvalue in `x` is lost due to cropping or do to masking out the
-#' inactive cells in `bf`.
+#' if some of the value in `x` is lost due to cropping or due to masking out the
+#' inactive cells.
 #'
 
 #' @param x An object to be converted either a data.frame with x and y columns
@@ -78,7 +78,7 @@ as_distr.data.frame <- function(x, bf, crs = NULL, ...) {
 }
 
 #' @rdname as_distr
-#' @param normalize if `TRUE` normalize each distribuiton to sum to 1
+#' @param normalize if `TRUE` normalize each distribution to sum to 1
 #' @param zero_na  if `TRUE` replace `NA` values with `0`.
 #' @export
 as_distr.SpatRaster <- function(x, bf, normalize = TRUE, zero_na = TRUE, ...) {

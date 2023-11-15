@@ -4,7 +4,7 @@
 #' @return `n_parameters()` the number of of parameters that the BirdFlow model
 #' contains or will contain. This is the number of cells in the marginal
 #' matrices + the sum of the dynamic mask for the first timestep (number of
-#' un masked cells at the first timestep).  If the model isn't dynamically
+#' unmasked cells at the first timestep).  If the model isn't dynamically
 #' masked this is equivalent to `n_active(x)^2 * n_transitons(x) + n_active(x)`
 n_parameters <- function(x) {
   if (has_dynamic_mask(x)) {

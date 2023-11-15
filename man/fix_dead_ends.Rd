@@ -12,9 +12,9 @@ fix_dead_ends(bf, max_attempts = 100)
 \arguments{
 \item{x}{\code{BirdFlow} model}
 
-\item{bf}{BirdFlow model}
+\item{bf}{A BirdFlow model.}
 
-\item{max_attempts}{The maximum number of iterations to try before giving up}
+\item{max_attempts}{The maximum number of iterations to try before giving up.}
 }
 \value{
 `find_dead_ends() returns a data.frame with columns:\tabular{ll}{

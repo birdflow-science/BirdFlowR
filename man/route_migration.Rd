@@ -29,7 +29,7 @@ A BirdFlowRoutes object with columns:
 \item{\code{i}}{Location index for the point (see \code{\link[=i_to_xy]{i_to_xy()}}).}
 \item{\code{stay_id}}{Within each route a sequential id for locations.}
 \item{\code{stay_len}}{How many timesteps was the Bird at that point during
-the stay (minumum of 1).}
+the stay (minimum of 1).}
 It also has \strong{experimental} attributes:
 \describe{
 \item{\code{geom}, \code{species}, \code{dates}}{The \code{geom}, \code{species}, and \code{dates}

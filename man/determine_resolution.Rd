@@ -16,7 +16,7 @@ determine_resolution(
 )
 }
 \arguments{
-\item{sp_path}{The species path used with ebirdst to download and load data}
+\item{sp_path}{The species path used with \pkg{ebirdst} to download and load data}
 
 \item{res}{The target resolution of the BirdFlow model in kilometers. If
 \code{res} is NULL (default) then a resolution that results in less than \code{max_params}
@@ -27,7 +27,7 @@ the number of significant digits.}
 model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}. Note: the reduction in
-paramters resulting from truncation (see \code{...}) is not factored into the
+parameters resulting from truncation (see \code{...}) is not factored into the
 calculation.}
 
 \item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
@@ -44,7 +44,7 @@ projection eBird has assigned to this species - see
 \code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
-\item{download_species}{The species code used with ebirdst this might be
+\item{download_species}{The species code used with \pkg{ebirdst} this might be
 "example_data" but otherwise will be a real species code.}
 
 \item{project_method}{This is the method used to reproject it is a local

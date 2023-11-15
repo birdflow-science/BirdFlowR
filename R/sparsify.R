@@ -18,14 +18,14 @@
 #' proportion of the density to retain after eliminating all values below a
 #' (calculated) threshold.
 #'
-#' In the different proprtional methods the thresholds are calculated and
+#' In the different proportional methods the thresholds are calculated and
 #' applied either to the whole model (`model`)  or repeatedly to its
 #' components (`conditional`, `marginal`).
 #'
 #' \describe{
 #' \item{`state`}{State based sparsification eliminates states (in time and
-#' space) that are zero in the training, ebirdst, distributions, from
-#'  from the marginals.
+#' space) that are zero in the training, eBird Status and Trends, distributions
+#'  from from the marginals.
 #'
 #'  For each marginal rows are zeroed out that correspond to zeroes in the
 #'  preceding timestep's distribution and columns are zeroed out that correspond
@@ -279,7 +279,7 @@ sparsify <- function(x, method, p, fix = TRUE) {
   # preceding timestep's distribution and set columns to zero that correspond
   # with zero in the following timestep's distribution. Thus there will be no
   # transitions into or out of the locations (in time and space) that are
-  # zero in the the training (ebirdst) distributions.
+  # zero in the the training (eBird S&T) distributions.
   #----------------------------------------------------------------------------#
   if (any(method == "state")) {
     d <- get_distr(x)

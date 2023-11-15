@@ -115,9 +115,9 @@ if the input isn't within the extent; or for (\code{i}) within the active cells.
 
 For most CRSs longitude translates to the x coordinate and
 latitude to the y coordinate. The traditional order of coordinates
-lat and lon; row and col, and x and y are not consistent, but that is
-still what is used here, i.e. lat, row, and y are generally correlated,
-and are first, first, and second in argument order.
+latitude and longitude; row and column, and x and y are not consistent, but
+that is still what is used here, i.e. latitude, row, and y are generally
+correlated, and are first, first, and second in argument order.
 }
 \seealso{
 \itemize{

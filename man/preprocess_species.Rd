@@ -48,7 +48,7 @@ or produce one when called with \link[terra:vect]{vect(clip)}}
 model should contain. Ignored if \code{res} is not NULL.  Otherwise a resolution
 will be chosen that yields this many fitted parameters. See \code{gpu_ram} for
 the default way of setting \code{max_params} and \code{res}. Note: the reduction in
-paramters resulting from truncation (see \code{...}) is not factored into the
+parameters resulting from truncation (see \code{...}) is not factored into the
 calculation.}
 
 \item{gpu_ram}{Gigabytes of ram on GPU machine that will fit the models.
@@ -95,9 +95,9 @@ and transitions.  Use \code{...} to truncate the model to part of the year.
 The maximum number of parameters that can be fit is machine dependent.
 2023-02-10 we tested under different resolutions with "amewoo" and
 identified bounds on the maximum.\tabular{lllll}{
-   Machine \tab GPU Ram (GB) \tab Lower Bound (worked) \tab Upper Bound (failed) \tab Params / GB \cr
-   titanx gpu \tab 12GB \tab 306804561 \tab 334693725 \tab 25567047 \cr
-   m40 gpu \tab 24GB \tab 557395226 \tab 610352178 \tab 23224801 \cr
+   Machine \tab GPU Ram (GB) \tab Lower Bound (worked) \tab Upper Bound (failed) \tab Parameters / GB \cr
+   titanx GPU \tab 12GB \tab 306804561 \tab 334693725 \tab 25567047 \cr
+   m40 GPU \tab 24GB \tab 557395226 \tab 610352178 \tab 23224801 \cr
 }
 
 

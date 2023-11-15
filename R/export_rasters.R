@@ -28,10 +28,10 @@
 #' @param what Either `"distr"`, `"mask"` or both as a two element vector.
 #'   `what` controls what components of `bf` are
 #'    exported.
-#' @param filetype The filttype to export to, one
-#' `"GTiff"` (for GeoTIFF files), or `"PNG"`
+#' @param filetype The file type to export: `"GTiff"` for GeoTIFF files,
+#' or `"PNG"` for Portable Network Graphics.
 #' @param as_integer Should the data be written as integers. With the default,
-#' `NULL`, integers will be written for the PNG filetype as they don't
+#' `NULL`, integers will be written for the PNG file type as they don't
 #' support real numbers and with GeoTIFFs floating point numbers
 #' will be written.
 #' @param factor To create integer output (`as_integer = TRUE`) the floating
@@ -39,8 +39,8 @@
 #' `factor` is `NULL` (the default) then the factor will be x / the maximum
 #'  value in any distribution in `bf`, where x is 255 for `PNG`
 #'  filetypes and 1000 for `GTiff`.  Thus the maximum integer value will be 255
-#'  for PNG files, and 1000 for GeoTiff files.
-#'  @param overwrite Should pre-existing files be overwritten with new output.
+#'  for PNG files, and 1000 for GeoTIFF files.
+#' @param overwrite Should pre-existing files be overwritten with new output.
 #'
 #' @return Nothing is returned, but raster files are written to `dir`
 #' @export

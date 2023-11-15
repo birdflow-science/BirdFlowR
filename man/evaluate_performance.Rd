@@ -16,7 +16,7 @@ evaluate_performance(x, distr_only = FALSE)
 \describe{
 \item{mean_step_cor}{Indicates on average how well the model project a
 single timestep. The mean correlation, across all timesteps, between the
-training (ebirdst) distribution projected forward one timestep, and the
+training (eBird S&T) distribution projected forward one timestep, and the
 training distribution for the projected timestep.
 }
 \item{min_step_cor}{Indicates the quality of the worst single step
@@ -39,9 +39,9 @@ DEPRECATED FUNCTION.  Please use \code{\link[=distribution_performance]{distribu
 }
 \details{
 Calculate several the correlation between projected distributions and
-the ebirdst distributions used to train the BirdFlow model.
+the eBird Status and Trends (S&T) distributions used to train the BirdFlow model.
 
-"Training distribution" is used to describe the ebirdst
+"Training distribution" is used to describe the eBird S&T
 distributions used to train the BirdFlow models.  "Marginal distribution"
 describes a distribution calculated from row or column sums of a marginal,
 joint probability matrix. "Projected distribution" is used to describe

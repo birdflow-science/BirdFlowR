@@ -1,17 +1,18 @@
 #' Define the coordinate reference system
 #'
-#' This defines the coordinate reference system (crs, AKA projection)
+#' This defines the coordinate reference system (CRS, AKA projection)
 #' used by default for BirdFlow models. It is a customized
 #' Mollweide projection, with the longitude of origin set to -90 deg.
 #' centering the western hemisphere.  St Louis, Missouri is very close to
-#' a longitude of -90 deg. The Mollweide projection preserves area, shapes
+#' a longitude of -90 deg. The Mollweide projection preserves area, shape
 #' distortion increases with distance from the longitude of origin.
 #'
 #' The projection is similar to:
-#'  https://spatialreference.org/ref/sr-org/7399/ and crs("ESRI:54009) which
+#'  [SR-ORG:7399](https://spatialreference.org/ref/sr-org/7399/) and
+#'  [ESRI:54009](https://epsg.io/54009) which
 #'   have a longitude of origin of 0, centered on Greenwich, England.
 #' @export
-#' @format This is a string defining a custom mollweide projection
+#' @format This is a string defining a custom Mollweide projection
 #' centered on the western hemisphere with well known text.
 #' @references https://epsg.io/54009
 #' @examples

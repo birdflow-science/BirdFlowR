@@ -25,22 +25,22 @@ plot_routes(
 
 \item{bf, x}{A BirdFlow object.}
 
-\item{facet}{If TRUE then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
+\item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
 
-\item{max_stay_len}{Used to scale the stay length dots. If NULL
-(the default) it will be set to the maximum "stay_len" value in \code{routes}.
+\item{max_stay_len}{Used to scale the stay length dots. If \code{NULL}
+(the default) it will be set to the maximum \code{"stay_len"} value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
 
-\item{use_seasonal_colors}{If TRUE a color scale that uses blues, greens,
+\item{use_seasonal_colors}{If \code{TRUE} a color scale that uses blues, greens,
 yellows, reds, for winter, spring, summer, and fall will be used with a
 consistent mapping of dates to colors regardless of the range of dates
-plotted. If FALSE then the data will be plotted using the full color scale.}
+plotted. If \code{FALSE} then the data will be plotted using the full color scale.}
 
-\item{pal}{The color palette to use for plotting whe \code{use_seasonal_cols} is
-FALSE. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
+\item{pal}{The color palette to use for plotting when \code{use_seasonal_cols} is
+\code{FALSE}. Defaults to \link[viridisLite:viridis]{viridisLite::viridis(n = 5)}.}
 
-\item{barheight}{The height of the color gradient legend bar.  Passed to
+\item{barheight}{The height of the color gradient legend bar. Passed to
 \code{\link[ggplot2:guide_colourbar]{ggplot2::guide_colorbar()}} as \code{barheight} argument. Depending on the output
 resolution and plot size this may need to be adjusted. Can take a number or
 the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
@@ -62,9 +62,9 @@ Plot routes as lines with color indicating the passage of time and dot size
 indicating the length of stay at each stop.
 }
 \details{
-plot.BirdflowRoutes calls plot_routes().
+\code{plot.BirdFlowRoutes()} calls \code{plot_routes()}.
 
-As of 6/13/2023 route() returns an object of class \code{BirdFlowRoutes}
+As of 6/13/2023 \code{route()} returns an object of class \code{BirdFlowRoutes}
 that is a data frame with some extra attributes tacked on.
 
 That \code{route()} returns a data frame like object that contains the data

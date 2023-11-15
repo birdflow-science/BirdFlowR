@@ -83,7 +83,7 @@ crs.BirdFlow <- function(x, proj = FALSE, describe = FALSE, parse = FALSE) {
 #' @rdname dimensions
 #' @export
 #' @return `crs()` the coordinate reference system, a character with well known
-#' text (wkt) by default, but see arguments.
+#' text (WKT) by default, but see arguments.
 setMethod(crs, "BirdFlow", crs.BirdFlow)
 
 ext.BirdFlow <- function(x) {
@@ -155,8 +155,8 @@ ymax.BirdFlow <- function(x) {
 setMethod(ymax, "BirdFlow", ymax.BirdFlow)
 
 #' @rdname dimensions
-#' @return `is_cyclical()` returns TRUE if the BirdFlow model has a transition
-#' from the last timestep to the first and FALSE otherwise.
+#' @return `is_cyclical()` returns `TRUE` if the BirdFlow model has a transition
+#' from the last timestep to the first and `FALSE` otherwise.
 #' @export
 is_cyclical <- function(x) {
   n_timesteps(x) == n_transitions(x)

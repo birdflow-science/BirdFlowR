@@ -23,7 +23,7 @@
 #' only has values for active cells. Thus the dimensions of objects returned
 #' by [get_dynamic_mask(bf)](get_dynamic_mask()) and get
 #' [get_distr(bf)](get_distr()) will be identical.
-#' The purposoe of the dynamic mask is to improve efficiency of fitting,
+#' The purpose of the dynamic mask is to improve efficiency of fitting,
 #' storing, and using BirdFlow models by eliminating unlikely locations
 #' in the model.  The dynamic mask includes cells that have a zero in the
 #' eBird S&T abundance for the associated week.
@@ -62,7 +62,7 @@
 #'   variable among the columns in ``distr`` as when density spreads out from a
 #'   single point in the results of [`predict(bf)`](predict.BirdFlowR) you may
 #'   want to set this smaller than the full range in which case the values will
-#'   be trunctated to the limits (see examples).
+#'   be truncated to the limits (see examples).
 #' @param dynamic_scale Set to `TRUE` to have the range of the data in each
 #'   distribution mapped to the full color gradient. This allows visualizing the
 #'   full range of values within each timestep optimally at the cost of

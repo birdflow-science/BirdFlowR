@@ -1,6 +1,6 @@
 
 #' @name has
-#' @title Does a BirdFlow object have certain compoenents
+#' @title Does a BirdFlow object have certain components
 #'
 #' @description These functions return information about the contents of a
 #' BirdFlow object.

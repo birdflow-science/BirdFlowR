@@ -11,10 +11,10 @@
 #' 2023-02-10 we tested under different resolutions with "amewoo" and
 #' identified bounds on the maximum.
 #'
-#'| Machine | GPU Ram (GB) | Lower Bound (worked) | Upper Bound (failed)| Params / GB  |
+#'| Machine | GPU Ram (GB) | Lower Bound (worked) | Upper Bound (failed)| Parameters / GB  |
 #'| ------- | ------------ | -------------------- | ------------------- | ------------|
-#'|titanx gpu | 12GB  | 306804561            | 334693725           | 25567047    |
-#'| m40 gpu  | 24GB   | 557395226            | 610352178           | 23224801    |
+#'|titanx GPU | 12GB  | 306804561            | 334693725           | 25567047    |
+#'| m40 GPU  | 24GB   | 557395226            | 610352178           | 23224801    |
 #'
 #' The number of parameters is the number of unmasked cells for the first
 #' timestep + the total number of cells in the marginals which is calculated
@@ -52,7 +52,7 @@
 #'   model should contain. Ignored if `res` is not NULL.  Otherwise a resolution
 #'   will be chosen that yields this many fitted parameters. See `gpu_ram` for
 #'   the default way of setting `max_params` and `res`. Note: the reduction in
-#'   paramters resulting from truncation (see `...`) is not factored into the
+#'   parameters resulting from truncation (see `...`) is not factored into the
 #'   calculation.
 #' @param gpu_ram Gigabytes of ram on GPU machine that will fit the models.
 #'   If `res` is NULL and `max_params` is NULL this is used to estimate

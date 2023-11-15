@@ -35,11 +35,11 @@ Will be forced to \code{TRUE}}
 \code{what} controls what components of \code{bf} are
 exported.}
 
-\item{filetype}{The filttype to export to, one
-\code{"GTiff"} (for GeoTIFF files), or \code{"PNG"}}
+\item{filetype}{The file type to export: \code{"GTiff"} for GeoTIFF files,
+or \code{"PNG"} for Portable Network Graphics.}
 
 \item{as_integer}{Should the data be written as integers. With the default,
-\code{NULL}, integers will be written for the PNG filetype as they don't
+\code{NULL}, integers will be written for the PNG file type as they don't
 support real numbers and with GeoTIFFs floating point numbers
 will be written.}
 
@@ -48,8 +48,9 @@ point distributions will be multiplied by this number prior to output. If
 \code{factor} is \code{NULL} (the default) then the factor will be x / the maximum
 value in any distribution in \code{bf}, where x is 255 for \code{PNG}
 filetypes and 1000 for \code{GTiff}.  Thus the maximum integer value will be 255
-for PNG files, and 1000 for GeoTiff files.
-@param overwrite Should pre-existing files be overwritten with new output.}
+for PNG files, and 1000 for GeoTIFF files.}
+
+\item{overwrite}{Should pre-existing files be overwritten with new output.}
 }
 \value{
 Nothing is returned, but raster files are written to \code{dir}

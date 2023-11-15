@@ -21,7 +21,7 @@
 #'
 #' @param bf
 #'
-#' @return An integer indicating how much to pad the numbers in transtion
+#' @return An integer indicating how much to pad the numbers in transition
 #' names.
 #' @keywords internal
 get_timestep_padding <- function(bf) {

@@ -90,7 +90,7 @@ time this will equal \code{n_timesteps()}.
 \code{n_active()} number of active cells (locations).
 
 \code{crs()} the coordinate reference system, a character with well known
-text (wkt) by default, but see arguments.
+text (WKT) by default, but see arguments.
 
 \code{ext()} a \link[terra:SpatExtent-class]{SpatExtent} object,
 which contains the xmin, xmax, ymin, and ymax of the extent.
@@ -109,13 +109,13 @@ which contains the xmin, xmax, ymin, and ymax of the extent.
 
 \code{ymax()} maximum y coordinate of extent.
 
-\code{is_cyclical()} returns TRUE if the BirdFlow model has a transition
-from the last timestep to the first and FALSE otherwise.
+\code{is_cyclical()} returns \code{TRUE} if the BirdFlow model has a transition
+from the last timestep to the first and \code{FALSE} otherwise.
 
 \code{n_parameters()} the number of of parameters that the BirdFlow model
 contains or will contain. This is the number of cells in the marginal
 matrices + the sum of the dynamic mask for the first timestep (number of
-un masked cells at the first timestep).  If the model isn't dynamically
+unmasked cells at the first timestep).  If the model isn't dynamically
 masked this is equivalent to \code{n_active(x)^2 * n_transitons(x) + n_active(x)}
 }
 \description{
