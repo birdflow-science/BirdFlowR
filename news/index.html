@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9037</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9038</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,8 +56,17 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9038" id="birdflowr-0109038">BirdFlowR 0.1.0.9038<a class="anchor" aria-label="anchor" href="#birdflowr-0109038"></a></h2>
+<p>2023-11-16</p>
+<p>Trying to pass all CI checks while still using ebirdst 2.2021</p>
+<ul><li>Added version dependency &lt;= 2.2021.3 for <strong>ebirdst</strong> (under imports) to avoid version 3.2022 until <strong>BirdFlowR</strong> is updated for the significant changes in <strong>ebirdst</strong>
+</li>
+<li>Removed call to <code><a href="https://rdrr.io/pkg/ebirdst/man/abundance_palette.html" class="external-link">ebirdst::abundance_palette()</a></code> and replaced it with the resulting values. As it was <strong>ebirdst</strong> should have been in imports. This also dodges dealing with the function name change in v. 3.2022.0.</li>
+<li>Dropped code that dealt with older version of <code>$dates</code>.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9037" id="birdflowr-0109037">BirdFlowR 0.1.0.9037<a class="anchor" aria-label="anchor" href="#birdflowr-0109037"></a></h2>
-<p>2023-11-14*</p>
+<p>2023-11-14</p>
 <ul><li>Spelling
 <ul><li>Checked spelling on package documentation and vignettes.</li>
 <li>Added wordlist (extending dictionary of valid words).</li>
