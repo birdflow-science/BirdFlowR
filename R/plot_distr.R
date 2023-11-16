@@ -190,9 +190,14 @@ plot_distr <- function(distr,
 
   coast <- get_coastline(bf)
 
-  if (is.null(gradient_colors))
-    gradient_colors <- ebirdst::abundance_palette(10, season = "weekly")
-
+  if (is.null(gradient_colors)) {
+    # Same as ebirdst::abundance_palette(10, season = "weekly")
+    # or  ebirdst::ebirdst_palette(10, season = "weekly") depending
+    # on ebirdst version
+    gradient_colors <-
+      c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
+        "#9D189D", "#7401A8", "#48039F", "#0D0887")
+  }
   p <-
     ggplot2::ggplot(r, ggplot2::aes(x = .data$x,
                                     y = .data$y,

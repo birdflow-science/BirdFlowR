@@ -63,16 +63,9 @@ lookup_timestep <- function(x, bf) {
       breaks <- c(dates$start[1], dates$end)
       x <- findInterval(py, vec = breaks, all.inside = TRUE)
 
-    } else {   #  SHOULD be DROPPED when we complete switch to dynamic masking
-      # Support very old models that don't have columns eith "start" and "end";
-      # or "week_start" and "week_end"
-
-      if (nrow(bf$dates) != 52)
-        stop("This is unexpected. bf is both lacking some date columns ",
-             "AND doesn't include all timesteps. To look up timesteps only",
-             " one of those can be true.")
-      x <- ebirdst::date_to_st_week(x)
-
+    } else {
+        stop("This is unexpected. bf$dates is lacking  \"start\" and/or ",
+             "\"end\" columns", sep = "")
     }
   }  # End is date
 
