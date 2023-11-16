@@ -1,5 +1,19 @@
+# BirdFlowR 0.1.0.9038
+2023-11-16
+
+Trying to pass all CI checks while still using ebirdst 2.2021
+
+* Added  version dependency <= 2.2021.3 for **ebirdst** (under imports)
+  to avoid version 3.2022 
+  until **BirdFlowR** is updated for the significant changes in **ebirdst**
+* Removed call to `ebirdst::abundance_palette()` 
+  and replaced it with the resulting values. 
+  As it was **ebirdst** should have been in imports.
+  This also dodges dealing with the function name change in v. 3.2022.0.
+* Dropped code that dealt with older version of `$dates`.
+
 # BirdFlowR 0.1.0.9037
-2023-11-14*
+2023-11-14
 
 * Spelling
   * Checked spelling on package documentation and vignettes. 
