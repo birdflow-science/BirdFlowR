@@ -13,7 +13,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     auk,
     BirdFlowModels (>= 0.0.2.9002),
-    ebirdst (<= 2.2021.3),
+    ebirdst (== 2.2021.3),
     knitr,
     ragg,
     rmarkdown,
@@ -48,6 +48,7 @@ Imports:
 VignetteBuilder: knitr
 Remotes:
   birdflow-science/BirdFlowModels
+  ebird/ebirdst
 URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
 BugReports: https://github.com/birdflow-science/BirdFlowR/issues
 Language: en-US
