@@ -219,8 +219,7 @@ test_that(
 
   n <- 7
   set.seed(1)
-  pts <- data.frame(x = runif(n, xmin(bf), xmax(bf)),
-                    y = runif(n, ymin(bf), ymax(bf)))
+  pts <- sample(1:n_active(bf), n) |> i_to_xy(bf)
 
   # Test points
   # 1. valid

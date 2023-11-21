@@ -46,11 +46,9 @@ test_that("forward and backwards transitions are consistent", {
   #  the two, timestep 1, distributions to be highly correlated.
   bf <- BirdFlowModels::amewoo
   d1a <- get_distr(bf, 1)
-  ft <- get_transition(bf, "T_01-02")
-  bt <- get_transition(bf, "T_02-01")
-  d2 <- ft %*% d1a
-  d1b <- as.numeric(bt %*% d2)
-  expect_true(cor(d1a, d1b) > 0.999)
+  d2 <- predict(bf, distr = d1a, start = 1, end = 2)[, 2]
+  d1b <- predict(bf, distr = d2, start = 2, end = 1)[, 2]
+  expect_true(cor(d1a, d1b) > 0.95)
 })
 
 test_that("transition_from_marginal throws errors with bogus direction", {

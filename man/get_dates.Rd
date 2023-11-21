@@ -16,7 +16,7 @@ It will range from 1 to \code{\link[=n_timesteps]{n_timesteps()}}.  With full mo
 equivalent to the week of the year but with truncated models may
 not be.}
 \item{date}{The date associated with the interval's midpoint.}
-\item{midpoint, star, end}{The midpoint, start, and end of each interval
+\item{midpoint, start, end}{The midpoint, start, and end of each interval
 as a proportion of the total year that has elapsed.}
 \item{doy}{The day of year associated with the midpoint of each interval.}
 }
