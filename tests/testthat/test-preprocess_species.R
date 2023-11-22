@@ -1,6 +1,9 @@
+
 # 1
 test_that("preprocess_species runs on test dataset", {
+
   skip_on_cran()
+  skip_if_unsupported_ebirdst_version()
 
   # Temporarily suppress BirdFlowR chatter
   o_verbose <- birdflow_options("verbose")
@@ -29,6 +32,8 @@ test_that("preprocess_species runs on test dataset", {
 
 #3
 test_that("preprocess_species catches error conditions", {
+
+  skip_if_unsupported_ebirdst_version()
 
   # Temporarily suppress BirdFlowR chatter
   o_verbose <- birdflow_options("verbose")
@@ -93,6 +98,8 @@ test_that("preprocess_species catches error conditions", {
 test_that("preprocess_species() works with clip", {
 
   skip_on_cran()
+  skip_if_unsupported_ebirdst_version()
+
 
   # Temporarily suppress BirdFlowR chatter
   o_verbose <- birdflow_options("verbose")

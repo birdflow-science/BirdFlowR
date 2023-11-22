@@ -21,10 +21,34 @@ as a proportion of the total year that has elapsed.}
 \item{doy}{The day of year associated with the midpoint of each interval.}
 }
 \description{
-\code{get_dates()} retrieves the dates component of a BirdFlow model.  Most of
-the resulting data is derived from \link[ebirdst:ebirdst_weeks]{ebirdst::ebirdst_weeks} and added
-to the model object by   \code{\link[=preprocess_species]{preprocess_species()}}.  \code{\link[=truncate_birdflow]{truncate_birdflow()}}
-creates models with a subset of the intervals and renames them
-\verb{1:[n_timesteps()]} of the truncated model so if it has been used the
-data may differ from \code{\link[ebirdst:ebirdst_weeks]{ebirdst::ebirdst_weeks()}}.
+\code{get_dates()} retrieves the dates component of a BirdFlow model.
+}
+\details{
+\pkg{BirdFlowR} uses the same conventions for assigning dates to
+eBird "weeks" as \pkg{ebirdst}. This changed with the 2022 release.
+
+\pkg{ebirdst} version <= 2.2021.3
+\itemize{
+\item Date table is derived from \code{ebirdst::ebirdst_weeks} and added
+to the model object by \code{\link[=preprocess_species]{preprocess_species()}}.
+\item Julian date is converted to a proportion with \code{(jd - 0.5)/366}.
+\item 52 even ranges are assigned to 0 to 1 and the proportional date is then
+compared to these thresholds.
+\item In a non-leap year two weeks have 8 days and the last week has 6.
+\item In a leap-year two weeks have 8 days.
+\item All other weeks have 7 days.
+}
+
+\pkg{ebirdst} version  >= 3.2022.0
+\itemize{
+\item \pkg{ebirdst} dropped \code{ebirdst_weeks} and  \code{ebirdst::date_to_st_week()}
+\item Dates are assigned to weeks by finding which evenly spaced Julian date of
+a week center Julian date of the input is closest to.
+\item All weeks but the last have 7 days.
+\item On non-leap-years the last week has 8 days, on leap years it has 9.
+}
+
+\code{\link[=truncate_birdflow]{truncate_birdflow()}} creates models with a subset of the intervals
+and renames them \verb{1:[n_timesteps()]} of the truncated model so if it
+has been used the data may differ from \code{ebirdst::ebirdst_weeks}.
 }
