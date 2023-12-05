@@ -46,7 +46,7 @@ Imports:
     viridisLite
 VignetteBuilder: knitr
 Remotes:
-  birdflow-science/BirdFlowModels
+  birdflow-science/BirdFlowModels,
   ebird/ebirdst
 URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
 BugReports: https://github.com/birdflow-science/BirdFlowR/issues
