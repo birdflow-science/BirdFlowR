@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="BirdFlowR">
 <meta property="og:description" content="BirdFlowR">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9038</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9039</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -159,21 +159,21 @@ be equal.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Methods for base R functions:</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 45 51</span></span>
+<span><span class="co">#&gt; [1] 22 31</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 45 51</span></span>
+<span><span class="co">#&gt; [1] 22 31</span></span>
 <span><span class="va">bf</span> <span class="co"># same as print(bf)</span></span>
 <span><span class="co">#&gt; American Woodcock BirdFlow model</span></span>
-<span><span class="co">#&gt;   dimensions   : 45, 51, 52  (nrow, ncol, ntimesteps)</span></span>
-<span><span class="co">#&gt;   resolution   : 79995.7798343748, 79995.8424586389  (x, y)</span></span>
-<span><span class="co">#&gt;   active cells : 1706</span></span>
-<span><span class="co">#&gt;   size         : 19 Mb</span></span>
+<span><span class="co">#&gt;   dimensions   : 22, 31, 52  (nrow, ncol, ntimesteps)</span></span>
+<span><span class="co">#&gt;   resolution   : 150000, 150000  (x, y)</span></span>
+<span><span class="co">#&gt;   active cells : 342</span></span>
+<span><span class="co">#&gt;   size         : 12.5 Mb</span></span>
 <span></span>
 <span><span class="co"># BirdFlowR functions</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1706</span></span>
+<span><span class="co">#&gt; [1] 342</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_transitions</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 51</span></span>
+<span><span class="co">#&gt; [1] 52</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_timesteps</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 52</span></span>
 <span></span>
@@ -185,7 +185,7 @@ be equal.</p>
 <span><span class="fu"><a href="../reference/has.html">has_transitions</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">is_cyclical</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="species-information-and-metadata">Species information and metadata<a class="anchor" aria-label="anchor" href="#species-information-and-metadata"></a>
@@ -209,7 +209,7 @@ seasons are likely to be useful.</p>
 <span><span class="va">si</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/species_info.html">species_info</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co"># list with all species information</span></span>
 <span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># list with all metadata</span></span>
 <span><span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"birdflow_model_date"</span><span class="op">)</span> <span class="co"># date model was exported from python</span></span>
-<span><span class="co">#&gt; [1] "2023-01-02 10:03:05.256454"</span></span>
+<span><span class="co">#&gt; [1] "2023-11-21 17:19:27.009766"</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/validate_BirdFlow.html">validate_BirdFlow</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># throws error if there are problems</span></span></code></pre></div>
 </div>
@@ -234,15 +234,15 @@ models with each other and with terra objects.</p>
 <code class="sourceCode R"><span><span class="co"># Methods for terra functions:</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co"># well known text (long)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span>, proj <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># proj4 string</span></span>
-<span><span class="co">#&gt; [1] "+proj=moll +lon_0=-90 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
+<span><span class="co">#&gt; [1] "+proj=laea +lat_0=39.161 +lon_0=-85.094 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">res</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 79995.78 79995.84</span></span>
+<span><span class="co">#&gt; [1] 150000 150000</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">xres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">yres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as res(bf)</span></span>
-<span><span class="co">#&gt; [1] 79995.78 79995.84</span></span>
+<span><span class="co">#&gt; [1] 150000 150000</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; SpatExtent : -1564958.2138293, 2514826.55772382, 2822153.67510416, 6421966.58574292 (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; SpatExtent : -2550000, 2100000, -1650000, 1650000 (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">xmin</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">xmax</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymin</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/xmin.html" class="external-link">ymax</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as ext(bf)</span></span>
-<span><span class="co">#&gt; [1] -1564958  2514827  2822154  6421967</span></span>
+<span><span class="co">#&gt; [1] -2550000  2100000 -1650000  1650000</span></span>
 <span></span>
 <span><span class="co"># Compare geometries - do they have the same CRS, extent, and cell size</span></span>
 <span><span class="fu"><a href="../reference/compareGeom-BirdFlow.html">compareGeom</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
@@ -267,21 +267,21 @@ of active cells.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># get first timestep distribution</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>  <span class="co"># 1 distribution so d is a vector</span></span>
-<span><span class="co">#&gt; [1] 1706</span></span>
+<span><span class="co">#&gt; [1] 342</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># its length is the the number of active cells in the model</span></span>
-<span><span class="co">#&gt; [1] 1706</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 342</span></span></code></pre></div>
 <p>Get 5 distributions, the result is a matrix in which each column is a
 distribution with a row for each active cell.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">26</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1706    5</span></span>
+<span><span class="co">#&gt; [1] 342   5</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       time</span></span>
-<span><span class="co">#&gt; i      June 28 July 5 July 12 July 19 July 26</span></span>
-<span><span class="co">#&gt;   [1,]       0      0       0       0       0</span></span>
-<span><span class="co">#&gt;   [2,]       0      0       0       0       0</span></span>
-<span><span class="co">#&gt;   [3,]       0      0       0       0       0</span></span></code></pre></div>
+<span><span class="co">#&gt; i      June 28       July 6      July 13 July 20      July 27</span></span>
+<span><span class="co">#&gt;   [1,]       0 0.000000e+00 0.000000e+00       0 0.000000e+00</span></span>
+<span><span class="co">#&gt;   [2,]       0 9.342922e-06 8.769396e-05       0 1.607396e-06</span></span>
+<span><span class="co">#&gt;   [3,]       0 1.499294e-05 4.842432e-05       0 1.748452e-06</span></span></code></pre></div>
 <p>We can also specify distributions with dates, or use “all” to
 retrieve all the distributions.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -341,8 +341,8 @@ elsewhere.</p>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">location</span><span class="op">)</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span><span class="op">)</span>  <span class="co"># starting coordinates</span></span>
-<span><span class="co">#&gt;           x       y</span></span>
-<span><span class="co">#&gt; 1 -5040.507 3982093</span></span></code></pre></div>
+<span><span class="co">#&gt;         x       y</span></span>
+<span><span class="co">#&gt; 1 -225000 -525000</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="project-forward-from-this-location-to-summer">Project forward from this location to summer<a class="anchor" aria-label="anchor" href="#project-forward-from-this-location-to-summer"></a>
