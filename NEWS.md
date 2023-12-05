@@ -1,3 +1,9 @@
+# BirdFlowR 0.1.0.9039
+2023-11-21*
+
+* Updated tests for new `amewoo` model in **BirdFlowModels** (R package)* 0.0.2.9002
+* Now depends on 
+
 # BirdFlowR 0.1.0.9038
 2023-11-16
 

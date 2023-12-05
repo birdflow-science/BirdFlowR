@@ -39,13 +39,7 @@
 #'
 #' @param hdf5 Path to an HDF5 file containing a fitted BirdFlow model.
 #' @param ... Arguments to be passed to a version specific internal function.
-#'    Likely will only be used with
-#'    version 1 which takes two additional arguments: \describe{
-#'        \item{tiff}{Path to the model GeoTIFF.}
-#'        \item{species}{An eBird species code.  It should appear in the
-#'   `species_code` column of the data.frame returned by
-#'   [auk::get_ebird_taxonomy()]}
-#'    }
+#'  Currently deprecated was used in early BirdFlow models.
 #' @param version (optional) force reading of BirdFlow models as a particular
 #'   version. Normally, this will be determined from metadata in the HDF5
 #'   file.

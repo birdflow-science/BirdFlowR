@@ -1,12 +1,11 @@
 test_that("route() works with a single distribution", {
-  bf <- BirdFlowModels::amewoo |> add_dynamic_mask()
+  bf <- BirdFlowModels::amewoo
 
-  n <- 10
   start <- 5
-  end  <- 10
+  end  <- 15
   sd <- get_distr(bf, start)
 
-  set.seed(1)
+  set.seed(2)
   n <- 1
   loc <- sample_distr(sd, n = n) |>
     as.logical() |>

@@ -374,7 +374,9 @@ preprocess_species <- function(species = NULL,
 
   # Reformat and export dates
 
-  dates <- as.data.frame(ebirdst::ebirdst_weeks)
+  dates <- as.data.frame(ebirdst_weeks)
+    # Note ebirdst_weeks now stored in BirdFlowR is a copy of the ebirdst
+    # version that was dropped with the 2022 data release (nov 2023)
   names(dates)[names(dates) == "week_number"] <- "interval"
   dates$doy <- lubridate::yday(dates$date) + 0.5
   dates$date <- as.character(dates$date)

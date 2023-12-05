@@ -264,8 +264,9 @@ test_that("lookup_timestep() works with start and n input", {
 
 test_that("lookup_timestep() throws expected errors with non-cyclical models", {
   bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 11, end = 21)
   expect_false(is_cyclical(bf))
-  expect_error(a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10),
+  expect_error(a <- lookup_timestep_sequence(bf, start = 9, n_steps = 10),
                regexp = "x is not cyclical and n_steps is large enough")
   expect_error(a <- lookup_timestep_sequence(bf, start = 3, n_steps = 10,
                                              direction = "backward"),
