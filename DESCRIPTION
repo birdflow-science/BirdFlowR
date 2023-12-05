@@ -51,3 +51,5 @@ Remotes:
 URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
 BugReports: https://github.com/birdflow-science/BirdFlowR/issues
 Language: en-US
+Depends: 
+    R (>= 3.5)
