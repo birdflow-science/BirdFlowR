@@ -123,13 +123,21 @@ test_that("preprocess_species() works with clip", {
     sf::st_polygon()
 
   clip <- terra::vect(poly)
-  sp_path <- ebirdst::get_species_path("example_data")
-  proj  <- terra::crs(
-    ebirdst::load_fac_map_parameters(sp_path)$custom_projection)
-  terra::crs(clip) <- proj
+
+  sp <- ebirdst_example()
+  sp_path <- ebirdst::get_species_path(sp)
+
+
+  if(ebirdst_pkg_ver() < "3.2022.0"){
+    proj <- ebirdst::load_fac_map_parameters(sp_path)$custom_projection
+  } else {
+    proj <- ebirdst::load_fac_map_parameters(species = sp)$custom_projection
+  }
+
+  terra::crs(clip) <- terra::crs(proj)
   if (interactive()) {
     # Plot "Full" abundance for "example_data" and our clipping polygon
-    a <- preprocess_species("example_data")
+    a <- preprocess_species(ebirdst_example(), hdf5 = FALSE, res = 30)
     terra::plot(rast(a, 1))
     terra::plot(poly, add = TRUE)
   }
@@ -150,6 +158,7 @@ test_that("preprocess_species() works with clip", {
 
   # Test that expect file was created
   created_files <- list.files(dir)
-  expect_setequal(created_files,  "example_data_2021_75km_clip.hdf5")
+  expect_in(created_files,  c("example_data_2021_75km_clip.hdf5",  # ebird 2021
+                              "yebsap-example_2022_75km_clip.hdf5")) # 2022
 
 })

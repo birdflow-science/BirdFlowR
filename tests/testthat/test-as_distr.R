@@ -27,7 +27,7 @@ test_that("as_distr() works with data frames", {
 
   # Warnings
   # Out of extent
-  df <- rbind(df, data.frame(x = xmax(bf) + 1000, y = 0, i = NA)) # out of extent
+  df <- rbind(df, data.frame(x = xmax(bf) + 1000, y = 0, i = NA))
   expect_warning(d5 <- as_distr(df, bf),
                  regexp = "Not all locations in x are within the BirdFlow mask")
   expect_true(all(is.na(d5[, 6])))
@@ -43,7 +43,8 @@ test_that("as_distr works with raster objects", {
   e <- sf::st_bbox(bf) |>
     sf::st_as_sfc() |>
     sf::st_as_sf() |>
-    sf::st_transform(crs = "EPSG:4326") |> terra::ext()
+    sf::st_transform(crs = "EPSG:4326") |>
+    terra::ext()
 
   # Create new Raster
   r <- terra::rast(matrix(1:20, 20, 20), ext = e)

@@ -24,7 +24,8 @@ test_that("plot_routes() works over year boundary", {
   set.seed(1)
   loc <- sample_distr(sd, n = n) |>
     apply(MARGIN = 2, FUN = function(x) which(as.logical(x))) |>
-    i_to_xy(bf) |> as.data.frame()
+    i_to_xy(bf) |>
+    as.data.frame()
   expect_no_error(rts <- route(bf, x_coord = loc$x, y_coord = loc$y,
                                start = start, end = end))
   expect_no_error(p <- plot_routes(rts, bf))
