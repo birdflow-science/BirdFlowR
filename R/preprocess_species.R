@@ -59,8 +59,15 @@
 #'   `max_params`which is, in turn, used to determine the resolution. Ignored
 #'   if either` res` or `max_params` is set.
 #' @param skip_quality_checks If `TRUE` than preprocess the species even if
-#'   not all of four ranges are modeled (based on
-#'   [ebirdst_runs()][ebirdst::ebirdst_runs()]).
+#'   not all of four ranges are modeled (under ebirdst 2021 version year) or for
+#'   2022 and subsequent data versions if
+#'   not all `<season>_quality` is higher than `min_season_quality` in
+#'   [ebirdst_runs][ebirdst::ebirdst_runs]).
+#' @param min_season_quality The minimum acceptable season quality when
+#'   preprocesing eBird 2022 and subsequent versions. Used to check model
+#'   quality using based on the four `<season>_model_quality` columns in
+#'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 ebirdst
+#'   version year.
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
 #' @return Returns a BirdFlow model object that lacks marginals, but is
@@ -106,6 +113,7 @@ preprocess_species <- function(species = NULL,
                                max_params = NULL,
                                gpu_ram = 12,
                                skip_quality_checks = FALSE,
+                               min_season_quality = 3,
                                ...
 
 ) {
@@ -140,15 +148,18 @@ preprocess_species <- function(species = NULL,
   stopifnot(is.logical(hdf5),
             length(hdf5) == 1)
 
-  # Handle "example_data" as a species
-  # use "example_data" when downloading, loading raster, and writing files
-  # but "yebsap" for looking up species information
-  if (species == "example_data") {
+  # Handle "example_data"  and "yesap-example" as species
+  # BirdFlowR excepts either as the example species input but changes
+  # the download name to whichever is appropriate for the installed
+  # ebirdst (it changed with 2022 data release)
+  # download_species is used when downloading, loading raster, and writing files
+  # but "yebsap" is used to look up species information
+  if (species %in% c("example_data", "yebsap-example")) {
     if (verbose)
       cat("The example datset does not represet a complete species range so\n",
           "should only used for demonstrating package functions.\n", sep = "")
-    download_species <- "example_data"
-    species <- "yebsap"
+    download_species <-  ebirdst_example() # example species for current ver.
+    species <- "yebsap"  # used to look up metadata
     if (!is.null(res) && res < 27)
       stop("res must be at least 27 when working with the low resolution ",
            "example_data")
@@ -156,8 +167,7 @@ preprocess_species <- function(species = NULL,
     a <- ebirdst::get_species(species)
     if (is.na(a))
       stop('"', species, '" is not an eBird S&T species')
-    species <- a
-    download_species <- species
+    species <- download_species <- a
   }
 
   if (!is.null(res)) {
@@ -165,9 +175,6 @@ preprocess_species <- function(species = NULL,
     if (res < 3)
       stop("Resolution cannot be less than 3 km")
   }
-
-
-
 
   # Create empty BirdFlow object
   # This is a nested list of all the components but most are NA.
@@ -189,6 +196,7 @@ preprocess_species <- function(species = NULL,
   # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
   er <- ebirdst::ebirdst_runs
+  names(er)[names(er) == "is_resident"] <- "resident" # restore 2021 name
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
   if (verbose)
@@ -212,39 +220,61 @@ preprocess_species <- function(species = NULL,
   # Restore formatting to ebirdst columns
   # in ebirdst 2.2021.1 all columns are stored as characters.
   #  It's fixed by 2.2021.3 but CRAN is still on 2.2021.1
-  logical_variables <- c("resident",
+  logical_variables <- intersect(c("resident",
                          "breeding_range_modeled",
                          "nonbreeding_range_modeled",
                          "postbreeding_migration_range_modeled",
-                         "prebreeding_migration_range_modeled")
+                         "prebreeding_migration_range_modeled"), names(spmd))
 
-  numeric_variables <- c("breeding_quality",
+  numeric_variables <- intersect(c("breeding_quality",
                          "nonbreeding_quality",
                          "postbreeding_migration_quality",
-                         "prebreeding_migration_quality")
+                         "prebreeding_migration_quality"), names(spmd))
 
   spmd[logical_variables] <- as.logical(spmd[logical_variables])
   spmd[numeric_variables] <- as.numeric(spmd[numeric_variables])
 
 
+  # Check eBird data quality
 
+  # used for check prior to ebirds 3.2022.0 and to drop these columns (any v.)
   model_coverage_variables <- c("breeding_range_modeled",
                                 "nonbreeding_range_modeled",
                                 "postbreeding_migration_range_modeled",
                                 "prebreeding_migration_range_modeled")
 
-  if (!skip_quality_checks && ! all(unlist(spmd[model_coverage_variables])))
-    stop("eBird status and trends models do not cover the full range for ",
-         spmd$common_name, " (", spmd$species_code, ")")
+  if (ebirdst_pkg_ver() < "3.2022.0") {
+    if (!skip_quality_checks && ! all(unlist(spmd[model_coverage_variables])))
+      stop("eBird status and trends models do not cover the full range for ",
+           spmd$common_name, " (", spmd$species_code, ")")
+  } else {
+    # ebirdst >= 3.2022.0
+    model_quality_variables <- c("breeding_quality",
+                                 "nonbreeding_quality",
+                                 "postbreeding_migration_quality",
+                                 "prebreeding_migration_quality")
+    if (!skip_quality_checks &&
+        any(unlist(spmd[model_quality_variables]) < min_season_quality))
+      stop("eBird status and trends model quality is less than ",
+           min_season_quality,
+           " in one or more seasons for ",
+           spmd$common_name, " (", spmd$species_code, ")", sep = "")
+  }
 
   # Drop the variables that aren't relevant to BirdFlow
-  # The model_coverage_variables because they are all TRUE (verified above)
-  # resident information because we only fit BirdFlow models to migrants
+  # * The model_coverage_variables were dropped from ebirdst with v 3.2022
+  #   and have always been dropped from BirdFlow objects
+  # * Resident information dropped b/c we only fit BirdFlow models to migrants
   spmd <- spmd[!names(spmd) %in% model_coverage_variables]
   spmd$resident <- NULL
   spmd$resident_quality <- NULL
   spmd$resident_end <- NULL
   spmd$resident_start  <- NULL
+
+  # As of ebirdst 3.2022 we also need to drop trends variables
+  spmd[grep("trends", names(spmd))] <- NULL
+  spmd$rsquared <- NULL # trends fit quality
+  spmd$beta0 <- NULL # trends model intercept
 
   # check contents against new_BirdFlow() for consistency
   stopifnot(all(names(spmd) == names(export$species)))
@@ -256,8 +286,11 @@ preprocess_species <- function(species = NULL,
   v <- ebirdst::ebirdst_version()
   export$metadata$ebird_version_year <- v$version_year
   export$metadata$ebird_release_year <- v$release_year
+  export$metadata$ebirdst_version <- as.character(ebirdst_pkg_ver())
   export$metadata$ebird_access_end_date <- as.character(v$access_end_date)
   export$metadata$birdflow_preprocess_date <- as.character(Sys.Date())
+  export$metadata$birdflowr_preprocess_version <-
+    as.character(packageVersion("BirdFlowR"))
 
   #----------------------------------------------------------------------------#
   # Download abundance data                                                 ####
@@ -267,17 +300,26 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
 
   # Define patterns for selecting specific files to download for each resolution
-  download_patterns <-
-    as.list(paste0("_abundance_((lower)|(median)|(upper))_",
-                   c("lr", "mr", "hr")))
-  names(download_patterns) <- c("lr", "mr", "hr")
+    download_patterns <-
+      as.list(paste0("_abundance_((lower)|(median)|(upper))_",
+                     res_label(c("lr", "mr", "hr"))))
+     names(download_patterns) <- c("lr", "mr", "hr")
 
   # Initially download just the Low resolution
-  sp_path <-  ebirdst::ebirdst_download(download_species,
+  if (ebirdst_pkg_ver() < "3.2022.0") {
+    sp_path <-  ebirdst::ebirdst_download(download_species,
                                         pattern = download_patterns$lr)
-
+  } else {
+     sp_path <-  ebirdst::ebirdst_download_status(download_species,
+                                          pattern = download_patterns$lr)
+  }
   # Load map parameters and set crs
-  mp <- ebirdst::load_fac_map_parameters(path = sp_path)
+  if (ebirdst_pkg_ver() < "3.2022.0") {
+    mp <- ebirdst::load_fac_map_parameters(path = sp_path)
+  } else {
+    mp <- ebirdst::load_fac_map_parameters(species = download_species)
+  }
+
   if (is.null(crs)) {
     crs <- terra::crs(mp$custom_projection)
   } else {
@@ -372,34 +414,16 @@ preprocess_species <- function(species = NULL,
   #  Define dates                                                           ####
   #----------------------------------------------------------------------------#
 
-  # Reformat and export dates
-
-  dates <- as.data.frame(ebirdst_weeks)
-    # Note ebirdst_weeks now stored in BirdFlowR is a copy of the ebirdst
-    # version that was dropped with the 2022 data release (nov 2023)
-  names(dates)[names(dates) == "week_number"] <- "interval"
-  dates$doy <- lubridate::yday(dates$date) + 0.5
-  dates$date <- as.character(dates$date)
-
-  # Rename ("week_" columns by dropping preffix )
-  names(dates) <- gsub("^week_", "", names(dates))
-
-  # Duplicate interval column as week so that week number is preserved
-  # in truncated models
-  dates$week <- dates$interval
-
   # Save to export object
-  export$dates <- dates
-  export$metadata$n_timesteps <- length(unique(dates$date))
+  export$dates <- make_dates()
+  export$metadata$n_timesteps <- length(unique(export$dates$date))
 
   #----------------------------------------------------------------------------#
   #  Add dynamic_mask and distances                                         ####
   #----------------------------------------------------------------------------#
   export$distances <- great_circle_distances(export) |>
     shorten_distance_matrix()
-
   export$geom$dynamic_mask <- export$distr > 0
-
 
   #----------------------------------------------------------------------------#
   #  Print details                                                          ####
@@ -426,10 +450,8 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   # Truncate
   #----------------------------------------------------------------------------#
-
-
   truncated <- !all(seq_len(n_timesteps(export)) %in%
-                              lookup_timestep_sequence(x = export, ...))
+                      lookup_timestep_sequence(x = export, ...))
 
   # Create standard timestep based column names in distributions and CIs
   colnames(export$uci) <- colnames(export$lci) <-
@@ -439,11 +461,9 @@ preprocess_species <- function(species = NULL,
   if (truncated) {
     truncated <- TRUE
     export <- truncate_birdflow(export, ...)
-
     if (verbose) {
       cat("After truncation model has:",  n_parameters(export), "parameters\n")
     }
-
   }
 
   #----------------------------------------------------------------------------#
@@ -460,14 +480,16 @@ preprocess_species <- function(species = NULL,
 
     # Dates
     dates <- export$dates
-    # Extract first date and resinsert as interval 53
+
+    # Extract first date and reinsert as interval 53
     first <- dates[1, , drop = FALSE]
-    first$interval <- dates$interval[nrow(dates)] + 1  # interval 53, week 1
+    timestep_col <- ifelse("timestep" %in% names(dates), "timestep", "interval")
+    first[[timestep_col]] <- dates[nrow(dates), timestep_col] + 1  # interval 53, week 1
     dates <- rbind(dates, first)
     export$dates <- dates
     export$metadata$n_timesteps <- length(unique(dates$date))
 
-    # distr Append first column onto end so we have full cycle of transitions
+    # distr append first column onto end so we have full cycle of transitions
     distr <- export$distr
     uci <- export$uci
     lci <- export$lci
@@ -492,7 +514,7 @@ preprocess_species <- function(species = NULL,
   #   # Write HDF5                                                          ####
   #----------------------------------------------------------------------------#
   if (hdf5) {
-   export_birdflow(bf = export, file = paths$hdf5, overwrite = overwrite)
+    export_birdflow(bf = export, file = paths$hdf5, overwrite = overwrite)
   }
 
   # invisibly return exported BirdFlow model

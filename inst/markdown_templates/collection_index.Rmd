@@ -13,8 +13,8 @@ index <- params$index
 collection_url <- params$collection_url
 
 if (!is.data.frame(index)) {
- index <- readRDS(system.file("markdown_templates/index_example.Rds",
-                              package = "BirdFlowR"))
+  index <- readRDS(system.file("markdown_templates/index_example.Rds",
+                               package = "BirdFlowR"))
 }
 
 # Add links to ebird species information e.g.:

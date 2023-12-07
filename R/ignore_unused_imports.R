@@ -2,7 +2,7 @@
 # This private function is here to avoid warnings and notes for packages
 # that I want to import but don't directly call.
 # This approach was suggested by:
-# https://r-pkgs.org/dependencies-in-practice.html#how-to-not-use-a-package-in-imports
+# https://r-pkgs.org/dependencies-in-practice.html#how-to-not-use-a-package-in-imports # nolint
 # Closes: https://github.com/birdflow-science/BirdFlowR/issues/102
 ignore_unused_imports <- function() {
 

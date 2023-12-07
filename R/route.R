@@ -7,8 +7,8 @@
 #' @param n If sampling starting positions (`x_coord`, and `y_coord` are NULL).
 #' Generate this many samples.  Otherwise the `x_coord` and `y_coord` positions
 #' will each be duplicated `n` times.
-#' @param x_coord,y_coord  Optional, if `NULL` starting points will be drawn from
-#'  the species distribution at the initial timestep.
+#' @param x_coord,y_coord  Optional, if `NULL` starting points will be drawn
+#'  from the species distribution at the initial timestep.
 #' @param from_marginals Use `FALSE` (the default) to use
 #' distributions derived directly from eBird Status and Trends when sampling
 #' starting locations. Set to `TRUE` to
@@ -59,7 +59,7 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   timesteps <-  lookup_timestep_sequence(bf, ...)
   transitions <- as_transitions(timesteps, bf)
   start <- timesteps[1]
-  end <- timesteps[length(timesteps)]
+  #  end <- timesteps[length(timesteps)]
 
 
   # Convert x and y coordinates input into row and col

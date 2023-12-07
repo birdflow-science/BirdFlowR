@@ -24,7 +24,7 @@ import_birdflow_v3 <- function(hdf5) {
   #----------------------------------------------------------------------------#
   if (FALSE) {
     # Code to generate expected contents from new_BirdFlow
-    list_structure <- function(x) {
+    list_structure <- function(x) {  # nolint: object_usage_linter
       if (is.list(x)) {
         n <- names(x)
         res <- vector(mode = "list", length = length(n))

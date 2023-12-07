@@ -22,7 +22,7 @@ test_that("lookup_timestep works with timesteps", {
 
 
 test_that("lookup_timestep works with dates", {
-  bf <- BirdFlowModels::rewbla
+  bf <- BirdFlowModels::amewoo
 
   # "Date" class
   # Single

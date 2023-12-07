@@ -10,7 +10,24 @@ get_dates(bf)
 \item{bf}{A BirdFlow object to retrieve dates from.}
 }
 \value{
-A data frame with:
+It returns a data frame.
+
+The columns are:
+\item{timestep}{The model timestep associated with each row. Will always
+equal the row number.}
+\item{date}{The date associated with the midpoint of the timestep}
+\item{label}{ The month and day based label associated with the interval.
+Consistent with eBird's 2022 date scheme will be one day off the \code{date}
+after February on leap years but are still used to label intervals. If the
+model was fit with an older version of \pkg{ebirdst} they will never be
+offset}
+\item{julian}{The Julian date (day of year) associated with the timestep
+center}
+\item{week}{The eBirdst week number associated with the date. For full year
+models this is identical to \code{timestep} but after
+\href{truncate_birdflow}{truncation} they will differ.
+
+Prior to \pkg{BirdFlowR} v. 0.1.0.9040 it returned columns:
 \item{interval}{The interval or timestep associated with each date.
 It will range from 1 to \code{\link[=n_timesteps]{n_timesteps()}}.  With full models this is
 equivalent to the week of the year but with truncated models may
@@ -21,7 +38,7 @@ as a proportion of the total year that has elapsed.}
 \item{doy}{The day of year associated with the midpoint of each interval.}
 }
 \description{
-\code{get_dates()} retrieves the dates component of a BirdFlow model.
+\code{get_dates()} get date information for a BirdFlow model
 }
 \details{
 \pkg{BirdFlowR} uses the same conventions for assigning dates to
@@ -50,5 +67,5 @@ a week center Julian date of the input is closest to.
 
 \code{\link[=truncate_birdflow]{truncate_birdflow()}} creates models with a subset of the intervals
 and renames them \verb{1:[n_timesteps()]} of the truncated model so if it
-has been used the data may differ from \code{ebirdst::ebirdst_weeks}.
+has been used \code{week} and \code{timestep} will not have identical values.
 }

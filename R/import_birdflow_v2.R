@@ -23,7 +23,7 @@ import_birdflow_v2 <- function(hdf5) {
   #----------------------------------------------------------------------------#
   if (FALSE) {
     # Code to generate expected contents from new_BirdFlow
-    list_structure <- function(x) {
+    list_structure <- function(x) {  # nolint: object_usage_linter
       if (is.list(x)) {
         n <- names(x)
         res <- vector(mode = "list", length = length(n))
@@ -68,15 +68,12 @@ import_birdflow_v2 <- function(hdf5) {
   contents <- paste0(contents$group, "/", contents$name)
   contents <- gsub("^/*", "", contents)
   absent <- setdiff(expected_contents, contents)
-  extra <- setdiff(contents, expected_contents)
+
 
   if (length(absent) != 0) {
     stop("hdf5 file:", hdf5, " is missing expected contents '",
          paste(absent, collapse = "', '"), "'")
   }
-
-  # Not al version2 files have a version number!
-  expected_version <- 2  # of HDF5 BirdFlow export
 
   #----------------------------------------------------------------------------#
   #   Process HDF5

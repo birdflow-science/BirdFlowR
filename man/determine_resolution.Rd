@@ -16,7 +16,8 @@ determine_resolution(
 )
 }
 \arguments{
-\item{sp_path}{The species path used with \pkg{ebirdst} to download and load data}
+\item{sp_path}{The species path used with \pkg{ebirdst} to download and load
+data}
 
 \item{res}{The target resolution of the BirdFlow model in kilometers. If
 \code{res} is NULL (default) then a resolution that results in less than \code{max_params}
@@ -44,8 +45,9 @@ projection eBird has assigned to this species - see
 \code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
-\item{download_species}{The species code used with \pkg{ebirdst} this might be
-"example_data" but otherwise will be a real species code.}
+\item{download_species}{The species code used with \pkg{ebirdst} this might
+be "example_data" or "yebsap-example" but otherwise will be a real
+species code.}
 
 \item{project_method}{This is the method used to reproject it is a local
 variable set within \code{preprocess_species}.}

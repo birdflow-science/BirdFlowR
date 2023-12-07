@@ -1,8 +1,39 @@
-# BirdFlowR 0.1.0.9039
-2023-11-21*
+# BirdFlowR 0.1.0.9040
+2023-12-05
 
-* Updated tests for new `amewoo` model in **BirdFlowModels** (R package)* 0.0.2.9002
-* Now depends on 
+* New metadata items 
+  * `birdflowr_preprocess_version` the version of BirdFlowR used for 
+    preprocessing
+  * `ebirdst_version` the ebirdst package version used while preprocessing
+
+* Changes made to allow preprocessing from **ebirdst** v. 3.2022
+  * Both "example_date" and "yeseb-example" are now handled as special cases
+  triggering the use of example data from ebirdst using whichever form is 
+  appropriate for the ebirdst version in use. 
+  * If ebirdst version >= 3.2022 quality of the model is assessed using the 
+  <x>_season_quality variables instead of the "<x>_range_modeled" variables 
+  and an error is thrown if any variable is less than `min_season_quality` 
+  which defaults to 3.
+  * With ebirdst >= 3.2022 all the trends columns are dropped from ebirdst_runs
+  when creating the species data.
+  
+  
+  
+
+# BirdFlowR 0.1.0.9039
+2023-11-21
+
+Updated tests to work with new example data and ebirdst 3.2022.0 
+
+* Updated tests for new `amewoo` model in **BirdFlowModels** 
+  (R package) v. 0.0.2.9002
+* Added formal dependency on BirdFlowModels >= 0.0.2.9002.
+* Updates to pass CRAN checks but not preproces with ebirdst 3.2022.0 
+        * Added ebird/ebirdst to remotes (to force installing dev version)
+          Revert this after changes in ebirdst  47bbdfc87 are on CRAN
+        * Add skip_if_unsupported_ebirdst_version() to preprocess species tests
+          as it currently does for ebirdst 3.2022.0. 
+        * Add copy of `ebirdst_weeks` to BirdFlowR as internal data.
 
 # BirdFlowR 0.1.0.9038
 2023-11-16
