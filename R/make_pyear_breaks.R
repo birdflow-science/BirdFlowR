@@ -10,7 +10,7 @@
 #'
 #' @param range A range in proportion of year (PY) or half proportion of year
 #'  (HPY) values over which breaks will be calculated.
-#' @param bf A BirdFlow object (just used for $dates component)
+#' @param bf A BirdFlow object - only used with `get_dates(bf)`.
 #' @param target_n The target number of breaks
 #' @param as_hpy if `TRUE` than treat range as HPY. If FALSE as PY.
 #'
@@ -47,7 +47,7 @@ make_pyear_breaks <- function(range, bf, target_n = 8, hpy = TRUE) {
 
   fifteenths <- proportion_of_year(paste0("2023-", 12:1, "-15"))
 
-  model_timesteps <- bf$dates$midpoint
+  model_timesteps <- proportion_of_year(get_dates(bf)$date)
 
   schemes <- list(quarters,
                   firsts,

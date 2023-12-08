@@ -28,16 +28,22 @@ reformat_timestep <- function(x, bf) {
   if (anyNA(timestep))
     stop("Unrecognized timestep labels")
 
-  mv <- match(timestep, bf$dates$interval)
-  dates <- lubridate::as_date(bf$dates$date[mv])
+
+  d <- get_dates(bf) # data frame with standard date info for bf
+  mv <- match(timestep, d$timestep) # match vector for aligning to timesteps
+  dates <- lubridate::as_date(d$date[mv]) # dates associated with timesteps
+
 
   if (format == "month_day") {
-    return(paste(lubridate::month(dates, label = TRUE, abbr = FALSE),
-                  lubridate::day(dates)))
+    return(d$label[mv])
   }
 
   if (format == "date") {
     return(as.character(dates))
+  }
+
+  if (format == "week") {
+    return(paste0("w", stringr::str_pad(d$week[mv], width = 2, pad = "0")))
   }
 
   stop("Unrecognized date format. ",

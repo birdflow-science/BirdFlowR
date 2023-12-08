@@ -50,9 +50,7 @@ import_birdflow_v3 <- function(hdf5) {
     "geom/crs",
     "geom/mask",
     "transitions",
-    "transitions",
     "marginals",
-    "dates",
     "dates",
     "distr",
     "species",
@@ -201,7 +199,13 @@ import_birdflow_v3 <- function(hdf5) {
       stop("Expected extra distribution to matrch first distribution")
     d <- d[, 1:(ncol(d) - 1)]
   }
-  dimnames(d) <- list(i = NULL, time = paste0("t", bf$dates$interval))
+
+  ### back compatability code
+  ts_col <- ifelse(bf$metadata$ebird_version_year < 2022,
+                   "interval",
+                   "timestep"
+                   )
+  dimnames(d) <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
   bf$distr <- d
 
   # Delete duplicated dynamic mask row
@@ -212,7 +216,8 @@ import_birdflow_v3 <- function(hdf5) {
            "BirdFlow model")
     dm <- dm[, 1:(ncol(dm) - 1)]
   }
-  dimnames(dm) <- list(i = NULL, time = paste0("t", bf$dates$interval))
+
+  dimnames(dm) <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
   bf$geom$dynamic_mask <- dm
 
   # Make and save marginal index

@@ -170,7 +170,7 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   y <- as.vector(i_to_y(trajectory, bf))
   timestep <- rep(timesteps, times = ncol(trajectory))
   route_id <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
-  date <- bf$dates$date[timestep]
+  date <- get_dates(bf)$date[timestep]
 
   points <- data.frame(x, y, route_id, timestep, date,
                        i = as.vector(trajectory))

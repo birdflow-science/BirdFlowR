@@ -32,13 +32,11 @@ truncate_birdflow <- function(bf, ...) {
     ts_padding <- get_timestep_padding(bf)
     bf$metadata$timestep_padding <- ts_padding
   }
-
   # Add dates$weeks if it doesn't exist
   ### back compatibility code
   if(is.null(bf$dates$week) && nrow(bf$dates) == 52){
     bf$dates$week <- 1:52
   }
-
 
   # Handle special case of circular preprocessed model
   # The last date and distribution in these models is a duplicate of the
@@ -49,6 +47,7 @@ truncate_birdflow <- function(bf, ...) {
   if (bf$dates$date[1] == bf$dates$date[nrow(bf$dates)]) {
     bf$dates <- bf$dates[-nrow(bf$dates), ]
     bf$distr <- bf$distr[, -ncol(bf$distr)]
+    bf$geom$dynamic_mask <- bf$geom$dynamic_mask[, -ncol(bf$geom$dynamic_mask)]
   }
 
   # Define the retained timesteps both by their old index (in the full model)
@@ -68,9 +67,19 @@ truncate_birdflow <- function(bf, ...) {
 
   # Update dates
   d <- bf$dates
-  mv <- match(ts_cw$old, d$interval) # (mv = match vector)
-  d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
-  d$interval <- seq_len(nrow(d))
+
+  ### back compatability code
+  if (get_metadata(bf, "ebird_version_year") < 2022){
+    mv <- match(ts_cw$old, d$interval) # (mv = match vector)
+    d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
+    d$interval <- seq_len(nrow(d))
+  } else {
+    mv <- match(ts_cw$old, d$timestep) # (mv = match vector)
+    d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
+    d$timestep <- seq_len(nrow(d))
+  }
+
+  rownames(d) <- NULL
   bf$dates <- d
 
   # Metadata

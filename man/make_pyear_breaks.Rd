@@ -11,7 +11,7 @@ make_pyear_breaks(range, bf, target_n = 8, hpy = TRUE)
 \item{range}{A range in proportion of year (PY) or half proportion of year
 (HPY) values over which breaks will be calculated.}
 
-\item{bf}{A BirdFlow object (just used for $dates component)}
+\item{bf}{A BirdFlow object - only used with \code{get_dates(bf)}.}
 
 \item{target_n}{The target number of breaks}
 

@@ -158,7 +158,7 @@ preprocess_species <- function(species = NULL,
     if (verbose)
       cat("The example datset does not represet a complete species range so\n",
           "should only used for demonstrating package functions.\n", sep = "")
-    download_species <-  ebirdst_example() # example species for current ver.
+    download_species <-  ebirdst_example_species() # example species for current ver.
     species <- "yebsap"  # used to look up metadata
     if (!is.null(res) && res < 27)
       stop("res must be at least 27 when working with the low resolution ",
@@ -481,10 +481,10 @@ preprocess_species <- function(species = NULL,
     # Dates
     dates <- export$dates
 
-    # Extract first date and reinsert as interval 53
+    # Extract first date and reinsert as timestep 53
     first <- dates[1, , drop = FALSE]
     timestep_col <- ifelse("timestep" %in% names(dates), "timestep", "interval")
-    first[[timestep_col]] <- dates[nrow(dates), timestep_col] + 1  # interval 53, week 1
+    first[[timestep_col]] <- dates[nrow(dates), timestep_col] + 1  # ts53, wk 1
     dates <- rbind(dates, first)
     export$dates <- dates
     export$metadata$n_timesteps <- length(unique(dates$date))

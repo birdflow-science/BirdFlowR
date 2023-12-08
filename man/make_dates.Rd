@@ -4,7 +4,12 @@
 \alias{make_dates}
 \title{Internal function to make the dates component of a BirdFlow model}
 \usage{
-make_dates()
+make_dates(version_year = NULL)
+}
+\arguments{
+\item{version_year}{leave NULL for typical usage.  Set to
+a ebird version year to overide.  Used by \code{switch_date_format()}.
+version_year < 2021 will yield old date format.}
 }
 \value{
 Dates table appropriate for the current version of eBirdst

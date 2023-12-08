@@ -1,24 +1,80 @@
 # BirdFlowR 0.1.0.9040
 2023-12-05
 
-* New metadata items 
-  * `birdflowr_preprocess_version` the version of BirdFlowR used for 
-    preprocessing
-  * `ebirdst_version` the ebirdst package version used while preprocessing
+## Support for **ebirdst** 3.2002.0 added.
+**BirdFlowR** can now fit models based on eBird 2022 data or 2021 data and
+will preprocess using whichever version of **ebirdst** is loaded.
+Both types of fitted models can be used with BirdFlowR.
+Most testing will run with either version of **ebirdst** installed but CRAN
+checks will only pass with the new version due to references to objects that
+don't exist in the old version.
 
-* Changes made to allow preprocessing from **ebirdst** v. 3.2022
-  * Both "example_date" and "yeseb-example" are now handled as special cases
-  triggering the use of example data from ebirdst using whichever form is 
-  appropriate for the ebirdst version in use. 
-  * If ebirdst version >= 3.2022 quality of the model is assessed using the 
-  <x>_season_quality variables instead of the "<x>_range_modeled" variables 
-  and an error is thrown if any variable is less than `min_season_quality` 
-  which defaults to 3.
-  * With ebirdst >= 3.2022 all the trends columns are dropped from ebirdst_runs
-  when creating the species data.
+## Breaking
+*  `get_dates()` 
+    * With any model fit using **ebirdst** 2.2021 (including previously) 
+    `$dates` has the older format with columns:
+    "interval", "date", "midpoint", "start", "end", "doy", and "week".
+    * With models fit with **ebirdst** 3.2022 `$dates` has columns: 
+    "timestep", "date", "label", "julian", "week".
+    * Regardless of the `$dates` format in the model object `get_dates()` 
+    returns the newer columns: "timestep", "date", "label", "julian", "week".
+    Previously it returned the older columns.
+    * Replacing `bf$dates` with `get_dates()` and adapting to the new column
+    names is recommended.
+
+*  Inconsistent weeks. **eBird** changed the way dates are assigned to weeks
+   in the 2022 version.  See notes in `get_dates()` for details. 
+   **BirdFlowR** honors the date scheme used
+   in the eBird data each model was built with and thus some dates will be 
+   assigned to a different week with a 2021 model than they are with
+   a 2022 model this will affect `lookup_timestep()`, 
+   `lookup_timestep_sequence()`, and the many functions that rely on them.
+   
+*  Importing (old) BirdFlow models fit without a dynamic mask is no longer
+   supported. Predicting with them is. Use BirdFlowR 0.1.0.39 if you want to 
+   import an old hdf5 file which could then be saved with `saveRDS()`.
+   Dynamic masks were added in 0.1.0.9001 (April 2023) so only models fit
+   (but not imported) before then will be affected. 
+       
+## New
+
+* `preprocess_species()` works with both **ebirdst** 3.2022.0 and
+  2.2021.3. It will use whichever version is loaded and models fit with 
+  either eBird version year can be used with BirdFlow. 
+
+* New metadata items 
+  * `birdflowr_preprocess_version`: the version of **BirdFlowR** used for 
+    preprocessing.
+  * `ebirdst_version`:  the **ebirdst** version used while preprocessing.
+
+## Updates
+
+* A number of interal changes were made to "`preprocess_species()` 
+  to work with  **ebirdst** v. 3.2022
+  * `species` can be set to either `"example_date"` or `"yeseb-example"` to
+  triggering using  **ebirdst** example data. **BirdFlowR** will silently
+  switch between the two to accommodate **ebirdst**.
+  * If **ebirdst** version >= 3.2022 the quality of the species model is 
+  checked using the `<x>_season_quality` values instead of the dropped
+  `<x>_range_modeled` information and an error is thrown if any value is 
+  less than the new `min_season_quality` argument which defaults to `3`.
+  With **ebirdst**  2.2021 quality is still checked with `<x>_range_modeled`.
+  * With **ebirdst** >= 3.2022 all the new trends columns are dropped from 
+  `ebirdst_runs` when creating the species data.  The data available via
+  `species_info()` (and `$species`) is unchanged.
+  * A new `dates` format is now used with 2022 models.
   
+* Date lookup code was overhauled througout the package. 
+  * Most use of `$dates`  was dropped in favor of `get_dates()` to handle the 
+  two date formats in use.
   
+* `preprocess_species()` snapshot tests were updated to use eBird 2022 derived
+  snapshots and are skipped if older versions of **eBirdst** are loaded, but
+  most `preprocess_species()` tests are still run.
   
+* Several internal functions documented in `ebirdst-compatability` help
+  insulate **BirdFlowR** from the changes in the **ebirdst** API and facilitate
+  working with both versions.
 
 # BirdFlowR 0.1.0.9039
 2023-11-21

@@ -3,12 +3,18 @@
 #' Internal function to make the dates component of a BirdFlow model
 #'
 #' Called from [preprocess_species] and not intended for other use.
-#'
+#' @param version_year leave NULL for typical usage.  Set to
+#' a ebird version year to overide.  Used by `switch_date_format()`.
+#' version_year < 2021 will yield old date format.
 #' @return Dates table appropriate for the current version of eBirdst
 #' @keywords internal
-make_dates <- function() {
+make_dates <- function(version_year = NULL) {
 
-  if (ebirdst_pkg_ver() < "3.2022.0") {
+  # With 2023 data release potentiall date format
+  if(is.null(version_year))
+    version_year <- ebirdst::ebirdst_version()$version_year
+
+  if (version_year < 2022) {
     # Reformat and export dates
     dates <- as.data.frame(ebirdst_weeks)
     # Note ebirdst_weeks now stored in BirdFlowR is a copy of the ebirdst
@@ -45,7 +51,7 @@ make_dates <- function() {
 
   # Dates - actual date associated with center of week
   # It Shifts one day relative to labels for weeks after Feb. on leap years.
-  lubridate::year(ts_dates) <- ebirdst::ebirdst_version()$version_year
+  lubridate::year(ts_dates) <- version_year
   lubridate::yday(ts_dates) <- dates$julian
   dates$date <- as.character(ts_dates)
 

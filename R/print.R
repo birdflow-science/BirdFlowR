@@ -17,11 +17,11 @@ print.BirdFlow <- function(x, ...) {
   nc <- 15 # n characters before colon
   pad <- function(x) stringr::str_pad(x, width = nc, side = "right", pad = " ")
   cat(pad("  dimensions"), ": ",
-      paste(x$geom$nrow, x$geom$ncol, nrow(x$dates), sep = ", "),
+      paste(nrow(x), ncol(x), n_timesteps(x), sep = ", "),
       "  (nrow, ncol, ntimesteps)\n", sep = "")
-  cat(pad("  resolution"), ": ", paste(x$geom$res, collapse = ", "),
+  cat(pad("  resolution"), ": ", paste(res(x), collapse = ", "),
       "  (x, y)\n", sep = "")
-  cat(pad("  active cells"), ": ", sum(x$geom$m), "\n", sep = "")
+  cat(pad("  active cells"), ": ", n_active(x), "\n", sep = "")
   cat(pad("  size"), ": ", format(utils::object.size(x), unit =  "auto"),
       "\n", sep = "")  # drop size before package release
   invisible(x)

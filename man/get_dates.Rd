@@ -10,22 +10,20 @@ get_dates(bf)
 \item{bf}{A BirdFlow object to retrieve dates from.}
 }
 \value{
-It returns a data frame.
-
-The columns are:
+A data frame with columns:
 \item{timestep}{The model timestep associated with each row. Will always
 equal the row number.}
 \item{date}{The date associated with the midpoint of the timestep}
-\item{label}{ The month and day based label associated with the interval.
+\item{label}{ The month and day based label associated with the timestep
 Consistent with eBird's 2022 date scheme will be one day off the \code{date}
-after February on leap years but are still used to label intervals. If the
+after February on leap years but are still used to label timesteps. If the
 model was fit with an older version of \pkg{ebirdst} they will never be
 offset}
 \item{julian}{The Julian date (day of year) associated with the timestep
 center}
 \item{week}{The eBirdst week number associated with the date. For full year
 models this is identical to \code{timestep} but after
-\href{truncate_birdflow}{truncation} they will differ.
+\href{truncate_birdflow}{truncation} they will differ.}
 
 Prior to \pkg{BirdFlowR} v. 0.1.0.9040 it returned columns:
 \item{interval}{The interval or timestep associated with each date.
@@ -40,11 +38,23 @@ as a proportion of the total year that has elapsed.}
 \description{
 \code{get_dates()} get date information for a BirdFlow model
 }
-\details{
-\pkg{BirdFlowR} uses the same conventions for assigning dates to
-eBird "weeks" as \pkg{ebirdst}. This changed with the 2022 release.
+\note{
+\itemize{
+\item \code{\link[=truncate_birdflow]{truncate_birdflow()}} creates models with a subset of the intervals
+and renames them \verb{1:[n_timesteps()]} of the truncated model so if it
+has been used \code{week} and \code{timestep} will not have identical values.
+}
+}
+\section{Date scheme}{
 
-\pkg{ebirdst} version <= 2.2021.3
+
+In a non-leap year there are 52 weeks plus 1 day so assigning days
+to weeks is a little bit arbitrary.  \pkg{BirdFlowR} uses the same
+conventions as \pkg{ebirdst} and eBird itself which changed
+with the eBird 2022 version year. Thus for some dates the result
+of \code{lookup_timestep()} will change depending on the \code{ebird_version_year}
+associated with the model.
+\subsection{2021 date scheme (\pkg{ebirdst} <= 2.2021.3)}{
 \itemize{
 \item Date table is derived from \code{ebirdst::ebirdst_weeks} and added
 to the model object by \code{\link[=preprocess_species]{preprocess_species()}}.
@@ -55,17 +65,28 @@ compared to these thresholds.
 \item In a leap-year two weeks have 8 days.
 \item All other weeks have 7 days.
 }
+}
 
-\pkg{ebirdst} version  >= 3.2022.0
+\subsection{2022 date scheme (\pkg{ebirdst} >= 3.2022.0)}{
 \itemize{
-\item \pkg{ebirdst} dropped \code{ebirdst_weeks} and  \code{ebirdst::date_to_st_week()}
-\item Dates are assigned to weeks by finding which evenly spaced Julian date of
-a week center Julian date of the input is closest to.
-\item All weeks but the last have 7 days.
+\item \pkg{ebirdst} dropped \code{ebirdst_weeks}
+\item Weeks are defined by evenly spaced Julian dates (of week center) which
+are always \code{seq(4, 366, 7)}.
+\item Dates are assigned to the week for which the Julian date is closest.
 \item On non-leap-years the last week has 8 days, on leap years it has 9.
+\item All weeks but the last have 7 days.
+\item Week labels (month and day) are assigned based on the month and day
+associated with the Julian week center on non-leap years regardless
+of whether it is a leap year. The label on leap years will thus be one
+day off the date of the week center for most of the year.
+}
 }
 
-\code{\link[=truncate_birdflow]{truncate_birdflow()}} creates models with a subset of the intervals
-and renames them \verb{1:[n_timesteps()]} of the truncated model so if it
-has been used \code{week} and \code{timestep} will not have identical values.
+\subsection{Retreiving dates}{
+
+The date columns stored within a birdflow model changes depending on the
+ebirdst version year, so do NOT use \code{bf$dates} in your code. Instead use
+\code{get_dates()} which will always return the same (newer) column names.
 }
+}
+
