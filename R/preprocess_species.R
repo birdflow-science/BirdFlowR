@@ -219,7 +219,8 @@ preprocess_species <- function(species = NULL,
 
   # Restore formatting to ebirdst columns
   # in ebirdst 2.2021.1 all columns are stored as characters.
-  #  It's fixed by 2.2021.3 but CRAN is still on 2.2021.1
+  # it was fixed in 2.2021.3 so this is now extra security against
+  # future format changes
   logical_variables <- intersect(c("resident",
                          "breeding_range_modeled",
                          "nonbreeding_range_modeled",

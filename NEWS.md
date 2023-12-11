@@ -11,10 +11,9 @@ don't exist in the old version.
 
 ## Breaking
 *  `get_dates()` 
-    * With any model fit using **ebirdst** 2.2021 (including previously) 
-    `$dates` has the older format with columns:
+    * Models fit using **ebirdst** 2.2021  have `$dates` columns:
     "interval", "date", "midpoint", "start", "end", "doy", and "week".
-    * With models fit with **ebirdst** 3.2022 `$dates` has columns: 
+    * Models fit with **ebirdst** 3.2022 have `$dates` columns: 
     "timestep", "date", "label", "julian", "week".
     * Regardless of the `$dates` format in the model object `get_dates()` 
     returns the newer columns: "timestep", "date", "label", "julian", "week".
