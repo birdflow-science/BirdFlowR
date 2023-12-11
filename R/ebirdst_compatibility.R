@@ -15,7 +15,7 @@ NULL
 #' @keywords internal
 #' @rdname ebirdst-compatability
 ebirdst_pkg_ver <- function() {
-  res <- tryCatch(packageVersion("ebirdst"), error = identity)
+  res <- tryCatch(utils::packageVersion("ebirdst"), error = identity)
   if (inherits(res, "error"))
     return(NA)
   res
@@ -29,7 +29,7 @@ ebirdst_pkg_ver <- function() {
 #' \pkg{ebirdst} 3.2022.0 switched from "lr", "mr", and "hr" to
 #'  "27km", "9km", and "3km" to indicate low, medium, and high resolution
 #'  versions of the raster data in function arguments.
-#'  [process_species()] uses the older two letter
+#'  [preprocess_species()] uses the older two letter
 #'  versions but runs them through this function before calling \pkg{ebirdst}
 #'  functions.
 #'
@@ -40,9 +40,6 @@ ebirdst_pkg_ver <- function() {
 #' of \pkg{ebirdst}.
 #' @rdname ebirdst-compatability
 #' @keywords internal
-#' @examples
-#'   res_label("hr")
-#'   res_label(c("lr", "mr", "hr"))
 res_label <- function(res) {
   crosswalk <- data.frame("v2021" = c("lr", "mr", "hr"),
                           "v2022" = c("27km", "9km", "3km"))

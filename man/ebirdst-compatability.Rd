@@ -58,7 +58,7 @@ installed \pkg{ebirdst}
 \pkg{ebirdst} 3.2022.0 switched from "lr", "mr", and "hr" to
 "27km", "9km", and "3km" to indicate low, medium, and high resolution
 versions of the raster data in function arguments.
-\code{\link[=process_species]{process_species()}} uses the older two letter
+\code{\link[=preprocess_species]{preprocess_species()}} uses the older two letter
 versions but runs them through this function before calling \pkg{ebirdst}
 functions.
 }
@@ -77,8 +77,4 @@ installed \pkg{ebirdst}.  The example species changed
 from "example_data" to "yebsap-example" in version 3.2022.0.
 }
 
-\examples{
-  res_label("hr")
-  res_label(c("lr", "mr", "hr"))
-}
 \keyword{internal}

@@ -290,7 +290,7 @@ preprocess_species <- function(species = NULL,
   export$metadata$ebird_access_end_date <- as.character(v$access_end_date)
   export$metadata$birdflow_preprocess_date <- as.character(Sys.Date())
   export$metadata$birdflowr_preprocess_version <-
-    as.character(packageVersion("BirdFlowR"))
+    as.character(utils::packageVersion("BirdFlowR"))
 
   #----------------------------------------------------------------------------#
   # Download abundance data                                                 ####
