@@ -20,7 +20,7 @@
 #' crs(birdflow_crs, proj = TRUE)
 #'
 birdflow_crs <-
-'PROJCRS["Western Mollweide",
+  'PROJCRS["Western Mollweide",
     BASEGEOGCRS["WGS 84",
         DATUM["World Geodetic System 1984",
             ELLIPSOID["WGS 84",6378137,298.257223563,

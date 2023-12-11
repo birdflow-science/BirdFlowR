@@ -1,5 +1,4 @@
-
-
+# nolint start:line_length_linter
 #' Retrieve BirdFlow metadata
 #'
 #' `get_metadata` retrieves information about the BirdFlow model: when it was
@@ -22,6 +21,7 @@
 #'| `birdflow_model_date` | The date the model was fitted and/or exported to hdf5 from Python. |
 #'| `is_sparse` | Logical, if `TRUE` the model is sparse. See [sparsify()] |
 #'|  `sparse_stats` | If the model is sparse this contains sparsification statistics (a list). |
+# nolint end
 #'
 #'
 #' @param x BirdFlow model
@@ -43,13 +43,17 @@
 #'
 #'  [Dimensions][nrow()] documents getting various attributes of a BirdFlow
 #'  model, some of which overlap `get_metadata()`.
-
 #' @examples
 #'library(BirdFlowModels)
 #'get_metadata(amewoo)
 #'get_metadata(amewoo, "is_sparse")
 #'
 get_metadata <- function(x, what) {
+
+  # Force all to lower case (early models one erroneous capital in
+  #  the metadata names (birdFlowr_version )
+  names(x$metadata) <- tolower(names(x$metadata))
+
   if (missing(what))
     what <- "all"
   what <- tolower(what)

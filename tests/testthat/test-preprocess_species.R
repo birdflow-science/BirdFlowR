@@ -15,7 +15,7 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
-  expect_true(all((ext(a)[, ] %% xres(a)) == 0))  # Test if origin is at 0, 0
+  expect_true(all((ext(a)[, ] %% xres(a)) < 1e-9))  # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribibution
   d <- get_distr(a, 5)
@@ -23,8 +23,9 @@ test_that("preprocess_species runs on test dataset", {
   df <- df[!df$density == 0, ]
   df <- df[1:12, ]
   rownames(df) <- NULL
-  expect_snapshot(df)
 
+  skip_if_wrong_ebirdst_for_snapshot()
+  expect_snapshot(df)
   expect_snapshot(ext(a))
   expect_snapshot(res(a))
 
@@ -56,23 +57,46 @@ test_that("preprocess_species catches error conditions", {
     preprocess_species("example_data", out_dir = "junkdirectory_airnfpw"),
     "Output directory junkdirectory_airnfpw does not exist.")
 
+  # Local and standardized copy of ebirest::runs
+  runs <- ebirdst::ebirdst_runs |> as.data.frame()
+  runs[names(runs) == "resident"] <- "is_resident" # 2022 name
+
+
+  # Pull out a resident species
+  sp <- runs[runs$is_resident, "species_code"][1]
+
   expect_error(
-    preprocess_species("grerhe1", hdf5 = FALSE),
-    paste0("Greater Rhea (grerhe1) is a resident (non-migratory) species and",
+    preprocess_species(sp, hdf5 = FALSE),
+    paste0("is a resident (non-migratory) species and",
            " is therefore a poor candidate for BirdFlow modeling."),
     fixed = TRUE
   )
 
-  # Error when full range isn't modeled by ebirdst
-  runs <- ebirdst::ebirdst_runs
-  i <- which(!as.logical(runs$resident) &
-               !as.logical(runs$nonbreeding_range_modeled))[1]
-  code <- runs$species_code[i]
-  species <- runs$common_name[i]
-  err <- paste0(
-    "eBird status and trends models do not cover the full range for ",
-    species, " (", code, ")")
-  expect_error(preprocess_species(code, hdf5 = FALSE), err, fixed = TRUE)
+  if(ebirdst_pkg_ver() < "3.2002.0"){
+    # Error when full range isn't modeled by ebirdst (ebirdst 2021)
+    runs <- ebirdst::ebirdst_runs
+    i <- which(!as.logical(runs$resident) &
+                 !as.logical(runs$nonbreeding_range_modeled))[1]
+    code <- runs$species_code[i]
+    species <- runs$common_name[i]
+    err <- paste0(
+      "eBird status and trends models do not cover the full range for ",
+      species, " (", code, ")")
+    expect_error(preprocess_species(code, hdf5 = FALSE), err, fixed = TRUE)
+  } else {
+    # Error when data quality isn't high enough (ebirdst 2022)
+    runs <- ebirdst::ebirdst_runs |> as.data.frame()
+    i <- which(!runs$is_resident & runs$breeding_quality < 3)[1]
+    code <- runs$species_code[i]
+    species <- runs$common_name[i]
+    err <- paste0(
+      "eBird status and trends model quality is less than",
+      " 3 in one or more seasons for ",
+      species, " (", code, ")")
+    expect_error(preprocess_species(code, hdf5 = FALSE), err, fixed = TRUE)
+
+  }
+
 
   # Issue #106  (bad species input)
   expect_error(preprocess_species(NA), "species cannot be NA")
@@ -123,19 +147,27 @@ test_that("preprocess_species() works with clip", {
     sf::st_polygon()
 
   clip <- terra::vect(poly)
-  sp_path <- ebirdst::get_species_path("example_data")
-  proj  <- terra::crs(
-    ebirdst::load_fac_map_parameters(sp_path)$custom_projection)
-  terra::crs(clip) <- proj
+
+  sp <- ebirdst_example_species()
+  sp_path <- ebirdst::get_species_path(sp)
+
+
+  if(ebirdst_pkg_ver() < "3.2022.0"){
+    proj <- ebirdst::load_fac_map_parameters(sp_path)$custom_projection
+  } else {
+    proj <- ebirdst::load_fac_map_parameters(species = sp)$custom_projection
+  }
+
+  terra::crs(clip) <- terra::crs(proj)
   if (interactive()) {
     # Plot "Full" abundance for "example_data" and our clipping polygon
-    a <- preprocess_species("example_data")
+    a <- preprocess_species(ebirdst_example_species(), hdf5 = FALSE, res = 30)
     terra::plot(rast(a, 1))
     terra::plot(poly, add = TRUE)
   }
 
   expect_no_error(
-    b <- preprocess_species("example_data",
+    b <- preprocess_species(ebirdst_example_species(),
                             out_dir = dir,
                             hdf5 = TRUE,
                             clip = clip,
@@ -143,13 +175,16 @@ test_that("preprocess_species() works with clip", {
                             res = 75)
     )
 
+
+  # Test that expect file was created
+  created_files <- list.files(dir)
+  expect_in(created_files,  c("example_data_2021_75km_clip.hdf5",  # ebird 2021
+                              "yebsap-example_2022_75km_clip.hdf5")) # 2022
+
+  skip_if_wrong_ebirdst_for_snapshot()
+
   expect_snapshot({
     ext(b)
     res(b)
   })
-
-  # Test that expect file was created
-  created_files <- list.files(dir)
-  expect_setequal(created_files,  "example_data_2021_75km_clip.hdf5")
-
 })

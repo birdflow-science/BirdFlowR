@@ -39,7 +39,8 @@ DEPRECATED FUNCTION.  Please use \code{\link[=distribution_performance]{distribu
 }
 \details{
 Calculate several the correlation between projected distributions and
-the eBird Status and Trends (S&T) distributions used to train the BirdFlow model.
+the eBird Status and Trends (S&T) distributions used to train the BirdFlow
+model.
 
 "Training distribution" is used to describe the eBird S&T
 distributions used to train the BirdFlow models.  "Marginal distribution"

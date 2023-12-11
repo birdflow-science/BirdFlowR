@@ -30,17 +30,17 @@
 #'
 lookup_timestep <- function(x, bf) {
   stopifnot(inherits(bf, "BirdFlow"))
-  dates <- bf$dates
+  dates <- get_dates(bf) # standardize to current date format
   original_x <- x
 
   # Special case "all" returns all timesteps in order
   if (length(x) == 1 && is.character(x) &&  tolower(x) == "all")
-    return(bf$dates$interval)
+    return(dates$timestep)
 
   # timesteps e.g. "t1" "t2"
   if (is.character(x) && all(grepl("^t[[:digit:]]*$",
                                    ignore.case = TRUE, x = x))) {
-      x <- as.numeric(gsub("t", "", x))
+    x <- as.numeric(gsub("t", "", x, ignore.case = TRUE))
   }
 
   # convert date like things to dates
@@ -48,32 +48,18 @@ lookup_timestep <- function(x, bf) {
     x <- lubridate::as_date(x)
   }
 
+  # Process dates
   if (lubridate::is.Date(x)) {
+    week <- date_to_week(x, get_metadata(bf, "ebird_version_year"))
+    x <- dates$timestep[match(week, dates$week)]
+  }
 
-    # Calculate the proportion of the year that has passed at each date.
-    # using 366 for all years as that's what ebirdst::date_to_st_week does
-
-    # Support old models with a different naming convention
-    if (any(grepl("^weeks_", names(dates))))
-      names(dates) <- gsub("^weeks_", "", names(dates))
-
-    if (all(c("start", "end") %in% names(bf$dates))) {
-      # Note POSIXct$yday starts at 0   lubridate::doy()  starts at 1
-      py <- proportion_of_year(x)
-      breaks <- c(dates$start[1], dates$end)
-      x <- findInterval(py, vec = breaks, all.inside = TRUE)
-
-    } else {
-        stop("This is unexpected. bf$dates is lacking  \"start\" and/or ",
-             "\"end\" columns", sep = "")
-    }
-  }  # End is date
-
-  if (!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$interval)) {
+  # Validate
+  if (!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$timestep)) {
     xtext <- ifelse(length(original_x) > 3,
                     paste0(paste(original_x[1:3], collapse = ", "),
                            ", ..."),
-                    paste0(original_x, collpase = ", "))
+                    paste0(original_x, collapse = ", "))
     stop("Date lookup failed for x = ", xtext)
   }
   if (is.integer(x))

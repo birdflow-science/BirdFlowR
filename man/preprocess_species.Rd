@@ -15,6 +15,7 @@ preprocess_species(
   max_params = NULL,
   gpu_ram = 12,
   skip_quality_checks = FALSE,
+  min_season_quality = 3,
   ...
 )
 }
@@ -57,8 +58,16 @@ If \code{res} is NULL and \code{max_params} is NULL this is used to estimate
 if either\code{ res} or \code{max_params} is set.}
 
 \item{skip_quality_checks}{If \code{TRUE} than preprocess the species even if
-not all of four ranges are modeled (based on
-\link[ebirdst:ebirdst_runs]{ebirdst_runs()}).}
+not all of four ranges are modeled (under ebirdst 2021 version year) or for
+2022 and subsequent data versions if
+not all \verb{<season>_quality} is higher than \code{min_season_quality} in
+\link[ebirdst:ebirdst_runs]{ebirdst_runs}).}
+
+\item{min_season_quality}{The minimum acceptable season quality when
+preprocesing eBird 2022 and subsequent versions. Used to check model
+quality using based on the four \verb{<season>_model_quality} columns in
+\link[ebirdst:ebirdst_runs]{ebirdst_runs} ignored with 2021 ebirdst
+version year.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}

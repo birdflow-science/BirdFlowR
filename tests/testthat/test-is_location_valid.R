@@ -61,7 +61,8 @@ test_that("is_location_valid() returns TRUE for valid inputs", {
   i <- apply(locs, 2, function(x)  which(as.logical(x)))
   x <- i_to_x(i, bf)
   y <- i_to_y(i, bf)
-  date <- bf$dates$date[bf$dates$interval == timestep]
+  d <- get_dates(bf)
+  date <- d$date[d$timestep == timestep]
 
   # i , timestep
   expect_no_error(a <- is_location_valid(bf, i = i, timestep = timestep))
@@ -98,7 +99,8 @@ test_that("is_location_valid() returns FALSE when it should", {
   i <- apply(distr, 2, function(x) sample(which(x == 0), 1))
   x <- i_to_x(i, bf)
   y <- i_to_y(i, bf)
-  date <- bf$dates$date[bf$dates$interval == timestep]
+  d <- get_dates(bf)
+  date <- d$date[d$timestep == timestep]
 
   # i , timestep
   expect_no_error(a <-  is_location_valid(bf, i = i, timestep = timestep))

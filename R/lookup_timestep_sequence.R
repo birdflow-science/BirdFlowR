@@ -102,7 +102,7 @@ lookup_timestep_sequence <- function(x,
   }
 
   stopifnot(inherits(x, "BirdFlow"))
-  dates <- x$dates
+  dates <- get_dates(x)
 
   no_direction <- is.null(direction)
   if (is.null(direction))
@@ -225,7 +225,7 @@ lookup_timestep_sequence <- function(x,
   } else {
     steps <- seq(start, end, by = step)
   }
-  stopifnot(all(steps %in% dates$interval))
+  stopifnot(all(steps %in% dates$timestep))
 
   return(steps)
 }
@@ -339,7 +339,7 @@ lookup_season_timesteps <- function(x, season, season_buffer = 1) {
   } else {
     s <- c(start:n_timesteps(x), 1:end)
   }
-  stopifnot(all(s) %in% x$dates$interval)
+  stopifnot(all(s) %in% get_dates(x)$timestep)
 
   return(s)
 }

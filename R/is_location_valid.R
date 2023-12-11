@@ -78,7 +78,7 @@ is_location_valid <- function(bf, i, x, y, timestep, date) {
   stopifnot(length(i) == length(timestep))
   stopifnot(all(is.na(i) | i %in% 1:n_active(bf)))
 
-  stopifnot(all(is.na(timestep) | timestep %in% bf$dates$interval))
+  stopifnot(all(is.na(timestep) | timestep %in% get_dates(bf)$timestep))
   valid <- rep(TRUE, length(timestep)) # will hold result
   valid[is.na(timestep)] <- FALSE
   ut <- unique(timestep)
@@ -113,7 +113,7 @@ is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE) {
     timestep <- rep(timestep, ncol(distr))
   stopifnot(ncol(distr) == length(timestep))
 
-  if (!all(is.na(timestep) | timestep %in% bf$dates$interval))
+  if (!all(is.na(timestep) | timestep %in% get_dates(bf)$timestep))
     stop("Invalid timesteps - they aren't all in the model.")
 
   valid <- rep(TRUE, length(timestep)) # will hold result

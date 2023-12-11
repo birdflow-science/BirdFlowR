@@ -9,5 +9,5 @@
 as_transitions <- function(timesteps, bf) {
   return(paste0("T_", pad_timestep(timesteps[-length(timesteps)], bf),
                 "-",
-                 pad_timestep(timesteps[-1], bf)))
+                pad_timestep(timesteps[-1], bf)))
 }

@@ -10,7 +10,8 @@ test_that("route() works with a single distribution", {
   loc <- sample_distr(sd, n = n) |>
     as.logical() |>
     which() |>
-    i_to_xy(bf) |> as.data.frame()
+    i_to_xy(bf) |>
+    as.data.frame()
   expect_no_error(pts <- route(bf, x_coord = loc$x, y_coord = loc$y,
                                start = start, end = end))
   pts <- as.data.frame(pts)
@@ -33,7 +34,8 @@ test_that("route() works over year boundary", {
   set.seed(1)
   loc <- sample_distr(sd, n = n) |>
     apply(MARGIN = 2, FUN = function(x) which(as.logical(x))) |>
-    i_to_xy(bf) |> as.data.frame()
+    i_to_xy(bf) |>
+    as.data.frame()
   expect_no_error(rts <- route(bf, x_coord = loc$x, y_coord = loc$y,
                                start = start, end = end))
 
@@ -43,7 +45,8 @@ test_that("route() works over year boundary", {
   loc <- sample_distr(sd, n = n) |>
     as.logical() |>
     which() |>
-    i_to_xy(bf) |> as.data.frame()
+    i_to_xy(bf) |>
+    as.data.frame()
   expect_no_error(rt <- route(bf, x_coord = loc$x, y_coord = loc$y,
                               start = start, end = end))
 

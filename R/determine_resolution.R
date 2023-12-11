@@ -37,9 +37,11 @@
 #'  The last step is to round up (reducing parameters) to a cleaner number.
 #'
 #' @inheritParams preprocess_species
-#' @param sp_path The species path used with \pkg{ebirdst} to download and load data
-#' @param download_species The species code used with \pkg{ebirdst} this might be
-#'   "example_data" but otherwise will be a real species code.
+#' @param sp_path The species path used with \pkg{ebirdst} to download and load
+#' data
+#' @param download_species The species code used with \pkg{ebirdst} this might
+#' be "example_data" or "yebsap-example" but otherwise will be a real
+#' species code.
 #' @param project_method This is the method used to reproject it is a local
 #' variable set within `preprocess_species`.
 #'
@@ -55,6 +57,7 @@ determine_resolution <- function(sp_path,
                                  crs,
                                  download_species,
                                  project_method) {
+
 
 
   verbose <- birdflow_options("verbose")
@@ -79,8 +82,17 @@ determine_resolution <- function(sp_path,
     cat("Calculating resolution\n")
   # Load low res abundance data and calculate total areas birds occupy at any
   # time (active_sq_m)
+  if (ebirdst_pkg_ver() < "3.2022.0") {
   abunds <- ebirdst::load_raster("abundance",
-                                 path = sp_path, resolution = "lr")
+                                 path = sp_path,
+                                 resolution = res_label("lr"))
+
+  } else {
+    abunds <- ebirdst::load_raster(species = download_species,
+                                   product = "abundance",
+                                   resolution = res_label("lr"))
+
+  }
 
   # Treat NA values as zeros - this better reflects what they actually are
   v <- terra::values(abunds)
@@ -94,9 +106,6 @@ determine_resolution <- function(sp_path,
     mask <- terra::mask(mask, clip2)
     mask[is.na(mask)] <- FALSE
     abunds <- terra::mask(abunds, clip2)
-
-
-
 
     if (verbose) {
       # Calculate percent of density lost
@@ -197,7 +206,7 @@ determine_resolution <- function(sp_path,
   }
 
   # With example date force resolution to be at least 30
-  if (download_species == "example_data" && res < 30) {
+  if (download_species %in% c("example_data", "yebsap-example") && res < 30) {
     if (verbose)
       cat("Resolution forced to 30 for example data,",
           "which only has low resolution images\n")

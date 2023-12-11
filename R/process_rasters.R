@@ -36,6 +36,11 @@ process_rasters <- function(res,
 
   verbose <- birdflow_options("verbose")
 
+  if (verbose) {
+    cat("process_rasters called with download_species =",
+        download_species, "\n")
+  }
+
   #----------------------------------------------------------------------------#
   # Load abundance data
   #----------------------------------------------------------------------------#
@@ -57,22 +62,44 @@ process_rasters <- function(res,
 
   # Download high or medium resolution data (if needed)
   if (load_res != "lr") {
-    ebirdst::ebirdst_download(download_species,
-                              pattern = download_patterns[[load_res]])
+    if (ebirdst_pkg_ver() < "3.2022.0") {
+      ebirdst::ebirdst_download(download_species,
+                                pattern = download_patterns[[load_res]])
+    } else {
+      cat(download_species, "\n", download_patterns[[load_res]], "\n")
+      ebirdst::ebirdst_download_status(download_species,
+                                pattern = download_patterns[[load_res]])
+
+    }
   }
 
   # Read abundance and upper and lower confidence intervals
-  abunds <- ebirdst::load_raster("abundance",
-                                 path = sp_path,
-                                 resolution = load_res)
-  abunds_lci <- ebirdst::load_raster("abundance",
-                                     metric = "lower",
-                                     path = sp_path,
-                                     resolution = load_res)
-  abunds_uci <- ebirdst::load_raster("abundance",
-                                     metric = "upper",
-                                     path = sp_path,
-                                     resolution = load_res)
+  if (ebirdst_pkg_ver() < "3.2022.0") {
+    abunds <- ebirdst::load_raster("abundance",
+                                   path = sp_path,
+                                   resolution = load_res)
+    abunds_lci <- ebirdst::load_raster("abundance",
+                                       metric = "lower",
+                                       path = sp_path,
+                                       resolution = load_res)
+    abunds_uci <- ebirdst::load_raster("abundance",
+                                       metric = "upper",
+                                       path = sp_path,
+                                       resolution = load_res)
+  } else {
+    abunds <- ebirdst::load_raster(species = download_species,
+                                   product = "abundance",
+                                   resolution = res_label(load_res))
+
+    abunds_lci <- ebirdst::load_raster(species = download_species,
+                                       product = "abundance",
+                                       metric = "lower",
+                                       resolution = res_label(load_res))
+    abunds_uci <- ebirdst::load_raster(species = download_species,
+                                       product = "abundance",
+                                       metric = "upper",
+                                       resolution = res_label(load_res))
+  }
 
   # Overwrite NA with zero
   # More often than not the NA represents very different habitat

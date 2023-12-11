@@ -1,3 +1,4 @@
+# nolint start: line_length_linter
 #' @rdname fix_dead_ends
 #' @title find and fix inconsistencies in sparse BirdFlow models
 #'
@@ -48,6 +49,7 @@
 #'  [sparsify()] calls `fix_dead_ends()`, which in turn calls
 #' `find_dead_ends()` and [fix_current_dead_ends()].
 #' @keywords internal
+# nolint end
 find_dead_ends <- function(x) {
   if (! has_marginals(x)) {
     stop("x lacks marginals can't find dead ends.")

@@ -47,6 +47,11 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   stopifnot(error %in% c(TRUE, FALSE),
             allow_incomplete %in% c(TRUE, FALSE))
 
+  ### Back compatability code
+  # Fix (allowed) typo in old models
+  names(x$metadata)[names(x$metadata) == "birdFlowr_version"] <-
+    "birdflowr_version"
+
   # Look for problems in nested list names, and items by comparing
   # to canonical BirdFlow object returned by new_BirdFlow
   diff <- compare_list_item_names(x, new_BirdFlow())
@@ -127,7 +132,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   } else {  # number of transitions is not NA
 
     if (!is.numeric(nt) || !length(nt) == 1 || is.na(nt) || is.infinite(nt) ||
-       !isTRUE(all.equal(as.numeric(nt) %% 1, 0)) || !nt > 0) {
+        !isTRUE(all.equal(as.numeric(nt) %% 1, 0)) || !nt > 0) {
       p <- add_prob("metadata$n_transitions not a single postive integer value",
                     "error", p)
     }
@@ -272,22 +277,28 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     p <- add_prob("x$dates is missing, NA or not a dataframe", "error", p)
   } else { # dates exists and is data.frame
 
-    required_cols <- c("interval", "date", "doy", "start", "midpoint", "end")
+    if(x$metadata$ebird_version_year < 2022){
+      # 2021 ebirdst models have use older dates format
+      required_cols <- c("interval", "date", "doy", "start", "midpoint", "end")
+    } else {
+      #2022_ ebirdst models use newer dates format
+      required_cols <- names(make_dates())
+    }
     if (!all(required_cols  %in% names(x$dates))) {
       p <- add_prob(paste0("dates is missing columns:",
-                            paste(setdiff(required_cols, names(x$dates)))),
-                     "error", p)
+                           paste(setdiff(required_cols, names(x$dates)))),
+                    "error", p)
     } # end if dates missing columns
     rm(required_cols)
 
+
     if ("distr" %in% names(x) && is.data.frame(x$distr)) {
       if (nrow(x$dates) != ncol(x$distr)) {
-        p <- add_prob("x$dates")
+        p <- add_prob(paste0("x$dates and x$distr do not represent the same ",
+                      "number of timesteps."))
       }
     }
-
   } # end dates is data.frame
-
 
   # check marginal names and index
   if ("marginals" %in% names(x) && is.list(x$marginals)) {

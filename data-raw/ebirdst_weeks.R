@@ -38,5 +38,3 @@ usethis::use_data(ebirdst_weeks, internal = TRUE)
 #'         year, i.e. a number from 0-1.}
 #' }
 "ebirdst_weeks"
-
-

@@ -66,7 +66,7 @@
 #'   }
 animate_distr <- function(distr, bf, title = species(bf), ...) {
 
-   p <- plot_distr(distr, bf, ...)
+  p <- plot_distr(distr, bf, ...)
 
   # Drop faceting and add animation
   a <- p +

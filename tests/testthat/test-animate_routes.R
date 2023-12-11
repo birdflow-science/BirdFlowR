@@ -5,8 +5,10 @@ test_that("animate_routes() runs", {
   start <- lookup_timestep(species_info(bf, "prebreeding_migration_start"), bf)
   end <- start + 3
 
-  xy <-  get_distr(bf, start) |> sample_distr(n = 3) |>
-    apply(2, function(x) which(as.logical(x))) |> i_to_xy(bf) |>
+  xy <-  get_distr(bf, start) |>
+    sample_distr(n = 3) |>
+    apply(2, function(x) which(as.logical(x))) |>
+    i_to_xy(bf) |>
     as.data.frame()
 
   # Short routes

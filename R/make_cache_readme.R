@@ -21,7 +21,9 @@ make_cache_readme <-
   # Local objects that exactly match field names in templates
   # eg "[date]" is a field in the template
   date <-  lubridate::today() |> as.character()
+  date  # for lintr::object_usage_linter    (it is used below with get() )
   cache_path <- cache_path(collection_url) # local variable for the code below
+
 
   # For each text object in memory and for each field
   # replace the field alias with it's value.

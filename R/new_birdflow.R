@@ -18,30 +18,21 @@ new_BirdFlow <- function() {
                  distr = NA,
                  distances = NA,
                  species = list(
-                   # Dropped items from ebirdst_runs are commented out
                    species_code = NA_character_,
                    scientific_name = NA_character_,
                    common_name = NA_character_,
-            #      resident = NA,
                    breeding_quality = NA_integer_,
-            #       breeding_range_modeled = NA,
                    breeding_start = NA,
                    breeding_end = NA,
                    nonbreeding_quality = NA_integer_,
-            #       nonbreeding_range_modeled = NA,
                    nonbreeding_start = NA,
                    nonbreeding_end = NA,
                    postbreeding_migration_quality = NA_integer_,
-            #       postbreeding_migration_range_modeled = NA,
                    postbreeding_migration_start = NA,
                    postbreeding_migration_end = NA,
                    prebreeding_migration_quality = NA_integer_,
-            #       prebreeding_migration_range_modeled = NA,
                    prebreeding_migration_start = NA,
                    prebreeding_migration_end = NA
-            #       resident_quality = NA,
-            #       resident_start = NA,
-            #       resident_end = NA
                  ),
                  metadata = list(
                    has_marginals = FALSE,
@@ -57,7 +48,7 @@ new_BirdFlow <- function() {
                    birdflow_preprocess_date = NA,
                    birdflow_model_date = NA,
                    birdflow_version = 3,
-                   birdFlowr_version =
+                   birdflowr_version =
                      as.character(utils::packageVersion("BirdFlowR")),
                    is_sparse = FALSE,
                    sparse = NA

@@ -13,8 +13,8 @@ route(bf, n = 1, x_coord = NULL, y_coord = NULL, from_marginals = FALSE, ...)
 Generate this many samples.  Otherwise the \code{x_coord} and \code{y_coord} positions
 will each be duplicated \code{n} times.}
 
-\item{x_coord, y_coord}{Optional, if \code{NULL} starting points will be drawn from
-the species distribution at the initial timestep.}
+\item{x_coord, y_coord}{Optional, if \code{NULL} starting points will be drawn
+from the species distribution at the initial timestep.}
 
 \item{from_marginals}{Use \code{FALSE} (the default) to use
 distributions derived directly from eBird Status and Trends when sampling
