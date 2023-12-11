@@ -79,6 +79,7 @@ and transitions.  Use <code>...</code> to truncate the model to part of the year
 <span>  max_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gpu_ram <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  skip_quality_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  min_season_quality <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -142,8 +143,18 @@ if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 
 <dt>skip_quality_checks</dt>
 <dd><p>If <code>TRUE</code> than preprocess the species even if
-not all of four ranges are modeled (based on
-<a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs()</a>).</p></dd>
+not all of four ranges are modeled (under ebirdst 2021 version year) or for
+2022 and subsequent data versions if
+not all <code>&lt;season&gt;_quality</code> is higher than <code>min_season_quality</code> in
+<a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs</a>).</p></dd>
+
+
+<dt>min_season_quality</dt>
+<dd><p>The minimum acceptable season quality when
+preprocesing eBird 2022 and subsequent versions. Used to check model
+quality using based on the four <code>&lt;season&gt;_model_quality</code> columns in
+<a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs</a> ignored with 2021 ebirdst
+version year.</p></dd>
 
 
 <dt>...</dt>

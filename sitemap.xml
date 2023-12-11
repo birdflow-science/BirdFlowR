@@ -94,6 +94,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/distribution_performance.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/ebirdst-compatability.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/evaluate_performance.html</loc>
   </url>
   <url>
@@ -182,6 +185,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_cache_readme.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_dates.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_marginal_index.html</loc>
