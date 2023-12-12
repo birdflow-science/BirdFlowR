@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 rocker/geospatial:4.3.0
+FROM --platform=linux/amd64 rocker/geospatial:4.3.2
 RUN install2.r --error --skipinstalled --ncpus -1 \
     rnaturalearth \
     rnaturalearthdata \
