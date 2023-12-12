@@ -55,7 +55,7 @@ reformat_distr_labels <- function(x, bf) {
     }
   }
 
-  # back compatability code:
+  # back compatibility code:
   names(dn)[time_dimension] <- "time"
 
   # Check for timestep column names

@@ -46,7 +46,7 @@ projection eBird has assigned to this species - see
 \code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
 \item{download_species}{The species code used with \pkg{ebirdst} this might
-be "example_data" or "yebsap-example" but otherwise will be a real
+be \code{"example_data"} or \code{"yebsap-example"} but otherwise will be a real
 species code.}
 
 \item{project_method}{This is the method used to reproject it is a local

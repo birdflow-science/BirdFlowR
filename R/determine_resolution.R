@@ -40,7 +40,7 @@
 #' @param sp_path The species path used with \pkg{ebirdst} to download and load
 #' data
 #' @param download_species The species code used with \pkg{ebirdst} this might
-#' be "example_data" or "yebsap-example" but otherwise will be a real
+#' be `"example_data"` or `"yebsap-example"` but otherwise will be a real
 #' species code.
 #' @param project_method This is the method used to reproject it is a local
 #' variable set within `preprocess_species`.

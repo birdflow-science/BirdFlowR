@@ -1,19 +1,19 @@
-#' @title ebirdst version compatability functions:
+#' @title ebirdst version compatibility functions:
 #'
 #' @description
 #' Internal functions to facilitate working with both the 2021 and 2022
 #' versions of pkg{ebirdst} despite the significant changes to the API.
 #'
-#' @name ebirdst-compatability
+#' @name ebirdst-compatibility
 NULL
 
-#' @section  ebirdst_pkg_ver:
+#' @section `ebirdst_pkg_ver()`:
 #' `ebirdst_pkg_ver()` Look up the version of the currently installed
 #' \pkg{ebirdst}.
 #' @return `ebirdst_pkg_ver()`: The installed \pkg{ebirdst} package version or
 #' `NA` if none.
 #' @keywords internal
-#' @rdname ebirdst-compatability
+#' @rdname ebirdst-compatibility
 ebirdst_pkg_ver <- function() {
   res <- tryCatch(utils::packageVersion("ebirdst"), error = identity)
   if (inherits(res, "error"))
@@ -22,7 +22,7 @@ ebirdst_pkg_ver <- function() {
 }
 
 
-#' @section res_label():
+#' @section `res_label()`:
 #' Convert resolution labels so they are appropriate for the
 #' installed \pkg{ebirdst}
 #'
@@ -38,7 +38,7 @@ ebirdst_pkg_ver <- function() {
 #'
 #' @return `res_label()`: resolution labels appropriate for installed version
 #' of \pkg{ebirdst}.
-#' @rdname ebirdst-compatability
+#' @rdname ebirdst-compatibility
 #' @keywords internal
 res_label <- function(res) {
   crosswalk <- data.frame("v2021" = c("lr", "mr", "hr"),
@@ -60,7 +60,7 @@ res_label <- function(res) {
   res
 }
 
-#' @section date_to_week():
+#' @section `date_to_week()`:
 #'
 #' This is a slightly modified copy of `ebirdst::date_to_st_week()` that
 #' allows calculating weeks from dates without depending on \pkg{ebirdst}.
@@ -71,7 +71,7 @@ res_label <- function(res) {
 #' the closest of those two. The output of
 #' `ebirdst::ebirdst_version()$version_year` or
 #' `get_metadata(bf, "ebird_version_year")` is appropriate.
-#' @rdname ebirdst-compatability
+#' @rdname ebirdst-compatibility
 #' @return `date_to_week()`: A vector of week numbers associated with `dates`
 #' @keywords internal
 date_to_week <- function(dates, version = 2022) {
@@ -92,14 +92,14 @@ date_to_week <- function(dates, version = 2022) {
   return(findInterval(jd, breaks))
 }
 
-#' @section  ebirdst_example_species():
+#' @section `ebirdst_example_species()`:
 #' Lookup the example species name that is appropriate for the
 #' installed \pkg{ebirdst}.  The example species changed
-#' from "example_data" to "yebsap-example" in version 3.2022.0.
+#' from `"example_data"` to `"yebsap-example"` in version 3.2022.0.
 #' @return `ebirdst_example_species()`: The example species name for
 #'  \pkg{ebirdst}
 #' @keywords internal
-#' @rdname ebirdst-compatability
+#' @rdname ebirdst-compatibility
 ebirdst_example_species <- function(){
    ifelse(ebirdst_pkg_ver() < "3.2022.0",
                           "example_data",

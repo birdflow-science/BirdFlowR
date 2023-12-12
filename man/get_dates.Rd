@@ -21,7 +21,7 @@ model was fit with an older version of \pkg{ebirdst} they will never be
 offset}
 \item{julian}{The Julian date (day of year) associated with the timestep
 center}
-\item{week}{The eBirdst week number associated with the date. For full year
+\item{week}{The \pkg{ebirdst} week number associated with the date. For full year
 models this is identical to \code{timestep} but after
 \href{truncate_birdflow}{truncation} they will differ.}
 
@@ -82,10 +82,10 @@ day off the date of the week center for most of the year.
 }
 }
 
-\subsection{Retreiving dates}{
+\subsection{Retrieving dates}{
 
 The date columns stored within a birdflow model changes depending on the
-ebirdst version year, so do NOT use \code{bf$dates} in your code. Instead use
+\pkg{ebirdst} version year, so do NOT use \code{bf$dates} in your code. Instead use
 \code{get_dates()} which will always return the same (newer) column names.
 }
 }

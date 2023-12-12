@@ -4,9 +4,9 @@
 #'
 #' Called from [preprocess_species] and not intended for other use.
 #' @param version_year leave NULL for typical usage.  Set to
-#' a ebird version year to overide.  Used by `switch_date_format()`.
+#' a eBird version year to override.  Used by `switch_date_format()`.
 #' version_year < 2021 will yield old date format.
-#' @return Dates table appropriate for the current version of eBirdst
+#' @return Dates table appropriate for the current version of \pkg{ebirdst}
 #' @keywords internal
 make_dates <- function(version_year = NULL) {
 

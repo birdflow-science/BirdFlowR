@@ -27,7 +27,7 @@
 truncate_birdflow <- function(bf, ...) {
 
   # Add timestep_padding metadata if it doesn't exist
-  ### back compatability
+  ### back compatibility
   if (is.null(bf$metadata$timestep_padding)) {
     ts_padding <- get_timestep_padding(bf)
     bf$metadata$timestep_padding <- ts_padding
@@ -68,7 +68,7 @@ truncate_birdflow <- function(bf, ...) {
   # Update dates
   d <- bf$dates
 
-  ### back compatability code
+  ### back compatibility code
   if (get_metadata(bf, "ebird_version_year") < 2022){
     mv <- match(ts_cw$old, d$interval) # (mv = match vector)
     d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)

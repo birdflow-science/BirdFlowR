@@ -200,7 +200,7 @@ import_birdflow_v3 <- function(hdf5) {
     d <- d[, 1:(ncol(d) - 1)]
   }
 
-  ### back compatability code
+  ### back compatibility code
   ts_col <- ifelse(bf$metadata$ebird_version_year < 2022,
                    "interval",
                    "timestep"

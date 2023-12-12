@@ -47,7 +47,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   stopifnot(error %in% c(TRUE, FALSE),
             allow_incomplete %in% c(TRUE, FALSE))
 
-  ### Back compatability code
+  ### Back compatibility code
   # Fix (allowed) typo in old models
   names(x$metadata)[names(x$metadata) == "birdFlowr_version"] <-
     "birdflowr_version"

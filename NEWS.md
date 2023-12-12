@@ -1,7 +1,7 @@
 # BirdFlowR 0.1.0.9040
 2023-12-05
 
-## Support for **ebirdst** 3.2002.0 added.
+## Support for **ebirdst** 3.2022.0 added.
 **BirdFlowR** can now fit models based on eBird 2022 data or 2021 data and
 will preprocess using whichever version of **ebirdst** is loaded.
 Both types of fitted models can be used with BirdFlowR.
@@ -12,14 +12,15 @@ don't exist in the old version.
 ## Breaking
 *  `get_dates()` 
     * Models fit using **ebirdst** 2.2021  have `$dates` columns:
-    "interval", "date", "midpoint", "start", "end", "doy", and "week".
+    `"interval"`, `"date"`, `"midpoint"`, `"start"`, `"end"`, `"doy"`, and 
+    `"week"`.
     * Models fit with **ebirdst** 3.2022 have `$dates` columns: 
-    "timestep", "date", "label", "julian", "week".
+    `"timestep"`, `"date"`, `"label"`, `"julian"`, and `"week"`.
     * Regardless of the `$dates` format in the model object `get_dates()` 
-    returns the newer columns: "timestep", "date", "label", "julian", "week".
-    Previously it returned the older columns.
-    * Replacing `bf$dates` with `get_dates()` and adapting to the new column
-    names is recommended.
+    returns the newer columns:  `"timestep"`, `"date"`, `"label"`, `"julian"`, 
+    and `"week"`. Previously it returned the older columns.
+    * Users should replace `bf$dates` with `get_dates()` and use new column
+    names.
 
 *  Inconsistent weeks. **eBird** changed the way dates are assigned to weeks
    in the 2022 version.  See notes in `get_dates()` for details. 
@@ -48,7 +49,7 @@ don't exist in the old version.
 
 ## Updates
 
-* A number of interal changes were made to "`preprocess_species()` 
+* A number of internal changes were made to `preprocess_species()` 
   to work with  **ebirdst** v. 3.2022
   * `species` can be set to either `"example_date"` or `"yeseb-example"` to
   triggering using  **ebirdst** example data. **BirdFlowR** will silently
@@ -63,15 +64,15 @@ don't exist in the old version.
   `species_info()` (and `$species`) is unchanged.
   * A new `dates` format is now used with 2022 models.
   
-* Date lookup code was overhauled througout the package. 
+* Date lookup code was overhauled throughout the package. 
   * Most use of `$dates`  was dropped in favor of `get_dates()` to handle the 
   two date formats in use.
   
 * `preprocess_species()` snapshot tests were updated to use eBird 2022 derived
-  snapshots and are skipped if older versions of **eBirdst** are loaded, but
+  snapshots and are skipped if older versions of **ebirdst** are loaded, but
   most `preprocess_species()` tests are still run.
   
-* Several internal functions documented in `ebirdst-compatability` help
+* Several internal functions documented in `ebirdst-compatibility` help
   insulate **BirdFlowR** from the changes in the **ebirdst** API and facilitate
   working with both versions.
 
@@ -83,11 +84,12 @@ Updated tests to work with new example data and ebirdst 3.2022.0
 * Updated tests for new `amewoo` model in **BirdFlowModels** 
   (R package) v. 0.0.2.9002
 * Added formal dependency on BirdFlowModels >= 0.0.2.9002.
-* Updates to pass CRAN checks but not preproces with ebirdst 3.2022.0 
-        * Added ebird/ebirdst to remotes (to force installing dev version)
-          Revert this after changes in ebirdst  47bbdfc87 are on CRAN
+* Updates to pass CRAN checks but not preprocess with **ebirdst** 3.2022.0 
+        * Added `ebird/ebirdst` to remotes (to force installing development 
+          version). Revert this after changes in **ebirdst**  
+          47bbdfc87 are on CRAN
         * Add skip_if_unsupported_ebirdst_version() to preprocess species tests
-          as it currently does for ebirdst 3.2022.0. 
+          as it currently does for **ebirdst** 3.2022.0. 
         * Add copy of `ebirdst_weeks` to BirdFlowR as internal data.
 
 # BirdFlowR 0.1.0.9038
@@ -109,7 +111,7 @@ Trying to pass all CI checks while still using ebirdst 2.2021
 
 * Spelling
   * Checked spelling on package documentation and vignettes. 
-  * Added wordlist (extending dictionary of valid words). 
+  * Added `inst\WORDLIST` (extending dictionary of valid words). 
   * To check package spelling use `devtools::spell_check()`
   * Added section on spelling to  `./.github/CONTRIBUTING.html` 
 

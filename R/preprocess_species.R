@@ -64,9 +64,9 @@
 #'   not all `<season>_quality` is higher than `min_season_quality` in
 #'   [ebirdst_runs][ebirdst::ebirdst_runs]).
 #' @param min_season_quality The minimum acceptable season quality when
-#'   preprocesing eBird 2022 and subsequent versions. Used to check model
+#'   preprocessing eBird 2022 and subsequent versions. Used to check model
 #'   quality using based on the four `<season>_model_quality` columns in
-#'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 ebirdst
+#'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 \pkg{ebirdst}
 #'   version year.
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
