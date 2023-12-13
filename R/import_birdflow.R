@@ -70,11 +70,17 @@ import_birdflow <- function(hdf5, ..., version) {
   }
 
   version <- as.character(version)
-  return(switch(as.character(version),
-                "1" = stop("Importing Version 1  BirdFlow models is no longer",
-                "supported."),
-                "2" = import_birdflow_v2(hdf5 = hdf5, ...),
-                "3" = import_birdflow_v3(hdf5 = hdf5, ...),
-                stop("Unrecognized version. ",
-                     "Was this model fit with a newer version of BirdFlowR?")))
+
+
+
+  if (version == 1)
+    stop("Importing this version ", version,
+         " BirdFlow model is no longer supported")
+
+  if (version == 2)
+    stop("Importing this version ", version,
+         " BirdFlow model is no longer supported. ",
+         "Use BirdFlowR version 0.1.0.9039 to import it.")
+
+  return(import_birdflow_v3(hdf5 = hdf5, ...))
 }

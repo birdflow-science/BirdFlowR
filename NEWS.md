@@ -1,5 +1,32 @@
+
+# BirdFlowR 0.1.0.9041
+2023-12-12
+
+* Fix spelling and minor documentation edits
+* Fix bug in `n_parameters()` for fitted models.
+* `birdflow_options()` now accepts a list with option names and their 
+  new values, as well as all the previously accepted argument forms.
+* Improve `validate_BirdFlowR()` error reporting.  
+* Add tests for:
+   *  Date lookup on preprocessed but not fitted models. Closes #147.
+   * `n_paramaters()`
+   * `load_model()`
+   * `load_collection_index()`
+   * `route_migration()`
+   * `marginal_stats()`, `calc_pct_zero()`, and `sum_marginals()`
+   * `find_threshold()`
+   * `print()` for `BirdFlow` and `BirdFlowRoutes` objects.
+   * `cache_path()`
+   * `compare_geom()`
+   * `birdflow_options()`
+   * `build_transitions()`, `drop_transitions()`
+
+* Expand testing for:
+   * `preprocess_species()`
+   * `validate_BirdFlow()`
+   
 # BirdFlowR 0.1.0.9040
-2023-12-05
+2023-12-11
 
 ## Support for **ebirdst** 3.2022.0 added.
 **BirdFlowR** can now fit models based on eBird 2022 data or 2021 data and

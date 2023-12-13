@@ -60,11 +60,14 @@
 #'}
 #'
 #'
-#' @param ... One of: (1) one or more named arguments where the name is a
-#'   an option and the value its new setting e.g. `verbose = FALSE` ; (2) a
-#'   single unnamed argument stating an option to retrieve e.g. `"verbose"`
-#'   with an option to retrieve; or (3) No arguments, indicating that all
-#'   options and their current settings should be returned in a list.
+#' @param ... One of:
+#'   (1) one or more named arguments where the name is a
+#'   an option and the value its new setting e.g. `verbose = FALSE` ;
+#'   (2) a single unnamed argument stating an option to retrieve e.g.
+#'   `"verbose"` with an option to retrieve.
+#'   (3) No arguments, indicating that all options and their current settings
+#'   should be returned in a list; or
+#'   (4) a single list argument with named items and their new values.
 #'
 #' @return If no arguments are used than all options will be returned as a list.
 #'   If there is a single, unnamed argument with a character value indicating an
@@ -89,7 +92,7 @@ birdflow_options <- function(...) {
   }
 
   # Process single unnamed arguments by returning the relevant option(s)
-  if (length(args) == 1 && is.null(names(args))) {
+  if (length(args) == 1 && is.null(names(args)) && !is.list(args[[1]])) {
     if (length(args[[1]]) > 1) {
       stop("You can only retrieve one option by name. Use birdflow_options() ",
            "(no arguments) to retrieve all options.")
@@ -103,10 +106,14 @@ birdflow_options <- function(...) {
     }
   }
 
+  # Special case where first argument is a list of arguments to set
+  if (length(args) == 1 && is.list(args[[1]])) {
+    args <- args[[1]]
+  }
 
   if (any(is.null(names(args))))
-    stop("You can not set and retrieve options in the same call;",
-         " an unamed argument must be the only argument.")
+    stop('Use "all" or a single argument name to retreive arguments.",
+         "If setting multiple arguments all arguments must be named.')
 
   if (!all(names(args) %in% names(.birdflow_config))) {
     missing <- setdiff(names(args), names(.birdflow_config))
@@ -159,8 +166,6 @@ birdflow_options <- function(...) {
          length(lc) == 1 && !is.na(lc))) {
       stop("Invalid cache")
     }
-    lc <- gsub("(/|\\\\)*$", base::.Platform$file.sep, lc) # force end slash
-
     .birdflow_config$cache <- lc
   }
 }

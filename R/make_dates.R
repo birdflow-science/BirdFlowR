@@ -11,7 +11,7 @@
 make_dates <- function(version_year = NULL) {
 
   # With 2023 data release potentiall date format
-  if(is.null(version_year))
+  if (is.null(version_year))
     version_year <- ebirdst::ebirdst_version()$version_year
 
   if (version_year < 2022) {

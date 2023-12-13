@@ -34,7 +34,7 @@ truncate_birdflow <- function(bf, ...) {
   }
   # Add dates$weeks if it doesn't exist
   ### back compatibility code
-  if(is.null(bf$dates$week) && nrow(bf$dates) == 52){
+  if (is.null(bf$dates$week) && nrow(bf$dates) == 52) {
     bf$dates$week <- 1:52
   }
 
@@ -69,13 +69,13 @@ truncate_birdflow <- function(bf, ...) {
   d <- bf$dates
 
   ### back compatibility code
-  if (get_metadata(bf, "ebird_version_year") < 2022){
+  if (get_metadata(bf, "ebird_version_year") < 2022) {
     mv <- match(ts_cw$old, d$interval) # (mv = match vector)
-    d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
+    d <- d[mv, , drop = FALSE] # possibly reorder for looping models)
     d$interval <- seq_len(nrow(d))
   } else {
     mv <- match(ts_cw$old, d$timestep) # (mv = match vector)
-    d <- d[mv, , drop = FALSE] # subset and possibly reorder (for looping models)
+    d <- d[mv, , drop = FALSE] # possibly reorder for looping models)
     d$timestep <- seq_len(nrow(d))
   }
 

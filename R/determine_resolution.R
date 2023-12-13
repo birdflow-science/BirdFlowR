@@ -1,4 +1,3 @@
-# nolint start: cyclocomp_linter.
 #' Determine BirdFlow model resolution                                     ####
 #'
 #'  Internal function to determine the resolution to use when creating a
@@ -216,4 +215,3 @@ determine_resolution <- function(sp_path,
   return(res)
 
 }
-# nolint end

@@ -4,7 +4,7 @@ test_that("truncation works accross year boundary", {
   bf <- BirdFlowModels::amewoo # need circular
   expect_no_error(tbf <- truncate_birdflow(bf, start = 40, end = 10))
 
-  if(interactive()){
+  if (interactive()) {
     r <- route(tbf, season = "all")
     plot(r)  # color guide is wrong.
   }

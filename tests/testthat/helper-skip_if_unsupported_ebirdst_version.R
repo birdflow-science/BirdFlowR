@@ -7,7 +7,7 @@ skip_if_unsupported_ebirdst_version <- function() { # nolint: object_length_lint
     #skip(paste0(
     #  "ebirdst version ", as.character(v),
     #     " not supported for preprocessing."))
-    warning("ebirdst ", v, "released. BirdFlowR may need to be updated." )
+    warning("ebirdst ", v, "released. BirdFlowR may need to be updated.")
 
   } else {
     invisible()

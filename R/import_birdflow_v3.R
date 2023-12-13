@@ -1,4 +1,3 @@
-# nolint start: cyclocomp_linter.
 #' import BirdFlow model from an hdf5 file
 #'
 #' This function imports a BirdFlow model data from an HDF5 file written by
@@ -225,4 +224,3 @@ import_birdflow_v3 <- function(hdf5) {
 
   return(bf)
 }
-# nolint end

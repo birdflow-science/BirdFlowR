@@ -37,8 +37,8 @@
 #'
 #' ### Retrieving dates
 #'  The date columns stored within a birdflow model changes depending on the
-#'  \pkg{ebirdst} version year, so do NOT use `bf$dates` in your code. Instead use
-#'  `get_dates()` which will always return the same (newer) column names.
+#'  \pkg{ebirdst} version year, so do NOT use `bf$dates` in your code. Instead
+#'  use`get_dates()` which will always return the same (newer) column names.
 #'
 #' @note
 #' * [truncate_birdflow()] creates models with a subset of the intervals
@@ -59,8 +59,8 @@
 #' offset}
 #' \item{julian}{The Julian date (day of year) associated with the timestep
 #' center}
-#' \item{week}{The \pkg{ebirdst} week number associated with the date. For full year
-#' models this is identical to `timestep` but after
+#' \item{week}{The \pkg{ebirdst} week number associated with the date. For full
+#' year models this is identical to `timestep` but after
 #' [truncation](truncate_birdflow) they will differ.}
 #'
 #' Prior to \pkg{BirdFlowR} v. 0.1.0.9040 it returned columns:

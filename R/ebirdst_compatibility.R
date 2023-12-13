@@ -100,9 +100,8 @@ date_to_week <- function(dates, version = 2022) {
 #'  \pkg{ebirdst}
 #' @keywords internal
 #' @rdname ebirdst-compatibility
-ebirdst_example_species <- function(){
+ebirdst_example_species <- function() {
    ifelse(ebirdst_pkg_ver() < "3.2022.0",
                           "example_data",
                           "yebsap-example")
 }
-

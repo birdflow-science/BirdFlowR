@@ -26,4 +26,6 @@ ignore_unused_imports <- function() {
   # TLDS Although in theory BirdFlowR only directly depends on
   # rnaturalearth it imports rnaturalearthdata to streamline
   # installation and avoid relying on rnaturalearth::install_rnaturalearthdata.
+
+  NULL
 }

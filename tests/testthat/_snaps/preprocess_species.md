@@ -36,9 +36,9 @@
     Code
       ext(b)
     Output
-      SpatExtent : 750000, 1500000, 675000, 1350000 (xmin, xmax, ymin, ymax)
+      SpatExtent : 810000, 1500000, 690000, 1320000 (xmin, xmax, ymin, ymax)
     Code
       res(b)
     Output
-      [1] 75000 75000
+      [1] 30000 30000
 

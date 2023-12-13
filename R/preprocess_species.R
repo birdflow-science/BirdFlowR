@@ -102,7 +102,6 @@
 #'
 #' }
 # nolint end
-# nolint start: cyclocomp_linter.
 preprocess_species <- function(species = NULL,
                                out_dir = NULL,
                                res = NULL,
@@ -158,7 +157,7 @@ preprocess_species <- function(species = NULL,
     if (verbose)
       cat("The example datset does not represet a complete species range so\n",
           "should only used for demonstrating package functions.\n", sep = "")
-    download_species <-  ebirdst_example_species() # example species for current ver.
+    download_species <-  ebirdst_example_species() # example for current ver.
     species <- "yebsap"  # used to look up metadata
     if (!is.null(res) && res < 27)
       stop("res must be at least 27 when working with the low resolution ",
@@ -475,7 +474,8 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   # Make cyclical
   #----------------------------------------------------------------------------#
-  # Duplicate first distribution and corresponding dates so full cycle is fit
+  # Duplicate first distribution, first dynamic mask, and corresponding dates
+  # so full cycle is fit
   # Skip if truncated because truncated models cannot be cyclical.
   if (!truncated) {
 
@@ -522,4 +522,3 @@ preprocess_species <- function(species = NULL,
   invisible(export)
 
 }
-# nolint end
