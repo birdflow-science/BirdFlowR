@@ -1,3 +1,4 @@
+bbdfc
 Albers
 Azimuthal
 BirdFlow
@@ -20,6 +21,7 @@ GeoTIFFs
 HDF
 HPY
 Jax
+Julian
 MacOS
 Mollweide
 PROJ
@@ -39,6 +41,7 @@ WGS
 XXXXX
 amewoo
 amd
+bbdfc
 biocViews
 bioRxiv
 birdflow
@@ -50,7 +53,7 @@ directionality
 distr
 doi
 eBird
-eBirds
+eBird's
 ebirdst
 easting
 epsg
@@ -70,10 +73,12 @@ io
 i'th
 laea
 lon
+lr
 marginal's
 md
 memoryless
 memorylessness
+mr
 multiband
 multilayer
 naturalearth

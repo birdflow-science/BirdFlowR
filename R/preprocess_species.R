@@ -64,9 +64,9 @@
 #'   not all `<season>_quality` is higher than `min_season_quality` in
 #'   [ebirdst_runs][ebirdst::ebirdst_runs]).
 #' @param min_season_quality The minimum acceptable season quality when
-#'   preprocesing eBird 2022 and subsequent versions. Used to check model
+#'   preprocessing eBird 2022 and subsequent versions. Used to check model
 #'   quality using based on the four `<season>_model_quality` columns in
-#'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 ebirdst
+#'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 \pkg{ebirdst}
 #'   version year.
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
@@ -102,7 +102,6 @@
 #'
 #' }
 # nolint end
-# nolint start: cyclocomp_linter.
 preprocess_species <- function(species = NULL,
                                out_dir = NULL,
                                res = NULL,
@@ -158,7 +157,7 @@ preprocess_species <- function(species = NULL,
     if (verbose)
       cat("The example datset does not represet a complete species range so\n",
           "should only used for demonstrating package functions.\n", sep = "")
-    download_species <-  ebirdst_example_species() # example species for current ver.
+    download_species <-  ebirdst_example_species() # example for current ver.
     species <- "yebsap"  # used to look up metadata
     if (!is.null(res) && res < 27)
       stop("res must be at least 27 when working with the low resolution ",
@@ -475,7 +474,8 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   # Make cyclical
   #----------------------------------------------------------------------------#
-  # Duplicate first distribution and corresponding dates so full cycle is fit
+  # Duplicate first distribution, first dynamic mask, and corresponding dates
+  # so full cycle is fit
   # Skip if truncated because truncated models cannot be cyclical.
   if (!truncated) {
 
@@ -522,4 +522,3 @@ preprocess_species <- function(species = NULL,
   invisible(export)
 
 }
-# nolint end

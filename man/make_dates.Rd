@@ -8,11 +8,11 @@ make_dates(version_year = NULL)
 }
 \arguments{
 \item{version_year}{leave NULL for typical usage.  Set to
-a ebird version year to overide.  Used by \code{switch_date_format()}.
+a eBird version year to override.  Used by \code{switch_date_format()}.
 version_year < 2021 will yield old date format.}
 }
 \value{
-Dates table appropriate for the current version of eBirdst
+Dates table appropriate for the current version of \pkg{ebirdst}
 }
 \description{
 Called from \link{preprocess_species} and not intended for other use.

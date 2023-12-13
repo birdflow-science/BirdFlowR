@@ -7,11 +7,14 @@
 birdflow_options(...)
 }
 \arguments{
-\item{...}{One of: (1) one or more named arguments where the name is a
-an option and the value its new setting e.g. \code{verbose = FALSE} ; (2) a
-single unnamed argument stating an option to retrieve e.g. \code{"verbose"}
-with an option to retrieve; or (3) No arguments, indicating that all
-options and their current settings should be returned in a list.}
+\item{...}{One of:
+(1) one or more named arguments where the name is a
+an option and the value its new setting e.g. \code{verbose = FALSE} ;
+(2) a single unnamed argument stating an option to retrieve e.g.
+\code{"verbose"} with an option to retrieve.
+(3) No arguments, indicating that all options and their current settings
+should be returned in a list; or
+(4) a single list argument with named items and their new values.}
 }
 \value{
 If no arguments are used than all options will be returned as a list.

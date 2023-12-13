@@ -1,4 +1,3 @@
-# nolint start: cyclocomp_linter.
 #' process_rasters
 #'
 #' Internal function to process rasters from eBird Status and Trends
@@ -244,4 +243,3 @@ process_rasters <- function(res,
               mask = mask))
 
 }
-# nolint end

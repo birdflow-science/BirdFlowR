@@ -64,9 +64,9 @@ not all \verb{<season>_quality} is higher than \code{min_season_quality} in
 \link[ebirdst:ebirdst_runs]{ebirdst_runs}).}
 
 \item{min_season_quality}{The minimum acceptable season quality when
-preprocesing eBird 2022 and subsequent versions. Used to check model
+preprocessing eBird 2022 and subsequent versions. Used to check model
 quality using based on the four \verb{<season>_model_quality} columns in
-\link[ebirdst:ebirdst_runs]{ebirdst_runs} ignored with 2021 ebirdst
+\link[ebirdst:ebirdst_runs]{ebirdst_runs} ignored with 2021 \pkg{ebirdst}
 version year.}
 
 \item{...}{

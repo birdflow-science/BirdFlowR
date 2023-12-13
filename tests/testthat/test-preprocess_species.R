@@ -29,6 +29,19 @@ test_that("preprocess_species runs on test dataset", {
   expect_snapshot(ext(a))
   expect_snapshot(res(a))
 
+  ### Test ability to use preprocessed model for date and other basic lookup
+  bf <- a
+  expect_no_error(lookup_timestep("2022-05-01", bf))
+  expect_no_error(n_active(bf))
+  expect_no_error(get_dynamic_mask(bf))
+  expect_no_error(get_distr(bf, 1))
+  expect_no_error(ext(bf))
+  expect_true(is_cyclical(bf))
+  expect_equal(n_distr(bf), 53)
+  expect_equal(n_timesteps(bf), 52)
+  expect_equal(n_transitions(bf), 52)
+
+
 })
 
 #3
@@ -72,7 +85,7 @@ test_that("preprocess_species catches error conditions", {
     fixed = TRUE
   )
 
-  if(ebirdst_pkg_ver() < "3.2002.0"){
+  if (ebirdst_pkg_ver() < "3.2002.0") {
     # Error when full range isn't modeled by ebirdst (ebirdst 2021)
     runs <- ebirdst::ebirdst_runs
     i <- which(!as.logical(runs$resident) &
@@ -152,7 +165,7 @@ test_that("preprocess_species() works with clip", {
   sp_path <- ebirdst::get_species_path(sp)
 
 
-  if(ebirdst_pkg_ver() < "3.2022.0"){
+  if (ebirdst_pkg_ver() < "3.2022.0") {
     proj <- ebirdst::load_fac_map_parameters(sp_path)$custom_projection
   } else {
     proj <- ebirdst::load_fac_map_parameters(species = sp)$custom_projection
@@ -172,14 +185,15 @@ test_that("preprocess_species() works with clip", {
                             hdf5 = TRUE,
                             clip = clip,
                             season = "prebreeding",
-                            res = 75)
+                            gpu_ram = 2
+                            )
     )
 
 
   # Test that expect file was created
   created_files <- list.files(dir)
-  expect_in(created_files,  c("example_data_2021_75km_clip.hdf5",  # ebird 2021
-                              "yebsap-example_2022_75km_clip.hdf5")) # 2022
+  expect_in(created_files,  c("example_data_2021_30km_clip.hdf5",  # ebird 2021
+                              "yebsap-example_2022_30km_clip.hdf5")) # 2022
 
   skip_if_wrong_ebirdst_for_snapshot()
 

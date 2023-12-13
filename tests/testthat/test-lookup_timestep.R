@@ -87,5 +87,4 @@ test_that("lookup_timestep works with dates", {
   dates <- as.POSIXlt(dates)
   expect_equal(lookup_timestep(dates, bf), c(19, 1))
 
-
 })

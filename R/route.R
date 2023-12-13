@@ -59,8 +59,6 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   timesteps <-  lookup_timestep_sequence(bf, ...)
   transitions <- as_transitions(timesteps, bf)
   start <- timesteps[1]
-  #  end <- timesteps[length(timesteps)]
-
 
   # Convert x and y coordinates input into row and col
   if (from_coordinates) {

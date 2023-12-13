@@ -1,7 +1,7 @@
 
 change_date_format <- function(bf, version_year = NULL) {
 
-  if(is.null(version_year)){
+  if (is.null(version_year)) {
     # If nothing specified switch to the opposite format from e
     # what is present
     version_year <- ifelse(get_metadata(bf, "ebird_version_year") < 2022,
@@ -9,7 +9,7 @@ change_date_format <- function(bf, version_year = NULL) {
   }
 
   stopifnot(is.numeric(version_year),
-            length(version_year) ==1,
+            length(version_year) == 1,
             !is.na(version_year))
 
   date_format <- ifelse(version_year < 2021.5, 2021, 2022)
@@ -19,10 +19,10 @@ change_date_format <- function(bf, version_year = NULL) {
   new_dates <- new_dates[match(weeks, new_dates$week), ]
   rownames(new_dates) <- NULL
 
-  if(date_format == 2021){
-    new_dates$interval <- 1:nrow(new_dates)
+  if (date_format == 2021) {
+    new_dates$interval <- seq_len(nrow(new_dates))
   } else {
-    new_dates$timestep <- 1:nrow(new_dates)
+    new_dates$timestep <- seq_len(nrow(new_dates))
   }
 
   bf$dates <- new_dates
