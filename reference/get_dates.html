@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9040</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9041</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,8 +95,8 @@ offset</p></dd>
 center</p></dd>
 
 <dt>week</dt>
-<dd><p>The eBirdst week number associated with the date. For full year
-models this is identical to <code>timestep</code> but after
+<dd><p>The <span class="pkg">ebirdst</span> week number associated with the date. For full
+year models this is identical to <code>timestep</code> but after
 <a href="truncate_birdflow">truncation</a> they will differ.</p></dd>
 
 
@@ -164,12 +164,12 @@ day off the date of the week center for most of the year.</p></li>
 </ul></div>
 
 <div class="section">
-<h3 id="retreiving-dates">Retreiving dates<a class="anchor" aria-label="anchor" href="#retreiving-dates"></a></h3>
+<h3 id="retrieving-dates">Retrieving dates<a class="anchor" aria-label="anchor" href="#retrieving-dates"></a></h3>
 
 
 <p>The date columns stored within a birdflow model changes depending on the
-ebirdst version year, so do NOT use <code>bf$dates</code> in your code. Instead use
-<code>get_dates()</code> which will always return the same (newer) column names.</p>
+<span class="pkg">ebirdst</span> version year, so do NOT use <code>bf$dates</code> in your code. Instead
+use<code>get_dates()</code> which will always return the same (newer) column names.</p>
 </div>
 
     </div>

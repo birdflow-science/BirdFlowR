@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9040</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9041</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,20 +56,53 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9041" id="birdflowr-0109041">BirdFlowR 0.1.0.9041<a class="anchor" aria-label="anchor" href="#birdflowr-0109041"></a></h2>
+<p>2023-12-12</p>
+<ul><li>Dropped the ability to import pre-dynamic-mask models. This was announced in 0.1.0.9040 but not done.</li>
+<li>Fix spelling and minor documentation edits</li>
+<li>Fix bug in <code><a href="../reference/dimensions.html">n_parameters()</a></code> for fitted models.</li>
+<li>
+<code><a href="../reference/birdflow_options.html">birdflow_options()</a></code> now accepts a list with option names and their new values, as well as all the previously accepted argument forms.</li>
+<li>Improve <code>validate_BirdFlowR()</code> error reporting.<br></li>
+<li>Add tests for:
+<ul><li>Date lookup on preprocessed but not fitted models. Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/147" class="external-link">#147</a>.</li>
+<li><code>n_paramaters()</code></li>
+<li><code><a href="../reference/load_model.html">load_model()</a></code></li>
+<li><code><a href="../reference/load_collection_index.html">load_collection_index()</a></code></li>
+<li><code><a href="../reference/route_migration.html">route_migration()</a></code></li>
+<li>
+<code><a href="../reference/marginal_stats.html">marginal_stats()</a></code>, <code><a href="../reference/marginal_stats.html">calc_pct_zero()</a></code>, and <code><a href="../reference/marginal_stats.html">sum_marginals()</a></code>
+</li>
+<li><code><a href="../reference/find_threshold.html">find_threshold()</a></code></li>
+<li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> for <code>BirdFlow</code> and <code>BirdFlowRoutes</code> objects.</li>
+<li><code><a href="../reference/cache_path.html">cache_path()</a></code></li>
+<li><code>compare_geom()</code></li>
+<li><code><a href="../reference/birdflow_options.html">birdflow_options()</a></code></li>
+<li>
+<code><a href="../reference/build_transitions.html">build_transitions()</a></code>, <code><a href="../reference/build_transitions.html">drop_transitions()</a></code>
+</li>
+</ul></li>
+<li>Expand testing for:
+<ul><li><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code></li>
+<li><code><a href="../reference/validate_BirdFlow.html">validate_BirdFlow()</a></code></li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9040" id="birdflowr-0109040">BirdFlowR 0.1.0.9040<a class="anchor" aria-label="anchor" href="#birdflowr-0109040"></a></h2>
-<p>2023-12-05</p>
+<p>2023-12-11</p>
 <div class="section level3">
-<h3 id="support-for-ebirdst-added-0-1-0-9040">Support for <strong>ebirdst</strong> 3.2002.0 added.<a class="anchor" aria-label="anchor" href="#support-for-ebirdst-added-0-1-0-9040"></a></h3>
+<h3 id="support-for-ebirdst-added-0-1-0-9040">Support for <strong>ebirdst</strong> 3.2022.0 added.<a class="anchor" aria-label="anchor" href="#support-for-ebirdst-added-0-1-0-9040"></a></h3>
 <p><strong>BirdFlowR</strong> can now fit models based on eBird 2022 data or 2021 data and will preprocess using whichever version of <strong>ebirdst</strong> is loaded. Both types of fitted models can be used with BirdFlowR. Most testing will run with either version of <strong>ebirdst</strong> installed but CRAN checks will only pass with the new version due to references to objects that don’t exist in the old version.</p>
 </div>
 <div class="section level3">
 <h3 id="breaking-0-1-0-9040">Breaking<a class="anchor" aria-label="anchor" href="#breaking-0-1-0-9040"></a></h3>
 <ul><li>
 <p><code><a href="../reference/get_dates.html">get_dates()</a></code></p>
-<ul><li>Models fit using <strong>ebirdst</strong> 2.2021 have <code>$dates</code> columns: “interval”, “date”, “midpoint”, “start”, “end”, “doy”, and “week”.</li>
-<li>Models fit with <strong>ebirdst</strong> 3.2022 have <code>$dates</code> columns: “timestep”, “date”, “label”, “julian”, “week”.</li>
-<li>Regardless of the <code>$dates</code> format in the model object <code><a href="../reference/get_dates.html">get_dates()</a></code> returns the newer columns: “timestep”, “date”, “label”, “julian”, “week”. Previously it returned the older columns.</li>
-<li>Replacing <code>bf$dates</code> with <code><a href="../reference/get_dates.html">get_dates()</a></code> and adapting to the new column names is recommended.</li>
+<ul><li>Models fit using <strong>ebirdst</strong> 2.2021 have <code>$dates</code> columns: <code>"interval"</code>, <code>"date"</code>, <code>"midpoint"</code>, <code>"start"</code>, <code>"end"</code>, <code>"doy"</code>, and <code>"week"</code>.</li>
+<li>Models fit with <strong>ebirdst</strong> 3.2022 have <code>$dates</code> columns: <code>"timestep"</code>, <code>"date"</code>, <code>"label"</code>, <code>"julian"</code>, and <code>"week"</code>.</li>
+<li>Regardless of the <code>$dates</code> format in the model object <code><a href="../reference/get_dates.html">get_dates()</a></code> returns the newer columns: <code>"timestep"</code>, <code>"date"</code>, <code>"label"</code>, <code>"julian"</code>, and <code>"week"</code>. Previously it returned the older columns.</li>
+<li>Users should replace <code>bf$dates</code> with <code><a href="../reference/get_dates.html">get_dates()</a></code> and use new column names.</li>
 </ul></li>
 <li><p>Inconsistent weeks. <strong>eBird</strong> changed the way dates are assigned to weeks in the 2022 version. See notes in <code><a href="../reference/get_dates.html">get_dates()</a></code> for details. <strong>BirdFlowR</strong> honors the date scheme used in the eBird data each model was built with and thus some dates will be assigned to a different week with a 2021 model than they are with a 2022 model this will affect <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code>, <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, and the many functions that rely on them.</p></li>
 <li><p>Importing (old) BirdFlow models fit without a dynamic mask is no longer supported. Predicting with them is. Use BirdFlowR 0.1.0.39 if you want to import an old hdf5 file which could then be saved with <code><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">saveRDS()</a></code>. Dynamic masks were added in 0.1.0.9001 (April 2023) so only models fit (but not imported) before then will be affected.</p></li>
@@ -88,7 +121,7 @@
 <div class="section level3">
 <h3 id="updates-0-1-0-9040">Updates<a class="anchor" aria-label="anchor" href="#updates-0-1-0-9040"></a></h3>
 <ul><li>
-<p>A number of interal changes were made to “<code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> to work with <strong>ebirdst</strong> v. 3.2022</p>
+<p>A number of internal changes were made to <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> to work with <strong>ebirdst</strong> v. 3.2022</p>
 <ul><li>
 <code>species</code> can be set to either <code>"example_date"</code> or <code>"yeseb-example"</code> to triggering using <strong>ebirdst</strong> example data. <strong>BirdFlowR</strong> will silently switch between the two to accommodate <strong>ebirdst</strong>.</li>
 <li>If <strong>ebirdst</strong> version &gt;= 3.2022 the quality of the species model is checked using the <code>&lt;x&gt;_season_quality</code> values instead of the dropped <code>&lt;x&gt;_range_modeled</code> information and an error is thrown if any value is less than the new <code>min_season_quality</code> argument which defaults to <code>3</code>. With <strong>ebirdst</strong> 2.2021 quality is still checked with <code>&lt;x&gt;_range_modeled</code>.</li>
@@ -96,11 +129,11 @@
 <li>A new <code>dates</code> format is now used with 2022 models.</li>
 </ul></li>
 <li>
-<p>Date lookup code was overhauled througout the package.</p>
+<p>Date lookup code was overhauled throughout the package.</p>
 <ul><li>Most use of <code>$dates</code> was dropped in favor of <code><a href="../reference/get_dates.html">get_dates()</a></code> to handle the two date formats in use.</li>
 </ul></li>
-<li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> snapshot tests were updated to use eBird 2022 derived snapshots and are skipped if older versions of <strong>eBirdst</strong> are loaded, but most <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> tests are still run.</p></li>
-<li><p>Several internal functions documented in <code>ebirdst-compatability</code> help insulate <strong>BirdFlowR</strong> from the changes in the <strong>ebirdst</strong> API and facilitate working with both versions.</p></li>
+<li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> snapshot tests were updated to use eBird 2022 derived snapshots and are skipped if older versions of <strong>ebirdst</strong> are loaded, but most <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> tests are still run.</p></li>
+<li><p>Several internal functions documented in <code>ebirdst-compatibility</code> help insulate <strong>BirdFlowR</strong> from the changes in the <strong>ebirdst</strong> API and facilitate working with both versions.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -109,7 +142,8 @@
 <p>Updated tests to work with new example data and ebirdst 3.2022.0</p>
 <ul><li>Updated tests for new <code>amewoo</code> model in <strong>BirdFlowModels</strong> (R package) v. 0.0.2.9002</li>
 <li>Added formal dependency on BirdFlowModels &gt;= 0.0.2.9002.</li>
-<li>Updates to pass CRAN checks but not preproces with ebirdst 3.2022.0 * Added ebird/ebirdst to remotes (to force installing dev version) Revert this after changes in ebirdst 47bbdfc87 are on CRAN * Add skip_if_unsupported_ebirdst_version() to preprocess species tests as it currently does for ebirdst 3.2022.0. * Add copy of <code>ebirdst_weeks</code> to BirdFlowR as internal data.</li>
+<li>Updates to pass CRAN checks but not preprocess with <strong>ebirdst</strong> 3.2022.0 * Added <code>ebird/ebirdst</code> to remotes (to force installing development version). Revert this after changes in <strong>ebirdst</strong><br>
+47bbdfc87 are on CRAN * Add skip_if_unsupported_ebirdst_version() to preprocess species tests as it currently does for <strong>ebirdst</strong> 3.2022.0. * Add copy of <code>ebirdst_weeks</code> to BirdFlowR as internal data.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9038" id="birdflowr-0109038">BirdFlowR 0.1.0.9038<a class="anchor" aria-label="anchor" href="#birdflowr-0109038"></a></h2>
@@ -125,7 +159,7 @@
 <p>2023-11-14</p>
 <ul><li>Spelling
 <ul><li>Checked spelling on package documentation and vignettes.</li>
-<li>Added wordlist (extending dictionary of valid words).</li>
+<li>Added <code>inst\WORDLIST</code> (extending dictionary of valid words).</li>
 <li>To check package spelling use <code>devtools::spell_check()</code>
 </li>
 <li>Added section on spelling to <code>./.github/CONTRIBUTING.html</code>
