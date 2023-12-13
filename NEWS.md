@@ -2,6 +2,8 @@
 # BirdFlowR 0.1.0.9041
 2023-12-12
 
+* Dropped the ability to import pre-dynamic-mask models. This was announced 
+  in 0.1.0.9040 but not done. 
 * Fix spelling and minor documentation edits
 * Fix bug in `n_parameters()` for fitted models.
 * `birdflow_options()` now accepts a list with option names and their 
