@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9041</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9042</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,15 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9042" id="birdflowr-0109042">BirdFlowR 0.1.0.9042<a class="anchor" aria-label="anchor" href="#birdflowr-0109042"></a></h2>
+<p>2023-12-14</p>
+<ul><li>Updated sparsification to work with dynamically masked models</li>
+<li>Added new parameter <code>p_protected</code> to <code><a href="../reference/sparsify.html">sparsify()</a></code>.<br>
+It is used with conditional sparsification to specify a proportion of the transitions out of every location that won’t be zeroed out.</li>
+<li>Added tests for <code><a href="../reference/sparsify.html">sparsify()</a></code> and related functions.</li>
+<li>Added <code>n_states</code> statistic to <code><a href="../reference/distribution_performance.html">distribution_performance()</a></code> and thus also to <code>$metadata$sparse$stats</code> it reports the total number of non-zero values in the marginal derived distributions for all time steps in the model. This is the number of states (locations in time and space) that birds can occupy in the model.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9041" id="birdflowr-0109041">BirdFlowR 0.1.0.9041<a class="anchor" aria-label="anchor" href="#birdflowr-0109041"></a></h2>
 <p>2023-12-12</p>

@@ -12,7 +12,7 @@ Status and Trend distributions used to train the BirdFlow model."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9041</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9042</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,6 +149,11 @@ the marginal distribution for the same timestep;  both versions compare the
 projected distribution to the eBird Status and Trends distribution for same
 timestep.</p></dd>
 
+<dt>n_states</dt>
+<dd><p>The total number of non_zero values across all
+marginal derived distributions in the model.  These are the number of
+states  (locations in space and time) that can be reached in the model.</p></dd>
+
 
 
 </dl></div>
@@ -170,27 +175,12 @@ default is to use all timesteps.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="fu">distribution_performance</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $min_step_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9645225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $mean_step_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9881073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $min_distr_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9615346</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $mean_distr_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9865373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $st_traverse_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9863234</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $md_traverse_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.982028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># full model - skipping because it's slow</span></span></span>
+<span class="r-in"><span><span class="fu">distribution_performance</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="co"># Just for prebreeding_migration</span></span></span>
 <span class="r-in"><span><span class="fu">distribution_performance</span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding_migration"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $min_step_cor</span>
@@ -210,6 +200,9 @@ default is to use all timesteps.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $md_traverse_cor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9907496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $n_states</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3138</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9041</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9042</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sparsify</span><span class="op">(</span><span class="va">x</span>, <span class="va">method</span>, <span class="va">p</span>, fix <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sparsify</span><span class="op">(</span><span class="va">x</span>, <span class="va">method</span>, p <span class="op">=</span> <span class="fl">0.99</span>, fix <span class="op">=</span> <span class="cn">TRUE</span>, p_protected <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,30 +72,36 @@
 
 
 <dt>method</dt>
-<dd><p>One of <code>"state"</code>, <code>"conditional"</code>, <code>"marginal"</code>, or <code>"model"</code>;
-or <code>"state"</code> paired with one of the other methods in a character
-vector (<code>c("state", "marginal")</code>) or a single string
-(<code>"state+conditional"</code>). See "Methods" section below for details.</p></dd>
+<dd><p>One of ``"conditional"<code>, </code>"marginal"`, or `"model"`.
+See "Methods" section below for details.</p></dd>
 
 
 <dt>p</dt>
-<dd><p>Required unless <code>method = "state"</code> to control the proportion of the
+<dd><p>Required to control the proportion of the
 probability density retained in the sparsification process. See "Methods"
 below.</p></dd>
 
 
 <dt>fix</dt>
 <dd><p>If TRUE call <code><a href="fix_dead_ends.html">fix_dead_ends()</a></code> to eliminate dead ends
-in the sparse model. Defaults to TRUE, unless the method is "state" in
-which case it will be forced to FALSE as the state method does not
-create dead ends.</p></dd>
+in the sparse model, but only honored if the method produces dead ends.</p></dd>
+
+
+<dt>p_protected</dt>
+<dd><p>Only used with <code>"conditional</code> method.
+The proportion of <strong>cells</strong> in each row and column that are protected from
+being zeroed out.  Any value of <code>p_protected</code> above 0 protects all the
+non-dynamically-masked (NDM) locations from being dropped from the model.
+The default value of <code>0.10</code> means that from any NDM location there will
+always be transitions retained to at least 10% of the next timestep's
+NDM locations.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A BirdFlow object with many values in the marginals set to zero. The
+<p>A BirdFlow object with some values in the marginals set to zero. The
 metadata will also be updated with sparsification statistics. The
 marginals will be standardized so that they sum to 1.</p>
     </div>
@@ -111,28 +117,14 @@ values consume memory.</p>
     </div>
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
-    <p>There are four sparsification methods. The first "state"
-does not use any parameters and eliminates model states entirely.</p>
-<p>The three remaining proportion based methods all use <code>p</code> to control the
+    <p>There are three sparsification methods that are all
+based on proportion. They use <code>p</code> to control the
 amount of sparsification; where <code>p</code> is the target
 proportion of the density to retain after eliminating all values below a
 (calculated) threshold.</p>
-<p>In the different proportional methods the thresholds are calculated and
-applied either to the whole model (<code>model</code>)  or repeatedly to its
-components (<code>conditional</code>, <code>marginal</code>).</p>
-<dl><dt><code>state</code></dt>
-<dd><p>State based sparsification eliminates states (in time and
-space) that are zero in the training, eBird Status and Trends, distributions
-from from the marginals.</p>
-<p>For each marginal rows are zeroed out that correspond to zeroes in the
-preceding timestep's distribution and columns are zeroed out that correspond
-to zeroes in the following timestep's distribution.  Thus all the cells in
-the marginal that represent a joint probability involving a state that is
-zero in either of the distributions are zeroed out, essentially dropping
-those states from the model.</p></dd>
-
-
-<dt><code>model</code></dt>
+<p>The thresholds are calculated and applied either to the whole model
+(<code>model</code>)  or repeatedly to its components (<code>conditional</code>, <code>marginal</code>).</p>
+<dl><dt><code>model</code></dt>
 <dd><p>In model sparsification the values from all marginals are
 pooled and then a threshold is chosen for that entire model such that zeroing
 values below the threshold results in the target proportion, <code>p</code>, of the
@@ -146,36 +138,34 @@ but the threshold below which cells are set to zero varies across marginals.</p>
 
 
 <dt><code>conditional</code></dt>
-<dd><p>This method targets (1 - p) of both the forward and
-backward conditional probabilities to be zeroed out.</p>
-<p>Conditional probability is calculating by dividing cells in each row
-or column by that row or columns total.</p>
+<dd><p>This method targets (<code>1 - p</code>) of both the forward and
+backward <strong>conditional probabilities</strong> to be zeroed out but also guarantees
+that at least <code>p_protected</code> proportion of the <strong>cells</strong> in each row
+and column will not be zeroed out.</p>
 <p>In this method thresholds are chosen independently for each row and each
 column of a marginal prior to any zeroing and then the cells that fall
-below either their row or column thresholds are set to zero.</p>
-<p>This likely results in each marginal and the model as a whole retaining
-less than <code>p</code> of the density. Theoretically somewhere between p - 1 and
-2 * (p - 1) of the density will be lost. The higher value would be
-achieved if the row and column methods don't overlap at all in the cells
-they select; and the lower value if there's complete agreement. In practice
-the dropped proportion will likely be near the middle of that range.
-Ultimately for all the proportional methods <code>p</code> should be tuned based on the
-performance of the sparsified model, so even though this method does not hit
-the target precisely it will still work as a tuning parameter.</p></dd>
+below either their row or column thresholds are set to zero as long as they
+aren't within the  <code>p_protected</code> proportion of cells (highest value cells)
+that are protected from zeroing based on either their row or column.
+<code>p_protected</code> thus prevents the number of transitions in the sparse model
+from any state falling below the given proportion of the
+transitions in the full model.  The default value means that for every
+location at every timestep at least 10% of the transitions to locations in
+the next timestep are retained.</p>
+<p>This method does not hit its target <code>p</code> density retained. In theory twice
+as much density as <code>p</code> implies could could be cut from the model if the
+cells targeted based on row and column do not overlap, or much more than
+<code>p</code> could be retained with high values of <code>p_protected</code></p></dd>
 
 
-</dl><p>It's possible to combine any of the proportional methods with the state based
-method by passing two methods as a vector. If this is done the state based
-sparsification is done second as it is not affected by the values in the
-marginal.</p>
-    </div>
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Full models are huge so we don't distribute them.</span></span></span>
-<span class="r-in"><span><span class="co"># Assuming you have an hdf5 file wit a full model you could run:</span></span></span>
+<span class="r-in"><span><span class="co"># Assuming you have an hdf5 file with a full model you could run:</span></span></span>
 <span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="import_birdflow.html">import_birdflow</a></span><span class="op">(</span><span class="va">hdf5_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sbf</span> <span class="op">&lt;-</span> <span class="fu">sparsify</span><span class="op">(</span><span class="va">bf</span>, method <span class="op">=</span> <span class="st">"marginal+state"</span>, p <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
