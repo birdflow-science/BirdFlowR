@@ -4,27 +4,31 @@
 \alias{sparsify}
 \title{sparsify BirdFlow models}
 \usage{
-sparsify(x, method, p, fix = TRUE)
+sparsify(x, method, p = 0.99, fix = TRUE, p_protected = 0.1)
 }
 \arguments{
 \item{x}{A BirdFlow model.}
 
-\item{method}{One of \code{"state"}, \code{"conditional"}, \code{"marginal"}, or \code{"model"};
-or \code{"state"} paired with one of the other methods in a character
-vector (\code{c("state", "marginal")}) or a single string
-(\code{"state+conditional"}). See "Methods" section below for details.}
+\item{method}{One of ``"conditional"\verb{, }"marginal"`, or `"model"`.
+See "Methods" section below for details.}
 
-\item{p}{Required unless \code{method = "state"} to control the proportion of the
+\item{p}{Required to control the proportion of the
 probability density retained in the sparsification process. See "Methods"
 below.}
 
 \item{fix}{If TRUE call \code{\link[=fix_dead_ends]{fix_dead_ends()}} to eliminate dead ends
-in the sparse model. Defaults to TRUE, unless the method is "state" in
-which case it will be forced to FALSE as the state method does not
-create dead ends.}
+in the sparse model, but only honored if the method produces dead ends.}
+
+\item{p_protected}{Only used with \verb{"conditional} method.
+The proportion of \strong{cells} in each row and column that are protected from
+being zeroed out.  Any value of \code{p_protected} above 0 protects all the
+non-dynamically-masked (NDM) locations from being dropped from the model.
+The default value of \code{0.10} means that from any NDM location there will
+always be transitions retained to at least 10\% of the next timestep's
+NDM locations.}
 }
 \value{
-A BirdFlow object with many values in the marginals set to zero. The
+A BirdFlow object with some values in the marginals set to zero. The
 metadata will also be updated with sparsification statistics. The
 marginals will be standardized so that they sum to 1.
 }
@@ -41,30 +45,16 @@ time. Marginals are stored as sparse matrices
 values consume memory.
 }
 \section{Methods}{
- There are four sparsification methods. The first "state"
-does not use any parameters and eliminates model states entirely.
-
-The three remaining proportion based methods all use \code{p} to control the
+  There are three sparsification methods that are all
+based on proportion. They use \code{p} to control the
 amount of sparsification; where \code{p} is the target
 proportion of the density to retain after eliminating all values below a
 (calculated) threshold.
 
-In the different proportional methods the thresholds are calculated and
-applied either to the whole model (\code{model})  or repeatedly to its
-components (\code{conditional}, \code{marginal}).
+The thresholds are calculated and applied either to the whole model
+(\code{model})  or repeatedly to its components (\code{conditional}, \code{marginal}).
 
 \describe{
-\item{\code{state}}{State based sparsification eliminates states (in time and
-space) that are zero in the training, eBird Status and Trends, distributions
-from from the marginals.
-
-For each marginal rows are zeroed out that correspond to zeroes in the
-preceding timestep's distribution and columns are zeroed out that correspond
-to zeroes in the following timestep's distribution.  Thus all the cells in
-the marginal that represent a joint probability involving a state that is
-zero in either of the distributions are zeroed out, essentially dropping
-those states from the model.
-}
 
 \item{\code{model}}{ In model sparsification the values from all marginals are
 pooled and then a threshold is chosen for that entire model such that zeroing
@@ -76,39 +66,34 @@ marginal in the model.  Ultimately, \code{p} is achieved for the model as a whol
 but the threshold below which cells are set to zero varies across marginals.
 }
 
-\item{\code{conditional}}{ This method targets (1 - p) of both the forward and
-backward conditional probabilities to be zeroed out.
-
-Conditional probability is calculating by dividing cells in each row
-or column by that row or columns total.
+\item{\code{conditional}}{ This method targets (\code{1 - p}) of both the forward and
+backward \strong{conditional probabilities} to be zeroed out but also guarantees
+that at least \code{p_protected} proportion of the \strong{cells} in each row
+and column will not be zeroed out.
 
 In this method thresholds are chosen independently for each row and each
 column of a marginal prior to any zeroing and then the cells that fall
-below either their row or column thresholds are set to zero.
+below either their row or column thresholds are set to zero as long as they
+aren't within the  \code{p_protected} proportion of cells (highest value cells)
+that are protected from zeroing based on either their row or column.
+\code{p_protected} thus prevents the number of transitions in the sparse model
+from any state falling below the given proportion of the
+transitions in the full model.  The default value means that for every
+location at every timestep at least 10\% of the transitions to locations in
+the next timestep are retained.
 
-This likely results in each marginal and the model as a whole retaining
-less than \code{p} of the density. Theoretically somewhere between p - 1 and
-2 * (p - 1) of the density will be lost. The higher value would be
-achieved if the row and column methods don't overlap at all in the cells
-they select; and the lower value if there's complete agreement. In practice
-the dropped proportion will likely be near the middle of that range.
-Ultimately for all the proportional methods \code{p} should be tuned based on the
-performance of the sparsified model, so even though this method does not hit
-the target precisely it will still work as a tuning parameter.
+This method does not hit its target \code{p} density retained. In theory twice
+as much density as \code{p} implies could could be cut from the model if the
+cells targeted based on row and column do not overlap, or much more than
+\code{p} could be retained with high values of \code{p_protected}}
 }
-}
-
-It's possible to combine any of the proportional methods with the state based
-method by passing two methods as a vector. If this is done the state based
-sparsification is done second as it is not affected by the values in the
-marginal.
 }
 
 \examples{
 
 \dontrun{
 # Full models are huge so we don't distribute them.
-# Assuming you have an hdf5 file wit a full model you could run:
+# Assuming you have an hdf5 file with a full model you could run:
 bf <- import_birdflow(hdf5_path)
 sbf <- sparsify(bf, method = "marginal+state", p = 0.99)
 }

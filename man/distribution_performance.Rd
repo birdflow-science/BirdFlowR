@@ -59,6 +59,9 @@ Status and Trends (st) distribution, while \code{md_traverse_cor} starts with a
 the marginal distribution for the same timestep;  both versions compare the
 projected distribution to the eBird Status and Trends distribution for same
 timestep.}
+\item{n_states}{ The total number of non_zero values across all
+marginal derived distributions in the model.  These are the number of
+states  (locations in space and time) that can be reached in the model.}
 
 }
 }
@@ -83,9 +86,12 @@ in which case all metrics will be calculated only on that subset. The
 default is to use all timesteps.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
-distribution_performance(bf)
+ bf <- BirdFlowModels::amewoo
 
+\dontrun{
+# full model - skipping because it's slow
+distribution_performance(bf)
+}
 # Just for prebreeding_migration
 distribution_performance(bf, season = "prebreeding_migration")
 
