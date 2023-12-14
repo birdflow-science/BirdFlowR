@@ -53,8 +53,4 @@ multiple timesteps.
 
 Correlations are calculated for only the non-dynamically masked cells.
 }
-\examples{
-bf <- BirdFlowModels::amewoo
-evaluate_performance(bf)
-}
 \keyword{internal}

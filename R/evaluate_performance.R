@@ -44,9 +44,6 @@
 #'  and training distribution.}
 #' }
 #' @keywords internal
-#' @examples
-#' bf <- BirdFlowModels::amewoo
-#' evaluate_performance(bf)
 #' @export
 evaluate_performance <- function(x, distr_only = FALSE) {
 

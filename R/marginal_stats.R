@@ -15,13 +15,15 @@
 #'  zero.}
 #' @keywords internal
 marginal_stats <- function(bf) {
-  marginal_zeros <- marginal_sums <- rep(0, n_transitions(bf))
+  marginal_n <- marginal_zeros <- marginal_sums <- rep(0, n_transitions(bf))
   mar_names <- unique(bf$marginals$index$marginal)
   for (i in seq_along(mar_names)) {
-    marginal_sums[i] <- sum(bf$marginals[[mar_names[i]]])
-    marginal_zeros[i] <- sum(bf$marginals[[mar_names[i]]] == 0)
+    m <- bf$marginals[[mar_names[i]]]
+    marginal_sums[i] <- sum(m)
+    marginal_zeros[i] <- sum(m == 0)
+    marginal_n[i] <- prod(dim(m))
   }
-  pct_zero <- sum(marginal_zeros) / (n_active(bf)^2 * n_transitions(bf)) * 100
+  pct_zero <- sum(marginal_zeros) / sum(marginal_n) * 100
   return(list(sum = sum(marginal_sums), pct_zero = pct_zero))
 }
 
@@ -42,11 +44,12 @@ sum_marginals <- function(bf) {
 #' zero
 #' @keywords internal
 calc_pct_zero <- function(bf) {
-  marginal_zeros <- rep(0, n_transitions(bf))
+  marginal_n <- marginal_zeros <- rep(0, n_transitions(bf))
   mar_names <- unique(bf$marginals$index$marginal)
   for (i in seq_along(mar_names)) {
-    marginal_zeros[i] <- sum(bf$marginals[[mar_names[i]]] == 0)
+    m <- bf$marginals[[mar_names[i]]]
+    marginal_zeros[i] <- sum(m == 0)
+    marginal_n[i] <- prod(dim(m))
   }
-  return(sum(marginal_zeros) / (n_active(bf)^2 * n_transitions(bf)) * 100)
-
+  return(sum(marginal_zeros) / sum(marginal_n) * 100)
 }

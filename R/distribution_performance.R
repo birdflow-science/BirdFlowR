@@ -52,13 +52,19 @@
 #'  the marginal distribution for the same timestep;  both versions compare the
 #'  projected distribution to the eBird Status and Trends distribution for same
 #'  timestep.}
+#'  \item{n_states}{ The total number of non_zero values across all
+#'  marginal derived distributions in the model.  These are the number of
+#'  states  (locations in space and time) that can be reached in the model.}
 #'
 #' }
 #'
 #' @examples
-#' bf <- BirdFlowModels::amewoo
-#' distribution_performance(bf)
+#'  bf <- BirdFlowModels::amewoo
 #'
+#' \dontrun{
+#' # full model - skipping because it's slow
+#' distribution_performance(bf)
+#' }
 #' # Just for prebreeding_migration
 #' distribution_performance(bf, season = "prebreeding_migration")
 #'
@@ -77,7 +83,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
                    "min_distr_cor",
                    "mean_distr_cor",
                    "st_traverse_cor",
-                   "md_traverse_cor")
+                   "md_traverse_cor",
+                   "n_states")
 
   if (is.null(metrics))
     metrics <- all_metrics
@@ -94,9 +101,10 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   st_traverse_cor <- md_traverse_cor <- NA_real_
   min_step_cor <- mean_step_cor <- NA_real_
   min_distr_cor <- mean_distr_cor <- NA_real_
+  n_states <- NA_real_
 
   # Flags to control what is calculated
-  do_distr <- any(c("min_distr_cor", "mean_distr_cor") %in% metrics)
+  do_distr <- any(c("min_distr_cor", "mean_distr_cor", "n_states") %in% metrics)
   do_traverse <- any(grepl("traverse", metrics))
   do_step <- any(grepl("_step_", metrics))
 
@@ -109,7 +117,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   # Calculate single step and distr metrics
   if (do_distr || do_step) {
 
-    distr_cor <- single_step_cor <- numeric(length(transitions))
+    distr_cor <- single_step_cor <- distr_states <- numeric(length(transitions))
 
     for (i in seq_along(transitions)) {
 
@@ -120,6 +128,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
       start_dm <- get_dynamic_mask(x, from)
       distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
+      distr_states[i] <- sum(marginal_start_distr != 0)
 
       # Calculate single step projection correlations
       if (do_step) {
@@ -138,6 +147,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
     if (do_distr) {
       mean_distr_cor <- mean(distr_cor)
       min_distr_cor <- min(distr_cor)
+      n_states <- sum(distr_states)
     }
   } # end distr and step
 
@@ -166,7 +176,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
                  st_traverse_cor = st_traverse_cor,
                  md_traverse_cor = md_traverse_cor,
                  mean_distr_cor = mean_distr_cor,
-                 min_distr_cor = min_distr_cor)
+                 min_distr_cor = min_distr_cor,
+                 n_states = n_states)
 
   return(result[metrics])
 

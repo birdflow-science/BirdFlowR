@@ -10,30 +10,16 @@
 #' ([Matrix::Matrix(x , sparse = TRUE)][Matrix::Matrix()] ) so only non-zero
 #' values consume memory.
 #'
-#' @section Methods: There are four sparsification methods. The first "state"
-#' does not use any parameters and eliminates model states entirely.
-#'
-#' The three remaining proportion based methods all use `p` to control the
+#' @section Methods:  There are three sparsification methods that are all
+#' based on proportion. They use `p` to control the
 #' amount of sparsification; where `p` is the target
 #' proportion of the density to retain after eliminating all values below a
 #' (calculated) threshold.
 #'
-#' In the different proportional methods the thresholds are calculated and
-#' applied either to the whole model (`model`)  or repeatedly to its
-#' components (`conditional`, `marginal`).
+#' The thresholds are calculated and applied either to the whole model
+#' (`model`)  or repeatedly to its components (`conditional`, `marginal`).
 #'
 #' \describe{
-#' \item{`state`}{State based sparsification eliminates states (in time and
-#' space) that are zero in the training, eBird Status and Trends, distributions
-#'  from from the marginals.
-#'
-#'  For each marginal rows are zeroed out that correspond to zeroes in the
-#'  preceding timestep's distribution and columns are zeroed out that correspond
-#'  to zeroes in the following timestep's distribution.  Thus all the cells in
-#'  the marginal that represent a joint probability involving a state that is
-#'  zero in either of the distributions are zeroed out, essentially dropping
-#'  those states from the model.
-#'  }
 #'
 #' \item{`model`}{ In model sparsification the values from all marginals are
 #' pooled and then a threshold is chosen for that entire model such that zeroing
@@ -45,46 +31,44 @@
 #' but the threshold below which cells are set to zero varies across marginals.
 #' }
 #'
-#' \item{`conditional`}{ This method targets (1 - p) of both the forward and
-#' backward conditional probabilities to be zeroed out.
-#'
-#' Conditional probability is calculating by dividing cells in each row
-#' or column by that row or columns total.
+#' \item{`conditional`}{ This method targets (`1 - p`) of both the forward and
+#' backward **conditional probabilities** to be zeroed out but also guarantees
+#' that at least `p_protected` proportion of the **cells** in each row
+#' and column will not be zeroed out.
 #'
 #' In this method thresholds are chosen independently for each row and each
 #' column of a marginal prior to any zeroing and then the cells that fall
-#' below either their row or column thresholds are set to zero.
+#' below either their row or column thresholds are set to zero as long as they
+#' aren't within the  `p_protected` proportion of cells (highest value cells)
+#' that are protected from zeroing based on either their row or column.
+#' `p_protected` thus prevents the number of transitions in the sparse model
+#' from any state falling below the given proportion of the
+#' transitions in the full model.  The default value means that for every
+#' location at every timestep at least 10% of the transitions to locations in
+#' the next timestep are retained.
 #'
-#' This likely results in each marginal and the model as a whole retaining
-#' less than `p` of the density. Theoretically somewhere between p - 1 and
-#' 2 * (p - 1) of the density will be lost. The higher value would be
-#' achieved if the row and column methods don't overlap at all in the cells
-#' they select; and the lower value if there's complete agreement. In practice
-#' the dropped proportion will likely be near the middle of that range.
-#' Ultimately for all the proportional methods `p` should be tuned based on the
-#' performance of the sparsified model, so even though this method does not hit
-#' the target precisely it will still work as a tuning parameter.
+#' This method does not hit its target `p` density retained. In theory twice
+#' as much density as `p` implies could could be cut from the model if the
+#' cells targeted based on row and column do not overlap, or much more than
+#' `p` could be retained with high values of `p_protected`}
 #' }
-#' }
-#'
-#' It's possible to combine any of the proportional methods with the state based
-#' method by passing two methods as a vector. If this is done the state based
-#' sparsification is done second as it is not affected by the values in the
-#' marginal.
 #'
 #' @param x A BirdFlow model.
-#' @param method One of `"state"`, `"conditional"`, `"marginal"`, or `"model"`;
-#'  or `"state"` paired with one of the other methods in a character
-#'   vector (`c("state", "marginal")`) or a single string
-#'   (`"state+conditional"`). See "Methods" section below for details.
-#' @param p Required unless `method = "state"` to control the proportion of the
+#' @param method One of ``"conditional"`, `"marginal"`, or `"model"`.
+#'   See "Methods" section below for details.
+#' @param p Required to control the proportion of the
 #'   probability density retained in the sparsification process. See "Methods"
 #'   below.
 #' @param fix If TRUE call [fix_dead_ends()] to eliminate dead ends
-#'   in the sparse model. Defaults to TRUE, unless the method is "state" in
-#'   which case it will be forced to FALSE as the state method does not
-#'   create dead ends.
-#' @return A BirdFlow object with many values in the marginals set to zero. The
+#'   in the sparse model, but only honored if the method produces dead ends.
+#' @param p_protected Only used with `"conditional` method.
+#' The proportion of **cells** in each row and column that are protected from
+#' being zeroed out.  Any value of `p_protected` above 0 protects all the
+#' non-dynamically-masked (NDM) locations from being dropped from the model.
+#' The default value of `0.10` means that from any NDM location there will
+#' always be transitions retained to at least 10% of the next timestep's
+#' NDM locations.
+#' @return A BirdFlow object with some values in the marginals set to zero. The
 #'   metadata will also be updated with sparsification statistics. The
 #'   marginals will be standardized so that they sum to 1.
 #' @importFrom stats cor
@@ -93,21 +77,16 @@
 #'
 #' \dontrun{
 #' # Full models are huge so we don't distribute them.
-#' # Assuming you have an hdf5 file wit a full model you could run:
+#' # Assuming you have an hdf5 file with a full model you could run:
 #' bf <- import_birdflow(hdf5_path)
 #' sbf <- sparsify(bf, method = "marginal+state", p = 0.99)
 #' }
-sparsify <- function(x, method, p, fix = TRUE) {
+sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
 
-  if (has_dynamic_mask(x))
-    stop("sparsify() has not yet been updated to work with dynamic masks.")
-  supported_methods <- c("model", "marginal", "conditional", "state")
-  proportional_methods <- setdiff(supported_methods, "state")
+  supported_methods <- c("model", "marginal", "conditional")
 
   # allow for specifying multiple methods in single string
   # e.g. "conditional+state"
-  if (grepl("+", method, fixed = TRUE))
-    method <- strsplit(method, "+", fixed = TRUE)[[1]]
 
   if (!all(method %in% supported_methods)) {
     invalid <- setdiff(method, supported_methods)
@@ -116,27 +95,24 @@ sparsify <- function(x, method, p, fix = TRUE) {
                 " are not valid methods."))
   }
 
-  if (length(method) > 1 && sum(method %in% proportional_methods) > 1)
-    stop("You can not combine proportional methods.")
+  if (length(method) > 1)
+    stop("Only one method may be used at a time")
 
   validate_BirdFlow(x)
+
   if (!has_marginals(x))
     stop("Currently implemented sparsification only works with marginals")
   if (!has_distr(x))
     stop("Distributions required to evaluate model")
 
-  if (!setequal(method, "state")) {
-    if (missing(p))
-      stop("p is required for for all methods except 'state'")
-    if (length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1) {
-      stop("p should be a single numeric greater than zero and less than or ",
-           "equal to 1.")
-    }
-    if (missing(fix))
-      fix <- TRUE
-  } else {
-    fix <- FALSE
-  }
+
+  if (missing(p))
+    stop("p is required for for all methods")
+
+  if (length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1)
+    stop("p should be a single numeric greater than zero and less than or ",
+         "equal to 1.")
+
 
   #----------------------------------------------------------------------------#
   # Setup (common to all methods)
@@ -168,13 +144,17 @@ sparsify <- function(x, method, p, fix = TRUE) {
   # conditional
   #  p determines what proportion of each row and column to retain
   #
-  #  zero out lowest values from rows and columns while trying to maintain a
-  #  fixed proportion of the value in each row and column.
+  #  1. Identify cells that are protected from zeroing out based on
+  # `p_protected`. This is the union of the cells identified based on
+  #  rows and based on columns.
   #
-  #  We independently calculate which cells to zero out based on rows and
-  #  columns before any are zeroed out, and then zero out all the targeted
-  #  cells.  Because cells are zeroed out for both rows and columns we will
-  #  likely overshoot our target and end up with a greater pct zero.
+  #  2. Then detrmine which cells to consider for zeroing out based on row and
+  #  column specific thresholds that would eliminate a fixed proportion (p)
+  #  of the the value in the row or column. This is done independently by row
+  #  and column so will likely target more than p when the two are combined.
+  #
+  #  3. Set to zero the cells identified in 2 as candidates as long as they
+  #  weren't identified in (1) as protected.
   #----------------------------------------------------------------------------#
   if (any(method == "conditional")) {
     if (verbose)
@@ -182,22 +162,32 @@ sparsify <- function(x, method, p, fix = TRUE) {
     for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
-      to_zero <- matrix(FALSE, nrow = nrow(mar), ncol = ncol(mar))
+      protected <- to_zero <- matrix(FALSE, nrow = nrow(mar), ncol = ncol(mar))
 
       # Calculate which cells need to be zeroed based on retaining p of each row
-      row_thresholds <- apply(mar, 1, find_threshold, p = p)
+      zero_thresholds <- apply(mar, 1, find_threshold, p = p)
+      protected_thresholds <- apply(mar, 1, find_threshold,
+                               p = p_protected, method = "values")
       for (j in seq_len(nrow(mar))) {
-        sv <- mar[j, ] < row_thresholds[j]
+        sv <- mar[j, ] < zero_thresholds[j]
         to_zero[j, sv] <- TRUE
+        sv <- mar[j, ] >= protected_thresholds[j]
+        protected[j, sv] <- TRUE
       }
 
       # Calculate which cells need to be zeroed based on retaining p of each col
-      col_thresholds <- apply(mar, 2, find_threshold, p = p)
+      zero_thresholds <- apply(mar, 2, find_threshold, p = p)
+      protected_thresholds <- apply(mar, 2, find_threshold,
+                               p = p_protected, method = "values")
+
       for (j in seq_len(ncol(mar))) {
-        sv <- mar[, j] < col_thresholds[j]
+        sv <- mar[, j] < zero_thresholds[j]
         to_zero[sv, j] <- TRUE
+        sv <- mar[, j] >= protected_thresholds[j]
+        protected[sv, j] <- TRUE
       }
 
+      to_zero[protected] <- FALSE
       mar[to_zero] <- 0
 
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
@@ -269,38 +259,6 @@ sparsify <- function(x, method, p, fix = TRUE) {
     }
     if (verbose) cat(" Done.\n")
   } # Done model sparsification
-
-  #----------------------------------------------------------------------------#
-  # state sparsification   (has no parameters)
-  #
-  # Eliminate states that are zero in the training data from the marginals
-  #
-  # For each marginal set rows to zero that correspond with zero in the
-  # preceding timestep's distribution and set columns to zero that correspond
-  # with zero in the following timestep's distribution. Thus there will be no
-  # transitions into or out of the locations (in time and space) that are
-  # zero in the the training (eBird S&T) distributions.
-  #----------------------------------------------------------------------------#
-  if (any(method == "state")) {
-    d <- get_distr(x)
-    d_is_zero  <- d == 0
-
-    if (verbose) {
-      cat("Starting state based sparsification.\n", sep = "")
-    }
-    for (i in seq_along(marginal_names)) {
-      m_name <- marginal_names[i]
-      mar <- x$marginals[[m_name]]
-
-      from  <-  index$from[index$marginal == m_name] # previous distr. index
-      to <- index$to[index$marginal == m_name] # next distribution index
-      mar[d_is_zero[, from], ] <- 0 # zero out rows when previous distr. is zero
-      mar[, d_is_zero[, to]] <- 0 # zero out cols when next distr. is zero
-
-      x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-
-    } # end marginal loop
-  } # end state based sparsification
 
   #----------------------------------------------------------------------------#
   #
@@ -377,11 +335,11 @@ sparsify <- function(x, method, p, fix = TRUE) {
     cat("\t", format(pct_zero, digits = 3), "% zero\n\t",
         format(pct_density_lost, digits = 3), "% density lost\n\t",
         "traverse correlation:\n\t\t",
-        "full: ", format(stats$traverse_cor[1], digits = 3), "\n\t\t",
-        "sparse: ", format(stats$traverse_cor[2], digits = 3), "\n",
+        "full: ", format(stats$st_traverse_cor[1], digits = 3), "\n\t\t",
+        "sparse: ", format(stats$st_traverse_cor[2], digits = 3), "\n",
         ifelse(fix,
                paste0("\t\t", "fix: ",
-                      format(stats$traverse_cor[3], digits = 3), "\n"),
+                      format(stats$st_traverse_cor[3], digits = 3), "\n"),
                ""),
         sep = "")
 

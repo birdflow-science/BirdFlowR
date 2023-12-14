@@ -81,8 +81,10 @@ ts <- lookup_timestep_sequence(bf, season = "prebreeding")
 distr <- get_distr(bf, ts)
 anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
 
+\dontrun{
+# Display it
 anim
-
+}
 ### Project a distribution
 
 # Make starting distribution

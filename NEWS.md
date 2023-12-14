@@ -1,3 +1,16 @@
+# BirdFlowR 0.1.0.9042
+2023-12-14
+
+* Updated sparsification to work with dynamically masked models
+* Added new parameter `p_protected` to `sparsify()`.  
+  It is used with conditional sparsification to specify a proportion of the 
+  transitions out of every location that won't be zeroed out.
+* Added tests for `sparsify()` and related functions.
+* Added `n_states` statistic to `distribution_performance()` and thus also to 
+  `$metadata$sparse$stats` it reports the total number of non-zero values
+  in the marginal derived distributions for all time steps in the model.  This
+  is the number of states (locations in time and space) that birds can occupy
+  in the model.
 
 # BirdFlowR 0.1.0.9041
 2023-12-12

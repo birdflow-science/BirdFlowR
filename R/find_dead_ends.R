@@ -64,7 +64,8 @@ find_dead_ends <- function(x) {
     second <- f_index$marginal[f_index$from == timestep]
 
     if (length(first) == 0 || length(second) == 0) {
-      warning("Timestep ", timestep, " doesn't have two marginals")
+      # If not circular then can't check transitions into the firs or out
+      # of the last
       next
     }
 
