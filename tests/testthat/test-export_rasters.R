@@ -6,6 +6,11 @@ test_that("export_rasters() works with GeoTIFFs", {
     unlink(dir, recursive = TRUE)
   dir.create(dir)
 
+
+  ov <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = ov))
+
   # GeoTIFF write
   expect_no_error(export_rasters(bf, dir, filetype = "GTiff"))
 
@@ -34,6 +39,11 @@ test_that("export_rasters() works with PNG and reprojection", {
   if (dir.exists(dir))
     unlink(dir, recursive = TRUE)
   dir.create(dir)
+
+  ov <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = ov))
+
 
   # PNG write
   expect_no_error(export_rasters(bf, dir, filetype = "PNG", crs = crs))

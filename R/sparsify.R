@@ -118,10 +118,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   # Setup (common to all methods)
   #----------------------------------------------------------------------------#
 
-  verbose <- birdflow_options("verbose")
-
-  if (verbose)
-    cat("Evaluating full model performance\n")
+  bf_msg("Evaluating full model performance\n")
   pre_sparsification_stats <- distribution_performance(x)
   index <- x$marginals$index
   index <- index[index$direction == "forward", ]
@@ -157,8 +154,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   #  weren't identified in (1) as protected.
   #----------------------------------------------------------------------------#
   if (any(method == "conditional")) {
-    if (verbose)
-      cat("Starting conditional sparsification with p= ", p, "\n\t", sep = "")
+    bf_msg("Starting conditional sparsification with p= ", p, "\n\t", sep = "")
     for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
@@ -191,9 +187,9 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
       mar[to_zero] <- 0
 
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if (verbose) cat(".")
+      bf_msg(".")
     }
-    if (verbose) cat(" Done.\n")
+    bf_msg(" Done.\n")
   }
 
 
@@ -202,17 +198,16 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   #  p determines what proportion of each marginal's density to retain
   #----------------------------------------------------------------------------#
   if (any(method == "marginal")) {
-    if (verbose)
-      cat("Starting marginal sparsification with p= ", p, "\n\t", sep = "")
+    bf_msg("Starting marginal sparsification with p= ", p, "\n\t")
     for (i in seq_along(marginal_names)) {
       m_name <- marginal_names[i]
       mar <- x$marginals[[m_name]]
       threshold <- find_threshold(mar, p = p)
       mar[mar < threshold] <- 0
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if (verbose) cat(".")
+      bf_msg(cat("."))
     }
-    if (verbose) cat(" Done.\n")
+    bf_msg(" Done.\n")
   }
 
   #----------------------------------------------------------------------------#
@@ -221,8 +216,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   #  (one threshold is used for all marginals)
   #----------------------------------------------------------------------------#
   if (any(method == "model")) {
-    if (verbose)
-      cat("Starting model sparsification with p= ", p, "\n\t", sep = "")
+    bf_msg("Starting model sparsification with p= ", p, "\n\t")
 
     # Aggregate all the values from all the marginals into one matrix
     # with 1 column per marginal and use it to determine the threshold
@@ -255,9 +249,9 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
       mar <- x$marginals[[m_name]]
       mar[mar < threshold] <- 0
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      if (verbose) cat(".")
+      bf_msg(".")
     }
-    if (verbose) cat(" Done.\n")
+    bf_msg(" Done.\n")
   } # Done model sparsification
 
   #----------------------------------------------------------------------------#
@@ -271,8 +265,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   # we also fix dead ends we want to calculate the density lost based
   # on the non-standardized object.
 
-  if (verbose)
-    cat("Evaluating post-sparsification performance\n")
+  bf_msg("Evaluating post-sparsification performance\n")
 
   # Make standardized version
   standardized_bf <- x
@@ -297,13 +290,11 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
                        as.data.frame(post_sparsification_stats)))
 
   if (fix) {
-    if (verbose)
-      cat("Fixing dead ends\n")
+    bf_msg("Fixing dead ends\n")
 
     x <- fix_dead_ends(x)
 
-    if (verbose)
-      cat("Evaluating post-fix performance\n")
+    bf_msg("Evaluating post-fix performance\n")
 
     ms <- marginal_stats(x)
     pct_zero <- ms$pct_zero
@@ -331,8 +322,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   # Update object to latest standardized version
   x <- standardized_bf
 
-  if (verbose)
-    cat("\t", format(pct_zero, digits = 3), "% zero\n\t",
+  bf_msg("\t", format(pct_zero, digits = 3), "% zero\n\t",
         format(pct_density_lost, digits = 3), "% density lost\n\t",
         "traverse correlation:\n\t\t",
         "full: ", format(stats$st_traverse_cor[1], digits = 3), "\n\t\t",
@@ -340,8 +330,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
         ifelse(fix,
                paste0("\t\t", "fix: ",
                       format(stats$st_traverse_cor[3], digits = 3), "\n"),
-               ""),
-        sep = "")
+               ""))
 
   # Build list of used arguments (other than x and method)
   args <- list()

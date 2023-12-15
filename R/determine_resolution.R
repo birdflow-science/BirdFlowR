@@ -57,9 +57,6 @@ determine_resolution <- function(sp_path,
                                  download_species,
                                  project_method) {
 
-
-
-  verbose <- birdflow_options("verbose")
   max_param_per_gb <- birdflow_options("max_param_per_gpu_gb")
 
   if (!is.null(res)) {
@@ -72,15 +69,13 @@ determine_resolution <- function(sp_path,
               !is.na(gpu_ram),
               gpu_ram > 0)
     max_params <- max_param_per_gb * gpu_ram
-    if (verbose)
-      cat("Setting max_params to ", max_params, " anticipating ",
+    bf_msg("Setting max_params to ", max_params, " anticipating ",
           gpu_ram, " GB of GPU ram.\n")
   }
 
-  if (verbose)
-    cat("Calculating resolution\n")
   # Load low res abundance data and calculate total areas birds occupy at any
   # time (active_sq_m)
+  bf_msg("Calculating resolution\n")
   if (ebirdst_pkg_ver() < "3.2022.0") {
   abunds <- ebirdst::load_raster("abundance",
                                  path = sp_path,
@@ -106,17 +101,18 @@ determine_resolution <- function(sp_path,
     mask[is.na(mask)] <- FALSE
     abunds <- terra::mask(abunds, clip2)
 
-    if (verbose) {
-      # Calculate percent of density lost
-      # will print after printing the resolved resolution
-      sa <- sum(abunds)
-      csa <- terra::mask(sa, clip2)
-      tot_density <- sum(terra::values(sa), na.rm = TRUE)
-      clipped_density <- sum(terra::values(csa), na.rm = TRUE)
-      pct_lost <-
-        round((tot_density - clipped_density) / tot_density * 100, 2)
-      rm(sa, csa, tot_density, clipped_density)
-    }
+
+    # Calculate percent of density lost
+    # it is printed after printing the resolved resolution
+    sa <- sum(abunds)
+    csa <- terra::mask(sa, clip2)
+    tot_density <- sum(terra::values(sa), na.rm = TRUE)
+    clipped_density <- sum(terra::values(csa), na.rm = TRUE)
+    pct_lost <-
+      round((tot_density - clipped_density) / tot_density * 100, 2)
+    rm(sa, csa, tot_density, clipped_density)
+
+
     rm(clip2)
   } # end clip
 
@@ -145,10 +141,8 @@ determine_resolution <- function(sp_path,
     res <-  o$minimum
     res_m <- 1000 * res
 
-    if (verbose) {
-      cat("  Attempt ", i, " at setting resolution\n")
-      cat("  (", round(res, 3), "km chosen)\n", sep = "")
-    }
+    bf_msg("  Attempt ", i, " at setting resolution\n",
+           "  (", round(res, 3), "km chosen)\n")
 
     # Trial transformation
     initial_res <- mean(res(abunds))
@@ -172,43 +166,37 @@ determine_resolution <- function(sp_path,
     # Evaluating on actual max_params
     #  - not target_params which is slightly lower
     pct_of_target <- a_stats$n_params / max_params * 100
-    if (verbose)
-      cat("  ", round(pct_of_target, 2), "% of target (estimate).\n")
+    bf_msg("  ", round(pct_of_target, 2), "% of target (estimate).\n")
 
     if (pct_of_target <= 100 && pct_of_target > 90) {
-      if (verbose)
-        cat(" success\n")
+      bf_msg(" success\n")
       break
     } else {
       # Try again (up to 10 times)
-      if (verbose)
-        cat("  trying again\n")
+      bf_msg("  trying again\n")
     }
   } # end resolution trials
 
   if (pct_of_target > 100 || pct_of_target < 90)
-    cat("  Failed to find a resolution that resulted in > 90% and < 100 % of",
-        "the target parameters.\n")
+    warning("  Failed to find a resolution that resulted in > 90% and < 100 %",
+            " of the target parameters.\n")
 
   # Round
   breaks <-  c(-Inf, 2.5,  5,  300, 600, Inf)  # in km
   precision <- c(0.1,  .5,  1,    5,  10)  # in km
   tp <- precision[findInterval(res, breaks)] # target precision
   res <- ceiling(res / tp)  * tp
-  if (verbose)
-    cat("Rounded to", res, "km final resolution.\n")
+  bf_msg("Rounded to", res, "km final resolution.\n")
 
-  if (!is.null(clip) && verbose) {
-    cat("Clipping removed ", format(pct_lost, nsmall = 2),
-        "% of the total density\n", sep = "")
-    rm(pct_lost)
+  if (!is.null(clip)) {
+    bf_msg("Clipping removed ", format(pct_lost, nsmall = 2),
+        "% of the total density\n")
   }
 
   # With example date force resolution to be at least 30
   if (download_species %in% c("example_data", "yebsap-example") && res < 30) {
-    if (verbose)
-      cat("Resolution forced to 30 for example data,",
-          "which only has low resolution images\n")
+    bf_msg("Resolution forced to 30 for example data,",
+           "which only has low resolution images\n")
     res <- 30
   }
 

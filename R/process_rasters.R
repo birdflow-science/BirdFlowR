@@ -33,12 +33,10 @@ process_rasters <- function(res,
 
   res_m <- res * 1000
 
-  verbose <- birdflow_options("verbose")
 
-  if (verbose) {
-    cat("process_rasters called with download_species =",
-        download_species, "\n")
-  }
+  bf_msg("process_rasters called with download_species =",
+         download_species, "\n")
+
 
   #----------------------------------------------------------------------------#
   # Load abundance data
@@ -49,29 +47,29 @@ process_rasters <- function(res,
   levels <- c("hr", "mr", "lr")
   load_res <- levels[findInterval(res, breaks)]
 
-  if (verbose)
-    cat("Reading ",
-        switch(load_res,
-               "lr" = "low resolution (27 km)",
-               "mr" = "medium resolution (9 km)",
-               "hr" = "high resolution (3 km)",
-               stop("unrecognized resolution")
-        ),
-        " geoTIFFs\n", sep = "")
+  bf_msg("Reading ",
+         switch(load_res,
+                "lr" = "low resolution (27 km)",
+                "mr" = "medium resolution (9 km)",
+                "hr" = "high resolution (3 km)",
+                stop("unrecognized resolution")),
+         " geoTIFFs\n")
 
   # Download high or medium resolution data (if needed)
-  if (load_res != "lr") {
-    if (ebirdst_pkg_ver() < "3.2022.0") {
-      ebirdst::ebirdst_download(download_species,
-                                pattern = download_patterns[[load_res]])
-    } else {
-      cat(download_species, "\n", download_patterns[[load_res]], "\n")
-      ebirdst::ebirdst_download_status(download_species,
-                                pattern = download_patterns[[load_res]])
-
+  bf_suppress_msg({
+    if (load_res != "lr") {
+      if (ebirdst_pkg_ver() < "3.2022.0") {
+        ebirdst::ebirdst_download(
+          download_species,
+          pattern = download_patterns[[load_res]])
+      } else {
+        cat(download_species, "\n", download_patterns[[load_res]], "\n")
+        ebirdst::ebirdst_download_status(
+          download_species,
+          pattern = download_patterns[[load_res]])
+      }
     }
-  }
-
+  })
   # Read abundance and upper and lower confidence intervals
   if (ebirdst_pkg_ver() < "3.2022.0") {
     abunds <- ebirdst::load_raster("abundance",
@@ -113,8 +111,7 @@ process_rasters <- function(res,
   }
 
 
-  if (verbose)
-    cat("Creating mask in target resolution and projection\n")
+  bf_msg("Creating mask in target resolution and projection\n")
 
   # Make mask in original coordinate system
   # TRUE if a cell has non-zero data in any layer (timestep) and
@@ -160,22 +157,17 @@ process_rasters <- function(res,
   }
 
   # Reproject data and crop to mask
-  if (verbose)
-    cat("Reprojecting and cropping to mask:\n\tabundance")
+  bf_msg("Reprojecting and cropping to mask:\n\tabundance")
   abunds <- terra::project(abunds, mask, method = project_method)
-  if (verbose)
-    cat(" done.\n\tUpper CI")
+  bf_msg(" done.\n\tUpper CI")
   abunds_uci <- terra::project(abunds_uci, mask, method =  project_method)
-  if (verbose)
-    cat(" done.\n\tLower CI")
+  bf_msg(" done.\n\tLower CI")
   abunds_lci <- terra::project(abunds_lci, mask, method =  project_method)
-  if (verbose)
-    cat(" done.\n")
+  bf_msg(" done.\n")
 
   # aggregate to target resolution
   if (factor != 1) {
-    if (verbose)
-      cat("Resampling to target resolution (", res, " km)\n", sep = "")
+    bf_msg("Resampling to target resolution (", res, " km)\n")
     abunds_low_res <- terra::aggregate(abunds,
                                        fact = factor,
                                        fun = mean,
