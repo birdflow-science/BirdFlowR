@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9043</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9044</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,19 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9044" id="birdflowr-0109044">BirdFlowR 0.1.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0109044"></a></h2>
+<p>2023-12-16</p>
+<p>More test tweaking - all changes should be invisible to users.</p>
+<ul><li>Sped up tests, mostly by using truncated models for slow tests.</li>
+<li>Added helper functions to <code>tests/testthat/</code>:
+<ul><li>
+<code>local_quiet()</code> - Sets verbose to FALSE within a test scope</li>
+<li>
+<code>local_test_dir()</code> - Creates a temporary directory that will be deleted automatically on test completion.</li>
+</ul></li>
+<li>Eliminated almost all messages output during testing to improve test result legibility.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9043" id="birdflowr-0109043">BirdFlowR 0.1.0.9043<a class="anchor" aria-label="anchor" href="#birdflowr-0109043"></a></h2>
 <p>2023-12-15</p>
