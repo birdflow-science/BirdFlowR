@@ -128,7 +128,6 @@ preprocess_species <- function(species = NULL,
 
   # Define local variables
   st_year <- ebirdst::ebirdst_version()$version_year
-  verbose <- birdflow_options("verbose")
   any_output <- hdf5
   max_param_per_gb <- birdflow_options("max_param_per_gpu_gb")
   project_method <- "bilinear"
@@ -154,9 +153,9 @@ preprocess_species <- function(species = NULL,
   # download_species is used when downloading, loading raster, and writing files
   # but "yebsap" is used to look up species information
   if (species %in% c("example_data", "yebsap-example")) {
-    if (verbose)
-      cat("The example datset does not represet a complete species range so\n",
-          "should only used for demonstrating package functions.\n", sep = "")
+    bf_msg(
+      "The example dataset does not represent a complete species range\n",
+      "so should only used for demonstrating package functions.\n")
     download_species <-  ebirdst_example_species() # example for current ver.
     species <- "yebsap"  # used to look up metadata
     if (!is.null(res) && res < 27)
@@ -198,9 +197,7 @@ preprocess_species <- function(species = NULL,
   names(er)[names(er) == "is_resident"] <- "resident" # restore 2021 name
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
-  if (verbose)
-    cat("Species resolved to: '", species, "' (", spmd$common_name, ")\n",
-        sep = "")
+  bf_msg("Species resolved to: '", species, "' (", spmd$common_name, ")\n")
 
   # Reformat dates as strings
   date_to_char <- function(x) {
@@ -221,15 +218,17 @@ preprocess_species <- function(species = NULL,
   # it was fixed in 2.2021.3 so this is now extra security against
   # future format changes
   logical_variables <- intersect(c("resident",
-                         "breeding_range_modeled",
-                         "nonbreeding_range_modeled",
-                         "postbreeding_migration_range_modeled",
-                         "prebreeding_migration_range_modeled"), names(spmd))
+                                   "breeding_range_modeled",
+                                   "nonbreeding_range_modeled",
+                                   "postbreeding_migration_range_modeled",
+                                   "prebreeding_migration_range_modeled"),
+                                 names(spmd))
 
   numeric_variables <- intersect(c("breeding_quality",
-                         "nonbreeding_quality",
-                         "postbreeding_migration_quality",
-                         "prebreeding_migration_quality"), names(spmd))
+                                   "nonbreeding_quality",
+                                   "postbreeding_migration_quality",
+                                   "prebreeding_migration_quality"),
+                                 names(spmd))
 
   spmd[logical_variables] <- as.logical(spmd[logical_variables])
   spmd[numeric_variables] <- as.numeric(spmd[numeric_variables])
@@ -300,19 +299,24 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
 
   # Define patterns for selecting specific files to download for each resolution
-    download_patterns <-
-      as.list(paste0("_abundance_((lower)|(median)|(upper))_",
-                     res_label(c("lr", "mr", "hr"))))
-     names(download_patterns) <- c("lr", "mr", "hr")
+  download_patterns <-
+    as.list(paste0("_abundance_((lower)|(median)|(upper))_",
+                   res_label(c("lr", "mr", "hr"))))
+  names(download_patterns) <- c("lr", "mr", "hr")
 
   # Initially download just the Low resolution
-  if (ebirdst_pkg_ver() < "3.2022.0") {
-    sp_path <-  ebirdst::ebirdst_download(download_species,
-                                        pattern = download_patterns$lr)
-  } else {
-     sp_path <-  ebirdst::ebirdst_download_status(download_species,
-                                          pattern = download_patterns$lr)
-  }
+  bf_suppress_msg({ # Conditionally suppress messages
+    if (ebirdst_pkg_ver() < "3.2022.0") {
+      sp_path <- ebirdst::ebirdst_download(
+        download_species,
+        pattern = download_patterns$lr)
+    } else {
+      sp_path <- ebirdst::ebirdst_download_status(
+        download_species,
+        pattern = download_patterns$lr)
+    }
+  })  # End conditional message suppression
+
   # Load map parameters and set crs
   if (ebirdst_pkg_ver() < "3.2022.0") {
     mp <- ebirdst::load_fac_map_parameters(path = sp_path)
@@ -428,24 +432,19 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   #  Print details                                                          ####
   #----------------------------------------------------------------------------#
-
-  if (verbose) {
-    # Calculate realized number of parameters in BirdFlow model
-    #  (number of parameters to be fit on GPU machine)
-    n_params <- n_parameters(export)
-
-    cat("Model has:\n\t",
-        sum(m), " active cells,\n\t", n_transitions(export), " transitions,",
-        " and\n\t", format(n_params, big.mark = ","), " parameters", sep = "")
-    if (!is.null(max_params)) {
-      pct_max_params <- n_params / max_params * 100
-      cat(", ", round(pct_max_params, 1), "% of maximum parameters\n", sep = "")
-    } else {
-      cat("\n")
-    }
-    cat(round(n_params / max_param_per_gb, 1),
-        "gb of GPU ram required to fit model.\n")
+  n_params <- n_parameters(export)
+  message <- paste0("Model has:\n\t", sum(m), " active cells,\n\t",
+                    n_transitions(export), " transitions,",
+                    " and\n\t", format(n_params, big.mark = ","), " parameters")
+  if (!is.null(max_params)) {
+    pct_max_params <- n_params / max_params * 100
+    message <- paste0(message, ", ", round(pct_max_params, 1),
+                      "% of maximum parameters", sep = "")
   }
+  message <- paste0(message, "\n",
+                    round(n_params / max_param_per_gb, 1),
+                    "gb of GPU ram required to fit model.\n")
+  bf_msg(message)
 
   #----------------------------------------------------------------------------#
   # Truncate
@@ -461,9 +460,8 @@ preprocess_species <- function(species = NULL,
   if (truncated) {
     truncated <- TRUE
     export <- truncate_birdflow(export, ...)
-    if (verbose) {
-      cat("After truncation model has:",  n_parameters(export), "parameters\n")
-    }
+    bf_msg("After truncation model has:",  n_parameters(export), "parameters\n")
+
   }
 
   #----------------------------------------------------------------------------#

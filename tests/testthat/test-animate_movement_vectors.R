@@ -1,5 +1,11 @@
+
 test_that("animate_movement_vectors runs cleanly", {
   skip_on_cran()
+
+  ov <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = ov))
+
   bf <- BirdFlowModels::amewoo
   expect_no_error(a <- animate_movement_vectors(bf, start = 1, end = 4))
   t_dir <- tempdir()
@@ -9,8 +15,8 @@ test_that("animate_movement_vectors runs cleanly", {
     for (f in l){
       file.remove(f)
     }
-  })
-  expect_no_error(
+  }, add = TRUE)
+  expect_no_error(bf_suppress_msg(
     gif <-
       gganimate::animate(
         a,
@@ -20,7 +26,6 @@ test_that("animate_movement_vectors runs cleanly", {
         width = 6,
         height = 5,
         res = 150,
-        units = "in"
-      )
-  )
+        units = "in")
+    ))
 })

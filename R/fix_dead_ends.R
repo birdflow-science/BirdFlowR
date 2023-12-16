@@ -10,7 +10,6 @@
 #' @keywords internal
 fix_dead_ends <- function(bf, max_attempts = 100) {
 
-  verbose <- birdflow_options("verbose")
   fix_stats <- data.frame(step = 0:max_attempts, pct_lost = NA_real_,
                           n_dead_ends = NA_integer_)
 
@@ -36,11 +35,10 @@ fix_dead_ends <- function(bf, max_attempts = 100) {
     msum <- sum_marginals(bf)
     fix_stats$pct_lost[i] <- (initial_sum - msum) / initial_sum * 100
     fix_stats$n_dead_ends[i] <- nrow(de)
-    if (verbose)
-      cat("Step ", i - 1, " of ", max_attempts, " ",
-          nrow(de), " dead ends ",
-          fix_stats$pct_lost[i], "% density lost\n"
-          )
+
+    bf_msg("Step ", i - 1, " of ", max_attempts, " ",  nrow(de), " dead ends ",
+          fix_stats$pct_lost[i], "% density lost\n")
+
     if (nrow(de) == 0) {
       # If we've fixed it
       fix_stats <- fix_stats[1:i, ]

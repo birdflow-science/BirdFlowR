@@ -46,8 +46,7 @@ load_collection_index <-
   }
 
   if (!up_to_date) {
-    if (birdflow_options("verbose"))
-      cat("Downloading collection index\n")
+    bf_msg("Downloading collection index\n")
     dir.create(dirname(local_index), recursive = TRUE, showWarnings = FALSE)
     utils::download.file(index_url, local_index, mode = "wb")
     make_cache_readme(collection_url)

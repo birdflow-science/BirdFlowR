@@ -71,13 +71,13 @@ animate_movement_vectors <- function(bf, ...) {
   }
 
   # Create data frame with movement vectors for all timesteps
-  cat("Creating vector fields\n\t")
+  bf_msg("Creating vector fields\n\t")
   d <- vector(mode = "list", length = length(transitions))
   for (i in seq_len(length(timesteps) - 1)) {
-    cat(".")
+    bf_msg(".")
     d[[i]] <- calc_movement_vectors(bf, timesteps[i], direction)
   }
-  cat("\n")
+  bf_msg("\n")
 
   d <- do.call(rbind, d)
 

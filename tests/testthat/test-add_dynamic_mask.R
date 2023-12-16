@@ -6,4 +6,4 @@ test_that("Add dynamic mask works", {
           expect_no_error(dbf <- add_dynamic_mask(bf, dummy_mask = TRUE))
           expect_no_error(validate_BirdFlow(dbf))
 
-         })
+})

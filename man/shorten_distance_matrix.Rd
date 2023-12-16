@@ -13,7 +13,7 @@ expand_distance_matrix(vals)
 \item{dm}{a distance matrix, a symmetrical n x n, matrix which contains all
 the distances among n locations.}
 
-\item{values}{The values from a lower triangle of a distance matrix in row
+\item{vals}{The values from a lower triangle of a distance matrix in row
 major order.}
 }
 \value{

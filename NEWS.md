@@ -1,3 +1,15 @@
+# BirdFlowR 0.1.0.9043
+2023-12-15
+
+More tests and cleaner message handling.
+Users should be unaffected, but might see fewer messages if `birdflow_options("verbose")` is `TRUE`.
+
+* New test for `build_collection_index()`
+* New internal `bf_msg()` now used for messages from BirdFlowR functions.
+* New internal `bf_suppress_msg()` to wrap calls to other packages so that 
+  their messages are suppressed when verbose is false.
+
+
 # BirdFlowR 0.1.0.9042
 2023-12-14
 

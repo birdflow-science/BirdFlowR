@@ -199,10 +199,6 @@ export_rasters <- function(bf,
   text <- as.character(crs(r))
   writeLines(text, file.path(dir, "crs.txt"))
 
-  if (birdflow_options("verbose")) {
-    n <- length(list.files(dir))
-    cat("Wrote ", n, "files to", dir, "\n")
-  }
-
+  bf_msg("Wrote ", length(list.files(dir)), "files to", dir, "\n")
 
 }  # end function

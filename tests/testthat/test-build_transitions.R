@@ -13,5 +13,4 @@ test_that("build_transitions(0) and drop_transitions() work", {
   # But transitions still the same
   expect_equal(get_transition(bf, "T_01-02"), get_transition(tbf, "T_01-02"))
 
-
 })

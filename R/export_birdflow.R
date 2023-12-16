@@ -24,9 +24,7 @@ export_birdflow <- function(bf, file = NULL,
       "If file is not NULL or a directory (ending in a slash) it should end",
          'in ".hdf5" or ".Rds" consistent with the format argument.'))
 
-  if (birdflow_options("verbose"))
-    cat("Exporting BirdFlow model for", species(bf), "to:\n\t",
-        file, "\n")
+  bf_msg("Exporting BirdFlow model for", species(bf), "to:\n\t", file, "\n")
 
 
   if (file.exists(file) && overwrite) {

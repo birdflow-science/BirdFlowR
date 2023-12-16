@@ -30,7 +30,6 @@ load_model <- function(model, update = TRUE,
 
 
   collection_url <- gsub("/*$", "/", collection_url) # force trailing slash
-  verbose <- birdflow_options("verbose")
 
   stopifnot(!is.null(model), !is.na(model), is.character(model),
             length(model) == 1)
@@ -56,10 +55,9 @@ load_model <- function(model, update = TRUE,
   }
 
   if (update && (is.na(up_to_date) || !up_to_date)) {
-    if (verbose) {
-      cat("Downloading ", model, "\n\tFrom:", remote_url, "\n\tTo:",
-          local_path, "\n", sep = "")
-    }
+    bf_msg("Downloading ", model, "\n\tFrom:", remote_url, "\n\tTo:",
+           local_path, "\n", sep = "")
+
     utils::download.file(remote_url, local_path, quiet = TRUE, mode = "wb")
     make_cache_readme(collection_url)
   }

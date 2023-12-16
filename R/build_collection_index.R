@@ -22,7 +22,7 @@
 #'
 build_collection_index <- function(dir, collection_url) {
 
-  verbose <- birdflow_options("verbose")
+
   index_path <- file.path(dir, "index.Rds")
   index_md5_path <- file.path(dir, "index_md5.txt")
 
@@ -31,9 +31,9 @@ build_collection_index <- function(dir, collection_url) {
             "file", "release_date", "md5", "version", "size")
   species_cols <- c("species_code", "scientific_name", "common_name")
 
-   # List model files in directory
+  # List model files in directory
   files <- list.files(dir, pattern = paste0("^.*\\.", model_extension, "$"),
-                  ignore.case = TRUE)
+                      ignore.case = TRUE)
   files <- files[!tolower(files) %in% "index.rds"]
 
   if (length(files) == 0)
@@ -53,7 +53,7 @@ build_collection_index <- function(dir, collection_url) {
                            drop = FALSE]
     old_cols <- colnames(old_index)
     if (setequal(old_cols, cols) && all(old_cols == cols) &&
-       any(old_index$file %in% files)) {
+        any(old_index$file %in% files)) {
       if (all(files %in% old_index$file)) {
         new_index <- old_index
       } else {
@@ -76,8 +76,7 @@ build_collection_index <- function(dir, collection_url) {
     md5 <- as.character(tools::md5sum(f))
 
     if (is.na(index$md5[i]) || index$md5[i] != md5) { # if new or changed model
-      if (verbose)
-        cat("Reading metadata for ", index$model[i], "\n", sep = "")
+      bf_msg("Reading metadata for ", index$model[i], "\n")
       index$md5[i] <- md5
       bf <- readRDS(f)
       if (!inherits(bf, "BirdFlow")) {
@@ -109,9 +108,11 @@ build_collection_index <- function(dir, collection_url) {
   # Download logo
   logo_file <-   file.path(dir, "logo.png")
   if (!file.exists(logo_file)) {
-    utils::download.file(
+
+  utils::download.file(
       "https://birdflow-science.github.io/BirdFlowR/logo.png",
-      destfile = logo_file, method = "wget")
+      destfile = logo_file, method = "libcurl", mode = "wb",
+      quiet = !birdflow_options("verbose"))
   }
   # Save index.htm
   model <- index$model[1]
@@ -135,11 +136,13 @@ build_collection_index <- function(dir, collection_url) {
   index$report_exists <- file.exists(
     file.path(dir, paste0(index$model, ".html")))
 
-  rmarkdown::render(
-    input = rmd_file,
-    output_file = file.path(dir, "index.html"),
-    params = list(index = index, collection_url = collection_url))
-
+  suppressMessages({
+    rmarkdown::render(
+      input = rmd_file,
+      output_file = file.path(dir, "index.html"),
+      params = list(index = index, collection_url = collection_url),
+      quiet = !birdflow_options("verbose"))
+  })
   file.remove(rmd_file)
 
   # Write separate index.md5 file
