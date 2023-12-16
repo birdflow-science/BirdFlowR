@@ -28,8 +28,7 @@ test_that("interval_log_likelihood returns expected values", {
   observations <- route(bf, x_coord = i_to_x(i, bf), y_coord = i_to_y(i, bf),
               start = start, end = end)
   observations$id <- seq_len(nrow(observations))
-  sf_obs <- sf::st_as_sf(observations, coords = c("x", "y"))
-  sf::st_crs(sf_obs) <- crs(bf)
+  sf_obs <- sf::st_as_sf(observations, coords = c("x", "y"), crs = crs(bf))
   wgs <- sf::st_transform(sf_obs, sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
   wgs <- wgs[, 1:2]
@@ -138,22 +137,20 @@ test_that(
 test_that("interval_log_likelihood() throws warning if overwriting columns", {
 
   # Also test that it works fine with verbose = FALSE
-  original_verbose <- birdflow_options("verbose")
-  on.exit(birdflow_options(verbose = original_verbose))
-  birdflow_options(verbose = FALSE)
+  # Temporarily suppress BirdFlowR chatter
+  local_quiet()
 
+  bf <- BirdFlowModels::rewbla
+  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
+  observations <- BirdFlowModels::rewbla_observations
 
-    bf <- BirdFlowModels::rewbla
-    intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
-    observations <- BirdFlowModels::rewbla_observations
+  a <- interval_log_likelihood(intervals, observations, bf)
+  expect_warning(b <- interval_log_likelihood(a, observations, bf),
+                 "These columns will be replaced in the output:")
 
-    a <- interval_log_likelihood(intervals, observations, bf)
-    expect_warning(b <- interval_log_likelihood(a, observations, bf),
-                   "These columns will be replaced in the output:")
+  expect_equal(a, b)
 
-    expect_equal(a, b)
-
-  })
+})
 
 
 test_that("Interval log likelihood handles empty input gracefully", {

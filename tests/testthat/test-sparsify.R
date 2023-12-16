@@ -12,7 +12,7 @@ test_that("sparsification works", {
 
   # Truncation is nonsensical here from a scientific perspective
   # but is done to speed testing
-  bf <- truncate_birdflow(bf, start = 6, end = 14)
+  bf <- truncate_birdflow(bf, start = 6, end = 8)
 
   # Test marginal
   expect_no_error(marginal <- sparsify(bf, method = "marginal", p = p))

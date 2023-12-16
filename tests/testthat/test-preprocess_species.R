@@ -6,9 +6,7 @@ test_that("preprocess_species runs on test dataset", {
   skip_if_unsupported_ebirdst_version()
 
   # Temporarily suppress BirdFlowR chatter
-  o_verbose <- birdflow_options("verbose")
-  birdflow_options(verbose = FALSE)
-  on.exit(birdflow_options(verbose = o_verbose))
+  local_quiet()
 
   # Run on example data setting resolution based on gb (and then overriding for
   # example_data)
@@ -50,9 +48,7 @@ test_that("preprocess_species catches error conditions", {
   skip_if_unsupported_ebirdst_version()
 
   # Temporarily suppress BirdFlowR chatter
-  o_verbose <- birdflow_options("verbose")
-  birdflow_options(verbose = FALSE)
-  on.exit(birdflow_options(verbose = o_verbose))
+  local_quiet()
 
   # Mostly testing these to close gaps in code coverage
   expect_error(preprocess_species(c("amewoo", "Western kingbird"),
@@ -139,14 +135,10 @@ test_that("preprocess_species() works with clip", {
 
 
   # Temporarily suppress BirdFlowR chatter
-  o_verbose <- birdflow_options("verbose")
-  birdflow_options(verbose = FALSE)
-  on.exit(birdflow_options(verbose = o_verbose))
+  local_quiet()
 
   # Create and commit to cleaning up a temporary dir
-  dir <- file.path(tempdir(), "preprocess_check")
-  dir.create(dir, showWarnings = FALSE)
-  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  dir <- local_test_dir("preprocess_check")
 
   # Create a clipping polygon for the ebirdst "example_data" species.
   # It's already clipped so here I'm reducing just a little more

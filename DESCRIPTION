@@ -1,6 +1,6 @@
 Package: BirdFlowR
 Title: Predict and Visualize Bird Movement
-Version: 0.1.0.9043
+Version: 0.1.0.9044
 Authors@R: 
     c(person("Ethan", "Plunkett",  email = "plunkett@umass.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4405-2251")),
@@ -12,12 +12,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
     BirdFlowModels (>= 0.0.2.9002),
+    covr,
     ebirdst,
     knitr,
     ragg,
     rmarkdown,
     testthat (>= 3.0.0),
-    covr
+    withr
 Config/testthat/edition: 3
 biocViews:
 Imports:

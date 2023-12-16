@@ -1,8 +1,22 @@
+# BirdFlowR 0.1.0.9044
+2023-12-16
+
+More test tweaking - all changes should be invisible to users.
+
+* Sped up tests, mostly by using truncated models for slow tests.
+* Added helper functions to `tests/testthat/`:
+    * `local_quiet()` - Sets verbose to FALSE within a test scope
+    * `local_test_dir()` - Creates a temporary directory that will be deleted 
+      automatically on test completion.
+* Eliminated almost all messages output during testing to improve test result 
+  legibility.
+
 # BirdFlowR 0.1.0.9043
 2023-12-15
 
 More tests and cleaner message handling.
-Users should be unaffected, but might see fewer messages if `birdflow_options("verbose")` is `TRUE`.
+Users should be unaffected, but might see fewer messages if 
+`birdflow_options("verbose")` is `TRUE`.
 
 * New test for `build_collection_index()`
 * New internal `bf_msg()` now used for messages from BirdFlowR functions.

@@ -124,7 +124,7 @@ interval_log_likelihood <- function(intervals, observations, bf,
 
   # Set distribution timestep labeling to "t1" etc,
   original_time_format <- birdflow_options("time_format")
-  on.exit(birdflow_options(time_format = original_time_format))
+  on.exit(birdflow_options(time_format = original_time_format), add = TRUE)
   birdflow_options(time_format = "timestep")
 
   # Convert observation lat, lon to to x,y and state index (i)

@@ -4,14 +4,10 @@ test_that("Build collection index works", {
   bf2 <- truncate_birdflow(bf, start = 10, end = 13)
 
   # Create test directory and promise to delete it
-  dir <- file.path(tempdir(), "collection_test")
-  dir.create(dir, showWarnings = FALSE)
-  on.exit(unlink(dir, recursive = TRUE))
+  dir <- local_test_dir("collection_test")
 
   # Turn off messages (to not clutter up tests)
-  ov <- birdflow_options("verbose")
-  on.exit(birdflow_options(verbose = ov), add = TRUE)
-  birdflow_options(verbose = FALSE)
+  local_quiet()
 
   # Write test files
   saveRDS(bf1, file.path(dir, "amewoo1-3.Rds"))

@@ -121,7 +121,8 @@ preprocess_species <- function(species = NULL,
   # BirdFlow team but don't fit their own models, and my initial installation
   # of ebirdst was tricky so I didn't want all users to need to import it.
   a <- requireNamespace("ebirdst",
-                        versionCheck = list(op = ">=", version = "2.2021.0"))
+                        versionCheck = list(op = ">=", version = "2.2021.0"),
+                        quietly = !birdflow_options("verbose"))
   if (!a) {
     stop("Install ebirdst >= 2.2021.0 to use preprocess_species()")
   }

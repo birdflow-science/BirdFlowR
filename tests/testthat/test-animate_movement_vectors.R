@@ -2,20 +2,14 @@
 test_that("animate_movement_vectors runs cleanly", {
   skip_on_cran()
 
-  ov <- birdflow_options("verbose")
-  birdflow_options(verbose = FALSE)
-  on.exit(birdflow_options(verbose = ov))
+  local_quiet()
 
   bf <- BirdFlowModels::amewoo
   expect_no_error(a <- animate_movement_vectors(bf, start = 1, end = 4))
-  t_dir <- tempdir()
-  on.exit({
-    # file cleanup from file_renderer
-    l <- list.files(path = t_dir, pattern = "^gganim_plot", full.names = TRUE)
-    for (f in l){
-      file.remove(f)
-    }
-  }, add = TRUE)
+
+  # Setup and promise to delete temporary directory
+  t_dir <- local_test_dir("animation_test")
+
   expect_no_error(bf_suppress_msg(
     gif <-
       gganimate::animate(
