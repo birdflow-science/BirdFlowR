@@ -12,7 +12,7 @@
 #'  (HPY) values over which breaks will be calculated.
 #' @param bf A BirdFlow object - only used with `get_dates(bf)`.
 #' @param target_n The target number of breaks
-#' @param as_hpy if `TRUE` than treat range as HPY. If FALSE as PY.
+#' @param hpy if `TRUE` than treat range as HPY. If FALSE as PY.
 #'
 #' @return a sequence of break points in PY or HPY units.
 #' @keywords internal

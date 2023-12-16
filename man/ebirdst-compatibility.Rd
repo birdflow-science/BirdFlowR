@@ -42,7 +42,7 @@ of \pkg{ebirdst}.
 }
 \description{
 Internal functions to facilitate working with both the 2021 and 2022
-versions of pkg{ebirdst} despite the significant changes to the API.
+versions of \pkg{ebirdst} despite the significant changes to the API.
 }
 \section{\code{ebirdst_pkg_ver()}}{
 

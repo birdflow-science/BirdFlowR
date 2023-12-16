@@ -8,7 +8,7 @@ bf_suppress_msg(exp)
 }
 \arguments{
 \item{exp}{R code that might throw a message (originating outside of
-pkg{BirdFlowR}.}
+\pkg{BirdFlowR}.}
 }
 \description{
 This internal functions is used to suppress messages thrown

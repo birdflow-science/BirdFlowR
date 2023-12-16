@@ -15,7 +15,7 @@ make_pyear_breaks(range, bf, target_n = 8, hpy = TRUE)
 
 \item{target_n}{The target number of breaks}
 
-\item{as_hpy}{if \code{TRUE} than treat range as HPY. If FALSE as PY.}
+\item{hpy}{if \code{TRUE} than treat range as HPY. If FALSE as PY.}
 }
 \value{
 a sequence of break points in PY or HPY units.

@@ -41,7 +41,7 @@
 #' @rdname shorten_distance_matrix
 #' @param dm a distance matrix, a symmetrical n x n, matrix which contains all
 #' the distances among n locations.
-#' @param values The values from a lower triangle of a distance matrix in row
+#' @param vals The values from a lower triangle of a distance matrix in row
 #' major order.
 #' @return `shorten_distance_matrix()` returns a vector of values.
 #' `expand_distance_matrix()` returns the full matrix given that vector.

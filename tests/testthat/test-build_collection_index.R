@@ -14,8 +14,8 @@ test_that("Build collection index works", {
   birdflow_options(verbose = FALSE)
 
   # Write test files
-  saveRDS(bf1, file.path(dir, "amewoo1-3.rds"))
-  saveRDS(bf2, file.path(dir, "amewoo10-13.rds"))
+  saveRDS(bf1, file.path(dir, "amewoo1-3.Rds"))
+  saveRDS(bf2, file.path(dir, "amewoo10-13.Rds"))
 
   # Create fake html files
   writeLines(text = "test", file.path(dir, "amewoo1-3.html"))
@@ -27,7 +27,7 @@ test_that("Build collection index works", {
 
   expect_true(file.exists(file.path(dir, "index.html")))
   expect_true(file.exists(file.path(dir, "logo.png")))
-  expect_true(file.exists(file.path(dir, "index.rds")))
+  expect_true(file.exists(file.path(dir, "index.Rds")))
   expect_true(file.exists(file.path(dir, "index_md5.txt")))
 
 })

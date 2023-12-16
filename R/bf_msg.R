@@ -20,8 +20,6 @@ bf_msg <- function(..., sep = "") {
   }
 }
 
-
-
 #' Conditionally suppress messages from expressions in BirdFlowR code
 #'
 #' This internal functions is used to suppress messages thrown
@@ -29,7 +27,7 @@ bf_msg <- function(..., sep = "") {
 #' is `FALSE`.
 #'
 #' @param exp R code that might throw a message (originating outside of
-#' pkg{BirdFlowR}.
+#' \pkg{BirdFlowR}.
 #' @keywords internal
 #' @seealso [preprocess_species()] uses this when calling \pkg{ebirdst}
 #' functions that display messages.
