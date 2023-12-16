@@ -1,5 +1,7 @@
 test_that("evaluate performance is consistent", {
   bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 1, end = 4)
+
   expect_warning(stats <- evaluate_performance(bf))
   expect_snapshot(stats)
 

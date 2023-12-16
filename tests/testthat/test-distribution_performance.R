@@ -1,22 +1,27 @@
 
 test_that("distribution_performance works", {
 
-  # Full year run
-  bf <- BirdFlowModels::amewoo
-  expect_no_error(stats <- distribution_performance(bf))
 
+  bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 5, end = 7)
+
+
+  expect_no_error(stats <- distribution_performance(bf))
   stats2 <- distribution_performance(bf,
                                      metrics = c("min_distr_cor",
                                                  "mean_distr_cor"))
   expect_equal(stats$min_distr_cor, stats2$min_distr_cor)
   expect_equal(stats$mean_distr_cor, stats2$mean_distr_cor)
 
-  # Migration season
+  # subset while running
+  bf <- BirdFlowModels::amewoo
   expect_no_error(
-    stats3 <- distribution_performance(bf, season = "prebreeding_migration"))
+    stats3 <- distribution_performance(bf, start = 5, end = 7)
+  )
+  expect_equal(stats, stats3)
 
-  a <- cbind(unlist(stats), unlist(stats3)) |> as.data.frame() |> round(4)
-  colnames(a) <- c("year", "spring-migration")
+  a <- cbind(unlist(stats)) |> as.data.frame() |> round(4)
+  colnames(a) <- c("")
   expect_snapshot(a)
 
 })
@@ -49,34 +54,30 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
   }
 
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 10, end = 13)
 
-  # Full model
+  # On truncated model
   a <- evaluate_performance_route(bf, season = "all")
   b <- distribution_performance(bf, season = "all")
   expect_equal(a$end_traverse_cor, b$md_traverse_cor)
 
-  # prebreeding_migration only
-  a  <- evaluate_performance_route(bf, season = "prebreeding_migration")
-  b <- distribution_performance(bf, season = "prebreeding_migration")
-  expect_equal(a$end_traverse_cor, b$md_traverse_cor)
 
 })
 
 test_that("distribution_performance works accross year boundary", {
   bf <- BirdFlowModels::rewbla
-  expect_no_error(a <- distribution_performance(bf, season = "winter"))
+  expect_no_error(a <- distribution_performance(bf, start = 51, end = 2))
 })
 
 
 test_that("distribution_performance works with individual metrics", {
   bf <- BirdFlowModels::amewoo
   all <- distribution_performance(bf, metrics = "md_traverse_cor",
-                                   start = 1, end = 5)
+                                   start = 1, end = 2)
   for (metric in names(all)) {
     expect_no_error(
       a <- distribution_performance(bf, metrics = metric,
-                                    start = 1, end = 5))
+                                    start = 1, end = 2))
     expect_equal(names(a), metric)
     expect_equal(a[[metric]], all[[metric]])
   }

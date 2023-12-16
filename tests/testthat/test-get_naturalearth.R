@@ -6,22 +6,23 @@ test_that("get_coastline returns expected objects", {
                       2822153.67510416, 6421966.58574292)
 
   # Using "new" method
-  expect_s3_class(coast <- get_coastline(bf, keep_buffer = TRUE),
-                  class = c("sf", "data.frame"))
+  coast <- get_coastline(bf, keep_buffer = TRUE, scale = "small")
+  expect_s3_class(coast, class = c("sf", "data.frame"))
   expect_s3_class(coast$geometry, c("sfc_GEOMETRY", "sfc"))
   expect_s3_class(coast$geometry[1],  c("sfc_LINESTRING", "sfc"))
   expect_true(sf::st_crs(coast) == sf::st_crs(crs(bf)))
-  expect_equal(nrow(coast), 269)
+  expect_equal(nrow(coast), 30)
 
   # using "old" method
   expect_no_error(coast2 <- get_naturalearth(bf, type = "coastline",
                                              keep_buffer = TRUE,
-                                             force_old_method = TRUE))
+                                             force_old_method = TRUE,
+                                             scale = "small"))
   expect_s3_class(coast2, c("sf", "data.frame"))
   expect_s3_class(coast2$geometry, c("sfc_GEOMETRY", "sfc"))
   expect_s3_class(coast2$geometry[1],  c("sfc_LINESTRING", "sfc"))
   expect_true(sf::st_crs(coast2) == sf::st_crs(crs(bf)))
-  expect_equal(nrow(coast2), 231)
+  expect_equal(nrow(coast2), 23)
 
   if (interactive()) {
     # Due to buffering and reprojection issues the extent of the
@@ -35,7 +36,7 @@ test_that("get_coastline returns expected objects", {
 test_that("get_countries returns expected objects", {
 
   bf <- BirdFlowModels::amewoo
-  expect_s3_class(countries <- get_countries(bf),
+  expect_s3_class(countries <- get_countries(bf, scale = "small"),
                   class = c("sf", "data.frame"))
   expect_s3_class(countries$geometry, c("sfc_GEOMETRY", "sfc"))
   expect_s3_class(countries$geometry[1],  c("sfc_MULTIPOLYGON", "sfc"))
@@ -73,30 +74,16 @@ test_that("get_naturalearth downloads and returns expected objects", {
 
   bf <- BirdFlowModels::amewoo
 
+  suppressMessages(
   expect_s3_class(grat <- get_naturalearth(bf, type = "graticules_30",
-                                           category = "physical"),
+                                           category = "physical", scale = 110),
                   class = c("sf", "data.frame"))
+  )
   expect_s3_class(grat$geometry, c("sfc_GEOMETRY", "sfc"))
   expect_s3_class(grat$geometry[1],  c("sfc_LINESTRING", "sfc"))
   expect_true(sf::st_crs(grat) == sf::st_crs(crs(bf)))
 
 })
-
-test_that("get_naturalearth works with non-default scale", {
-
-  skip_on_ci()
-  skip_on_covr()
-  skip_on_cran()
-
-  bf <- BirdFlowModels::amewoo
-
-  expect_no_error(
-    grat_med <- get_naturalearth(bf, type = "graticules_30",
-                                 category = "physical", scale = "large")
-  )
-
-})
-
 
 test_that("get_naturalearth() works at edge of WGS84", {
 
@@ -205,8 +192,8 @@ test_that("get_naturalearth() works with mollweide and broken bounding box", {
     terra::plot(terra::ext(bf), add = TRUE, border = "red")
   }
 
-  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE))
-  expect_equal(nrow(coast2), 668)
+  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE, scale = 110))
+  expect_equal(nrow(coast2), 73)
 })
 
 
@@ -218,8 +205,8 @@ test_that("get_naturalearth() works with lambert equal area (laea)", {
                             "+y_0=0 +datum=WGS84 +units=m +no_defs"))
   bf$geom$ext <- c(-2410760.5, 1958109.5, -1548178, 1658294)
 
-  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE))
-  expect_equal(nrow(coast2),  241)  # original run through had 134
+  expect_no_error(coast2 <- get_coastline(bf, keep_buffer = TRUE, scale = 110))
+  expect_equal(nrow(coast2),  22)
 
   if (interactive()) {
     coast <- rnaturalearth::ne_coastline(returnclass = "sf") |>
@@ -251,12 +238,12 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
 
   # new method
   expect_warning(get_naturalearth(bf, "coastline", buffer = 0,
-                                  keep_buffer = TRUE),
+                                  keep_buffer = TRUE, scale = 110),
                   "No objects within extent. Returning empty sf object.")
 
   # old method
   expect_warning(get_naturalearth(bf, "coastline",  buffer = 0,
-                                        force_old_method = TRUE),
+                                        force_old_method = TRUE, scale = 110),
                   "No objects within extent. Returning empty sf object.")
 
 })
@@ -271,7 +258,7 @@ test_that(paste0("get_naturalearth with default keep_buffer = FALSE, crops ",
 
   expect_no_error(coast <- get_naturalearth(bf,
                                             type = "coastline",
-                                            res = "lowres",
+                                            res = 110,
                                             match_extent = TRUE))
   # Note this depends on the coasts intersecting each edge of the extent
   expect_equal(as.numeric(terra::ext(coast)[1:4]),

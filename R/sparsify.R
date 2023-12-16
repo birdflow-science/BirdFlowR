@@ -205,7 +205,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
       threshold <- find_threshold(mar, p = p)
       mar[mar < threshold] <- 0
       x$marginals[[m_name]] <- Matrix::Matrix(mar, sparse = TRUE)
-      bf_msg(cat("."))
+      bf_msg(".")
     }
     bf_msg(" Done.\n")
   }

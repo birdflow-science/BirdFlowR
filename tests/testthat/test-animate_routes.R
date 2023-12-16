@@ -20,11 +20,14 @@ test_that("animate_routes() runs", {
 
   skip_if_not_installed("ragg")
 
-  expect_no_error(gif <- gganimate::animate(anim,
-                            device = "ragg_png", # ragg_png is fast and pretty
-                            width = 6, height = 5,
-                            res = 150, units = "in",
-                            nframes = length(timesteps) * 2, fps = 2))
-
+  suppressMessages(
+    expect_no_error(
+      gif <-
+        gganimate::animate(anim,
+                           device = "ragg_png", # ragg_png is fast and pretty
+                           width = 6, height = 5,
+                           res = 150, units = "in",
+                           nframes = length(timesteps) * 2, fps = 2)
+    ))
 
 })
