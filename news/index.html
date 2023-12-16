@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9042</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9043</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,15 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9043" id="birdflowr-0109043">BirdFlowR 0.1.0.9043<a class="anchor" aria-label="anchor" href="#birdflowr-0109043"></a></h2>
+<p>2023-12-15</p>
+<p>More tests and cleaner message handling. Users should be unaffected, but might see fewer messages if <code>birdflow_options("verbose")</code> is <code>TRUE</code>.</p>
+<ul><li>New test for <code><a href="../reference/build_collection_index.html">build_collection_index()</a></code>
+</li>
+<li>New internal <code><a href="../reference/bf_msg.html">bf_msg()</a></code> now used for messages from BirdFlowR functions.</li>
+<li>New internal <code><a href="../reference/bf_suppress_msg.html">bf_suppress_msg()</a></code> to wrap calls to other packages so that their messages are suppressed when verbose is false.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9042" id="birdflowr-0109042">BirdFlowR 0.1.0.9042<a class="anchor" aria-label="anchor" href="#birdflowr-0109042"></a></h2>
 <p>2023-12-14</p>
