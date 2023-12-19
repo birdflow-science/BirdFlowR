@@ -1,3 +1,17 @@
+# BirdFlowR 0.1.0.9045
+2023-12-18
+
+New function `combine_transitions()` combines the transition matricies from a 
+series of timesteps into a single transition matrix that encodes the transition
+probabilities between the starting and ending timesteps in a single multi-week
+transition matrix.  
+
+New  **BirdFlowExtras** package uses `combine_transitions()` to calculate
+migratory connectivity.  That package will hold more esoteric uses of 
+BirdFlow models, and any functions that rely on packages that are not on either
+CRAN or BioConductor. 
+
+
 # BirdFlowR 0.1.0.9044
 2023-12-16
 
