@@ -22,13 +22,17 @@
 #'  a numeric timestep, a character representing a timestep e.g. "t1", or "all"
 #'  for all timesteps in the model.
 #' @param bf A BirdFlow object.
+#' @param allow_failure If TRUE function will return NA values when it fails
+#' to resolve a timestep for any element of `x`. With the default, FALSE,
+#' the function will throw an error if not all elements of `x` are resolved
+#' to timesteps.
 #' @return A vector of timesteps corresponding to elements in `x`.
 #' @export
 #' @examples
 #' bf <- BirdFlowModels::amewoo
 #' lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
 #'
-lookup_timestep <- function(x, bf) {
+lookup_timestep <- function(x, bf, allow_failure = FALSE) {
   stopifnot(inherits(bf, "BirdFlow"))
   dates <- get_dates(bf) # standardize to current date format
   original_x <- x
@@ -54,15 +58,23 @@ lookup_timestep <- function(x, bf) {
     x <- dates$timestep[match(week, dates$week)]
   }
 
+  # Eliminate out of range values
+  x[!x %in% dates$timestep] <- NA
+
+  # Check that x is numeric (should always be TRUE by now)
+  if(!is.numeric(x))
+    stop("Date lookup failed. Likely the class of x was unexpected.")
+
+  # Force integers to numeric
+  x <- as.numeric(x)
+
   # Validate
-  if (!is.numeric(x) || any(is.na(x)) || !all(x %in% dates$timestep)) {
+  if ( any(is.na(x)) && !allow_failure) {
     xtext <- ifelse(length(original_x) > 3,
                     paste0(paste(original_x[1:3], collapse = ", "),
                            ", ..."),
                     paste0(original_x, collapse = ", "))
     stop("Date lookup failed for x = ", xtext)
   }
-  if (is.integer(x))
-    x <- as.numeric(x)
   return(x)
 }

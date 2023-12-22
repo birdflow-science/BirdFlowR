@@ -4,7 +4,7 @@
 \alias{lookup_timestep}
 \title{Lookup timestep}
 \usage{
-lookup_timestep(x, bf)
+lookup_timestep(x, bf, allow_failure = FALSE)
 }
 \arguments{
 \item{x}{A character object representing date as year-month-day e.g.
@@ -14,6 +14,11 @@ a numeric timestep, a character representing a timestep e.g. "t1", or "all"
 for all timesteps in the model.}
 
 \item{bf}{A BirdFlow object.}
+
+\item{allow_failure}{If TRUE function will return NA values when it fails
+to resolve a timestep for any element of \code{x}. With the default, FALSE,
+the function will throw an error if not all elements of \code{x} are resolved
+to timesteps.}
 }
 \value{
 A vector of timesteps corresponding to elements in \code{x}.
