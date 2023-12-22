@@ -264,7 +264,7 @@ snap_to_birdflow <- function(d, bf,
   d$message <- names(errors)[apply(errors, 1, function(x) which(x)[1])]
 
   # Standarize output
-  expected_cols <- c(id_cols, "date", "timestep", "x", "y", "i", "n",
+  expected_cols <- c(id_cols, date_col, "timestep", "x", "y", "i", "n",
                      "error", "message")
 
 
