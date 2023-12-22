@@ -11,7 +11,7 @@
 #' @keywords internal
 local_test_dir <- function(subdir = "test_dir", env = parent.frame()) {
   test_dir <- file.path(tempdir(), subdir)
-  if(file.exists(test_dir))
+  if (file.exists(test_dir))
     unlink(test_dir, recursive = TRUE)
   dir.create(test_dir)
   withr::defer(unlink(test_dir, recursive = TRUE), envir = env)

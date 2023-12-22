@@ -25,13 +25,13 @@ values for the first three are  \code{"lon"}, \code{"lat"}, and\code{"date"}.}
 \item{x_col}{The name of the column that holds x or longitude coordinates.
 Default is \code{"lon"}.}
 
-\item{y_col}{The name of the y or latidute column, default is \code{"lat"}.}
+\item{y_col}{The name of the y or latitude column, default is \code{"lat"}.}
 
 \item{date_col}{Name of the date column, defaults to \code{"date"}}
 
 \item{id_cols}{The name of identification columns. One or more columns that
 collectively define a unique track. If \code{aggregate} is not \code{NULL} these along
-with \code{timestep} (calculagted from the \code{date_col}) are used to define the
+with \code{timestep} (calculated from the \code{date_col}) are used to define the
 groups.  If aggregate is \code{NULL} these columns are not used but are retained
 in the output.}
 
@@ -65,11 +65,11 @@ represent the week.
 }
 \value{
 A data frame with columns
-\item{\verb{<id_cols>}}{The columns identified with \code{id_cols} will be retained and be
-leftmost.}
+\item{\verb{<id_cols>}}{The columns identified with \code{id_cols} will be retained
+and be leftmost.}
 \item{date}{This column will have information from \code{date_col} but not retain
 its name or original formatting. If aggregate is NULL the input dates
-will be retained, if not the date will vary with the aggegation method but
+will be retained, if not the date will vary with the aggregation method but
 will represent the dates that went into the summary and not the mid-week
 date associated with \code{timestep}.
 For example with \code{aggregate = "mean"} the date will be the average date of
@@ -88,13 +88,13 @@ If aggregate is NULL every value will be 1. }
 \item "err_date" - The date could not be parsed with \code{\link[lubridate:as_date]{lubridate::as_date()}}
 \item "err_truncated" - \code{bf} is \href{truncate_birdflow}{truncated} and the date
 falls outside of portion of the year the model covers.
-\item "err_coords" - The coordinates could not be reprojected into \code{crs(bf)}
+\item \code{"err_coords"} - The coordinates could not be transformed into \code{crs(bf)}
 and thus likely are corrupt in some way.
-\item "err_not_active" - the location does not fall within an active cell
+\item \code{"err_not_active"} - the location does not fall within an active cell
 as defined by the static mask.
-\item "err_dynamic" - the location does not fall within the dynamic mask on
+\item \code{"err_dynamic"} - the location does not fall within the dynamic mask on
 the associated date.
-\item "err_sparse" - the location falls within the dynamic mask but that
+\item \code{"err_sparse"} - the location falls within the dynamic mask but that
 location and date combination has been eliminated by
 \href{sparsify}{sparsification}.
 }
@@ -128,5 +128,4 @@ the model on the associated date.
 bf <- BirdFlowModels::rewbla |> add_dynamic_mask()
 obs <- BirdFlowModels::rewbla_observations
 a <- snap_to_birdflow(obs, bf, id_cols = "bird_id")
-
 }

@@ -11,14 +11,14 @@
 #' described by `...`
 #'
 #' @export
-combine_transitions <- function(bf, ...){
+combine_transitions <- function(bf, ...) {
   # Lookup transition names
   transitions <- lookup_transitions(x = bf, ...)
 
   # Multiply all the transitions together
-  for(i in seq_along(transitions)){
+  for (i in seq_along(transitions)) {
     # Origin timestep get transtion
-    if(i == 1){
+    if (i == 1) {
       trans <- get_transition(bf,  transitions[i])
       next
     }

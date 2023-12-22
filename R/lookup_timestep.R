@@ -62,14 +62,14 @@ lookup_timestep <- function(x, bf, allow_failure = FALSE) {
   x[!x %in% dates$timestep] <- NA
 
   # Check that x is numeric (should always be TRUE by now)
-  if(!is.numeric(x))
+  if (!is.numeric(x))
     stop("Date lookup failed. Likely the class of x was unexpected.")
 
   # Force integers to numeric
   x <- as.numeric(x)
 
   # Validate
-  if ( any(is.na(x)) && !allow_failure) {
+  if (any(is.na(x)) && !allow_failure) {
     xtext <- ifelse(length(original_x) > 3,
                     paste0(paste(original_x[1:3], collapse = ", "),
                            ", ..."),

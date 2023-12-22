@@ -1,4 +1,9 @@
-# BirdFlowR 0.1.0.9045
+# BirdFlowR 0.1.0.9047
+2023-12-22
+
+* Fix `snap_to_birdflow()` now works with preprocessed (but not fit) models.
+
+# BirdFlowR 0.1.0.9046
 2023-12-21
 
 New functions:
@@ -12,13 +17,13 @@ week and cells and optionally aggregate the data from each week
 Changes
 
 * `lookup_timestep()` gains a new argument `allow_failure`.  FALSE, the default
-  mimics prior behanvior.  Set to TRUE to return NA if the date cannot be 
+  mimics prior behavior.  Set to TRUE to return NA if the date cannot be 
   looked up.
 
 # BirdFlowR 0.1.0.9045
 2023-12-18
 
-New function `combine_transitions()` combines the transition matricies from a 
+New function `combine_transitions()` combines the transition matrices from a 
 series of timesteps into a single transition matrix that encodes the transition
 probabilities between the starting and ending timesteps in a single multi-week
 transition matrix.  
@@ -26,8 +31,7 @@ transition matrix.
 New  **BirdFlowExtras** package uses `combine_transitions()` to calculate
 migratory connectivity.  That package will hold more esoteric uses of 
 BirdFlow models, and any functions that rely on packages that are not on either
-CRAN or BioConductor. 
-
+CRAN or Bioconductor. 
 
 # BirdFlowR 0.1.0.9044
 2023-12-16
