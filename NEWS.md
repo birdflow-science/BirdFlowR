@@ -1,4 +1,10 @@
-# BirdFlowR 0.1.0.9045
+# BirdFlowR 0.1.0.9047
+2023-12-22
+
+* Fix `snap_to_birdflow()` now works with preprocessed (but not fit) models.
+
+
+# BirdFlowR 0.1.0.9046
 2023-12-21
 
 New functions:
