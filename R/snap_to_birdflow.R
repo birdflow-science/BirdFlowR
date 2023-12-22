@@ -1,3 +1,4 @@
+# nolint start: line_length_linter
 #' Assign cells and timesteps to coordinates and dates
 #'
 #' This function aligns bird movement data that has both location and date
@@ -22,11 +23,11 @@
 #' @param bf A BirdFlow model
 #' @param x_col The name of the column that holds x or longitude coordinates.
 #'  Default is `"lon"`.
-#' @param y_col The name of the y or latidute column, default is `"lat"`.
+#' @param y_col The name of the y or latitude column, default is `"lat"`.
 #' @param date_col Name of the date column, defaults to `"date"`
 #' @param id_cols The name of identification columns. One or more columns that
 #' collectively define a unique track. If `aggregate` is not `NULL` these along
-#' with `timestep` (calculagted from the `date_col`) are used to define the
+#' with `timestep` (calculated from the `date_col`) are used to define the
 #' groups.  If aggregate is `NULL` these columns are not used but are retained
 #' in the output.
 #' @param crs The coordinate reference system used by `x_col` and
@@ -52,11 +53,11 @@
 #'  * `central` The point closest to the centroid of all the points is used to
 #'  represent the week.
 #' @return A data frame with columns
-#' \item{`<id_cols>`}{The columns identified with `id_cols` will be retained and be
-#' leftmost.}
+#' \item{`<id_cols>`}{The columns identified with `id_cols` will be retained
+#' and be leftmost.}
 #' \item{date}{This column will have information from `date_col` but not retain
 #' its name or original formatting. If aggregate is NULL the input dates
-#' will be retained, if not the date will vary with the aggegation method but
+#' will be retained, if not the date will vary with the aggregation method but
 #' will represent the dates that went into the summary and not the mid-week
 #' date associated with `timestep`.
 #' For example with `aggregate = "mean"` the date will be the average date of
@@ -74,13 +75,13 @@
 #'  * "err_date" - The date could not be parsed with [lubridate::as_date()]
 #'  * "err_truncated" - `bf` is [truncated](truncate_birdflow) and the date
 #'  falls outside of portion of the year the model covers.
-#'  * "err_coords" - The coordinates could not be reprojected into `crs(bf)`
+#'  * `"err_coords"` - The coordinates could not be transformed into `crs(bf)`
 #'    and thus likely are corrupt in some way.
-#'  * "err_not_active" - the location does not fall within an active cell
+#'  * `"err_not_active"` - the location does not fall within an active cell
 #'  as defined by the static mask.
-#'  * "err_dynamic" - the location does not fall within the dynamic mask on
+#'  * `"err_dynamic"` - the location does not fall within the dynamic mask on
 #'  the associated date.
-#'  * "err_sparse" - the location falls within the dynamic mask but that
+#'  * `"err_sparse"` - the location falls within the dynamic mask but that
 #'  location and date combination has been eliminated by
 #'  [sparsification](sparsify).
 #'
@@ -96,18 +97,18 @@
 #' bf <- BirdFlowModels::rewbla |> add_dynamic_mask()
 #' obs <- BirdFlowModels::rewbla_observations
 #' a <- snap_to_birdflow(obs, bf, id_cols = "bird_id")
-#'
+# nolint end
 snap_to_birdflow <- function(d, bf,
                         x_col = "lon", y_col = "lat",
                         date_col = "date",
                         id_cols = "id",
                         crs = "EPSG:4326",
-                        aggregate = NULL){
+                        aggregate = NULL) {
 
 
   # Check columns
   for (arg in c("x_col", "y_col", "date_col", "id_cols")) {
-    value = get(arg)
+    value <- get(arg)
     if (!all(value %in% names(d)))
       stop("\"", setdiff(value, names(d)), "\" is not a column in d")
   }
@@ -116,7 +117,7 @@ snap_to_birdflow <- function(d, bf,
             is.numeric(d[[y_col]]))
 
   # Helper - make an empty error table
-  make_error_table <- function(n){
+  make_error_table <- function(n) {
     f <- rep(FALSE, n)
     data.frame(error = f,
                err_date = f,
@@ -124,12 +125,12 @@ snap_to_birdflow <- function(d, bf,
                err_coords = f,
                err_not_active = f,
                err_dynamic = f,
-               err_sparse =f)
+               err_sparse = f)
   }
 
   # helper - propagate an error in any "err_..." column to "error" column
-  update_errors <- function(e){
-    e$error <- apply(e[ , !names(e) == "error", drop = FALSE], 1, any)
+  update_errors <- function(e) {
+    e$error <- apply(e[, !names(e) == "error", drop = FALSE], 1, any)
     e
   }
 
@@ -163,7 +164,7 @@ snap_to_birdflow <- function(d, bf,
   rm(coords)
 
 
-  if(is.null(aggregate)){
+  if (is.null(aggregate)) {
     # Number of observations is 1 if no aggregation
      d$n <- 1
   } else {  # aggregation
@@ -173,7 +174,7 @@ snap_to_birdflow <- function(d, bf,
     # Note: since it's unclear what to do with rows that have unresolved
     # dates or locations when we aggregate I'm dropping them here.
     keep <- !errors$error
-    if(!all(keep)){
+    if (!all(keep)) {
       warning(sum(!keep), " input rows have dates or coordinates that can't ",
               "be resolved and will be dropped prior to aggregation.")
       d <- d[keep, , drop = FALSE]
@@ -190,21 +191,23 @@ snap_to_birdflow <- function(d, bf,
 
 
     d <- switch(aggregate,
-           "mean" = {dplyr::summarize(d,
-                               x = mean(.data$x),
-                               y = mean(.data$y),
-                               date = mean(.data$date),
-                               n = dplyr::n())},
-           "median" = {dplyr::summarize(d,
-                                 x = median(.data$x),
-                                 y = median(.data$y),
-                                 date = median(.data$date),
-                                 n = dplyr::n())},
+           "mean" = {
+             dplyr::summarize(d,
+                              x = mean(.data$x),
+                              y = mean(.data$y),
+                              date = mean(.data$date),
+                              n = dplyr::n())},
+           "median" = {
+             dplyr::summarize(d,
+                              x = median(.data$x),
+                              y = median(.data$y),
+                              date = median(.data$date),
+                              n = dplyr::n())},
            "midweek" = {
               d$mid <- lookup_date(d$timestep, bf)
 
               # find which element in x is closest to y
-              closest <- function(x, y){
+              closest <- function(x, y) {
                 which.min(abs(x - y))
               }
 
@@ -234,7 +237,7 @@ snap_to_birdflow <- function(d, bf,
   }
 
   # resolve i (location index)
-  d$i <- xy_to_i(d[ , c("x", "y"), drop = FALSE], bf = bf)
+  d$i <- xy_to_i(d[, c("x", "y"), drop = FALSE], bf = bf)
   errors$err_not_active <- is.na(d$i)
   errors <- update_errors(errors)
 
@@ -248,7 +251,7 @@ snap_to_birdflow <- function(d, bf,
   # Check against sparsification
   # sm is the sparsified mask, locations where the dynamic mask is 1
   # but the marginal derived distribution is 0
-  if(has_marginals(bf)){
+  if (has_marginals(bf)) {
     sm <- (get_distr(bf, from_marginals = TRUE) > 0) & dm
     no_err <- !errors$error  # only evaluate where there aren't other problems
     errors$err_sparse[no_err] <- !sm[cbind(d$i[no_err], d$timestep[no_err])]

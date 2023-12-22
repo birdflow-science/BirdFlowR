@@ -9,7 +9,7 @@ test_that("combine_transitions is consistent with predict", {
   # Combine the transitions
   expect_no_error(
     trans <- combine_transitions(bf, start = start,
-                                 end = end, direction = direction )
+                                 end = end, direction = direction)
   )
 
   # predict ending distribution with bf

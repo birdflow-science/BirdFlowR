@@ -12,7 +12,7 @@
 #' @examples
 #' bf <- BirdFlowModels::amewoo
 #' lookup_date(1:5, bf)
-lookup_date <- function(timestep, bf){
+lookup_date <- function(timestep, bf) {
   dates <- get_dates(bf)
   lubridate::as_date(dates$date[match(timestep, dates$timestep)])
 }

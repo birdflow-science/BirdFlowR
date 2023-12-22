@@ -13,7 +13,7 @@ test_that("snap_to_birdflow works", {
 
   # Swap out lat and lon for x and y
   d2 <- cbind(d[, !names(d) %in% c("x", "y"), drop = FALSE],
-              xy_to_latlon(d[, c("x","y"), drop = FALSE], bf =  bf))
+              xy_to_latlon(d[, c("x", "y"), drop = FALSE], bf =  bf))
 
   # Test align with default lat, lon, and no crs.
   expect_no_error(
@@ -38,8 +38,8 @@ test_that("snap_to_birdflow works", {
 
 
   consistent_cols <- c("bird_id", "track_id", "timestep", "n")
-  expect_equal(a1[, consistent_cols], a2[ , consistent_cols])
-  expect_equal(a1[, consistent_cols], a3[ , consistent_cols])
+  expect_equal(a1[, consistent_cols], a2[, consistent_cols])
+  expect_equal(a1[, consistent_cols], a3[, consistent_cols])
 
 
   # Expect median and mean to be identical if less than 3 observations
@@ -61,7 +61,3 @@ test_that("snap_to_birdflow() works with preprocessed models", {
                    id_cols = c("bird_id", "track_id"))
 
 })
-
-
-
-
