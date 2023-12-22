@@ -1,4 +1,21 @@
 # BirdFlowR 0.1.0.9045
+2023-12-21
+
+New functions:
+
+* `snap_to_birdflow()` snap movement data to a BirdFlow model 
+week and cells and optionally aggregate the data from each week 
+(by unique bird or track).  
+
+* `lookup_date()` convert timesteps to dates.
+
+Changes
+
+* `lookup_timestep()` gains a new argument `allow_failure`.  FALSE, the default
+  mimics prior behanvior.  Set to TRUE to return NA if the date cannot be 
+  looked up.
+
+# BirdFlowR 0.1.0.9045
 2023-12-18
 
 New function `combine_transitions()` combines the transition matricies from a 
