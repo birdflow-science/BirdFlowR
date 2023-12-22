@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9046</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9047</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,20 +56,25 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9045" id="birdflowr-0109045">BirdFlowR 0.1.0.9045<a class="anchor" aria-label="anchor" href="#birdflowr-0109045"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9047" id="birdflowr-0109047">BirdFlowR 0.1.0.9047<a class="anchor" aria-label="anchor" href="#birdflowr-0109047"></a></h2>
+<p>2023-12-22</p>
+<ul><li>Fix <code><a href="../reference/snap_to_birdflow.html">snap_to_birdflow()</a></code> now works with preprocessed (but not fit) models.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9046" id="birdflowr-0109046">BirdFlowR 0.1.0.9046<a class="anchor" aria-label="anchor" href="#birdflowr-0109046"></a></h2>
 <p>2023-12-21</p>
 <p>New functions:</p>
 <ul><li><p><code><a href="../reference/snap_to_birdflow.html">snap_to_birdflow()</a></code> snap movement data to a BirdFlow model week and cells and optionally aggregate the data from each week (by unique bird or track).</p></li>
 <li><p><code><a href="../reference/lookup_date.html">lookup_date()</a></code> convert timesteps to dates.</p></li>
 </ul><p>Changes</p>
 <ul><li>
-<code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> gains a new argument <code>allow_failure</code>. FALSE, the default mimics prior behanvior. Set to TRUE to return NA if the date cannot be looked up.</li>
+<code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> gains a new argument <code>allow_failure</code>. FALSE, the default mimics prior behavior. Set to TRUE to return NA if the date cannot be looked up.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9045" id="birdflowr-0109045-1">BirdFlowR 0.1.0.9045<a class="anchor" aria-label="anchor" href="#birdflowr-0109045-1"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0.9045" id="birdflowr-0109045">BirdFlowR 0.1.0.9045<a class="anchor" aria-label="anchor" href="#birdflowr-0109045"></a></h2>
 <p>2023-12-18</p>
-<p>New function <code><a href="../reference/combine_transitions.html">combine_transitions()</a></code> combines the transition matricies from a series of timesteps into a single transition matrix that encodes the transition probabilities between the starting and ending timesteps in a single multi-week transition matrix.</p>
-<p>New <strong>BirdFlowExtras</strong> package uses <code><a href="../reference/combine_transitions.html">combine_transitions()</a></code> to calculate migratory connectivity. That package will hold more esoteric uses of BirdFlow models, and any functions that rely on packages that are not on either CRAN or BioConductor.</p>
+<p>New function <code><a href="../reference/combine_transitions.html">combine_transitions()</a></code> combines the transition matrices from a series of timesteps into a single transition matrix that encodes the transition probabilities between the starting and ending timesteps in a single multi-week transition matrix.</p>
+<p>New <strong>BirdFlowExtras</strong> package uses <code><a href="../reference/combine_transitions.html">combine_transitions()</a></code> to calculate migratory connectivity. That package will hold more esoteric uses of BirdFlow models, and any functions that rely on packages that are not on either CRAN or Bioconductor.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9044" id="birdflowr-0109044">BirdFlowR 0.1.0.9044<a class="anchor" aria-label="anchor" href="#birdflowr-0109044"></a></h2>
