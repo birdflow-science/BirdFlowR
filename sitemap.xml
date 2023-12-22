@@ -178,6 +178,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/load_model.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_date.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.html</loc>
   </url>
   <url>
@@ -260,6 +263,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/shorten_distance_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/snap_to_birdflow.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/sparsify.html</loc>
