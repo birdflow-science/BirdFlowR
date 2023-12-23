@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9047</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9048</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,16 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9048" id="birdflowr-0109048">BirdFlowR 0.1.0.9048<a class="anchor" aria-label="anchor" href="#birdflowr-0109048"></a></h2>
+<p>2023-12-22</p>
+<ul><li>Fix <code><a href="../reference/snap_to_birdflow.html">snap_to_birdflow()</a></code>
+<ul><li>Now works with date column names other than “date”</li>
+<li>Consistently re-formats dates with <code><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">lubridate::as_date()</a></code> and standardizes return date column to “date”</li>
+<li>now handles empty data frame input gracefully by returning empty data frame with appropriate column names and classes.</li>
+</ul></li>
+<li>Fix <code><a href="../reference/export_rasters.html">export_rasters()</a></code> bugs when exporting TIFF files (with some combinations of arguments)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9047" id="birdflowr-0109047">BirdFlowR 0.1.0.9047<a class="anchor" aria-label="anchor" href="#birdflowr-0109047"></a></h2>
 <p>2023-12-22</p>
