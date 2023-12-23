@@ -105,8 +105,7 @@ snap_to_birdflow <- function(d, bf,
                         crs = "EPSG:4326",
                         aggregate = NULL) {
 
-
-  # Check columns
+  # Check input columns
   for (arg in c("x_col", "y_col", "date_col", "id_cols")) {
     value <- get(arg)
     if (!all(value %in% names(d)))
@@ -115,6 +114,24 @@ snap_to_birdflow <- function(d, bf,
 
   stopifnot(is.numeric(d[[x_col]]),
             is.numeric(d[[y_col]]))
+
+  # Expected output columns
+  expected_cols <- c(id_cols, "date", "timestep", "x", "y", "i", "n",
+                     "error", "message")
+
+  # Handle special case of no input rows
+  if (nrow(d)== 0) {
+    d <- cbind(d[, id_cols, drop = FALSE],
+               date = lubridate::as_date(integer(0)),
+               timestep = numeric(0),
+               x = numeric(0),
+               y = numeric(0),
+               i = integer(0),
+               n = numeric(0),
+               error = logical(0),
+               message = character(0))
+    return(d[, expected_cols, drop = FALSE])
+  }
 
   # Helper - make an empty error table
   make_error_table <- function(n) {
@@ -134,14 +151,13 @@ snap_to_birdflow <- function(d, bf,
     e
   }
 
-
   errors <- make_error_table(nrow(d))
 
-  # Process dates into timesteps and labels
-  dates <- suppressWarnings(lubridate::as_date(d[[date_col]]))
-  errors$err_date[is.na(dates)]  <- TRUE
+  # Standardize date column name, date format, and add timesteps
+  d$date <- suppressWarnings(lubridate::as_date(d[[date_col]]))
+  errors$err_date[is.na(d$date)]  <- TRUE
   errors <- update_errors(errors)
-  d$timestep <- lookup_timestep(dates, bf, allow_failure = TRUE)
+  d$timestep <- lookup_timestep(d$date, bf, allow_failure = TRUE)
   errors$err_truncated <- !errors$err_date & is.na(d$timestep)
   errors <- update_errors(errors)
 
@@ -152,8 +168,7 @@ snap_to_birdflow <- function(d, bf,
   # Transform to bf crs
   d_t <- sf::st_transform(d_sf, sf::st_crs(crs(bf)))
   coords <- sf::st_coordinates(d_t)
-  colnames(coords) <- tolower(colnames(coords))
-  stopifnot(colnames(coords) == c("x", "y"))
+  colnames(coords) <- c("x", "y")
   errors$err_coords <- apply(coords, 1, anyNA)
   errors <- update_errors(errors)
 
@@ -163,10 +178,9 @@ snap_to_birdflow <- function(d, bf,
   d <- cbind(d, coords)
   rm(coords)
 
-
   if (is.null(aggregate)) {
     # Number of observations is 1 if no aggregation
-     d$n <- 1
+     d$n <- rep(1, nrow(d))
   } else {  # aggregation
 
     #### Aggregate ####
@@ -181,14 +195,9 @@ snap_to_birdflow <- function(d, bf,
       errors <- errors[keep, , drop = FALSE]
     }
 
-
-    # Add coordinates  - and drop any prexisting x or y columns
+    # Add coordinates  - and drop any pre-existing x or y columns
     # work with a temporary copy
-    d$date <- lubridate::as_date(d[[date_col]])
-
     d <- dplyr::group_by(d, dplyr::pick({{id_cols}}), .data$timestep)
-
-
 
     d <- switch(aggregate,
            "mean" = {
@@ -230,7 +239,6 @@ snap_to_birdflow <- function(d, bf,
     # Make new error for remaining rows
     # We dropped all the errors before aggregation so there are none (yet)
     errors <- make_error_table(nrow(d))
-
   }
 
   # resolve i (location index)
@@ -243,7 +251,6 @@ snap_to_birdflow <- function(d, bf,
   no_err <- !errors$error  # only evaluate where there aren't other problems
   errors$err_dynamic[no_err] <- !dm[cbind(d$i[no_err], d$timestep[no_err])]
   errors <- update_errors(errors)
-
 
   # Check against sparsification
   # sm is the sparsified mask, locations where the dynamic mask is 1
@@ -260,12 +267,15 @@ snap_to_birdflow <- function(d, bf,
   errors$error <- NULL
   d$message <- names(errors)[apply(errors, 1, function(x) which(x)[1])]
 
-  # Standarize output
-  expected_cols <- c(id_cols, "date", "timestep", "x", "y", "i", "n",
-                     "error", "message")
+  # Standardize output
 
+  # Replace Nan with NA in coordinates (reprojection errors can produce NaN)
+  d$x[is.na(d$x)] <- NA_real_
+  d$y[is.na(d$y)] <- NA_real_
 
+  # Filter and order columns
   stopifnot(all(expected_cols %in% names(d)))
+  d <- d[, expected_cols, drop = FALSE]
 
-  return(d[, expected_cols, drop = FALSE])
+  return(d)
 }

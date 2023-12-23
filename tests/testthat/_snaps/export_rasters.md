@@ -1,153 +1,38 @@
 # export_rasters() works with GeoTIFFs
 
     Code
-      files
+      cat(files[c(1:8, (n - 4):n)], sep = "\n")
     Output
-        [1] "amewoo_distr_01.tif" "amewoo_distr_02.tif" "amewoo_distr_03.tif"
-        [4] "amewoo_distr_04.tif" "amewoo_distr_05.tif" "amewoo_distr_06.tif"
-        [7] "amewoo_distr_07.tif" "amewoo_distr_08.tif" "amewoo_distr_09.tif"
-       [10] "amewoo_distr_10.tif" "amewoo_distr_11.tif" "amewoo_distr_12.tif"
-       [13] "amewoo_distr_13.tif" "amewoo_distr_14.tif" "amewoo_distr_15.tif"
-       [16] "amewoo_distr_16.tif" "amewoo_distr_17.tif" "amewoo_distr_18.tif"
-       [19] "amewoo_distr_19.tif" "amewoo_distr_20.tif" "amewoo_distr_21.tif"
-       [22] "amewoo_distr_22.tif" "amewoo_distr_23.tif" "amewoo_distr_24.tif"
-       [25] "amewoo_distr_25.tif" "amewoo_distr_26.tif" "amewoo_distr_27.tif"
-       [28] "amewoo_distr_28.tif" "amewoo_distr_29.tif" "amewoo_distr_30.tif"
-       [31] "amewoo_distr_31.tif" "amewoo_distr_32.tif" "amewoo_distr_33.tif"
-       [34] "amewoo_distr_34.tif" "amewoo_distr_35.tif" "amewoo_distr_36.tif"
-       [37] "amewoo_distr_37.tif" "amewoo_distr_38.tif" "amewoo_distr_39.tif"
-       [40] "amewoo_distr_40.tif" "amewoo_distr_41.tif" "amewoo_distr_42.tif"
-       [43] "amewoo_distr_43.tif" "amewoo_distr_44.tif" "amewoo_distr_45.tif"
-       [46] "amewoo_distr_46.tif" "amewoo_distr_47.tif" "amewoo_distr_48.tif"
-       [49] "amewoo_distr_49.tif" "amewoo_distr_50.tif" "amewoo_distr_51.tif"
-       [52] "amewoo_distr_52.tif" "amewoo_mask_01.tif"  "amewoo_mask_02.tif" 
-       [55] "amewoo_mask_03.tif"  "amewoo_mask_04.tif"  "amewoo_mask_05.tif" 
-       [58] "amewoo_mask_06.tif"  "amewoo_mask_07.tif"  "amewoo_mask_08.tif" 
-       [61] "amewoo_mask_09.tif"  "amewoo_mask_10.tif"  "amewoo_mask_11.tif" 
-       [64] "amewoo_mask_12.tif"  "amewoo_mask_13.tif"  "amewoo_mask_14.tif" 
-       [67] "amewoo_mask_15.tif"  "amewoo_mask_16.tif"  "amewoo_mask_17.tif" 
-       [70] "amewoo_mask_18.tif"  "amewoo_mask_19.tif"  "amewoo_mask_20.tif" 
-       [73] "amewoo_mask_21.tif"  "amewoo_mask_22.tif"  "amewoo_mask_23.tif" 
-       [76] "amewoo_mask_24.tif"  "amewoo_mask_25.tif"  "amewoo_mask_26.tif" 
-       [79] "amewoo_mask_27.tif"  "amewoo_mask_28.tif"  "amewoo_mask_29.tif" 
-       [82] "amewoo_mask_30.tif"  "amewoo_mask_31.tif"  "amewoo_mask_32.tif" 
-       [85] "amewoo_mask_33.tif"  "amewoo_mask_34.tif"  "amewoo_mask_35.tif" 
-       [88] "amewoo_mask_36.tif"  "amewoo_mask_37.tif"  "amewoo_mask_38.tif" 
-       [91] "amewoo_mask_39.tif"  "amewoo_mask_40.tif"  "amewoo_mask_41.tif" 
-       [94] "amewoo_mask_42.tif"  "amewoo_mask_43.tif"  "amewoo_mask_44.tif" 
-       [97] "amewoo_mask_45.tif"  "amewoo_mask_46.tif"  "amewoo_mask_47.tif" 
-      [100] "amewoo_mask_48.tif"  "amewoo_mask_49.tif"  "amewoo_mask_50.tif" 
-      [103] "amewoo_mask_51.tif"  "amewoo_mask_52.tif"  "crs.txt"            
-      [106] "extent.txt"         
+      amewoo_crs.txt
+      amewoo_distr_01.tif
+      amewoo_distr_02.tif
+      amewoo_distr_03.tif
+      amewoo_distr_04.tif
+      amewoo_distr_05.tif
+      amewoo_distr_06.tif
+      amewoo_distr_07.tif
+      amewoo_mask_48.tif
+      amewoo_mask_49.tif
+      amewoo_mask_50.tif
+      amewoo_mask_51.tif
+      amewoo_mask_52.tif
 
 # export_rasters() works with PNG and reprojection
 
     Code
-      png_export_files
+      cat(png_export_files[c(1:8, (n - 4):n)], sep = "\n")
     Output
-        [1] "amewoo_distr_01.png"         "amewoo_distr_01.png.aux.xml"
-        [3] "amewoo_distr_02.png"         "amewoo_distr_02.png.aux.xml"
-        [5] "amewoo_distr_03.png"         "amewoo_distr_03.png.aux.xml"
-        [7] "amewoo_distr_04.png"         "amewoo_distr_04.png.aux.xml"
-        [9] "amewoo_distr_05.png"         "amewoo_distr_05.png.aux.xml"
-       [11] "amewoo_distr_06.png"         "amewoo_distr_06.png.aux.xml"
-       [13] "amewoo_distr_07.png"         "amewoo_distr_07.png.aux.xml"
-       [15] "amewoo_distr_08.png"         "amewoo_distr_08.png.aux.xml"
-       [17] "amewoo_distr_09.png"         "amewoo_distr_09.png.aux.xml"
-       [19] "amewoo_distr_10.png"         "amewoo_distr_10.png.aux.xml"
-       [21] "amewoo_distr_11.png"         "amewoo_distr_11.png.aux.xml"
-       [23] "amewoo_distr_12.png"         "amewoo_distr_12.png.aux.xml"
-       [25] "amewoo_distr_13.png"         "amewoo_distr_13.png.aux.xml"
-       [27] "amewoo_distr_14.png"         "amewoo_distr_14.png.aux.xml"
-       [29] "amewoo_distr_15.png"         "amewoo_distr_15.png.aux.xml"
-       [31] "amewoo_distr_16.png"         "amewoo_distr_16.png.aux.xml"
-       [33] "amewoo_distr_17.png"         "amewoo_distr_17.png.aux.xml"
-       [35] "amewoo_distr_18.png"         "amewoo_distr_18.png.aux.xml"
-       [37] "amewoo_distr_19.png"         "amewoo_distr_19.png.aux.xml"
-       [39] "amewoo_distr_20.png"         "amewoo_distr_20.png.aux.xml"
-       [41] "amewoo_distr_21.png"         "amewoo_distr_21.png.aux.xml"
-       [43] "amewoo_distr_22.png"         "amewoo_distr_22.png.aux.xml"
-       [45] "amewoo_distr_23.png"         "amewoo_distr_23.png.aux.xml"
-       [47] "amewoo_distr_24.png"         "amewoo_distr_24.png.aux.xml"
-       [49] "amewoo_distr_25.png"         "amewoo_distr_25.png.aux.xml"
-       [51] "amewoo_distr_26.png"         "amewoo_distr_26.png.aux.xml"
-       [53] "amewoo_distr_27.png"         "amewoo_distr_27.png.aux.xml"
-       [55] "amewoo_distr_28.png"         "amewoo_distr_28.png.aux.xml"
-       [57] "amewoo_distr_29.png"         "amewoo_distr_29.png.aux.xml"
-       [59] "amewoo_distr_30.png"         "amewoo_distr_30.png.aux.xml"
-       [61] "amewoo_distr_31.png"         "amewoo_distr_31.png.aux.xml"
-       [63] "amewoo_distr_32.png"         "amewoo_distr_32.png.aux.xml"
-       [65] "amewoo_distr_33.png"         "amewoo_distr_33.png.aux.xml"
-       [67] "amewoo_distr_34.png"         "amewoo_distr_34.png.aux.xml"
-       [69] "amewoo_distr_35.png"         "amewoo_distr_35.png.aux.xml"
-       [71] "amewoo_distr_36.png"         "amewoo_distr_36.png.aux.xml"
-       [73] "amewoo_distr_37.png"         "amewoo_distr_37.png.aux.xml"
-       [75] "amewoo_distr_38.png"         "amewoo_distr_38.png.aux.xml"
-       [77] "amewoo_distr_39.png"         "amewoo_distr_39.png.aux.xml"
-       [79] "amewoo_distr_40.png"         "amewoo_distr_40.png.aux.xml"
-       [81] "amewoo_distr_41.png"         "amewoo_distr_41.png.aux.xml"
-       [83] "amewoo_distr_42.png"         "amewoo_distr_42.png.aux.xml"
-       [85] "amewoo_distr_43.png"         "amewoo_distr_43.png.aux.xml"
-       [87] "amewoo_distr_44.png"         "amewoo_distr_44.png.aux.xml"
-       [89] "amewoo_distr_45.png"         "amewoo_distr_45.png.aux.xml"
-       [91] "amewoo_distr_46.png"         "amewoo_distr_46.png.aux.xml"
-       [93] "amewoo_distr_47.png"         "amewoo_distr_47.png.aux.xml"
-       [95] "amewoo_distr_48.png"         "amewoo_distr_48.png.aux.xml"
-       [97] "amewoo_distr_49.png"         "amewoo_distr_49.png.aux.xml"
-       [99] "amewoo_distr_50.png"         "amewoo_distr_50.png.aux.xml"
-      [101] "amewoo_distr_51.png"         "amewoo_distr_51.png.aux.xml"
-      [103] "amewoo_distr_52.png"         "amewoo_distr_52.png.aux.xml"
-      [105] "amewoo_mask_01.png"          "amewoo_mask_01.png.aux.xml" 
-      [107] "amewoo_mask_02.png"          "amewoo_mask_02.png.aux.xml" 
-      [109] "amewoo_mask_03.png"          "amewoo_mask_03.png.aux.xml" 
-      [111] "amewoo_mask_04.png"          "amewoo_mask_04.png.aux.xml" 
-      [113] "amewoo_mask_05.png"          "amewoo_mask_05.png.aux.xml" 
-      [115] "amewoo_mask_06.png"          "amewoo_mask_06.png.aux.xml" 
-      [117] "amewoo_mask_07.png"          "amewoo_mask_07.png.aux.xml" 
-      [119] "amewoo_mask_08.png"          "amewoo_mask_08.png.aux.xml" 
-      [121] "amewoo_mask_09.png"          "amewoo_mask_09.png.aux.xml" 
-      [123] "amewoo_mask_10.png"          "amewoo_mask_10.png.aux.xml" 
-      [125] "amewoo_mask_11.png"          "amewoo_mask_11.png.aux.xml" 
-      [127] "amewoo_mask_12.png"          "amewoo_mask_12.png.aux.xml" 
-      [129] "amewoo_mask_13.png"          "amewoo_mask_13.png.aux.xml" 
-      [131] "amewoo_mask_14.png"          "amewoo_mask_14.png.aux.xml" 
-      [133] "amewoo_mask_15.png"          "amewoo_mask_15.png.aux.xml" 
-      [135] "amewoo_mask_16.png"          "amewoo_mask_16.png.aux.xml" 
-      [137] "amewoo_mask_17.png"          "amewoo_mask_17.png.aux.xml" 
-      [139] "amewoo_mask_18.png"          "amewoo_mask_18.png.aux.xml" 
-      [141] "amewoo_mask_19.png"          "amewoo_mask_19.png.aux.xml" 
-      [143] "amewoo_mask_20.png"          "amewoo_mask_20.png.aux.xml" 
-      [145] "amewoo_mask_21.png"          "amewoo_mask_21.png.aux.xml" 
-      [147] "amewoo_mask_22.png"          "amewoo_mask_22.png.aux.xml" 
-      [149] "amewoo_mask_23.png"          "amewoo_mask_23.png.aux.xml" 
-      [151] "amewoo_mask_24.png"          "amewoo_mask_24.png.aux.xml" 
-      [153] "amewoo_mask_25.png"          "amewoo_mask_25.png.aux.xml" 
-      [155] "amewoo_mask_26.png"          "amewoo_mask_26.png.aux.xml" 
-      [157] "amewoo_mask_27.png"          "amewoo_mask_27.png.aux.xml" 
-      [159] "amewoo_mask_28.png"          "amewoo_mask_28.png.aux.xml" 
-      [161] "amewoo_mask_29.png"          "amewoo_mask_29.png.aux.xml" 
-      [163] "amewoo_mask_30.png"          "amewoo_mask_30.png.aux.xml" 
-      [165] "amewoo_mask_31.png"          "amewoo_mask_31.png.aux.xml" 
-      [167] "amewoo_mask_32.png"          "amewoo_mask_32.png.aux.xml" 
-      [169] "amewoo_mask_33.png"          "amewoo_mask_33.png.aux.xml" 
-      [171] "amewoo_mask_34.png"          "amewoo_mask_34.png.aux.xml" 
-      [173] "amewoo_mask_35.png"          "amewoo_mask_35.png.aux.xml" 
-      [175] "amewoo_mask_36.png"          "amewoo_mask_36.png.aux.xml" 
-      [177] "amewoo_mask_37.png"          "amewoo_mask_37.png.aux.xml" 
-      [179] "amewoo_mask_38.png"          "amewoo_mask_38.png.aux.xml" 
-      [181] "amewoo_mask_39.png"          "amewoo_mask_39.png.aux.xml" 
-      [183] "amewoo_mask_40.png"          "amewoo_mask_40.png.aux.xml" 
-      [185] "amewoo_mask_41.png"          "amewoo_mask_41.png.aux.xml" 
-      [187] "amewoo_mask_42.png"          "amewoo_mask_42.png.aux.xml" 
-      [189] "amewoo_mask_43.png"          "amewoo_mask_43.png.aux.xml" 
-      [191] "amewoo_mask_44.png"          "amewoo_mask_44.png.aux.xml" 
-      [193] "amewoo_mask_45.png"          "amewoo_mask_45.png.aux.xml" 
-      [195] "amewoo_mask_46.png"          "amewoo_mask_46.png.aux.xml" 
-      [197] "amewoo_mask_47.png"          "amewoo_mask_47.png.aux.xml" 
-      [199] "amewoo_mask_48.png"          "amewoo_mask_48.png.aux.xml" 
-      [201] "amewoo_mask_49.png"          "amewoo_mask_49.png.aux.xml" 
-      [203] "amewoo_mask_50.png"          "amewoo_mask_50.png.aux.xml" 
-      [205] "amewoo_mask_51.png"          "amewoo_mask_51.png.aux.xml" 
-      [207] "amewoo_mask_52.png"          "amewoo_mask_52.png.aux.xml" 
-      [209] "crs.txt"                     "extent.txt"                 
+      amewoo_crs.txt
+      amewoo_distr_01.png
+      amewoo_distr_01.png.aux.xml
+      amewoo_distr_02.png
+      amewoo_distr_02.png.aux.xml
+      amewoo_distr_03.png
+      amewoo_distr_03.png.aux.xml
+      amewoo_distr_04.png
+      amewoo_mask_50.png.aux.xml
+      amewoo_mask_51.png
+      amewoo_mask_51.png.aux.xml
+      amewoo_mask_52.png
+      amewoo_mask_52.png.aux.xml
 

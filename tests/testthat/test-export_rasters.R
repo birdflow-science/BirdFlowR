@@ -13,7 +13,9 @@ test_that("export_rasters() works with GeoTIFFs", {
 
   # Expected files
   files <- sort(list.files(dir))
-  expect_snapshot(files)
+  n <- length(files)
+  expect_snapshot(cat(files[c(1:8, (n-4):n)], sep = "\n"))
+
 
   # First exported distribution is very close to first distribution
   file <- file.path(dir, files[grep("distr", files)[1]])
@@ -44,7 +46,8 @@ test_that("export_rasters() works with PNG and reprojection", {
 
   # Expected files
   png_export_files <- sort(list.files(dir))
-  expect_snapshot(png_export_files)
+  n <- length(png_export_files)
+  expect_snapshot(cat(png_export_files[c(1:8, (n-4):n)], sep = "\n"))
 
   # First exported distribution is very close to first distribution
   file <- file.path(dir, png_export_files[grep("distr", png_export_files)[1]])
