@@ -227,9 +227,6 @@ snap_to_birdflow <- function(d, bf,
 
     d <- as.data.frame(d)
 
-    # restore date column name
-    names(d)[names(d) == "date"] <- date_col
-
     # Make new error for remaining rows
     # We dropped all the errors before aggregation so there are none (yet)
     errors <- make_error_table(nrow(d))
