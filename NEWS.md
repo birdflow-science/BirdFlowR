@@ -1,3 +1,16 @@
+# BirdFlowR 0.1.0.9048
+2023-12-22
+
+* Fix `snap_to_birdflow()` 
+  * Now works with date column names other than "date"
+  * Consistently re-formats dates with `lubridate::as_date()` and standardizes
+  return date column to "date" 
+  * now handles empty data frame input gracefully by returning
+  empty data frame with appropriate column names and classes.
+  
+* Fix `export_rasters()` bugs when exporting TIFF files (with some combinations
+  of arguments)
+
 # BirdFlowR 0.1.0.9047
 2023-12-22
 
