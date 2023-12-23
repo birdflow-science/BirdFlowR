@@ -67,6 +67,8 @@ export_rasters <- function(bf,
                            overwrite = TRUE) {
   stopifnot(all(what %in% c("distr", "mask")))
 
+  files_written <- 0
+
   integerize_fun <- function(x, factor) {
     x <- x * factor
     x[x < 1 & x != 0] <- 1
@@ -101,7 +103,7 @@ export_rasters <- function(bf,
     dmax <- max(get_distr(bf))
 
     factor <- switch(filetype,
-                     "GTIFF" = 1 / dmax * 1000,
+                     "GTiff" = 1 / dmax * 1000,
                      "JPEG" = 1 / dmax * 255,
                      "PNG" = 1 / dmax * 255
     )
@@ -142,9 +144,10 @@ export_rasters <- function(bf,
       r <- get_distr(bf)
       if (as_integer) {
         r <- integerize_fun(r, factor = factor)
-        if (max(r) < 256) {
+        maxr <- max(r)
+        if (maxr < 256) {
           datatype <- "INT1U"
-        } else if (max < 65536) {
+        } else if (maxr < 65536) {
           datatype <- "INT2U"
         } else {
           datatype <- "INT4u"
@@ -157,11 +160,17 @@ export_rasters <- function(bf,
     } # End distr == what
 
 
-    names(r) <- 1:n_timesteps(bf)
+    names(r) <- 1:n_distr(bf)
     crs <- terra::crs(crs)
     if (crs(bf) != crs) {
       r <- terra::project(r, crs)
     }
+
+    # Drop extra distribution from preprocessed models
+    if(!has_marginals(bf) && !has_transitions(bf) && n_distr(bf) == 53){
+      r <- r[[-53]]
+    }
+
 
     if (multiband) {
       file <- file.path(dir, paste0(species(bf, "code"),
@@ -170,6 +179,7 @@ export_rasters <- function(bf,
       dir.create(dir, showWarnings = FALSE)
       terra::writeRaster(r, filename = file, filetype = filetype,
                          datatype = datatype, overwrite = overwrite)
+      files_written <- files_written + 1
     }
 
     if (singleband) {
@@ -182,6 +192,7 @@ export_rasters <- function(bf,
       for (j in seq_len(n_timesteps(bf))) {
         terra::writeRaster(r[[j]], file = files[j], filetype = filetype,
                            datatype = datatype, overwrite = overwrite)
+        files_written <- files_written + 1
       }
     } # end if single band
   } # end loop through what (distr, and/or mask)
@@ -193,12 +204,16 @@ export_rasters <- function(bf,
                    paste0(x, " = ",
                           do.call(x, args = list(x = extent)))
                  })
-  writeLines(text, file.path(dir, "extent.txt"))
+  writeLines(text, file.path(dir, paste0(species(bf, "code"), "_extent.txt")))
+  files_written <- files_written + 1
+
 
   # Write crs as text file
   text <- as.character(crs(r))
-  writeLines(text, file.path(dir, "crs.txt"))
+  writeLines(text, file.path(dir, paste0(species(bf, "code"),  "_crs.txt")))
+  files_written <- files_written + 1
 
-  bf_msg("Wrote ", length(list.files(dir)), "files to", dir, "\n")
+  bf_msg("Wrote ", files_written, " files to ", dir, "\n")
+
 
 }  # end function
