@@ -60,7 +60,7 @@ get_metadata <- function(x, what) {
   nbf <- new_BirdFlow()
   valid_metatdata_names  <- c("all", names(nbf$metadata))
 
-  if (!what %in% c(valid_metatdata_names)) {
+  if (length(what) != 1 || !what %in% c(valid_metatdata_names)) {
     stop("what should be one of ",
          paste(valid_metatdata_names, collapse = ", "))
   }
