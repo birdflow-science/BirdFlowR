@@ -37,13 +37,18 @@ lookup_timestep <- function(x, bf, allow_failure = FALSE) {
   dates <- get_dates(bf) # standardize to current date format
   original_x <- x
 
+  # Deal with length 1 NA input of any class
+  if (length(x) == 1 && is.na(x))
+    x <- NA_real_
+
   # Special case "all" returns all timesteps in order
   if (length(x) == 1 && is.character(x) &&  tolower(x) == "all")
     return(dates$timestep)
 
   # timesteps e.g. "t1" "t2"
   if (is.character(x) && all(grepl("^t[[:digit:]]*$",
-                                   ignore.case = TRUE, x = x))) {
+                                   ignore.case = TRUE,
+                                   x = stats::na.omit(x)))) {
     x <- as.numeric(gsub("t", "", x, ignore.case = TRUE))
   }
 
