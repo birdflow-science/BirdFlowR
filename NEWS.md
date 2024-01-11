@@ -1,6 +1,13 @@
 # BirdFlowR 0.1.0.9049
 2023-01-11
 
+#### Drop "_clip"
+
+ Drop "_clip" from name when clipping with preprocess_species() 
+See issue #165, but note I haven't added the extra metadata item yet.  
+
+#### Zero abundance for some timesteps
+
  `validate_birdflow()` and thus also `preprocess_species()` now throw errors
 if any distribution doesn't sum to 1 or if the dynamic mask excludes all cells
 for a timestep. This addresses a problem discovered when attempting to fit 
@@ -14,6 +21,7 @@ The change can be observed with:
 preprocess_species("antnig", res = 150, hdf5 = FALSE, 
                     skip_quality_checks = TRUE)`
 ```
+
 
 
 # BirdFlowR 0.1.0.9048
