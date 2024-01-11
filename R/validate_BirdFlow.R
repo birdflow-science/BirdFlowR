@@ -62,12 +62,12 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     if (error) {
       if (allow_incomplete) {
         if (any(p$type == "error"))
-          message <- paste0("Problems found by validate_BirdFlow:",
+          message <- paste0("Problems found by validate_BirdFlow:\n\t",
                             paste(p$problem[p$type == "error"],
-                                  collapse = "; "))
+                                  collapse = ";\n\t"))
       } else { # Don't allow incomplete:
         if (nrow(p) > 0)
-          message <- paste("Problems found by validate_BirdFlow:\n\t",
+          message <- paste0("Problems found by validate_BirdFlow:\n\t",
                           paste(p$problem, collapse = "; \n\t"))
       }
     }
@@ -136,6 +136,48 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   }
 
 
+
+
+  # check dates
+  if (!"dates" %in% names(x) || !is.data.frame(x$dates)) {
+    p <- add_prob("x$dates is missing, NA or not a dataframe", "error", p)
+    report_problems()
+  } else { # dates exists and is data.frame
+
+    if (x$metadata$ebird_version_year < 2022) {
+      # 2021 ebirdst models have use older dates format
+      required_cols <- c("interval", "date", "doy", "start", "midpoint", "end")
+    } else {
+      #2022_ ebirdst models use newer dates format
+      required_cols <- names(make_dates())
+    }
+    if (!all(required_cols  %in% names(x$dates))) {
+      p <- add_prob(paste0("x$dates is missing columns:",
+                           paste(setdiff(required_cols, names(x$dates)))),
+                    "error", p)
+      report_problems()
+    } # end if dates missing columns
+    rm(required_cols)
+
+
+    if ("distr" %in% names(x)) {
+      if (is.null(dim(x$distr)) ||
+          !length(dim(x$distr)) == 2 ||
+          !is.numeric(x$distr)) {
+        p <- add_prob("distr has wrong format", "error", p)
+        report_problems()
+      }
+
+      if (nrow(x$dates) != ncol(x$distr)) {
+        p <- add_prob(paste0("x$dates and x$distr do not represent the same ",
+                             "number of timesteps."), "error", p)
+        report_problems()
+      }
+    }
+  } # end dates is data.frame
+
+
+
   # check consistancy of has_ (transitions, marginals, distr)
   components <- c("transitions", "marginals", "distr")
   for (i in seq_along(components)) {
@@ -144,13 +186,26 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
       p <- add_prob(paste0("has_", components[i], " is not TRUE or FALSE"),
                     "error", p)
   }
+
   if (has_distr(x)) {
     if (!is.matrix(x$distr))
       p <- add_prob("distr is not a matrix", "error", p)
+    sums_to_one <- get_distr(x) |>
+      apply(2, sum) |>
+      sapply(function(x) isTRUE(all.equal(x, 1)))
+    if(!all(sums_to_one)){
+      p <- add_prob("not all distributions sum to one",
+                    "error", p)
+    }
   }
   if (has_dynamic_mask(x)) {
-    if (!is.matrix(x$geom$dynamic_mask))
+    if (!is.matrix(x$geom$dynamic_mask)){
       p <- add_prob("dynamic mask is not a matrix", "error", p)
+    } else {
+      if(!all(apply(get_dynamic_mask(x), 2, sum) > 0)){
+        p <- add_prob("dynamic mask eliminates all cells for some timesteps", "error", p)
+      }
+    }
   }
 
   if (has_marginals(x)) {
@@ -201,44 +256,6 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     }
   }  # end consistency checks on n_transitions
 
-
-
-  # check dates
-  if (!"dates" %in% names(x) || !is.data.frame(x$dates)) {
-    p <- add_prob("x$dates is missing, NA or not a dataframe", "error", p)
-    report_problems()
-  } else { # dates exists and is data.frame
-
-    if (x$metadata$ebird_version_year < 2022) {
-      # 2021 ebirdst models have use older dates format
-      required_cols <- c("interval", "date", "doy", "start", "midpoint", "end")
-    } else {
-      #2022_ ebirdst models use newer dates format
-      required_cols <- names(make_dates())
-    }
-    if (!all(required_cols  %in% names(x$dates))) {
-      p <- add_prob(paste0("x$dates is missing columns:",
-                           paste(setdiff(required_cols, names(x$dates)))),
-                    "error", p)
-      report_problems()
-    } # end if dates missing columns
-    rm(required_cols)
-
-
-    if ("distr" %in% names(x)) {
-      if (is.null(dim(x$distr)) ||
-         !length(dim(x$distr)) == 2 ||
-         !is.numeric(x$distr)) {
-        p <- add_prob("distr has wrong format", "error", p)
-        report_problems()
-      }
-
-      if (nrow(x$dates) != ncol(x$distr)) {
-        p <- add_prob(paste0("x$dates and x$distr do not represent the same ",
-                             "number of timesteps."), "error", p)
-      }
-    }
-  } # end dates is data.frame
 
 
   # consistency on n_active
