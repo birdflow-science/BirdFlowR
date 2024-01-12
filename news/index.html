@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9048</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,21 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9049" id="birdflowr-0109049">BirdFlowR 0.1.0.9049<a class="anchor" aria-label="anchor" href="#birdflowr-0109049"></a></h2>
+<p>2023-01-11</p>
+<div class="section level5">
+<h5 id="drop-_clip-0-1-0-9049">Drop “_clip”<a class="anchor" aria-label="anchor" href="#drop-_clip-0-1-0-9049"></a></h5>
+<p>Drop “_clip” from name when clipping with preprocess_species() See issue <a href="https://github.com/birdflow-science/BirdFlowR/issues/165" class="external-link">#165</a>, but note I haven’t added the extra metadata item yet.</p>
+</div>
+<div class="section level5">
+<h5 id="zero-abundance-for-some-timesteps-0-1-0-9049">Zero abundance for some timesteps<a class="anchor" aria-label="anchor" href="#zero-abundance-for-some-timesteps-0-1-0-9049"></a></h5>
+<p><code>validate_birdflow()</code> and thus also <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now throw errors if any distribution doesn’t sum to 1 or if the dynamic mask excludes all cells for a timestep. This addresses a problem discovered when attempting to fit models with species: “antnig” (Antillean Nighthawk) where for some timesteps the abundance grids from status and trends are all zero. Prior to this change it was possible to preprocess Antillean Nighthawk but then during fitting with BirdFlowPy confusing errors were thrown.</p>
+<p>The change can be observed with:</p>
+<pre class="{r}"><code>preprocess_species("antnig", res = 150, hdf5 = FALSE, 
+                    skip_quality_checks = TRUE)`</code></pre>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9048" id="birdflowr-0109048">BirdFlowR 0.1.0.9048<a class="anchor" aria-label="anchor" href="#birdflowr-0109048"></a></h2>
 <p>2023-12-22</p>
