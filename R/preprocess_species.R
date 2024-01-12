@@ -357,8 +357,6 @@ preprocess_species <- function(species = NULL,
   if (any_output) {
     out_base <-
       file.path(out_dir, paste0(download_species, "_", st_year, "_", res, "km"))
-    if (!is.null(clip))
-      out_base <- paste0(out_base, "_clip")
 
     paths <- list()
     if (hdf5) {

@@ -184,8 +184,8 @@ test_that("preprocess_species() works with clip", {
 
   # Test that expect file was created
   created_files <- list.files(dir)
-  expect_in(created_files,  c("example_data_2021_30km_clip.hdf5",  # ebird 2021
-                              "yebsap-example_2022_30km_clip.hdf5")) # 2022
+  expect_in(created_files,  c("example_data_2021_30km.hdf5",  # ebird 2021
+                              "yebsap-example_2022_30km.hdf5")) # 2022
 
   skip_if_wrong_ebirdst_for_snapshot()
 
