@@ -1,3 +1,8 @@
+# BirdFlowR 0.1.0.9050
+2023-02-22
+
+* Add test for `preprocess_species()` with a non-default CRS.
+
 # BirdFlowR 0.1.0.9049
 2023-01-11
 
