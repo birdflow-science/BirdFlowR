@@ -194,3 +194,18 @@ test_that("preprocess_species() works with clip", {
     res(b)
   })
 })
+
+
+test_that("preprocess_species() works with crs arg", {
+  skip_on_cran()
+  skip_on_ci()
+
+  skip_if_unsupported_ebirdst_version()
+
+  # Create and commit to cleaning up a temporary dir
+  dir <- local_test_dir("preprocess_crs")
+
+  expect_no_error(
+    bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE, crs = birdflow_crs)
+  )
+})
