@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,11 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9050" id="birdflowr-0109050">BirdFlowR 0.1.0.9050<a class="anchor" aria-label="anchor" href="#birdflowr-0109050"></a></h2>
+<p>2023-02-22</p>
+<ul><li>Add test for <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> with a non-default CRS.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9049" id="birdflowr-0109049">BirdFlowR 0.1.0.9049<a class="anchor" aria-label="anchor" href="#birdflowr-0109049"></a></h2>
 <p>2023-01-11</p>
@@ -182,7 +187,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <li>Users should replace <code>bf$dates</code> with <code><a href="../reference/get_dates.html">get_dates()</a></code> and use new column names.</li>
 </ul></li>
 <li><p>Inconsistent weeks. <strong>eBird</strong> changed the way dates are assigned to weeks in the 2022 version. See notes in <code><a href="../reference/get_dates.html">get_dates()</a></code> for details. <strong>BirdFlowR</strong> honors the date scheme used in the eBird data each model was built with and thus some dates will be assigned to a different week with a 2021 model than they are with a 2022 model this will affect <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code>, <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, and the many functions that rely on them.</p></li>
-<li><p>Importing (old) BirdFlow models fit without a dynamic mask is no longer supported. Predicting with them is. Use BirdFlowR 0.1.0.39 if you want to import an old hdf5 file which could then be saved with <code><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">saveRDS()</a></code>. Dynamic masks were added in 0.1.0.9001 (April 2023) so only models fit (but not imported) before then will be affected.</p></li>
+<li><p>Importing (old) BirdFlow models fit without a dynamic mask is no longer supported. Predicting with them is. Use BirdFlowR 0.1.0.39 if you want to import an old hdf5 file which could then be saved with <code><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">saveRDS()</a></code>. Dynamic masks were added in 0.1.0.9001 (April 2023) so only models fit (but not imported) before then will be affected.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-0-1-0-9040">New<a class="anchor" aria-label="anchor" href="#new-0-1-0-9040"></a></h3>
@@ -228,7 +233,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <p>Trying to pass all CI checks while still using ebirdst 2.2021</p>
 <ul><li>Added version dependency &lt;= 2.2021.3 for <strong>ebirdst</strong> (under imports) to avoid version 3.2022 until <strong>BirdFlowR</strong> is updated for the significant changes in <strong>ebirdst</strong>
 </li>
-<li>Removed call to <code><a href="https://rdrr.io/pkg/ebirdst/man/ebirdst-deprecated.html" class="external-link">ebirdst::abundance_palette()</a></code> and replaced it with the resulting values. As it was <strong>ebirdst</strong> should have been in imports. This also dodges dealing with the function name change in v. 3.2022.0.</li>
+<li>Removed call to <code><a href="https://ebird.github.io/ebirdst/reference/ebirdst-deprecated.html" class="external-link">ebirdst::abundance_palette()</a></code> and replaced it with the resulting values. As it was <strong>ebirdst</strong> should have been in imports. This also dodges dealing with the function name change in v. 3.2022.0.</li>
 <li>Dropped code that dealt with older version of <code>$dates</code>.</li>
 </ul></div>
     <div class="section level2">
@@ -283,7 +288,7 @@ It is used with conditional sparsification to specify a proportion of the transi
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9031" id="birdflowr-0109031">BirdFlowR 0.1.0.9031<a class="anchor" aria-label="anchor" href="#birdflowr-0109031"></a></h2>
 <p>2023-09-08</p>
-<ul><li><p>New function <code><a href="../reference/as_distr.html">as_distr()</a></code> converts raster (<code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>) and point (<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code>or data frames) data into distributions. Rasters will be projected into cells that align with the BirdFlow object’s cells and then cropped and masked. With default settings the resulting values will be normalized to sum to 1 and any NA values will be replaced with 0. Points are converted into a distribution for each point in which all the density is placed in the cell corresponding to the point. Projection of <code>sf</code> and <code>SpatRasters</code> is done automatically. Data in dataframes is assumed to match the coordinate reference system (CRS) of the BirdFlow object unless the <code>crs</code> argument is used to define the CRS. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/116" class="external-link">#116</a>.</p></li>
+<ul><li><p>New function <code><a href="../reference/as_distr.html">as_distr()</a></code> converts raster (<code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>) and point (<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code>or data frames) data into distributions. Rasters will be projected into cells that align with the BirdFlow object’s cells and then cropped and masked. With default settings the resulting values will be normalized to sum to 1 and any NA values will be replaced with 0. Points are converted into a distribution for each point in which all the density is placed in the cell corresponding to the point. Projection of <code>sf</code> and <code>SpatRasters</code> is done automatically. Data in dataframes is assumed to match the coordinate reference system (CRS) of the BirdFlow object unless the <code>crs</code> argument is used to define the CRS. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/116" class="external-link">#116</a>.</p></li>
 <li><p>bug fix in <code><a href="../reference/index_conversions.html">xy_to_latlon()</a></code> that caused it to fail when <code>y</code> was omitted.</p></li>
 </ul></div>
     <div class="section level2">
@@ -306,8 +311,8 @@ It is used with conditional sparsification to specify a proportion of the transi
 </ul><p>All three of these were a little anachronistic. <code>TIFF</code> output original was used in place of including the abundance data in the <code>hdf5</code>. The other two arguments were added during updates to allow simulating the older behavior for testing the update, and in both cases we’ve decided we like the newer behavior.</p>
 <p>Although these are breaking changes in that previously supported arguments are dropped, the new behavior mimics the old default behavior and I expect in most cases the values were not set differently than the default.</p>
 <p><strong>Note:</strong> Although TIFF output of abundances is no longer directly supported by preprocess species any model’s abundance can be exported as TIFF with:</p>
-<pre><code><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">writeRaster</a></span><span class="op">(</span><span class="va">r</span>, <span class="st">"abundance.tif"</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">writeRaster</a></span><span class="op">(</span><span class="va">r</span>, <span class="st">"abundance.tif"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="refactoring-0-1-0-9030">Refactoring<a class="anchor" aria-label="anchor" href="#refactoring-0-1-0-9030"></a></h4>
@@ -434,7 +439,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <li>The old <code>points$route</code> column has been renamed<code>route_id</code>
 </li>
 <li>
-<strong>Experimental</strong> the returned <code>BirdFlowRoutes</code> object has attributes that contain much of the ancillary data in the parent BirdFlow object: <code>geom</code>, <code>species</code>, <code>metadata</code>, and <code>dates</code>. Additionally, a new item is added to <code>metadata</code>: <code>route_type = "synthetic"</code>. This may be useful if we also create <code>BirdFlowRoute</code> objects from tracking data. If you want to insulate yourself from the experimental aspects of this call <code><a href="https://rdrr.io/pkg/terra/man/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the returned routes.</li>
+<strong>Experimental</strong> the returned <code>BirdFlowRoutes</code> object has attributes that contain much of the ancillary data in the parent BirdFlow object: <code>geom</code>, <code>species</code>, <code>metadata</code>, and <code>dates</code>. Additionally, a new item is added to <code>metadata</code>: <code>route_type = "synthetic"</code>. This may be useful if we also create <code>BirdFlowRoute</code> objects from tracking data. If you want to insulate yourself from the experimental aspects of this call <code><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame()</a></code> on the returned routes.</li>
 </ul></li>
 </ul></div>
 <div class="section level4">
@@ -443,7 +448,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <li>
 <code><a href="../reference/route_migration.html">route_migration()</a></code> is deprecated. Its arguments are unchanged and it will work but now throws a warning. Please transition to using <code><a href="../reference/route.html">route()</a></code> with the <code>season</code> argument. The returned object is changed - see changes to <code><a href="../reference/route.html">route()</a></code> above.</li>
 <li>A new method for <code><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf()</a></code> convert <code>BirdFlowRoutes</code> objects to <strong>sf</strong> objects with either points or lines. Use <code>st_as_sf(rts)</code> for lines or <code>st_as_sf(rts, type = "point")</code> to convert to an <em>sf</em> points object.</li>
-<li>New <code><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot()</a></code> method for <code>BirdFlowRoutes</code> objects dispatches to <code><a href="../reference/plot_routes.html">plot_routes()</a></code>.</li>
+<li>New <code><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot()</a></code> method for <code>BirdFlowRoutes</code> objects dispatches to <code><a href="../reference/plot_routes.html">plot_routes()</a></code>.</li>
 <li>
 <strong>Experimental:</strong> <code>plot_route()</code> and <code>plot(BirdFlowRoutes)</code> now do not require the BirdFlow object - as long as the attributes added by <code><a href="../reference/route.html">route()</a></code> are present. If the <code>bf</code> argument is used it supersedes the route attributes so including it will make your code less likely to break if we change the <code>BirdFlowRoutes</code> class. This is kind of nice though: <code>route(bf, 5, season = "prebreeding") |&gt; plot()</code>
 </li>
@@ -586,7 +591,7 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
 <ul><li>
 <code><a href="../reference/plot_routes.html">plot_routes()</a></code> for plotting routes with ggplot2.</li>
 <li>
-<code><a href="../reference/compareGeom-BirdFlow.html">compareGeom()</a></code> methods for BirdFlow objects, possibly mixed with <code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> objects. See <code><a href="https://rdrr.io/pkg/terra/man/compareGeom.html" class="external-link">terra::compareGeom()</a></code>
+<code><a href="../reference/compareGeom-BirdFlow.html">compareGeom()</a></code> methods for BirdFlow objects, possibly mixed with <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> objects. See <code><a href="https://rspatial.github.io/terra/reference/compareGeom.html" class="external-link">terra::compareGeom()</a></code>
 </li>
 <li>
 <code>proportion_of_year()</code> (internal function) converts a date into a number between 0 and 1.</li>
@@ -756,7 +761,7 @@ controlled by <code>match_extent</code>.</li>
 <h2 class="pkg-version" data-toc-text="0.0.0.9073" id="birdflowr-0009073">BirdFlowR 0.0.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0009073"></a></h2>
 <p>2023-04-11</p>
 <ul><li>Changed behavior:
-<ul><li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> and timestep lookup throughout the package is now consistent with <code><a href="https://rdrr.io/pkg/ebirdst/man/date_to_st_week.html" class="external-link">ebirdst::date_to_st_week()</a></code> this wasn’t previously true. Some dates near the edges of the week breaks will end up classified into a different timestep than previously.</p></li>
+<ul><li><p><code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> and timestep lookup throughout the package is now consistent with <code><a href="https://ebird.github.io/ebirdst/reference/date_to_st_week.html" class="external-link">ebirdst::date_to_st_week()</a></code> this wasn’t previously true. Some dates near the edges of the week breaks will end up classified into a different timestep than previously.</p></li>
 <li><p><code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now saves the breakpoints from <code>ebirdst::ebirdst_weeks</code> as <code>start</code> and <code>end</code> instead of <code>week_start</code> and <code>week_end</code>.</p></li>
 </ul></li>
 <li>New functions:
@@ -775,7 +780,7 @@ controlled by <code>match_extent</code>.</li>
 <li>Addresses issues:
 <ul><li>Fixes bug in <a href="https://github.com/birdflow-science/BirdFlowR/issues/66" class="external-link">#66</a> where date lookup forward across the year boundary failed.</li>
 <li>Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/68" class="external-link">#68</a> by providing a function to lookup timestep series based on season names (and adds a buffer ability).</li>
-<li>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/56" class="external-link">#56</a> time now is processed mostly by <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> for points in time, and <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> for date ranges. Point lookup now uses <code>findInterval</code> on breaks derived from <code>ebirdst::ebirdst_weeks</code> rather than from <code><a href="https://rdrr.io/pkg/terra/man/summarize-generics.html" class="external-link">which.min()</a></code> on a difference from center of the nominal day for each week. This should also make time lookup compatible with partial year BirdFlow models.</li>
+<li>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/56" class="external-link">#56</a> time now is processed mostly by <code><a href="../reference/lookup_timestep.html">lookup_timestep()</a></code> for points in time, and <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code> for date ranges. Point lookup now uses <code>findInterval</code> on breaks derived from <code>ebirdst::ebirdst_weeks</code> rather than from <code><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">which.min()</a></code> on a difference from center of the nominal day for each week. This should also make time lookup compatible with partial year BirdFlow models.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
@@ -825,10 +830,10 @@ controlled by <code>match_extent</code>.</li>
 <h2 class="pkg-version" data-toc-text="0.0.0.9033" id="birdflowr-0009033">BirdFlowR 0.0.0.9033<a class="anchor" aria-label="anchor" href="#birdflowr-0009033"></a></h2>
 <p>The end result of all the time stuff enumerated below is that (1) you can set the time format, (2) as before when possible the time associated with each distribution is stored in dim names, (3) when it’s a single distribution and thus not possible to store the time in the dim names a new <code>"time"</code> attribute is added to the object to store the time associated with the distribution.</p>
 <ul><li><p>new <code><a href="../reference/birdflow_options.html">birdflow_options()</a></code> allows setting global options that persist for the session. Currently there are two options <code>verbose</code> and <code>time_format</code>.</p></li>
-<li><p>The <code>time_format</code> option controls the labeling of distributions either in column names if there are more than 1 distribution or via the “time” attribute (See below) if there’s a single distribution. This affects <code><a href="../reference/get_distr.html">get_distr()</a></code>, <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, and <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code>.</p></li>
+<li><p>The <code>time_format</code> option controls the labeling of distributions either in column names if there are more than 1 distribution or via the “time” attribute (See below) if there’s a single distribution. This affects <code><a href="../reference/get_distr.html">get_distr()</a></code>, <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, and <code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast()</a></code>.</p></li>
 <li><p><code><a href="../reference/get_distr.html">get_distr()</a></code> now adds an attribute <code>"time"</code> when returning a single distribution as a vector. Multiple distributions already used matrix column names to record the time associated with each distribution.</p></li>
 <li><p>Similarly, <code><a href="../reference/expand_distr.html">expand_distr()</a></code> when called on a single distribution will preserve the <code>"time"</code> attribute in its output matrix, and <code><a href="../reference/flatten_raster.html">flatten_raster()</a></code> called on a single distribution’s raster (a matrix) will also preserve the “time” attribute in its output vector.</p></li>
-<li><p><code><a href="../reference/rasterize.html">rasterize_distr()</a></code> and thus also <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> now convert the <code>"time"</code> attribute to a layer name in the output raster when there is a single distribution. They previously and still do this with the distribution column names for multiple distributions.</p></li>
+<li><p><code><a href="../reference/rasterize.html">rasterize_distr()</a></code> and thus also <code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast()</a></code> now convert the <code>"time"</code> attribute to a layer name in the output raster when there is a single distribution. They previously and still do this with the distribution column names for multiple distributions.</p></li>
 <li><p>The names for the column dimension of distribution matrices has changed from “timestep” to “time” both in the internal, stored object and in returned objects from <code><a href="../reference/get_distr.html">get_distr()</a></code> and <code>forecast()</code>.</p></li>
 <li><p><code><a href="../reference/fix_dead_ends.html">fix_dead_ends()</a></code>, <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code>, and <code><a href="../reference/sparsify.html">sparsify()</a></code> now honor <code>birdflow_options("verbose")</code> - printing progress and information only if it is <code>TRUE</code>.</p></li>
 </ul></div>

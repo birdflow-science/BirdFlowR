@@ -14,7 +14,7 @@ common name by default so provides a succinct way to get the species name."><met
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,13 +97,13 @@ complete list.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The <code>what</code>
-argument takes the column names used in <a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst::ebirdst_runs</a> as input
+argument takes the column names used in <a href="https://ebird.github.io/ebirdst/reference/ebirdst_runs.html" class="external-link">ebirdst::ebirdst_runs</a> as input
 (descriptions from <span class="pkg">ebirdst</span>):</p><table class="table table"><tr><td><code>species_code</code></td><td>Six letter eBird code in eBird Taxonomy v2018</td></tr><tr><td><code>scientific_name</code></td><td>Scientific name from eBird Taxonomy v2018</td></tr><tr><td><code>common_name</code></td><td>English common name from eBird Taxonomy v2018</td></tr><tr><td><code>breeding_quality</code></td><td>Breeding season quality</td></tr><tr><td><code>breeding_start</code></td><td>Breeding season start date</td></tr><tr><td><code>breeding_end</code></td><td>Breeding season end date</td></tr><tr><td><code>nonbreeding_quality</code></td><td>Non-breeding season quality</td></tr><tr><td><code>nonbreeding_start</code></td><td>Non-breeding season start date</td></tr><tr><td><code>nonbreeding_end</code></td><td>Non-breeding season end date</td></tr><tr><td><code>postbreeding_migration_quality</code></td><td>Post-breeding season quality</td></tr><tr><td><code>postbreeding_migration_start</code></td><td>Post-breeding season start date</td></tr><tr><td><code>postbreeding_migration_end</code></td><td>Post-breeding season end date</td></tr><tr><td><code>prebreeding_migration_quality</code></td><td>Pre-breeding season quality</td></tr><tr><td><code>prebreeding_migration_start</code></td><td>Pre-breeding season start date</td></tr><tr><td><code>prebreeding_migration_end</code></td><td>Pre-breeding season end date</td></tr><tr><td></td><td></td></tr><tr><td><code>all</code></td><td>returns the complete list</td></tr></table><p>For convenience the following short versions are also accepted:</p><table class="table table"><tr><td><code>code</code></td><td>(<code>species_code</code>)</td></tr><tr><td><code>common</code></td><td>(<code>common_name</code>)</td></tr><tr><td><code>name</code></td><td>(<code>common_name</code>)</td></tr><tr><td><code>scientific</code></td><td>(<code>scientific_name</code>)</td></tr><tr><td><code>species</code></td><td>(<code>common_name</code>)</td></tr></table></div>
     <div class="section level2">
     <h2 id="dropped-items">Dropped items<a class="anchor" aria-label="anchor" href="#dropped-items"></a></h2>
     
 
-<p>The 8 variables below are in <a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst::ebirdst_runs</a> but are dropped
+<p>The 8 variables below are in <a href="https://ebird.github.io/ebirdst/reference/ebirdst_runs.html" class="external-link">ebirdst::ebirdst_runs</a> but are dropped
 from the BirdFlow model and thus can not be retrieved by
 <code>species_info()</code>.</p>
 <p>Four variables that track whether the full range is covered by eBird that

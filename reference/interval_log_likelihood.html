@@ -16,7 +16,7 @@ the same."><meta property="og:image" content="https://birdflow-science.github.io
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,7 +196,7 @@ decisions to the user.</p>
 <span class="r-in"><span><span class="va">intervals</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/rewbla_banding_data.html" class="external-link">rewbla_intervals</a></span></span></span>
 <span class="r-in"><span><span class="va">intervals</span> <span class="op">&lt;-</span> <span class="va">intervals</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>, <span class="op">]</span> <span class="co"># toy example</span></span></span>
 <span class="r-in"><span><span class="va">intervals</span>  <span class="op">&lt;-</span> <span class="fu">interval_log_likelihood</span><span class="op">(</span><span class="va">intervals</span>, <span class="va">observations</span>, <span class="va">bf</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           bird_id  from    to interval_id log_likelihood   null_ll lag exclude</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1017 B19221769152  2223  2224        1017      -3.157935 -4.453952  47   FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4775 B77724064244 10149 10150        4775      -3.429942 -4.870969  50   FALSE</span>

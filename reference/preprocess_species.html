@@ -14,7 +14,7 @@ and transitions.  Use ... to truncate the model to part of the year."><meta prop
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@ and transitions.  Use <code>...</code> to truncate the model to part of the year
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>species</dt>
-<dd><p>A species in any format accepted by <code><a href="https://rdrr.io/pkg/ebirdst/man/get_species.html" class="external-link">ebirdst::get_species()</a></code></p></dd>
+<dd><p>A species in any format accepted by <code><a href="https://ebird.github.io/ebirdst/reference/get_species.html" class="external-link">ebirdst::get_species()</a></code></p></dd>
 
 
 <dt>out_dir</dt>
@@ -115,14 +115,14 @@ overwritten. If FALSE pre-existing files will result in an error.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
-<code><a href="https://rdrr.io/pkg/ebirdst/man/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
-<code><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>
+<code><a href="https://ebird.github.io/ebirdst/reference/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
+<code><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>
 
 
 <dt>clip</dt>
 <dd><p>A polygon or the path to a file containing a polygon. It must
-have a CRS and should either be a <a href="https://rdrr.io/pkg/terra/man/SpatVector-class.html" class="external-link">SpatVector()</a> object
-or produce one when called with <a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect(clip)</a></p></dd>
+have a CRS and should either be a <a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">SpatVector()</a> object
+or produce one when called with <a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect(clip)</a></p></dd>
 
 
 <dt>max_params</dt>
@@ -146,14 +146,14 @@ if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 not all of four ranges are modeled (under ebirdst 2021 version year) or for
 2022 and subsequent data versions if
 not all <code>&lt;season&gt;_quality</code> is higher than <code>min_season_quality</code> in
-<a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs</a>).</p></dd>
+<a href="https://ebird.github.io/ebirdst/reference/ebirdst_runs.html" class="external-link">ebirdst_runs</a>).</p></dd>
 
 
 <dt>min_season_quality</dt>
 <dd><p>The minimum acceptable season quality when
 preprocessing eBird 2022 and subsequent versions. Used to check model
 quality using based on the four <code>&lt;season&gt;_model_quality</code> columns in
-<a href="https://rdrr.io/pkg/ebirdst/man/ebirdst_runs.html" class="external-link">ebirdst_runs</a> ignored with 2021 <span class="pkg">ebirdst</span>
+<a href="https://ebird.github.io/ebirdst/reference/ebirdst_runs.html" class="external-link">ebirdst_runs</a> ignored with 2021 <span class="pkg">ebirdst</span>
 version year.</p></dd>
 
 
@@ -233,7 +233,7 @@ a slightly larger resolution (fewer parameters).</p>
 <span class="r-in"><span>                   <span class="va">e</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">e</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                   <span class="va">e</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">e</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                   <span class="va">e</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">e</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sfc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">coords</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfc</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">coords</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clip</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, geom <span class="op">=</span> <span class="va">sfc</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bfc</span> <span class="op">&lt;-</span> <span class="fu">preprocess_species</span><span class="op">(</span><span class="st">"amewoo"</span>, hdf5 <span class="op">=</span> <span class="cn">FALSE</span>, clip <span class="op">=</span> <span class="va">clip</span> <span class="op">)</span> <span class="co"># with clip</span></span></span>

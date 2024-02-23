@@ -18,7 +18,7 @@ frame."><meta property="og:image" content="https://birdflow-science.github.io/Bi
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,10 +65,10 @@ frame."><meta property="og:image" content="https://birdflow-science.github.io/Bi
     </div>
 
     <div class="ref-description section level2">
-    <p><code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> converts a BirdFlow object directly
-to a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">SpatRaster</a>.
+    <p><code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast()</a></code> converts a BirdFlow object directly
+to a <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">SpatRaster</a>.
 <code>rasterize_distr()</code> converts a <a href="as_distr">distribution</a> into a
-<a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">SpatRaster</a>, numeric matrix or array, or a raster data
+<a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">SpatRaster</a>, numeric matrix or array, or a raster data
 frame.</p>
     </div>
 
@@ -77,7 +77,7 @@ frame.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rasterize_distr</span><span class="op">(</span><span class="va">distr</span>, <span class="va">bf</span>, format <span class="op">=</span> <span class="st">"SpatRaster"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BirdFlow</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -92,7 +92,7 @@ matrix in which each column represents a different distribution.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>One of <code>'SpatRast'</code> for a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> object,
+<dd><p>One of <code>'SpatRast'</code> for a <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> object,
 <code>'numeric'</code> for a matrix or array, or<code>'dataframe'</code> for raster data
 suitable for plotting with <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">ggplot2::geom_raster()</a></code></p></dd>
 
@@ -112,7 +112,7 @@ or <code>"all"</code> which will return distributions for all timesteps.</p></dd
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>For <code>rasterize_distr()</code> the return type depends on the <code>format</code> argument:</p><ul><li><p><code>"SpatRaster"</code> (the default) returns a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> object.</p></li>
+<p>For <code>rasterize_distr()</code> the return type depends on the <code>format</code> argument:</p><ul><li><p><code>"SpatRaster"</code> (the default) returns a <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> object.</p></li>
 <li><p><code>"numeric"</code> returns a matrix (one distribution) or array (multiple
 distributions).  In either case the first two dimensions will be y (rows),
 and x (columns).</p></li>
@@ -128,7 +128,7 @@ The ordered factor is helpful when animating.</p></li>
 distribution <code>1</code>.
 The object is suitable for plotting with [<a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">ggplot2::geom_raster</a>].</p></li>
 </ul></li>
-</ul><p><code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast()</a></code> returns a <a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></p>
+</ul><p><code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast()</a></code> returns a <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></p>
 
 
     </div>

@@ -12,7 +12,7 @@ BirdFlow object to raster files (TIFF, PNG)."><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,7 +147,7 @@ for PNG files, and 1000 for GeoTIFF files.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This replaces and extends the old behavior of <code><a href="preprocess_species.html">preprocess_species()</a></code> which
 allowed exporting TIFF files of the distributions while preprocessing.</p>
-<p>Files are written via <a href="https://rdrr.io/pkg/terra/man/writeRaster.html" class="external-link">terra::writeRaster</a> but the data is manipulated prior
+<p>Files are written via <a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">terra::writeRaster</a> but the data is manipulated prior
 to export, in particular if <code>as_integer</code> is <code>TRUE</code> or if the filetype only
 supports integers than the distribution data which is normally between 0 and
 1 is stretched and then converted to integer.  The amount of stretching can

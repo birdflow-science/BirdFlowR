@@ -14,7 +14,7 @@ but is complicated enough to justify being it's own function."><meta property="o
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9049</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,15 +112,15 @@ if either<code> res</code> or <code>max_params</code> is set.</p></dd>
 
 <dt>clip</dt>
 <dd><p>A polygon or the path to a file containing a polygon. It must
-have a CRS and should either be a <a href="https://rdrr.io/pkg/terra/man/SpatVector-class.html" class="external-link">SpatVector()</a> object
-or produce one when called with <a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect(clip)</a></p></dd>
+have a CRS and should either be a <a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">SpatVector()</a> object
+or produce one when called with <a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect(clip)</a></p></dd>
 
 
 <dt>crs</dt>
 <dd><p>Coordinate reference system (CRS) to use.  Defaults to the custom
 projection eBird has assigned to this species - see
-<code><a href="https://rdrr.io/pkg/ebirdst/man/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
-<code><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>
+<code><a href="https://ebird.github.io/ebirdst/reference/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
+<code><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>
 
 
 <dt>download_species</dt>
