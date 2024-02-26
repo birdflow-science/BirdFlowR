@@ -1,3 +1,12 @@
+# BirdFlowR 0.1.0.9051
+2023-02-26
+
+* Add `get_mask()`
+* Add `extend_birdflow()`
+* Add internal `read_geom()`
+* Add internal `extend_geom()`
+* Start testing `extend_birdflow()`
+
 # BirdFlowR 0.1.0.9050
 2023-02-22
 

@@ -109,13 +109,7 @@ import_birdflow_v3 <- function(hdf5) {
   #----------------------------------------------------------------------------#
 
   # Process geometry
-  geom <- h5read(hdf5, name = "geom", native = TRUE)
-  for (a in c("nrow", "ncol", "res", "ext")) {
-    bf$geom[[a]] <- as.numeric(geom[[a]])
-  }
-  bf$geom$crs <- as.character(geom$crs)
-  bf$geom$mask <- geom$mask
-  bf$geom$dynamic_mask <- geom$dynamic_mask
+  geom <- read_geom(hdf5)
 
   # Process species information
   # They are read as one dimensional arrays (a strange type for R)
