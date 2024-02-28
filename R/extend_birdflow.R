@@ -50,7 +50,7 @@ extend_birdflow <- function(x, y) {
     if (length(x) > 1) {
       success <- rep(FALSE, length(x))
       for (i in seq_along(x)) {
-        success[i] <- extend_birdflow(x, y)
+        success[i] <- extend_birdflow(x[i], y)
       }
       return(success)
     }
@@ -109,15 +109,32 @@ extend_geom <- function(geom, y) {
 
   eg  <- geom$ext  # extent of geom
   ey <- ext(y)  # extent of y
-  if(!all(c(
-    isTRUE(all.equal(ey[1] %% geom$res[1], 0, check.attributes = FALSE)),
-    isTRUE(all.equal(ey[2] %% geom$res[1], 0, check.attributes = FALSE)),
-    isTRUE(all.equal(ey[3] %% geom$res[2], 0, check.attributes = FALSE)),
-    isTRUE(all.equal(ey[4] %% geom$res[2], 0, check.attributes = FALSE))))) {
 
+  is_aligned <- function(a, res, tolerance = sqrt(.Machine$double.eps)){
+    # Args:
+    # a:  extent coordinates (can be vector)
+    # res: cell size (single value)
+    #
+    # Return: A logical vector of the same length as a, indicating if
+    # each element in a is a multiple of
+    # check to see if a is a multiple of res while allowing for tiny differences
+    a <- as.numeric(as.vector(a)) # double conversion works if a is SpatExtent
+    res <- as.numeric(res)
+    m <- a %% res
+    # Ok if modulo is 0
+    test1 <-
+      sapply(m,  function(x) isTRUE(all.equal(x, 0, tolerance = tolerance)))
+    # Also OK if the modulo is the res which happens if `a` is slightly less
+    # than a multiple of res, but within the tolerance.
+    test2 <-
+      sapply(m, function(x) isTRUE(all.equal(x, res, tolerance = tolerance)))
+    return(test1 | test2)
+  }
+
+  if(!all(is_aligned(ey[c(1,2)], geom$res[1])) ||
+     !all(is_aligned(ey[c(3, 4)], geom$res[2]))) {
     stop("The new extent (y) does not align with cells in the ",
          "BirdFlow model (x) ", call. = FALSE)
-
   }
 
   # Check that new extent completely contains old extent
@@ -129,15 +146,16 @@ extend_geom <- function(geom, y) {
   x_mask  <- terra::rast(x_mask, extent = geom$ext, crs = geom$crs)
   names(x_mask) <- "mask"
 
-
+  # Extend the mask
   r <- terra::extend(x = x_mask, y = ey, fill = FALSE) # raster
+
+  # Update the geom
   geom$mask <- matrix(as.logical(terra::values(r, mat = FALSE)),
                    nrow = terra::nrow(r),
                    ncol = terra::ncol(r),
                    byrow = TRUE)
   geom$ncol <- terra::ncol(r)
   geom$nrow <- terra::nrow(r)
-
   geom$ext <- as.numeric(as.vector(ext(y)))
 
   return(geom)
