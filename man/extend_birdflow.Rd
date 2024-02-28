@@ -8,7 +8,7 @@ extend_birdflow(x, y)
 }
 \arguments{
 \item{x}{A single BirdFlow object, or one or more paths to BirdFlow objects
-stored as either hdf5 or R Data files.}
+stored as either hdf5 or rds files.}
 
 \item{y}{An extent or an object that yields an extent when passed
 to \code{\link[terra:ext]{terra::ext()}}.}

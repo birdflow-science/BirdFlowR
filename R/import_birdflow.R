@@ -1,16 +1,33 @@
-#' Import BirdFlow models from HDF5 files
+#' Export and import BirdFlow models in HDF5 format
 #'
-#' This function imports a BirdFlow model from an HDF5
-#' (Hierarchical Data Format version 5) file. The workflow is to
-#' first use [preprocess_species()] to download and format the data for
-#' model fitting, producing an HDF5 file; then use BirdFlow Python software to
-#' fit the model and add marginals and hyperparameters to the HDF5 file; and,
-#' finally import the model with `import_birdflow()`.
+#' `import_birdflow()` imports a BirdFlow model from an HDF5
+#' (Hierarchical Data Format version 5) file.
 #'
-#' @details After importing you may want to call [sparsify()] to reduce the
-#' object size.  If you plan on doing many calls to [route()] or [predict()]
-#' you should call [build_transitions()] as well.
+#' THe standard workflow for generating a fitted BirdFlow model is:
+#' 1. Use [preprocess_species()] to download and format eBird data into an
+#' HDF5 file (this calls `export_birdflow()` internally).
+#' 2. Fit the model and add marginals and hyperparameters to the HDF5 file
+#' with [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy)
+#' 3. Import the model with `import_birdflow()`.
+#' 4. Save the model to a new file either with:
+#'    * [saveRDS()] to a .rds file, or
+#'    * `export_birdflow()` to a new .hdf5 file.
 #'
+#' @details
+#' During the first import after fitting with
+#' [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy)
+#' `import_birdflow()` does a fair amount of renaming and reformatting of the
+#' data - for example it renames the marginals and adds a marginal index.
+#' If the resulting BirdFlow model is exported again with `export_birdflow()`
+#' these updates are retained, so the internal structure of the HDF5 file
+#' will be different.  `import_birdflow()` can handle either format.
+#'
+#' @seealso
+#' * [sparsify()] to reduce the object size after importing.
+#' * [build_transitions()] to add transition matrices for quicker processing
+#' at the cost of larger file sizes.
+#' * [export_rasters()] to save the distributions and mask from a
+#' BirdFlow model to raster files.
 #'
 #' @section HDF5 file version:
 #'
@@ -38,16 +55,17 @@
 #'   `$metadata$hyperparameters` (a list).
 #'
 #' @param hdf5 Path to an HDF5 file containing a fitted BirdFlow model.
-#' @param ... Arguments to be passed to a version specific internal function.
-#'  Currently deprecated was used in early BirdFlow models.
+#' @param ... Deprectated, arguments to be passed to a version specific
+#'  internal functions.
 #' @param version (optional) force reading of BirdFlow models as a particular
 #'   version. Normally, this will be determined from metadata in the HDF5
 #'   file.
-#' @return A BirdFlow object.
-#' @export
+#' @return `import_birdflow()` returns a BirdFlow object.
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
+#' @rdname export_import_birdflow
+#' @export
 import_birdflow <- function(hdf5, ..., version) {
 
   current_version <- new_BirdFlow()$metadata$birdflow_version

@@ -3,7 +3,7 @@
 #' Extend BirdFlow extent
 #'
 #' @param x A single BirdFlow object, or one or more paths to BirdFlow objects
-#' stored as either hdf5 or R Data files.
+#' stored as either hdf5 or rds files.
 #' @param y An extent or an object that yields an extent when passed
 #' to [terra::ext()].
 #' @return If `x` is a BirdFlow model object `extend_birdflow()` returns an
@@ -57,13 +57,14 @@ extend_birdflow <- function(x, y) {
 
     ## Single files
 
-    stopifnot(file.exists(bf))
+    stopifnot(file.exists(x))
 
     # hdf5
     # only read, modify, and write the geometry component
     if (grepl("\\.hdf5$", x, ignore.case = TRUE)) {
       geom <- read_geom(x)
       geom <- extend_geom(geom, y)
+      rhdf5::h5delete(x, name = "geom")
       rhdf5::h5write(geom,
                      file = x,
                      name = "geom",
@@ -75,12 +76,14 @@ extend_birdflow <- function(x, y) {
 
 
     # Rdata file - read - extend - write
-    if (grepl("\\.Rdata$|\\.Rda$", x)) {
-      bf <- import_birdflow(x) |> extend_birdflow(y = y)
-      export_birdflow(bf, file = x, overwrite = TRUE)
+    if (grepl("\\.rds$", x, ignore.case = TRUE)) {
+      bf <- readRDS(x)
+      bf <- extend_birdflow(bf, y = y)
+      saveRDS(bf, file = x)
       return(TRUE)
     }
-    stop("x does not appear to be a hdf5 or R data file as expected.")
+    stop("if x is not a BirdFlow object it should be the path to an ",
+         ".hdf5 or R .rds file.")
 
   } # end x is path
 
@@ -123,13 +126,18 @@ extend_geom <- function(geom, y) {
 
   geom$ext <- as.numeric(as.vector(ext(y)))
 
-  x_mask <- get_mask(bf, format = "SpatRaster")
+  # Convert mask to SpatRaster
+  x_mask <- geom$mask
+  x_mask  <- terra::rast(x_mask, extent = geom$ext, crs = geom$crs)
+  names(x_mask) <- "mask"
+
+
   r <- terra::extend(x = x_mask, y = ey, fill = FALSE) # raster
-  geom$mask <- matrix(as.logical(values(r, mat = FALSE)),
-                   nrow = nrow(r),
-                   ncol = ncol(r),
+  geom$mask <- matrix(as.logical(terra::values(r, mat = FALSE)),
+                   nrow = terra::nrow(r),
+                   ncol = terra::ncol(r),
                    byrow = TRUE)
-  geom$ncol <- ncol(r)
-  geom$nrow <- nrow(r)
+  geom$ncol <- terra::ncol(r)
+  geom$nrow <- terra::nrow(r)
   return(geom)
 }

@@ -14,5 +14,5 @@ test_that("getmask works with data.frame", {
 test_that("getmask works with SpatRaster", {
   bf <- BirdFlowModels::amewoo
   expect_no_error(r <- get_mask(bf, format = "SpatRaster"))
-  expect_equal(as.vector(values(r)), as.logical(t(bf$geom$mask)))
+  expect_equal(as.vector(terra::values(r)), as.logical(t(bf$geom$mask)))
 })

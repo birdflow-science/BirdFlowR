@@ -199,6 +199,7 @@ test_that("preprocess_species() works with clip", {
 test_that("preprocess_species() works with crs arg", {
   skip_on_cran()
   skip_on_ci()
+  local_quiet()
 
   skip_if_unsupported_ebirdst_version()
 

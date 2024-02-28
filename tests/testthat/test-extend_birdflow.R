@@ -1,23 +1,76 @@
-test_that("extend_birdflow() works with object", {
-  bf <- BirdFlowModels::amewoo
+test_that("extend_birdflow() works with BirdFlow object in memory", {
+  bf1 <- BirdFlowModels::amewoo
   # Define expanded extent for example
-  e <-  ext(bf)
-  buffer <- 3 * res(bf)
-  e[1] <- e[1] - buffer[1]
-  e[2] <- e[2] + buffer[1]
-  e[3] <- e[3] - buffer[2]
-  e[4] <- e[4] + buffer[2]
-  expect_no_error(bf2 <- extend_birdflow(bf, e))
+  buffer <- xres(bf1) * 3 # 3 cells converted to map units (m)
+
+   e <-  ext(bf1) |> buffer_extent(buffer = buffer)
+  expect_no_error(bf2 <- extend_birdflow(bf1, e))
   expect_no_error(validate_BirdFlow(bf2))
 
 })
 
 test_that("extend_birdflow() works with hdf5", {
 
-  stop("Need to complete extend_birdflow() testing")
+  skip_on_cran()
+  skip_on_ci()
+
+  dir <- withr::local_tempdir("extend_hdf5")
+
+  bf <- BirdFlowModels::amewoo
+
+  # Make new extent to extend to
+  buffer <- xres(bf) * 3 # 3 cells converted to map units (m)
+  e <-  ext(bf) |> buffer_extent(buffer = buffer)
+
+  # Extend in memory
+  bfe1 <- extend_birdflow(bf, e)
+
+  # Write hdf5
+  hdf <- file.path(dir, "amewoo.hdf5")
+  export_birdflow(bf, hdf)
+
+  # extend hdf5
+  expect_true(extend_birdflow(hdf, e))
+  bfe2 <- import_birdflow(hdf)
+
+  # For weird historical reasons:
+  names(bfe1$metadata)[names(bfe1$metadata) == "birdFlowr_version"] <-
+    "birdflowr_version"
+
+   # Reimporting changes the import version so nuke both
+  bfe1$metadata$birdflowr_version <- ""
+  bfe2$metadata$birdflowr_version <- ""
+
+  expect_equal(bfe1, bfe2)
 })
 
-test_that("extend_birdflow() works with .rda", {
+test_that("extend_birdflow() works with .rds", {
 
-  stop("Need to complete extend_birdflow() testing")
+  skip_on_cran()
+  skip_on_ci()
+
+  dir <- withr::local_tempdir("extend_hdf5")
+  bf <- BirdFlowModels::amewoo
+
+  # Make new extent to extend to
+  buffer <- xres(bf) * 3 # 3 cells converted to map units (m)
+  e <-  ext(bf) |> buffer_extent(buffer = buffer)
+
+
+  # Extend in memory
+  bfe1 <- extend_birdflow(bf, e)
+
+  # Write original
+  rds <- file.path(dir, "amewoo.rds")
+  export_birdflow(bf, rds, format = "rds")
+
+  # Update rds on disk
+  extend_birdflow(rds, e)
+
+  # Reimport
+  bfe2 <- readRDS(rds)
+
+  expect_equal(bfe1, bfe2)
+
+
 })

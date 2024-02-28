@@ -109,7 +109,7 @@ import_birdflow_v3 <- function(hdf5) {
   #----------------------------------------------------------------------------#
 
   # Process geometry
-  geom <- read_geom(hdf5)
+  bf$geom <- read_geom(hdf5)
 
   # Process species information
   # They are read as one dimensional arrays (a strange type for R)
@@ -132,15 +132,27 @@ import_birdflow_v3 <- function(hdf5) {
   # The code below looks for factors that store logical values and
   # explicitly converts them to logical
   for (i in seq_along(hp)) {
-    if (is.factor(hp[[i]]) &&
-       all(tolower(levels(hp[[i]])) %in% c("true", "false"))) {
-      hp[[i]] <- as.logical(hp[[i]])
+    a <- hp[[i]] # this hyper parameter
+    if (is.factor(a) && all(tolower(levels(a)) %in% c("true", "false"))) {
+      a <- as.logical(a)
     }
+    if (inherits(a, "array")) {
+      a <- as.vector(a)
+    }
+    hp[[i]] <- a
   }
   bf$metadata$hyperparameters <- hp
 
   # loss values
-  bf$metadata$loss_values <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
+  lv <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
+  for (i in seq_len(ncol(lv))) {
+    # IF R re-exports an imported hdf5 the loss values columns are each
+    # arrays.  This returns them to standard data.frame columns
+    lv[[i]] <- as.vector(lv[[i]])
+  }
+  bf$metadata$loss_values <- lv
+
+
 
   # dates
   dates <- h5read(hdf5, "dates")
@@ -152,25 +164,31 @@ import_birdflow_v3 <- function(hdf5) {
 
   # Save marginals into list
   marg <- h5read(hdf5, "marginals", native = TRUE)
-  nt <- length(marg)
+  nt <- length(marg[!names(marg) == "index"])
   bf$metadata$n_transitions <- nt
   if (is.null(bf$metadata$timestep_padding))
     bf$metadata$timestep_padding <- nchar(nt)
   circular <- nt == length(unique(dates$date))
   bf$marginals <- vector(mode = "list", length = nt)
 
-  # Copy and rename marginals
-  for (i in seq_len(nt)) {
-    python_label <- paste0("Week", i, "_to_", i + 1)
-    if (circular && i == nt) {
-      label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(1, bf))
-    } else {
-      label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(i + 1, bf))
+  # If this hdf5 has been re-exported from R than we just copy the marginals over
+  if("index" %in% names(marg)){
+    bf$marginals <- marg
+  } else {
+    # If this hdf5 was written by python then we need to copy and rename
+    # marginals
+    for (i in seq_len(nt)) {
+      python_label <- paste0("Week", i, "_to_", i + 1)
+      if (circular && i == nt) {
+        label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(1, bf))
+      } else {
+        label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(i + 1, bf))
+      }
+      bf$marginals[[i]] <- marg[[python_label]]
+      names(bf$marginals)[i] <- label
     }
-    bf$marginals[[i]] <- marg[[python_label]]
-    names(bf$marginals)[i] <- label
+    bf$metadata$has_marginals <- TRUE
   }
-  bf$metadata$has_marginals <- TRUE
 
   # Save distributions
   bf$distr <- h5read(hdf5, "distr", native = TRUE)
@@ -189,7 +207,7 @@ import_birdflow_v3 <- function(hdf5) {
   d <- bf$distr
   if (ncol(d) == n_timesteps(bf) + 1) {
     if (!all(d[, 1] == d[, ncol(d)]))
-      stop("Expected extra distribution to matrch first distribution")
+      stop("Expected extra distribution to match first distribution")
     d <- d[, 1:(ncol(d) - 1)]
   }
 
@@ -197,7 +215,7 @@ import_birdflow_v3 <- function(hdf5) {
   ts_col <- ifelse(bf$metadata$ebird_version_year < 2022,
                    "interval",
                    "timestep"
-                   )
+  )
   dimnames(d) <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
   bf$distr <- d
 
