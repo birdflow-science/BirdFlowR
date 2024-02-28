@@ -124,8 +124,6 @@ extend_geom <- function(geom, y) {
   stopifnot(all(ey[c(1, 3)] <= eg[c(1, 3)]))
   stopifnot(all(ey[c(2, 4)] >= eg[c(2, 4)]))
 
-  geom$ext <- as.numeric(as.vector(ext(y)))
-
   # Convert mask to SpatRaster
   x_mask <- geom$mask
   x_mask  <- terra::rast(x_mask, extent = geom$ext, crs = geom$crs)
@@ -139,5 +137,8 @@ extend_geom <- function(geom, y) {
                    byrow = TRUE)
   geom$ncol <- terra::ncol(r)
   geom$nrow <- terra::nrow(r)
+
+  geom$ext <- as.numeric(as.vector(ext(y)))
+
   return(geom)
 }

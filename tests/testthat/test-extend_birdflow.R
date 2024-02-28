@@ -1,11 +1,14 @@
 test_that("extend_birdflow() works with BirdFlow object in memory", {
   bf1 <- BirdFlowModels::amewoo
   # Define expanded extent for example
-  buffer <- xres(bf1) * 3 # 3 cells converted to map units (m)
+  cell_buffer <- 3
+  buffer <- xres(bf1) * cell_buffer # 3 cells converted to map units (m)
 
    e <-  ext(bf1) |> buffer_extent(buffer = buffer)
   expect_no_error(bf2 <- extend_birdflow(bf1, e))
   expect_no_error(validate_BirdFlow(bf2))
+  expect_equal(nrow(bf1) + 2 * cell_buffer, nrow(bf2))
+  expect_equal(ncol(bf1) + 2 * cell_buffer, ncol(bf2))
 
 })
 
