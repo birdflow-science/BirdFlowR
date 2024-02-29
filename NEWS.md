@@ -1,3 +1,23 @@
+# BirdFlowR 0.1.0.9051
+2023-02-28
+
+* Add `get_mask()`
+* Add `extend_birdflow()`
+* Add internal `read_geom()`
+* Add internal `extend_geom()`
+* Make `export_birdflow()` a public function.
+* Update `import_birdflow()` so that it can re-import a BirdFlow model.
+  Previously the only viable workflow was `preprocess_birdflow()`, fit model
+  in BirdFlowPy, and then`import_birdflow()` (once).  After that we wrote the 
+  model to .rda files.  Now it's possible to do the above but then save it 
+  to a new `hdf5`  with: `export_birdflow()` (to hdf5) and then import again 
+  with `import_birdflow()`.   Note, however, that the file structure of a 
+  re-exported hdf5 will not match that of the output from python, b/c on the 
+  first import R updates a bunch of data structures - for instance renaming the
+  marginals and adding a marginal index, and the rexported model retains those
+  updates.  Thus, the need to modify  `import_birdflow()` to behave 
+  appropriately with both file structures.
+
 # BirdFlowR 0.1.0.9050
 2023-02-22
 

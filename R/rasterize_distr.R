@@ -10,7 +10,7 @@
 #' matrix in which each column represents a different distribution.
 #' @param bf A BirdFlow object.
 #' @param x A BirdFlow object.
-#' @param format One of `'SpatRast'` for a [terra::SpatRaster] object,
+#' @param format One of `'SpatRaster'` for a [terra::SpatRaster] object,
 #'   `'numeric'` for a matrix or array, or`'dataframe'` for raster data
 #'   suitable for plotting with [ggplot2::geom_raster()]
 #' @inheritParams get_distr
