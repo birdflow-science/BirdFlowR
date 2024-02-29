@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9051</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,6 +137,16 @@
         <dd>Evaluate a BirdFlow models ability to recreate training distributions</dd>
       </dl><dl><dt>
           
+          <code><a href="export_import_birdflow.html">export_birdflow()</a></code> <code><a href="export_import_birdflow.html">import_birdflow()</a></code> 
+        </dt>
+        <dd>Export and import BirdFlow models in HDF5 format</dd>
+      </dl><dl><dt>
+          
+          <code><a href="extend_birdflow.html">extend_birdflow()</a></code> 
+        </dt>
+        <dd>Extend BirdFlow extent</dd>
+      </dl><dl><dt>
+          
           <code><a href="flatten_raster.html">flatten_raster()</a></code> 
         </dt>
         <dd>Convert a raster bird distribution into its flattened, vector equivalent</dd>
@@ -157,6 +167,11 @@
         <dd>Get the dynamic mask from a BirdFlow object</dd>
       </dl><dl><dt>
           
+          <code><a href="get_mask.html">get_mask()</a></code> 
+        </dt>
+        <dd>Extract mask from BirdFlow model</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_metadata.html">get_metadata()</a></code> 
         </dt>
         <dd>Retrieve BirdFlow metadata</dd>
@@ -175,11 +190,6 @@
           <code><a href="has.html">has_marginals()</a></code> <code><a href="has.html">has_transitions()</a></code> <code><a href="has.html">has_distr()</a></code> <code><a href="has.html">has_dynamic_mask()</a></code> 
         </dt>
         <dd>Does a BirdFlow object have certain components</dd>
-      </dl><dl><dt>
-          
-          <code><a href="import_birdflow.html">import_birdflow()</a></code> 
-        </dt>
-        <dd>Import BirdFlow models from HDF5 files</dd>
       </dl><dl><dt>
           
           <code><a href="index_conversions.html">x_to_col()</a></code> <code><a href="index_conversions.html">y_to_row()</a></code> <code><a href="index_conversions.html">row_to_y()</a></code> <code><a href="index_conversions.html">col_to_x()</a></code> <code><a href="index_conversions.html">i_to_rc()</a></code> <code><a href="index_conversions.html">i_to_row()</a></code> <code><a href="index_conversions.html">i_to_col()</a></code> <code><a href="index_conversions.html">i_to_x()</a></code> <code><a href="index_conversions.html">i_to_y()</a></code> <code><a href="index_conversions.html">i_to_xy()</a></code> <code><a href="index_conversions.html">rc_to_i()</a></code> <code><a href="index_conversions.html">xy_to_i()</a></code> <code><a href="index_conversions.html">latlon_to_xy()</a></code> <code><a href="index_conversions.html">xy_to_latlon()</a></code> 
@@ -265,6 +275,11 @@
           <code><a href="rasterize.html">rasterize_distr()</a></code> <code><a href="rasterize.html">rast(<i>&lt;BirdFlow&gt;</i>)</a></code> 
         </dt>
         <dd>Convert a BirdFlow distribution into a raster</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_geom.html">read_geom()</a></code> 
+        </dt>
+        <dd>Read geom component of a BirdFlow hdf5</dd>
       </dl><dl><dt>
           
           <code><a href="route.html">route()</a></code> 

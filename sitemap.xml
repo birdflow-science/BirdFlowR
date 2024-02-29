@@ -112,7 +112,16 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/expand_distr.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/export_rasters.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_birdflow.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_geom.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/find_threshold.html</loc>
@@ -136,6 +145,9 @@
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc>
   </url>
   <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc>
+  </url>
+  <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.html</loc>
   </url>
   <url>
@@ -152,9 +164,6 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/has.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow_v3.html</loc>
@@ -245,6 +254,9 @@
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc>
+  </url>
+  <url>
+    <loc>https://birdflow-science.github.io/BirdFlowR/reference/read_geom.html</loc>
   </url>
   <url>
     <loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_distr_labels.html</loc>

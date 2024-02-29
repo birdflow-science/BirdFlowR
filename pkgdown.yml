@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -6,7 +6,7 @@ articles:
   BirdFlowR: BirdFlowR.html
   Installation: Installation.html
   Preprocess: Preprocess.html
-last_built: 2024-02-23T17:15Z
+last_built: 2024-02-29T14:41Z
 urls:
   reference: https://birdflow-science.github.io/BirdFlowR/reference
   article: https://birdflow-science.github.io/BirdFlowR/articles

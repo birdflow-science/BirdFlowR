@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9050</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9051</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,20 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9051" id="birdflowr-0109051">BirdFlowR 0.1.0.9051<a class="anchor" aria-label="anchor" href="#birdflowr-0109051"></a></h2>
+<p>2023-02-28</p>
+<ul><li>Add <code><a href="../reference/get_mask.html">get_mask()</a></code>
+</li>
+<li>Add <code><a href="../reference/extend_birdflow.html">extend_birdflow()</a></code>
+</li>
+<li>Add internal <code><a href="../reference/read_geom.html">read_geom()</a></code>
+</li>
+<li>Add internal <code><a href="../reference/extend_geom.html">extend_geom()</a></code>
+</li>
+<li>Make <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> a public function.</li>
+<li>Update <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> so that it can re-import a BirdFlow model. Previously the only viable workflow was <code>preprocess_birdflow()</code>, fit model in BirdFlowPy, and then<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> (once). After that we wrote the model to .rda files. Now it’s possible to do the above but then save it to a new <code>hdf5</code> with: <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> (to hdf5) and then import again with <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. Note, however, that the file structure of a re-exported hdf5 will not match that of the output from python, b/c on the first import R updates a bunch of data structures - for instance renaming the marginals and adding a marginal index, and the rexported model retains those updates. Thus, the need to modify <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> to behave appropriately with both file structures.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9050" id="birdflowr-0109050">BirdFlowR 0.1.0.9050<a class="anchor" aria-label="anchor" href="#birdflowr-0109050"></a></h2>
 <p>2023-02-22</p>
 <ul><li>Add test for <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> with a non-default CRS.</li>
@@ -70,9 +84,7 @@
 <div class="section level5">
 <h5 id="zero-abundance-for-some-timesteps-0-1-0-9049">Zero abundance for some timesteps<a class="anchor" aria-label="anchor" href="#zero-abundance-for-some-timesteps-0-1-0-9049"></a></h5>
 <p><code>validate_birdflow()</code> and thus also <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> now throw errors if any distribution doesn’t sum to 1 or if the dynamic mask excludes all cells for a timestep. This addresses a problem discovered when attempting to fit models with species: “antnig” (Antillean Nighthawk) where for some timesteps the abundance grids from status and trends are all zero. Prior to this change it was possible to preprocess Antillean Nighthawk but then during fitting with BirdFlowPy confusing errors were thrown.</p>
-<p>The change can be observed with:</p>
-<pre class="{r}"><code>preprocess_species("antnig", res = 150, hdf5 = FALSE, 
-                    skip_quality_checks = TRUE)`</code></pre>
+<p>The change can be observed with: <code>{r} preprocess_species("antnig", res = 150, hdf5 = FALSE,                      skip_quality_checks = TRUE)`</code></p>
 </div>
 </div>
     <div class="section level2">
@@ -323,7 +335,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <li>
 <code><a href="../reference/process_rasters.html">process_rasters()</a></code> generates the resampled and aggregated rasters used by the model from the eBird S&amp;T rasters.</li>
 <li>
-<code>export_birdflow()</code> exports a BirdFlow model as an hdf5 (or optionally .Rds)</li>
+<code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> exports a BirdFlow model as an hdf5 (or optionally .Rds)</li>
 </ul></div>
 <div class="section level4">
 <h4 id="truncation-new-0-1-0-9030">Truncation <strong>New</strong>
@@ -392,7 +404,7 @@ It is used with conditional sparsification to specify a proportion of the transi
 <li>New public,<code><a href="../reference/get_dates.html">get_dates()</a></code> returns the <code>$dates</code> component of a BirdFlow object, replacing an old private function that was no longer used. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/121" class="external-link">#121</a>.</li>
 <li>New metadata item <code>timestep_padding</code> tracks how much timesteps are padded in transition and marginal names. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/new_BirdFlow.html">new_BirdFlow()</a></code> are updated to produce it.<br></li>
 <li>New internal function <code><a href="../reference/get_timestep_padding.html">get_timestep_padding()</a></code> retrieves the above or, for older models figures it out from the model structure.</li>
-<li>New internal function <code><a href="../reference/make_marginal_index.html">make_marginal_index()</a></code> derived from code previously in <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> is used by both <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
+<li>New internal function <code><a href="../reference/make_marginal_index.html">make_marginal_index()</a></code> derived from code previously in <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> is used by both <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>
 </li>
 <li>New internal function <code><a href="../reference/ts_info.html">ts_info()</a></code> determines if a timestep sequence is forward or backwards and whether it crosses the year boundary.</li>
 </ul></div>
@@ -628,7 +640,7 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9008" id="birdflowr-0109008">BirdFlowR 0.1.0.9008<a class="anchor" aria-label="anchor" href="#birdflowr-0109008"></a></h2>
 <p>2023-05-09</p>
-<ul><li><p><code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> now converts logical hyperparameters masquerading as factors into logical. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/81" class="external-link">#81</a>.</p></li>
+<ul><li><p><code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> now converts logical hyperparameters masquerading as factors into logical. Addresses <a href="https://github.com/birdflow-science/BirdFlowR/issues/81" class="external-link">#81</a>.</p></li>
 <li>
 <p>Dropped legacy import functions:</p>
 <ul><li>
@@ -688,7 +700,7 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
 <h4 id="summary-0-1-0-9001">Summary<a class="anchor" aria-label="anchor" href="#summary-0-1-0-9001"></a></h4>
 <p>Dynamic masking is a major overhaul of the package in which the cells the model acts on will change over time and be limited to cells with non-zero value in the eBird S&amp;T distributions. This means that the marginal dimensions will vary over time, and they will often not be square.</p>
 <p>The intent is to isolate the user and from the changes. In particular the output and input distribution objects will still contain all the active cells and most public function arguments are unchanged.</p>
-<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamically masked distributions that conform to the marginal dimensions. <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
+<p>Functions that interact with the marginals now have to convert internally between standard distributions covering all active cells, and the the dynamically masked distributions that conform to the marginal dimensions. <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, and <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> all had substantial updates.</p>
 <p>BirdFlow objects gained a great circle distance and a dynamic mask, both created in preprocessing, and variable marginals and transitions dimensions. The great circle distance is used by python and then dropped (in python) from the fitted model, as it’s fairly large and easy to recalculate with <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code>.</p>
 </div>
 <div class="section level4">
@@ -711,14 +723,14 @@ The default is <code>distr</code> which mimics previous behavior. This is in res
 <li>
 <code><a href="../reference/has.html">has_dynamic_mask()</a></code> returns a logical.</li>
 <li>
-<code><a href="../reference/import_birdflow_v3.html">import_birdflow_v3()</a></code> internal function is called by <code><a href="../reference/import_birdflow.html">import_birdflow()</a></code> for version 3 BirdFlow HDF5 files.</li>
+<code><a href="../reference/import_birdflow_v3.html">import_birdflow_v3()</a></code> internal function is called by <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> for version 3 BirdFlow HDF5 files.</li>
 <li>
 <code><a href="../reference/great_circle_distances.html">great_circle_distances()</a></code> creates a great circle distance matrix encoding the distance (km) between every pair of cells in a BirdFlow object.</li>
 </ul></li>
 <li>
 <strong>Updated functions</strong>
 <ul><li>
-<code><a href="../reference/import_birdflow.html">import_birdflow()</a></code>
+<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>
 <ul><li>now works with version 2 and 3 BirdFlow HDF5 files (added version 3, dropped version 1)</li>
 <li>reads the dynamic mask</li>
 <li>reads metadata/hyperparameters</li>
