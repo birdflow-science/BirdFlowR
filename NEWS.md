@@ -1,3 +1,17 @@
+# BirdFlowR  (flux)
+
+* Add internal function `is_between()` to determines if a set points are on the
+great circles connecting every possible pair of active cells in a BirdFlow 
+model.  It will be used to calculate flux. Currently it is non-directional.
+
+### Pending (for flux)
+
+* Test `is_between()` 
+* Non-directional flux
+* Directional `is_between()`
+* Directional flux
+
+
 # BirdFlowR 0.1.0.9051
 2023-02-28
 
