@@ -19,8 +19,7 @@ if (FALSE) {
 #'
 #' If `points` and `radius` are `NULL` they default to the cell radius and the
 #' center of all cells within the BirdFlow extent that fall between
-#' any active cells.
-
+#' any active cells. This is ussually a superset of the active cells.
 #'
 #' @param bf A BirdFlow model
 #' @param points The points to evaluate betweenness on. If NULL the cell
@@ -33,9 +32,15 @@ if (FALSE) {
 #' @param n_direction The number of (equally spaced) directional bins to
 #' classify bearings into.  Currently only `1` is supported.
 #'
-#' @return An array with dimensions representing the
+#' @return A list with:
+#' \item{between}{An array with dimensions representing the
 #' "from" location, the "to" location, and the `points`. Cells are `TRUE`
-#'  if the associated point is between the associated from and to locations.
+#'  if the associated point is between the associated from and to locations.}
+#'  \item{points}{A dataframe of points that define the third dimension
+#'  in between.  It is identical to the input `points` if they are not `NULL`.
+#'  Otherwise it will be a data frame with columns x, y, and i corresponding to
+#'  the third dimension in `between`. Note `i` will be `NA` for some points that
+#'  aren't within the mask but do fall between active cells.}
 #' @keywords internal
 is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1) {
 
@@ -163,5 +168,5 @@ is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1) {
          col = "green", add = TRUE)
   }
 
-  return(between)
+  return(list(between = between, points = points))
 }
