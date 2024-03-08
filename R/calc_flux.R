@@ -3,7 +3,7 @@ if(FALSE){
   # Prep for line by line coding
   bf <- BirdFlowModels::amewoo
   if(!exists("o_between")){
-    between <- is_between(bf)
+    result <- is_between(bf)
     o_between <- betwween
   }
   between <- o_between
@@ -84,14 +84,15 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1, format
     r <- terra::rast(raster, extent = bf$geom$ext, crs = bf$geom$crs)
     names(r) <- transitions
     return(r)
+  }
 
-  } if (format == "dataframe") {
+  if (format == "dataframe") {
     wide <- cbind(as.data.frame(points)[, c("x", "y")],
                 net_movement)
     long <- tidyr::pivot_longer(wide, cols = setdiff(names(wide), c("x", "y")),
                                 names_to = "transition", values_to = "movement")
 
-    #### Need to add dates!
+    long$date <- as.character(lookup_date(long$transition, bf))
 
     return(long)
 
@@ -99,3 +100,35 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1, format
 
   stop(format, "is not a recoginized format.") # shouldn't ever get here
 }
+
+
+if(FALSE){
+
+  gradient_colors <-
+    c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
+      "#9D189D", "#7401A8", "#48039F", "#0D0887")
+  title <- paste0(species(bf), " Net Movement")
+
+    p <- long |>
+      #dplyr::filter(transition %in% transitions[seq(4, 50, 4)]) |>
+      ggplot(aes(x = x, y = y, fill = .data$movement)) +
+        geom_raster() +
+        ggplot2::scale_fill_gradientn(colors = gradient_colors) +
+        facet_wrap(vars(.data$transition))
+
+    anim <- p +
+      facet_null() +
+      gganimate::transition_manual(frames = .data$date) +
+      ggplot2::labs(title = title,
+                    subtitle = "{current_frame}")
+
+
+    gif <- gganimate::animate(anim, fps = 3, device = "ragg_png",
+                              width = 7, height = 6, res = 100, units = "in")
+
+    gganimate::save_animation(gif, file = "C:/temp/amewoo_net_movement.gif")
+
+  facet_wrap(facets = .data$transition)
+
+}
+

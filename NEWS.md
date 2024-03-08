@@ -1,5 +1,15 @@
 # BirdFlowR  (flux)
 
+* The first argument of `lookup_date()` is now `x` instead of `timestep` 
+  `timestep` is added as a deprecated third argument so all old usage should 
+  work.  
+* `lookup_dates()` now works with transition names (e.g. "T_01-02") marginal 
+names ("M_02-03"), character timesteps ("T1", "T2"), and, as before, numeric 
+timesteps. Marginal and transition dates are the midpoint between the two 
+timesteps, this falls squarly between two dates and it is left up to 
+`base::mean.Date()` to resolve this, which it does by rounding down.
+
+
 * Add internal function `is_between()` to determines if a set points are on the
 great circles connecting every possible pair of active cells in a BirdFlow 
 model.  It will be used to calculate flux. Currently it is non-directional.

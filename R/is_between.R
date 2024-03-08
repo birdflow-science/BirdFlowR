@@ -133,7 +133,11 @@ is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1) {
 
 
   # Unique pairs of points disregarding order
-  pairs <- all_pairs[!duplicated(all_pairs$id), ]
+  pairs <- all_pairs[!duplicated(all_pairs$id), , drop = FALSE]
+
+  # Drop self, self pairs.
+  # They represent stop overs or seasonal residence, not migratory movement
+  pairs <- pairs[pairs$from != pairs$to, , drop = FALSE]
 
   # Lines connecting pairs of points
   lines <- vector(mode = "list", length  = nrow(pairs))
@@ -167,6 +171,8 @@ is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1) {
     plot(points_sph[between[pairs$from[i], pairs$to[i], ], ], cex = 2,
          col = "green", add = TRUE)
   }
+
+
 
   return(list(between = between, points = points))
 }
