@@ -1,16 +1,47 @@
-if(FALSE){
-
-  # Prep for line by line coding
-  bf <- BirdFlowModels::amewoo
-  if(!exists("o_between")){
-    result <- is_between(bf)
-    o_between <- betwween
-  }
-  between <- o_between
-  margi
-
-}
-
+#' Estimate net bird movement
+#'
+#' `calc_flux()` estimates the proportion of the species that passes through
+#' a set of points during each transition in a BirdFlow model.
+#'
+#' @param bf A BirdFlow model
+#' @param points A set of points to calculate movement through. If `points` is
+#' `NULL` they will default to the BirdFlow model cells that are either active
+#' or fall between two active cells. Should be a data frame with `x` and  `y`
+#' columns containing point coordinates in [crs(bf)].
+#' @param radius The radius in meters around the points, used to determine if
+#' a path is passing through the point.
+#' @param n_directions The number of directional bins to use for recording
+#' movement direction. Must be either `1` indicating no direction information
+#' or an even number.
+#' @param format The format to return the results in one of:
+#' \describe{
+#' \item{`"points"`}{Returns a list with `net_movement` a matrix or array of
+#'  movement, and `points` a data frame of either the input    `points` or the
+#'  point locations }
+#' \item{`"dataframe"`}{Returns a "long" data frame with columns:
+#' *`x` and `y` coordinates of the points.
+#' * `transition` Transition code.
+#' * `movement` The total abundance moving through the point in the transition.
+#' * `date` The date associated with the transition, will be at the midpoint
+#'          between timesteps.}
+#' \item{`"SpatRaster"`}{Returns a `terra::SpatRaster` with layers for each
+#' transition.
+#' }
+#'}
+#' @return See `format` argument.
+#' @export
+#'
+#' @examples
+#'
+#' \dontrun{
+#' bf <- BirdFlowModels::amewoo
+#' flux <- calc_flux(bf)
+#'
+#' plot_flux(flux, bf)
+#'
+#' animate_flux(flux, bf)
+#' }
+#'
 calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1, format = NULL){
 
   if(n_directions != 1)
@@ -94,41 +125,9 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1, format
 
     long$date <- as.character(lookup_date(long$transition, bf))
 
-    return(long)
+    return(as.data.frame(long))
 
   }
 
   stop(format, "is not a recoginized format.") # shouldn't ever get here
 }
-
-
-if(FALSE){
-
-  gradient_colors <-
-    c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
-      "#9D189D", "#7401A8", "#48039F", "#0D0887")
-  title <- paste0(species(bf), " Net Movement")
-
-    p <- long |>
-      #dplyr::filter(transition %in% transitions[seq(4, 50, 4)]) |>
-      ggplot(aes(x = x, y = y, fill = .data$movement)) +
-        geom_raster() +
-        ggplot2::scale_fill_gradientn(colors = gradient_colors) +
-        facet_wrap(vars(.data$transition))
-
-    anim <- p +
-      facet_null() +
-      gganimate::transition_manual(frames = .data$date) +
-      ggplot2::labs(title = title,
-                    subtitle = "{current_frame}")
-
-
-    gif <- gganimate::animate(anim, fps = 3, device = "ragg_png",
-                              width = 7, height = 6, res = 100, units = "in")
-
-    gganimate::save_animation(gif, file = "C:/temp/amewoo_net_movement.gif")
-
-  facet_wrap(facets = .data$transition)
-
-}
-

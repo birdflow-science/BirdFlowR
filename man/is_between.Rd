@@ -22,9 +22,15 @@ locations. \code{radius} defaults to half the cell size (\code{mean(res(bf))/2})
 classify bearings into.  Currently only \code{1} is supported.}
 }
 \value{
-An array with dimensions representing the
+A list with:
+\item{between}{An array with dimensions representing the
 "from" location, the "to" location, and the \code{points}. Cells are \code{TRUE}
-if the associated point is between the associated from and to locations.
+if the associated point is between the associated from and to locations.}
+\item{points}{A dataframe of points that define the third dimension
+in between.  It is identical to the input \code{points} if they are not \code{NULL}.
+Otherwise it will be a data frame with columns x, y, and i corresponding to
+the third dimension in \code{between}. Note \code{i} will be \code{NA} for some points that
+aren't within the mask but do fall between active cells.}
 }
 \description{
 This internal function is used to create a betweenness array with dimensions
@@ -39,6 +45,6 @@ of the great circle line connecting the cell centers.
 \details{
 If \code{points} and \code{radius} are \code{NULL} they default to the cell radius and the
 center of all cells within the BirdFlow extent that fall between
-any active cells.
+any active cells. This is ussually a superset of the active cells.
 }
 \keyword{internal}

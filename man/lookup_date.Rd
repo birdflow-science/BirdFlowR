@@ -2,20 +2,32 @@
 % Please edit documentation in R/lookup_date.R
 \name{lookup_date}
 \alias{lookup_date}
-\title{Retrieve date associated with a timestep}
+\title{Retrieve date associated with timesteps, transitions, or marginals}
 \usage{
-lookup_date(timestep, bf)
+lookup_date(x, bf, timestep = NULL)
 }
 \arguments{
-\item{timestep}{Integer between 1 and \code{n_timesteps(bf)}}
+\item{x}{A vector of one of the following formats:
+\enumerate{
+\item Integer between 1 and \code{n_timesteps(bf)} representing timestep.
+\item Character with "T" followed by digits that indicate timesteps,
+(this format is used internally to label timestep dimensions of objects)
+\item Marginal or Transition names. These start with either "T_" or "M_", and
+then have two timesteps respresented by digits and separated by a dash,
+E.g. "T_01-02".
+}}
 
 \item{bf}{A BirdFlow object}
+
+\item{timestep}{Deprecated alternative to \code{x}.  Previous versions of
+\code{lookup_dates()} only supported timestep input and used \code{timestep} as
+the first argument.}
 }
 \value{
 A Date object
 }
 \description{
-Retrieve date associated with a timestep
+Retrieve date associated with timesteps, transitions, or marginals
 }
 \examples{
 bf <- BirdFlowModels::amewoo
