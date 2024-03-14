@@ -12,7 +12,7 @@ BirdFlow object to raster files (TIFF, PNG)."><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9051</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9052</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,9 @@ BirdFlow object to raster files (TIFF, PNG).</p>
 <span>  filetype <span class="op">=</span> <span class="st">"GTiff"</span>,</span>
 <span>  as_integer <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  factor <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mb_file <span class="op">=</span> <span class="st">"&lt;code&gt;_&lt;what&gt;.&lt;ext&gt;"</span>,</span>
+<span>  sb_file <span class="op">=</span> <span class="st">"&lt;code&gt;_&lt;what&gt;_&lt;p_ts&gt;.&lt;ext&gt;"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -86,7 +88,8 @@ BirdFlow object to raster files (TIFF, PNG).</p>
 
 
 <dt>dir</dt>
-<dd><p>The directory where output should be stored</p></dd>
+<dd><p>The directory where output should be stored. Can include
+aliases; see <code>mb_file</code>,<code>sb_file</code> below.</p></dd>
 
 
 <dt>crs</dt>
@@ -133,6 +136,26 @@ for PNG files, and 1000 for GeoTIFF files.</p></dd>
 
 <dt>overwrite</dt>
 <dd><p>Should pre-existing files be overwritten with new output.</p></dd>
+
+
+<dt>mb_file, sb_file, </dt>
+<dd><p>The multi-band and single-band file name templates.
+They control where files are written. Possible aliases are:</p><ul><li><p><code>&lt;ext&gt;</code> the file extention, required at end of template.</p></li>
+<li><p><code>&lt;code&gt;</code> the species code.</p></li>
+<li><p><code>&lt;common&gt;</code> the species common name, spaces will be replaced with <code>"_"</code></p></li>
+<li><p><code>&lt;scientific&gt;</code> the scientic name, spaces will be replaced with <code>"_"</code></p></li>
+<li><p><code>&lt;ts&gt;</code> timestep (without padding)</p></li>
+<li><p><code>&lt;p_ts&gt;</code> padded timestep e.g. <code>"03"</code></p></li>
+<li><p><code>&lt;date&gt;</code> date in format <code>year-month-day</code>  e.g. <code>"2024-03-14"</code></p></li>
+<li><p><code>&lt;what&gt;</code> will be one of "distr" or "mask" can be omitted if only one
+is to be output.  See <code>what</code> argument above.</p></li>
+</ul><p>The two metadata files (CRS, extent) are written using the
+multi-band template with <code>&lt;what&gt;</code> set
+to <code>"crs"</code> and  <code>"extent"</code>, unless <code>&lt;what&gt;</code> isn't in the file name
+in which case <code>"_crs"</code> and <code>"_extent"</code> will be inserted prior to the
+extension.</p>
+<p><code>sb_file</code> must include one of <code>&lt;ts&gt;</code>, <code>&lt;p_ts&gt;</code> or <code>&lt;date&gt;</code>.</p>
+<p>The aliases above may be used in <code>dir</code> as well.</p></dd>
 
 </dl></div>
     <div class="section level2">
