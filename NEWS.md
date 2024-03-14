@@ -15,15 +15,17 @@ great circles connecting every possible pair of active cells in a BirdFlow
 model.  It will be used to calculate flux. Currently it is non-directional.
 
 * Add  `get_marginal()`  
-* Add `calc_flux()` currently it only calculates non directional net movement.
+* Add `calc_flux()`, `plot_flux()`, `animate_flux()`  currently they only 
+calculate and work with  non-directional flux / net movement.
+
 
 ### Pending (for flux)
 
 * Test `is_between()` 
 * Test `calc_flux()`
 * Test `get_marginal()`
-* Document `calc_flux()`
-* Add date column to result when `format = "dataframe"`
+* Test `plot_flux()` and `animate_flux()`
+
 * Normalize?  See Dan's comment in the issue.
 * Directional `is_between()`
 * Directional `calc_flux()`
