@@ -1,8 +1,14 @@
+# BirdFlowR 0.1.0.9052
+2023-03-14
+
+* `export_birdflow()` gets new arguments to control output file names. 
+  Default values mimic old behavior.
+
 # BirdFlowR 0.1.0.9051
 2023-02-28
 
 * Add `get_mask()`
-* Add `extend_birdflow()`
+* Add `extend_bird_flow()`
 * Add internal `read_geom()`
 * Add internal `extend_geom()`
 * Make `export_birdflow()` a public function.

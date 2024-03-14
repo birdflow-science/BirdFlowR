@@ -18,7 +18,8 @@
 #' single band by setting both arguments to `TRUE`.
 #'
 #' @param bf A BirdFlow object
-#' @param dir The directory where output should be stored
+#' @param dir The directory where output should be stored. Can include
+#'   aliases; see `mb_file`,`sb_file` below.
 #' @param crs The coordinate reference system to use in the output files,
 #'   defaults to  `crs(bf)`
 #' @param multiband If `TRUE` export a multiband file. Will be forced to `FALSE`
@@ -41,7 +42,28 @@
 #'  filetypes and 1000 for `GTiff`.  Thus the maximum integer value will be 255
 #'  for PNG files, and 1000 for GeoTIFF files.
 #' @param overwrite Should pre-existing files be overwritten with new output.
+#' @param mb_file,sb_file, The multi-band and single-band file name templates.
+#'   They control where files are written. Possible aliases are:
+#'   * `<ext>` the file extention, required at end of template.
+#'   * `<code>` the species code.
+#'   * `<common>` the species common name, spaces will be replaced with `"_"`
+#'   * `<scientific>` the scientic name, spaces will be replaced with `"_"`
+#'   * `<ts>` timestep (without padding)
+#'   * `<p_ts>` padded timestep e.g. `"03"`
+#'   * `<date>` date in format `year-month-day`  e.g. `"2024-03-14"`
+#'   * `<what>` will be one of "distr" or "mask" can be omitted if only one
+#'      is to be output.  See `what` argument above.
 #'
+#'   The two metadata files (CRS, extent) are written using the
+#'   multi-band template with `<what>` set
+#'   to `"crs"` and  `"extent"`, unless `<what>` isn't in the file name
+#'   in which case `"_crs"` and `"_extent"` will be inserted prior to the
+#'   extension.
+#'
+#'   `sb_file` must include one of `<ts>`, `<p_ts>` or `<date>`.
+#'
+#'   The aliases above may be used in `dir` as well.
+
 #' @return Nothing is returned, but raster files are written to `dir`
 #' @export
 #' @keywords internal
@@ -64,7 +86,10 @@ export_rasters <- function(bf,
                            filetype = "GTiff",
                            as_integer = NULL,
                            factor = NULL,
-                           overwrite = TRUE) {
+                           overwrite = TRUE,
+                           mb_file = "<code>_<what>.<ext>",
+                           sb_file = "<code>_<what>_<p_ts>.<ext>"
+                           ) {
   stopifnot(all(what %in% c("distr", "mask")))
 
   files_written <- 0
@@ -121,9 +146,34 @@ export_rasters <- function(bf,
 
 
   extension <- switch(filetype,
-                      "GTiff" = ".tif",
-                      "PNG" = ".png",
-                      "JPEG" = ".jpg")
+                      "GTiff" = "tif",
+                      "PNG" = "png",
+                      "JPEG" = "jpg")
+
+
+
+  substitute_aliases <- function(file, bf, ts, what, extension){
+
+    if (!grepl("\\.<ext>$", file))
+      stop("File templates should end in \".<ext>\"")
+
+    # handle special case where what is "crs" or "extent" and "<what>"
+    # is missing from file template, so the two metadata
+    # files don't overwrite each other
+    if (what %in% c("crs", "extent") && !grepl("<what>", file, fixed = TRUE)) {
+      gsub("\\.*<ext>$", paste0("_", what, ".<ext>"))
+    }
+
+    file <- gsub("<code>", species(bf, "code"), file, fixed = TRUE)
+    file <- gsub("<common>", species(bf), file, fixed = TRUE)
+    file <- gsub("<scientific>", species(bf, "scientific"), file, fixed = TRUE)
+    file <- gsub("<ext>", extension, file, fixed = TRUE)
+    file <- gsub("<what>", what, file, fixed = TRUE)
+    file <- gsub("<ts>", ts, file, fixed = TRUE)
+    file <- gsub("<p_ts>", pad_timestep(ts, bf), file, fixed = TRUE)
+    file <- gsub("<date>", lookup_date(ts, bf), file, fixed = TRUE)
+    file
+  }
 
 
   if (is.null(crs))
@@ -173,24 +223,23 @@ export_rasters <- function(bf,
 
 
     if (multiband) {
-      file <- file.path(dir, paste0(species(bf, "code"),
-                                    "_", what[i],
-                                    extension))
-      dir.create(dir, showWarnings = FALSE)
+      file <- file.path(dir, mb_file)
+      file <- substitute_aliases(file, bf, 0, what[i], extension)
+      dir.create(dirname(file), showWarnings = FALSE)
+
       terra::writeRaster(r, filename = file, filetype = filetype,
                          datatype = datatype, overwrite = overwrite)
       files_written <- files_written + 1
     }
 
     if (singleband) {
-      files <-  file.path(
-        dir,
-        paste0(species(bf, "code"),
-               "_", what[i], "_",
-               pad_timestep(seq_len(n_timesteps(bf)), bf),
-               extension))
+
       for (j in seq_len(n_timesteps(bf))) {
-        terra::writeRaster(r[[j]], file = files[j], filetype = filetype,
+        file <-  file.path(dir, sb_file)
+        file <- substitute_aliases(file, bf, j, what[i], extension)
+        dir.create(dirname(file), showWarnings = FALSE)
+
+        terra::writeRaster(r[[j]], filename = file, filetype = filetype,
                            datatype = datatype, overwrite = overwrite)
         files_written <- files_written + 1
       }
@@ -204,13 +253,24 @@ export_rasters <- function(bf,
                    paste0(x, " = ",
                           do.call(x, args = list(x = extent)))
                  })
-  writeLines(text, file.path(dir, paste0(species(bf, "code"), "_extent.txt")))
+  what <- "extent"
+  extension <- "txt"
+  file <-  file.path(dir, mb_file)
+  file <- substitute_aliases(file, bf, 0, what, extension)
+  dir.create(dirname(file), showWarnings = FALSE)
+
+  writeLines(text, file)
   files_written <- files_written + 1
 
 
   # Write crs as text file
   text <- as.character(crs(r))
-  writeLines(text, file.path(dir, paste0(species(bf, "code"),  "_crs.txt")))
+  what <- "crs"
+  extension <- "txt"
+  file <-  file.path(dir, mb_file)
+  file <- substitute_aliases(file, bf, 0, what, extension)
+  dir.create(dirname(file), showWarnings = FALSE)
+  writeLines(text, file)
   files_written <- files_written + 1
 
   bf_msg("Wrote ", files_written, " files to ", dir, "\n")

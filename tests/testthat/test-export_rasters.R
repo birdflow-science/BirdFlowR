@@ -1,10 +1,7 @@
 test_that("export_rasters() works with GeoTIFFs", {
   bf <- BirdFlowModels::amewoo
   bf <- add_dynamic_mask(bf) # Backwards compatibility
-  dir <- file.path(tempdir(), "export_geotiff_test")
-  if (dir.exists(dir))
-    unlink(dir, recursive = TRUE)
-  dir.create(dir)
+  dir <- withr::local_tempdir("export_geotiff_test")
 
   local_quiet()
 
