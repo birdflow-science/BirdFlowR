@@ -44,10 +44,10 @@
 #' @param overwrite Should pre-existing files be overwritten with new output.
 #' @param mb_file,sb_file, The multi-band and single-band file name templates.
 #'   They control where files are written. Possible aliases are:
-#'   * `<ext>` the file extention, required at end of template.
+#'   * `<ext>` the file extension, required at end of template.
 #'   * `<code>` the species code.
 #'   * `<common>` the species common name, spaces will be replaced with `"_"`
-#'   * `<scientific>` the scientic name, spaces will be replaced with `"_"`
+#'   * `<scientific>` the scientific name, spaces will be replaced with `"_"`
 #'   * `<ts>` timestep (without padding)
 #'   * `<p_ts>` padded timestep e.g. `"03"`
 #'   * `<date>` date in format `year-month-day`  e.g. `"2024-03-14"`
@@ -152,7 +152,7 @@ export_rasters <- function(bf,
 
 
 
-  substitute_aliases <- function(file, bf, ts, what, extension){
+  substitute_aliases <- function(file, bf, ts, what, extension) {
 
     if (!grepl("\\.<ext>$", file))
       stop("File templates should end in \".<ext>\"")
@@ -217,10 +217,9 @@ export_rasters <- function(bf,
     }
 
     # Drop extra distribution from preprocessed models
-    if(!has_marginals(bf) && !has_transitions(bf) && n_distr(bf) == 53){
+    if (!has_marginals(bf) && !has_transitions(bf) && n_distr(bf) == 53) {
       r <- r[[-53]]
     }
-
 
     if (multiband) {
       file <- file.path(dir, mb_file)

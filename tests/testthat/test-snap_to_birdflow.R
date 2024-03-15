@@ -26,15 +26,18 @@ test_that("snap_to_birdflow works", {
 
   # Aggregate with median
   a1 <-  snap_to_birdflow(d2, bf,
-                          id_cols = c("bird_id", "track_id"), aggregate = "median")
+                          id_cols = c("bird_id", "track_id"),
+                          aggregate = "median")
 
   # aggregate with mean
   a2 <-  snap_to_birdflow(d2, bf,
-                          id_cols = c("bird_id", "track_id"), aggregate = "mean")
+                          id_cols = c("bird_id", "track_id"),
+                          aggregate = "mean")
 
   # aggregate with midweek
   a3 <-  snap_to_birdflow(d2, bf,
-                          id_cols = c("bird_id", "track_id"), aggregate = "midweek")
+                          id_cols = c("bird_id", "track_id"),
+                          aggregate = "midweek")
 
 
   consistent_cols <- c("bird_id", "track_id", "timestep", "n")
@@ -102,7 +105,7 @@ test_that("snap_to_birdflow()  behaves with odd input", {
                          id_cols = c("bird_id", "track_id"), crs = crs(bf))
 
   # Empty input data frame
-  d <- d[FALSE , , drop = FALSE]
+  d <- d[FALSE, , drop = FALSE]
 
   # Note some weird warnings are thrown during reprojection about
   # infinite extent when there's no data. I think I'm OK with this.

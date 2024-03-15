@@ -24,7 +24,7 @@ an error if  \code{file} already exists.}
 
 \item{hdf5}{Path to an HDF5 file containing a fitted BirdFlow model.}
 
-\item{...}{Deprectated, arguments to be passed to a version specific
+\item{...}{Deprecated, arguments to be passed to a version specific
 internal functions.}
 
 \item{version}{(optional) force reading of BirdFlow models as a particular
@@ -45,7 +45,7 @@ HDF5 (Hierarchical Data Format version 5)
 (Hierarchical Data Format version 5) file.
 }
 \details{
-THe standard workflow for generating a fitted BirdFlow model is:
+The standard workflow for generating a fitted BirdFlow model is:
 \enumerate{
 \item Use \code{\link[=preprocess_species]{preprocess_species()}} to download and format eBird data into an
 HDF5 file (this calls \code{export_birdflow()} internally).

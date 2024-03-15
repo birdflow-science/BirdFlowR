@@ -3,7 +3,7 @@
 #' `import_birdflow()` imports a BirdFlow model from an HDF5
 #' (Hierarchical Data Format version 5) file.
 #'
-#' THe standard workflow for generating a fitted BirdFlow model is:
+#' The standard workflow for generating a fitted BirdFlow model is:
 #' 1. Use [preprocess_species()] to download and format eBird data into an
 #' HDF5 file (this calls `export_birdflow()` internally).
 #' 2. Fit the model and add marginals and hyperparameters to the HDF5 file
@@ -55,7 +55,7 @@
 #'   `$metadata$hyperparameters` (a list).
 #'
 #' @param hdf5 Path to an HDF5 file containing a fitted BirdFlow model.
-#' @param ... Deprectated, arguments to be passed to a version specific
+#' @param ... Deprecated, arguments to be passed to a version specific
 #'  internal functions.
 #' @param version (optional) force reading of BirdFlow models as a particular
 #'   version. Normally, this will be determined from metadata in the HDF5

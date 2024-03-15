@@ -1,3 +1,12 @@
+# BirdFlowR 0.1.0.9053
+2023-03-15
+
+* New `shrink_birdlfow()` reverses `extend_birdflow()`, returning the model
+  to it's original extent.
+* `extend_birdflow()`now can "extend" BirdFlow models to smaller extents 
+  if they have already been extended and the new extent is still larger than 
+  the original. 
+
 # BirdFlowR 0.1.0.9052
 2023-03-14
 
@@ -20,7 +29,7 @@
   with `import_birdflow()`.   Note, however, that the file structure of a 
   re-exported hdf5 will not match that of the output from python, b/c on the 
   first import R updates a bunch of data structures - for instance renaming the
-  marginals and adding a marginal index, and the rexported model retains those
+  marginals and adding a marginal index, and the re-exported model retains those
   updates.  Thus, the need to modify  `import_birdflow()` to behave 
   appropriately with both file structures.
 

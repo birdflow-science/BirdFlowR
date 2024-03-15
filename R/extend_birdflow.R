@@ -10,33 +10,14 @@
 #' extended version of the same model.  If `x` is the path to one or more
 #'  BirdFlow models than those files are modified and a logical vector of the
 #'  same length is returned with TRUE for success.
-#' @export
 #'
-#' @examples
-#' bf <- BirdFlowModels::amewoo
+#' @details
+#'  Models can only be extended beyond their original extent, however if they
+#'  have already been extended it is possible to "extend" them again to
+#'  a smaller extent as long as it is also larger than the original extent.
+#' @seealso [shrink_birdflow()] returns a model to it's original extent.
 #'
-#' # Define expanded extent for example
-#' e <-  ext(bf)
-#' buffer <- 3 * res(bf)
-#' e[1] <- e[1] - buffer[1]
-#' e[2] <- e[2] + buffer[1]
-#' e[3] <- e[3] - buffer[2]
-#' e[4] <- e[4] + buffer[2]
-#'
-#' bf2 <- extend_birdflow(bf, e)
-#'
-#'# Compare initial and expandeded extents
-#'data.frame(item = names(as.vector(ext(bf))),
-#'             initial = as.vector(ext(bf)),
-#'             final = as.vector(ext(bf2)))
-#'
-#'\dontrun{
-#'# Plot both versions
-#'library(terra)
-#'plot_distr(get_distr(bf, 1), bf)
-#'plot_distr(get_distr(bf2, 1), bf2)
-#'   }
-#'
+#' @inherit shrink_birdflow examples
 extend_birdflow <- function(x, y) {
 
   if (inherits(x, "BirdFlow")) {
@@ -95,8 +76,8 @@ extend_birdflow <- function(x, y) {
 #' Extend geometry component of a BirdFlow object
 #'
 #' This is an internal helper function called twice by [extend_birdflow()]
-#' it adjust the nrow, ncol, ext, and mask elements of the
-#' geom component of a BirdFlow model to expand the extent while preserving
+#' it adjusts the `nrow`, `ncol`, `ext`, and `mask` elements of the
+#'`geom` component of a BirdFlow model to expand the extent while preserving
 #' the same number, location, and alignment of the unmasked cells -
 #' thus nothing else in the object needs to change.
 #'
@@ -107,10 +88,15 @@ extend_birdflow <- function(x, y) {
 #' @keywords internal
 extend_geom <- function(geom, y) {
 
+  # Return to original extent  to allow "expanding" to any extent
+  # greater than the original - even if if it's smaller than the current
+  # extent.
+  geom <- shrink_geom(geom)
+
   eg  <- geom$ext  # extent of geom
   ey <- ext(y)  # extent of y
 
-  is_aligned <- function(a, res, tolerance = sqrt(.Machine$double.eps)){
+  is_aligned <- function(a, res, tolerance = sqrt(.Machine$double.eps)) {
     # Args:
     # a:  extent coordinates (can be vector)
     # res: cell size (single value)
@@ -131,7 +117,7 @@ extend_geom <- function(geom, y) {
     return(test1 | test2)
   }
 
-  if(!all(is_aligned(ey[c(1,2)], geom$res[1])) ||
+  if (!all(is_aligned(ey[c(1, 2)], geom$res[1])) ||
      !all(is_aligned(ey[c(3, 4)], geom$res[2]))) {
     stop("The new extent (y) does not align with cells in the ",
          "BirdFlow model (x) ", call. = FALSE)

@@ -58,10 +58,10 @@ for PNG files, and 1000 for GeoTIFF files.}
 \item{mb_file, sb_file, }{The multi-band and single-band file name templates.
 They control where files are written. Possible aliases are:
 \itemize{
-\item \verb{<ext>} the file extention, required at end of template.
+\item \verb{<ext>} the file extension, required at end of template.
 \item \verb{<code>} the species code.
 \item \verb{<common>} the species common name, spaces will be replaced with \code{"_"}
-\item \verb{<scientific>} the scientic name, spaces will be replaced with \code{"_"}
+\item \verb{<scientific>} the scientific name, spaces will be replaced with \code{"_"}
 \item \verb{<ts>} timestep (without padding)
 \item \verb{<p_ts>} padded timestep e.g. \code{"03"}
 \item \verb{<date>} date in format \code{year-month-day}  e.g. \code{"2024-03-14"}
