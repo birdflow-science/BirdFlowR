@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9052</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9053</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,13 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9053" id="birdflowr-0109053">BirdFlowR 0.1.0.9053<a class="anchor" aria-label="anchor" href="#birdflowr-0109053"></a></h2>
+<p>2023-03-15</p>
+<ul><li>New <code>shrink_birdlfow()</code> reverses <code><a href="../reference/extend_birdflow.html">extend_birdflow()</a></code>, returning the model to it’s original extent.</li>
+<li>
+<code><a href="../reference/extend_birdflow.html">extend_birdflow()</a></code>now can “extend” BirdFlow models to smaller extents if they have already been extended and the new extent is still larger than the original.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9052" id="birdflowr-0109052">BirdFlowR 0.1.0.9052<a class="anchor" aria-label="anchor" href="#birdflowr-0109052"></a></h2>
 <p>2023-03-14</p>
 <ul><li>
@@ -73,7 +80,7 @@
 <li>Add internal <code><a href="../reference/extend_geom.html">extend_geom()</a></code>
 </li>
 <li>Make <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> a public function.</li>
-<li>Update <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> so that it can re-import a BirdFlow model. Previously the only viable workflow was <code>preprocess_birdflow()</code>, fit model in BirdFlowPy, and then<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> (once). After that we wrote the model to .rda files. Now it’s possible to do the above but then save it to a new <code>hdf5</code> with: <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> (to hdf5) and then import again with <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. Note, however, that the file structure of a re-exported hdf5 will not match that of the output from python, b/c on the first import R updates a bunch of data structures - for instance renaming the marginals and adding a marginal index, and the rexported model retains those updates. Thus, the need to modify <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> to behave appropriately with both file structures.</li>
+<li>Update <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> so that it can re-import a BirdFlow model. Previously the only viable workflow was <code>preprocess_birdflow()</code>, fit model in BirdFlowPy, and then<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> (once). After that we wrote the model to .rda files. Now it’s possible to do the above but then save it to a new <code>hdf5</code> with: <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> (to hdf5) and then import again with <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. Note, however, that the file structure of a re-exported hdf5 will not match that of the output from python, b/c on the first import R updates a bunch of data structures - for instance renaming the marginals and adding a marginal index, and the re-exported model retains those updates. Thus, the need to modify <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> to behave appropriately with both file structures.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9050" id="birdflowr-0109050">BirdFlowR 0.1.0.9050<a class="anchor" aria-label="anchor" href="#birdflowr-0109050"></a></h2>
