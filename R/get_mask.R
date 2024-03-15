@@ -71,7 +71,6 @@ get_mask <- function(bf, format = "SpatRaster") {
     df$y <- row_to_y(df$row, bf)
     df$i <- rc_to_i(df$row, df$col, bf)
     mv <- match(1:n_active(bf), df$i)
-    n_rast <- ncol(bf) * nrow(bf)
     df$mask <- FALSE
     df$mask[mv] <- TRUE
     return(df)

@@ -207,6 +207,7 @@ test_that("preprocess_species() works with crs arg", {
   dir <- local_test_dir("preprocess_crs")
 
   expect_no_error(
-    bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE, crs = birdflow_crs)
+    bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE,
+                             crs = birdflow_crs)
   )
 })

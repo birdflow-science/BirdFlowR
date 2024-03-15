@@ -66,14 +66,14 @@ test_that("validate_BirdFlow throws expected errors", {
 
   # Distributions don't sum to 1
   bad <- bf
-  bad$distr[ , 1] <- 0
+  bad$distr[, 1] <- 0
   expect_error(validate_BirdFlow(bad),
                "not all distributions sum to one")
 
 
   # Empty dynamic mask (for any timestep)
   bad <- bf
-  bad$geom$dynamic_mask[ , 1] <- 0
+  bad$geom$dynamic_mask[, 1] <- 0
   expect_error(validate_BirdFlow(bad),
                "dynamic mask eliminates all cells for some timesteps")
 

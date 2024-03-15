@@ -12,8 +12,8 @@ test_that("lookup_timestep works with NAs", {
   expect_error(lookup_timestep(NA_real_, bf), nice_error)
   expect_equal(lookup_timestep(NA_real_, bf, allow_failure = TRUE), NA_real_)
   # NA in t# style character vector
-  expect_error(lookup_timestep(c('t1', NA_character_), bf), nice_error)
-  expect_equal(lookup_timestep(c('t1', NA_character_), bf,
+  expect_error(lookup_timestep(c("t1", NA_character_), bf), nice_error)
+  expect_equal(lookup_timestep(c("t1", NA_character_), bf,
                                allow_failure = TRUE),
                c(1, NA_real_))
   # NA in numeric vector
@@ -22,9 +22,9 @@ test_that("lookup_timestep works with NAs", {
                                allow_failure = TRUE),
                c(1, NA_real_))
   # NA in Date vector
-  expect_error(lookup_timestep(as.Date(c('2023-01-01', NA_character_)), bf),
+  expect_error(lookup_timestep(as.Date(c("2023-01-01", NA_character_)), bf),
                nice_error)
-  expect_equal(lookup_timestep(as.Date(c('2023-01-01', NA_character_)), bf,
+  expect_equal(lookup_timestep(as.Date(c("2023-01-01", NA_character_)), bf,
                                allow_failure = TRUE),
                c(1, NA_real_))
 })
