@@ -18,6 +18,7 @@
 #' @seealso [shrink_birdflow()] returns a model to it's original extent.
 #'
 #' @inherit shrink_birdflow examples
+#' @export
 extend_birdflow <- function(x, y) {
 
   if (inherits(x, "BirdFlow")) {
