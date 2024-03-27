@@ -4,12 +4,16 @@
 \alias{get_marginal}
 \title{Return a marginal matrix from a BirdFlowR model}
 \usage{
-get_marginal(x, marginal, from, to)
+get_marginal(x, marginal = NULL, from = NULL)
 }
 \arguments{
 \item{x}{A BirdFlow object}
 
 \item{marginal}{A marginal code, e.g. "M_01-02"}
+
+\item{from}{The first timestep associated with the marginal. Note marginals
+are always forward so the second marginal will  be \code{from + 1} or \code{1} (when
+\code{from} is the last timestep).}
 }
 \value{
 A  marginal matrix
@@ -19,7 +23,7 @@ Marginals in BirdFlow models are stored such that the cell [i, j]
 represents the probability of the bird being in state i in the prior
 timestep and state j in the next.  Thus the number of rows in the marginal
 equals the number of cells within the dynamic mask for the prior timestep
-and the columns count is equal to the included cells for the folling
+and the columns count is equal to the included cells for the following
 timestep.
 }
 \seealso{

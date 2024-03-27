@@ -45,6 +45,6 @@ of the great circle line connecting the cell centers.
 \details{
 If \code{points} and \code{radius} are \code{NULL} they default to the cell radius and the
 center of all cells within the BirdFlow extent that fall between
-any active cells. This is ussually a superset of the active cells.
+any active cells. This is usually a superset of the active cells.
 }
 \keyword{internal}

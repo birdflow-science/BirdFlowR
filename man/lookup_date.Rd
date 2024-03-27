@@ -13,7 +13,7 @@ lookup_date(x, bf, timestep = NULL)
 \item Character with "T" followed by digits that indicate timesteps,
 (this format is used internally to label timestep dimensions of objects)
 \item Marginal or Transition names. These start with either "T_" or "M_", and
-then have two timesteps respresented by digits and separated by a dash,
+then have two timesteps represented by digits and separated by a dash,
 E.g. "T_01-02".
 }}
 

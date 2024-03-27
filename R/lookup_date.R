@@ -6,7 +6,7 @@
 #' 2. Character with "T" followed by digits that indicate timesteps,
 #'  (this format is used internally to label timestep dimensions of objects)
 #' 3. Marginal or Transition names. These start with either "T_" or "M_", and
-#' then have two timesteps respresented by digits and separated by a dash,
+#' then have two timesteps represented by digits and separated by a dash,
 #'  E.g. "T_01-02".
 #' @param bf A BirdFlow object
 #' @param timestep Deprecated alternative to `x`.  Previous versions of
@@ -22,22 +22,23 @@
 #' lookup_date(1:5, bf)
 lookup_date <- function(x, bf, timestep = NULL) {
 
-  if(all(is.na(x)))
+  if (all(is.na(x)))
     return(as.Date(x))
 
-  if(!is.null(timestep)){
+  if (!is.null(timestep)) {
     x <- timestep
-    warning("timestep argument to lookup_dates() is deprecated please use x instead")
+    warning("timestep argument to lookup_dates() is deprecated.",
+            "Please use x instead")
   }
 
-  if(is.character(x)){
-    if(all(grepl("^T[[:digit:]]+$", x[!is.na(x)]))){
+  if (is.character(x)) {
+    if (all(grepl("^T[[:digit:]]+$", x[!is.na(x)]))) {
       # There are character representations of timesteps used to
       # label distributions internally
       x <- as.numeric(gsub("^T", "", x))
       # x is now numeric timeseps and will be handled at bottom
 
-    } else if (all(grepl("^[MT]_[[:digit:]]+-[[:digit:]]+$", x[!is.na(x)]))){
+    } else if (all(grepl("^[MT]_[[:digit:]]+-[[:digit:]]+$", x[!is.na(x)]))) {
 
       # These are marginal or transition IDs in the form M_01-02 or T_52-01
       # We'll convert them to two columns of dates represnting the
@@ -60,11 +61,11 @@ lookup_date <- function(x, bf, timestep = NULL) {
       # timestep
       # Backward loop over year boundary:
       sv <- loops & ts_pairs[, 1] == 1 & !is.na(x)
-      if(any(sv))
+      if (any(sv))
         lubridate::year(dates[sv, 1]) <- lubridate::year(dates[sv, 1]) + 1
       # Forward loop over year boundary:
       sv <- loops & ts_pairs[, 2] == 1  & !is.na(x)
-      if(any(sv))
+      if (any(sv))
         lubridate::year(dates[sv, 2]) <- lubridate::year(dates[sv, 2]) + 1
 
       # Mean date
@@ -75,14 +76,14 @@ lookup_date <- function(x, bf, timestep = NULL) {
       lubridate::year(mean_date) <- get_metadata(bf, "ebird_version_year")
 
       return(lubridate::as_date(mean_date))
-    } else if(all(grepl("^[[:digit:]]+$", x[!is.na(x)]))) {
+    } else if (all(grepl("^[[:digit:]]+$", x[!is.na(x)]))) {
       # All digits but as text - assume timesteps
       x <- as.numeric(x)
     } else {
       # Unrecognized character input
       stop("Unrecognized character input to lookup_date(). ",
-           "Valid inputs are numeric timesteps, timesteps preceeded by a \"T\", ",
-           "marginal names, and transition names.", call. = FALSE)
+           "Valid inputs are numeric timesteps, timesteps preceeded by a ",
+          "\"T\", marginal names, and transition names.", call. = FALSE)
 
     }
   } # end character input

@@ -12,7 +12,7 @@ calc_flux(bf, points = NULL, radius = NULL, n_directions = 1, format = NULL)
 \item{points}{A set of points to calculate movement through. If \code{points} is
 \code{NULL} they will default to the BirdFlow model cells that are either active
 or fall between two active cells. Should be a data frame with \code{x} and  \code{y}
-columns containing point coordinates in \link{crs(bf)}.}
+columns containing point coordinates in \link[=crs]{crs(bf)}.}
 
 \item{radius}{The radius in meters around the points, used to determine if
 a path is passing through the point.}
@@ -24,19 +24,20 @@ or an even number.}
 \item{format}{The format to return the results in one of:
 \describe{
 \item{\code{"points"}}{Returns a list with \code{net_movement} a matrix or array of
-movement, and \code{points} a data frame of either the input    \code{points} or the
+movement, and \code{points} a data frame of either the input \code{points} or the
 point locations }
 \item{\code{"dataframe"}}{Returns a "long" data frame with columns:
-*\code{x} and \code{y} coordinates of the points.
 \itemize{
+\item \code{x} and \code{y} coordinates of the points.
 \item \code{transition} Transition code.
 \item \code{movement} The total abundance moving through the point in the transition.
 \item \code{date} The date associated with the transition, will be at the midpoint
-between timesteps.}
+between timesteps.
+}
+
+}
 \item{\code{"SpatRaster"}}{Returns a \code{terra::SpatRaster} with layers for each
-transition.
-}
-}
+transition.}
 }}
 }
 \value{

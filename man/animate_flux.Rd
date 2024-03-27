@@ -7,7 +7,7 @@
 animate_flux(flux, bf, title = species(bf), ...)
 }
 \arguments{
-\item{flux}{A flux object as created by \link{calc_flux(format = "dataframe")}}
+\item{flux}{A flux object as created by \link[=calc_flux]{calc_flux(format = "dataframe")}}
 
 \item{bf}{A BirdFlow object}
 
@@ -17,27 +17,27 @@ animate_flux(flux, bf, title = species(bf), ...)
   Arguments passed on to \code{\link[=plot_flux]{plot_flux}}
   \describe{
     \item{\code{subset}}{A subset of the transitions in \code{flux} to plot, can be
-a logical vector of the same length as the number of transtions in \code{flux};
+a logical vector of the same length as the number of transitions in \code{flux};
 a numeric index of transitions in \code{flux}, or a subset of the transition names
 in \code{flux}.}
     \item{\code{limits}}{Two numbers representing the range in movement values to
 display. Values outside of this range will be truncated to the range. With
 the default of \code{NULL} the entire range is plotted.}
     \item{\code{dynamic_scale}}{If \code{TRUE} then the range of the data in each
-transition is mapped to the color palett. This makes it easier to see
+transition is mapped to the color palette. This makes it easier to see
 the variation within a single transition but results in an inconsistent
 scale among transitions.}
     \item{\code{coast_linewidth}}{The line width used to plot the coast. Set to \code{NULL}
 to skip plotting the coastline.}
     \item{\code{coast_color}}{The color used to plot the coastline, or \code{NULL} to skip
 plotting the coastline.}
-    \item{\code{gradient_colors}}{The colors palett used to represent the movement
+    \item{\code{gradient_colors}}{The colors palette used to represent the movement
 intensity.}
     \item{\code{value_label}}{The label for the net movement values.}
   }}
 }
 \value{
-A \href{gganimate::gganimate-package}{gganim} object
+A \code{\link[gganimate:gganimate-package]{gganim}} object
 }
 \description{
 Animate net migration from \code{\link[=calc_flux]{calc_flux()}}.
@@ -53,4 +53,7 @@ plot_flux(flux, bf)
 animate_flux(flux, bf)
 }
 
+}
+\seealso{
+\code{\link[=calc_flux]{calc_flux()}},\code{\link[=plot_flux]{plot_flux()}}
 }

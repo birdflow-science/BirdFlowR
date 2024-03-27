@@ -19,7 +19,7 @@ if (FALSE) {
 #'
 #' If `points` and `radius` are `NULL` they default to the cell radius and the
 #' center of all cells within the BirdFlow extent that fall between
-#' any active cells. This is ussually a superset of the active cells.
+#' any active cells. This is usually a superset of the active cells.
 #'
 #' @param bf A BirdFlow model
 #' @param points The points to evaluate betweenness on. If NULL the cell
@@ -49,7 +49,7 @@ is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1) {
   on.exit(sf::sf_use_s2(o_use_s2))
   sf::sf_use_s2(TRUE)
 
-  if(!n_directions == 1) {
+  if (!n_directions == 1) {
     stop("Currently only one direction is supported.")
   }
   # Dimensions

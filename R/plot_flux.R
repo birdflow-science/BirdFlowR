@@ -1,23 +1,23 @@
 #' Plot net bird movement
 #'
-#' @param flux A flux object as created by [calc_flux(format = "dataframe")]
+#' @param flux A flux object as created by [calc_flux(format = "dataframe")][calc_flux]
 #' @param bf A BirdFlow object
 #' @param subset A subset of the transitions in `flux` to plot, can be
-#' a logical vector of the same length as the number of transtions in `flux`;
+#' a logical vector of the same length as the number of transitions in `flux`;
 #' a numeric index of transitions in `flux`, or a subset of the transition names
 #' in `flux`.
 #' @param limits Two numbers representing the range in movement values to
 #' display. Values outside of this range will be truncated to the range. With
 #' the default of `NULL` the entire range is plotted.
 #' @param dynamic_scale  If `TRUE` then the range of the data in each
-#' transition is mapped to the color palett. This makes it easier to see
+#' transition is mapped to the color palette. This makes it easier to see
 #' the variation within a single transition but results in an inconsistent
 #' scale among transitions.
 #' @param coast_linewidth The line width used to plot the coast. Set to `NULL`
 #' to skip plotting the coastline.
 #' @param coast_color The color used to plot the coastline, or `NULL` to skip
 #' plotting the coastline.
-#' @param gradient_colors The colors palett used to represent the movement
+#' @param gradient_colors The colors palette used to represent the movement
 #' intensity.
 #' @param title The plot title
 #' @param value_label The label for the net movement values.
@@ -100,8 +100,9 @@ plot_flux <- function(flux,
   # Start plot
   p <- flux |>
     #dplyr::filter(transition %in% transitions[seq(4, 50, 4)]) |>
-    ggplot(aes(x = .data$x, y = .data$y, fill = .data$movement)) +
-    geom_raster() +
+    ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
+                                 fill = .data$movement)) +
+    ggplot2::geom_raster() +
     ggplot2::scale_fill_gradientn(colors = gradient_colors)
 
 
@@ -109,7 +110,7 @@ plot_flux <- function(flux,
   if (length(transitions > 1)) {
     # Multiple transitions, facet wrap on date and add species title
     p <- p +
-      facet_wrap(vars(.data$date)) +
+      ggplot2::facet_wrap(ggplot2::vars(.data$date)) +
       ggplot2::ggtitle(species(bf))
   } else {
     # Single transition add species title AND date subtitle
