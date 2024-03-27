@@ -1,3 +1,41 @@
+
+# BirdFlowR 0.1.0.9054
+## Flux I
+Non-directional only, additional changes pending
+
+### Changes
+
+* The first argument of `lookup_date()` is now `x` instead of `timestep` 
+  `timestep` is added as a deprecated third argument so all old usage should 
+  work.  
+* `lookup_dates()` now works with transition names (e.g. "T_01-02") marginal 
+names ("M_02-03"), character timesteps ("T1", "T2"), and, as before, numeric 
+timesteps. Marginal and transition dates are the midpoint between the two 
+timesteps, this falls squarely between two dates and it is left up to 
+`base::mean.Date()` to resolve this, which it does by rounding down.
+
+
+* Add internal function `is_between()` to determines if a set points are on the
+great circles connecting every possible pair of active cells in a BirdFlow 
+model.  It will be used to calculate flux. Currently it is non-directional.
+
+* Add  `get_marginal()`  
+* Add `calc_flux()`, `plot_flux()`, `animate_flux()`  currently they only 
+calculate and work with non-directional flux / net movement.
+
+
+### Pending flux changes
+
+* Test `is_between()` 
+* Test `calc_flux()`
+* Test `get_marginal()`
+* Test `plot_flux()` and `animate_flux()`
+
+* Normalize?  See Dan's comment in the issue.
+* Directional `is_between()`
+* Directional `calc_flux()`
+
+
 # BirdFlowR 0.1.0.9053
 2023-03-15
 
@@ -12,6 +50,7 @@
 
 * `export_birdflow()` gets new arguments to control output file names. 
   Default values mimic old behavior.
+
 
 # BirdFlowR 0.1.0.9051
 2023-02-28

@@ -114,6 +114,10 @@ plot_distr <- function(distr,
                        title = species(bf),
                        value_label = "Density") {
 
+  if (!is.null(limits) && dynamic_scale) {
+    stop("Do not set dynamic_scale to TRUE while also setting limits.")
+  }
+
   if (dynamic_scale) {
     distr <- apply(distr, 2, function(x) x / max(x, na.rm = TRUE))
   }
