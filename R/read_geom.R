@@ -4,7 +4,7 @@
 #' [extend_birdflow()] to read and format the geom component of the model
 #' @param hdf5 the path to an hdf5 file
 #' @return The geom component of a birdflow model
-read_geom <-  function(hdf5){
+read_geom <-  function(hdf5) {
   geom <- h5read(hdf5, name = "geom", native = TRUE)
   for (a in c("nrow", "ncol", "res", "ext")) {
     geom[[a]] <- as.numeric(geom[[a]])

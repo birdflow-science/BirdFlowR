@@ -5,7 +5,7 @@
 #' @param e An SpatExtent as produced by [terra::ext()]
 #' @param buffer The buffer to add, in same units as the `SpatExtent`.
 #' @return a buffered SpatExtent
-buffer_extent <- function(e, buffer){
+buffer_extent <- function(e, buffer) {
   e[1] <- e[1] - buffer
   e[2] <- e[2] + buffer
   e[3] <- e[3] - buffer

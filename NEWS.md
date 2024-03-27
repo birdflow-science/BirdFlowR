@@ -1,4 +1,9 @@
-# BirdFlowR  (flux)
+
+# BirdFlowR 0.1.0.9053
+## Flux I
+Non-directional only, additional changes pending
+
+### Changes
 
 * The first argument of `lookup_date()` is now `x` instead of `timestep` 
   `timestep` is added as a deprecated third argument so all old usage should 
@@ -6,7 +11,7 @@
 * `lookup_dates()` now works with transition names (e.g. "T_01-02") marginal 
 names ("M_02-03"), character timesteps ("T1", "T2"), and, as before, numeric 
 timesteps. Marginal and transition dates are the midpoint between the two 
-timesteps, this falls squarly between two dates and it is left up to 
+timesteps, this falls squarely between two dates and it is left up to 
 `base::mean.Date()` to resolve this, which it does by rounding down.
 
 
@@ -16,10 +21,10 @@ model.  It will be used to calculate flux. Currently it is non-directional.
 
 * Add  `get_marginal()`  
 * Add `calc_flux()`, `plot_flux()`, `animate_flux()`  currently they only 
-calculate and work with  non-directional flux / net movement.
+calculate and work with non-directional flux / net movement.
 
 
-### Pending (for flux)
+### Pending flux changes
 
 * Test `is_between()` 
 * Test `calc_flux()`
@@ -31,11 +36,27 @@ calculate and work with  non-directional flux / net movement.
 * Directional `calc_flux()`
 
 
+# BirdFlowR 0.1.0.9053
+2023-03-15
+
+* New `shrink_birdlfow()` reverses `extend_birdflow()`, returning the model
+  to it's original extent.
+* `extend_birdflow()`now can "extend" BirdFlow models to smaller extents 
+  if they have already been extended and the new extent is still larger than 
+  the original. 
+
+# BirdFlowR 0.1.0.9052
+2023-03-14
+
+* `export_birdflow()` gets new arguments to control output file names. 
+  Default values mimic old behavior.
+
+
 # BirdFlowR 0.1.0.9051
 2023-02-28
 
 * Add `get_mask()`
-* Add `extend_birdflow()`
+* Add `extend_bird_flow()`
 * Add internal `read_geom()`
 * Add internal `extend_geom()`
 * Make `export_birdflow()` a public function.
@@ -47,7 +68,7 @@ calculate and work with  non-directional flux / net movement.
   with `import_birdflow()`.   Note, however, that the file structure of a 
   re-exported hdf5 will not match that of the output from python, b/c on the 
   first import R updates a bunch of data structures - for instance renaming the
-  marginals and adding a marginal index, and the rexported model retains those
+  marginals and adding a marginal index, and the re-exported model retains those
   updates.  Thus, the need to modify  `import_birdflow()` to behave 
   appropriately with both file structures.
 

@@ -14,13 +14,16 @@ export_rasters(
   filetype = "GTiff",
   as_integer = NULL,
   factor = NULL,
-  overwrite = TRUE
+  overwrite = TRUE,
+  mb_file = "<code>_<what>.<ext>",
+  sb_file = "<code>_<what>_<p_ts>.<ext>"
 )
 }
 \arguments{
 \item{bf}{A BirdFlow object}
 
-\item{dir}{The directory where output should be stored}
+\item{dir}{The directory where output should be stored. Can include
+aliases; see \code{mb_file},\code{sb_file} below.}
 
 \item{crs}{The coordinate reference system to use in the output files,
 defaults to  \code{crs(bf)}}
@@ -51,6 +54,30 @@ filetypes and 1000 for \code{GTiff}.  Thus the maximum integer value will be 255
 for PNG files, and 1000 for GeoTIFF files.}
 
 \item{overwrite}{Should pre-existing files be overwritten with new output.}
+
+\item{mb_file, sb_file, }{The multi-band and single-band file name templates.
+They control where files are written. Possible aliases are:
+\itemize{
+\item \verb{<ext>} the file extension, required at end of template.
+\item \verb{<code>} the species code.
+\item \verb{<common>} the species common name, spaces will be replaced with \code{"_"}
+\item \verb{<scientific>} the scientific name, spaces will be replaced with \code{"_"}
+\item \verb{<ts>} timestep (without padding)
+\item \verb{<p_ts>} padded timestep e.g. \code{"03"}
+\item \verb{<date>} date in format \code{year-month-day}  e.g. \code{"2024-03-14"}
+\item \verb{<what>} will be one of "distr" or "mask" can be omitted if only one
+is to be output.  See \code{what} argument above.
+}
+
+The two metadata files (CRS, extent) are written using the
+multi-band template with \verb{<what>} set
+to \code{"crs"} and  \code{"extent"}, unless \verb{<what>} isn't in the file name
+in which case \code{"_crs"} and \code{"_extent"} will be inserted prior to the
+extension.
+
+\code{sb_file} must include one of \verb{<ts>}, \verb{<p_ts>} or \verb{<date>}.
+
+The aliases above may be used in \code{dir} as well.}
 }
 \value{
 Nothing is returned, but raster files are written to \code{dir}

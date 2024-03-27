@@ -120,7 +120,7 @@ snap_to_birdflow <- function(d, bf,
                      "error", "message")
 
   # Handle special case of no input rows
-  if (nrow(d)== 0) {
+  if (nrow(d) == 0) {
     d <- cbind(d[, id_cols, drop = FALSE],
                date = lubridate::as_date(integer(0)),
                timestep = numeric(0),

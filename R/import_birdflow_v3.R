@@ -171,8 +171,8 @@ import_birdflow_v3 <- function(hdf5) {
   circular <- nt == length(unique(dates$date))
   bf$marginals <- vector(mode = "list", length = nt)
 
-  # If this hdf5 has been re-exported from R than we just copy the marginals over
-  if("index" %in% names(marg)){
+  # If the hdf5 has been re-exported from R than we just copy the marginals over
+  if ("index" %in% names(marg)) {
     bf$marginals <- marg
   } else {
     # If this hdf5 was written by python then we need to copy and rename

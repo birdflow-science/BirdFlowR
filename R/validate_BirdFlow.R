@@ -193,17 +193,18 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     sums_to_one <- get_distr(x) |>
       apply(2, sum) |>
       sapply(function(x) isTRUE(all.equal(x, 1)))
-    if(!all(sums_to_one)){
+    if (!all(sums_to_one)) {
       p <- add_prob("not all distributions sum to one",
                     "error", p)
     }
   }
   if (has_dynamic_mask(x)) {
-    if (!is.matrix(x$geom$dynamic_mask)){
+    if (!is.matrix(x$geom$dynamic_mask)) {
       p <- add_prob("dynamic mask is not a matrix", "error", p)
     } else {
-      if(!all(apply(get_dynamic_mask(x), 2, sum) > 0)){
-        p <- add_prob("dynamic mask eliminates all cells for some timesteps", "error", p)
+      if (!all(apply(get_dynamic_mask(x), 2, sum) > 0)) {
+        p <- add_prob("dynamic mask eliminates all cells for some timesteps",
+                      "error", p)
       }
     }
   }

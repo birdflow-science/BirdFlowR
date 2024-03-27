@@ -17,8 +17,8 @@ extended geometry (covering larger area)
 }
 \description{
 This is an internal helper function called twice by \code{\link[=extend_birdflow]{extend_birdflow()}}
-it adjust the nrow, ncol, ext, and mask elements of the
-geom component of a BirdFlow model to expand the extent while preserving
+it adjusts the \code{nrow}, \code{ncol}, \code{ext}, and \code{mask} elements of the
+\code{geom} component of a BirdFlow model to expand the extent while preserving
 the same number, location, and alignment of the unmasked cells -
 thus nothing else in the object needs to change.
 }
