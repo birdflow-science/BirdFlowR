@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9053</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9054</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,31 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9054" id="birdflowr-0109054">BirdFlowR 0.1.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0109054"></a></h2>
+<div class="section level3">
+<h3 id="flux-i-0-1-0-9054">Flux I<a class="anchor" aria-label="anchor" href="#flux-i-0-1-0-9054"></a></h3>
+<p>Non-directional only, additional changes pending</p>
+<div class="section level4">
+<h4 id="changes-0-1-0-9054">Changes<a class="anchor" aria-label="anchor" href="#changes-0-1-0-9054"></a></h4>
+<ul><li><p>The first argument of <code><a href="../reference/lookup_date.html">lookup_date()</a></code> is now <code>x</code> instead of <code>timestep</code> <code>timestep</code> is added as a deprecated third argument so all old usage should work.<br></p></li>
+<li><p><code>lookup_dates()</code> now works with transition names (e.g. “T_01-02”) marginal names (“M_02-03”), character timesteps (“T1”, “T2”), and, as before, numeric timesteps. Marginal and transition dates are the midpoint between the two timesteps, this falls squarely between two dates and it is left up to <code><a href="https://rdrr.io/r/base/Dates.html" class="external-link">base::mean.Date()</a></code> to resolve this, which it does by rounding down.</p></li>
+<li><p>Add internal function <code><a href="../reference/is_between.html">is_between()</a></code> to determines if a set points are on the great circles connecting every possible pair of active cells in a BirdFlow model. It will be used to calculate flux. Currently it is non-directional.</p></li>
+<li><p>Add <code><a href="../reference/get_marginal.html">get_marginal()</a></code><br></p></li>
+<li><p>Add <code><a href="../reference/calc_flux.html">calc_flux()</a></code>, <code><a href="../reference/plot_flux.html">plot_flux()</a></code>, <code><a href="../reference/animate_flux.html">animate_flux()</a></code> currently they only calculate and work with non-directional flux / net movement.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="pending-flux-changes-0-1-0-9054">Pending flux changes<a class="anchor" aria-label="anchor" href="#pending-flux-changes-0-1-0-9054"></a></h4>
+<ul><li><p>Test <code><a href="../reference/is_between.html">is_between()</a></code></p></li>
+<li><p>Test <code><a href="../reference/calc_flux.html">calc_flux()</a></code></p></li>
+<li><p>Test <code><a href="../reference/get_marginal.html">get_marginal()</a></code></p></li>
+<li><p>Test <code><a href="../reference/plot_flux.html">plot_flux()</a></code> and <code><a href="../reference/animate_flux.html">animate_flux()</a></code></p></li>
+<li><p>Normalize? See Dan’s comment in the issue.</p></li>
+<li><p>Directional <code><a href="../reference/is_between.html">is_between()</a></code></p></li>
+<li><p>Directional <code><a href="../reference/calc_flux.html">calc_flux()</a></code></p></li>
+</ul></div>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9053" id="birdflowr-0109053">BirdFlowR 0.1.0.9053<a class="anchor" aria-label="anchor" href="#birdflowr-0109053"></a></h2>
 <p>2023-03-15</p>
