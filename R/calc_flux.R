@@ -1,7 +1,29 @@
-#' Estimate net bird movement
+#' Estimate bird flux
 #'
-#' `calc_flux()` estimates the proportion of the species that passes through
+#' `calc_flux()` estimates the proportion of the species that passes near
 #' a set of points during each transition in a BirdFlow model.
+#'
+#' @section Units:
+#'
+#' The total relative abundance passing through the circle centered on the point
+#'  is divided by the diameter of the circle in kilometers.  The units of the
+#'  returned value is therefore roughly the proportion
+#' (\eqn{P}) of the
+#' species's population that is expected to pass through each km
+#' of a line oriented perpendicular to the movement at each point:
+#' \eqn{\frac{P}{km \cdot week}}
+#'
+#' Multiplying the result by the total population would yield:
+#' \eqn{\frac{birds}{km \cdot week}}
+#'
+#' @section Limitations:
+#'
+#' `calc_flux()` makes the incorrect simplifying assumption
+#'  that birds follow the shortest (great circle) path
+#' between the center of the the source and destination raster cells.  Caution
+#' should be used when interpreting the results especially around
+#' major geographic features such as coasts, large lakes, mountain ranges, and
+#' ecological system boundaries that might result in non-linear migration paths.
 #'
 #' @param bf A BirdFlow model
 #' @param points A set of points to calculate movement through. If `points` is
@@ -15,13 +37,13 @@
 #' or an even number.
 #' @param format The format to return the results in one of:
 #' \describe{
-#' \item{`"points"`}{Returns a list with `net_movement` a matrix or array of
-#'  movement, and `points` a data frame of either the input `points` or the
-#'  point locations }
+#' \item{`"points"`}{Returns a list with `flux` a matrix or array of
+#'  flux values, and `points` a data frame of either the input `points` or the
+#'  default cell center derived points.}
 #' \item{`"dataframe"`}{Returns a "long" data frame with columns:
 #' * `x` and `y` coordinates of the points.
 #' * `transition` Transition code.
-#' * `movement` The total abundance moving through the point in the transition.
+#' * `flux` The flux at the point. See "Units" below  .
 #' * `date` The date associated with the transition, will be at the midpoint
 #'          between timesteps.
 #'
@@ -29,6 +51,7 @@
 #' \item{`"SpatRaster"`}{Returns a `terra::SpatRaster` with layers for each
 #' transition.}
 #'}
+#' @inheritParams is_between
 #'
 #' @return See `format` argument.
 #' @export
@@ -45,7 +68,7 @@
 #' }
 #'
 calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
-                      format = NULL) {
+                      format = NULL, batch_size = 1e6, check_radius = TRUE) {
 
   if (n_directions != 1)
     stop("Only one directional flux is supported at the moment.")
@@ -65,6 +88,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   result <- is_between(bf, points, radius, n_directions)
   between <- result$between
   points <- result$points
+  radius_km <- result$radius / 1000
 
   timesteps <- lookup_timestep_sequence(bf)
   transitions <- lookup_transitions(bf)
@@ -96,9 +120,11 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
     }
   }
 
+  # Standardize to P of population to pass through KM of transect in a week
+  net_movement <- net_movement / (radius_km * 2)
 
   if (format == "points") {
-    return(list(net_movement, points))
+    return(list(flux = net_movement, point = points))
   }
 
   if (format == "spatraster") {
@@ -124,7 +150,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
     wide <- cbind(as.data.frame(points)[, c("x", "y")],
                 net_movement)
     long <- tidyr::pivot_longer(wide, cols = setdiff(names(wide), c("x", "y")),
-                                names_to = "transition", values_to = "movement")
+                                names_to = "transition", values_to = "flux")
 
     long$date <- as.character(lookup_date(long$transition, bf))
 

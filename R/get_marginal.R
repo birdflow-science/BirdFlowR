@@ -31,7 +31,7 @@ get_marginal <- function(x, marginal = NULL, from = NULL) {
               length(from) == 1,
               from %in% seq_len(n_timesteps(x)))
     if (from == n_timesteps(x)) {
-      if(!is_cyclical(x))
+      if (!is_cyclical(x))
         stop("x isn't cyclical so there's no marginal with from = ", from)
       to <- 1
     } else {
