@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9054</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9055</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,10 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9055" id="birdflowr-0109055">BirdFlowR 0.1.0.9055<a class="anchor" aria-label="anchor" href="#birdflowr-0109055"></a></h2>
+<p>2023-03-29 ## Flux II * Flux values are now divided by the radius to standardize units at at P/km/week/ where P is the proportion of the population. * Add tests for <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and <code><a href="../reference/is_between.html">is_between()</a></code> * Add analysis of flux radius parameter’s affect on flux values. It’s in <code>"test-calc_flux.R"</code>. * Add limit to radius argument in <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and ability to bypass it with <code>check_radius</code> argument. * Modified <code><a href="../reference/is_between.html">is_between()</a></code> to only calculate the result for transitions that are non-zero (at any timestep) in <code>bf</code>. This provides a slight performance benefit for standard models and a large one for sparse models. * <code>is_betweeen()</code> now processes connection lines in batches, controlled by <code>batch_size</code> argument to it and <code><a href="../reference/calc_flux.html">calc_flux()</a></code>. This is for memory management.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9054" id="birdflowr-0109054">BirdFlowR 0.1.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0109054"></a></h2>
 <div class="section level3">
