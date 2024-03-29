@@ -2,9 +2,17 @@
 % Please edit documentation in R/calc_flux.R
 \name{calc_flux}
 \alias{calc_flux}
-\title{Estimate net bird movement}
+\title{Estimate bird flux}
 \usage{
-calc_flux(bf, points = NULL, radius = NULL, n_directions = 1, format = NULL)
+calc_flux(
+  bf,
+  points = NULL,
+  radius = NULL,
+  n_directions = 1,
+  format = NULL,
+  batch_size = 1e+06,
+  check_radius = TRUE
+)
 }
 \arguments{
 \item{bf}{A BirdFlow model}
@@ -23,14 +31,14 @@ or an even number.}
 
 \item{format}{The format to return the results in one of:
 \describe{
-\item{\code{"points"}}{Returns a list with \code{net_movement} a matrix or array of
-movement, and \code{points} a data frame of either the input \code{points} or the
-point locations }
+\item{\code{"points"}}{Returns a list with \code{flux} a matrix or array of
+flux values, and \code{points} a data frame of either the input \code{points} or the
+default cell center derived points.}
 \item{\code{"dataframe"}}{Returns a "long" data frame with columns:
 \itemize{
 \item \code{x} and \code{y} coordinates of the points.
 \item \code{transition} Transition code.
-\item \code{movement} The total abundance moving through the point in the transition.
+\item \code{flux} The flux at the point. See "Units" below  .
 \item \code{date} The date associated with the transition, will be at the midpoint
 between timesteps.
 }
@@ -39,14 +47,50 @@ between timesteps.
 \item{\code{"SpatRaster"}}{Returns a \code{terra::SpatRaster} with layers for each
 transition.}
 }}
+
+\item{batch_size}{controls the number of movement lines that are processed
+at a time. A smaller
+\code{batch_size} will conserve memory at a slight performance cost.  The number
+of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
+
+\item{check_radius}{If  \code{TRUE} an error will be thrown if the radius
+is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
+that range the algorithm is likely to yield distorted results.
+\code{0.5 * mean(res(bf))} is the default, and recommended radius.}
 }
 \value{
 See \code{format} argument.
 }
 \description{
-\code{calc_flux()} estimates the proportion of the species that passes through
+\code{calc_flux()} estimates the proportion of the species that passes near
 a set of points during each transition in a BirdFlow model.
 }
+\section{Units}{
+
+
+The total relative abundance passing through the circle centered on the point
+is divided by the diameter of the circle in kilometers.  The units of the
+returned value is therefore roughly the proportion
+(\eqn{P}) of the
+species's population that is expected to pass through each km
+of a line oriented perpendicular to the movement at each point:
+\eqn{\frac{P}{km \cdot week}}
+
+Multiplying the result by the total population would yield:
+\eqn{\frac{birds}{km \cdot week}}
+}
+
+\section{Limitations}{
+
+
+\code{calc_flux()} makes the incorrect simplifying assumption
+that birds follow the shortest (great circle) path
+between the center of the the source and destination raster cells.  Caution
+should be used when interpreting the results especially around
+major geographic features such as coasts, large lakes, mountain ranges, and
+ecological system boundaries that might result in non-linear migration paths.
+}
+
 \examples{
 
 \dontrun{

@@ -4,7 +4,15 @@
 \alias{is_between}
 \title{Determine if points are between BirdFlow cells}
 \usage{
-is_between(bf, points = NULL, radius = NULL, n_directions = 1)
+is_between(
+  bf,
+  points = NULL,
+  radius = NULL,
+  n_directions = 1,
+  skip_unconnected = TRUE,
+  batch_size = 1e+06,
+  check_radius = TRUE
+)
 }
 \arguments{
 \item{bf}{A BirdFlow model}
@@ -18,6 +26,22 @@ cell centers to a buffered convex hull around the active cell centers.}
 \code{radius} meters (along a great circle) of the great circle line between the
 locations. \code{radius} defaults to half the cell size (\code{mean(res(bf))/2}).}
 
+\item{skip_unconnected}{If \code{TRUE} then only connections that exist in \code{bf}
+will be evaluated, and between matrix will erroneously indicate that
+no points are between locations that are not connected.
+The resulting array can still be used with the model it was built for because
+those missing connections would always have zero probability.}
+
+\item{batch_size}{controls the number of movement lines that are processed
+at a time. A smaller
+\code{batch_size} will conserve memory at a slight performance cost.  The number
+of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
+
+\item{check_radius}{If  \code{TRUE} an error will be thrown if the radius
+is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
+that range the algorithm is likely to yield distorted results.
+\code{0.5 * mean(res(bf))} is the default, and recommended radius.}
+
 \item{n_direction}{The number of (equally spaced) directional bins to
 classify bearings into.  Currently only \code{1} is supported.}
 }
@@ -25,26 +49,31 @@ classify bearings into.  Currently only \code{1} is supported.}
 A list with:
 \item{between}{An array with dimensions representing the
 "from" location, the "to" location, and the \code{points}. Cells are \code{TRUE}
-if the associated point is between the associated from and to locations.}
-\item{points}{A dataframe of points that define the third dimension
-in between.  It is identical to the input \code{points} if they are not \code{NULL}.
-Otherwise it will be a data frame with columns x, y, and i corresponding to
-the third dimension in \code{between}. Note \code{i} will be \code{NA} for some points that
-aren't within the mask but do fall between active cells.}
+if the point is between the associated from and to locations.}
+\item{points}{A data,frame of points that define the third dimension
+in \code{between}.  It is identical to the input \code{points} if they are not \code{NULL}.
+Otherwise it will be a data frame with columns \code{x}, \code{y}, and \code{i}
+corresponding to the third dimension in \code{between}.
+\code{i} will be \code{NA} for points that are not within the mask but
+fall between active cells.}
+\item{radius}{The radius of the circle in meters.}
 }
 \description{
 This internal function is used to create a betweenness array with dimensions
 \href{n_active()}{n_active(bf)}, \href{n_active()}{n_active(bf)}, and \code{length(points)}.
-The first two dimensions represent pairs of locations within the
-BirdFlow model (active cells).
-The third dimension represents the \code{points}. Each value in the array is
-\code{TRUE} if the point is between the associated model cells. Specifically,
-if the point is within \code{radius} meters (along a great circle)
+The first two dimensions from and to cells of possible connections
+between  pairs of locations within the BirdFlow model and both
+\code{n_active()} elements.
+The third dimension represents \code{points} that might be between each
+connection.
+Cell values are \code{TRUE} if the point is between the associated model cells.
+Specifically, if the point is within \code{radius} meters (along a great circle)
 of the great circle line connecting the cell centers.
 }
 \details{
 If \code{points} and \code{radius} are \code{NULL} they default to the cell radius and the
 center of all cells within the BirdFlow extent that fall between
-any active cells. This is usually a superset of the active cells.
+any active cells. This includes all cell centers within a convex hull
+(in spherical coordinates) around the active cells in \code{bf}.
 }
 \keyword{internal}

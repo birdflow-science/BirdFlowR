@@ -7,7 +7,8 @@
 animate_flux(flux, bf, title = species(bf), ...)
 }
 \arguments{
-\item{flux}{A flux object as created by \link[=calc_flux]{calc_flux(format = "dataframe")}}
+\item{flux}{A flux object as created by
+\link[=calc_flux]{calc_flux(format = "dataframe")}}
 
 \item{bf}{A BirdFlow object}
 
@@ -20,7 +21,7 @@ animate_flux(flux, bf, title = species(bf), ...)
 a logical vector of the same length as the number of transitions in \code{flux};
 a numeric index of transitions in \code{flux}, or a subset of the transition names
 in \code{flux}.}
-    \item{\code{limits}}{Two numbers representing the range in movement values to
+    \item{\code{limits}}{Two numbers representing the range in flux values to
 display. Values outside of this range will be truncated to the range. With
 the default of \code{NULL} the entire range is plotted.}
     \item{\code{dynamic_scale}}{If \code{TRUE} then the range of the data in each
@@ -31,9 +32,9 @@ scale among transitions.}
 to skip plotting the coastline.}
     \item{\code{coast_color}}{The color used to plot the coastline, or \code{NULL} to skip
 plotting the coastline.}
-    \item{\code{gradient_colors}}{The colors palette used to represent the movement
+    \item{\code{gradient_colors}}{The colors palette used to represent the flux
 intensity.}
-    \item{\code{value_label}}{The label for the net movement values.}
+    \item{\code{value_label}}{The label for the flux values.}
   }}
 }
 \value{

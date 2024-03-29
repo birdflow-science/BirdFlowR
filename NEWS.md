@@ -1,3 +1,19 @@
+# BirdFlowR 0.1.0.9055
+2023-03-29
+## Flux II
+* Flux values are now divided by the radius to standardize units at
+  at P/km/week/  where P is the proportion of the population.
+* Add tests for `calc_flux()` and `is_between()`
+* Add analysis of flux radius parameter's affect on flux values. It's in 
+ `"test-calc_flux.R"`.
+* Add limit to radius argument in `calc_flux()` and ability to bypass it with
+  `check_radius` argument.
+* Modified `is_between()` to only calculate the result for transitions that
+are non-zero (at any timestep) in `bf`.  This provides a slight performance
+benefit for standard models and a large one for sparse models. 
+* `is_betweeen()` now processes connection lines in batches, controlled by
+ `batch_size` argument to it and `calc_flux()`.  This is for memory management.
+
 
 # BirdFlowR 0.1.0.9054
 ## Flux I
