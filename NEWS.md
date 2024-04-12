@@ -1,5 +1,13 @@
+# BirdFlowR 0.1.0.9056
+2024-04-04
+## Flux III 
+* `is_between()` now uses a `SparseArray::SparseArray()` for the logical array.
+  to reduce memory usage
+* Labeling updates to `plot_flux()` and `animate_flux()`.
+
+
 # BirdFlowR 0.1.0.9055
-2023-03-29
+2024-03-29
 ## Flux II
 * Flux values are now divided by the radius to standardize units at
   at P/km/week/  where P is the proportion of the population.
@@ -53,7 +61,7 @@ calculate and work with non-directional flux / net movement.
 
 
 # BirdFlowR 0.1.0.9053
-2023-03-15
+2024-03-15
 
 * New `shrink_birdlfow()` reverses `extend_birdflow()`, returning the model
   to it's original extent.
@@ -62,14 +70,14 @@ calculate and work with non-directional flux / net movement.
   the original. 
 
 # BirdFlowR 0.1.0.9052
-2023-03-14
+2024-03-14
 
 * `export_birdflow()` gets new arguments to control output file names. 
   Default values mimic old behavior.
 
 
 # BirdFlowR 0.1.0.9051
-2023-02-28
+2024-02-28
 
 * Add `get_mask()`
 * Add `extend_bird_flow()`
@@ -89,12 +97,12 @@ calculate and work with non-directional flux / net movement.
   appropriately with both file structures.
 
 # BirdFlowR 0.1.0.9050
-2023-02-22
+2024-02-22
 
 * Add test for `preprocess_species()` with a non-default CRS.
 
 # BirdFlowR 0.1.0.9049
-2023-01-11
+2024-01-11
 
 #### Drop "_clip"
 

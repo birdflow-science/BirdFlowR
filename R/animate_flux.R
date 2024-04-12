@@ -14,7 +14,7 @@ animate_flux <- function(flux, bf, title = species(bf), ...) {
 
   anim <- p +
     ggplot2::facet_null() +
-    gganimate::transition_manual(frames = .data$date) +
+    gganimate::transition_manual(frames = .data$label) +
     ggplot2::labs(title = title,
                   subtitle = "{current_frame}")
 

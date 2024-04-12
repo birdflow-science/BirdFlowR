@@ -25,16 +25,34 @@
 #' major geographic features such as coasts, large lakes, mountain ranges, and
 #' ecological system boundaries that might result in non-linear migration paths.
 #'
+#' `calc_flux()` assumes that a line passes by a point if any part of the line
+#' is within the radius of the point.  This assumption breaks down if the
+#' radius is much larger than the movement lengths as points that are ahead of
+#' the line may still be within a radius of the line.  In the extreme a large
+#' enough radius on a point outside of the entire range will capture all the
+#' movement.  This isn't a problem with
+#' the default points and radius as the points ahead of the line will never be
+#' within the radius.
+#'
+#' The default points for `calc_flux()` are aligned with the cell centers as
+#' are the movement lines. This alignment means that a very small radius will
+#' result in an overestimate of flux. The default value of half the cell size
+#' is sufficient for this not to be a problem, as we are capturing and
+#' standardizing the units based on the entire cell area that that point
+#' represents.
+#'
 #' @param bf A BirdFlow model
 #' @param points A set of points to calculate movement through. If `points` is
 #' `NULL` they will default to the BirdFlow model cells that are either active
-#' or fall between two active cells. Should be a data frame with `x` and  `y`
+#' or fall between two active cells. Otherwise a data frame with `x` and  `y`
 #' columns containing point coordinates in [crs(bf)][crs()].
-#' @param radius The radius in meters around the points, used to determine if
-#' a path is passing through the point.
+#' @param radius The radius in meters around the points used to assess whether
+#' a movement line passes by (or through) the point. If a point is farther than
+#' `radius` from a great circle line between two cells centers then it is not
+#' between them.
 #' @param n_directions The number of directional bins to use for recording
 #' movement direction. Must be either `1` indicating no direction information
-#' or an even number.
+#' or an even number. This is a placeholder, currently only `1` is supported.
 #' @param format The format to return the results in one of:
 #' \describe{
 #' \item{`"points"`}{Returns a list with `flux` a matrix or array of
@@ -68,7 +86,12 @@
 #' }
 #'
 calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
-                      format = NULL, batch_size = 1e6, check_radius = TRUE) {
+                      format = NULL, batch_size = 5e5, check_radius = TRUE) {
+
+  if (!requireNamespace("SparseArray", quietly = TRUE)) {
+    stop("The SparseArray package is required to use calc_flux(). ",
+         "Please install it prior to calling this function.")
+  }
 
   if (n_directions != 1)
     stop("Only one directional flux is supported at the moment.")
@@ -90,6 +113,8 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   points <- result$points
   radius_km <- result$radius / 1000
 
+  bf_msg("Calculating Flux\n")
+
   timesteps <- lookup_timestep_sequence(bf)
   transitions <- lookup_transitions(bf)
   marginals <- gsub("^T", "M", transitions)
@@ -104,7 +129,10 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
 
 
   n_pts <- dim(between)[3]
+
+  bf_msg("  Processing Marginals\n")
   for (i in seq_along(marginals)) {
+
     from <- timesteps[i]
     to <- timesteps[i + 1]
     mar <- get_marginal(bf, marginals[i])
@@ -116,10 +144,19 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
     stopifnot(all(dim(sb)[1:2] == dim(mar)))  # verify
 
     for (j in seq_len(n_pts)){
-      net_movement[j, i] <- sum(mar[sb[, , j]])
+      # This is a little hacky the marginal is a sparse Matrix::Matrix
+      # or a standard Matrix (depending on whether bf is sparse)
+      # sb and between are  SparseArray::SparseArray
+      # SparseArray doesn't support logical sub-setting ("yet"),
+      # Matrix does. The solution is to convert the selection
+      # to a standard matrix or a sparse Matrix. The first is empirically a
+      # lot faster
+      sel <- as.matrix(sb[, , j]) #, sparse = TRUE)
+      net_movement[j, i] <- sum(mar[sel])
     }
   }
 
+  bf_msg("  Formatting flux\n")
   # Standardize to P of population to pass through KM of transect in a week
   net_movement <- net_movement / (radius_km * 2)
 

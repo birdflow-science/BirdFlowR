@@ -115,7 +115,7 @@ spread_anim <- animate_distr(density_spread, bf,  limit = c(0, 0.05))
   # Display
   print(gif)
 
-  # mv
+  # Save
   gif_file <- tempfile("animation", fileext = ".gif")
   gganimate::save_animation(gif, gif_file)
   file.remove(gif_file) # cleanup
