@@ -1,10 +1,9 @@
 Package: BirdFlowR
 Title: Predict and Visualize Bird Movement
-Version: 0.1.0.9055
+Version: 0.1.0.9056
 Authors@R: 
     c(person("Ethan", "Plunkett",  email = "plunkett@umass.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-4405-2251")),
-     person("Daniel", "Sheldon",  role = c("aut")) )
+           comment = c(ORCID = "0000-0003-4405-2251")))
 Description: BirdFlowR predicts bird movement and distribution from previously fitted models.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -17,6 +16,7 @@ Suggests:
     knitr,
     ragg,
     rmarkdown,
+    SparseArray,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3

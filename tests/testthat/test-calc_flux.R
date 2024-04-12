@@ -23,6 +23,12 @@ test_that("Test sensativity of flux to radius", {
 
   testthat::skip("In depth flux radius analysis - always skipped")
 
+  # This is an exploration of how flux varies across a very wide range
+  # of values for the radius parameter.
+  # It's a "test" only in the sense that it improves understanding of the
+  # functions behavior, but this seemed as good a place to save it as any.
+  # Conclusions are at bottom.
+
   # Sparsify and truncate to speed things up
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)
@@ -138,14 +144,11 @@ test_that("Test sensativity of flux to radius", {
   #  Two conclusions:
   #    1. as implemented a diameter equal to the cell size is a sweet spot, and
   #    keeping the diameter within the range between > 0.5 and < 2 cell widths
-  #    is a good idea.
+  #    is a good idea (and radius half that).
   #    2. If we want the algorithm to work with larger diameters it would make
   #    sense to not allow points beyond the end of the line to be counted
   #    (even if they are within the radius of the line).  I suspect this
   #    would slow things down unless I implemented it in C++ as I don't think
   #    I can do it with any kind of vectorization in R.
-
-
-
 
 })

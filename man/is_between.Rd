@@ -10,7 +10,7 @@ is_between(
   radius = NULL,
   n_directions = 1,
   skip_unconnected = TRUE,
-  batch_size = 1e+06,
+  batch_size = 1e+05,
   check_radius = TRUE
 )
 }

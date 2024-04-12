@@ -10,7 +10,7 @@ calc_flux(
   radius = NULL,
   n_directions = 1,
   format = NULL,
-  batch_size = 1e+06,
+  batch_size = 5e+05,
   check_radius = TRUE
 )
 }
@@ -19,15 +19,17 @@ calc_flux(
 
 \item{points}{A set of points to calculate movement through. If \code{points} is
 \code{NULL} they will default to the BirdFlow model cells that are either active
-or fall between two active cells. Should be a data frame with \code{x} and  \code{y}
+or fall between two active cells. Otherwise a data frame with \code{x} and  \code{y}
 columns containing point coordinates in \link[=crs]{crs(bf)}.}
 
-\item{radius}{The radius in meters around the points, used to determine if
-a path is passing through the point.}
+\item{radius}{The radius in meters around the points used to assess whether
+a movement line passes by (or through) the point. If a point is farther than
+\code{radius} from a great circle line between two cells centers then it is not
+between them.}
 
 \item{n_directions}{The number of directional bins to use for recording
 movement direction. Must be either \code{1} indicating no direction information
-or an even number.}
+or an even number. This is a placeholder, currently only \code{1} is supported.}
 
 \item{format}{The format to return the results in one of:
 \describe{
@@ -89,6 +91,22 @@ between the center of the the source and destination raster cells.  Caution
 should be used when interpreting the results especially around
 major geographic features such as coasts, large lakes, mountain ranges, and
 ecological system boundaries that might result in non-linear migration paths.
+
+\code{calc_flux()} assumes that a line passes by a point if any part of the line
+is within the radius of the point.  This assumption breaks down if the
+radius is much larger than the movement lengths as points that are ahead of
+the line may still be within a radius of the line.  In the extreme a large
+enough radius on a point outside of the entire range will capture all the
+movement.  This isn't a problem with
+the default points and radius as the points ahead of the line will never be
+within the radius.
+
+The default points for \code{calc_flux()} are aligned with the cell centers as
+are the movement lines. This alignment means that a very small radius will
+result in an overestimate of flux. The default value of half the cell size
+is sufficient for this not to be a problem, as we are capturing and
+standardizing the units based on the entire cell area that that point
+represents.
 }
 
 \examples{

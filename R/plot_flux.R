@@ -45,6 +45,15 @@ plot_flux <- function(flux,
     distr <- apply(distr, 2, function(x) x / max(x, na.rm = TRUE))
   }
 
+  # Add "<Month> <mday>" labels as ordered factor
+  dates <- lubridate::as_date(flux$date)
+  label <- paste0(lubridate::month(dates, label = TRUE, abbr = FALSE), " ",
+                  lubridate::mday(dates))
+  ud <- sort(unique(dates))
+  ul <- paste0(lubridate::month(ud, label = TRUE, abbr = FALSE), " ",
+               lubridate::mday(ud))
+  label <- ordered(label, levels = ul)
+  flux$label <- label
 
   if (is.null(limits)) {
     limits <- range(flux$flux, na.rm = TRUE)
@@ -104,20 +113,22 @@ plot_flux <- function(flux,
     ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
                                  fill = .data$flux)) +
     ggplot2::geom_raster() +
-    ggplot2::scale_fill_gradientn(colors = gradient_colors)
+    ggplot2::scale_fill_gradientn(colors = gradient_colors, name = value_label)
 
 
   # Add facet wrap and title
   if (length(transitions > 1)) {
     # Multiple transitions, facet wrap on date and add species title
     p <- p +
-      ggplot2::facet_wrap(ggplot2::vars(.data$date)) +
+      ggplot2::facet_wrap(ggplot2::vars(.data$label)) +
       ggplot2::ggtitle(title)
   } else {
     # Single transition add species title AND date subtitle
     p <- p +
-      ggplot2::ggtitle(title, subtitle = flux$date[1])
+      ggplot2::ggtitle(title, subtitle = flux$label[1])
   }
+
+
 
   # Add coastline
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
@@ -130,6 +141,15 @@ plot_flux <- function(flux,
                        linewidth = coast_linewidth,
                        color = coast_color)
   }
+
+  # coord_sf is required to adjust coordinates while using geom_sf
+  # Here we are preventing expanding the extent of the plot.
+  # Setting the CRS is only necessary when the coastline isn't plotted because
+  # of NULL coast_color or coast_linewidth
+  p <- p +
+    ggplot2::coord_sf(expand = FALSE, crs = crs(bf)) +
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+                   strip.background = ggplot2::element_blank())
 
   return(p)
 }
