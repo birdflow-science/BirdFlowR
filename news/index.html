@@ -6,11 +6,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9055</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9056</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,8 +56,12 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9056" id="birdflowr-0109056">BirdFlowR 0.1.0.9056<a class="anchor" aria-label="anchor" href="#birdflowr-0109056"></a></h2>
+<p>2024-04-04 ## Flux III * <code><a href="../reference/is_between.html">is_between()</a></code> now uses a <code><a href="https://rdrr.io/pkg/SparseArray/man/SparseArray-class.html" class="external-link">SparseArray::SparseArray()</a></code> for the logical array. to reduce memory usage * Labeling updates to <code><a href="../reference/plot_flux.html">plot_flux()</a></code> and <code><a href="../reference/animate_flux.html">animate_flux()</a></code>.</p>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9055" id="birdflowr-0109055">BirdFlowR 0.1.0.9055<a class="anchor" aria-label="anchor" href="#birdflowr-0109055"></a></h2>
-<p>2023-03-29 ## Flux II * Flux values are now divided by the radius to standardize units at at P/km/week/ where P is the proportion of the population. * Add tests for <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and <code><a href="../reference/is_between.html">is_between()</a></code> * Add analysis of flux radius parameter’s affect on flux values. It’s in <code>"test-calc_flux.R"</code>. * Add limit to radius argument in <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and ability to bypass it with <code>check_radius</code> argument. * Modified <code><a href="../reference/is_between.html">is_between()</a></code> to only calculate the result for transitions that are non-zero (at any timestep) in <code>bf</code>. This provides a slight performance benefit for standard models and a large one for sparse models. * <code>is_betweeen()</code> now processes connection lines in batches, controlled by <code>batch_size</code> argument to it and <code><a href="../reference/calc_flux.html">calc_flux()</a></code>. This is for memory management.</p>
+<p>2024-03-29 ## Flux II * Flux values are now divided by the radius to standardize units at at P/km/week/ where P is the proportion of the population. * Add tests for <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and <code><a href="../reference/is_between.html">is_between()</a></code> * Add analysis of flux radius parameter’s affect on flux values. It’s in <code>"test-calc_flux.R"</code>. * Add limit to radius argument in <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and ability to bypass it with <code>check_radius</code> argument. * Modified <code><a href="../reference/is_between.html">is_between()</a></code> to only calculate the result for transitions that are non-zero (at any timestep) in <code>bf</code>. This provides a slight performance benefit for standard models and a large one for sparse models. * <code>is_betweeen()</code> now processes connection lines in batches, controlled by <code>batch_size</code> argument to it and <code><a href="../reference/calc_flux.html">calc_flux()</a></code>. This is for memory management.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9054" id="birdflowr-0109054">BirdFlowR 0.1.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0109054"></a></h2>
@@ -86,20 +90,20 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9053" id="birdflowr-0109053">BirdFlowR 0.1.0.9053<a class="anchor" aria-label="anchor" href="#birdflowr-0109053"></a></h2>
-<p>2023-03-15</p>
+<p>2024-03-15</p>
 <ul><li>New <code>shrink_birdlfow()</code> reverses <code><a href="../reference/extend_birdflow.html">extend_birdflow()</a></code>, returning the model to it’s original extent.</li>
 <li>
 <code><a href="../reference/extend_birdflow.html">extend_birdflow()</a></code>now can “extend” BirdFlow models to smaller extents if they have already been extended and the new extent is still larger than the original.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9052" id="birdflowr-0109052">BirdFlowR 0.1.0.9052<a class="anchor" aria-label="anchor" href="#birdflowr-0109052"></a></h2>
-<p>2023-03-14</p>
+<p>2024-03-14</p>
 <ul><li>
 <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> gets new arguments to control output file names. Default values mimic old behavior.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9051" id="birdflowr-0109051">BirdFlowR 0.1.0.9051<a class="anchor" aria-label="anchor" href="#birdflowr-0109051"></a></h2>
-<p>2023-02-28</p>
+<p>2024-02-28</p>
 <ul><li>Add <code><a href="../reference/get_mask.html">get_mask()</a></code>
 </li>
 <li>Add <code>extend_bird_flow()</code>
@@ -113,12 +117,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9050" id="birdflowr-0109050">BirdFlowR 0.1.0.9050<a class="anchor" aria-label="anchor" href="#birdflowr-0109050"></a></h2>
-<p>2023-02-22</p>
+<p>2024-02-22</p>
 <ul><li>Add test for <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> with a non-default CRS.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9049" id="birdflowr-0109049">BirdFlowR 0.1.0.9049<a class="anchor" aria-label="anchor" href="#birdflowr-0109049"></a></h2>
-<p>2023-01-11</p>
+<p>2024-01-11</p>
 <div class="section level5">
 <h5 id="drop-_clip-0-1-0-9049">Drop “_clip”<a class="anchor" aria-label="anchor" href="#drop-_clip-0-1-0-9049"></a></h5>
 <p>Drop “_clip” from name when clipping with preprocess_species() See issue <a href="https://github.com/birdflow-science/BirdFlowR/issues/165" class="external-link">#165</a>, but note I haven’t added the extra metadata item yet.</p>
@@ -978,11 +982,11 @@ This removes the documentation from the package manual and index, but it’s sti
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ethan Plunkett, Daniel Sheldon.</p>
+  <p></p><p>Developed by Ethan Plunkett.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>

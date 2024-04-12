@@ -8,11 +8,11 @@ a set of points during each transition in a BirdFlow model."><meta property="og:
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9055</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9056</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ a set of points during each transition in a BirdFlow model.</p>
 <span>  radius <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_directions <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  batch_size <span class="op">=</span> <span class="fl">1e+06</span>,</span>
+<span>  batch_size <span class="op">=</span> <span class="fl">5e+05</span>,</span>
 <span>  check_radius <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -85,19 +85,21 @@ a set of points during each transition in a BirdFlow model.</p>
 <dt>points</dt>
 <dd><p>A set of points to calculate movement through. If <code>points</code> is
 <code>NULL</code> they will default to the BirdFlow model cells that are either active
-or fall between two active cells. Should be a data frame with <code>x</code> and  <code>y</code>
+or fall between two active cells. Otherwise a data frame with <code>x</code> and  <code>y</code>
 columns containing point coordinates in crs(bf).</p></dd>
 
 
 <dt>radius</dt>
-<dd><p>The radius in meters around the points, used to determine if
-a path is passing through the point.</p></dd>
+<dd><p>The radius in meters around the points used to assess whether
+a movement line passes by (or through) the point. If a point is farther than
+<code>radius</code> from a great circle line between two cells centers then it is not
+between them.</p></dd>
 
 
 <dt>n_directions</dt>
 <dd><p>The number of directional bins to use for recording
 movement direction. Must be either <code>1</code> indicating no direction information
-or an even number.</p></dd>
+or an even number. This is a placeholder, currently only <code>1</code> is supported.</p></dd>
 
 
 <dt>format</dt>
@@ -168,6 +170,20 @@ between the center of the the source and destination raster cells.  Caution
 should be used when interpreting the results especially around
 major geographic features such as coasts, large lakes, mountain ranges, and
 ecological system boundaries that might result in non-linear migration paths.</p>
+<p><code>calc_flux()</code> assumes that a line passes by a point if any part of the line
+is within the radius of the point.  This assumption breaks down if the
+radius is much larger than the movement lengths as points that are ahead of
+the line may still be within a radius of the line.  In the extreme a large
+enough radius on a point outside of the entire range will capture all the
+movement.  This isn't a problem with
+the default points and radius as the points ahead of the line will never be
+within the radius.</p>
+<p>The default points for <code>calc_flux()</code> are aligned with the cell centers as
+are the movement lines. This alignment means that a very small radius will
+result in an overestimate of flux. The default value of half the cell size
+is sufficient for this not to be a problem, as we are capturing and
+standardizing the units based on the entire cell area that that point
+represents.</p>
     </div>
 
     <div class="section level2">
@@ -189,11 +205,11 @@ ecological system boundaries that might result in non-linear migration paths.</p
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Ethan Plunkett, Daniel Sheldon.</p>
+  <p></p><p>Developed by Ethan Plunkett.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
