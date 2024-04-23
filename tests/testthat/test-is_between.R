@@ -1,5 +1,7 @@
 test_that("is_between() works", {
 
+  local_quiet()
+
   # Sparsifying and truncating to speed things up
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)

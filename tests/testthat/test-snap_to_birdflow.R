@@ -55,15 +55,22 @@ test_that("snap_to_birdflow() works with preprocessed models", {
 
   local_quiet()  # to suppress preprocess chatter
 
-  # The required preprocesing takes a while
+  # The required preprocesing takes a long time:
   skip_on_cran()
   skip_on_covr()
   skip_on_ci()
 
-  bf <- preprocess_species("amewoo", res = 150, hdf5 = FALSE)
+  # And it requires and ebirdst access key
+  err <- tryCatch(bf <- preprocess_species("amewoo", res = 150, hdf5 = FALSE),
+                  error = identity)
+  if (inherits(err, "error") &&
+     grepl("Cannot access Status and Trends", err$message)) {
+    skip("Skipping - missing valid ebirdst key")
+  }
+
   d <- make_fake_move_data(bf)
   expect_no_error(
-    s <- snap_to_birdflow(d, x = "x", y = "y", crs = crs(bf),  bf = bf,
+    s <- snap_to_birdflow(d, x = "x", y = "y", crs = crs(bf), bf = bf,
                           id_cols = c("bird_id", "track_id"))
   )
 })

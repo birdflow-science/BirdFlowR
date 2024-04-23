@@ -399,7 +399,7 @@ preprocess_species <- function(species = NULL,
   geom <- list(nrow = nrow(mask),
                ncol = ncol(mask),
                res = res(mask),
-               ext = as.vector(ext(mask)),
+               ext = as.numeric(as.vector(ext(mask))),
                crs = crs(mask),
                mask = NA)
   m <- terra::values(mask)
@@ -497,9 +497,9 @@ preprocess_species <- function(species = NULL,
     uci <- cbind(uci, uci[, 1, drop = FALSE])
     lci <- cbind(lci, lci[, 1, drop = FALSE])
     dynamic_mask <- cbind(dynamic_mask, dynamic_mask[, 1, drop = FALSE])
-    colnames(uci) <- colnames(lci) <-
-      colnames(distr) <- colnames(dynamic_mask) <-
-      paste0("t", seq_len(ncol(distr)))
+    dimnames(uci) <- dimnames(lci) <-
+      dimnames(distr) <- dimnames(dynamic_mask) <-
+      list(i = NULL, time = paste0("t", seq_len(ncol(distr))))
 
     export$distr <- distr
     export$uci <- uci

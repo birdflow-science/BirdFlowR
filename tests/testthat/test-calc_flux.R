@@ -1,5 +1,5 @@
 test_that("calc_flux() works without directionality", {
-
+  local_quiet()
   # Sparsify and truncate to speed things up
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)
@@ -20,7 +20,7 @@ test_that("calc_flux() works without directionality", {
 
 
 test_that("Test sensativity of flux to radius", {
-
+  local_quiet()
   testthat::skip("In depth flux radius analysis - always skipped")
 
   # This is an exploration of how flux varies across a very wide range

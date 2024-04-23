@@ -49,7 +49,6 @@ import_birdflow_v3 <- function(hdf5) {
     "geom/crs",
     "geom/mask",
     "transitions",
-    "marginals",
     "dates",
     "distr",
     "species",
@@ -72,8 +71,6 @@ import_birdflow_v3 <- function(hdf5) {
     "metadata/has_marginals",
     "metadata/has_transitions",
     "metadata/has_distr",
-    "metadata/hyperparameters",
-    "metadata/loss_values",
     "metadata/n_transitions",
     "metadata/n_active",
     "metadata/n_timesteps",
@@ -82,13 +79,26 @@ import_birdflow_v3 <- function(hdf5) {
     "metadata/ebird_access_end_date",
     "metadata/birdflow_preprocess_date",
     "metadata/birdflow_model_date",
-    "metadata/is_sparse",
-    "marginals")
+    "metadata/is_sparse"
+  )
+
+  fit_model_items <- c(
+    "metadata/hyperparameters",
+    "metadata/loss_values",
+    "marginals"
+  )
+
 
   # Check HDF5 for version consistency and missing contents
   contents <- h5ls(hdf5)
   contents <- paste0(contents$group, "/", contents$name)
   contents <- gsub("^/*", "", contents)
+
+  is_fitted_model <- "marginals" %in% contents
+  if (is_fitted_model) {
+    expected_contents <- c(expected_contents, fit_model_items)
+  }
+
   absent <- setdiff(expected_contents, contents)
   extra <- setdiff(contents, expected_contents) # nolint: object_usage_linter
 
@@ -96,6 +106,7 @@ import_birdflow_v3 <- function(hdf5) {
     stop("hdf5 file:", hdf5, " is missing expected contents '",
          paste(absent, collapse = "', '"), "'")
   }
+
 
   expected_version <- 3  # of HDF5 BirdFlow export
   version <- as.vector(h5read(hdf5, "metadata/birdflow_version"))
@@ -127,31 +138,34 @@ import_birdflow_v3 <- function(hdf5) {
   }
 
   # hyperparameters
-  hp <- h5read(hdf5, "metadata/hyperparameters")
-  # hdf5 seems to store logical as a factor or at least R reads them as such.
-  # The code below looks for factors that store logical values and
-  # explicitly converts them to logical
-  for (i in seq_along(hp)) {
-    a <- hp[[i]] # this hyper parameter
-    if (is.factor(a) && all(tolower(levels(a)) %in% c("true", "false"))) {
-      a <- as.logical(a)
-    }
-    if (inherits(a, "array")) {
-      a <- as.vector(a)
-    }
-    hp[[i]] <- a
-  }
-  bf$metadata$hyperparameters <- hp
+  if (is_fitted_model) {
 
-  # loss values
-  lv <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
-  for (i in seq_len(ncol(lv))) {
-    # IF R re-exports an imported hdf5 the loss values columns are each
-    # arrays.  This returns them to standard data.frame columns
-    lv[[i]] <- as.vector(lv[[i]])
-  }
-  bf$metadata$loss_values <- lv
+    hp <- h5read(hdf5, "metadata/hyperparameters")
+    # hdf5 seems to store logical as a factor or at least R reads them as such.
+    # The code below looks for factors that store logical values and
+    # explicitly converts them to logical
+    for (i in seq_along(hp)) {
+      a <- hp[[i]] # this hyper parameter
+      if (is.factor(a) && all(tolower(levels(a)) %in% c("true", "false"))) {
+        a <- as.logical(a)
+      }
+      if (inherits(a, "array")) {
+        a <- as.vector(a)
+      }
+      hp[[i]] <- a
+    }
+    bf$metadata$hyperparameters <- hp
 
+    # loss values
+    lv <- as.data.frame(h5read(hdf5, "metadata/loss_values"))
+    for (i in seq_len(ncol(lv))) {
+      # IF R re-exports an imported hdf5 the loss values columns are each
+      # arrays.  This returns them to standard data.frame columns
+      lv[[i]] <- as.vector(lv[[i]])
+    }
+    bf$metadata$loss_values <- lv
+
+  } # end only for fitted models
 
 
   # dates
@@ -162,77 +176,134 @@ import_birdflow_v3 <- function(hdf5) {
   colnames(dates) <- gsub("^week_", "", colnames(dates))
   bf$dates <- dates
 
-  # Save marginals into list
-  marg <- h5read(hdf5, "marginals", native = TRUE)
-  nt <- length(marg[!names(marg) == "index"])
-  bf$metadata$n_transitions <- nt
-  if (is.null(bf$metadata$timestep_padding))
-    bf$metadata$timestep_padding <- nchar(nt)
-  circular <- nt == length(unique(dates$date))
-  bf$marginals <- vector(mode = "list", length = nt)
+  if (is_fitted_model) {
 
-  # If the hdf5 has been re-exported from R than we just copy the marginals over
-  if ("index" %in% names(marg)) {
-    bf$marginals <- marg
-  } else {
-    # If this hdf5 was written by python then we need to copy and rename
-    # marginals
-    for (i in seq_len(nt)) {
-      python_label <- paste0("Week", i, "_to_", i + 1)
-      if (circular && i == nt) {
-        label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(1, bf))
-      } else {
-        label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(i + 1, bf))
+    # Save marginals into list
+    marg <- h5read(hdf5, "marginals", native = TRUE)
+    nt <- length(marg[!names(marg) == "index"])
+    bf$metadata$n_transitions <- nt
+    if (is.null(bf$metadata$timestep_padding))
+      bf$metadata$timestep_padding <- nchar(nt)
+    circular <- nt == length(unique(dates$date))
+    bf$marginals <- vector(mode = "list", length = nt)
+
+    # If the hdf5 has been re-exported from R, just copy the marginals over
+    if ("index" %in% names(marg)) {
+      bf$marginals <- marg
+    } else {
+      # If this hdf5 was written by python then we need to copy and rename
+      # marginals
+      for (i in seq_len(nt)) {
+        python_label <- paste0("Week", i, "_to_", i + 1)
+        if (circular && i == nt) {
+          label <- paste0("M_", pad_timestep(i, bf), "-", pad_timestep(1, bf))
+        } else {
+          label <- paste0("M_", pad_timestep(i, bf), "-",
+                          pad_timestep(i + 1, bf))
+        }
+        bf$marginals[[i]] <- marg[[python_label]]
+        names(bf$marginals)[i] <- label
       }
-      bf$marginals[[i]] <- marg[[python_label]]
-      names(bf$marginals)[i] <- label
+      bf$metadata$has_marginals <- TRUE
     }
-    bf$metadata$has_marginals <- TRUE
   }
 
   # Save distributions
   bf$distr <- h5read(hdf5, "distr", native = TRUE)
 
-  # Cleanup duplicated distribution, dynamic_mask row, and date added to
-  # input to force circular model fitting.
+  if (is_fitted_model) {
+    # Cleanup duplicated distribution, dynamic_mask row, and date added to
+    # input to force circular model fitting.
 
-  # Cleanup duplicated date row
-  sv <- duplicated(bf$dates$date)
-  if (any(sv)) {
-    bf$dates <- bf$dates[!sv, ]
-  }
-  bf$metadata$n_timesteps <- nrow(bf$dates)
+    # Cleanup duplicated date row
+    sv <- duplicated(bf$dates$date)
+    if (any(sv)) {
+      bf$dates <- bf$dates[!sv, ]
+    }
+    bf$metadata$n_timesteps <- nrow(bf$dates)
 
-  # Delete duplicated distribution
-  d <- bf$distr
-  if (ncol(d) == n_timesteps(bf) + 1) {
-    if (!all(d[, 1] == d[, ncol(d)]))
-      stop("Expected extra distribution to match first distribution")
-    d <- d[, 1:(ncol(d) - 1)]
-  }
+    # Delete duplicated distribution
+    d <- bf$distr
+    if (ncol(d) == n_timesteps(bf) + 1) {
+      if (!all(d[, 1] == d[, ncol(d)]))
+        stop("Expected extra distribution to match first distribution")
+      d <- d[, 1:(ncol(d) - 1)]
+    }
 
-  ### back compatibility code
+    bf$distr <- d
+
+    # Delete duplicated dynamic mask row
+    dm <- bf$geom$dynamic_mask
+    if (ncol(dm) == n_timesteps(bf) + 1) {
+      if (!all(dm[, 1] == dm[, ncol(dm)]))
+        stop("Expected first and last dynamic mask columns to matrch in ",
+             "circular BirdFlow model")
+      dm <- dm[, 1:(ncol(dm) - 1)]
+    }
+
+    bf$geom$dynamic_mask <- dm
+
+    # Make and save marginal index
+    bf$marginals$index <- make_marginal_index(bf)
+
+  } # end fitted model only
+
+
+  # Restore distr and dynamic mask dimnames (lost in hdf5 write+read)
   ts_col <- ifelse(bf$metadata$ebird_version_year < 2022,
                    "interval",
                    "timestep"
-  )
-  dimnames(d) <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
-  bf$distr <- d
+  )      ### back compatibility code
 
-  # Delete duplicated dynamic mask row
-  dm <- bf$geom$dynamic_mask
-  if (ncol(dm) == n_timesteps(bf) + 1) {
-    if (!all(dm[, 1] == dm[, ncol(dm)]))
-      stop("Expected first and last dynamic mask columns to matrch in circular",
-           "BirdFlow model")
-    dm <- dm[, 1:(ncol(dm) - 1)]
+  # Set dimnames for distr and dynamic mask
+  dn <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
+  dimnames(bf$distr) <- dn
+  dimnames(bf$geom$dynamic_mask) <- dn
+
+  if (!is_fitted_model) {
+    # Need to import some stuff here
+    bf$marginals <- NULL
+    bf$distances <- as.numeric(h5read(hdf5, "distances"))
+    bf$uci <- h5read(hdf5, "uci", native = TRUE)
+    bf$lci <- h5read(hdf5, "lci", native = TRUE)
+    dimnames(bf$uci) <- dn
+    dimnames(bf$lci) <- dn
   }
 
-  dimnames(dm) <- list(i = NULL, time = paste0("t", bf$dates[[ts_col]]))
-  bf$geom$dynamic_mask <- dm
+  # Convert sparse matricies (if present) back into sparse matrices
+  # (only relevant if reimporting a previously imported and exported model)
+  if (has_marginals(bf) && bf$metadata$is_sparse) {
+    mn <- setdiff(names(bf$marginals), "index")
+    for (m in mn) {
+      bf$marginals[[m]] <- Matrix::Matrix(bf$marginals[[m]], sparse = TRUE)
+    }
 
-  # Make and save marginal index
-  bf$marginals$index <- make_marginal_index(bf)
+    # Clean up metadata$sparse attriubtes and order problems
+
+    sparse <- bf$metadata$sparse
+
+    # Restore standard order to sparse if names are as expected
+    sparse_order <-
+      c("fix_stats", "method", "arguments", "stats",
+        "pct_zero", "pct_density_lost")
+    if (setequal(sparse_order, names(sparse))) {
+      sparse <- sparse[sparse_order]
+    }
+
+    # Remove extra attributes hidden in data frame columns and vectors
+    for (i in seq_along(bf$metadata$sparse)) {
+      if (inherits(sparse[[i]], "data.frame")) {
+        sparse[[i]] <- clean_hdf5_dataframe(sparse[[i]])
+      } else {
+        sparse[[i]] <- as.vector(sparse[[i]])
+       }
+    }
+    # Cleanup extra attributes in argument list
+    if ("arguments" %in% names(sparse))
+      sparse$arguments <- lapply(sparse$arguments, as.vector)
+
+    bf$metadata$sparse <- sparse
+  } # end if sparse
 
   return(bf)
 }
