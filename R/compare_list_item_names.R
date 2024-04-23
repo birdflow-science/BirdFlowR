@@ -34,14 +34,13 @@ compare_list_item_names <- function(x, y, map = "x", differences) {
       differences <- rbind(
         differences,
         data.frame(where = map,
-                   differences = paste0("extra:",
-                                        paste0(lost, collapse = ", "))))
+                   differences = paste0("extra:", lost)))
+
     if (length(gained) != 0)
       differences <- rbind(
         differences,
         data.frame(where = map,
-                   differences = paste0("missing:",
-                                        paste0(gained, collapse = ", "))))
+                   differences = paste0("missing:", gained)))
     return(differences)
   }
 

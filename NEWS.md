@@ -1,5 +1,30 @@
+
+# Birdflow 0.1.0.9057
+2024-04-17
+
+* `import_birdflow()` now works with preprocessed hdf5 files. See #177
+* `preprocess_birdflow()` and `import_birdflow()` are now more consistent 
+  with some dimension names:
+    * `bf$geom$ext` is now an unnamed vector in objects from either function.
+    Previously one was a named vector. The `ext(bf)` return object is unchanged.
+    * `distr`, `dynamic_mask`, `uci`, and `lci` now always have `NULL` 
+    rownames and 
+    `"t<timestep>"` column names, and the names
+    of those two dimensions are `"i"` and `"time"`.
+    * `import_birdflow()` no longer drops two metadata items that it was losing
+    before: `ebirdst_version`  and `birdflowr_preprocess_version` these 
+    will exist in old `.hdf5` files but not in old `.rds` files.  
+* `compare_lists()` (internal helper) return format changed slightly.
+* `import_birdflow()` and `export_birdflow()` now work with sparse models.
+   Marginals from these models are converted to standard matrices before 
+   writing so some of the benefits of sparsification are lost when writing to
+   hdf5 files - but compression will probably mitigate this somewhat. Sparse
+   Matrices are re-created when sparse models are re-imported.
+   
+
 # BirdFlowR 0.1.0.9056
 2024-04-04
+
 ## Flux III 
 * `is_between()` now uses a `SparseArray::SparseArray()` for the logical array.
   to reduce memory usage

@@ -55,26 +55,34 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   }
 
   report_problems <- function() {
-    # This function uses p, error,  and allow_incomplete
+    # Use p, error,  and allow_incomplete
     # from the parent function to either throw an error
     # OR return from the parent function.
     message <- NA
-    if (error) {
-      if (allow_incomplete) {
-        if (any(p$type == "error"))
-          message <- paste0("Problems found by validate_BirdFlow:\n\t",
-                            paste(p$problem[p$type == "error"],
-                                  collapse = ";\n\t"))
-      } else { # Don't allow incomplete:
-        if (nrow(p) > 0)
-          message <- paste0("Problems found by validate_BirdFlow:\n\t",
+
+    # If not throwing error return (visibly) the table
+    if (!error) {
+      do.call("return", args = list(p), envir = parent.frame(n = 1))
+    }
+
+
+    # If throwing an error compose message
+
+    if (allow_incomplete) {
+      if (any(p$type == "error"))
+        message <- paste0("Problems found by validate_BirdFlow:\n\t",
+                          paste(p$problem[p$type == "error"],
+                                collapse = ";\n\t"))
+    } else { # Don't allow incomplete:
+      if (nrow(p) > 0)
+        message <- paste0("Problems found by validate_BirdFlow:\n\t",
                           paste(p$problem, collapse = "; \n\t"))
-      }
     }
     if (!is.na(message))
       stop(message, call. =  FALSE)
 
-    do.call("return", args = list(p), envir = parent.frame(n = 1))
+    # error is TRUE but there are no errors: invisibly return empty df:
+    do.call("invisible", args = list(p), envir = parent.frame(n = 1))
 
   }
 
@@ -101,16 +109,17 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     c("x$marginals should not be a list", # ok to have marginals
       "x$dates should not be a list", # ok to have dates
       "x$transitions should not be a list", # ok to have transitions
-      "x extra:uci, lci",  # Ok to have these (included in preprocessing output)
-      "x extra:lci, uci",  # ok in this order too
+      "x extra:uci",  # (included in preprocessing output)
+      "x extra:lci",  # (included in preprocessing output)
       "x missing:marginals", # ok to be missing marginals
-      "x missing:marginals, distances",
       "x missing:distances",
       "x$metadata$sparse_stats should not be a list",  # Having them is fine
       "x$metadata$sparse should not be a list",  #
-      "x$metadata missing:birdflow_version",
-      "x$metadata extra:hyperparameters",
-      "x$metadata extra:hyperparameters, loss_values"
+      "x$metadata missing:birdflow_version", ### back compatibility
+      "x$metadata extra:hyperparameters", # added by python
+      "x$metadata extra:loss_values", # added by python
+      "x$metadata missing:ebirdst_version", ### back compatibility
+      "x$metadata missing:birdflowr_preprocess_version" ### back compatibility
     ))
 
 
@@ -392,7 +401,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
       p <- add_prob("Not all marginals have a sum of one.", "error", p)
   }
 
-  return(report_problems())
+  report_problems()
 
 } # end validation function
 # nolint end

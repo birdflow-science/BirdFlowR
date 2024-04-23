@@ -1,4 +1,5 @@
 test_that("get_coastline returns expected objects", {
+  local_quiet()
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
                             " +ellps=WGS84 +units=m +no_defs"))
@@ -34,7 +35,7 @@ test_that("get_coastline returns expected objects", {
 })
 
 test_that("get_countries returns expected objects", {
-
+  local_quiet()
   bf <- BirdFlowModels::amewoo
   expect_s3_class(countries <- get_countries(bf, scale = "small"),
                   class = c("sf", "data.frame"))
@@ -44,6 +45,7 @@ test_that("get_countries returns expected objects", {
 })
 
 test_that("get_states returns expected objects", {
+  local_quiet()
   # States requires rnaturalearthhires which is a large download
   # Use  devtools::install_github("ropensci/rnaturalearthhires")
   # to install.
@@ -66,6 +68,7 @@ test_that("get_states returns expected objects", {
 })
 
 test_that("get_naturalearth downloads and returns expected objects", {
+  local_quiet()
   # This downloads data and writes it to disk so skip everywhere but local
   # machine
   skip_on_ci()
@@ -86,7 +89,7 @@ test_that("get_naturalearth downloads and returns expected objects", {
 })
 
 test_that("get_naturalearth() works at edge of WGS84", {
-
+  local_quiet()
   # Construct a psuedo BirdFlow object that has a crs centered on the edge
   # of the wgs84 projection (used by rnaturalearth)
   # mollweide centered on 180 deg lon:
@@ -117,7 +120,7 @@ test_that("get_naturalearth() works at edge of WGS84", {
 
 
 test_that("get_naturalearth() works at edge of WGS84 with old method", {
-
+  local_quiet()
   # Construct a psuedo BirdFlow object that has a crs centered on the edge
   # of the wgs84 projection (used by rnaturalearth)
   # mollweide centered on 180 deg lon.
@@ -156,6 +159,7 @@ test_that("get_naturalearth() works at edge of WGS84 with old method", {
 })
 
 test_that("get_naturalearth() works at edge of WGS84 with double wrapping", {
+  local_quiet()
   # mollweide centered on 180 deg lon:
   seam_crs <- crs(paste0("+proj=moll +lon_0=180 +x_0=0 +y_0=0 +datum=WGS84 ",
                          "+units=m +no_defs +type=crs"))
@@ -172,6 +176,7 @@ test_that("get_naturalearth() works at edge of WGS84 with double wrapping", {
 })
 
 test_that("get_naturalearth() works with mollweide and broken bounding box", {
+  local_quiet()
   # Construct a psuedo BirdFlow object with the extent and
   #  projection that a user submitted.  This is a mollweide where
   # one corner of the bounding box is not on the map.
@@ -199,6 +204,7 @@ test_that("get_naturalearth() works with mollweide and broken bounding box", {
 
 
 test_that("get_naturalearth() works with lambert equal area (laea)", {
+  local_quiet()
   # Construct a psuedo BirdFlow object
   bf <- new_BirdFlow()
   bf$geom$crs <- crs(paste0("+proj=laea +lat_0=39.161 +lon_0=-85.094 +x_0=0 ",
@@ -218,7 +224,7 @@ test_that("get_naturalearth() works with lambert equal area (laea)", {
 })
 
 test_that("get_naturalearth() issues appropriate warning with empty extent", {
-
+  local_quiet()
   crs <- crs(paste0("+proj=moll +lon_0=180 +x_0=0 +y_0=0 +datum=WGS84 +units=m",
                     " +no_defs +type=crs")) # mollweide centered on 180 deg lon.
   bf <- new_BirdFlow()
@@ -250,6 +256,7 @@ test_that("get_naturalearth() issues appropriate warning with empty extent", {
 
 test_that(paste0("get_naturalearth with default keep_buffer = FALSE, crops ",
                  "to input extent"), {
+  local_quiet()
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
                                    " +ellps=WGS84 +units=m +no_defs"))
@@ -268,7 +275,7 @@ test_that(paste0("get_naturalearth with default keep_buffer = FALSE, crops ",
 
 
 test_that("get_naturalearth() works with projections that have +units=us-ft", {
-
+  local_quiet()
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs("EPSG:2249")
   if (interactive()) {
@@ -298,6 +305,7 @@ test_that("get_naturalearth() works with projections that have +units=us-ft", {
 
 
 test_that("Double wrapped buffer works.", {
+  local_quiet()
   # Note this only sort of works because there are artifacts but
   # if you don't force the old method it works perfectly
   bf <- new_BirdFlow()
@@ -319,6 +327,7 @@ test_that("Double wrapped buffer works.", {
 
 
 test_that("Left wrapped buffer works.", {
+  local_quiet()
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=-90 +x_0=0 +y_0=0",
                                    " +ellps=WGS84 +units=m +no_defs"))
@@ -333,6 +342,7 @@ test_that("Left wrapped buffer works.", {
 
 
 test_that("Right wrapped buffer works.", {
+  local_quiet()
   bf <- new_BirdFlow()
   bf$geom$crs <- terra::crs(paste0("+proj=moll +lon_0=+90 +x_0=0 +y_0=0",
                                    " +ellps=WGS84 +units=m +no_defs"))

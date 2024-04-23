@@ -58,6 +58,14 @@ export_birdflow <- function(bf, file = NULL,
     return()
   }
 
+  # Convert sparse matrices to standard (for hdf5 only)
+  if (has_marginals(bf) && bf$metadata$is_sparse) {
+    mn <- setdiff(names(bf$marginals), "index")
+    for (m in mn) {
+      bf$marginals[[m]] <- as.matrix(bf$marginals[[m]])
+    }
+  }
+
   # Write HDF5
   ns <- names(bf)
   for (i in seq_along(ns)) {

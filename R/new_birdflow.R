@@ -45,9 +45,11 @@ new_BirdFlow <- function() {
                    ebird_version_year = NA_integer_,
                    ebird_release_year = NA_integer_,
                    ebird_access_end_date = NA,
+                   ebirdst_version = NA,
                    birdflow_preprocess_date = NA,
                    birdflow_model_date = NA,
                    birdflow_version = 3,
+                   birdflowr_preprocess_version = NA,
                    birdflowr_version =
                      as.character(utils::packageVersion("BirdFlowR")),
                    is_sparse = FALSE,

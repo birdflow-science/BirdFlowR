@@ -17,6 +17,8 @@ test_that("extend_birdflow() works with hdf5", {
   skip_on_cran()
   skip_on_ci()
 
+  local_quiet()
+
   dir <- withr::local_tempdir("extend_hdf5")
 
   bf <- BirdFlowModels::amewoo
@@ -36,9 +38,15 @@ test_that("extend_birdflow() works with hdf5", {
   expect_true(extend_birdflow(hdf, e))
   bfe2 <- import_birdflow(hdf)
 
-  # For weird historical reasons:
+  ### Back compatibility code
+  ### (delete metadata items that only exist in some model versions)
   names(bfe1$metadata)[names(bfe1$metadata) == "birdFlowr_version"] <-
     "birdflowr_version"
+  bfe1$metadata$ebirdst_version <- NULL
+  bfe2$metadata$ebirdst_version <- NULL
+  bfe1$metadata$birdflowr_preprocess_version <- NULL
+  bfe2$metadata$birdflowr_preprocess_version <- NULL
+
 
    # Reimporting changes the import version so nuke both
   bfe1$metadata$birdflowr_version <- ""
