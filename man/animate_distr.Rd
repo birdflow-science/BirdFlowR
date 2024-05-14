@@ -82,8 +82,8 @@ distr <- get_distr(bf, ts)
 anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
 
 \dontrun{
-# Display it
-anim
+  # Display it
+  anim
 }
 ### Project a distribution
 
@@ -119,5 +119,5 @@ spread_anim <- animate_distr(density_spread, bf,  limit = c(0, 0.05))
   gif_file <- tempfile("animation", fileext = ".gif")
   gganimate::save_animation(gif, gif_file)
   file.remove(gif_file) # cleanup
-  }
+}
 }
