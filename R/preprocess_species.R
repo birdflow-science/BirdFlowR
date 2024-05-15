@@ -328,6 +328,11 @@ preprocess_species <- function(species = NULL,
   if (is.null(crs)) {
     crs <- terra::crs(mp$custom_projection)
   } else {
+
+    # Handle objects of class crs (defined in sf)
+    if(inherits(crs, "crs"))
+      crs <- crs$wkt
+
     crs <- terra::crs(crs)
   }
 

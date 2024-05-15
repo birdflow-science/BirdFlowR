@@ -27,8 +27,16 @@ names(a) <- n
 
 # Get eBird codes from auk
 t <- auk::ebird_taxonomy
+
+# Based on scientific name
 mv <- match(a$scientific_name, t$scientific_name)
 a$species_code <- t$species_code[mv]
+
+# Based on common name
+unmatched <- is.na(a$species_code)
+
+a$species_code[unmatched] <- t$species_code[match(a$common_name[unmatched], t$common_name)]
+
 
 # Determine which ones are in the current eBird version
 ebird_ver <- ebirdst::ebirdst_version()$version_year
