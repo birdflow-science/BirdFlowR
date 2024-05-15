@@ -55,10 +55,14 @@ test_that("as_distr works with raster objects", {
   expect_warning(d <- as_distr(r, bf)) # value lost both to cropping and masking
   expect_equal(sum(d), 1)
 
-  # Multiple layers
+  # Multiple layers in raster
   r2 <- c(r, r, r)
   expect_warning(d2 <- as_distr(r2, bf)) # value lost to cropping and masking
-  expect_true(all(apply(d2, 2, sum) == 1))
+  sums <- apply(d2, 2, sum)
+  for(i in seq_along(sums)) {
+    expect_equal(sums[i], 1)
+  }
+
   expect_equal(nrow(d2), n_active(bf))
   expect_equal(ncol(d2), 3)
   expect_equal(d2[, 1], d, ignore_attr = TRUE)
