@@ -56,6 +56,36 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9059" id="birdflowr-0109059">BirdFlowR 0.1.0.9059<a class="anchor" aria-label="anchor" href="#birdflowr-0109059"></a></h2>
+<p>2024-05-15</p>
+<ul><li>Added <code>callaghan_abundance</code> dataset on species populations.</li>
+<li>Added <code><a href="../reference/get_population.html">get_population()</a></code> function.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9058" id="birdflowr-0109058">BirdFlowR 0.1.0.9058<a class="anchor" aria-label="anchor" href="#birdflowr-0109058"></a></h2>
+<p>2024-05-07</p>
+<ul><li>Fixed bug that prevented knitting example collection index without passed parameters.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9057" id="birdflowr-0109057">BirdFlowR 0.1.0.9057<a class="anchor" aria-label="anchor" href="#birdflowr-0109057"></a></h2>
+<p>2024-04-17</p>
+<ul><li>
+<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> now works with preprocessed hdf5 files. See <a href="https://github.com/birdflow-science/BirdFlowR/issues/177" class="external-link">#177</a></li>
+<li>
+<code>preprocess_birdflow()</code> and <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> are now more consistent with some dimension names:
+<ul><li>
+<code>bf$geom$ext</code> is now an unnamed vector in objects from either function. Previously one was a named vector. The <code>ext(bf)</code> return object is unchanged.</li>
+<li>
+<code>distr</code>, <code>dynamic_mask</code>, <code>uci</code>, and <code>lci</code> now always have <code>NULL</code> rownames and <code>"t&lt;timestep&gt;"</code> column names, and the names of those two dimensions are <code>"i"</code> and <code>"time"</code>.</li>
+<li>
+<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> no longer drops two metadata items that it was losing before: <code>ebirdst_version</code> and <code>birdflowr_preprocess_version</code> these will exist in old <code>.hdf5</code> files but not in old <code>.rds</code> files.<br></li>
+</ul></li>
+<li>
+<code>compare_lists()</code> (internal helper) return format changed slightly.</li>
+<li>
+<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> and <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> now work with sparse models. Marginals from these models are converted to standard matrices before writing so some of the benefits of sparsification are lost when writing to hdf5 files - but compression will probably mitigate this somewhat. Sparse Matrices are re-created when sparse models are re-imported.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9056" id="birdflowr-0109056">BirdFlowR 0.1.0.9056<a class="anchor" aria-label="anchor" href="#birdflowr-0109056"></a></h2>
 <p>2024-04-04</p>
 <div class="section level3">
