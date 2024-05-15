@@ -1,4 +1,5 @@
 bbdfc
+al
 Albers
 antnig
 Azimuthal
@@ -11,6 +12,7 @@ BirdFlowModels
 BirdFlowOverview
 BugReports
 CMD
+Cornwell
 CRAN
 CRS
 CRSs
@@ -18,6 +20,7 @@ Codecov
 Dockerfile
 Doren
 EPSG
+et
 GeoTIFF
 GeoTIFFs
 HDF
@@ -26,6 +29,7 @@ Jax
 Julian
 MacOS
 Mollweide
+Nakagawa
 NDM
 PROJ
 Preprocess
@@ -38,6 +42,7 @@ RStudio's
 Rasters
 Rds
 Rmd
+Shinichi
 Sparsify
 SpatRaster
 WGS
