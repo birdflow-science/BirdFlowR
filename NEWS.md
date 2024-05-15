@@ -1,8 +1,18 @@
+
+# BirdFlowR 0.1.0.9060
+2024-05-15 
+
+* Update `preprocess_species()` `crs` argument so that it accepts objects 
+of class `crs` as produced by [sf::st_crs()].
+* Fix bug in `preprocess_species()` that prevented clipping to irregular 
+  polygons.
+
+
 # BirdFlowR 0.1.0.9059
 2024-05-15
 
 * Added `callaghan_abundance` dataset on species populations.
-* Added `get_population()`  function.
+* Added `get_population()`  function.                 
 
 # BirdFlowR 0.1.0.9058
 2024-05-07

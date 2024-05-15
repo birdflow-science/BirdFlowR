@@ -164,6 +164,7 @@ test_that("preprocess_species() works with clip", {
   }
 
   terra::crs(clip) <- terra::crs(proj)
+
   if (interactive()) {
     # Plot "Full" abundance for "example_data" and our clipping polygon
     a <- preprocess_species(ebirdst_example_species(), hdf5 = FALSE, res = 30)
@@ -211,3 +212,86 @@ test_that("preprocess_species() works with crs arg", {
                              crs = birdflow_crs)
   )
 })
+
+
+test_that("preprocess_species() works with clip and crs", {
+
+  # This was a problem that manifested while running lots of species with a
+  # clip polygon that buffered the Americas and while also using a custom
+  # crs.
+
+  # I'm not certain but it's possible that prior to 0.1.0.9060 clipping was
+  # only done to the rectangular extent of the clip. and certain that
+  # it failed in this case with both an irregular clip polygon and a custom
+  # crs.
+
+  # Note this test is slow and requires an active ebirdst access key
+  # See ebirdst::set_ebirdst_access_key()
+
+  skip("Slow test to documents an old bug. Always skipped.")
+
+  species <- "banswa"
+
+  # Define custom CRS
+  lat0 <- 30
+  lon0 <- -95
+  false_easting <- 5.5e6
+  false_northing <- 9.5e6
+  crs <-
+    paste0(
+      'PROJCRS["Custom_Lambert_Azimuthal",
+    BASEGEOGCRS["WGS 84",
+        DATUM["World Geodetic System 1984",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6326]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Lambert Azimuthal Equal Area",
+            ID["EPSG",9820]],
+        PARAMETER["Latitude of natural origin",', lat0, ',
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",', lon0,',
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["False easting",', false_easting,',
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",', false_northing, ',
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["(E)",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]') |> sf::st_crs()
+
+
+  # Make Clipping polygon
+  suppressWarnings({
+    a <- get_americas(include_hawaii = FALSE) |> sf::st_transform(crs)
+    clip <- sf::st_union(a) |>  sf::st_buffer(300000)
+  })
+
+
+  bf <- preprocess_species(species, res = 200, hdf5 = FALSE, clip = clip,
+                           crs = crs, skip_quality_checks = TRUE)
+
+  r <- rasterize_distr(get_distr(bf, 20), bf)
+
+  if(FALSE)
+    plot(r)
+
+  # expect uppper right corner to be NA
+  expect_true(is.na(r[1, ncol(r)]))
+
+})
+
+
+
