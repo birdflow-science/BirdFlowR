@@ -1,10 +1,16 @@
-# Birdflow 0.1.0.9058
+# BirdFlowR 0.1.0.9059
+2024-05-15
+
+* Added `callaghan_abundance` dataset on species populations.
+* Added `get_population()`  function.
+
+# BirdFlowR 0.1.0.9058
 2024-05-07
 
 * Fixed bug that prevented knitting example collection index without passed
 parameters.
 
-# Birdflow 0.1.0.9057
+# BirdFlowR 0.1.0.9057
 2024-04-17
 
 * `import_birdflow()` now works with preprocessed hdf5 files. See #177

@@ -59,7 +59,7 @@ test_that("as_distr works with raster objects", {
   r2 <- c(r, r, r)
   expect_warning(d2 <- as_distr(r2, bf)) # value lost to cropping and masking
   sums <- apply(d2, 2, sum)
-  for(i in seq_along(sums)) {
+  for (i in seq_along(sums)) {
     expect_equal(sums[i], 1)
   }
 

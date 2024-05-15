@@ -57,3 +57,4 @@ BugReports: https://github.com/birdflow-science/BirdFlowR/issues
 Language: en-US
 Depends: 
     R (>= 3.5)
+LazyData: true
