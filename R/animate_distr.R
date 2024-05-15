@@ -28,8 +28,8 @@
 #' anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
 #'
 #' \dontrun{
-#' # Display it
-#' anim
+#'   # Display it
+#'   anim
 #' }
 #' ### Project a distribution
 #'
@@ -65,7 +65,7 @@
 #'   gif_file <- tempfile("animation", fileext = ".gif")
 #'   gganimate::save_animation(gif, gif_file)
 #'   file.remove(gif_file) # cleanup
-#'   }
+#' }
 animate_distr <- function(distr, bf, title = species(bf), ...) {
 
   p <- plot_distr(distr, bf, ...)

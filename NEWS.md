@@ -1,3 +1,8 @@
+# Birdflow 0.1.0.9058
+2024-05-07
+
+* Fixed bug that prevented knitting example collection index without passed
+parameters.
 
 # Birdflow 0.1.0.9057
 2024-04-17
