@@ -59,6 +59,11 @@ landscape. These are cells that are always masked. Only relevant when
 \code{show_mask = TRUE}.}
     \item{\code{value_label}}{The label used for the values in the distribution.
 Defaults to "Density"}
+    \item{\code{transform}}{A transformation to apply to the color scaling. Recommended
+\code{"identity"}, and \code{"sqrt"}.  If \code{"log"} is used zeros will be replaced with
+1/2 the smallest non-zero value prior to transforming.
+mapping to the color gradient. Legend will still reflect the original values.
+Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
   }}
 }
 \value{

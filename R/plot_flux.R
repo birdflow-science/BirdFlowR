@@ -22,6 +22,12 @@
 #' intensity.
 #' @param title The plot title
 #' @param value_label The label for the flux values.
+#' @param transform A transformation to apply to the color scaling.
+#' `"identity"`, and `"sqrt"` are recommended.
+#' If `"log"` is used zeros will be replaced with
+#' 1/2 the smallest non-zero value prior to transforming.
+#' Legend will still reflect the original values.
+#' Passed to [ggplot2::scale_color_gradientn()].
 #' @return `plot_flux` returns a **ggplot2** object.  It can be displayed with
 #' `print()`.
 #' @export
@@ -35,14 +41,30 @@ plot_flux <- function(flux,
                       coast_color = gray(0.5),
                       gradient_colors = NULL,
                       title = species(bf),
-                      value_label = "Flux") {
+                      value_label = "Flux",
+                      transform = "identity") {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
   }
 
+
   if (dynamic_scale) {
-    distr <- apply(distr, 2, function(x) x / max(x, na.rm = TRUE))
+
+    # Scale each transition 0 to 1
+    for (t in unique(flux$transition)) {
+      sv <- flux$transition == t
+      flux$flux[sv] <- range_rescale(flux$flux[sv])
+    }
+
+  }
+
+  if (transform == "log") {
+    min_non_zero <- min(flux$flux[!flux$flux == 0], na.rm = TRUE)
+    if (min_non_zero < 0)
+      stop("Can't log transflorm flux with negative values.")
+
+    flux$flux[flux$flux == 0] <- min_non_zero / 2
   }
 
   # Add "<Month> <mday>" labels as ordered factor
@@ -86,9 +108,9 @@ plot_flux <- function(flux,
       transitions <- transitions[subset]
     } else if (is.numeric(subset)) {
       if (anyNA(subset) ||
-         !all.equal(subset, floor(subset)) ||
-         any(subset < 1) ||
-         any(subset > length(transitions))) {
+          !all.equal(subset, floor(subset)) ||
+          any(subset < 1) ||
+          any(subset > length(transitions))) {
         stop("Numeric subset should contain only integer values between 1 and ",
              length(transitions), ".")
       }
@@ -113,7 +135,9 @@ plot_flux <- function(flux,
     ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
                                  fill = .data$flux)) +
     ggplot2::geom_raster() +
-    ggplot2::scale_fill_gradientn(colors = gradient_colors, name = value_label)
+    ggplot2::scale_fill_gradientn(colors = gradient_colors,
+                                  name = value_label,
+                                  transform = transform)
 
 
   # Add facet wrap and title
@@ -133,15 +157,18 @@ plot_flux <- function(flux,
   # Add coastline
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
 
-    coast <- get_coastline(bf)
+    suppress_specific_warnings({
+      coast <- get_coastline(bf)
+    }, "No objects within extent. Returning empty sf object.")
 
-    p  <- p +
-      ggplot2::geom_sf(data = coast,
-                       inherit.aes = FALSE,
-                       linewidth = coast_linewidth,
-                       color = coast_color)
+    if (nrow(coast) > 0) {
+      p  <- p +
+        ggplot2::geom_sf(data = coast,
+                         inherit.aes = FALSE,
+                         linewidth = coast_linewidth,
+                         color = coast_color)
+    }
   }
-
   # coord_sf is required to adjust coordinates while using geom_sf
   # Here we are preventing expanding the extent of the plot.
   # Setting the CRS is only necessary when the coastline isn't plotted because

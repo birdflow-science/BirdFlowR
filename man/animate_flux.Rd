@@ -35,6 +35,12 @@ plotting the coastline.}
     \item{\code{gradient_colors}}{The colors palette used to represent the flux
 intensity.}
     \item{\code{value_label}}{The label for the flux values.}
+    \item{\code{transform}}{A transformation to apply to the color scaling.
+\code{"identity"}, and \code{"sqrt"} are recommended.
+If \code{"log"} is used zeros will be replaced with
+1/2 the smallest non-zero value prior to transforming.
+Legend will still reflect the original values.
+Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
   }}
 }
 \value{

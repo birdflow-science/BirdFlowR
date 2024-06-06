@@ -1,4 +1,19 @@
 
+
+# BirdFlowR 0.1.0.9061
+2024-06-05 
+
+* Add `suppress_specific_warnings()` internal function.
+* Update `plot_distr()`, `plot_route()`, and `plot_flux()` 
+so that they work with BirdFlow models in which the extent does not overlap 
+the coast. `bcrfin`, Brown-capped Rosy-Finch is one example. 
+* Add `transform` argument to `plot_flux()` and `plot_distr()` to allow 
+log (`"log"`) and square route (`"sqrt"`) transformations prior to applying 
+the color scale.  These allow differentiating the smaller differences better.
+I think the square route transformation might be the way to go.
+
+
+
 # BirdFlowR 0.1.0.9060
 2024-05-15 
 

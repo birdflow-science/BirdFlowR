@@ -253,10 +253,10 @@ test_that("preprocess_species() works with clip and crs", {
         PARAMETER["Latitude of natural origin",', lat0, ',
             ANGLEUNIT["Degree",0.0174532925199433],
             ID["EPSG",8801]],
-        PARAMETER["Longitude of natural origin",', lon0,',
+        PARAMETER["Longitude of natural origin",', lon0, ',
             ANGLEUNIT["Degree",0.0174532925199433],
             ID["EPSG",8802]],
-        PARAMETER["False easting",', false_easting,',
+        PARAMETER["False easting",', false_easting, ',
             LENGTHUNIT["metre",1],
             ID["EPSG",8806]],
         PARAMETER["False northing",', false_northing, ',
@@ -285,13 +285,10 @@ test_that("preprocess_species() works with clip and crs", {
 
   r <- rasterize_distr(get_distr(bf, 20), bf)
 
-  if(FALSE)
+  if (FALSE)
     plot(r)
 
   # expect uppper right corner to be NA
   expect_true(is.na(r[1, ncol(r)]))
 
 })
-
-
-

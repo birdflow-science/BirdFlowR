@@ -14,7 +14,8 @@ plot_flux(
   coast_color = gray(0.5),
   gradient_colors = NULL,
   title = species(bf),
-  value_label = "Flux"
+  value_label = "Flux",
+  transform = "identity"
 )
 }
 \arguments{
@@ -49,6 +50,13 @@ intensity.}
 \item{title}{The plot title}
 
 \item{value_label}{The label for the flux values.}
+
+\item{transform}{A transformation to apply to the color scaling.
+\code{"identity"}, and \code{"sqrt"} are recommended.
+If \code{"log"} is used zeros will be replaced with
+1/2 the smallest non-zero value prior to transforming.
+Legend will still reflect the original values.
+Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
 }
 \value{
 \code{plot_flux} returns a \strong{ggplot2} object.  It can be displayed with

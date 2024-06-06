@@ -35,7 +35,8 @@ a$species_code <- t$species_code[mv]
 # Based on common name
 unmatched <- is.na(a$species_code)
 
-a$species_code[unmatched] <- t$species_code[match(a$common_name[unmatched], t$common_name)]
+a$species_code[unmatched] <- t$species_code[match(a$common_name[unmatched],
+                                                  t$common_name)]
 
 
 # Determine which ones are in the current eBird version
