@@ -86,8 +86,11 @@
 #'   species (`species(bf)`).
 #' @param value_label The label used for the values in the distribution.
 #'   Defaults to "Density"
-#'
-#'
+#' @param transform A transformation to apply to the color scaling. Recommended
+#' `"identity"`, and `"sqrt"`.  If `"log"` is used zeros will be replaced with
+#' 1/2 the smallest non-zero value prior to transforming.
+#' mapping to the color gradient. Legend will still reflect the original values.
+#' Passed to [ggplot2::scale_color_gradientn()].
 #' @return [ggplot2::ggplot()] object.  Use `print()` to render it.
 #' @export
 #' @importFrom grDevices gray grey
@@ -112,7 +115,8 @@ plot_distr <- function(distr,
                        active_cell_color = rgb(1, 1, 1, .3),
                        inactive_cell_color = rgb(0, 0, 0, .2),
                        title = species(bf),
-                       value_label = "Density") {
+                       value_label = "Density",
+                       transform = "identity") {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
@@ -140,6 +144,15 @@ plot_distr <- function(distr,
     }
   }
 
+  if (transform == "log") {
+
+    min_non_zero <- min(distr[!distr == 0], na.rm = TRUE)
+    if (min_non_zero < 0)
+      stop("Can't log distribution with negative values.")
+
+    distr[distr == 0] <- min_non_zero / 2
+
+  }
 
   if (is.null(limits)) {
     limits <- range(distr, na.rm = TRUE)
@@ -192,7 +205,9 @@ plot_distr <- function(distr,
     order_labeller  <-  ggplot2::as_labeller(order_to_label)
   }
 
-  coast <- get_coastline(bf)
+  suppress_specific_warnings({
+    coast <- get_coastline(bf)
+  }, "No objects within extent. Returning empty sf object.")
 
   if (is.null(gradient_colors)) {
     # Same as ebirdst::abundance_palette(10, season = "weekly")
@@ -202,6 +217,11 @@ plot_distr <- function(distr,
       c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
         "#9D189D", "#7401A8", "#48039F", "#0D0887")
   }
+
+
+
+
+
   p <-
     ggplot2::ggplot(r, ggplot2::aes(x = .data$x,
                                     y = .data$y,
@@ -209,26 +229,36 @@ plot_distr <- function(distr,
     ggplot2::geom_raster()
 
 
+
   if (dynamic_scale) {
     p <- p +  ggplot2::scale_fill_gradientn(colors = gradient_colors,
                                             na.value = active_cell_color,
                                             limits = limits,
                                             breaks = c(0, 1),
-                                            labels = c("Min.", "Max."))
+                                            labels = c("Min.", "Max."),
+                                            transform = transform)
   } else {
     p <- p + ggplot2::scale_fill_gradientn(colors = gradient_colors,
                                            na.value = active_cell_color,
-                                           limits = limits)
+                                           limits = limits,
+                                           transform = transform)
   }
 
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
 
-    p  <- p +
-      ggplot2::geom_sf(data = coast,
-                       inherit.aes = FALSE,
-                       linewidth = coast_linewidth,
-                       color = coast_color)
+    suppress_specific_warnings({
+      coast <- get_coastline(bf)
+    }, "No objects within extent. Returning empty sf object.")
 
+
+    if (nrow(coast) > 0) {
+
+      p  <- p +
+        ggplot2::geom_sf(data = coast,
+                         inherit.aes = FALSE,
+                         linewidth = coast_linewidth,
+                         color = coast_color)
+    }
   }
 
   # coord_sf is required to adjust coordinates while using geom_sf
@@ -272,9 +302,9 @@ plot_distr <- function(distr,
 
     # Add it to the plot
     p <- p + ggplot2::annotation_raster(col_mask, xmin = xmin(bf),
-                               xmax = xmax(bf),
-                               ymin = ymin(bf),
-                               ymax = ymax(bf))
+                                        xmax = xmax(bf),
+                                        ymin = ymin(bf),
+                                        ymax = ymax(bf))
 
 
     # Move the new annotation layer to the first layer so it draws under others

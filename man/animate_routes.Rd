@@ -57,12 +57,12 @@ from within \code{animate_routes()} where it could not be suppressed."
 
 
 bf <- BirdFlowModels::amewoo
-rts <- route_migration(bf, 10)
+rts <- route(bf, 10,  season = "prebreeding")
 anim <- animate_routes(rts, bf)
 
 \dontrun{
   # example render
-  timesteps <- unique(rts$points$timestep)
+  timesteps <- unique(rts$timestep)
   gif <- gganimate::animate(anim,
                             device = "ragg_png", # is fast and pretty
                             width = 7, height = 6,

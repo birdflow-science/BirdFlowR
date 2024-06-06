@@ -166,7 +166,7 @@ process_rasters <- function(res,
   bf_msg(" done.\n")
 
   # Clip data
-  if(!is.null(clip)){
+  if (!is.null(clip)) {
     abunds <- terra::mask(abunds, clip)
     abunds_uci <- terra::mask(abunds_uci, clip)
     abunds_lci <- terra::mask(abunds_lci, clip)

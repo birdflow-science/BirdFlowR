@@ -181,8 +181,6 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   rast$value[is.na(rast$value)] <- FALSE
   rast$value <- rast$value
 
-  # Coastline for this model
-  coast <- get_coastline(bf)
 
   #----------------------------------------------------------------------------#
   # Data summary
@@ -297,16 +295,29 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
                              max_size = dot_sizes[2],
                              breaks = stay_len_breaks,
                              name = "Stay Length",
-                             guide = ggplot2::guide_legend(order = 0)) +
+                             guide = ggplot2::guide_legend(order = 0))
 
-    # Plot coastal data
-    ggplot2::geom_sf(data = coast,
-                     inherit.aes = FALSE,
-                     linewidth = coast_linewidth,
-                     color = coast_color) +
+  # Plot coastal data
+  if (!is.null(coast_color) && !is.null(coast_linewidth)) {
 
-    # coord_sf is required to adjust coordinates while using geom_sf
-    # Here we are preventing expanding the extent of the plot.
+    # Coastline for this model
+    suppress_specific_warnings({
+      coast <- get_coastline(bf)
+    }, "No objects within extent. Returning empty sf object.")
+
+    if (nrow(coast) > 0) {
+
+      p <- p +
+        ggplot2::geom_sf(data = coast,
+                         inherit.aes = FALSE,
+                         linewidth = coast_linewidth,
+                         color = coast_color)
+    }
+  }
+
+  # coord_sf is required to adjust coordinates while using geom_sf
+  # Here we are preventing expanding the extent of the plot.
+  p  <- p +
     ggplot2::coord_sf(expand = FALSE) +
 
     # Add title and subtitle

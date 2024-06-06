@@ -330,7 +330,7 @@ preprocess_species <- function(species = NULL,
   } else {
 
     # Handle objects of class crs (defined in sf)
-    if(inherits(crs, "crs"))
+    if (inherits(crs, "crs"))
       crs <- crs$wkt
 
     crs <- terra::crs(crs)

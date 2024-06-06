@@ -18,7 +18,8 @@ plot_distr(
   active_cell_color = rgb(1, 1, 1, 0.3),
   inactive_cell_color = rgb(0, 0, 0, 0.2),
   title = species(bf),
-  value_label = "Density"
+  value_label = "Density",
+  transform = "identity"
 )
 }
 \arguments{
@@ -80,6 +81,12 @@ species (\code{species(bf)}).}
 
 \item{value_label}{The label used for the values in the distribution.
 Defaults to "Density"}
+
+\item{transform}{A transformation to apply to the color scaling. Recommended
+\code{"identity"}, and \code{"sqrt"}.  If \code{"log"} is used zeros will be replaced with
+1/2 the smallest non-zero value prior to transforming.
+mapping to the color gradient. Legend will still reflect the original values.
+Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
 }
 \value{
 \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object.  Use \code{print()} to render it.
