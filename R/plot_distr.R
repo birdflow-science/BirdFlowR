@@ -205,9 +205,6 @@ plot_distr <- function(distr,
     order_labeller  <-  ggplot2::as_labeller(order_to_label)
   }
 
-  suppress_specific_warnings({
-    coast <- get_coastline(bf)
-  }, "No objects within extent. Returning empty sf object.")
 
   if (is.null(gradient_colors)) {
     # Same as ebirdst::abundance_palette(10, season = "weekly")
