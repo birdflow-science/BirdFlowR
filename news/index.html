@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9060</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9061</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,13 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9061" id="birdflowr-0109061">BirdFlowR 0.1.0.9061<a class="anchor" aria-label="anchor" href="#birdflowr-0109061"></a></h2>
+<p>2024-06-05</p>
+<ul><li>Add <code><a href="../reference/suppress_specific_warnings.html">suppress_specific_warnings()</a></code> internal function.</li>
+<li>Update <code><a href="../reference/plot_distr.html">plot_distr()</a></code>, <code>plot_route()</code>, and <code><a href="../reference/plot_flux.html">plot_flux()</a></code> so that they work with BirdFlow models in which the extent does not overlap the coast. <code>bcrfin</code>, Brown-capped Rosy-Finch is one example.</li>
+<li>Add <code>transform</code> argument to <code><a href="../reference/plot_flux.html">plot_flux()</a></code> and <code><a href="../reference/plot_distr.html">plot_distr()</a></code> to allow log (<code>"log"</code>) and square route (<code>"sqrt"</code>) transformations prior to applying the color scale. These allow differentiating the smaller differences better. I think the square route transformation might be the way to go.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9060" id="birdflowr-0109060">BirdFlowR 0.1.0.9060<a class="anchor" aria-label="anchor" href="#birdflowr-0109060"></a></h2>
 <p>2024-05-15</p>

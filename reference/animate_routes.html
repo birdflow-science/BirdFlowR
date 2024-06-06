@@ -12,7 +12,7 @@ producing a dynamic version of plot_routes()."><meta property="og:image" content
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9060</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9061</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,13 +142,12 @@ from within <code>animate_routes()</code> where it could not be suppressed."</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route_migration.html">route_migration</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>route_migration() is deprecated please transition to route()and change the migration argument to season.</span>
+<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">10</span>,  season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">anim</span> <span class="op">&lt;-</span> <span class="fu">animate_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># example render</span></span></span>
-<span class="r-in"><span>  <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">points</span><span class="op">$</span><span class="va">timestep</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">timestep</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">gif</span> <span class="op">&lt;-</span> <span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">anim</span>,</span></span>
 <span class="r-in"><span>                            device <span class="op">=</span> <span class="st">"ragg_png"</span>, <span class="co"># is fast and pretty</span></span></span>
 <span class="r-in"><span>                            width <span class="op">=</span> <span class="fl">7</span>, height <span class="op">=</span> <span class="fl">6</span>,</span></span>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9060</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9061</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,6 +112,14 @@ intensity.</p></dd>
 
     <dt><code>value_label</code></dt>
 <dd><p>The label for the flux values.</p></dd>
+
+    <dt><code>transform</code></dt>
+<dd><p>A transformation to apply to the color scaling.
+<code>"identity"</code>, and <code>"sqrt"</code> are recommended.
+If <code>"log"</code> is used zeros will be replaced with
+1/2 the smallest non-zero value prior to transforming.
+Legend will still reflect the original values.
+Passed to <code><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">ggplot2::scale_color_gradientn()</a></code>.</p></dd>
 
   
 </dl></dd>
