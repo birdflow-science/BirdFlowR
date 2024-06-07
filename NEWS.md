@@ -1,5 +1,12 @@
 
 
+# BirdFlowR 0.1.0.9062
+2024-06-07
+
+* Updated code coverage github action in attempt to fix broken upload to 
+codecov.io despite the coverage action running and generating the coverage data.
+
+
 # BirdFlowR 0.1.0.9061
 2024-06-05 
 
