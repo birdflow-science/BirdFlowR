@@ -130,6 +130,12 @@ import_birdflow_v3 <- function(hdf5) {
     bf$species[[a]] <- as.vector(species[[a]])
   }
 
+  # Replace empty strings in species with NA
+  # The inverse was done while writing to avoid writing NA
+  is_empty <- sapply(bf$species, function(x) x == "") |> as.logical()
+  bf$species[is_empty] <- NA
+
+
   # metadata
   metadata <- h5read(hdf5, "metadata")
   for (a in names(bf$metadata)) {

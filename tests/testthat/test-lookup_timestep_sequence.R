@@ -552,3 +552,26 @@ test_that("lookup_timestep() throws expected errors with non-cyclical models", {
 
 
 })
+
+test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
+
+    #   https://github.com/birdflow-science/BirdFlowR/issues/168
+
+  # These were NA in magfri
+  na_items <- c("postbreeding_migration_start",
+                "postbreeding_migration_end",
+                "prebreeding_migration_start",
+                "prebreeding_migration_end")
+
+  bf <- BirdFlowModels::amewoo
+  bf$species[na_items] <- NA
+  expect_error(lookup_timestep_sequence(bf, season = "prebreeding"),
+               regexp = "season has NA .* season lookup is impossible")
+
+  expect_error(route(bf, season = "prebreeding"),
+               regexp = "season has NA .* season lookup is impossible")
+  d <- get_distr(bf, 1)
+  expect_error(predict(bf, d, season = "postbreeding"),
+               regexp = "season has NA .* season lookup is impossible")
+
+})

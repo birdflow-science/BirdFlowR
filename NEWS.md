@@ -1,4 +1,17 @@
 
+# BirdFlowR 0.1.0.9063
+2024-06-12
+
+Fix #168 -- allow `NA` in species date fields as in Magnificent Frigate bird
+* Replace `NA` with `$species` with empty string before writing to HDF5 with
+`export_birdflow()`
+* Replace empty string with `NA` when reading `$species` items in 
+`import_birdflow()`.
+* Throw meaningful error within `lookup_season_timesteps()` when the required
+date in `bf$species` is `NA`. This affects lots of functions that allow
+specifying date ranges with `season = `.  This includes `predict()`, `route()`,
+`lookup_timestep_sequence()`, and `truncate_birdflow()`.
+
 
 # BirdFlowR 0.1.0.9062
 2024-06-07

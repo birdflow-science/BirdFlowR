@@ -46,3 +46,38 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
 
 
 })
+
+test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
+
+  #   https://github.com/birdflow-science/BirdFlowR/issues/168
+  dir <- local_test_dir("na_metadata")
+
+  skip_on_cran()
+
+  local_test_dir()
+
+  # These were NA in magfri
+  na_items <- c("postbreeding_migration_start",
+                "postbreeding_migration_end",
+                "prebreeding_migration_start",
+                "prebreeding_migration_end")
+
+  f <- file.path(dir, "amewoo.hdf5")
+
+  bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 1, end = 3) # faster read/write in test
+  bf$species[na_items] <- NA # Overwrite some species info with NA
+
+  export_birdflow(bf, f)
+
+  bf2 <- import_birdflow(f)
+
+
+  # Metadata in BirdFlowModels::amewoo isn't always the same as the
+  # current metadata, so I'm deleting both before comparison
+  bf$metadata <- NULL
+  bf2$metadata <- NULL
+
+  expect_equal(bf, bf2)
+
+})
