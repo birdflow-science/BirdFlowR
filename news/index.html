@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9062</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9063</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,11 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9063" id="birdflowr-0109063">BirdFlowR 0.1.0.9063<a class="anchor" aria-label="anchor" href="#birdflowr-0109063"></a></h2>
+<p>2024-06-12</p>
+<p>Fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/168" class="external-link">#168</a> – allow <code>NA</code> in species date fields as in Magnificent Frigate bird * Replace <code>NA</code> with <code>$species</code> with empty string before writing to HDF5 with <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> * Replace empty string with <code>NA</code> when reading <code>$species</code> items in <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. * Throw meaningful error within <code><a href="../reference/lookup_season_timesteps.html">lookup_season_timesteps()</a></code> when the required date in <code>bf$species</code> is <code>NA</code>. This affects lots of functions that allow specifying date ranges with <code>season =</code>. This includes <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9062" id="birdflowr-0109062">BirdFlowR 0.1.0.9062<a class="anchor" aria-label="anchor" href="#birdflowr-0109062"></a></h2>
 <p>2024-06-07</p>
