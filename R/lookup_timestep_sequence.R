@@ -305,8 +305,14 @@ lookup_season_timesteps <- function(x, season, season_buffer = 1) {
                           "breeding",
                           "nonbreeding"))
 
-  start <- species_info(x, paste0(season, "_start")) |> lookup_timestep(x)
-  end <- species_info(x, paste0(season, "_end")) |> lookup_timestep(x)
+  start <- species_info(x, paste0(season, "_start")) |>
+    lookup_timestep(x, allow_failure = TRUE)
+  end <- species_info(x, paste0(season, "_end")) |>
+    lookup_timestep(x, allow_failure = TRUE)
+
+  if (is.na(start) || is.na(end))
+    stop(season, " season has NA for start and/or end date so season lookup",
+    " is impossible. This is derived from eBird metadata.")
 
   circular <- n_timesteps(x) == n_transitions(x)
 

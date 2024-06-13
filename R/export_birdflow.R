@@ -38,7 +38,7 @@ export_birdflow <- function(bf, file = NULL,
       "If file is not NULL or a directory (ending in a slash) it should end",
          'in ".hdf5" or ".rds" consistent with the format argument.'))
 
-  bf_msg("Exporting BirdFlow model for", species(bf), "to:\n\t", file, "\n")
+  bf_msg("Exporting BirdFlow model for ", species(bf), " to:\n\t", file, "\n")
 
 
   if (file.exists(file) && overwrite) {
@@ -65,6 +65,12 @@ export_birdflow <- function(bf, file = NULL,
       bf$marginals[[m]] <- as.matrix(bf$marginals[[m]])
     }
   }
+
+  # Replace NA in $species component with ""
+  # This is for the rare species like magfri where some of the data has
+  # NA.  The goal here is to bipass issues writing NA to hdf5 files
+  has_na <- sapply(bf$species, is.na) |> as.logical()
+  bf$species[has_na] <- ""
 
   # Write HDF5
   ns <- names(bf)
