@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9063</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9064</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,10 +56,19 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9064" id="birdflowr-0109064">BirdFlowR 0.1.0.9064<a class="anchor" aria-label="anchor" href="#birdflowr-0109064"></a></h2>
+<p>2024-06-14</p>
+<p>Fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/191" class="external-link">#191</a> Date lookup now works for seasons that start and end on the same day.</p>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9063" id="birdflowr-0109063">BirdFlowR 0.1.0.9063<a class="anchor" aria-label="anchor" href="#birdflowr-0109063"></a></h2>
 <p>2024-06-12</p>
-<p>Fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/168" class="external-link">#168</a> – allow <code>NA</code> in species date fields as in Magnificent Frigate bird * Replace <code>NA</code> with <code>$species</code> with empty string before writing to HDF5 with <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> * Replace empty string with <code>NA</code> when reading <code>$species</code> items in <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. * Throw meaningful error within <code><a href="../reference/lookup_season_timesteps.html">lookup_season_timesteps()</a></code> when the required date in <code>bf$species</code> is <code>NA</code>. This affects lots of functions that allow specifying date ranges with <code>season =</code>. This includes <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>.</p>
-</div>
+<p>Fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/168" class="external-link">#168</a> – allow <code>NA</code> in species date fields as in Magnificent Frigate bird.</p>
+<ul><li>Replace <code>NA</code> with <code>$species</code> with empty string before writing to HDF5 with <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code>
+</li>
+<li>Replace empty string with <code>NA</code> when reading <code>$species</code> items in <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>.</li>
+<li>Throw meaningful error within <code><a href="../reference/lookup_season_timesteps.html">lookup_season_timesteps()</a></code> when the required date in <code>bf$species</code> is <code>NA</code>. This affects lots of functions that allow specifying date ranges with <code>season =</code>. This includes <code><a href="../reference/predict.BirdFlow.html">predict()</a></code>, <code><a href="../reference/route.html">route()</a></code>, <code><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence()</a></code>, and <code><a href="../reference/truncate_birdflow.html">truncate_birdflow()</a></code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9062" id="birdflowr-0109062">BirdFlowR 0.1.0.9062<a class="anchor" aria-label="anchor" href="#birdflowr-0109062"></a></h2>
 <p>2024-06-07</p>
@@ -120,7 +129,18 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9055" id="birdflowr-0109055">BirdFlowR 0.1.0.9055<a class="anchor" aria-label="anchor" href="#birdflowr-0109055"></a></h2>
-<p>2024-03-29 ## Flux II * Flux values are now divided by the radius to standardize units at at P/km/week/ where P is the proportion of the population. * Add tests for <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and <code><a href="../reference/is_between.html">is_between()</a></code> * Add analysis of flux radius parameter’s affect on flux values. It’s in <code>"test-calc_flux.R"</code>. * Add limit to radius argument in <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and ability to bypass it with <code>check_radius</code> argument. * Modified <code><a href="../reference/is_between.html">is_between()</a></code> to only calculate the result for transitions that are non-zero (at any timestep) in <code>bf</code>. This provides a slight performance benefit for standard models and a large one for sparse models. * <code>is_betweeen()</code> now processes connection lines in batches, controlled by <code>batch_size</code> argument to it and <code><a href="../reference/calc_flux.html">calc_flux()</a></code>. This is for memory management.</p>
+<p>2024-03-29</p>
+<div class="section level3">
+<h3 id="flux-ii-0-1-0-9055">Flux II<a class="anchor" aria-label="anchor" href="#flux-ii-0-1-0-9055"></a></h3>
+<ul><li>Flux values are now divided by the radius to standardize units at at P/km/week/ where P is the proportion of the population.</li>
+<li>Add tests for <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and <code><a href="../reference/is_between.html">is_between()</a></code>
+</li>
+<li>Add analysis of flux radius parameter’s affect on flux values. It’s in <code>"test-calc_flux.R"</code>.</li>
+<li>Add limit to radius argument in <code><a href="../reference/calc_flux.html">calc_flux()</a></code> and ability to bypass it with <code>check_radius</code> argument.</li>
+<li>Modified <code><a href="../reference/is_between.html">is_between()</a></code> to only calculate the result for transitions that are non-zero (at any timestep) in <code>bf</code>. This provides a slight performance benefit for standard models and a large one for sparse models.</li>
+<li>
+<code>is_betweeen()</code> now processes connection lines in batches, controlled by <code>batch_size</code> argument to it and <code><a href="../reference/calc_flux.html">calc_flux()</a></code>. This is for memory management.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9054" id="birdflowr-0109054">BirdFlowR 0.1.0.9054<a class="anchor" aria-label="anchor" href="#birdflowr-0109054"></a></h2>
@@ -980,7 +1000,8 @@ sparsification</p></li>
 <li><p>Expanded “Learn More”” section in README.md to link to all vignettes as well as the BirdFlow paper.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9021" id="birdflowr-0009021-2023-03-03">BirdFlowR 0.0.0.9021 2023-03-03<a class="anchor" aria-label="anchor" href="#birdflowr-0009021-2023-03-03"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9021" id="birdflowr-0009021">BirdFlowR 0.0.0.9021<a class="anchor" aria-label="anchor" href="#birdflowr-0009021"></a></h2>
+<p>2023-03-03</p>
 <ul><li>Updated preprocess_species()
 <ul><li>Now only downloads the files it needs <a href="https://github.com/birdflow-science/BirdFlowR/issues/21" class="external-link">#21</a>
 </li>
@@ -989,7 +1010,8 @@ sparsification</p></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9019" id="birdflowr-0009019-2023-03-01">BirdFlowR 0.0.0.9019 2023-03-01<a class="anchor" aria-label="anchor" href="#birdflowr-0009019-2023-03-01"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9019" id="birdflowr-0009019">BirdFlowR 0.0.0.9019<a class="anchor" aria-label="anchor" href="#birdflowr-0009019"></a></h2>
+<p>2023-03-01</p>
 <ul><li>Nomenclature cleanup (round 1)
 <ul><li>collapse_distr(x, bf) -&gt; collapse_raster(raster, bf)</li>
 <li>evaluate_performance(bf) -&gt; evaluate_performance(x)</li>
@@ -1013,26 +1035,31 @@ sparsification</p></li>
 This removes the documentation from the package manual and index, but it’s still accessible with ?function_name.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9016" id="birdflowr-0009016-2023-02-27">BirdFlowR 0.0.0.9016 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009016-2023-02-27"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9016" id="birdflowr-0009016">BirdFlowR 0.0.0.9016<a class="anchor" aria-label="anchor" href="#birdflowr-0009016"></a></h2>
+<p>2023-02-27</p>
 <ul><li>Added package down. Starting to use <a href="https://semver.org/" class="external-link">semantic versioning</a>.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9017" id="birdflowr-0009017-2023-02-27">BirdFlowR 0.0.0.9017 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009017-2023-02-27"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9017" id="birdflowr-0009017">BirdFlowR 0.0.0.9017<a class="anchor" aria-label="anchor" href="#birdflowr-0009017"></a></h2>
+<p>2023-02-27</p>
 <ul><li>Fix bug introduced by <strong>ebirdst</strong> 2.2021.0 (switch from <strong>raster</strong> to <strong>terra</strong>) <a href="https://github.com/birdflow-science/BirdFlowR/issues/17" class="external-link">#17</a>.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9003" id="birdflowr-0009003-2023-02-27">BirdFlowR 0.0.0.9003 2023-02-27<a class="anchor" aria-label="anchor" href="#birdflowr-0009003-2023-02-27"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9003" id="birdflowr-0009003">BirdFlowR 0.0.0.9003<a class="anchor" aria-label="anchor" href="#birdflowr-0009003"></a></h2>
+<p>2023-02-27</p>
 <ul><li><p>Updated installation instructions. Closing <a href="https://github.com/birdflow-science/BirdFlowR/issues/11" class="external-link">#11</a>.</p></li>
 <li><p>Added docker file. <a href="https://github.com/birdflow-science/BirdFlowR/pull/15#issuecomment-1445152787" class="external-link">Usage instructions.</a></p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9002" id="birdflowr-0009002-2023-02-23">BirdFlowR 0.0.0.9002 2023-02-23<a class="anchor" aria-label="anchor" href="#birdflowr-0009002-2023-02-23"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9002" id="birdflowr-0009002">BirdFlowR 0.0.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-0009002"></a></h2>
+<p>2023-02-23</p>
 <ul><li><p>Added “biocViews:” before “Imports:” in DESCRIPTION so that devtools can find and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR needs. <a href="https://github.com/birdflow-science/BirdFlowR/issues/13" class="external-link">#13</a></p></li>
 <li><p>Vignette now attempts to load rnaturalearthdata with utils::install.packages() instead of <code>devtools::install_cran()</code> in attempt to fix <a href="https://github.com/birdflow-science/BirdFlowR/issues/11" class="external-link">#11</a></p></li>
 <li><p>Updated <code><a href="../reference/get_naturalearth.html">get_naturalearth()</a></code> so that it handles some cases in which it previously failed. In particular extents that span more than 180 deg of longitude, and extents that cross the 180 deg. meridian that defines the edge of the WGS84 projection both now work. The function still doesn’t handle polar projections or global extents in most projections. Fixes <a href="https://github.com/birdflow-science/BirdFlowR/issues/14" class="external-link">#14</a></p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9001" id="birdflowr-0009001-2023-02-21">BirdFlowR 0.0.0.9001 2023-02-21<a class="anchor" aria-label="anchor" href="#birdflowr-0009001-2023-02-21"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.0.9001" id="birdflowr-0009001">BirdFlowR 0.0.0.9001<a class="anchor" aria-label="anchor" href="#birdflowr-0009001"></a></h2>
+<p>2023-02-21</p>
 <ul><li><p>Switched order of package installation in readme and added installation of rnaturalearthdata to vignette <a href="https://github.com/birdflow-science/BirdFlowR/issues/11" class="external-link">#11</a></p></li>
 <li><p>Added a <code>NEWS.md</code> file to track changes to the package.</p></li>
 </ul></div>
