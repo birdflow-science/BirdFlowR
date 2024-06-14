@@ -11,11 +11,17 @@ process_rasters(
   sp_path,
   clip,
   project_method,
-  download_patterns
+  download_patterns,
+  trim_quantile = NULL
 )
 }
 \arguments{
 \item{res}{Output resolution in kilometers}
+
+\item{crs}{Coordinate reference system (CRS) to use.  Defaults to the custom
+projection eBird has assigned to this species - see
+\code{\link[ebirdst:load_fac_map_parameters]{ebirdst::load_fac_map_parameters()}}). It will be interpreted by
+\code{\link[terra:crs]{terra::crs()}} to generate a well known text representation of the CRS.}
 
 \item{download_species}{The species code used when downloading eBird
 S&T data, might be "example_data" but otherwise a standard species code.}
@@ -28,6 +34,18 @@ species range.}
 
 \item{project_method}{Method to use when reprojecting. Set locally by code
 within \code{preprocess_species()}}
+
+\item{trim_quantile}{With the default of \code{NULL} there is no outlier trimming,
+otherwise a single value between 0 and 1 to indicate the quantile
+to truncate at or a series of 52 such values corresponding with each week.
+Trimming outliers is always done week by week with the values above the
+\code{trim_quantile} quantile set to the value
+of that quantile. Reasonable non \code{NULL} values will be close to 1 e.g. 0.99,
+0.995, 0.999.
+Set \code{trim_quantile} to eliminate high outliers that are believed
+to be model artifacts.
+See \href{https://github.com/birdflow-science/BirdFlowR/issues/189}{Issue #189}
+for detailed justification.}
 }
 \value{
 A list with

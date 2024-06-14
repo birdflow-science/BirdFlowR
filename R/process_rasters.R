@@ -13,7 +13,7 @@
 #' species range.
 #' @param project_method Method to use when reprojecting. Set locally by code
 #' within `preprocess_species()`
-#'
+#' @inheritParams preprocess_species
 #' @return A list with
 #' \item{distr, uci, lci}{The are the species distribution, and upper and lower
 #' confidence intervals on that distribution in their flattened form. Each
@@ -28,7 +28,8 @@ process_rasters <- function(res,
                             sp_path,
                             clip,
                             project_method,
-                            download_patterns) {
+                            download_patterns,
+                            trim_quantile = NULL) {
 
 
   res_m <- res * 1000
@@ -234,6 +235,35 @@ process_rasters <- function(res,
   uci[is.na(uci)] <- 0
   lci <- terra::values(abunds_lci_low_res)[m, , drop = FALSE]
   lci[is.na(lci)] <- 0
+
+  #----------------------------------------------------------------------------#
+  # Trim outliers
+  #----------------------------------------------------------------------------#
+  if (!is.null(trim_quantile)) {
+
+    nt <- ncol(distr)
+
+    stopifnot(is.numeric(trim_quantile),
+              !anyNA(trim_quantile),
+              all(trim_quantile > 0),
+              all(trim_quantile <= 1),
+              length(trim_quantile) == 1 || length(trim_quantile) == nt)
+
+    if (length(trim_quantile) == 1)
+      trim_quantile <- rep(trim_quantile, nt)
+
+    truncate_and_renormalize <- function(x, p = 0.95) {
+      q <- quantile(x[!x == 0], p = p)
+      x[x > q] <- q
+      x <- x / sum(x, na.rm = TRUE)
+      x
+    }
+
+    for (i in seq_len(ncol(distr))) {
+      distr[, i] <- truncate_and_renormalize(distr[, i], p = trim_quantile[i])
+    }
+  }  # end trim outliers
+
 
   return(list(distr = distr,
               uci = uci,

@@ -68,6 +68,17 @@
 #'   quality using based on the four `<season>_model_quality` columns in
 #'   [ebirdst_runs][ebirdst::ebirdst_runs] ignored with 2021 \pkg{ebirdst}
 #'   version year.
+#' @param trim_quantile With the default of `NULL` there is no outlier trimming,
+#' otherwise a single value between 0 and 1 to indicate the quantile
+#' to truncate at or a series of 52 such values corresponding with each week.
+#' Trimming outliers is always done week by week with the values above the
+#' `trim_quantile` quantile set to the value
+#' of that quantile. Reasonable non `NULL` values will be close to 1 e.g. 0.99,
+#' 0.995, 0.999.
+#' Set `trim_quantile` to eliminate high outliers that are believed
+#' to be model artifacts.
+#' See [Issue #189](https://github.com/birdflow-science/BirdFlowR/issues/189)
+#' for detailed justification.
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
 #' @return Returns a BirdFlow model object that lacks marginals, but is
@@ -113,6 +124,7 @@ preprocess_species <- function(species = NULL,
                                gpu_ram = 12,
                                skip_quality_checks = FALSE,
                                min_season_quality = 3,
+                               trim_quantile = NULL,
                                ...
 
 ) {
@@ -143,6 +155,18 @@ preprocess_species <- function(species = NULL,
 
   if (is.na(species))
     stop("species cannot be NA")
+
+  if (!is.null(trim_quantile)) {
+    stopifnot(is.numeric(trim_quantile),
+              !anyNA(trim_quantile),
+              all(trim_quantile > 0),
+              all(trim_quantile <= 1),
+              length(trim_quantile) == 1 || length(trim_quantile) == 52)
+
+    if (length(trim_quantile) == 1)
+      trim_quantile <- rep(trim_quantile, 52)
+
+  }
 
   stopifnot(is.logical(hdf5),
             length(hdf5) == 1)
@@ -388,7 +412,8 @@ preprocess_species <- function(species = NULL,
                        sp_path = sp_path,
                        clip = clip,
                        project_method = project_method,
-                       download_patterns = download_patterns)
+                       download_patterns = download_patterns,
+                       trim_quantile = trim_quantile)
   mask <- a$mask
 
   # Save distribution and confidence intervals to export object
@@ -451,7 +476,7 @@ preprocess_species <- function(species = NULL,
   bf_msg(message)
 
   #----------------------------------------------------------------------------#
-  # Truncate
+  # Truncate (dates)
   #----------------------------------------------------------------------------#
   truncated <- !all(seq_len(n_timesteps(export)) %in%
                       lookup_timestep_sequence(x = export, ...))
