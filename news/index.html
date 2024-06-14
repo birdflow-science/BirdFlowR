@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9064</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9065</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,13 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9065" id="birdflowr-0109065">BirdFlowR 0.1.0.9065<a class="anchor" aria-label="anchor" href="#birdflowr-0109065"></a></h2>
+<p>2024-06-14</p>
+<p>Add <code>trim_quantile</code> argument to <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/process_rasters.html">process_rasters()</a></code> to allow trimming values above a quantile in the values to the quantile’s value. E.g. with <code>trim_quantile = 0.99</code> any value above the 99th percentile will be trimmed to value of the 99th percentile.</p>
+<p>The motivation is to trim high outliers when they are believed to be artifacts of the S&amp;T models and eBird data. Robins are a good example.</p>
+<p>Closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/198" class="external-link">#198</a> “Outliers”.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9064" id="birdflowr-0109064">BirdFlowR 0.1.0.9064<a class="anchor" aria-label="anchor" href="#birdflowr-0109064"></a></h2>
 <p>2024-06-14</p>

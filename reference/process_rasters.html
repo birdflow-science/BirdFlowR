@@ -14,7 +14,7 @@ sufficiently complicated to justify being a separate function."><meta property="
     
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9064</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9065</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,8 @@ sufficiently complicated to justify being a separate function.</p>
 <span>  <span class="va">sp_path</span>,</span>
 <span>  <span class="va">clip</span>,</span>
 <span>  <span class="va">project_method</span>,</span>
-<span>  <span class="va">download_patterns</span></span>
+<span>  <span class="va">download_patterns</span>,</span>
+<span>  trim_quantile <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -83,6 +84,13 @@ sufficiently complicated to justify being a separate function.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>res</dt>
 <dd><p>Output resolution in kilometers</p></dd>
+
+
+<dt>crs</dt>
+<dd><p>Coordinate reference system (CRS) to use.  Defaults to the custom
+projection eBird has assigned to this species - see
+<code><a href="https://ebird.github.io/ebirdst/reference/load_fac_map_parameters.html" class="external-link">ebirdst::load_fac_map_parameters()</a></code>). It will be interpreted by
+<code><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">terra::crs()</a></code> to generate a well known text representation of the CRS.</p></dd>
 
 
 <dt>download_species</dt>
@@ -103,6 +111,20 @@ species range.</p></dd>
 <dt>project_method</dt>
 <dd><p>Method to use when reprojecting. Set locally by code
 within <code><a href="preprocess_species.html">preprocess_species()</a></code></p></dd>
+
+
+<dt>trim_quantile</dt>
+<dd><p>With the default of <code>NULL</code> there is no outlier trimming,
+otherwise a single value between 0 and 1 to indicate the quantile
+to truncate at or a series of 52 such values corresponding with each week.
+Trimming outliers is always done week by week with the values above the
+<code>trim_quantile</code> quantile set to the value
+of that quantile. Reasonable non <code>NULL</code> values will be close to 1 e.g. 0.99,
+0.995, 0.999.
+Set <code>trim_quantile</code> to eliminate high outliers that are believed
+to be model artifacts.
+See <a href="https://github.com/birdflow-science/BirdFlowR/issues/189" class="external-link">Issue #189</a>
+for detailed justification.</p></dd>
 
 </dl></div>
     <div class="section level2">
