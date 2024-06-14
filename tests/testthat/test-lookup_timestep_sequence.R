@@ -575,3 +575,18 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
                regexp = "season has NA .* season lookup is impossible")
 
 })
+
+test_that("lookup_season_timesteps() works with single timestep season", {
+  # See https://github.com/birdflow-science/BirdFlowR/issues/191
+  # The Northerth Saw-whet Owl  "nswowl
+
+  bf <- BirdFlowModels::amewoo
+
+  # Hack species info to artificially recreate problem with standard test model
+  # same date for start and end of prebreeding migration
+  bf$species$prebreeding_migration_end <- bf$species$prebreeding_migration_start
+
+  expect_no_error(a <- lookup_season_timesteps(bf, season = "prebreeding"))
+  expect_equal(length(a), 3) # given default season buffer of 1
+
+})

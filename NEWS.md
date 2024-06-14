@@ -1,8 +1,13 @@
+# BirdFlowR 0.1.0.9064
+2024-06-14
+
+Fix #191  Date lookup now works for seasons that start and end on the same day.
 
 # BirdFlowR 0.1.0.9063
 2024-06-12
 
-Fix #168 -- allow `NA` in species date fields as in Magnificent Frigate bird
+Fix #168 -- allow `NA` in species date fields as in Magnificent Frigate bird.
+
 * Replace `NA` with `$species` with empty string before writing to HDF5 with
 `export_birdflow()`
 * Replace empty string with `NA` when reading `$species` items in 
@@ -89,7 +94,9 @@ parameters.
 
 # BirdFlowR 0.1.0.9055
 2024-03-29
+
 ## Flux II
+
 * Flux values are now divided by the radius to standardize units at
   at P/km/week/  where P is the proportion of the population.
 * Add tests for `calc_flux()` and `is_between()`
@@ -1377,7 +1384,8 @@ it is `TRUE`.
 * Expanded "Learn More"" section in README.md to link to all vignettes as well
   as the BirdFlow paper.
 
-# BirdFlowR 0.0.0.9021  2023-03-03
+# BirdFlowR 0.0.0.9021
+2023-03-03
 
 * Updated preprocess_species()
   - Now only downloads the files it needs [#21](https://github.com/birdflow-science/BirdFlowR/issues/21)
@@ -1385,7 +1393,8 @@ it is `TRUE`.
   find the right resolution.
   - Added  additional tests to cover error conditions and clipping
 
-# BirdFlowR 0.0.0.9019  2023-03-01
+# BirdFlowR 0.0.0.9019
+2023-03-01
 
 * Nomenclature cleanup (round 1)
   - collapse_distr(x, bf) -> collapse_raster(raster, bf)
@@ -1412,16 +1421,19 @@ it is `TRUE`.
   still accessible with ?function_name. 
 
 
-# BirdFlowR 0.0.0.9016  2023-02-27
+# BirdFlowR 0.0.0.9016
+2023-02-27
 
 * Added package down. Starting to use [semantic versioning](https://semver.org/).
 
-# BirdFlowR 0.0.0.9017  2023-02-27
+# BirdFlowR 0.0.0.9017
+2023-02-27
 
 * Fix bug introduced by **ebirdst** 2.2021.0 (switch from **raster** to 
 **terra**) [#17](https://github.com/birdflow-science/BirdFlowR/issues/17).
 
-# BirdFlowR 0.0.0.9003  2023-02-27
+# BirdFlowR 0.0.0.9003
+2023-02-27
 
 * Updated installation instructions.  Closing
   [#11](https://github.com/birdflow-science/BirdFlowR/issues/11).
@@ -1429,7 +1441,8 @@ it is `TRUE`.
 * Added docker file. 
   [Usage instructions.](https://github.com/birdflow-science/BirdFlowR/pull/15#issuecomment-1445152787) 
 
-# BirdFlowR 0.0.0.9002  2023-02-23
+# BirdFlowR 0.0.0.9002
+2023-02-23
 
 * Added "biocViews:" before "Imports:" in DESCRIPTION so that devtools can find
 and install rhdf5 (from Bioconductor) while installing the packages BirdFlowR 
@@ -1446,7 +1459,9 @@ needs. [#13](https://github.com/birdflow-science/BirdFlowR/issues/13)
   polar projections or global extents in most projections. Fixes 
   [#14](https://github.com/birdflow-science/BirdFlowR/issues/14) 
 
-# BirdFlowR 0.0.0.9001   2023-02-21
+# BirdFlowR 0.0.0.9001
+2023-02-21
+
 * Switched order of package installation in readme and added installation of
   rnaturalearthdata to vignette
   [#11](https://github.com/birdflow-science/BirdFlowR/issues/11) 
