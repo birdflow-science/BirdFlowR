@@ -319,7 +319,7 @@ lookup_season_timesteps <- function(x, season, season_buffer = 1) {
   if (circular) {
 
     # Buffered season should at most add up to n_timesteps
-    n <- ifelse(end > start, end - start + 1, n_timesteps(x) - start + 1 + end)
+    n <- ifelse(end >= start, end - start + 1, n_timesteps(x) - start + 1 + end)
     if ((n + 2 * season_buffer) > n_timesteps(x))
       stop("season_buffer is too large.")
 
