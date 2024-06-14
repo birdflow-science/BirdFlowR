@@ -1,3 +1,16 @@
+# BirdFlowR 0.1.0.9065
+2024-06-14
+
+Add `trim_quantile` argument to `preprocess_species()` and `process_rasters()`
+to allow trimming values above a quantile in the values to the quantile's value.
+E.g. with `trim_quantile = 0.99` any value above the 99th percentile will be
+trimmed to value of the 99th percentile.
+
+The motivation is to trim high outliers when they are believed to be artifacts
+of the S&T models and eBird data. Robins are a good example. 
+
+Closes #198 "Outliers". 
+
 # BirdFlowR 0.1.0.9064
 2024-06-14
 

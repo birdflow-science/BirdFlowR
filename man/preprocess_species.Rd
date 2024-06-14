@@ -16,6 +16,7 @@ preprocess_species(
   gpu_ram = 12,
   skip_quality_checks = FALSE,
   min_season_quality = 3,
+  trim_quantile = NULL,
   ...
 )
 }
@@ -68,6 +69,18 @@ preprocessing eBird 2022 and subsequent versions. Used to check model
 quality using based on the four \verb{<season>_model_quality} columns in
 \link[ebirdst:ebirdst_runs]{ebirdst_runs} ignored with 2021 \pkg{ebirdst}
 version year.}
+
+\item{trim_quantile}{With the default of \code{NULL} there is no outlier trimming,
+otherwise a single value between 0 and 1 to indicate the quantile
+to truncate at or a series of 52 such values corresponding with each week.
+Trimming outliers is always done week by week with the values above the
+\code{trim_quantile} quantile set to the value
+of that quantile. Reasonable non \code{NULL} values will be close to 1 e.g. 0.99,
+0.995, 0.999.
+Set \code{trim_quantile} to eliminate high outliers that are believed
+to be model artifacts.
+See \href{https://github.com/birdflow-science/BirdFlowR/issues/189}{Issue #189}
+for detailed justification.}
 
 \item{...}{
   Arguments passed on to \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence}}

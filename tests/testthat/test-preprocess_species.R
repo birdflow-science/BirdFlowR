@@ -147,7 +147,7 @@ test_that("preprocess_species() works with clip", {
   xmax <-  1550000
   ymax <-  1300000
   poly <- matrix(c(xmin, xmin, xmax, xmax, xmin,
-                    ymin, ymax, ymax, ymin, ymin), ncol = 2) |>
+                   ymin, ymax, ymax, ymin, ymin), ncol = 2) |>
     list() |>
     sf::st_polygon()
 
@@ -179,8 +179,8 @@ test_that("preprocess_species() works with clip", {
                             clip = clip,
                             season = "prebreeding",
                             gpu_ram = 2
-                            )
     )
+  )
 
 
   # Test that expect file was created
@@ -214,6 +214,87 @@ test_that("preprocess_species() works with crs arg", {
 })
 
 
+test_that("preprocess_species() works with trim_quantile", {
+  skip_on_cran()
+  skip_on_ci()
+  local_quiet()
+
+  bf <- preprocess_species(species = "example_data",
+                           res = 200,
+                           hdf5 = FALSE,
+                           trim_quantile = NULL)
+
+
+  expect_no_error(
+    bf_trim <- preprocess_species(species = "example_data",
+                                  res = 200,
+                                  hdf5 = FALSE,
+                                  trim_quantile = 0.99)
+  )
+
+
+
+
+  # Expect highest value to be lower in trimmed dataset
+  expect_true((dt < d)[which.max(d)])
+
+  # Expect lowest non-zero value to be higher in trimmed dataset
+  sv <- d != 0
+  expect_true((dt[sv] > d[sv])[which.min(d[sv])])
+
+  if (FALSE) {
+    # Code to visualize differences
+    # With the test dataset there's almost nothing.
+    d <- get_distr(bf, 10)
+    dt <- get_distr(bf_trim, 10)
+    col <- rep(NA, length(d))
+    col[d < dt] <- "Blue"
+    col[d == dt] <- "Black"
+    col[d > dt] <- "Red"
+    plot(d, dt, col = col)
+    abline(a = 0, b = 1)
+    cbind(d, dt)
+    get_distr(bf, c(1, 10, 20, 40)) |> plot_distr(bf)
+    get_distr(bf_trim, c(1, 10, 20, 40)) |> plot_distr(bf_trim)
+  }
+
+  skip("Slow test of quatile trimming on Robins - always skipped.")
+
+  # This test requires a valid ebirdst key as well
+
+  # The robin distribution is super concentrated in the first timestep
+  # and was the motivation for adding quantile based trimming.
+  # This test is mostly a visual confirmation that it's working
+  # as expected with that species.
+
+  bf <- preprocess_species("amerob", hdf5 = FALSE, res = 200)
+  bft <- preprocess_species("amerob", hdf5 = FALSE, res = 200,
+                            trim_quantile = c(0.994, rep(1, 51)))
+
+  get_distr(bf, c(1, 10)) |> plot_distr(bf)
+  get_distr(bft, c(1, 10)) |> plot_distr(bft)
+
+  # Only first distribution was trimmed
+  expect_equal(get_distr(bf, 2), get_distr(bft, 2))
+
+
+  # Expect highest value to be lower in trimmed dataset
+  expect_true((dt < d)[which.max(d)])
+
+  # Expect lowest non-zero value to be higher in trimmed dataset
+  sv <- d != 0
+  expect_true((dt[sv] > d[sv])[which.min(d[sv])])
+
+  # Visualize outlier truncation
+  if (FALSE) {
+    d <- get_distr(bf, 1)
+    dt <- get_distr(bft, 1)
+    plot(d, dt)
+    abline(0, 1)
+  }
+
+})
+
 test_that("preprocess_species() works with clip and crs", {
 
   # This was a problem that manifested while running lots of species with a
@@ -228,7 +309,7 @@ test_that("preprocess_species() works with clip and crs", {
   # Note this test is slow and requires an active ebirdst access key
   # See ebirdst::set_ebirdst_access_key()
 
-  skip("Slow test to documents an old bug. Always skipped.")
+  skip("Slow test to document an old bug. Always skipped.")
 
   species <- "banswa"
 
