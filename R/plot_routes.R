@@ -137,7 +137,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   # Check for full output from route() and select just point component
   # This is to ease the transition in return format for route()
   # (from a list with $points and $lines to just the $points component)
-  if (is.list(routes) && all(names(routes) == c("points", "lines")) &&
+  if (is.list(routes) && all(names(routes) %in% c("points", "lines")) &&
       is.data.frame(routes$points)) {
     routes <- routes$points
   }
