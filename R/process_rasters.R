@@ -253,7 +253,7 @@ process_rasters <- function(res,
       trim_quantile <- rep(trim_quantile, nt)
 
     truncate_and_renormalize <- function(x, p = 0.95) {
-      q <- quantile(x[!x == 0], p = p)
+      q <- stats::quantile(x[!x == 0], p = p)
       x[x > q] <- q
       x <- x / sum(x, na.rm = TRUE)
       x
