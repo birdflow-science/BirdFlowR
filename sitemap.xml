@@ -1,330 +1,116 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/404.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowOverview.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowR.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/articles/Installation.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_flux.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_routes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/as_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/as_transitions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/bf_msg.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/bf_suppress_msg.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/build_collection_index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/cache_path.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_number.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/callaghan_abundance.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/determine_resolution.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/dimensions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/distribution_performance.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/ebirdst-compatibility.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/evaluate_performance.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/expand_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/export_rasters.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_birdflow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_geom.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/find_threshold.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_current_dead_ends.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_dead_ends.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dates.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_marginal.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_population.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_timestep_padding.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/get_transition.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/great_circle_distances.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/has.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow_v3.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/is_between.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/load_collection_index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/load_model.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_date.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep_sequence.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_transitions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_cache_readme.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_dates.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_marginal_index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_mask.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/make_pyear_breaks.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/marginal_stats.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/pad_timestep.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_flux.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_routes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/predict_params.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlowRoutes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/process_rasters.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/read_geom.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_distr_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_timestep.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/route.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/route_migration.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/shorten_distance_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/shrink_birdflow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/shrink_geom.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/snap_to_birdflow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/sparsify.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/species_info.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/suppress_specific_warnings.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/transition_from_marginal.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/ts_info.html</loc>
-  </url>
-  <url>
-    <loc>https://birdflow-science.github.io/BirdFlowR/reference/validate_BirdFlow.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/404.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/CONTRIBUTING.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/LICENSE-text.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/LICENSE.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowOverview.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowR.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Installation.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/authors.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/news/index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_flux.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_routes.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/as_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/as_transitions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/bf_msg.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/bf_suppress_msg.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_crs.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/build_collection_index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/cache_path.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_number.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/callaghan_abundance.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/determine_resolution.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/dimensions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/distribution_performance.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/ebirdst-compatibility.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/evaluate_performance.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/expand_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/export_rasters.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_birdflow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/extend_geom.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/find_threshold.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_current_dead_ends.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_dead_ends.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dates.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_loss.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_marginal.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_population.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_timestep_padding.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_transition.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/great_circle_distances.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/has.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/import_birdflow_v3.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/is_between.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/load_collection_index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/load_model.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_date.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep_sequence.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/lookup_transitions.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/make_cache_readme.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/make_dates.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/make_marginal_index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/make_mask.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/make_pyear_breaks.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/marginal_stats.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/pad_timestep.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_flux.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_loss.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_routes.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/predict_params.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlowRoutes.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/process_rasters.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/read_geom.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_distr_labels.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_timestep.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/route.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/route_migration.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/shorten_distance_matrix.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/shrink_birdflow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/shrink_geom.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/snap_to_birdflow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/sparsify.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/species_info.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/suppress_specific_warnings.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/transition_from_marginal.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/ts_info.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/validate_BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/weight_between.html</loc></url>
 </urlset>
+
