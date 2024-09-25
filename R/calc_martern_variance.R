@@ -11,7 +11,7 @@ k_m3 <- function(d, gamma = 40, kl = 40) {
 }
 
 k_m5 <- function(d, gamma = 40, kl = 40) {
-  gamma * (1 + sqrt(5) * d / kl +  5 * d^2 / (3 * l^2)) * exp(-sqrt(5) * d / kl)
+  gamma * (1 + sqrt(5) * d / kl +  5 * d^2 / (3 * kl^2)) * exp(-sqrt(5) * d / kl)
 }
 
 k_sq <- function(d, gamma, kl) {
