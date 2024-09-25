@@ -18,6 +18,26 @@ test_that("calc_flux() works without directionality", {
 
 })
 
+test_that("calc_flux() works with weights", {
+  local_quiet()
+  # Sparsify and truncate to speed things up
+  bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 1, end = 5)
+  bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
+
+  expect_no_error(f <- calc_flux(bf, weighted = TRUE))
+
+  # Snapshot of first 6 non-zero movements
+  top <- head(f[!f$flux == 0, ], 6)
+  top$flux <- signif(top$flux, 4)
+  # --- expect_snapshot(top)  --- wait for final parameters to save snapshot
+
+  # Visualizations
+  expect_no_error(plot_flux(f, bf))
+  expect_no_error(animate_flux(f, bf))
+
+})
+
 
 test_that("Test sensativity of flux to radius", {
   local_quiet()

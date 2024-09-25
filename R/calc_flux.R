@@ -41,6 +41,7 @@
 #' standardizing the units based on the entire cell area that that point
 #' represents.
 #'
+#'
 #' @param bf A BirdFlow model
 #' @param points A set of points to calculate movement through. If `points` is
 #' `NULL` they will default to the BirdFlow model cells that are either active
@@ -70,6 +71,13 @@
 #' transition.}
 #'}
 #' @inheritParams is_between
+#' @param weighted If `FALSE` use the original and quicker version of flux
+#' that sums all the marginal probability for transitions that pass within a
+#' fixed distance of the point.  If `TRUE` assign a weight to the point and
+#' transition combo that then is multiplied by the marginal probability before
+#' summing.  This argument is experimental but the default value is identical
+#' to the old version. The argument name and behaviour when set to `TRUE` may
+#' change.
 #'
 #' @return See `format` argument.
 #' @export
@@ -86,7 +94,9 @@
 #' }
 #'
 calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
-                      format = NULL, batch_size = 5e5, check_radius = TRUE) {
+                      format = NULL, batch_size = 5e5, check_radius = TRUE,
+                      weighted = FALSE) {
+
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
     stop("The SparseArray package is required to use calc_flux(). ",
@@ -107,8 +117,16 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   format <- tolower(format)
   stopifnot(format %in% c("points", "spatraster", "dataframe"))
 
+  # The only difference between is_between() and weight_between() return formats
+  # is in the "between" component.  In the first it's logical (TRUE is between)
+  # in the second it is a weight between 0 and 1 (non zero indicates some
+  # level of betweeness".
+  if (weighted) {
+    result <- weight_between(bf, points, radius, n_directions)
+  } else {
+    result <- is_between(bf, points, radius, n_directions)
+  }
 
-  result <- is_between(bf, points, radius, n_directions)
   between <- result$between
   points <- result$points
   radius_km <- result$radius / 1000
@@ -151,8 +169,8 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
       # Matrix does. The solution is to convert the selection
       # to a standard matrix or a sparse Matrix. The first is empirically a
       # lot faster
-      sel <- as.matrix(sb[, , j]) #, sparse = TRUE)
-      net_movement[j, i] <- sum(mar[sel])
+      sel <- as.matrix(sb[, , j]) # either logical or weights
+      net_movement[j, i] <- sum(mar * sel)
     }
   }
 
@@ -167,7 +185,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   if (format == "spatraster") {
     raster <- array(data = NA, dim = c(nrow(bf), ncol(bf), ncol(net_movement)))
     dimnames(raster) <- list(row = NULL, col = NULL,
-                            transition = colnames(net_movement))
+                             transition = colnames(net_movement))
     rc <- cbind(y_to_row(points$y, bf), x_to_col(points$x, bf))
     colnames(rc) <- c("row", "col")
     for (i in seq_along(marginals)) {
@@ -185,7 +203,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
 
   if (format == "dataframe") {
     wide <- cbind(as.data.frame(points)[, c("x", "y")],
-                net_movement)
+                  net_movement)
     long <- tidyr::pivot_longer(wide, cols = setdiff(names(wide), c("x", "y")),
                                 names_to = "transition", values_to = "flux")
 

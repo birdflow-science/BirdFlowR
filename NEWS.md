@@ -1,3 +1,30 @@
+# BirdFlowR 0.1.0.9067
+2024-07-24
+
+## Probabilistic flux
+
+**Note** this version adds the machinery for calculating probabilistic flux but
+the parameterization is not yet right and it will likely need some optimization
+to run on non-trivial models. 
+
+* Add `weight_betweeness()` which returns betweenness weights in a manner similar
+to `is_between()`.
+* Add `calc_distance_weights()`,`calc_martern_variance()` and some related 
+helper functions that support `weight_betweeness()`
+* Update `calc_flux()` with argument `weighted` which switches between
+ the old binary betweenness with linear paths and the new probabilistic flux 
+ with weighted betweenness in which the probability spreads in the middle of the 
+ transition path and spreads more for longer paths.  
+* Add `data-raw/martern_parameters.R` which helps visualize how parameters and
+functional forms affect weights.
+
+# BirdFlowR 0.1.0.9066
+2024-07-11
+
+Add `plot_loss()` to plot the change in the total loss and three loss 
+components during fitting. It relies on metadata added to the HDF5 file by
+BirdFlowPy.  
+
 # BirdFlowR 0.1.0.9065
 2024-06-14
 

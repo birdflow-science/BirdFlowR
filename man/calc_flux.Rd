@@ -11,7 +11,8 @@ calc_flux(
   n_directions = 1,
   format = NULL,
   batch_size = 5e+05,
-  check_radius = TRUE
+  check_radius = TRUE,
+  weighted = FALSE
 )
 }
 \arguments{
@@ -59,6 +60,14 @@ of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
 is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
 that range the algorithm is likely to yield distorted results.
 \code{0.5 * mean(res(bf))} is the default, and recommended radius.}
+
+\item{weighted}{If \code{FALSE} use the original and quicker version of flux
+that sums all the marginal probability for transitions that pass within a
+fixed distance of the point.  If \code{TRUE} assign a weight to the point and
+transition combo that then is multiplied by the marginal probability before
+summing.  This argument is experimental but the default value is identical
+to the old version. The argument name and behaviour when set to \code{TRUE} may
+change.}
 }
 \value{
 See \code{format} argument.

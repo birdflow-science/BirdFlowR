@@ -233,7 +233,8 @@ test_that("preprocess_species() works with trim_quantile", {
   )
 
 
-
+  dt <- get_distr(bf_trim)
+  d <- get_distr(bf)
 
   # Expect highest value to be lower in trimmed dataset
   expect_true((dt < d)[which.max(d)])
