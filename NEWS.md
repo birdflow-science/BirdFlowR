@@ -1,3 +1,10 @@
+# BirdFlowR 0.1.0.9068
+2024-09-24
+
+Move `build_collection_index()` to **BirdFlowPipeline**
+
+
+
 # BirdFlowR 0.1.0.9067
 2024-07-24
 
