@@ -6,6 +6,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowOverview.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/BirdFlowR.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Installation.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Polygons.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/index.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/authors.html</loc></url>
@@ -29,7 +30,6 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_number.html</loc></url>
-<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/callaghan_abundance.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc></url>
@@ -55,7 +55,6 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.html</loc></url>
-<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_population.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_timestep_padding.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_transition.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/great_circle_distances.html</loc></url>
