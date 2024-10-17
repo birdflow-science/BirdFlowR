@@ -3,6 +3,9 @@
 
 Add vignette for calculating movement among polygons from a BirdFlow model.
 
+Drop Callaghan abundance data and `get_population()`. Partners in Flight data
+is preferred, and users are encouraged to get data directly from them.
+
 # BirdFlowR 0.1.0.9068
 2024-09-24
 
