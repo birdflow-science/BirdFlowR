@@ -63,12 +63,15 @@ predict_encounter_distribution <- function(b_e, bf, gcd, st_dists){
 }
 
 
+#' @export
 get_distance_metric <- function(intervals, observations, bf){
+  # intervals is not used for now
+
   ## Must have 2 banding data
   if (length(unique(observations$BAND_TRACK)) < 2) {
     return(NA)
   }
-  b_e <- track_info$obs_df %>% group_by(BAND_TRACK) %>% filter(max(distance, na.rm = TRUE) > 100) %>% ungroup
+  b_e <- observations |> dplyr::group_by(BAND_TRACK) |> dplyr::filter(max(distance, na.rm = TRUE) > 100) |> dplyr::ungroup()
 
   # weekly distributions directly from S&T
   st_dists <- get_distr(bf, which = "all", from_marginals = FALSE)
@@ -77,8 +80,8 @@ get_distance_metric <- function(intervals, observations, bf){
   gcd <- great_circle_distances(bf)
 
   # Calculate distance metric
-  track_info$obs_df <- track_info$obs_df %>% group_by(BAND_TRACK) %>% filter(max(distance, na.rm = TRUE) > 100) %>% ungroup
-  band_tracks <- split(track_info$obs_df, track_info$obs_df$BAND_TRACK)
+  observations <- observations |> dplyr::group_by(BAND_TRACK) |> dplyr::filter(max(distance, na.rm = TRUE) > 100) |> dplyr::ungroup()
+  band_tracks <- split(observations, observations$BAND_TRACK)
 
   band_tracks <- sample(band_tracks, min(1000, length(band_tracks)))
   dists <- sapply(band_tracks, predict_encounter_distribution, bf, gcd, st_dists)
