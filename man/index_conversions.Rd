@@ -43,9 +43,9 @@ rc_to_i(row, col, bf)
 
 xy_to_i(x, y, bf)
 
-latlon_to_xy(lat, lon, bf)
+latlon_to_xy(lat, lon, bf = NULL)
 
-xy_to_latlon(x, y, bf)
+xy_to_latlon(x, y, bf = NULL)
 }
 \arguments{
 \item{x, y}{x and y coordinates in the BirdFlow model's CRS.
@@ -92,13 +92,13 @@ coordinates corresponding to the index, \code{i} of the vector state space.}
 space index corresponding to x and y coordinates or row and column indices.}
 }
 
-\item{\code{latlon_to_xy(lat, lon, bf)}}{Returns a two column matrix of the x
+\item{\code{latlon_to_xy(lat, lon, bf=NULL)}}{Returns a two column matrix of the x
 and y coordinates corresponding to the supplied latitude and longitude. The
-output is in the CRS of \code{bf} (\code{crs(bf)}).}
+output is in the CRS of \code{bf} (\code{crs(bf)}). If bf not provided, using the CRS defined by the birdflow_crs variable in the environment.}
 
-\item{\code{xy_to_latlon(x, y, bf)}}{Returns a two column matrix of the
+\item{\code{xy_to_latlon(x, y, bf, bf=NULL)}}{Returns a two column matrix of the
 latitude and longitude of points in WGS84 given their coordinates in the
-BirdFlow object's CRS.}
+BirdFlow object's CRS. If bf not provided, using the CRS defined by the birdflow_crs variable in the environment.}
 }
 \description{
 These functions convert among different ways of referencing
