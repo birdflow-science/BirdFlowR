@@ -214,9 +214,23 @@ xy_to_i <- function(x, y, bf) {
   return(rc_to_i(row, col, bf))
 }
 
+
+get_crs_from_bf_or_null <- function(bf = NULL){
+  # get crs
+  if (!is.null(bf)){
+    crs_ <- crs(bf)
+  } else {
+    if (exists("birdflow_crs", envir = .GlobalEnv)){
+      crs_ <- get("birdflow_crs", envir = .GlobalEnv)
+    } else {
+      stop("Error: Either bf argument must be provided or 'birdflow_crs' must exist in the environment.")
+    }
+  }
+}
+
 #' @rdname index_conversions
 #' @export
-latlon_to_xy <- function(lat, lon, bf) {
+latlon_to_xy <- function(lat, lon, bf = NULL) {
   if (missing(lon)) {
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(lat)
@@ -242,10 +256,13 @@ latlon_to_xy <- function(lat, lon, bf) {
     latlon$lon <= 180 &
     latlon$lat >= -90 &
     latlon$lat <= 90
+
+  crs_ <- get_crs_from_bf_or_null(bf)
+
   pts <-
     sf::st_as_sf(latlon[sv, , drop = FALSE], coords = c("lon", "lat"),
                  crs = sf::st_crs("EPSG:4326")) |>
-    sf::st_transform(crs = sf::st_crs(crs(bf))) |>
+    sf::st_transform(crs = sf::st_crs(crs_)) |>
     sf::st_coordinates()
 
   all_pts[sv, ] <- pts
@@ -256,7 +273,7 @@ latlon_to_xy <- function(lat, lon, bf) {
 
 #' @rdname index_conversions
 #' @export
-xy_to_latlon <- function(x, y, bf) {
+xy_to_latlon <- function(x, y, bf = NULL) {
   if (missing(y)) {
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(x)
@@ -278,9 +295,11 @@ xy_to_latlon <- function(x, y, bf) {
   all_pts <- matrix(NA_real_, nrow = nrow(xy), ncol = 2)
   sv <- !is.na(xy$x) & !is.na(xy$y)
 
+  crs_ <- get_crs_from_bf_or_null(bf)
+
   pts <-
     sf::st_as_sf(xy[sv, , drop = FALSE], coords = c("x", "y"),
-                 crs = sf::st_crs(crs(bf))) |>
+                 crs = sf::st_crs(crs_)) |>
     sf::st_transform(crs = sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
 
