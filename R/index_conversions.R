@@ -60,13 +60,13 @@
 #'  space index corresponding to x and y coordinates or row and column indices.}
 #'  }
 #'
-#'  \item{`latlon_to_xy(lat, lon, bf)`}{Returns a two column matrix of the x
+#'  \item{`latlon_to_xy(lat, lon, bf=NULL)`}{Returns a two column matrix of the x
 #'  and y coordinates corresponding to the supplied latitude and longitude. The
-#'  output is in the CRS of `bf` (`crs(bf)`).}
+#'  output is in the CRS of `bf` (`crs(bf)`). If bf not provided, using the CRS defined by the birdflow_crs variable in the environment.}
 #'
-#'  \item{`xy_to_latlon(x, y, bf)`}{Returns a two column matrix of the
+#'  \item{`xy_to_latlon(x, y, bf, bf=NULL)`}{Returns a two column matrix of the
 #'  latitude and longitude of points in WGS84 given their coordinates in the
-#'  BirdFlow object's CRS.}
+#'  BirdFlow object's CRS. If bf not provided, using the CRS defined by the birdflow_crs variable in the environment.}
 #'
 #' @seealso
 #' * [expand_distr()] converts a vector distribution into it's raster (matrix)
