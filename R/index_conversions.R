@@ -247,7 +247,7 @@ latlon_to_xy <- function(lat, lon, bf) {
   pts <-
     sf::st_as_sf(latlon[sv, , drop = FALSE], coords = c("lon", "lat"),
                  crs = sf::st_crs("EPSG:4326")) |>
-    sf::st_transform(crs = sf::st_crs(crs_)) |>
+    sf::st_transform(crs = sf::st_crs(crs(bf))) |>
     sf::st_coordinates()
 
   all_pts[sv, ] <- pts
@@ -282,7 +282,7 @@ xy_to_latlon <- function(x, y) {
 
   pts <-
     sf::st_as_sf(xy[sv, , drop = FALSE], coords = c("x", "y"),
-                 crs = sf::st_crs(crs_)) |>
+                 crs = sf::st_crs(crs(bf))) |>
     sf::st_transform(crs = sf::st_crs("EPSG:4326")) |>
     sf::st_coordinates()
 
