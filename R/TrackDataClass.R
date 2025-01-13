@@ -1,245 +1,106 @@
-#' Create a Track object
-#'
-#' The `Track` function creates an object of class "Track" and "BirdFlowRoute".
-#' 
-#' @rdname TrackDataClass
-#' @param track_id A string or number representing the unique identifiers of the track.
-#' @param track_date A vector representing the dates associated with the track.
-#' @param track_longitude A vector of longitudes for the track points.
-#' @param track_latitude A vector of latitudes for the track points.
-#' @param track_x A vector of x-coordinates in a projected coordinate system (projected into BirdFlow CRS).
-#' @param track_y A vector of y-coordinates in a projected coordinate system (projected into BirdFlow CRS).
-#' @param track_type A character string indicating the type of track (default: "Undefined").
-#' @param track_info Additional information or metadata about the track (default: "").
-#'
-#' @return An object of class "Track" and "BirdFlowRoute".
 #' @export
-Track <- function(track_id, track_date, track_longitude, track_latitude, track_x, track_y, track_type = "Undefined", track_info="") {
-  # check input data format
-  check_data_input_format.Track(track_id, track_date, track_longitude, track_latitude, track_x, track_y, track_type, track_info)
+Tracks <- function(track_df, species = NULL, source = NULL){
+  # Check input
+  stopifnot(is.data.frame(track_df))
+  validate_Tracks_input_track_df(track_df)
   
-  # 
-  data <- list(track_id=track_id,
-               track_date=track_date,
-               track_longitude=track_longitude,
-               track_latitude=track_latitude,
-               track_x=track_x,
-               track_y=track_y,
-               track_type=track_type,
-               track_info=track_info)
-  structure(
-    data, class = c("Track", "BirdFlowRoute")
+  # Make new Tracks object
+  obj <- new_Tracks(track_df, species, source)
+  return(obj)
+}
+
+new_Tracks <- function(track_df, species, source){
+  # Sort columns
+  target_ordered_columns <- c('track_id', 'date', 'lon', 'lat', 'track_type')
+  track_df <- track_df[, c(target_ordered_columns, setdiff(names(track_df), target_ordered_columns))]
+  
+  obj <- structure(
+    track_df, 
+    class = c("Tracks", class(track_df)),
+    species = species, 
+    source = source
   )
+  return(obj)
 }
 
-#' Check the input data format of Track object
-#' 
-#' @rdname TrackDataClass
+
 #' @export
-check_data_input_format.Track <- function(track_id, track_date, track_longitude, track_latitude, track_x, track_y, track_type, track_info){
-  if ((!is.character(track_id) & !is.numeric(track_id)) || length(track_id) != 1){
-    stop(sprintf("'track_id' must be a single string or number"))
+BirdFlowTracks <- function(birdflow_track_df,
+                           species = NULL,
+                           geom = NULL,
+                           dates = NULL,
+                           source = NULL,
+                           sort_id_and_dates = TRUE,
+                           reset_index=FALSE){
+  # Check input
+  stopifnot(inherits(bf, 'BirdFlow'))
+  stopifnot(inherits(birdflow_track_df, 'data.frame'))
+  validate_BirdFlowTracks_input_birdflow_track_df(birdflow_track_df)
+  
+  # Sort & reindex
+  if (sort_id_and_dates){
+    birdflow_track_df <- birdflow_track_df |> sort_by_id_and_dates()
   }
-  if (
-    (!inherits(track_date, "Date")) || any(is.na(track_date))
-  ) {
-    stop("'track_date' must be of class 'Date'. Please provide valid Date objects.")
-  }
-  for (var_name in c("track_longitude", "track_latitude", "track_x", "track_y")) {
-    var <- get(var_name)
-    
-    if (!is.numeric(var) || any(is.na(var))) {
-      stop(sprintf("'%s' must be a numeric vector and cannot contain NA values.", var_name))
-    }
-    
-    if (length(var) != length(track_date)) {
-      stop(sprintf("All variables must have the same length! '%s' must have the same length as 'track_date'.", var_name))
-    }
+  if (reset_index){
+    birdflow_track_df <- birdflow_track_df |> reset_index()
   }
   
-  if (max(track_longitude) > 180 || min(track_longitude) > 180){
-    stop(sprintf("'track_longitude' not in range (-180, 180)!"))
-  }
-  if (max(track_latitude) > 90 || min(track_latitude) < -90){
-    stop(sprintf("'track_latitude' not in range (-90, 90)!"))
-  }
-  valid_track_types <- c("Tracking", "Banding", "BirdFlow_generated_route","Undefined")
-  if (!is.character(track_type) || length(track_type) != 1 || !(track_type %in% valid_track_types)) {
-    stop(sprintf("'track_type' must be one of: %s", paste(valid_track_types, collapse = ", ")))
-  }
+  # Make the BirdFlowTracks object
+  obj <- new_BirdFlowTracks(birdflow_track_df=birdflow_track_df, 
+                            species=species,
+                            geom=geom,
+                            dates=dates,
+                            source=source)
   
-  if (!is.character(track_info)){
-    stop(sprintf("'info' must be a string."))
-  }
+  return(obj)
 }
 
-
-#' Print the Track object
-#' 
-#' This function print the track as a summary
-#' 
-#' @rdname TrackDataClass
-#' @param track An object of class "Track".
-#' @return No return value. Prints a summary to the console.
-#' @method print Track
-#' @export
-print.Track <- function(track) {
-  pad_width <- 18
-  cat(format("Track ID: ", width = pad_width), track$track_id, "\n")
-  cat(format("Number of points: ", width = pad_width), length(track$track_date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(track$track_date)), "to", format(max(track$track_date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(track$track_longitude), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(track$track_latitude), "\n")
-  cat(format("x range: ", width = pad_width), range(track$track_x), "\n")
-  cat(format("y range:", width = pad_width), range(track$track_y), "\n")
-  cat(format("Track type: ", width = pad_width), track$track_type, "\n")
-  cat(format("Info: ", width = pad_width), ifelse(length(track$track_info)>20, paste0(substr(track$track_info, 1, 20),' ...'), track$track_info), "\n") # only print the head 20 characters
-}
-
-
-#' Create a TrackCollection object
-#'
-#' The `TrackCollection` function creates an object of class "TrackCollection".
-#' 
-#' @rdname TrackDataClass
-#' @param tracks a list of objects of class "Track". Default to empty list.
-#' @return An object of class "TrackCollection" containing a list of tracks (default: empty list).
-#' @export
-TrackCollection <- function(tracks = list()) {
-  structure(
-    list(tracks = tracks),
-    class = "TrackCollection"
+new_BirdFlowTracks <- function(birdflow_track_df, species, geom, dates, source){
+  
+  ## Add stay id
+  birdflow_track_df <- birdflow_track_df |>
+    dplyr::group_by(.data$track_id) |>
+    add_stay_id_with_varied_intervals(timestep_col = "timestep") |> # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. It takes 'timestep' as input so account for varying intervals, if the data is not sampled in a frequency.
+    dplyr::ungroup() |>
+    as.data.frame() |>
+    preserve_s3_attributes(original=birdflow_track_df)
+  
+  # Sort columns
+  target_ordered_columns <- c('track_id', 'x', 'y', 'i', 'timestep', 'date','track_type','stay_id','stay_len')
+  birdflow_track_df <- birdflow_track_df[, c(target_ordered_columns, setdiff(names(birdflow_track_df), target_ordered_columns))]
+  
+  obj <- structure(
+    birdflow_track_df, 
+    class = unique(c('BirdFlowTracks', 'Tracks', class(birdflow_track_df))),
+    species = species, 
+    geom = geom,
+    dates = dates,
+    source = source
   )
-}
-
-#' Check if an object is a valid Track for TrackCollection
-#'
-#' This function checks whether the input is a valid object of class "Track".
-#' 
-#' @rdname TrackDataClass
-#' @param track An object to check.
-#' @return No return value. Raises an error if the input is not of class "Track".
-#' @export
-check_track.TrackCollection <- function(track){
-  if (!inherits(track, "Track")) {
-    stop("Only objects of class 'Track' can be added.")
-  }
-}
-
-
-#' Add a Track to a TrackCollection
-#'
-#' This function adds a `Track` object to a `TrackCollection`.
-#' 
-#' @rdname TrackDataClass
-#' @param track_collection An object of class "TrackCollection".
-#' @param track An object of class "Track" to add to the collection.
-#' @return An updated `TrackCollection` object with the new `Track` added.
-#' @export
-add_track.TrackCollection <- function(track_collection, track) {
-  check_track.TrackCollection(track)
-  track_collection$tracks[[length(track_collection$tracks) + 1]] <- track
-  return(track_collection)
-}
-
-#' Summarize a TrackCollection
-#'
-#' This function summarizes the content of a `TrackCollection`, including the 
-#' number of tracks and the types of tracks.
-#' 
-#' @rdname TrackDataClass
-#' @param track_collection An object of class "TrackCollection".
-#' @return A list containing:
-#' \describe{
-#'   \item{`track_count_summary`}{The number of tracks in the collection.}
-#'   \item{`track_type_summary`}{A table summarizing the types of tracks in the collection.}
-#' }
-#' @method summary TrackCollection
-#' @export
-summary.TrackCollection <- function(track_collection){
-  # Summarize track count, track type
-  track_count_summary <- length(track_collection$tracks)
-  track_type_summary <- table(sapply(track_collection$tracks, function(track) track$track_type))
-  return(list(track_count_summary=track_count_summary, track_type_summary=track_type_summary))
-}
-
-#' Print a TrackCollection
-#'
-#' This function provides a human-readable summary of a `TrackCollection`.
-#' @rdname TrackDataClass
-#' @param track_collection An object of class "TrackCollection".
-#' @return No return value. Prints a summary to the console.
-#' @method print TrackCollection
-#' @export
-print.TrackCollection <- function(track_collection) {
-  cat("TrackCollection with", length(track_collection$tracks), "tracks\n")
-  summary_ <- summary(track_collection)
-  track_type_summary_str <- paste(names(summary_$track_type_summary), summary_$track_type_summary, sep = ": ", collapse = ", ")
-  summary_str <- paste(
-    "Track Types:\n",
-    track_type_summary_str
-  )
-  cat(summary_str,'\n')
-}
-
-
-make_pairs.TrackCollection <- function(track_collection, force=FALSE) {
-  if ('paired_track' %in% names(track_collection)){
-    if (!force){
-      return(track_collection)
-    }
-  }
-  
-  track_collection$paired_track <- '...'
+  return(obj)
 }
 
 
 
 
-# 
-# # Create a PairedTrack object (S3 class)
-# PairedTrack <- function(start, end) {
-#   structure(
-#     list(start = start, end = end),
-#     class = "PairedTrack"
-#   )
-# }
-# 
-# # Print method for PairedTrack
-# print.PairedTrack <- function(paired_track) {
-#   cat("PairedTrack:\n")
-#   cat("Start:\n")
-#   print(paired_track$start)
-#   cat("End:\n")
-#   print(paired_track$end)
-# }
-# 
-# # Create a PairedTrackCollection object (S3 class)
-# PairedTrackCollection <- function(track_collection) {
-#   paired_tracks <- lapply(track_collection$tracks, function(track) {
-#     if (nrow(track$data) >= 2) { # Ensure at least two points
-#       start <- track$data[1, ]
-#       end <- track$data[nrow(track$data), ]
-#       PairedTrack(start, end)
-#     } else {
-#       NULL
-#     }
-#   })
-#   paired_tracks <- Filter(Negate(is.null), paired_tracks) # Remove NULLs for tracks with less than 2 points
-#   
-#   structure(
-#     list(paired_tracks = paired_tracks),
-#     class = "PairedTrackCollection"
-#   )
-# }
-# 
-# # Print method for PairedTrackCollection
-# print.PairedTrackCollection <- function(paired_collection) {
-#   cat("PairedTrackCollection with", length(paired_collection$paired_tracks), "paired tracks:\n")
-#   lapply(paired_collection$paired_tracks, print)
-# }
+## test
+track_df1 <- data.frame(
+  track_id = c("001", "001", "001", "001", "001", "003", "004"),          
+  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01")),
+  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -95.3698),         
+  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 29.7604), 
+  track_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus")
+)
 
-# 
+# track_df20 <- do.call(rbind, replicate(200, track_df1, simplify = FALSE))
+bf <- BirdFlowModels::amewoo
+species1 = 'aa'
+source1 = list(a=c('1'), b=c('2'))
+my_tracks <- Tracks(track_df1, species1, source1)
+my_bftracks <- as_BirdFlowTracks(my_tracks, bf=bf)
+
+
+
 # 
 # bf <- BirdFlowModels::amewoo
 # bf <- add_dynamic_mask(bf)  # To ease transition pain
