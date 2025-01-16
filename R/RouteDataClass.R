@@ -1,22 +1,22 @@
 #' @export
-Tracks <- function(track_df, species = NULL, source = NULL){
+Routes <- function(route_df, species = NULL, source = NULL){
   # Check input
-  stopifnot(is.data.frame(track_df))
-  validate_Tracks_input_track_df(track_df)
+  stopifnot(is.data.frame(route_df))
+  validate_Routes_input_route_df(route_df)
   
-  # Make new Tracks object
-  obj <- new_Tracks(track_df, species, source)
+  # Make new Routes object
+  obj <- new_Routes(route_df, species, source)
   return(obj)
 }
 
-new_Tracks <- function(track_df, species, source){
+new_Routes <- function(route_df, species, source){
   # Sort columns
-  target_ordered_columns <- c('track_id', 'date', 'lon', 'lat', 'track_type')
-  track_df <- track_df[, c(target_ordered_columns, setdiff(names(track_df), target_ordered_columns))]
+  target_ordered_columns <- c('route_id', 'date', 'lon', 'lat', 'route_type')
+  route_df <- route_df[, c(target_ordered_columns, setdiff(names(route_df), target_ordered_columns))]
   
   obj <- structure(
-    track_df, 
-    class = c("Tracks", class(track_df)),
+    route_df, 
+    class = c("Routes", class(route_df)),
     species = species, 
     source = source
   )
@@ -25,7 +25,7 @@ new_Tracks <- function(track_df, species, source){
 
 
 #' @export
-BirdFlowTracks <- function(birdflow_track_df,
+BirdFlowRoutes <- function(birdflow_route_df,
                            species = NULL,
                            geom = NULL,
                            dates = NULL,
@@ -34,19 +34,19 @@ BirdFlowTracks <- function(birdflow_track_df,
                            reset_index=FALSE){
   # Check input
   stopifnot(inherits(bf, 'BirdFlow'))
-  stopifnot(inherits(birdflow_track_df, 'data.frame'))
-  validate_BirdFlowTracks_input_birdflow_track_df(birdflow_track_df)
+  stopifnot(inherits(birdflow_route_df, 'data.frame'))
+  validate_BirdFlowRoutes_input_birdflow_route_df(birdflow_route_df)
   
   # Sort & reindex
   if (sort_id_and_dates){
-    birdflow_track_df <- birdflow_track_df |> sort_by_id_and_dates()
+    birdflow_route_df <- birdflow_route_df |> sort_by_id_and_dates()
   }
   if (reset_index){
-    birdflow_track_df <- birdflow_track_df |> reset_index()
+    birdflow_route_df <- birdflow_route_df |> reset_index()
   }
   
-  # Make the BirdFlowTracks object
-  obj <- new_BirdFlowTracks(birdflow_track_df=birdflow_track_df, 
+  # Make the BirdFlowRoutes object
+  obj <- new_BirdFlowRoutes(birdflow_route_df=birdflow_route_df, 
                             species=species,
                             geom=geom,
                             dates=dates,
@@ -55,23 +55,23 @@ BirdFlowTracks <- function(birdflow_track_df,
   return(obj)
 }
 
-new_BirdFlowTracks <- function(birdflow_track_df, species, geom, dates, source){
+new_BirdFlowRoutes <- function(birdflow_route_df, species, geom, dates, source){
   
   ## Add stay id
-  birdflow_track_df <- birdflow_track_df |>
-    dplyr::group_by(.data$track_id) |>
+  birdflow_route_df <- birdflow_route_df |>
+    dplyr::group_by(.data$route_id) |>
     add_stay_id_with_varied_intervals(timestep_col = "timestep") |> # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. It takes 'timestep' as input so account for varying intervals, if the data is not sampled in a frequency.
     dplyr::ungroup() |>
     as.data.frame() |>
-    preserve_s3_attributes(original=birdflow_track_df)
+    preserve_s3_attributes(original=birdflow_route_df)
   
   # Sort columns
-  target_ordered_columns <- c('track_id', 'x', 'y', 'i', 'timestep', 'date','track_type','stay_id','stay_len')
-  birdflow_track_df <- birdflow_track_df[, c(target_ordered_columns, setdiff(names(birdflow_track_df), target_ordered_columns))]
+  target_ordered_columns <- c('route_id', 'x', 'y', 'i', 'timestep', 'date','route_type','stay_id','stay_len')
+  birdflow_route_df <- birdflow_route_df[, c(target_ordered_columns, setdiff(names(birdflow_route_df), target_ordered_columns))]
   
   obj <- structure(
-    birdflow_track_df, 
-    class = unique(c('BirdFlowTracks', 'Tracks', class(birdflow_track_df))),
+    birdflow_route_df, 
+    class = unique(c('BirdFlowRoutes', 'Routes', class(birdflow_route_df))),
     species = species, 
     geom = geom,
     dates = dates,
@@ -84,20 +84,20 @@ new_BirdFlowTracks <- function(birdflow_track_df, species, geom, dates, source){
 
 
 ## test
-track_df1 <- data.frame(
-  track_id = c("001", "001", "001", "001", "001", "003", "004"),          
+route_df1 <- data.frame(
+  route_id = c("001", "001", "001", "001", "001", "003", "004"),          
   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01")),
   lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -95.3698),         
   lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 29.7604), 
-  track_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus")
+  route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus")
 )
 
-# track_df20 <- do.call(rbind, replicate(200, track_df1, simplify = FALSE))
+# route_df20 <- do.call(rbind, replicate(200, route_df1, simplify = FALSE))
 bf <- BirdFlowModels::amewoo
 species1 = 'aa'
 source1 = list(a=c('1'), b=c('2'))
-my_tracks <- Tracks(track_df1, species1, source1)
-my_bftracks <- as_BirdFlowTracks(my_tracks, bf=bf)
+my_routes <- Routes(route_df1, species1, source1)
+my_bfroutes <- as_BirdFlowRoutes(my_routes, bf=bf)
 
 
 
