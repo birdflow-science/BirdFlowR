@@ -258,7 +258,7 @@ latlon_to_xy <- function(lat, lon, bf) {
 
 #' @rdname index_conversions
 #' @export
-xy_to_latlon <- function(x, y) {
+xy_to_latlon <- function(x, y, bf) {
   if (missing(y)) {
     # allow passing a matrix with two columns as lat and lon
     nc <- ncol(x)
