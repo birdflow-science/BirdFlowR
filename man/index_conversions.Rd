@@ -43,9 +43,9 @@ rc_to_i(row, col, bf)
 
 xy_to_i(x, y, bf)
 
-latlon_to_xy(lat, lon, bf = NULL)
+latlon_to_xy(lat, lon, bf)
 
-xy_to_latlon(x, y, bf = NULL)
+xy_to_latlon(x, y)
 }
 \arguments{
 \item{x, y}{x and y coordinates in the BirdFlow model's CRS.
