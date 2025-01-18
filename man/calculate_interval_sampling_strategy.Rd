@@ -9,7 +9,7 @@ calculate_interval_sampling_strategy(routes, n)
 \arguments{
 \item{routes}{A \code{Routes} or similar object with \code{route_id} and time point data.}
 
-\item{n}{The total number of intervals to sample.}
+\item{n}{The total maximum number of intervals to sample. Notice: The actual output of intervals might be less than n, because of data deficiency. But never larger than n.}
 }
 \value{
 A data frame with the columns:

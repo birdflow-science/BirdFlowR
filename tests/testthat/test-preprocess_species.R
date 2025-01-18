@@ -209,7 +209,7 @@ test_that("preprocess_species() works with crs arg", {
 
   expect_no_error(
     bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE,
-                             crs = birdflow_crs)
+                             crs = terra::crs("EPSG:5069"))
   )
 })
 

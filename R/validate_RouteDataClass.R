@@ -53,14 +53,14 @@ NULL
 # For the input of Routes class
 
 #' @rdname object_validators
-validate_Routes_route_df <- function(route_df){
+validate_Routes_route_df <- function(route_df) {
   for (name in get_target_columns_Routes(type='input')){
-    if (!name %in% colnames(route_df)){
+    if (!name %in% colnames(route_df)) {
       stop(sprintf(glue::glue("'{name}' is not found in the input dataframe.")))
     }
   }
   
-  if (nrow(route_df)==0){
+  if (nrow(route_df)==0) {
     stop(sprintf("Input dataframe cannot be empty!"))
   }
   
@@ -73,12 +73,12 @@ validate_Routes_route_df <- function(route_df){
 
 
 #' @rdname object_validators
-validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df){
+validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   # For the input of BirdFlowRoutes class
   stopifnot(inherits(birdflow_route_df, 'data.frame'))
 
   # check the features required by direct initiation of BirdFlowRoutes class
-  for (name in get_target_columns_BirdFlowRoutes(type='input')){
+  for (name in get_target_columns_BirdFlowRoutes(type='input')) {
     if (!name %in% colnames(birdflow_route_df)){
       stop(sprintf(glue::glue("'{name}' is not found in the input dataframe.")))
     }
@@ -283,44 +283,44 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 NULL
 
 #' @rdname attribute_validators
-validate_Routes_route_id <- function(route_id){
-  if ((!is.character(route_id) & !is.numeric(route_id)) || any(is.na(route_id))){
+validate_Routes_route_id <- function(route_id) {
+  if ((!is.character(route_id) && !is.numeric(route_id)) || any(is.na(route_id))) {
     stop(sprintf("'route_id' must be strings or numbers. Missing values are not allowded."))
   }
 }
 
 #' @rdname attribute_validators
-validate_Routes_date <- function(date_vector){
-  if (!inherits(date_vector, c("Date", 'POSIXct', 'POSIXlt')) || any(is.na(date_vector))){
+validate_Routes_date <- function(date_vector) {
+  if (!inherits(date_vector, c("Date", 'POSIXct', 'POSIXlt')) || any(is.na(date_vector))) {
     stop("'date' must be of class 'Date', 'POSIXct', or 'POSIXlt'. Missing values are not allowded. Please provide valid Date objects.")
   }
 }
 
 #' @rdname attribute_validators
-validate_Routes_lon <- function(lon_vector){
+validate_Routes_lon <- function(lon_vector) {
   if (!is.numeric(lon_vector) || any(is.na(lon_vector))) {
     stop(sprintf("'lon' must be a numeric vector and cannot contain NA values."))
   }
-  
-  if (max(lon_vector) > 180 || min(lon_vector) > 180){
+
+  if (max(lon_vector) > 180 || min(lon_vector) > 180) {
     stop(sprintf("'lon' not in range (-180, 180)!"))
   }
 }
 
 #' @rdname attribute_validators
-validate_Routes_lat <- function(lat_vector){
+validate_Routes_lat <- function(lat_vector) {
   if (!is.numeric(lat_vector) || any(is.na(lat_vector))) {
     stop(sprintf("'lat' must be a numeric vector and cannot contain NA values."))
   }
-  
-  if (max(lat_vector) > 90 || min(lat_vector) < -90){
+
+  if (max(lat_vector) > 90 || min(lat_vector) < -90) {
     stop(sprintf("'lat' not in range (-90, 90)!"))
   }
 }
 
 #' @rdname attribute_validators
 validate_Routes_route_type <- function(route_type_vector){
-  valid_route_types <- c("tracking", "banding",'motus',"unknown")
+  valid_route_types <- c("tracking", "banding", "motus", "unknown")
   if (!all(unique(route_type_vector) %in% valid_route_types)) {
     invalid_types <- unique(route_type_vector)[!unique(route_type_vector) %in% valid_route_types]
     stop(sprintf(
@@ -332,8 +332,8 @@ validate_Routes_route_type <- function(route_type_vector){
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_route_type <- function(route_type_vector){
-  valid_route_types <- c("tracking", "banding",'motus','synthetic',"unknown")
+validate_BirdFlowRoutes_route_type <- function(route_type_vector) {
+  valid_route_types <- c("tracking", "banding", "motus", "synthetic","unknown")
   if (!all(unique(route_type_vector) %in% valid_route_types)) {
     invalid_types <- unique(route_type_vector)[!unique(route_type_vector) %in% valid_route_types]
     stop(sprintf(
@@ -373,13 +373,13 @@ validate_BirdFlowRoutes_timestep <- function(route_id_vector, timestep_vector){
   }
   
   tmp_new_df <- data.frame(list(route_id=route_id_vector, timestep=timestep_vector))
-  duplicated_timestep_check <- tmp_new_df |> 
-    dplyr::group_by(route_id) |> 
+  duplicated_timestep_check <- tmp_new_df |>
+    dplyr::group_by(route_id) |>
     dplyr::summarize(
     duplicated_timesteps = any(duplicated(timestep)),
     .groups = "drop"
   )
-  
+
   if (any(duplicated_timestep_check$duplicated_timesteps)) {
     stop("Duplicated timesteps detected within one or more route IDs. Should select only one data point per timestep for each route.")
   }
@@ -387,51 +387,49 @@ validate_BirdFlowRoutes_timestep <- function(route_id_vector, timestep_vector){
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_stay_id <- function(stay_id_vector){
+validate_BirdFlowRoutes_stay_id <- function(stay_id_vector) {
   if (!(is.numeric(stay_id_vector) || is.character(stay_id_vector)) || any(is.na(stay_id_vector))) {
     stop(sprintf("stay_id' must be a numeric or charactor vector and cannot contain NA values."))
   }
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_stay_len <- function(stay_len_vector){
+validate_BirdFlowRoutes_stay_len <- function(stay_len_vector) {
   if (!is.integer(stay_len_vector) || any(is.na(stay_len_vector))) {
     stop(sprintf("stay_len' must be an integer vector and cannot contain NA values."))
   }
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_species <- function(species){
+validate_BirdFlowRoutes_species <- function(species) {
   exists_names <- names(species)
   target_name_list <- c("species_code", "scientific_name", "common_name")
   for (name in target_name_list){
-    if (!(name %in% exists_names)){
-      stop(sprintf(glue::glue('{name} component not found in species!')))
+    if (!(name %in% exists_names)) {
+      stop(sprintf(glue::glue("{name} component not found in species!")))
     }
   }
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_geom <- function(geom){
+validate_BirdFlowRoutes_geom <- function(geom) {
   exists_names <- names(geom)
-  target_name_list <- c("nrow","ncol","res","ext","crs","mask","dynamic_mask")
+  target_name_list <- c("nrow", "ncol", "res", "ext", "crs", "mask", "dynamic_mask")
   for (name in target_name_list){
-    if (!(name %in% exists_names)){
-      stop(sprintf(glue::glue('{name} component not found in geom!')))
+    if (!(name %in% exists_names)) {
+      stop(sprintf(glue::glue("{name} component not found in geom!")))
     }
   }
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_dates <- function(dates){
-  stopifnot(inherits(dates, 'data.frame'))
+validate_BirdFlowRoutes_dates <- function(dates) {
+  stopifnot(inherits(dates, "data.frame"))
   exists_names <- colnames(dates)
   target_name_list <- c("interval", "date", "midpoint", "start", "end", "doy", "week")
   for (name in target_name_list){
-    if (!(name %in% exists_names)){
-      stop(sprintf(glue::glue('{name} component not found in dates!')))
+    if (!(name %in% exists_names)) {
+      stop(sprintf(glue::glue("{name} component not found in dates!")))
     }
   }
 }
-
-

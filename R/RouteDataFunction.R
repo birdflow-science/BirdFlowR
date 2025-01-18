@@ -433,8 +433,8 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
     this_row <- sampling_strategy_df[row_id, ]
     this_route <- birdflow_routes[birdflow_routes$route_id==this_row$route_id,]
     
-    all_pairs <- as.data.frame(t(combn(1:nrow(this_route), 2)))
-    sampled_pairs <- all_pairs[sample(1:nrow(all_pairs), size = this_row$interval_pairs, replace = FALSE), ]
+    all_pairs <- as.data.frame(t(combn(seq_len(nrow(this_route)), 2)))
+    sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$interval_pairs, replace = FALSE), ]
     
     
     extract_intervals <- function(idx_pair) {

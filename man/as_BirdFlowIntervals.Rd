@@ -4,7 +4,7 @@
 \alias{as_BirdFlowIntervals}
 \title{Convert BirdFlowRoutes to BirdFlowIntervals}
 \usage{
-as_BirdFlowIntervals(birdflow_routes, n = 1000)
+as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
 }
 \arguments{
 \item{birdflow_routes}{A \code{BirdFlowRoutes} object.}

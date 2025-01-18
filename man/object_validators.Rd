@@ -4,11 +4,14 @@
 \alias{object_validators}
 \alias{validate_Routes_route_df}
 \alias{validate_BirdFlowRoutes_birdflow_route_df}
+\alias{validate_BirdFlowIntervals_birdflow_intervals}
 \title{Object Validators}
 \usage{
 validate_Routes_route_df(route_df)
 
 validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
+
+validate_BirdFlowIntervals_birdflow_intervals(birdflow_interval_df)
 }
 \arguments{
 \item{route_df}{A data frame containing data for the \code{Routes} class. It must include columns like \code{route_id}, \code{date}, \code{lon}, \code{lat}, and \code{route_type}.}
