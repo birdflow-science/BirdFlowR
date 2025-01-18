@@ -138,15 +138,15 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
     trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1])
   }
 
+  # trajectory to BirdFlowRoutes object
   rts <- format_trajectory(trajectory, bf, timesteps)
-  attr(rts, "geom") <- bf$geom
-  attr(rts, "species") <- bf$species
-
-  md <- bf$metadata
-  md$route_type <- "synthetic"
-  attr(rts, "metadata") <- md
-  attr(rts, "dates") <- bf$dates
-  class(rts) <- c("BirdFlowRoutes", class(rts))
+  latlon <- xy_to_latlon(rts$x, rts$y, bf)
+  rts$lon <- latlon$lon
+  rts$lat <- latlon$lat
+  rts$timestep <- as.integer(rts$timestep)
+  rts$route_type <- 'synthetic'
+  rts$date <- as.Date(rts$date)
+  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = bf$metadata, geom = bf$geom, dates = bf$dates, source='Synthesized from a BirdFlow model')
 
   return(rts)
 }
@@ -173,15 +173,25 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   points <- data.frame(x, y, route_id, timestep, date,
                        i = as.vector(trajectory))
 
-  add_stay_id <- function(df) {
-    # Benjamin's function
-    df |>
-      dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
-                    stay_len = rep(rle(.data$stay_id)$lengths,
-                                   times = rle(.data$stay_id)$lengths))
-  }
+  # Adjust dates -- If it cross the year boundary, add year by 1
+  points$date <- as.Date(points$date)
+  points <- points |>
+      dplyr::group_by(route_id) |>
+      dplyr::mutate(
+          date = as.Date(unlist(purrr::accumulate(date, ~ ifelse(.y < .x, .y + lubridate::years(1), .y))))
+      ) |>
+      dplyr::ungroup() |>
+      as.data.frame()
 
-  points <- points |> dplyr::group_by(.data$route_id) |> add_stay_id()
+  # add_stay_id <- function(df) {
+  #   # Benjamin's function
+  #   df |>
+  #     dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
+  #                   stay_len = rep(rle(.data$stay_id)$lengths,
+  #                                  times = rle(.data$stay_id)$lengths))
+  # }
 
-  return(as.data.frame(points))
+  # points <- points |> dplyr::group_by(.data$route_id) |> add_stay_id()
+
+  return(points)
 }

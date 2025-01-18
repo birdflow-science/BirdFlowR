@@ -76,7 +76,7 @@ print.BirdFlowRoutes <- function(birdflow_routes){
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of birdflow_routes: ", width = pad_width), length(unique(birdflow_routes$route_id)), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(birdflow_routes$route_id)), "\n")
   cat(format("Number of points: ", width = pad_width), length(birdflow_routes$date), "\n")
   cat(format("Date range: ", width = pad_width), format(min(birdflow_routes$date)), "to", format(max(birdflow_routes$date)), "\n")
   cat(format("Longitude range: ", width = pad_width), range(birdflow_routes$lon), "\n")
