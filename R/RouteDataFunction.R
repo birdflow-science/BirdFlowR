@@ -254,12 +254,14 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
+  metadata <- bf$metadata
   geom <- bf$geom
   dates <- bf$dates
   
   # Transform to BirdFlowRoutes
   routes <- BirdFlowRoutes(birdflow_route_df = routes,
                            species = species,
+                           metadata = metadata,
                            geom = geom,
                            dates = dates,
                            source = attr(routes, 'source'))
@@ -472,10 +474,11 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   
   
   obs <- BirdFlowIntervals(all_interval_df,
-                           attr(birdflow_routes, 'species'),
-                           attr(birdflow_routes, 'geom'),
-                           attr(birdflow_routes, 'dates'),
-                           attr(birdflow_routes, 'source'))
+                           species = attr(birdflow_routes, 'species'),
+                           metadata = attr(birdflow_routes, 'metadata'),
+                           geom = attr(birdflow_routes, 'geom'),
+                           dates = attr(birdflow_routes, 'dates'),
+                           source = attr(birdflow_routes, 'source'))
   return(obs)
 }
 

@@ -14,6 +14,7 @@
 #' @param birdflow_route_df A data frame containing route data for `BirdFlowRoutes`.
 #' @param birdflow_intervals A data frame containing interval data for `BirdFlowIntervals`.
 #' @param species A list with species metadata, including `species_code`, `scientific_name`, and `common_name`.
+#' @param metadata A list with additional metadata.
 #' @param geom A list describing spatial geometry, such as `nrow`, `ncol`, `crs`, and `mask`.
 #' @param dates A data frame with date-related information, including `date`, `start`, `end`, and `timestep`.
 #' @param source A character string indicating the source of the data.
@@ -31,11 +32,18 @@
 #'   lat = c(40, 41, 42),
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
-#' Routes(route_df)
+#' species <- list(
+#'     species_code = "amewoo",
+#'     scientific_name = "Scolopax minor",
+#'     common_name = "American Woodcock"
+#' )
+#' metadata <- list(info1='Additional information')
+#' sources <- 'Unknown sources'
+#' routes_obj <- Routes(route_df, species=species, metadata=metadata, sources=sources)
 #'
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`
-#' birdflow_route_df <- route_df |> as_BirdFlowRoutes(bf=bf)
+#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
 #' 
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
@@ -47,11 +55,6 @@
 #'   date = as.Date(c("2024-01-01", "2024-01-02")),
 #'   route_type = c("tracking", "banding")
 #' )
-#' species <- list(
-#'     species_code = "amewoo",
-#'     scientific_name = "Scolopax minor",
-#'     common_name = "American Woodcock"
-#' )
 #' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
 #' dates <- data.frame(
 #'     interval = 1:2,
@@ -61,10 +64,11 @@
 #'     end = c(0.02,0.03),
 #'     doy = c(4.5, 11.5),
 #'     week = c(1,2)
-#'   )
+#' )
 #' birdflowroutes_object <- BirdFlowRoutes(
 #'   birdflow_route_df,
 #'   species = species,
+#'   metadata = metadata,
 #'   geom = geom,
 #'   dates = dates,
 #'   source = "example_source"
@@ -96,6 +100,7 @@
 #' birdflow_intervals_obj <- BirdFlowIntervals(
 #'   birdflow_intervals = birdflow_intervals,
 #'   species = species,
+#'   metadata = metadata,
 #'   geom = geom,
 #'   dates = dates,
 #'   source = "example_source"
@@ -110,19 +115,19 @@ NULL
 
 #' @rdname RouteDataClass
 #' @export
-Routes <- function(route_df, species = NULL, source = NULL) {
+Routes <- function(route_df, species = NULL, metadata = NULL, source = NULL) {
   # Check input
   stopifnot(is.data.frame(route_df))
   validate_Routes_route_df(route_df)
 
   # Make new Routes object
-  obj <- new_Routes(route_df, species, source)
+  obj <- new_Routes(route_df, species, metadata, source)
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_Routes <- function(route_df, species, source) {
+new_Routes <- function(route_df, species, metadata, source) {
   # Sort columns
   target_ordered_columns <- get_target_columns_Routes(type = "output")
   route_df <- route_df[, 
@@ -135,6 +140,7 @@ new_Routes <- function(route_df, species, source) {
     route_df,
     class = c("Routes", class(route_df)),
     species = species,
+    metadata = metadata,
     source = source
   )
   return(obj)
@@ -144,6 +150,7 @@ new_Routes <- function(route_df, species, source) {
 #' @export
 BirdFlowRoutes <- function(birdflow_route_df,
                            species,
+                           metadata,
                            geom,
                            dates,
                            source = NULL,
@@ -153,6 +160,7 @@ BirdFlowRoutes <- function(birdflow_route_df,
   stopifnot(inherits(birdflow_route_df, "data.frame"))
   validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
   validate_BirdFlowRoutes_species(species)
+  validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
 
@@ -167,6 +175,7 @@ BirdFlowRoutes <- function(birdflow_route_df,
   # Make the BirdFlowRoutes object
   obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
                             species = species,
+                            metadata = metadata,
                             geom = geom,
                             dates = dates,
                             source = source)
@@ -176,7 +185,7 @@ BirdFlowRoutes <- function(birdflow_route_df,
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_BirdFlowRoutes <- function(birdflow_route_df, species, geom, dates, source) {
+new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates, source) {
 
   ## Add stay id
   birdflow_route_df <- birdflow_route_df |>
@@ -205,6 +214,7 @@ new_BirdFlowRoutes <- function(birdflow_route_df, species, geom, dates, source) 
     birdflow_route_df,
     class = unique(c("BirdFlowRoutes", "Routes", class(birdflow_route_df))),
     species = species,
+    metadata = metadata,
     geom = geom,
     dates = dates,
     source = source
@@ -216,18 +226,21 @@ new_BirdFlowRoutes <- function(birdflow_route_df, species, geom, dates, source) 
 #' @export
 BirdFlowIntervals <- function(birdflow_intervals,
                               species,
+                              metadata,
                               geom,
                               dates,
                               source = NULL) {
 
   validate_BirdFlowIntervals_birdflow_intervals(birdflow_intervals)
   validate_BirdFlowRoutes_species(species)
+  validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
 
   # Make the BirdFlowIntervals object
   obj <- new_BirdFlowIntervals(birdflow_intervals = birdflow_intervals,
                             species = species,
+                            metadata = metadata,
                             geom = geom,
                             dates = dates,
                             source = source)
@@ -239,6 +252,7 @@ BirdFlowIntervals <- function(birdflow_intervals,
 #' @keywords internal
 new_BirdFlowIntervals <- function(birdflow_intervals,
                                   species,
+                                  metadata,
                                   geom,
                                   dates,
                                   source) {
@@ -258,6 +272,7 @@ new_BirdFlowIntervals <- function(birdflow_intervals,
     birdflow_intervals,
     class = unique(c("BirdFlowIntervals", class(birdflow_intervals))),
     species = species,
+    metadata = metadata,
     geom = geom,
     dates = dates,
     source = source

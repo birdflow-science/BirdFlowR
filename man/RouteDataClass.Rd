@@ -10,13 +10,14 @@
 \alias{new_BirdFlowIntervals}
 \title{RouteDataClass Creation Functions}
 \usage{
-Routes(route_df, species = NULL, source = NULL)
+Routes(route_df, species = NULL, metadata = NULL, source = NULL)
 
-new_Routes(route_df, species, source)
+new_Routes(route_df, species, metadata, source)
 
 BirdFlowRoutes(
   birdflow_route_df,
   species,
+  metadata,
   geom,
   dates,
   source = NULL,
@@ -24,16 +25,32 @@ BirdFlowRoutes(
   reset_index = FALSE
 )
 
-new_BirdFlowRoutes(birdflow_route_df, species, geom, dates, source)
+new_BirdFlowRoutes(birdflow_route_df, species, metadata, geom, dates, source)
 
-BirdFlowIntervals(birdflow_intervals, species, geom, dates, source = NULL)
+BirdFlowIntervals(
+  birdflow_intervals,
+  species,
+  metadata,
+  geom,
+  dates,
+  source = NULL
+)
 
-new_BirdFlowIntervals(birdflow_intervals, species, geom, dates, source)
+new_BirdFlowIntervals(
+  birdflow_intervals,
+  species,
+  metadata,
+  geom,
+  dates,
+  source
+)
 }
 \arguments{
 \item{route_df}{A data frame containing route data for \code{Routes}.}
 
 \item{species}{A list with species metadata, including \code{species_code}, \code{scientific_name}, and \code{common_name}.}
+
+\item{metadata}{A list with additional metadata.}
 
 \item{source}{A character string indicating the source of the data.}
 
@@ -77,6 +94,10 @@ route_df <- data.frame(
 Routes(route_df)
 
 # Create a BirdFlowRoutes object
+## 1. convert from `Routes`
+birdflow_route_df <- route_df |> as_BirdFlowRoutes(bf=bf)
+
+## 2. Directly from dataframe
 birdflow_route_df <- data.frame(
   route_id = c("route1", "route2"),
   x = c(1000, 2000),
@@ -86,19 +107,61 @@ birdflow_route_df <- data.frame(
   date = as.Date(c("2024-01-01", "2024-01-02")),
   route_type = c("tracking", "banding")
 )
-BirdFlowRoutes(
-  birdflow_route_df,
-  species = list(
-    species_code = "SP001",
-    scientific_name = "Hirundo rustica",
-    common_name = "Barn Swallow"
-  ),
-  geom = list(nrow = 100, ncol = 200, crs = NULL, mask = NULL),
-  dates = data.frame(
+species <- list(
+    species_code = "amewoo",
+    scientific_name = "Scolopax minor",
+    common_name = "American Woodcock"
+)
+metadata <- list(info1='Additional information')
+geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
+dates <- data.frame(
     interval = 1:2,
     date = as.Date(c("2024-01-01", "2024-01-02")),
-    midpoint = as.Date(c("2024-01-01", "2024-01-02"))
-  )
+    midpoint = as.Date(c("2024-01-01", "2024-01-02")),
+    start = c(0.01,0.02),
+    end = c(0.02,0.03),
+    doy = c(4.5, 11.5),
+    week = c(1,2)
+)
+birdflowroutes_object <- BirdFlowRoutes(
+  birdflow_route_df,
+  species = species,
+  metadata = metadata,
+  geom = geom,
+  dates = dates,
+  source = "example_source"
+)
+# Create a BirdFlowIntervals object
+## 1. convert from `BirdFlowRoutes`
+birdflow_intervals_obj <- birdflowroutes_object |> as_BirdFlowIntervals()
+
+## 2. Directly from dataframe
+birdflow_intervals <- data.frame(
+  interval_id = 1:3,
+  route_id = c("route1", "route1", "route2"),
+  lon1 = c(-90, -89, -88),
+  lon2 = c(-89, -88, -87),
+  lat1 = c(40, 41, 42),
+  lat2 = c(41, 42, 43),
+  x1 = c(1000, 1100, 1200),
+  x2 = c(1100, 1200, 1300),
+  y1 = c(500, 600, 700),
+  y2 = c(600, 700, 800),
+  i1 = c(1, 2, 3),
+  i2 = c(2, 3, 4),
+  date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+  date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
+  timestep1 = as.integer(c(1, 2, 3)),
+  timestep2 = as.integer(c(2, 3, 4)),
+  route_type = c("tracking", "tracking", "banding")
+)
+birdflow_intervals_obj <- BirdFlowIntervals(
+  birdflow_intervals = birdflow_intervals,
+  species = species,
+  metadata = metadata,
+  geom = geom,
+  dates = dates,
+  source = "example_source"
 )
 
 }

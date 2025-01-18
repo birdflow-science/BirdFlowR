@@ -15,6 +15,7 @@
 \alias{validate_BirdFlowRoutes_stay_id}
 \alias{validate_BirdFlowRoutes_stay_len}
 \alias{validate_BirdFlowRoutes_species}
+\alias{validate_BirdFlowRoutes_metadata}
 \alias{validate_BirdFlowRoutes_geom}
 \alias{validate_BirdFlowRoutes_dates}
 \title{Attribute Validators}
@@ -45,6 +46,8 @@ validate_BirdFlowRoutes_stay_len(stay_len_vector)
 
 validate_BirdFlowRoutes_species(species)
 
+validate_BirdFlowRoutes_metadata(metadata)
+
 validate_BirdFlowRoutes_geom(geom)
 
 validate_BirdFlowRoutes_dates(dates)
@@ -69,6 +72,8 @@ validate_BirdFlowRoutes_dates(dates)
 \item{stay_len_vector}{An integer vector for stay lengths. Must not contain missing values.}
 
 \item{species}{A list with species information. Must include \code{species_code}, \code{scientific_name}, and \code{common_name}.}
+
+\item{metadata}{A list with additional metadata.}
 
 \item{geom}{A list containing geometry attributes. Must include \code{nrow}, \code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
 
@@ -124,10 +129,11 @@ These functions are intended for internal use and are not exported for user-faci
 \item \code{validate_BirdFlowRoutes_stay_id()}, \code{validate_BirdFlowRoutes_stay_len()}
 \item \code{validate_BirdFlowRoutes_species()}
 }
-\item Geometry and Dates:
+\item Geometry and Dates and Metadata:
 \itemize{
 \item \code{validate_BirdFlowRoutes_geom()}
 \item \code{validate_BirdFlowRoutes_dates()}
+\item \code{validate_BirdFlowRoutes_metadata()}
 }
 }
 }

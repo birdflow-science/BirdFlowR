@@ -210,9 +210,10 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #'   - `validate_BirdFlowRoutes_i()`, `validate_BirdFlowRoutes_timestep()`
 #'   - `validate_BirdFlowRoutes_stay_id()`, `validate_BirdFlowRoutes_stay_len()`
 #'   - `validate_BirdFlowRoutes_species()`
-#' - Geometry and Dates:
+#' - Geometry and Dates and Metadata:
 #'   - `validate_BirdFlowRoutes_geom()`
 #'   - `validate_BirdFlowRoutes_dates()`
+#'   - `validate_BirdFlowRoutes_metadata()`
 #'
 #' @param route_id A vector of route IDs (character or numeric). Must not contain missing values.
 #' @param date_vector A vector of dates (`Date`, `POSIXct`, or `POSIXlt`). Must not contain missing values.
@@ -224,6 +225,7 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #' @param stay_id_vector A numeric or character vector for stay IDs. Must not contain missing values.
 #' @param stay_len_vector An integer vector for stay lengths. Must not contain missing values.
 #' @param species A list with species information. Must include `species_code`, `scientific_name`, and `common_name`.
+#' @param metadata A list with additional metadata.
 #' @param geom A list containing geometry attributes. Must include `nrow`, `ncol`, `res`, `ext`, `crs`, `mask`, and `dynamic_mask`.
 #' @param dates A data frame with date-related information. Must include `interval`, `date`, `midpoint`, `start`, `end`, `doy`, and `week`.
 #'
@@ -409,6 +411,12 @@ validate_BirdFlowRoutes_species <- function(species) {
       stop(sprintf(glue::glue("{name} component not found in species!")))
     }
   }
+}
+
+
+#' @rdname attribute_validators
+validate_BirdFlowRoutes_metadata <- function(metadata) {
+  # Does nothing and returns nothing
 }
 
 #' @rdname attribute_validators
