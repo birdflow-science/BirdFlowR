@@ -153,9 +153,9 @@ get_target_columns_Routes <- function(type='input'){
 #' @rdname target_columns
 get_target_columns_BirdFlowRoutes <- function(type='input'){
   if (type=='input'){
-    return(c('route_id', 'x', 'y', 'i', 'timestep', 'date', 'route_type'))  # 'stay_id', 'stay_len' is not necessary in this phase
+    return(c('route_id', 'x', 'y', 'i', 'lon', 'lat', 'timestep', 'date', 'route_type'))  # 'stay_id', 'stay_len' is not necessary in this phase
   } else if (type=='output') {
-    return(c('route_id', 'x', 'y', 'i', 'timestep', 'date', 'route_type', 'stay_id', 'stay_len')) # 'stay_id', 'stay_len'
+    return(c('route_id', 'x', 'y', 'i', 'lon', 'lat', 'timestep', 'date', 'route_type', 'stay_id', 'stay_len')) # 'stay_id', 'stay_len'
   } else {
     stop(glue::glue("The type should be 'input' or 'output', got {type}"))
   }
@@ -164,9 +164,9 @@ get_target_columns_BirdFlowRoutes <- function(type='input'){
 #' @rdname target_columns
 get_target_columns_BirdFlowIntervals <- function(type='input'){
   if (type=='input'){
-    return(c("interval_id", "route_id", "lon1", "lon2", "lat1", "lat2", "x1", "x2", "y1", "y2", "i1", "i2", "date1", "date2", "timestep1", "timestep2", 'route_type')) 
+    return(c("interval_id", "route_id", "x1", "x2", "y1", "y2", "i1", "i2", "lon1", "lon2", "lat1", "lat2", "date1", "date2", "timestep1", "timestep2", 'route_type')) 
   } else if (type=='output') {
-    return(c("interval_id", "route_id", "lon1", "lon2", "lat1", "lat2", "x1", "x2", "y1", "y2", "i1", "i2", "date1", "date2", "timestep1", "timestep2", 'route_type')) # 
+    return(c("interval_id", "route_id", "x1", "x2", "y1", "y2", "i1", "i2", "lon1", "lon2", "lat1", "lat2", "date1", "date2", "timestep1", "timestep2", 'route_type')) # 
   } else {
     stop(glue::glue("The type should be 'input' or 'output', got {type}"))
   }

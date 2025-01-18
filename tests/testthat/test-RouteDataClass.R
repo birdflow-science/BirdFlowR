@@ -7,6 +7,10 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
     expect_no_error(my_routes <- Routes(fake_routes, species1, source1))
     expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf=bf))
     expect_no_error(my_intervals <- as_BirdFlowIntervals(my_bfroutes))
+
+    expect_snapshot(my_routes)
+    expect_snapshot(my_bfroutes)
+    expect_snapshot(my_intervals)
 })
 
 ## More to add -- print, etc

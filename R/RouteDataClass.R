@@ -34,6 +34,10 @@
 #' Routes(route_df)
 #'
 #' # Create a BirdFlowRoutes object
+#' ## 1. convert from `Routes`
+#' birdflow_route_df <- route_df |> as_BirdFlowRoutes(bf=bf)
+#' 
+#' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
 #'   route_id = c("route1", "route2"),
 #'   x = c(1000, 2000),
@@ -43,19 +47,58 @@
 #'   date = as.Date(c("2024-01-01", "2024-01-02")),
 #'   route_type = c("tracking", "banding")
 #' )
-#' BirdFlowRoutes(
-#'   birdflow_route_df,
-#'   species = list(
-#'     species_code = "SP001",
-#'     scientific_name = "Hirundo rustica",
-#'     common_name = "Barn Swallow"
-#'   ),
-#'   geom = list(nrow = 100, ncol = 200, crs = NULL, mask = NULL),
-#'   dates = data.frame(
+#' species <- list(
+#'     species_code = "amewoo",
+#'     scientific_name = "Scolopax minor",
+#'     common_name = "American Woodcock"
+#' )
+#' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
+#' dates <- data.frame(
 #'     interval = 1:2,
 #'     date = as.Date(c("2024-01-01", "2024-01-02")),
-#'     midpoint = as.Date(c("2024-01-01", "2024-01-02"))
+#'     midpoint = as.Date(c("2024-01-01", "2024-01-02")),
+#'     start = c(0.01,0.02),
+#'     end = c(0.02,0.03),
+#'     doy = c(4.5, 11.5),
+#'     week = c(1,2)
 #'   )
+#' birdflowroutes_object <- BirdFlowRoutes(
+#'   birdflow_route_df,
+#'   species = species,
+#'   geom = geom,
+#'   dates = dates,
+#'   source = "example_source"
+#' )
+#' # Create a BirdFlowIntervals object
+#' ## 1. convert from `BirdFlowRoutes`
+#' birdflow_intervals_obj <- birdflowroutes_object |> as_BirdFlowIntervals()
+#' 
+#' ## 2. Directly from dataframe
+#' birdflow_intervals <- data.frame(
+#'   interval_id = 1:3,
+#'   route_id = c("route1", "route1", "route2"),
+#'   lon1 = c(-90, -89, -88),
+#'   lon2 = c(-89, -88, -87),
+#'   lat1 = c(40, 41, 42),
+#'   lat2 = c(41, 42, 43),
+#'   x1 = c(1000, 1100, 1200),
+#'   x2 = c(1100, 1200, 1300),
+#'   y1 = c(500, 600, 700),
+#'   y2 = c(600, 700, 800),
+#'   i1 = c(1, 2, 3),
+#'   i2 = c(2, 3, 4),
+#'   date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
+#'   timestep1 = as.integer(c(1, 2, 3)),
+#'   timestep2 = as.integer(c(2, 3, 4)),
+#'   route_type = c("tracking", "tracking", "banding")
+#' )
+#' birdflow_intervals_obj <- BirdFlowIntervals(
+#'   birdflow_intervals = birdflow_intervals,
+#'   species = species,
+#'   geom = geom,
+#'   dates = dates,
+#'   source = "example_source"
 #' )
 #'
 #' @seealso

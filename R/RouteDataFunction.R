@@ -164,8 +164,8 @@ summarize_route_type <- function(routes) {
   routes |>
     dplyr::group_by(route_type) |>
     dplyr::summarize(
-      unique_route_count = n_distinct(route_id), 
-      unique_point_count = n(),
+      unique_route_count = dplyr::n_distinct(route_id), 
+      unique_point_count = dplyr::n(),
       .groups = "drop"
     )
 }
@@ -506,7 +506,7 @@ calculate_interval_sampling_strategy <- function(routes, n) {
   # Group by route_id and count the number of time points in each route
   route_counts <- routes |>
     dplyr::group_by(route_id) |>
-    dplyr::summarize(time_points = n())
+    dplyr::summarize(time_points = dplyr::n())
   
   # Calculate interval pairs for each route
   route_counts <- route_counts |>
