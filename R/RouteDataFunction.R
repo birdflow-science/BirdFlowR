@@ -421,12 +421,12 @@ preserve_s3_attributes <- function(original, modified) {
 #'
 #' @examples
 #' birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, n = 1000)
-as_BirdFlowIntervals <- function(birdflow_routes, n=1000) {
+as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
-  stopifnot(is.numeric(n))
+  stopifnot(is.numeric(max_n))
   
   # Conversion
-  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes, n)
+  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes, max_n)
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   all_interval_df <- list()
   for (row_id in seq_len(nrow(sampling_strategy_df))){
@@ -486,7 +486,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, n=1000) {
 #' Ensures an even distribution across routes when possible.
 #'
 #' @param routes A `Routes` or similar object with `route_id` and time point data.
-#' @param n The total number of intervals to sample.
+#' @param n The total maximum number of intervals to sample. Notice: The actual output of intervals might be less than n, because of data deficiency. But never larger than n.
 #'
 #' @return A data frame with the columns:
 #' - `route_id`: The route ID.
