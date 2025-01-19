@@ -217,15 +217,6 @@ summarize_route_type <- function(routes) {
 #'
 #' @return A formatted string summarizing route types.
 #' @keywords internal
-#'
-#' @examples
-#' route_summary <- data.frame(
-#'   route_type = c("tracking", "banding", "unknown"),
-#'   unique_route_count = c(5, 3, 2),
-#'   unique_point_count = c(50, 30, 20),
-#'   stringsAsFactors = FALSE
-#' )
-#' formatted_summary <- format_summary_route_type(route_summary)
 format_summary_route_type <- function(summary_route_type) {
   stopifnot(inherits(summary_route_type,'data.frame'))
   
@@ -329,16 +320,6 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
 #'
 #' @return A data frame with updated route IDs.
 #' @keywords internal
-#'
-#' @examples
-#' route_df <- data.frame(
-#'   route_id = 1:3,
-#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-#'   lon = c(-90, -89, -88),
-#'   lat = c(40, 41, 42),
-#'   route_type = c("tracking", "banding", "unknown")
-#' )
-#' reset_routes <- reset_index(route_df)
 reset_index <- function(routes) {
   stopifnot(inherits(routes,'data.frame'))
   # Get unique route_ids and create a mapping
@@ -450,16 +431,6 @@ add_stay_id_with_varied_intervals <- function(df, timestep_col = "timestep", tim
 #'
 #' @return The `modified` object with the preserved attributes from the `original` object.
 #' @keywords internal
-#'
-#' @examples
-#' # Example usage
-#' original <- data.frame(x = 1:5)
-#' class(original) <- c("Routes", class(original))
-#' attr(original, "custom_attr") <- "example"
-#'
-#' modified <- data.frame(y = 6:10)
-#' modified <- preserve_s3_attributes(original, modified)
-#' attributes(modified)
 preserve_s3_attributes <- function(original, modified) {
   
   # Class check
@@ -513,7 +484,6 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   
   # Conversion
   sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes, max_n)
-  print(sampling_strategy_df)
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   all_interval_df <- list()
   for (row_id in seq_len(nrow(sampling_strategy_df))){

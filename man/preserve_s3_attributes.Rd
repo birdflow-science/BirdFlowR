@@ -19,14 +19,4 @@ The \code{modified} object with the preserved attributes from the \code{original
 Copies custom S3 attributes from an original object to a modified object while
 avoiding overwriting structural attributes like \code{class}, \code{names}, and \code{dim}.
 }
-\examples{
-# Example usage
-original <- data.frame(x = 1:5)
-class(original) <- c("Routes", class(original))
-attr(original, "custom_attr") <- "example"
-
-modified <- data.frame(y = 6:10)
-modified <- preserve_s3_attributes(original, modified)
-attributes(modified)
-}
 \keyword{internal}

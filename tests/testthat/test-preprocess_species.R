@@ -207,9 +207,40 @@ test_that("preprocess_species() works with crs arg", {
   # Create and commit to cleaning up a temporary dir
   dir <- local_test_dir("preprocess_crs")
 
+  test_crs <-
+    'PROJCRS["Western Mollweide",
+      BASEGEOGCRS["WGS 84",
+          DATUM["World Geodetic System 1984",
+              ELLIPSOID["WGS 84",6378137,298.257223563,
+                  LENGTHUNIT["metre",1]]],
+          PRIMEM["Greenwich",0,
+              ANGLEUNIT["Degree",0.0174532925199433]]],
+      CONVERSION["Western Mollweide",
+          METHOD["Mollweide"],
+          PARAMETER["Longitude of natural origin",-90,
+              ANGLEUNIT["Degree",0.0174532925199433],
+              ID["EPSG",8802]],
+          PARAMETER["False easting",0,
+              LENGTHUNIT["metre",1],
+              ID["EPSG",8806]],
+          PARAMETER["False northing",0,
+              LENGTHUNIT["metre",1],
+              ID["EPSG",8807]]],
+      CS[Cartesian,2],
+          AXIS["(E)",east,
+              ORDER[1],
+              LENGTHUNIT["metre",1]],
+          AXIS["(N)",north,
+              ORDER[2],
+              LENGTHUNIT["metre",1]],
+      USAGE[
+          SCOPE["Not known."],
+          AREA["World."],
+          BBOX[-90,-180,90,180]]]'
+
   expect_no_error(
     bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE,
-                             crs = terra::crs("EPSG:5069"))
+                             crs = test_crs)
   )
 })
 

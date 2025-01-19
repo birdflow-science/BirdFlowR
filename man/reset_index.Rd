@@ -15,14 +15,4 @@ A data frame with updated route IDs.
 \description{
 Resets the route IDs in a \code{Routes} object to a new sequential numbering.
 }
-\examples{
-route_df <- data.frame(
-  route_id = 1:3,
-  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-  lon = c(-90, -89, -88),
-  lat = c(40, 41, 42),
-  route_type = c("tracking", "banding", "unknown")
-)
-reset_routes <- reset_index(route_df)
-}
 \keyword{internal}
