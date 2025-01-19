@@ -102,6 +102,7 @@ routes_obj <- Routes(route_df, species=species, metadata=metadata, source=source
 
 # Create a BirdFlowRoutes object
 ## 1. convert from `Routes`
+bf <- BirdFlowModels::amewoo
 birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
 
 ## 2. Directly from dataframe
