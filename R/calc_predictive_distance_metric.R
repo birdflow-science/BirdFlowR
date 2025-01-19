@@ -1,7 +1,13 @@
 #' Calculate the predictive distance metric:
 #' What is the probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?
 
-# util function 1
+#' To be done
+#'
+#' @param b_e To be done
+#' @param bf BF model
+#'
+#' @return valid ro not
+#' @export
 check_b_e_valid_cells <- function(b_e, bf){
   for (row in 1:2){
     res <- TRUE
@@ -13,7 +19,15 @@ check_b_e_valid_cells <- function(b_e, bf){
   return(TRUE)
 }
 
-# util function 2
+#' To be done
+#'
+#' @param b_e To be done
+#' @param bf To be done
+#' @param gcd To be done
+#' @param st_dists To be done
+#'
+#' @return A dataframe
+#' @export
 predict_encounter_distribution <- function(b_e, bf, gcd, st_dists){
   if (!check_b_e_valid_cells(b_e, bf)) return(c(pred = NA_real_, st = NA_real_, YK_win_prob = NA_real_, 
                                                 global_prob_of_the_banding_starting = NA_real_, elapsed = NA_integer_, distance_winning_fraction = NA_real_))
@@ -63,6 +77,14 @@ predict_encounter_distribution <- function(b_e, bf, gcd, st_dists){
 }
 
 
+
+#' To be done
+#'
+#' @param intervals To be done
+#' @param observations To be done
+#' @param bf BF model
+#'
+#' @return mean distance metric
 #' @export
 get_distance_metric <- function(intervals, observations, bf){
   # intervals is not used for now

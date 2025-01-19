@@ -3,11 +3,21 @@
 \name{check_b_e_valid_cells}
 \alias{check_b_e_valid_cells}
 \title{Calculate the predictive distance metric:
-What is the probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?}
+What is the probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?
+To be done}
 \usage{
 check_b_e_valid_cells(b_e, bf)
+}
+\arguments{
+\item{b_e}{To be done}
+
+\item{bf}{BF model}
+}
+\value{
+valid ro not
 }
 \description{
 Calculate the predictive distance metric:
 What is the probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?
+To be done
 }
