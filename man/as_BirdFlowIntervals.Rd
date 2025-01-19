@@ -9,7 +9,7 @@ as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
 \arguments{
 \item{birdflow_routes}{A \code{BirdFlowRoutes} object.}
 
-\item{n}{The number of intervals to sample. Defaults to 1000.}
+\item{max_n}{The maximum number of intervals to sample. Defaults to 1000.}
 }
 \value{
 A \code{BirdFlowIntervals} object.

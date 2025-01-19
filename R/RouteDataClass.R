@@ -39,7 +39,7 @@
 #' )
 #' metadata <- list(info1='Additional information')
 #' sources <- 'Unknown sources'
-#' routes_obj <- Routes(route_df, species=species, metadata=metadata, sources=sources)
+#' routes_obj <- Routes(route_df, species=species, metadata=metadata, source=sources)
 #'
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`

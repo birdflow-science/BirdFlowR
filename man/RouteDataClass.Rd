@@ -91,11 +91,18 @@ route_df <- data.frame(
   lat = c(40, 41, 42),
   route_type = c("tracking", "banding", "unknown")
 )
-Routes(route_df)
+species <- list(
+    species_code = "amewoo",
+    scientific_name = "Scolopax minor",
+    common_name = "American Woodcock"
+)
+metadata <- list(info1='Additional information')
+sources <- 'Unknown sources'
+routes_obj <- Routes(route_df, species=species, metadata=metadata, source=sources)
 
 # Create a BirdFlowRoutes object
 ## 1. convert from `Routes`
-birdflow_route_df <- route_df |> as_BirdFlowRoutes(bf=bf)
+birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
 
 ## 2. Directly from dataframe
 birdflow_route_df <- data.frame(
@@ -107,12 +114,6 @@ birdflow_route_df <- data.frame(
   date = as.Date(c("2024-01-01", "2024-01-02")),
   route_type = c("tracking", "banding")
 )
-species <- list(
-    species_code = "amewoo",
-    scientific_name = "Scolopax minor",
-    common_name = "American Woodcock"
-)
-metadata <- list(info1='Additional information')
 geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
 dates <- data.frame(
     interval = 1:2,
