@@ -256,7 +256,7 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
   metadata <- bf$metadata
   geom <- bf$geom
-  dates <- bf$dates
+  dates <- get_dates(bf) # use the up-to-date dates dataframe
   
   # Transform to BirdFlowRoutes
   routes <- BirdFlowRoutes(birdflow_route_df = routes,

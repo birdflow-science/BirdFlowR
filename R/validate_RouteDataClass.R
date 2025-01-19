@@ -434,7 +434,7 @@ validate_BirdFlowRoutes_geom <- function(geom) {
 validate_BirdFlowRoutes_dates <- function(dates) {
   stopifnot(inherits(dates, "data.frame"))
   exists_names <- colnames(dates)
-  target_name_list <- c("interval", "date", "midpoint", "start", "end", "doy", "week")
+  target_name_list <- c("timestep", "date", "label", "julian", "week")
   for (name in target_name_list){
     if (!(name %in% exists_names)) {
       stop(sprintf(glue::glue("{name} component not found in dates!")))
