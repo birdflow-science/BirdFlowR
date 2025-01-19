@@ -23,8 +23,8 @@ BirdFlowRoutes(
   source = NULL,
   sort_id_and_dates = TRUE,
   reset_index = FALSE,
-  timestep_col = "date",
-  timediff_unit = "days"
+  stay_calculate_col = "date",
+  stay_calculate_timediff_unit = "days"
 )
 
 new_BirdFlowRoutes(
@@ -34,8 +34,8 @@ new_BirdFlowRoutes(
   geom,
   dates,
   source,
-  timestep_col = "date",
-  timediff_unit = "days"
+  stay_calculate_col = "date",
+  stay_calculate_timediff_unit = "days"
 )
 
 BirdFlowIntervals(
@@ -74,6 +74,10 @@ new_BirdFlowIntervals(
 \item{sort_id_and_dates}{Logical. Should the data be sorted by \code{route_id} and \code{dates}?}
 
 \item{reset_index}{Logical. Should the index of the data frame be reset after sorting?}
+
+\item{stay_calculate_col}{The column name for calculating the stay_id and stay_len in BirdFlowRoutes object. Default to \code{date}.}
+
+\item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes object. Default to \code{days}.}
 
 \item{birdflow_intervals}{A data frame containing interval data for \code{BirdFlowIntervals}.}
 }

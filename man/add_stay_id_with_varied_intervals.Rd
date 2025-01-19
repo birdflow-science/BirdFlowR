@@ -14,7 +14,9 @@ add_stay_id_with_varied_intervals(
 \arguments{
 \item{df}{A data frame with spatial and temporal data.}
 
-\item{timestep_col}{The name of the column containing time steps. Defaults to \code{"timestep"}.}
+\item{timestep_col}{The name of the column containing time steps. Defaults to \code{"date"}.}
+
+\item{timediff_unit}{The unit of 'stay_len'.}
 
 \item{time_threshold}{A numeric threshold for time differences. Defaults to \code{Inf}.}
 }
@@ -23,7 +25,7 @@ A data frame with \code{stay_id} and \code{stay_len} columns added.
 }
 \description{
 Adds stay IDs to a data frame, considering changes in spatial indices and temporal thresholds.
-Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'timestep' as input so account for varying intervals, if the data is not sampled in the same frequency.
+Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals, if the data is not sampled in the same frequency.
 }
 \examples{
 routes <- data.frame(

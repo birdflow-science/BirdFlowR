@@ -375,12 +375,12 @@ add_stay_id <- function(df) {
 #' Add Stay IDs with Temporal Thresholds
 #'
 #' @description Adds stay IDs to a data frame, considering changes in spatial indices and temporal thresholds.
-#' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'timestep' as input so account for varying intervals, if the data is not sampled in the same frequency.
+#' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals, if the data is not sampled in the same frequency.
 #'
 #' @param df A data frame with spatial and temporal data.
-#' @param timestep_col The name of the column containing time steps. Defaults to `"timestep"`.
+#' @param timestep_col The name of the column containing time steps. Defaults to `"date"`.
 #' @param time_threshold A numeric threshold for time differences. Defaults to `Inf`.
-#'
+#' @param timediff_unit The unit of 'stay_len'.
 #' @return A data frame with `stay_id` and `stay_len` columns added.
 #' @export
 #'

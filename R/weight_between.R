@@ -43,7 +43,7 @@ if (FALSE) {
 #' the line and intersecting the point is summed over the inteval within
 #' `radius` meters of the point. `radius` defaults to half the cell
 #' size (`mean(res(bf))/2`).
-#' @param n_direction The number of (equally spaced) directional bins to
+#' @param n_directions The number of (equally spaced) directional bins to
 #' classify bearings into.  Currently only `1` is supported.
 #' @param skip_unconnected If `TRUE` then only connections that exist in `bf`
 #' will be evaluated, and between matrix will erroneously indicate that

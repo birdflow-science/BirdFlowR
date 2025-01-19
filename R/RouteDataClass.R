@@ -20,6 +20,8 @@
 #' @param source A character string indicating the source of the data.
 #' @param sort_id_and_dates Logical. Should the data be sorted by `route_id` and `dates`?
 #' @param reset_index Logical. Should the index of the data frame be reset after sorting?
+#' @param stay_calculate_col The column name for calculating the stay_id and stay_len in BirdFlowRoutes object. Default to `date`.
+#' @param stay_calculate_timediff_unit The unit of stay_len in BirdFlowRoutes object. Default to `days`.
 #'
 #' @return Each function returns an S3 object of the corresponding class (`Routes`, `BirdFlowRoutes`, or `BirdFlowIntervals`).
 #'
@@ -159,8 +161,8 @@ BirdFlowRoutes <- function(birdflow_route_df,
                            source = NULL,
                            sort_id_and_dates = TRUE,
                            reset_index = FALSE,
-                           timestep_col = "date", 
-                           timediff_unit = "days") {
+                           stay_calculate_col = "date", 
+                           stay_calculate_timediff_unit = "days") {
   # Check input
   stopifnot(inherits(birdflow_route_df, "data.frame"))
   validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
@@ -176,8 +178,8 @@ BirdFlowRoutes <- function(birdflow_route_df,
                             geom = geom,
                             dates = dates,
                             source = source,
-                            timestep_col = timestep_col,
-                            timediff_unit = timediff_unit)
+                            stay_calculate_col = stay_calculate_col,
+                            stay_calculate_timediff_unit = stay_calculate_timediff_unit)
 
   # Sort & reindex
   if (sort_id_and_dates) {
@@ -193,13 +195,13 @@ BirdFlowRoutes <- function(birdflow_route_df,
 #' @rdname RouteDataClass
 #' @keywords internal
 new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates, source, 
-                               timestep_col = "date", timediff_unit = "days") {
+                               stay_calculate_col = "date", stay_calculate_timediff_unit = "days") {
 
   ## Add stay id
   birdflow_route_df <- birdflow_route_df |>
     sort_by_id_and_dates() |>
     dplyr::group_by(.data$route_id) |>
-    add_stay_id_with_varied_intervals(timestep_col = timestep_col, timediff_unit = timediff_unit) |> 
+    add_stay_id_with_varied_intervals(timestep_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |> 
     # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. 
     # It takes 'timestep' as input so account for varying intervals, 
     # if the data is not sampled in a frequency.

@@ -29,6 +29,9 @@ the line and intersecting the point is summed over the inteval within
 \code{radius} meters of the point. \code{radius} defaults to half the cell
 size (\code{mean(res(bf))/2}).}
 
+\item{n_directions}{The number of (equally spaced) directional bins to
+classify bearings into.  Currently only \code{1} is supported.}
+
 \item{skip_unconnected}{If \code{TRUE} then only connections that exist in \code{bf}
 will be evaluated, and between matrix will erroneously indicate that
 the weights associated with transitions that aren't used is always 0.
@@ -39,9 +42,6 @@ those missing connections would always have zero probability.}
 at a time. A smaller
 \code{batch_size} will conserve memory at a slight performance cost.  The number
 of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
-
-\item{n_direction}{The number of (equally spaced) directional bins to
-classify bearings into.  Currently only \code{1} is supported.}
 }
 \value{
 A list with:
