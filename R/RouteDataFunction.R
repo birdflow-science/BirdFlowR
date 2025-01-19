@@ -186,18 +186,6 @@ print.BirdFlowIntervals <- function(birdflow_intervals){
 #'
 #' @return A data frame with columns `route_type`, `unique_route_count`, and `unique_point_count`.
 #' @keywords internal
-#'
-#' @examples
-#' # Summarize route types
-#' route_df <- data.frame(
-#'   route_id = 1:3,
-#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-#'   lon = c(-90, -89, -88),
-#'   lat = c(40, 41, 42),
-#'   route_type = c("tracking", "banding", "unknown")
-#' )
-#' routes_obj <- Routes(route_df)
-#' route_summary <- summarize_route_type(routes_obj)
 summarize_route_type <- function(routes) {
   stopifnot(inherits(routes,c('Routes', 'BirdFlowIntervals')))
   routes |>
