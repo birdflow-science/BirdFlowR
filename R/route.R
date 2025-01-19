@@ -181,7 +181,8 @@ format_trajectory <- function(trajectory, bf, timesteps) {
           date = as.Date(unlist(purrr::accumulate(date, ~ ifelse(.y < .x, .y + lubridate::years(1), .y))))
       ) |>
       dplyr::ungroup() |>
-      as.data.frame()
+      as.data.frame() |> 
+      sort_by_id_and_dates()
 
   # add_stay_id <- function(df) {
   #   # Benjamin's function

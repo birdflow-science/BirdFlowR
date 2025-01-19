@@ -12,6 +12,7 @@
 \alias{validate_BirdFlowRoutes_y}
 \alias{validate_BirdFlowRoutes_i}
 \alias{validate_BirdFlowRoutes_timestep}
+\alias{validate_BirdFlowRoutes_date}
 \alias{validate_BirdFlowRoutes_stay_id}
 \alias{validate_BirdFlowRoutes_stay_len}
 \alias{validate_BirdFlowRoutes_species}
@@ -38,7 +39,9 @@ validate_BirdFlowRoutes_y(y_vector)
 
 validate_BirdFlowRoutes_i(i_vector)
 
-validate_BirdFlowRoutes_timestep(route_id_vector, timestep_vector)
+validate_BirdFlowRoutes_timestep(timestep_vector)
+
+validate_BirdFlowRoutes_date(route_id_vector, date_vector)
 
 validate_BirdFlowRoutes_stay_id(stay_id_vector)
 
@@ -55,7 +58,8 @@ validate_BirdFlowRoutes_dates(dates)
 \arguments{
 \item{route_id}{A vector of route IDs (character or numeric). Must not contain missing values.}
 
-\item{date_vector}{A vector of dates (\code{Date}, \code{POSIXct}, or \code{POSIXlt}). Must not contain missing values.}
+\item{date_vector}{A vector of dates (\code{Date}, \code{POSIXct}, or \code{POSIXlt}). Must not contain missing values;
+Must not have duplicates within a \code{route_id} (for \code{BirdFlowRoutes}; but not for \code{Routes}).}
 
 \item{lon_vector, }{lat_vector Numeric vectors for longitude and latitude. Must not contain missing values and must be within valid ranges.}
 
@@ -65,7 +69,7 @@ validate_BirdFlowRoutes_dates(dates)
 
 \item{i_vector}{An integer vector for spatial indices. Must not contain missing values.}
 
-\item{timestep_vector}{An integer vector for timesteps, paired with \code{route_id_vector}. Must not have duplicates within a \code{route_id}.}
+\item{timestep_vector}{An integer vector for timesteps, paired with \code{route_id_vector}.}
 
 \item{stay_id_vector}{A numeric or character vector for stay IDs. Must not contain missing values.}
 
@@ -125,7 +129,8 @@ These functions are intended for internal use and are not exported for user-faci
 \item BirdFlowRoutes Validators:
 \itemize{
 \item \code{validate_BirdFlowRoutes_x()}, \code{validate_BirdFlowRoutes_y()}
-\item \code{validate_BirdFlowRoutes_i()}, \code{validate_BirdFlowRoutes_timestep()}
+\item \code{validate_BirdFlowRoutes_i()}, \code{validate_BirdFlowRoutes_timestep()},
+\item \code{validate_BirdFlowRoutes_date()},
 \item \code{validate_BirdFlowRoutes_stay_id()}, \code{validate_BirdFlowRoutes_stay_len()}
 \item \code{validate_BirdFlowRoutes_species()}
 }

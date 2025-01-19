@@ -334,7 +334,7 @@ reset_index <- function(routes) {
 #' @param routes A `Routes` or data frame object.
 #'
 #' @return A sorted data frame.
-#' @keywords internal
+#' @export
 sort_by_id_and_dates <- function(routes){
   stopifnot(inherits(routes,'data.frame'))
   sorted_routes <- routes |> dplyr::arrange(.data[["route_id"]], .data[["date"]])

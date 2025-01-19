@@ -67,8 +67,10 @@ validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   validate_BirdFlowRoutes_x(birdflow_route_df$x)
   validate_BirdFlowRoutes_y(birdflow_route_df$y)
   validate_BirdFlowRoutes_i(birdflow_route_df$i)
-  validate_BirdFlowRoutes_timestep(birdflow_route_df$route_id, birdflow_route_df$timestep) # Should not have duplicated timesteps within each route! Should select only one data point for each timestep for each route. 
-  validate_Routes_date(birdflow_route_df$date)
+  validate_BirdFlowRoutes_timestep(birdflow_route_df$timestep)
+  validate_BirdFlowRoutes_date(birdflow_route_df$route_id, birdflow_route_df$date)  
+  # Should not have duplicated date within each route! 
+  # Should select only one data point for each date for each route. 
   validate_BirdFlowRoutes_route_type(birdflow_route_df$route_type)
 }
 
@@ -190,7 +192,8 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #'   - `validate_Routes_route_type()`
 #' - BirdFlowRoutes Validators:
 #'   - `validate_BirdFlowRoutes_x()`, `validate_BirdFlowRoutes_y()`
-#'   - `validate_BirdFlowRoutes_i()`, `validate_BirdFlowRoutes_timestep()`
+#'   - `validate_BirdFlowRoutes_i()`, `validate_BirdFlowRoutes_timestep()`,
+#'   - `validate_BirdFlowRoutes_date()`,
 #'   - `validate_BirdFlowRoutes_stay_id()`, `validate_BirdFlowRoutes_stay_len()`
 #'   - `validate_BirdFlowRoutes_species()`
 #' - Geometry and Dates and Metadata:
@@ -199,12 +202,13 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #'   - `validate_BirdFlowRoutes_metadata()`
 #'
 #' @param route_id A vector of route IDs (character or numeric). Must not contain missing values.
-#' @param date_vector A vector of dates (`Date`, `POSIXct`, or `POSIXlt`). Must not contain missing values.
+#' @param date_vector A vector of dates (`Date`, `POSIXct`, or `POSIXlt`). Must not contain missing values;
+#' Must not have duplicates within a `route_id` (for `BirdFlowRoutes`; but not for `Routes`).
 #' @param lon_vector, lat_vector Numeric vectors for longitude and latitude. Must not contain missing values and must be within valid ranges.
 #' @param route_type_vector A character vector of route types. Must only contain valid types.
 #' @param x_vector, y_vector Numeric vectors for spatial coordinates. Must not contain missing values.
 #' @param i_vector An integer vector for spatial indices. Must not contain missing values.
-#' @param timestep_vector An integer vector for timesteps, paired with `route_id_vector`. Must not have duplicates within a `route_id`.
+#' @param timestep_vector An integer vector for timesteps, paired with `route_id_vector`.
 #' @param stay_id_vector A numeric or character vector for stay IDs. Must not contain missing values.
 #' @param stay_len_vector An integer vector for stay lengths. Must not contain missing values.
 #' @param species A list with species information. Must include `species_code`, `scientific_name`, and `common_name`.
@@ -304,24 +308,34 @@ validate_BirdFlowRoutes_i <- function(i_vector){
 }
 
 #' @rdname attribute_validators
-validate_BirdFlowRoutes_timestep <- function(route_id_vector, timestep_vector){
+validate_BirdFlowRoutes_timestep <- function(timestep_vector){
   if (!is.integer(timestep_vector) || any(is.na(timestep_vector))) {
     stop(sprintf("timestep' must be an integer vector and cannot contain NA values."))
   }
+  # Timestep can be duplicated (2021-01-04 and 2022-01-04 will be the same timestep), but date can not be duplicated
+}
+
+#' @rdname attribute_validators
+validate_BirdFlowRoutes_date <- function(route_id_vector, date_vector) {
+  if (!inherits(date_vector, c("Date", 'POSIXct', 'POSIXlt')) || any(is.na(date_vector))) {
+    stop("'date' must be of class 'Date', 'POSIXct', or 'POSIXlt'. Missing values are not allowded. Please provide valid Date objects.")
+  }
   
-  tmp_new_df <- data.frame(list(route_id=route_id_vector, timestep=timestep_vector))
-  duplicated_timestep_check <- tmp_new_df |>
+  tmp_new_df <- data.frame(list(route_id=route_id_vector, date_=date_vector))
+  duplicated_date_check <- tmp_new_df |>
     dplyr::group_by(route_id) |>
     dplyr::summarize(
-    duplicated_timesteps = any(duplicated(timestep)),
-    .groups = "drop"
-  )
-
-  if (any(duplicated_timestep_check$duplicated_timesteps)) {
-    stop("Duplicated timesteps detected within one or more route IDs. Should select only one data point per timestep for each route.")
+      duplicated_date = any(duplicated(date_)),
+      .groups = "drop"
+    )
+  
+  if (any(duplicated_date_check$duplicated_date)) {
+    stop("Duplicated date detected within one or more route IDs. Should select only one data point per date for each route.")
   }
-  # Should not have duplicated timesteps within each route! Should select only one data point per timestep for each route. 
+  # Should not have duplicated date within each route! Should select only one data point per date for each route. 
+  # Timestep can be duplicated (2021-01-04 and 2022-01-04 will be the same timestep), but date can not be duplicated
 }
+
 
 #' @rdname attribute_validators
 validate_BirdFlowRoutes_stay_id <- function(stay_id_vector) {

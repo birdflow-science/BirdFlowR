@@ -15,4 +15,3 @@ A sorted data frame.
 \description{
 Sorts a \code{Routes} or data frame object by route ID and date.
 }
-\keyword{internal}
