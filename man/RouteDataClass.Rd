@@ -22,10 +22,21 @@ BirdFlowRoutes(
   dates,
   source = NULL,
   sort_id_and_dates = TRUE,
-  reset_index = FALSE
+  reset_index = FALSE,
+  timestep_col = "date",
+  timediff_unit = "days"
 )
 
-new_BirdFlowRoutes(birdflow_route_df, species, metadata, geom, dates, source)
+new_BirdFlowRoutes(
+  birdflow_route_df,
+  species,
+  metadata,
+  geom,
+  dates,
+  source,
+  timestep_col = "date",
+  timediff_unit = "days"
+)
 
 BirdFlowIntervals(
   birdflow_intervals,

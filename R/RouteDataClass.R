@@ -158,7 +158,9 @@ BirdFlowRoutes <- function(birdflow_route_df,
                            dates,
                            source = NULL,
                            sort_id_and_dates = TRUE,
-                           reset_index = FALSE) {
+                           reset_index = FALSE,
+                           timestep_col = "date", 
+                           timediff_unit = "days") {
   # Check input
   stopifnot(inherits(birdflow_route_df, "data.frame"))
   validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
@@ -166,6 +168,16 @@ BirdFlowRoutes <- function(birdflow_route_df,
   validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
+  
+  # Make the BirdFlowRoutes object
+  obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
+                            species = species,
+                            metadata = metadata,
+                            geom = geom,
+                            dates = dates,
+                            source = source,
+                            timestep_col = timestep_col,
+                            timediff_unit = timediff_unit)
 
   # Sort & reindex
   if (sort_id_and_dates) {
@@ -174,26 +186,20 @@ BirdFlowRoutes <- function(birdflow_route_df,
   if (reset_index) {
     birdflow_route_df <- birdflow_route_df |> reset_index()
   }
-
-  # Make the BirdFlowRoutes object
-  obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
-                            species = species,
-                            metadata = metadata,
-                            geom = geom,
-                            dates = dates,
-                            source = source)
-
+  
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates, source) {
+new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates, source, 
+                               timestep_col = "date", timediff_unit = "days") {
 
   ## Add stay id
   birdflow_route_df <- birdflow_route_df |>
+    sort_by_id_and_dates() |>
     dplyr::group_by(.data$route_id) |>
-    add_stay_id_with_varied_intervals(timestep_col = "timestep") |> 
+    add_stay_id_with_varied_intervals(timestep_col = timestep_col, timediff_unit = timediff_unit) |> 
     # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. 
     # It takes 'timestep' as input so account for varying intervals, 
     # if the data is not sampled in a frequency.

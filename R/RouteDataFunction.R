@@ -388,24 +388,25 @@ add_stay_id <- function(df) {
 #' routes <- data.frame(
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
 #'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
-#'   timestep = as.integer(c(1, 2, 5, 6, 10, 15, 16, 20))  # Time steps with varying intervals
+#'   date = as.integer(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
+#'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
 #' )
-#' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "timestep", time_threshold = Inf)
-add_stay_id_with_varied_intervals <- function(df, timestep_col = "timestep", time_threshold = Inf) {
+#' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days", time_threshold = Inf)
+add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timediff_unit = "days", time_threshold = Inf) {
   
   # Ensure the data is sorted by timestep
   df <- df |> dplyr::arrange(.data[[timestep_col]])
   
   new_df <- df |>
     dplyr::mutate(
-      timestep_diff = c(1, diff(.data[[timestep_col]])),  # Time differences
+      timestep_diff = c(1, as.numeric(diff(.data[[timestep_col]]), units = timediff_unit)),  # Time differences
       i_change = c(1, as.numeric(diff(.data$i)) != 0),    # Changes in 'i'
       stay_id = cumsum(i_change | (timestep_diff > time_threshold))
     ) |>
     # Now the stay_id is assigned, calculate the duration (time difference) of each stay
     dplyr::group_by(route_id, stay_id) |>
     dplyr::mutate(
-      stay_len = max(.data[[timestep_col]]) - min(.data[[timestep_col]]) + 1
+      stay_len = as.numeric(max(.data[[timestep_col]]) - min(.data[[timestep_col]]) + 1, units = timediff_unit)
     ) |>
     dplyr::select(-timestep_diff, -i_change)
   
