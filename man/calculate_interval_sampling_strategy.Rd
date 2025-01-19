@@ -29,5 +29,4 @@ Ensures an even distribution across routes when possible.
 routes <- data.frame(route_id = c("A", "A", "B", "B", "B"),
                      date = as.Date("2024-01-01") + 0:4)
 sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10)
-print(sampling_strategy)
 }

@@ -60,6 +60,8 @@ birdflow_route_df <- data.frame(
   route_id = 1:3,
   x = c(1000, 2000, 3000),
   y = c(500, 600, 700),
+  lon = c(-10, 10, 10),
+  lat = c(10, -10, 10),
   i = as.integer(c(1, 2, 3)),
   timestep = as.integer(c(1, 1, 2)),
   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),

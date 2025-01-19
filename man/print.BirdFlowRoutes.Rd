@@ -4,7 +4,7 @@
 \alias{print.BirdFlowRoutes}
 \title{Print a BirdFlowRoutes Object}
 \usage{
-print.BirdFlowRoutes(birdflow_routes)
+\method{print}{BirdFlowRoutes}(birdflow_routes)
 }
 \arguments{
 \item{birdflow_routes}{A \code{BirdFlowRoutes} object to print.}
@@ -18,6 +18,15 @@ and BirdFlow-specific attributes.
 }
 \examples{
 # Create a BirdFlowRoutes object
-birdflow_routes <- BirdFlowRoutes(route_df, species = NULL, geom = NULL, dates = NULL)
+route_df <- data.frame(
+  route_id = 1:3,
+  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+  lon = c(-90, -89, -88),
+  lat = c(40, 41, 42),
+  route_type = c("tracking", "banding", "unknown")
+)
+routes <- Routes(route_df)
+bf <- BirdFlowModels::amewoo
+birdflow_routes <- as_BirdFlowRoutes(routes, bf)
 print(birdflow_routes)
 }

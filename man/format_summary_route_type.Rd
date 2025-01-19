@@ -16,7 +16,12 @@ A formatted string summarizing route types.
 Formats a summary of route types into a human-readable string.
 }
 \examples{
-# Format the route type summary
+route_summary <- data.frame(
+  route_type = c("tracking", "banding", "unknown"),
+  unique_route_count = c(5, 3, 2),
+  unique_point_count = c(50, 30, 20),
+  stringsAsFactors = FALSE
+)
 formatted_summary <- format_summary_route_type(route_summary)
 }
 \keyword{internal}

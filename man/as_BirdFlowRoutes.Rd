@@ -30,5 +30,14 @@ A \code{BirdFlowRoutes} object.
 Converts a \code{Routes} object to a \code{BirdFlowRoutes} object, adding BirdFlow-specific spatiotemporal coordinates.
 }
 \examples{
-birdflow_routes <- as_BirdFlowRoutes(routes, bf)
+route_df <- data.frame(
+  route_id = 1:3,
+  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+  lon = c(-90, -89, -88),
+  lat = c(40, 41, 42),
+  route_type = c("tracking", "banding", "unknown")
+)
+routes_obj <- Routes(route_df)
+bf <- BirdFlowModels::amewoo
+birdflow_routes <- as_BirdFlowRoutes(routes_obj, bf)
 }

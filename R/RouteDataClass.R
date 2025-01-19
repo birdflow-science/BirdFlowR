@@ -40,7 +40,7 @@
 #' metadata <- list(info1='Additional information')
 #' sources <- 'Unknown sources'
 #' routes_obj <- Routes(route_df, species=species, metadata=metadata, source=sources)
-#'
+#' 
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`
 #' bf <- BirdFlowModels::amewoo
@@ -48,23 +48,23 @@
 #' 
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
-#'   route_id = c("route1", "route2"),
-#'   x = c(1000, 2000),
-#'   y = c(500, 600),
-#'   i = as.integer(c(1, 2)),
-#'   timestep = as.integer(c(1, 2)),
-#'   date = as.Date(c("2024-01-01", "2024-01-02")),
-#'   route_type = c("tracking", "banding")
+#'   route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
+#'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
+#'   lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
+#'   lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
+#'   x = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
+#'   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
+#'   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
+#'   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
+#'   route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus", "motus", "motus")
 #' )
 #' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
 #' dates <- data.frame(
-#'     interval = 1:2,
-#'     date = as.Date(c("2024-01-01", "2024-01-02")),
-#'     midpoint = as.Date(c("2024-01-01", "2024-01-02")),
-#'     start = c(0.01,0.02),
-#'     end = c(0.02,0.03),
-#'     doy = c(4.5, 11.5),
-#'     week = c(1,2)
+#'     timestep = 1:2,
+#'     date = as.Date(c("2022-01-04", "2022-01-11")),
+#'     label = c("January 4", "January 11"),
+#'     julian = c(4, 11),
+#'     week = c(1, 2)
 #' )
 #' birdflowroutes_object <- BirdFlowRoutes(
 #'   birdflow_route_df,

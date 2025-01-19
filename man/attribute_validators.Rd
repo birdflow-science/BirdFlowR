@@ -175,13 +175,11 @@ validate_BirdFlowRoutes_geom(geom)
 
 # Validate dates
 dates <- data.frame(
-  interval = 1:3,
-  date = as.Date("2024-01-01") + 0:2,
-  midpoint = as.Date("2024-01-01") + 0:2,
-  start = as.Date("2024-01-01") + 0:2,
-  end = as.Date("2024-01-03") + 0:2,
-  doy = 1:3,
-  week = 1:3
+    timestep = 1:2,
+    date = as.Date(c("2022-01-04", "2022-01-11")),
+    label = c("January 4", "January 11"),
+    julian = c(4, 11),
+    week = c(1, 2)
 )
 validate_BirdFlowRoutes_dates(dates)
 

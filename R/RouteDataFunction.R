@@ -8,6 +8,7 @@
 #' @param routes A `Routes` object to print.
 #'
 #' @return Invisibly returns the input `routes` object.
+#' @method print Routes
 #' @export
 #'
 #' @examples
@@ -60,11 +61,21 @@ print.Routes <- function(routes){
 #' @param birdflow_routes A `BirdFlowRoutes` object to print.
 #'
 #' @return Invisibly returns the input `birdflow_routes` object.
+#' @method print BirdFlowRoutes
 #' @export
 #'
 #' @examples
 #' # Create a BirdFlowRoutes object
-#' birdflow_routes <- BirdFlowRoutes(route_df, species = NULL, geom = NULL, dates = NULL)
+#' route_df <- data.frame(
+#'   route_id = 1:3,
+#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   lon = c(-90, -89, -88),
+#'   lat = c(40, 41, 42),
+#'   route_type = c("tracking", "banding", "unknown")
+#' )
+#' routes <- Routes(route_df)
+#' bf <- BirdFlowModels::amewoo
+#' birdflow_routes <- as_BirdFlowRoutes(routes, bf)
 #' print(birdflow_routes)
 print.BirdFlowRoutes <- function(birdflow_routes){
   stopifnot(inherits(birdflow_routes,'BirdFlowRoutes'))
@@ -106,12 +117,32 @@ print.BirdFlowRoutes <- function(birdflow_routes){
 #' @param birdflow_intervals A `BirdFlowIntervals` object to print.
 #'
 #' @return Invisibly returns the input `birdflow_intervals` object.
+#' @method print BirdFlowIntervals
 #' @export
 #'
 #' @examples
 #' # Create a BirdFlowIntervals object
-#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = NULL, geom = NULL, dates = NULL)
-#' print(birdflow_intervals)
+#' interval_df <- data.frame(
+#'   interval_id = 1:3,
+#'   route_id = c("route1", "route1", "route2"),
+#'   lon1 = c(-90, -89, -88),
+#'   lon2 = c(-89, -88, -87),
+#'   lat1 = c(40, 41, 42),
+#'   lat2 = c(41, 42, 43),
+#'   x1 = c(1000, 1100, 1200),
+#'   x2 = c(1100, 1200, 1300),
+#'   y1 = c(500, 600, 700),
+#'   y2 = c(600, 700, 800),
+#'   i1 = c(1, 2, 3),
+#'   i2 = c(2, 3, 4),
+#'   date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
+#'   timestep1 = as.integer(c(1, 2, 3)),
+#'   timestep2 = as.integer(c(2, 3, 4)),
+#'   route_type = c("tracking", "tracking", "banding")
+#' )
+#' bf <- BirdFlowModels::amewoo
+#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
 print.BirdFlowIntervals <- function(birdflow_intervals){
   stopifnot(inherits(birdflow_intervals,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
@@ -158,7 +189,15 @@ print.BirdFlowIntervals <- function(birdflow_intervals){
 #'
 #' @examples
 #' # Summarize route types
-#' route_summary <- summarize_route_type(routes)
+#' route_df <- data.frame(
+#'   route_id = 1:3,
+#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   lon = c(-90, -89, -88),
+#'   lat = c(40, 41, 42),
+#'   route_type = c("tracking", "banding", "unknown")
+#' )
+#' routes_obj <- Routes(route_df)
+#' route_summary <- summarize_route_type(routes_obj)
 summarize_route_type <- function(routes) {
   stopifnot(inherits(routes,c('Routes', 'BirdFlowIntervals')))
   routes |>
@@ -180,7 +219,12 @@ summarize_route_type <- function(routes) {
 #' @keywords internal
 #'
 #' @examples
-#' # Format the route type summary
+#' route_summary <- data.frame(
+#'   route_type = c("tracking", "banding", "unknown"),
+#'   unique_route_count = c(5, 3, 2),
+#'   unique_point_count = c(50, 30, 20),
+#'   stringsAsFactors = FALSE
+#' )
 #' formatted_summary <- format_summary_route_type(route_summary)
 format_summary_route_type <- function(summary_route_type) {
   stopifnot(inherits(summary_route_type,'data.frame'))
@@ -215,7 +259,16 @@ format_summary_route_type <- function(summary_route_type) {
 #' @export
 #'
 #' @examples
-#' birdflow_routes <- as_BirdFlowRoutes(routes, bf)
+#' route_df <- data.frame(
+#'   route_id = 1:3,
+#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   lon = c(-90, -89, -88),
+#'   lat = c(40, 41, 42),
+#'   route_type = c("tracking", "banding", "unknown")
+#' )
+#' routes_obj <- Routes(route_df)
+#' bf <- BirdFlowModels::amewoo
+#' birdflow_routes <- as_BirdFlowRoutes(routes_obj, bf)
 as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates = TRUE, reset_index=FALSE){
   # Check input
   stopifnot(inherits(routes, 'Routes'))
@@ -278,7 +331,14 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
 #' @keywords internal
 #'
 #' @examples
-#' reset_routes <- reset_index(routes)
+#' route_df <- data.frame(
+#'   route_id = 1:3,
+#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   lon = c(-90, -89, -88),
+#'   lat = c(40, 41, 42),
+#'   route_type = c("tracking", "banding", "unknown")
+#' )
+#' reset_routes <- reset_index(route_df)
 reset_index <- function(routes) {
   stopifnot(inherits(routes,'data.frame'))
   # Get unique route_ids and create a mapping
@@ -319,6 +379,15 @@ sort_by_id_and_dates <- function(routes){
 #' @export
 #'
 #' @examples
+#' routes <- data.frame(
+#'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
+#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),
+#'   date = as.Date(c(
+#'     "2024-01-01", "2024-01-02", "2024-01-03", 
+#'     "2024-01-04", "2024-01-05", "2024-01-06",
+#'     "2024-01-07", "2024-01-08"
+#'   ))
+#' )
 #' df_with_stay_ids <- add_stay_id(routes)
 add_stay_id <- function(df) {
   new_df <- df |>
@@ -343,6 +412,11 @@ add_stay_id <- function(df) {
 #' @export
 #'
 #' @examples
+#' routes <- data.frame(
+#'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
+#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
+#'   timestep = as.integer(c(1, 2, 5, 6, 10, 15, 16, 20))  # Time steps with varying intervals
+#' )
 #' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "timestep", time_threshold = Inf)
 add_stay_id_with_varied_intervals <- function(df, timestep_col = "timestep", time_threshold = Inf) {
   
@@ -422,13 +496,24 @@ preserve_s3_attributes <- function(original, modified) {
 #' @export
 #'
 #' @examples
-#' birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, n = 1000)
+#' route_df <- data.frame(
+#'   route_id = 1:3,
+#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+#'   lon = c(-90, -89, -88),
+#'   lat = c(40, 41, 42),
+#'   route_type = c("tracking", "banding", "unknown")
+#' )
+#' routes_obj <- Routes(route_df)
+#' bf <- BirdFlowModels::amewoo
+#' birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf=bf)
+#' birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
 as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
   stopifnot(is.numeric(max_n))
   
   # Conversion
   sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes, max_n)
+  print(sampling_strategy_df)
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   all_interval_df <- list()
   for (row_id in seq_len(nrow(sampling_strategy_df))){
@@ -468,10 +553,33 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   target_columns <- get_target_columns_BirdFlowIntervals(type='input')
   
   all_interval_df <- do.call(rbind, all_interval_df)
-  rownames(all_interval_df) <- NULL
-  all_interval_df$interval_id <- paste0("interval_", seq_len(nrow(all_interval_df)))
-  all_interval_df <- all_interval_df[, c(target_columns, setdiff(names(all_interval_df), target_columns))]
+  if (is.null(all_interval_df)) {
+    all_interval_df <- data.frame(
+      interval_id = character(),
+      lon1 = numeric(),
+      lon2 = numeric(),
+      lat1 = numeric(),
+      lat2 = numeric(),
+      x1 = numeric(),
+      x2 = numeric(),
+      y1 = numeric(),
+      y2 = numeric(),
+      i1 = numeric(),
+      i2 = numeric(),
+      date1 = as.Date(character()),
+      date2 = as.Date(character()),
+      timestep1 = numeric(),
+      timestep2 = numeric(),
+      route_id = character(),
+      route_type = character(),
+      stringsAsFactors = FALSE # Avoid factor conversion
+    )
+  } else {
+    all_interval_df$interval_id <- paste0("interval_", seq_len(nrow(all_interval_df)))
+  }
   
+  rownames(all_interval_df) <- NULL
+  all_interval_df <- all_interval_df[, c(target_columns, setdiff(names(all_interval_df), target_columns))]
   
   obs <- BirdFlowIntervals(all_interval_df,
                            species = attr(birdflow_routes, 'species'),
@@ -504,7 +612,6 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
 #' routes <- data.frame(route_id = c("A", "A", "B", "B", "B"),
 #'                      date = as.Date("2024-01-01") + 0:4)
 #' sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10)
-#' print(sampling_strategy)
 calculate_interval_sampling_strategy <- function(routes, n) {
   # Group by route_id and count the number of time points in each route
   route_counts <- routes |>

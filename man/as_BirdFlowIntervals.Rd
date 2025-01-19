@@ -19,5 +19,15 @@ Converts a \code{BirdFlowRoutes} object into a \code{BirdFlowIntervals} object,
 sampling interval pairs between time points.
 }
 \examples{
-birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, n = 1000)
+route_df <- data.frame(
+  route_id = 1:3,
+  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+  lon = c(-90, -89, -88),
+  lat = c(40, 41, 42),
+  route_type = c("tracking", "banding", "unknown")
+)
+routes_obj <- Routes(route_df)
+bf <- BirdFlowModels::amewoo
+birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf=bf)
+birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
 }

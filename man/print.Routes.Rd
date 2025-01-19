@@ -4,7 +4,7 @@
 \alias{print.Routes}
 \title{Print a Routes Object}
 \usage{
-print.Routes(routes)
+\method{print}{Routes}(routes)
 }
 \arguments{
 \item{routes}{A \code{Routes} object to print.}

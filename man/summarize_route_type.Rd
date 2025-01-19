@@ -17,6 +17,14 @@ Summarizes the number of unique routes and points for each route type.
 }
 \examples{
 # Summarize route types
-route_summary <- summarize_route_type(routes)
+route_df <- data.frame(
+  route_id = 1:3,
+  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
+  lon = c(-90, -89, -88),
+  lat = c(40, 41, 42),
+  route_type = c("tracking", "banding", "unknown")
+)
+routes_obj <- Routes(route_df)
+route_summary <- summarize_route_type(routes_obj)
 }
 \keyword{internal}

@@ -25,5 +25,10 @@ Adds stay IDs to a data frame, considering changes in spatial indices and tempor
 Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'timestep' as input so account for varying intervals, if the data is not sampled in the same frequency.
 }
 \examples{
+routes <- data.frame(
+  route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
+  i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
+  timestep = as.integer(c(1, 2, 5, 6, 10, 15, 16, 20))  # Time steps with varying intervals
+)
 df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "timestep", time_threshold = Inf)
 }
