@@ -14,7 +14,7 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
     expect_snapshot(my_routes)
     expect_snapshot(my_bfroutes)
     expect_snapshot(my_intervals) 
-    
+
     # Here we will randomly select only one data point for route 001 at timestep 1, 
     # so the snapshot is not necessarily the same.
     # But we are using seed, so it will always be the same.
