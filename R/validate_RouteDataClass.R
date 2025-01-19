@@ -30,6 +30,7 @@ NULL
 # For the input of Routes class
 
 #' @rdname object_validators
+#' @export
 validate_Routes_route_df <- function(route_df) {
   for (name in get_target_columns_Routes(type='input')){
     if (!name %in% colnames(route_df)) {
@@ -50,6 +51,7 @@ validate_Routes_route_df <- function(route_df) {
 
 
 #' @rdname object_validators
+#' @export
 validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   # For the input of BirdFlowRoutes class
   stopifnot(inherits(birdflow_route_df, 'data.frame'))
@@ -71,6 +73,7 @@ validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
 }
 
 #' @rdname object_validators
+#' @export
 validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
   stopifnot(inherits(birdflow_interval_df, 'data.frame'))
   # check the features required by direct initiation of BirdFlowIntervals class
@@ -117,6 +120,7 @@ validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
 NULL
 
 #' @rdname target_columns
+#' @export
 get_target_columns_Routes <- function(type='input'){
   if (type=='input'){
     return(c('route_id', 'date', 'lon', 'lat', 'route_type'))
@@ -128,6 +132,7 @@ get_target_columns_Routes <- function(type='input'){
 }
 
 #' @rdname target_columns
+#' @export
 get_target_columns_BirdFlowRoutes <- function(type='input'){
   if (type=='input'){
     return(c('route_id', 'x', 'y', 'i', 'lon', 'lat', 'timestep', 'date', 'route_type'))  # 'stay_id', 'stay_len' is not necessary in this phase
@@ -139,6 +144,7 @@ get_target_columns_BirdFlowRoutes <- function(type='input'){
 }
 
 #' @rdname target_columns
+#' @export
 get_target_columns_BirdFlowIntervals <- function(type='input'){
   if (type=='input'){
     return(c("interval_id", "route_id", "x1", "x2", "y1", "y2", "i1", "i2", "lon1", "lon2", "lat1", "lat2", "date1", "date2", "timestep1", "timestep2", 'route_type')) 

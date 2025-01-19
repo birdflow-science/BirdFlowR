@@ -4,10 +4,10 @@
 \alias{print.BirdFlowIntervals}
 \title{Print a BirdFlowIntervals Object}
 \usage{
-\method{print}{BirdFlowIntervals}(birdflow_intervals)
+\method{print}{BirdFlowIntervals}(x, ...)
 }
 \arguments{
-\item{birdflow_intervals}{A \code{BirdFlowIntervals} object to print.}
+\item{x}{A \code{BirdFlowIntervals} object to print.}
 }
 \value{
 Invisibly returns the input \code{birdflow_intervals} object.
@@ -38,5 +38,6 @@ interval_df <- data.frame(
   route_type = c("tracking", "tracking", "banding")
 )
 bf <- BirdFlowModels::amewoo
-birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
+birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, 
+metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
 }

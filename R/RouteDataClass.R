@@ -44,12 +44,14 @@
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
+#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, 
+#' and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
 #' 
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
 #'   route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
-#'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
+#'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", 
+#'   "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
 #'   lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
 #'   lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
 #'   x = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),

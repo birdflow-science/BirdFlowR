@@ -4,10 +4,10 @@
 \alias{print.Routes}
 \title{Print a Routes Object}
 \usage{
-\method{print}{Routes}(routes)
+\method{print}{Routes}(x, ...)
 }
 \arguments{
-\item{routes}{A \code{Routes} object to print.}
+\item{x}{A \code{Routes} object to print.}
 }
 \value{
 Invisibly returns the input \code{routes} object.

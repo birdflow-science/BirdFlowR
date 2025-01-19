@@ -4,10 +4,10 @@
 \alias{print.BirdFlowRoutes}
 \title{Print a BirdFlowRoutes Object}
 \usage{
-\method{print}{BirdFlowRoutes}(birdflow_routes)
+\method{print}{BirdFlowRoutes}(x, ...)
 }
 \arguments{
-\item{birdflow_routes}{A \code{BirdFlowRoutes} object to print.}
+\item{x}{A \code{BirdFlowRoutes} object to print.}
 }
 \value{
 Invisibly returns the input \code{birdflow_routes} object.

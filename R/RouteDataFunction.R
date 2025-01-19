@@ -5,7 +5,7 @@
 #'
 #' @description Custom print method for `Routes` objects, summarizing their contents and metadata.
 #'
-#' @param routes A `Routes` object to print.
+#' @param x A `Routes` object to print.
 #'
 #' @return Invisibly returns the input `routes` object.
 #' @method print Routes
@@ -22,35 +22,35 @@
 #' )
 #' routes <- Routes(route_df)
 #' print(routes)
-print.Routes <- function(routes){
-  stopifnot(inherits(routes,'Routes'))
+print.Routes <- function(x, ...){
+  stopifnot(inherits(x,'Routes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(routes)[1]} Object:"), '\n\n')
+  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
   # Print the data.frame part
-  print.data.frame(routes)
+  print.data.frame(x, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of routes: ", width = pad_width), length(unique(routes$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(routes$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(routes$date)), "to", format(max(routes$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(routes$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(routes$lat), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
+  cat(format("Number of points: ", width = pad_width), length(x$date), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$date)), "to", format(max(x$date)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$lon), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$lat), "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(routes))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(routes)){
-    cat(format("Info: ", width = pad_width), ifelse(length(routes$info)>20, paste0(substr(routes$info, 1, 20),' ...'), routes$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat("Species:\n", toString(attr(routes, "species")), "\n\n", sep = "")
+  cat("Species:\n", toString(attr(x, "species")), "\n\n", sep = "")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(routes, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
-  invisible(routes)
+  invisible(x)
 }
 
 #' Print a BirdFlowRoutes Object
@@ -58,7 +58,7 @@ print.Routes <- function(routes){
 #' @description Custom print method for `BirdFlowRoutes` objects, summarizing their contents, metadata, 
 #' and BirdFlow-specific attributes.
 #'
-#' @param birdflow_routes A `BirdFlowRoutes` object to print.
+#' @param x A `BirdFlowRoutes` object to print.
 #'
 #' @return Invisibly returns the input `birdflow_routes` object.
 #' @method print BirdFlowRoutes
@@ -77,35 +77,35 @@ print.Routes <- function(routes){
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_routes <- as_BirdFlowRoutes(routes, bf)
 #' print(birdflow_routes)
-print.BirdFlowRoutes <- function(birdflow_routes){
-  stopifnot(inherits(birdflow_routes,'BirdFlowRoutes'))
+print.BirdFlowRoutes <- function(x, ...){
+  stopifnot(inherits(x,'BirdFlowRoutes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(birdflow_routes)[1]} Object:"), '\n\n')
+  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
   # Print the data.frame part
-  print.data.frame(birdflow_routes)
+  print.data.frame(x, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of routes: ", width = pad_width), length(unique(birdflow_routes$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(birdflow_routes$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(birdflow_routes$date)), "to", format(max(birdflow_routes$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(birdflow_routes$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(birdflow_routes$lat), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
+  cat(format("Number of points: ", width = pad_width), length(x$date), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$date)), "to", format(max(x$date)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$lon), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$lat), "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(birdflow_routes))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(birdflow_routes)){
-    cat(format("Info: ", width = pad_width), ifelse(length(birdflow_routes$info)>20, paste0(substr(birdflow_routes$info, 1, 20),' ...'), birdflow_routes$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat(glue::glue("Species: {attr(birdflow_routes, 'species')$species_code} / {attr(birdflow_routes, 'species')$scientific_name} / {attr(birdflow_routes, 'species')$common_name} \n", "\n\n", sep = ""))
+  cat(glue::glue("Species: {attr(x, 'species')$species_code} / {attr(x, 'species')$scientific_name} / {attr(x, 'species')$common_name} \n", "\n\n", sep = ""))
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(birdflow_routes, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
-  invisible(birdflow_routes)
+  invisible(x)
 }
 
 
@@ -114,7 +114,7 @@ print.BirdFlowRoutes <- function(birdflow_routes){
 #' @description Custom print method for `BirdFlowIntervals` objects, summarizing interval data 
 #' and metadata, including temporal and spatial ranges.
 #'
-#' @param birdflow_intervals A `BirdFlowIntervals` object to print.
+#' @param x A `BirdFlowIntervals` object to print.
 #'
 #' @return Invisibly returns the input `birdflow_intervals` object.
 #' @method print BirdFlowIntervals
@@ -142,38 +142,39 @@ print.BirdFlowRoutes <- function(birdflow_routes){
 #'   route_type = c("tracking", "tracking", "banding")
 #' )
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
-print.BirdFlowIntervals <- function(birdflow_intervals){
-  stopifnot(inherits(birdflow_intervals,'BirdFlowIntervals'))
+#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, 
+#' metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
+print.BirdFlowIntervals <- function(x, ...){
+  stopifnot(inherits(x,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(birdflow_intervals)[1]} Object:"), '\n\n')
+  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
   # Print the data.frame part
-  print.data.frame(birdflow_intervals)
+  print.data.frame(x, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of intervals: ", width = pad_width), nrow(birdflow_intervals), "\n")
-  cat(format("Number of routes: ", width = pad_width), length(unique(birdflow_intervals$route_id)), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(birdflow_intervals$date1, birdflow_intervals$date2)), "to", format(max(birdflow_intervals$date1, birdflow_intervals$date2)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(birdflow_intervals$lon1, birdflow_intervals$lon2), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(birdflow_intervals$lat1, birdflow_intervals$lat2), "\n")
-  cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(birdflow_intervals$date2 - birdflow_intervals$date1, units = "days")), 'days / ', min(birdflow_intervals$timestep2 - birdflow_intervals$timestep1), 'timesteps', "\n")
-  cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(birdflow_intervals$date2 - birdflow_intervals$date1, units = "days")), 'days / ', max(birdflow_intervals$timestep2 - birdflow_intervals$timestep1), 'timesteps', "\n")
+  cat(format("Number of intervals: ", width = pad_width), nrow(x), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$date1, x$date2)), "to", format(max(x$date1, x$date2)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$lon1, x$lon2), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$lat1, x$lat2), "\n")
+  cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(x$date2 - x$date1, units = "days")), 'days / ', min(x$timestep2 - x$timestep1), 'timesteps', "\n")
+  cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(x$date2 - x$date1, units = "days")), 'days / ', max(x$timestep2 - x$timestep1), 'timesteps', "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(birdflow_intervals))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(birdflow_intervals)){
-    cat(format("Info: ", width = pad_width), ifelse(length(birdflow_intervals$info)>20, paste0(substr(birdflow_intervals$info, 1, 20),' ...'), birdflow_intervals$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat(glue::glue("Species: {attr(birdflow_intervals, 'species')$species_code} / {attr(birdflow_intervals, 'species')$scientific_name} / {attr(birdflow_intervals, 'species')$common_name} \n", "\n\n", sep = ""))
+  cat(glue::glue("Species: {attr(x, 'species')$species_code} / {attr(x, 'species')$scientific_name} / {attr(x, 'species')$common_name} \n", "\n\n", sep = ""))
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(birdflow_intervals, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
-  invisible(birdflow_intervals)
+  invisible(x)
 }
 
 # Non-S3-generic methods for presentation (print, summary, plot) --------------------------------------------------------
