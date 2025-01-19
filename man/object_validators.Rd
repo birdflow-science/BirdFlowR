@@ -44,32 +44,6 @@ These functions perform comprehensive checks to ensure data integrity. They veri
 }
 }
 }
-\examples{
-# Example: Validating a Routes data frame
-route_df <- data.frame(
-  route_id = 1:3,
-  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-  lon = c(-90, -89, -88),
-  lat = c(40, 41, 42),
-  route_type = c("tracking", "banding", "unknown")
-)
-validate_Routes_route_df(route_df)
-
-# Example: Validating a BirdFlowRoutes data frame
-birdflow_route_df <- data.frame(
-  route_id = 1:3,
-  x = c(1000, 2000, 3000),
-  y = c(500, 600, 700),
-  lon = c(-10, 10, 10),
-  lat = c(10, -10, 10),
-  i = as.integer(c(1, 2, 3)),
-  timestep = as.integer(c(1, 1, 2)),
-  date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-  route_type = c("tracking", "banding", "unknown")
-)
-validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
-
-}
 \seealso{
 \itemize{
 \item \href{?attribute_validators}{Attribute Validators}
