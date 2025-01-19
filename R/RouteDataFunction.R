@@ -416,7 +416,7 @@ preserve_s3_attributes <- function(original, modified) {
 #' sampling interval pairs between time points.
 #'
 #' @param birdflow_routes A `BirdFlowRoutes` object.
-#' @param n The number of intervals to sample. Defaults to 1000.
+#' @param max_n The maximum number of intervals to sample. Defaults to 1000.
 #'
 #' @return A `BirdFlowIntervals` object.
 #' @export
