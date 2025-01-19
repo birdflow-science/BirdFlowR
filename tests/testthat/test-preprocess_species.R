@@ -13,6 +13,7 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
+  print(ext(a)[, ]%%xres(a))
   expect_true(all((ext(a)[, ] %% xres(a)) < 1e-9))  # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribibution
