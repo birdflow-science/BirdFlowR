@@ -3,6 +3,9 @@
     Code
       my_routes
     Output
+      --------------------------------------------- 
+      Routes Object: 
+      
         route_id       date      lon     lat route_type
       1      001 2025-01-01 -75.0060 39.7128   tracking
       2      001 2025-01-08 -75.0060 39.7128   tracking
@@ -13,12 +16,41 @@
       7      003 2025-05-01 -89.6298 42.8781      motus
       8      003 2025-06-01 -85.6298 40.8781      motus
       9      004 2025-05-01 -95.3698 29.7604      motus
+      
+      Number of routes:  3 
+      Number of points:  9 
+      Date range:        2025-01-01 to 2025-06-01 
+      Longitude range:   -95.3698 -74.006 
+      Latitude range:    29.7604 42.8781 
+      --------------------------------------------- 
+      Route Type: motus
+      Unique Routes: 2; Unique Points: 4
+      
+      Route Type: tracking
+      Unique Routes: 1; Unique Points: 5
+       
+      --------------------------------------------- 
+      Species:
+      aa
+      
+      --------------------------------------------- 
+      Source:
+      $a
+      [1] "1"
+      
+      $b
+      [1] "2"
+      
+      --------------------------------------------- 
 
 ---
 
     Code
       my_bfroutes
     Output
+      --------------------------------------------- 
+      BirdFlowRoutes Object: 
+      
         route_id          x         y   i      lon     lat timestep       date
       1      001  862606.04  109290.4 204 -75.0060 39.7128        1 2025-01-01
       2      001  862606.04  109290.4 204 -75.0060 39.7128        2 2025-01-08
@@ -37,12 +69,35 @@
       6      motus       2        1
       7      motus       1        1
       8      motus       3        1
+      
+      Number of routes:  3 
+      Number of points:  8 
+      Date range:        2025-01-01 to 2025-06-01 
+      Longitude range:   -95.3698 -74.006 
+      Latitude range:    29.7604 42.8781 
+      --------------------------------------------- 
+      Route Type: motus
+      Unique Routes: 2; Unique Points: 4
+      
+      Route Type: tracking
+      Unique Routes: 1; Unique Points: 4
+       
+      --------------------------------------------- 
+      Species: amewoo / Scolopax minor / American Woodcock 
+      
+      --------------------------------------------- 
+      Source:
+      NULL
+      --------------------------------------------- 
 
 ---
 
     Code
       my_intervals
     Output
+      --------------------------------------------- 
+      BirdFlowIntervals Object: 
+      
         interval_id route_id        x1         x2       y1       y2  i1  i2     lon1
       1  interval_1      001  862606.0  862606.04 109290.4 109290.4 204 204 -75.0060
       2  interval_2      001  862606.0  933778.96 109290.4 229776.2 204 189 -75.0060
@@ -63,4 +118,26 @@
       7 -85.6298 41.8781 40.8781 2025-03-01 2025-06-01         9        22      motus
       8 -85.6298 42.8781 40.8781 2025-05-01 2025-06-01        18        22      motus
       9 -89.6298 41.8781 42.8781 2025-03-01 2025-05-01         9        18      motus
+      
+      Number of intervals:  9 
+      Number of routes:  2 
+      Date range:        2025-01-01 to 2025-06-01 
+      Longitude range:   -89.6298 -74.006 
+      Latitude range:    39.7128 42.8781 
+      Minimum interval size:  7 days /  1 timesteps 
+      MAximum interval size:  92 days /  13 timesteps 
+      --------------------------------------------- 
+      Route Type: motus
+      Unique Routes: 1; Unique Points: 3
+      
+      Route Type: tracking
+      Unique Routes: 1; Unique Points: 6
+       
+      --------------------------------------------- 
+      Species: amewoo / Scolopax minor / American Woodcock 
+      
+      --------------------------------------------- 
+      Source:
+      NULL
+      --------------------------------------------- 
 

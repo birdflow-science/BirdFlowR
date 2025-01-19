@@ -138,52 +138,6 @@ These functions are intended for internal use and are not exported for user-faci
 }
 }
 }
-\examples{
-# Validate route IDs
-validate_Routes_route_id(c(1, 2, 3))
-
-# Validate dates
-validate_Routes_date(as.Date(c("2024-01-01", "2024-01-02")))
-
-# Validate longitude and latitude
-validate_Routes_lon(c(-90, -89, -88))
-validate_Routes_lat(c(40, 41, 42))
-
-# Validate spatial indices
-validate_BirdFlowRoutes_x(c(1000, 2000, 3000))
-validate_BirdFlowRoutes_y(c(500, 600, 700))
-validate_BirdFlowRoutes_i(as.integer(c(1, 2, 3)))
-
-# Validate timesteps
-route_ids <- c("route1", "route1", "route2")
-timesteps <- as.integer(c(1, 2, 1))
-validate_BirdFlowRoutes_timestep(route_ids, timesteps)
-
-# Validate species
-species <- list(
-  species_code = "SP001",
-  scientific_name = "Hirundo rustica",
-  common_name = "Barn Swallow"
-)
-validate_BirdFlowRoutes_species(species)
-
-# Validate geometry
-geom <- list(
-  nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL
-)
-validate_BirdFlowRoutes_geom(geom)
-
-# Validate dates
-dates <- data.frame(
-    timestep = 1:2,
-    date = as.Date(c("2022-01-04", "2022-01-11")),
-    label = c("January 4", "January 11"),
-    julian = c(4, 11),
-    week = c(1, 2)
-)
-validate_BirdFlowRoutes_dates(dates)
-
-}
 \seealso{
 \itemize{
 \item \href{?object_validators}{Object Validators}
