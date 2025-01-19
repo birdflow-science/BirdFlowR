@@ -28,7 +28,7 @@ test_that("preprocess_species runs on test dataset", {
   div_results <- ext(a)[, ] %/% xres(a) # exact division
   print(div_results)
   print(abs(div_results * xres(a) - ext(a)[, ]))
-  all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9)   # Test if origin is at 0, 0
+  expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))   # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribibution
   d <- get_distr(a, 5)
