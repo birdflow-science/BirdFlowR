@@ -170,7 +170,7 @@ BirdFlowRoutes <- function(birdflow_route_df,
   validate_BirdFlowRoutes_dates(dates)
   
   # Make the BirdFlowRoutes object
-  obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
+  birdflow_routes_obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
                             species = species,
                             metadata = metadata,
                             geom = geom,
@@ -181,13 +181,13 @@ BirdFlowRoutes <- function(birdflow_route_df,
 
   # Sort & reindex
   if (sort_id_and_dates) {
-    birdflow_route_df <- birdflow_route_df |> sort_by_id_and_dates()
+    birdflow_routes_obj <- birdflow_routes_obj |> sort_by_id_and_dates()
   }
   if (reset_index) {
-    birdflow_route_df <- birdflow_route_df |> reset_index()
+    birdflow_routes_obj <- birdflow_routes_obj |> reset_index()
   }
   
-  return(obj)
+  return(birdflow_routes_obj)
 }
 
 #' @rdname RouteDataClass
