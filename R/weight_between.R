@@ -54,10 +54,6 @@ if (FALSE) {
 #' at a time. A smaller
 #' `batch_size` will conserve memory at a slight performance cost.  The number
 #' of batches will be less than or equal to `n_active(bf)^2 / batch_size`.
-#' @param check_radius If  `TRUE` an error will be thrown if the radius
-#' is not between the resolution and 1/4 the resolution of `bf`. Outside of
-#' that range the algorithm is likely to yield distorted results.
-#' `mean(res(bf)) / 2` is the default, and recommended radius.
 #' @return A list with:
 #' \item{between}{An array with dimensions representing the
 #' "from" location, the "to" location, and the `points`. Cells are weights and

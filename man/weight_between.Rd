@@ -42,11 +42,6 @@ of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
 
 \item{n_direction}{The number of (equally spaced) directional bins to
 classify bearings into.  Currently only \code{1} is supported.}
-
-\item{check_radius}{If  \code{TRUE} an error will be thrown if the radius
-is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
-that range the algorithm is likely to yield distorted results.
-\code{mean(res(bf)) / 2} is the default, and recommended radius.}
 }
 \value{
 A list with:

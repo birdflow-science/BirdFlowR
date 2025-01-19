@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{A \code{BirdFlowRoutes} object to print.}
+
+\item{...}{Additional arguments passed to \code{print.data.frame}.}
 }
 \value{
 Invisibly returns the input \code{birdflow_routes} object.

@@ -6,7 +6,8 @@
 #' @description Custom print method for `Routes` objects, summarizing their contents and metadata.
 #'
 #' @param x A `Routes` object to print.
-#'
+#' @param ... Additional arguments passed to `print.data.frame`.
+#' 
 #' @return Invisibly returns the input `routes` object.
 #' @method print Routes
 #' @export
@@ -59,7 +60,8 @@ print.Routes <- function(x, ...){
 #' and BirdFlow-specific attributes.
 #'
 #' @param x A `BirdFlowRoutes` object to print.
-#'
+#' @param ... Additional arguments passed to `print.data.frame`.
+#' 
 #' @return Invisibly returns the input `birdflow_routes` object.
 #' @method print BirdFlowRoutes
 #' @export
@@ -115,7 +117,8 @@ print.BirdFlowRoutes <- function(x, ...){
 #' and metadata, including temporal and spatial ranges.
 #'
 #' @param x A `BirdFlowIntervals` object to print.
-#'
+#' @param ... Additional arguments passed to `print.data.frame`.
+#' 
 #' @return Invisibly returns the input `birdflow_intervals` object.
 #' @method print BirdFlowIntervals
 #' @export
