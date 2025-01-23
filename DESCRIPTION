@@ -31,7 +31,6 @@ Imports:
     ggthemes,
     gifski,
     grDevices,
-    glue,
     lubridate,
     Matrix (>= 1.5-2),
     methods,

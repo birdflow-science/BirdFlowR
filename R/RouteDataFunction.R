@@ -27,29 +27,30 @@ print.Routes <- function(x, ...){
   stopifnot(inherits(x,'Routes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
+  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
+  
   # Print the data.frame part
-  print.data.frame(x, ...)
+  print.data.frame(x$data, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(x$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$date)), "to", format(max(x$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$lat), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
+  cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(x)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x$data)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat("Species:\n", toString(attr(x, "species")), "\n\n", sep = "")
+  cat("Species:\n", toString(x$species), "\n\n", sep = "")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -83,29 +84,31 @@ print.BirdFlowRoutes <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowRoutes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
+  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
   # Print the data.frame part
-  print.data.frame(x, ...)
+  print.data.frame(x$data, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(x$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$date)), "to", format(max(x$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$lat), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
+  cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(x)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x$data)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat(glue::glue("Species: {attr(x, 'species')$species_code} / {attr(x, 'species')$scientific_name} / {attr(x, 'species')$common_name} \n", "\n\n", sep = ""))
+  cat(sprintf("Species: %s / %s / %s \n", 
+              x$species$species_code, x$species$scientific_name, x$species$common_name),
+      "\n\n")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -151,31 +154,33 @@ print.BirdFlowIntervals <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(glue::glue("{class(x)[1]} Object:"), '\n\n')
+  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
   # Print the data.frame part
-  print.data.frame(x, ...)
+  print.data.frame(x$data, ...)
   cat('\n')
   
   pad_width <- 18
-  cat(format("Number of intervals: ", width = pad_width), nrow(x), "\n")
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$route_id)), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$date1, x$date2)), "to", format(max(x$date1, x$date2)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$lon1, x$lon2), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$lat1, x$lat2), "\n")
-  cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(x$date2 - x$date1, units = "days")), 'days / ', min(x$timestep2 - x$timestep1), 'timesteps', "\n")
-  cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(x$date2 - x$date1, units = "days")), 'days / ', max(x$timestep2 - x$timestep1), 'timesteps', "\n")
+  cat(format("Number of intervals: ", width = pad_width), nrow(x$data), "\n")
+  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
+  cat(format("Date range: ", width = pad_width), format(min(x$data$date1, x$data$date2)), "to", format(max(x$data$date1, x$data$date2)), "\n")
+  cat(format("Longitude range: ", width = pad_width), range(x$data$lon1, x$data$lon2), "\n")
+  cat(format("Latitude range: ", width = pad_width), range(x$data$lat1, x$data$lat2), "\n")
+  cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', min(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
+  cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', max(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
   cat(crossline,'\n')
   
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x))
+  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
   cat(formatted_summary_route_type, '\n')
   
-  if ('info' %in% colnames(x)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$info)>20, paste0(substr(x$info, 1, 20),' ...'), x$info), "\n") # only print the head 20 characters
+  if ('info' %in% colnames(x$data)){
+    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
   }
   cat(crossline,'\n')
-  cat(glue::glue("Species: {attr(x, 'species')$species_code} / {attr(x, 'species')$scientific_name} / {attr(x, 'species')$common_name} \n", "\n\n", sep = ""))
+  cat(sprintf("Species: %s / %s / %s \n", 
+              x$species$species_code, x$species$scientific_name, x$species$common_name),
+      "\n\n")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(attr(x, "source"))), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -192,7 +197,7 @@ print.BirdFlowIntervals <- function(x, ...){
 #' @keywords internal
 summarize_route_type <- function(routes) {
   stopifnot(inherits(routes,c('Routes', 'BirdFlowIntervals')))
-  routes |>
+  routes$data |>
     dplyr::group_by(route_type) |>
     dplyr::summarize(
       unique_route_count = dplyr::n_distinct(route_id), 
@@ -262,31 +267,31 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   
   # Sort & reindex
   if (sort_id_and_dates){
-    routes <- routes |> sort_by_id_and_dates()
+    routes$data <- routes$data |> sort_by_id_and_dates()
   }
   if (reset_index){
-    routes <- routes |> reset_index()
+    routes$data <- routes$data |> reset_index()
   }
   
   # Conversion
   ## Spatial
-  xy <- BirdFlowR::latlon_to_xy(lat = routes$lat, lon = routes$lon, bf = bf)
-  routes$x <- xy$x
-  routes$y <- xy$y
-  routes$i <- BirdFlowR::xy_to_i(x = routes$x, y = routes$y, bf)
+  xy <- BirdFlowR::latlon_to_xy(lat = routes$data$lat, lon = routes$data$lon, bf = bf)
+  routes$data$x <- xy$x
+  routes$data$y <- xy$y
+  routes$data$i <- BirdFlowR::xy_to_i(x = routes$data$x, y = routes$data$y, bf)
   
   ## Temporal
-  routes$date <- lubridate::as_date(routes[['date']])
-  routes$timestep <- as.integer(BirdFlowR::lookup_timestep(routes$date, bf, allow_failure = TRUE))
+  routes$data$date <- lubridate::as_date(routes$data[['date']])
+  routes$data$timestep <- as.integer(BirdFlowR::lookup_timestep(routes$data$date, bf, allow_failure = TRUE))
   
   # Only sucessfully converted spatiotemporal points will be included
   if (valid_only){
-    routes <- routes |>
+    routes$data <- routes$data |>
       dplyr::filter(!is.na(x) & !is.na(y) & !is.na(i) & !is.na(timestep))
   }
   
   # Randomly select only one data point per timestep per routes
-  routes <- routes |> dplyr::group_by(route_id, timestep) |> dplyr::slice_sample(n = 1) |> dplyr::ungroup() |> as.data.frame()
+  routes$data <- routes$data |> dplyr::group_by(route_id, timestep) |> dplyr::slice_sample(n = 1) |> dplyr::ungroup() |> as.data.frame()
   
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
@@ -295,12 +300,12 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   dates <- get_dates(bf) # use the up-to-date dates dataframe
   
   # Transform to BirdFlowRoutes
-  routes <- BirdFlowRoutes(birdflow_route_df = routes,
+  routes <- BirdFlowRoutes(data = routes$data,
                            species = species,
                            metadata = metadata,
                            geom = geom,
                            dates = dates,
-                           source = attr(routes, 'source'))
+                           source = routes$source)
   return(routes)
 }
 
@@ -391,8 +396,8 @@ add_stay_id <- function(df) {
 #'   date = as.integer(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
 #'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
 #' )
-#' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days", time_threshold = Inf)
-add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timediff_unit = "days", time_threshold = Inf) {
+#' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
+add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timediff_unit = "days") {
   
   # Ensure the data is sorted by timestep
   df <- df |> dplyr::arrange(.data[[timestep_col]])
@@ -401,50 +406,18 @@ add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timedif
     dplyr::mutate(
       timestep_diff = c(1, as.numeric(diff(.data[[timestep_col]]), units = timediff_unit)),  # Time differences
       i_change = c(1, as.numeric(diff(.data$i)) != 0),    # Changes in 'i'
-      stay_id = cumsum(i_change | (timestep_diff > time_threshold))
+      stay_id = cumsum(i_change)
     ) |>
     # Now the stay_id is assigned, calculate the duration (time difference) of each stay
     dplyr::group_by(route_id, stay_id) |>
     dplyr::mutate(
-      stay_len = as.numeric(max(.data[[timestep_col]]) - min(.data[[timestep_col]]) + 1, units = timediff_unit)
+      stay_len = as.numeric(max(.data[[timestep_col]]) - min(.data[[timestep_col]]), units = timediff_unit)
     ) |>
     dplyr::select(-timestep_diff, -i_change)
   
   return(new_df)
 }
 
-#' Preserve S3 Attributes Between Objects
-#'
-#' @description Copies custom S3 attributes from an original object to a modified object while 
-#' avoiding overwriting structural attributes like `class`, `names`, and `dim`.
-#'
-#' @param original The original object from which attributes are preserved. Must be of class 
-#' `BirdFlowRoutes`, `Routes`, or `data.frame`.
-#' @param modified The modified object to which attributes will be applied.
-#'
-#' @return The `modified` object with the preserved attributes from the `original` object.
-#' @keywords internal
-preserve_s3_attributes <- function(original, modified) {
-  
-  # Class check
-  stopifnot(inherits(original,c('BirdFlowRoutes', 'Routes', 'data.frame')))
-  
-  # Preserve the class
-  class(modified) <- class(original)
-  
-  # Preserve custom attributes while avoiding overwriting structural attributes
-  original_attrs <- attributes(original)
-  modified_attrs <- attributes(modified)
-  
-  # Exclude attributes that should not be overwritten
-  excluded <- c("names", 'class', "row.names", "dim", "dimnames")
-  preserved_attrs <- original_attrs[!(names(original_attrs) %in% excluded)]
-  
-  # Add preserved attributes to modified object
-  attributes(modified) <- c(modified_attrs, preserved_attrs)
-  
-  return(modified)
-}
 
 ## For as_BirdFlowIntervals --------------------------------------------------------
 
@@ -476,12 +449,12 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   stopifnot(is.numeric(max_n))
   
   # Conversion
-  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes, max_n)
+  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes$data, max_n)
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   all_interval_df <- list()
   for (row_id in seq_len(nrow(sampling_strategy_df))){
     this_row <- sampling_strategy_df[row_id, ]
-    this_route <- birdflow_routes[birdflow_routes$route_id==this_row$route_id,]
+    this_route <- birdflow_routes$data[birdflow_routes$data$route_id==this_row$route_id,]
     
     all_pairs <- as.data.frame(t(combn(seq_len(nrow(this_route)), 2)))
     sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$interval_pairs, replace = FALSE), ]
@@ -545,11 +518,11 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   all_interval_df <- all_interval_df[, c(target_columns, setdiff(names(all_interval_df), target_columns))]
   
   obs <- BirdFlowIntervals(all_interval_df,
-                           species = attr(birdflow_routes, 'species'),
-                           metadata = attr(birdflow_routes, 'metadata'),
-                           geom = attr(birdflow_routes, 'geom'),
-                           dates = attr(birdflow_routes, 'dates'),
-                           source = attr(birdflow_routes, 'source'))
+                           species = birdflow_routes$species,
+                           metadata = birdflow_routes$metadata,
+                           geom = birdflow_routes$geom,
+                           dates = birdflow_routes$dates,
+                           source = birdflow_routes$source)
   return(obs)
 }
 

@@ -10,9 +10,7 @@
 #'
 #' All objects are internally validated during creation, ensuring required columns, valid data types, and proper formats. Non-exported `new_*` functions handle the final assembly of the object after validation.
 #'
-#' @param route_df A data frame containing route data for `Routes`.
-#' @param birdflow_route_df A data frame containing route data for `BirdFlowRoutes`.
-#' @param birdflow_intervals A data frame containing interval data for `BirdFlowIntervals`.
+#' @param data A data frame containing route/interval data for `Routes`, `BirdFlowRoutes` or `BirdFlowIntervals`.
 #' @param species A list with species metadata, including `species_code`, `scientific_name`, and `common_name`.
 #' @param metadata A list with additional metadata.
 #' @param geom A list describing spatial geometry, such as `nrow`, `ncol`, `crs`, and `mask`.
@@ -120,40 +118,41 @@ NULL
 
 #' @rdname RouteDataClass
 #' @export
-Routes <- function(route_df, species = NULL, metadata = NULL, source = NULL) {
+Routes <- function(data, species = NULL, metadata = NULL, source = NULL) {
   # Check input
-  stopifnot(is.data.frame(route_df))
-  validate_Routes_route_df(route_df)
+  stopifnot(is.data.frame(data))
+  validate_Routes_route_df(data)
 
   # Make new Routes object
-  obj <- new_Routes(route_df, species, metadata, source)
+  obj <- new_Routes(data, species, metadata, source)
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_Routes <- function(route_df, species, metadata, source) {
+new_Routes <- function(data, species, metadata, source) {
   # Sort columns
   target_ordered_columns <- get_target_columns_Routes(type = "output")
-  route_df <- route_df[, 
-                       c(target_ordered_columns, 
-                         setdiff(names(route_df), target_ordered_columns)
-                         )
-                       ]
+  data <- data[, 
+                 c(target_ordered_columns, 
+                   setdiff(names(data), target_ordered_columns)
+                   )
+                 ]
 
-  obj <- structure(
-    route_df,
-    class = c("Routes", class(route_df)),
+  obj <- list(
+    data = data,
     species = species,
     metadata = metadata,
     source = source
   )
+  
+  class(obj) <- c("Routes", class(obj))
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @export
-BirdFlowRoutes <- function(birdflow_route_df,
+BirdFlowRoutes <- function(data,
                            species,
                            metadata,
                            geom,
@@ -164,15 +163,15 @@ BirdFlowRoutes <- function(birdflow_route_df,
                            stay_calculate_col = "date", 
                            stay_calculate_timediff_unit = "days") {
   # Check input
-  stopifnot(inherits(birdflow_route_df, "data.frame"))
-  validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
+  stopifnot(inherits(data, "data.frame"))
+  validate_BirdFlowRoutes_birdflow_route_df(data)
   validate_BirdFlowRoutes_species(species)
   validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
   
   # Make the BirdFlowRoutes object
-  birdflow_routes_obj <- new_BirdFlowRoutes(birdflow_route_df = birdflow_route_df,
+  birdflow_routes_obj <- new_BirdFlowRoutes(data = data,
                             species = species,
                             metadata = metadata,
                             geom = geom,
@@ -194,11 +193,11 @@ BirdFlowRoutes <- function(birdflow_route_df,
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates, source, 
+new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source, 
                                stay_calculate_col = "date", stay_calculate_timediff_unit = "days") {
 
   ## Add stay id
-  birdflow_route_df <- birdflow_route_df |>
+  data <- data |>
     sort_by_id_and_dates() |>
     dplyr::group_by(.data$route_id) |>
     add_stay_id_with_varied_intervals(timestep_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |> 
@@ -206,50 +205,50 @@ new_BirdFlowRoutes <- function(birdflow_route_df, species, metadata, geom, dates
     # It takes 'timestep' as input so account for varying intervals, 
     # if the data is not sampled in a frequency.
     dplyr::ungroup() |>
-    as.data.frame() |>
-    preserve_s3_attributes(original = birdflow_route_df)
+    as.data.frame()
 
   # Sort columns
   target_ordered_columns <- get_target_columns_BirdFlowRoutes(type = "output")
-  birdflow_route_df <- birdflow_route_df[, 
-                                         c(
-                                           target_ordered_columns,
-                                           setdiff(
-                                             names(birdflow_route_df),
-                                             target_ordered_columns
-                                             )
-                                           )
-                                         ]
-
-  obj <- structure(
-    birdflow_route_df,
-    class = unique(c("BirdFlowRoutes", "Routes", class(birdflow_route_df))),
+  data <- data[, 
+                 c(
+                   target_ordered_columns,
+                   setdiff(
+                     names(data),
+                     target_ordered_columns
+                     )
+                   )
+                 ]
+  obj <- list(
+    data = data,
     species = species,
     metadata = metadata,
     geom = geom,
     dates = dates,
     source = source
   )
+  
+  class(obj) <- unique(c("BirdFlowRoutes", "Routes", class(data)))
+  
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @export
-BirdFlowIntervals <- function(birdflow_intervals,
+BirdFlowIntervals <- function(data,
                               species,
                               metadata,
                               geom,
                               dates,
                               source = NULL) {
 
-  validate_BirdFlowIntervals_birdflow_intervals(birdflow_intervals)
+  validate_BirdFlowIntervals_birdflow_intervals(data)
   validate_BirdFlowRoutes_species(species)
   validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
 
   # Make the BirdFlowIntervals object
-  obj <- new_BirdFlowIntervals(birdflow_intervals = birdflow_intervals,
+  obj <- new_BirdFlowIntervals(data = data,
                             species = species,
                             metadata = metadata,
                             geom = geom,
@@ -261,7 +260,7 @@ BirdFlowIntervals <- function(birdflow_intervals,
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_BirdFlowIntervals <- function(birdflow_intervals,
+new_BirdFlowIntervals <- function(data,
                                   species,
                                   metadata,
                                   geom,
@@ -270,23 +269,24 @@ new_BirdFlowIntervals <- function(birdflow_intervals,
 
   # Sort columns
   target_ordered_columns <- get_target_columns_BirdFlowIntervals(type = "output")
-  birdflow_intervals <- birdflow_intervals[, 
-                                           c(
-                                             target_ordered_columns, 
-                                             setdiff(
-                                               names(birdflow_intervals), 
-                                               target_ordered_columns)
-                                             )
-                                           ]
-
-  obj <- structure(
-    birdflow_intervals,
-    class = unique(c("BirdFlowIntervals", class(birdflow_intervals))),
+  data <- data[, 
+                 c(
+                   target_ordered_columns, 
+                   setdiff(
+                     names(data), 
+                     target_ordered_columns)
+                   )
+                 ]
+  obj <- list(
+    data = data,
     species = species,
     metadata = metadata,
     geom = geom,
     dates = dates,
     source = source
   )
+  
+  class(obj) <- unique(c("BirdFlowIntervals", class(data))),
+  
   return(obj)
 }

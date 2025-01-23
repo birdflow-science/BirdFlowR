@@ -30,11 +30,10 @@ NULL
 # For the input of Routes class
 
 #' @rdname object_validators
-#' @export
 validate_Routes_route_df <- function(route_df) {
   for (name in get_target_columns_Routes(type='input')){
     if (!name %in% colnames(route_df)) {
-      stop(sprintf(glue::glue("'{name}' is not found in the input dataframe.")))
+      stop(sprintf("'%s' is not found in the input dataframe.", name))
     }
   }
   
@@ -51,7 +50,6 @@ validate_Routes_route_df <- function(route_df) {
 
 
 #' @rdname object_validators
-#' @export
 validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   # For the input of BirdFlowRoutes class
   stopifnot(inherits(birdflow_route_df, 'data.frame'))
@@ -59,8 +57,121 @@ validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   # check the features required by direct initiation of BirdFlowRoutes class
   for (name in get_target_columns_BirdFlowRoutes(type='input')) {
     if (!name %in% colnames(birdflow_route_df)){
-      stop(sprintf(glue::glue("'{name}' is not found in the input dataframe.")))
+      stop(sprintf("'%s' is not found in the input dataframe.", name))
     }
+  }
+  
+  validate_Routes_route_id(birdflow_route_df$route_id)
+  validate_Routes_lon(birdflow_route_df$lon)
+  validate_Routes_lat(birdflow_route_df$lat)
+  validate_BirdFlowRoutes_x(birdflow_route_df$x)
+  validate_BirdFlowRoutes_y(birdflow_route_df$y)
+  validate_BirdFlowRoutes_i(birdflow_route_df$i)
+  validate_BirdFlowRoutes_timestep(birdflow_route_df$timestep)
+  validate_BirdFlowRoutes_date(birdflow_route_df$route_id, birdflow_route_df$date)  
+  # Should not have duplicated date within each route! 
+  # Should select only one data point for each date for each route. 
+  validate_BirdFlowRoutes_route_type(birdflow_route_df$route_type)
+}
+
+#' @rdname object_validators
+validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
+  stopifnot(inherits(birdflow_interval_df, 'data.frame'))
+  # check the features required by direct initiation of BirdFlowIntervals class
+  for (name in get_target_columns_BirdFlowIntervals(type='input')){
+    if (!name %in% colnames(birdflow_interval_df)){
+      stop(sprintf("'%s' is not found in the input dataframe.", name))
+    }
+  }
+  
+  validate_BirdFlowIntervals_interval_id(birdflow_interval_df$interval_id)
+  validate_Routes_route_id(birdflow_interval_df$route_id)
+  validate_BirdFlowRoutes_x(birdflow_interval_df$x1)
+  validate_BirdFlowRoutes_x(birdflow_interval_df$x2)
+  validate_BirdFlowRoutes_y(birdflow_interval_df$y1)
+  validate_BirdFlowRoutes_y(birdflow_interval_df$y2)
+  validate_BirdFlowRoutes_i(birdflow_interval_df$i1)
+  validate_BirdFlowRoutes_i(birdflow_interval_df$i2)
+  validate_Routes_lon(birdflow_interval_df$lon1)
+  validate_Routes_lon(birdflow_interval_df$lon2)
+  validate_Routes_lat(birdflow_interval_df$lat1)
+  validate_Routes_lat(birdflow_interval_df$lat2)
+  validate_Routes_date(birdflow_interval_df$date1)
+  validate_Routes_date(birdflow_interval_df$date2)
+  validate_BirdFlowRoutes_timestep(birdflow_interval_df$timestep1)
+  validate_BirdFlowRoutes_timestep(birdflow_interval_df$timestep2)
+  validate_BirdFlowRoutes_route_type(birdflow_interval_df$route_type)
+}
+
+
+#' @rdname object_validators
+#' @export
+validate_Routes <- function(routes) {
+  stopifnot(inherits(routes, 'Routes'))
+  stopifnot(inherits(routes, 'list'))
+  
+  for (name in c('data', 'species', 'metadata', 'source')){
+    if (!name %in% names(routes)) {
+      stop(sprintf("'%s' is not found in the input object!", name))
+    }
+  }
+  
+  # Don't need to validate other attributes for Routes class
+  # Validate data
+  route_df <-routes$data
+  stopifnot(inherits(route_df, 'data.frame'))
+  
+  for (name in get_target_columns_Routes(type='output')){
+    if (!name %in% colnames(route_df)) {
+      stop(sprintf("'%s' is not found in the dataframe of the input object!", name))
+    }
+  }
+  
+  if (nrow(route_df)==0) {
+    stop(sprintf("The dataframe of the input object cannot be empty!"))
+  }
+  
+  validate_Routes_route_id(route_df$route_id)
+  validate_Routes_date(route_df$date)
+  validate_Routes_lon(route_df$lon)
+  validate_Routes_lat(route_df$lat)
+  validate_Routes_route_type(route_df$route_type)
+}
+
+
+
+#' @rdname object_validators
+#' @export
+validate_BirdFlowRoutes <- function(birdflow_routes) {
+  stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
+  stopifnot(inherits(birdflow_routes, 'Routes'))
+  stopifnot(inherits(birdflow_routes, 'list'))
+  
+  for (name in c('data', 'species', 'metadata', 'geom', 'dates', 'source')) {
+    if (!name %in% names(birdflow_routes)) {
+      stop(sprintf("'%s' is not found in the input object!", name))
+    }
+  }
+  
+  # validate elements
+  validate_BirdFlowRoutes_species(birdflow_routes$speices)
+  validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
+  validate_BirdFlowRoutes_geom(birdflow_routes$geom)
+  validate_BirdFlowRoutes_dates(birdflow_routes$dates)
+  validate_BirdFlowRoutes_source(birdflow_routes$source)
+  
+  # Validate data
+  birdflow_route_df <-birdflow_routes$data
+  stopifnot(inherits(birdflow_route_df, 'data.frame'))
+  
+  for (name in get_target_columns_BirdFlowRoutes(type='output')){
+    if (!name %in% colnames(birdflow_route_df)) {
+      stop(sprintf("'%s' is not found in the dataframe of the input object!", name))
+    }
+  }
+  
+  if (nrow(birdflow_route_df)==0) {
+    stop(sprintf("The dataframe of the input object cannot be empty!"))
   }
   
   validate_Routes_route_id(birdflow_route_df$route_id)
@@ -74,17 +185,64 @@ validate_BirdFlowRoutes_birdflow_route_df <- function(birdflow_route_df) {
   validate_BirdFlowRoutes_route_type(birdflow_route_df$route_type)
 }
 
+
+
 #' @rdname object_validators
 #' @export
-validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
-  stopifnot(inherits(birdflow_interval_df, 'data.frame'))
-  # check the features required by direct initiation of BirdFlowIntervals class
-  for (name in get_target_columns_BirdFlowIntervals(type='input')){
-    if (!name %in% colnames(birdflow_interval_df)){
-      stop(sprintf(glue::glue("'{name}' is not found in the input dataframe.")))
+validate_BirdFlowIntervals <- function(birdflow_intervals) {
+  stopifnot(inherits(birdflow_intervals, 'BirdFlowIntervals'))
+  stopifnot(inherits(birdflow_intervals, 'list'))
+  
+  for (name in c('data', 'species', 'metadata', 'geom', 'dates', 'source')) {
+    if (!name %in% names(birdflow_routes)) {
+      stop(sprintf("'%s' is not found in the input object!", name))
     }
   }
+  
+  # validate elements
+  validate_BirdFlowRoutes_species(birdflow_routes$speices)
+  validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
+  validate_BirdFlowRoutes_geom(birdflow_routes$geom)
+  validate_BirdFlowRoutes_dates(birdflow_routes$dates)
+  validate_BirdFlowRoutes_source(birdflow_routes$source)
+  
+  # Validate data
+  birdflow_interval_df <-birdflow_intervals$data
+  stopifnot(inherits(birdflow_interval_df, 'data.frame'))
+  
+  for (name in get_target_columns_BirdFlowIntervals(type='output')){
+    if (!name %in% colnames(birdflow_interval_df)) {
+      stop(sprintf("'%s' is not found in the dataframe of the input object!", name))
+    }
+  }
+  
+  if (nrow(birdflow_interval_df)==0) {
+    stop(sprintf("The dataframe of the input object cannot be empty!"))
+  }
+  
+  validate_BirdFlowIntervals_interval_id(birdflow_interval_df$interval_id)
+  validate_Routes_route_id(birdflow_interval_df$route_id)
+  validate_BirdFlowRoutes_x(birdflow_interval_df$x1)
+  validate_BirdFlowRoutes_x(birdflow_interval_df$x2)
+  validate_BirdFlowRoutes_y(birdflow_interval_df$y1)
+  validate_BirdFlowRoutes_y(birdflow_interval_df$y2)
+  validate_BirdFlowRoutes_i(birdflow_interval_df$i1)
+  validate_BirdFlowRoutes_i(birdflow_interval_df$i2)
+  validate_Routes_lon(birdflow_interval_df$lon1)
+  validate_Routes_lon(birdflow_interval_df$lon2)
+  validate_Routes_lat(birdflow_interval_df$lat1)
+  validate_Routes_lat(birdflow_interval_df$lat2)
+  validate_Routes_date(birdflow_interval_df$date1)
+  validate_Routes_date(birdflow_interval_df$date2)
+  validate_BirdFlowRoutes_timestep(birdflow_interval_df$timestep1)
+  validate_BirdFlowRoutes_timestep(birdflow_interval_df$timestep2)
+  validate_BirdFlowRoutes_route_type(birdflow_interval_df$route_type)
 }
+
+
+
+
+
 
 #' @name target_columns
 #' @title Get Target Columns for Data Frames
@@ -129,7 +287,7 @@ get_target_columns_Routes <- function(type='input'){
   } else if (type=='output') {
     return(c('route_id', 'date', 'lon', 'lat', 'route_type')) # No additional columns added when making this class
   } else {
-    stop(glue::glue("The type should be 'input' or 'output', got {type}"))
+    stop(sprintf("The type should be 'input' or 'output', got %s.", type))
   }
 }
 
@@ -141,7 +299,7 @@ get_target_columns_BirdFlowRoutes <- function(type='input'){
   } else if (type=='output') {
     return(c('route_id', 'x', 'y', 'i', 'lon', 'lat', 'timestep', 'date', 'route_type', 'stay_id', 'stay_len')) # 'stay_id', 'stay_len'
   } else {
-    stop(glue::glue("The type should be 'input' or 'output', got {type}"))
+    stop(sprintf("The type should be 'input' or 'output', got %s.", type))
   }
 }
 
@@ -153,7 +311,7 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
   } else if (type=='output') {
     return(c("interval_id", "route_id", "x1", "x2", "y1", "y2", "i1", "i2", "lon1", "lon2", "lat1", "lat2", "date1", "date2", "timestep1", "timestep2", 'route_type')) # 
   } else {
-    stop(glue::glue("The type should be 'input' or 'output', got {type}"))
+    stop(sprintf("The type should be 'input' or 'output', got %s.", type))
   }
 }
 
@@ -357,7 +515,7 @@ validate_BirdFlowRoutes_species <- function(species) {
   target_name_list <- c("species_code", "scientific_name", "common_name")
   for (name in target_name_list){
     if (!(name %in% exists_names)) {
-      stop(sprintf(glue::glue("{name} component not found in species!")))
+      stop(sprintf("%s component not found in species!", name))
     }
   }
 }
@@ -374,7 +532,7 @@ validate_BirdFlowRoutes_geom <- function(geom) {
   target_name_list <- c("nrow", "ncol", "res", "ext", "crs", "mask", "dynamic_mask")
   for (name in target_name_list){
     if (!(name %in% exists_names)) {
-      stop(sprintf(glue::glue("{name} component not found in geom!")))
+      stop(sprintf("%s component not found in geom!", name))
     }
   }
 }
@@ -386,7 +544,14 @@ validate_BirdFlowRoutes_dates <- function(dates) {
   target_name_list <- c("timestep", "date", "label", "julian", "week")
   for (name in target_name_list){
     if (!(name %in% exists_names)) {
-      stop(sprintf(glue::glue("{name} component not found in dates!")))
+      stop(sprintf("%s component not found in dates!", name))
     }
+  }
+}
+
+#' @rdname attribute_validators
+validate_BirdFlowIntervals_interval_id <- function(interval_id) {
+  if ((!is.character(interval_id) && !is.numeric(interval_id)) || any(is.na(interval_id))) {
+    stop(sprintf("'interval_id' must be strings or numbers. Missing values are not allowded."))
   }
 }
