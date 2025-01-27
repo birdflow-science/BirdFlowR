@@ -13,7 +13,7 @@ test_that("route() works with a single distribution", {
     i_to_xy(bf) |>
     as.data.frame()
   expect_no_error(pts <- route(bf, x_coord = loc$x, y_coord = loc$y,
-                               start = start, end = end))
+                               start = start, end = end)$data)
   pts <- as.data.frame(pts)
   pts <- head(pts[!duplicated(pts[, c("route_id", "stay_id")]), ], 4)
 

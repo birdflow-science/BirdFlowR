@@ -21,6 +21,7 @@
 #'   lat = c(40, 41, 42),
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
+#' 
 #' routes <- Routes(route_df)
 #' print(routes)
 print.Routes <- function(x, ...){
@@ -50,7 +51,7 @@ print.Routes <- function(x, ...){
   cat(crossline,'\n')
   cat("Species:\n", toString(x$species), "\n\n", sep = "")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -108,7 +109,7 @@ print.BirdFlowRoutes <- function(x, ...){
               x$species$species_code, x$species$scientific_name, x$species$common_name),
       "\n\n")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -139,8 +140,8 @@ print.BirdFlowRoutes <- function(x, ...){
 #'   x2 = c(1100, 1200, 1300),
 #'   y1 = c(500, 600, 700),
 #'   y2 = c(600, 700, 800),
-#'   i1 = c(1, 2, 3),
-#'   i2 = c(2, 3, 4),
+#'   i1 = as.integer(c(1, 2, 3)),
+#'   i2 = as.integer(c(2, 3, 4)),
 #'   date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
 #'   date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
 #'   timestep1 = as.integer(c(1, 2, 3)),
@@ -180,7 +181,7 @@ print.BirdFlowIntervals <- function(x, ...){
               x$species$species_code, x$species$scientific_name, x$species$common_name),
       "\n\n")
   cat(crossline,'\n')
-  cat("Source:\n", paste(capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
+  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
   cat(crossline,'\n')
   invisible(x)
 }
@@ -196,11 +197,11 @@ print.BirdFlowIntervals <- function(x, ...){
 #' @return A data frame with columns `route_type`, `unique_route_count`, and `unique_point_count`.
 #' @keywords internal
 summarize_route_type <- function(routes) {
-  stopifnot(inherits(routes,c('Routes', 'BirdFlowIntervals')))
-  routes$data |>
-    dplyr::group_by(route_type) |>
+  stopifnot(inherits(routes,c('data.frame')))
+  routes |>
+    dplyr::group_by(.data[['route_type']]) |>
     dplyr::summarize(
-      unique_route_count = dplyr::n_distinct(route_id), 
+      unique_route_count = dplyr::n_distinct(.data[['route_id']]), 
       unique_point_count = dplyr::n(),
       .groups = "drop"
     )
@@ -267,10 +268,10 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   
   # Sort & reindex
   if (sort_id_and_dates){
-    routes$data <- routes$data |> sort_by_id_and_dates()
+    routes$data <- (routes$data |> sort_by_id_and_dates())
   }
   if (reset_index){
-    routes$data <- routes$data |> reset_index()
+    routes$data <- (routes$data |> reset_index())
   }
   
   # Conversion
@@ -278,7 +279,7 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   xy <- BirdFlowR::latlon_to_xy(lat = routes$data$lat, lon = routes$data$lon, bf = bf)
   routes$data$x <- xy$x
   routes$data$y <- xy$y
-  routes$data$i <- BirdFlowR::xy_to_i(x = routes$data$x, y = routes$data$y, bf)
+  routes$data$i <- as.integer(BirdFlowR::xy_to_i(x = routes$data$x, y = routes$data$y, bf))
   
   ## Temporal
   routes$data$date <- lubridate::as_date(routes$data[['date']])
@@ -287,11 +288,11 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   # Only sucessfully converted spatiotemporal points will be included
   if (valid_only){
     routes$data <- routes$data |>
-      dplyr::filter(!is.na(x) & !is.na(y) & !is.na(i) & !is.na(timestep))
+      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]))
   }
   
   # Randomly select only one data point per timestep per routes
-  routes$data <- routes$data |> dplyr::group_by(route_id, timestep) |> dplyr::slice_sample(n = 1) |> dplyr::ungroup() |> as.data.frame()
+  routes$data <- routes$data |> dplyr::group_by(.data[['route_id']], .data[['timestep']]) |> dplyr::slice_sample(n = 1) |> dplyr::ungroup() |> as.data.frame()
   
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
@@ -324,7 +325,7 @@ reset_index <- function(routes) {
   new_ids <- paste0("route_", seq_along(unique_ids))
   
   # Create a lookup table
-  id_mapping <- setNames(new_ids, unique_ids)
+  id_mapping <- stats::setNames(new_ids, unique_ids)
   
   # Replace
   routes$route_id <- id_mapping[routes$route_id]
@@ -357,15 +358,16 @@ sort_by_id_and_dates <- function(routes){
 #' @export
 #'
 #' @examples
-#' routes <- data.frame(
+#' routes <- data.frame(list(
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
-#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),
+#'   i = c(1, 1, 2, 2, 3, 4, 4, 5),
 #'   date = as.Date(c(
 #'     "2024-01-01", "2024-01-02", "2024-01-03", 
 #'     "2024-01-04", "2024-01-05", "2024-01-06",
 #'     "2024-01-07", "2024-01-08"
-#'   ))
+#'   )))
 #' )
+#' routes$i <- as.integer(routes$i)
 #' df_with_stay_ids <- add_stay_id(routes)
 add_stay_id <- function(df) {
   new_df <- df |>
@@ -384,18 +386,17 @@ add_stay_id <- function(df) {
 #'
 #' @param df A data frame with spatial and temporal data.
 #' @param timestep_col The name of the column containing time steps. Defaults to `"date"`.
-#' @param time_threshold A numeric threshold for time differences. Defaults to `Inf`.
 #' @param timediff_unit The unit of 'stay_len'.
 #' @return A data frame with `stay_id` and `stay_len` columns added.
 #' @export
 #'
 #' @examples
-#' routes <- data.frame(
+#' routes <- data.frame(list(
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
 #'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
-#'   date = as.integer(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
+#'   date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
 #'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
-#' )
+#' ))
 #' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
 add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timediff_unit = "days") {
   
@@ -406,14 +407,14 @@ add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timedif
     dplyr::mutate(
       timestep_diff = c(1, as.numeric(diff(.data[[timestep_col]]), units = timediff_unit)),  # Time differences
       i_change = c(1, as.numeric(diff(.data$i)) != 0),    # Changes in 'i'
-      stay_id = cumsum(i_change)
+      stay_id = cumsum(.data[['i_change']])
     ) |>
     # Now the stay_id is assigned, calculate the duration (time difference) of each stay
-    dplyr::group_by(route_id, stay_id) |>
+    dplyr::group_by(.data[['route_id']], .data[['stay_id']]) |>
     dplyr::mutate(
       stay_len = as.numeric(max(.data[[timestep_col]]) - min(.data[[timestep_col]]), units = timediff_unit)
     ) |>
-    dplyr::select(-timestep_diff, -i_change)
+    dplyr::select(-dplyr::all_of(c('timestep_diff', 'i_change')))
   
   return(new_df)
 }
@@ -433,13 +434,15 @@ add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timedif
 #' @export
 #'
 #' @examples
-#' route_df <- data.frame(
-#'   route_id = 1:3,
-#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-#'   lon = c(-90, -89, -88),
-#'   lat = c(40, 41, 42),
-#'   route_type = c("tracking", "banding", "unknown")
-#' )
+#'route_df <- data.frame(
+#'  route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
+#'  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15",
+#'  "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
+#'  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
+#'  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
+#'  route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', 
+#'  "motus", "motus", "motus", "motus")
+#')
 #' routes_obj <- Routes(route_df)
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf=bf)
@@ -450,13 +453,14 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
   
   # Conversion
   sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes$data, max_n)
+
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   all_interval_df <- list()
   for (row_id in seq_len(nrow(sampling_strategy_df))){
     this_row <- sampling_strategy_df[row_id, ]
     this_route <- birdflow_routes$data[birdflow_routes$data$route_id==this_row$route_id,]
     
-    all_pairs <- as.data.frame(t(combn(seq_len(nrow(this_route)), 2)))
+    all_pairs <- as.data.frame(t(utils::combn(seq_len(nrow(this_route)), 2)))
     sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$interval_pairs, replace = FALSE), ]
     
     
@@ -486,44 +490,29 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
     all_interval_df[[row_id]] <- formatted_intervals
   }
   
-  target_columns <- get_target_columns_BirdFlowIntervals(type='input')
-  
   all_interval_df <- do.call(rbind, all_interval_df)
+
+  target_columns <- get_target_columns_BirdFlowIntervals(type='input')
+
   if (is.null(all_interval_df)) {
-    all_interval_df <- data.frame(
-      interval_id = character(),
-      lon1 = numeric(),
-      lon2 = numeric(),
-      lat1 = numeric(),
-      lat2 = numeric(),
-      x1 = numeric(),
-      x2 = numeric(),
-      y1 = numeric(),
-      y2 = numeric(),
-      i1 = numeric(),
-      i2 = numeric(),
-      date1 = as.Date(character()),
-      date2 = as.Date(character()),
-      timestep1 = numeric(),
-      timestep2 = numeric(),
-      route_id = character(),
-      route_type = character(),
-      stringsAsFactors = FALSE # Avoid factor conversion
-    )
+    
+    return(NULL)
+    
   } else {
+    all_interval_df$i1 <- as.integer(all_interval_df$i1)
+    all_interval_df$i2 <- as.integer(all_interval_df$i2)
     all_interval_df$interval_id <- paste0("interval_", seq_len(nrow(all_interval_df)))
+    rownames(all_interval_df) <- NULL
+    all_interval_df <- all_interval_df[, c(target_columns, setdiff(names(all_interval_df), target_columns))]
+    
+    obs <- BirdFlowIntervals(data = all_interval_df,
+                             species = birdflow_routes$species,
+                             metadata = birdflow_routes$metadata,
+                             geom = birdflow_routes$geom,
+                             dates = birdflow_routes$dates,
+                             source = birdflow_routes$source)
+    return(obs)
   }
-  
-  rownames(all_interval_df) <- NULL
-  all_interval_df <- all_interval_df[, c(target_columns, setdiff(names(all_interval_df), target_columns))]
-  
-  obs <- BirdFlowIntervals(all_interval_df,
-                           species = birdflow_routes$species,
-                           metadata = birdflow_routes$metadata,
-                           geom = birdflow_routes$geom,
-                           dates = birdflow_routes$dates,
-                           source = birdflow_routes$source)
-  return(obs)
 }
 
 
@@ -551,13 +540,13 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000) {
 calculate_interval_sampling_strategy <- function(routes, n) {
   # Group by route_id and count the number of time points in each route
   route_counts <- routes |>
-    dplyr::group_by(route_id) |>
+    dplyr::group_by(.data[['route_id']]) |>
     dplyr::summarize(time_points = dplyr::n())
   
   # Calculate interval pairs for each route
   route_counts <- route_counts |>
-    dplyr::mutate(interval_pairs = time_points * (time_points - 1) / 2) |> 
-    dplyr::filter(interval_pairs!=0)
+    dplyr::mutate(interval_pairs = .data[['time_points']] * (.data[['time_points']] - 1) / 2) |> 
+    dplyr::filter(.data[['interval_pairs']]!=0)
   
   if (n <= nrow(route_counts)){
     # The requested interval count is smaller than the total routes, so sample one interval per route

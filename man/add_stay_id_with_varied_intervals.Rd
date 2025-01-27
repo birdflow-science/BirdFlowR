@@ -7,8 +7,7 @@
 add_stay_id_with_varied_intervals(
   df,
   timestep_col = "date",
-  timediff_unit = "days",
-  time_threshold = Inf
+  timediff_unit = "days"
 )
 }
 \arguments{
@@ -17,8 +16,6 @@ add_stay_id_with_varied_intervals(
 \item{timestep_col}{The name of the column containing time steps. Defaults to \code{"date"}.}
 
 \item{timediff_unit}{The unit of 'stay_len'.}
-
-\item{time_threshold}{A numeric threshold for time differences. Defaults to \code{Inf}.}
 }
 \value{
 A data frame with \code{stay_id} and \code{stay_len} columns added.
@@ -28,11 +25,11 @@ Adds stay IDs to a data frame, considering changes in spatial indices and tempor
 Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals, if the data is not sampled in the same frequency.
 }
 \examples{
-routes <- data.frame(
+routes <- data.frame(list(
   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
-  date = as.integer(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
+  date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
-)
-df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days", time_threshold = Inf)
+))
+df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
 }

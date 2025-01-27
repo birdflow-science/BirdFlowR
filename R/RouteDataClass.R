@@ -45,7 +45,8 @@
 #' ## 1. convert from `Routes`
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, 
-#' # and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
+#' # and sources will be inherited from the bf object. 
+#' # The attributes of the routes_obj will be ignored.
 #' 
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
@@ -58,9 +59,11 @@
 #'   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
 #'   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
 #'   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-#'   route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus", "motus", "motus")
+#'   route_type = c("tracking", 'tracking', "tracking", 'tracking', 
+#'   'tracking', "motus", "motus", "motus", "motus")
 #' )
-#' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
+#' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, 
+#' mask = NULL, dynamic_mask = NULL)
 #' dates <- data.frame(
 #'     timestep = 1:2,
 #'     date = as.Date(c("2022-01-04", "2022-01-11")),
@@ -92,8 +95,8 @@
 #'   x2 = c(1100, 1200, 1300),
 #'   y1 = c(500, 600, 700),
 #'   y2 = c(600, 700, 800),
-#'   i1 = c(1, 2, 3),
-#'   i2 = c(2, 3, 4),
+#'   i1 = as.integer(c(1, 2, 3)),
+#'   i2 = as.integer(c(2, 3, 4)),
 #'   date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
 #'   date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
 #'   timestep1 = as.integer(c(1, 2, 3)),
@@ -101,7 +104,7 @@
 #'   route_type = c("tracking", "tracking", "banding")
 #' )
 #' birdflow_intervals_obj <- BirdFlowIntervals(
-#'   birdflow_intervals = birdflow_intervals,
+#'   birdflow_intervals,
 #'   species = species,
 #'   metadata = metadata,
 #'   geom = geom,
@@ -146,7 +149,7 @@ new_Routes <- function(data, species, metadata, source) {
     source = source
   )
   
-  class(obj) <- c("Routes", class(obj))
+  class(obj) <- c("Routes")
   return(obj)
 }
 
@@ -182,10 +185,10 @@ BirdFlowRoutes <- function(data,
 
   # Sort & reindex
   if (sort_id_and_dates) {
-    birdflow_routes_obj <- birdflow_routes_obj |> sort_by_id_and_dates()
+    birdflow_routes_obj$data <- birdflow_routes_obj$data |> sort_by_id_and_dates()
   }
   if (reset_index) {
-    birdflow_routes_obj <- birdflow_routes_obj |> reset_index()
+    birdflow_routes_obj$data <- birdflow_routes_obj$data |> reset_index()
   }
   
   return(birdflow_routes_obj)
@@ -227,7 +230,7 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
     source = source
   )
   
-  class(obj) <- unique(c("BirdFlowRoutes", "Routes", class(data)))
+  class(obj) <- c("BirdFlowRoutes", "Routes")
   
   return(obj)
 }
@@ -286,7 +289,7 @@ new_BirdFlowIntervals <- function(data,
     source = source
   )
   
-  class(obj) <- unique(c("BirdFlowIntervals", class(data))),
+  class(obj) <- c("BirdFlowIntervals")
   
   return(obj)
 }

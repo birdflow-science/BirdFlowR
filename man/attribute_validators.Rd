@@ -19,6 +19,7 @@
 \alias{validate_BirdFlowRoutes_metadata}
 \alias{validate_BirdFlowRoutes_geom}
 \alias{validate_BirdFlowRoutes_dates}
+\alias{validate_BirdFlowIntervals_interval_id}
 \title{Attribute Validators}
 \usage{
 validate_Routes_route_id(route_id)
@@ -54,6 +55,8 @@ validate_BirdFlowRoutes_metadata(metadata)
 validate_BirdFlowRoutes_geom(geom)
 
 validate_BirdFlowRoutes_dates(dates)
+
+validate_BirdFlowIntervals_interval_id(interval_id)
 }
 \arguments{
 \item{route_id}{A vector of route IDs (character or numeric). Must not contain missing values.}
@@ -133,6 +136,10 @@ These functions are intended for internal use and are not exported for user-faci
 \item \code{validate_BirdFlowRoutes_date()},
 \item \code{validate_BirdFlowRoutes_stay_id()}, \code{validate_BirdFlowRoutes_stay_len()}
 \item \code{validate_BirdFlowRoutes_species()}
+}
+\item BirdFlowIntervals Validators:
+\itemize{
+\item \code{validate_BirdFlowIntervals_interval_id()}
 }
 \item Geometry and Dates and Metadata:
 \itemize{

@@ -13,21 +13,7 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
-  print("a: ")
-  print(a)
-  print("ext(a): ")
-  print(ext(a))
-  print("ext(a)[, ]: ")
-  print(ext(a)[, ])
-  print("xres(a): ")
-  print(xres(a))
-  print("ext(a)[, ]%%xres(a): ")
-  print(ext(a)[, ]%%xres(a))
-  print("as.numeric(as.vector(ext(a)[, ])) %% as.numeric(as.vector(xres(a))): ")
-  print(as.numeric(as.vector(ext(a)[, ])) %% as.numeric(as.vector(xres(a))))
   div_results <- ext(a)[, ] %/% xres(a) # exact division
-  print(div_results)
-  print(abs(div_results * xres(a) - ext(a)[, ]))
   expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))   # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribibution

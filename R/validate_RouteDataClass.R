@@ -18,6 +18,9 @@
 #' @param route_df A data frame containing data for the `Routes` class. It must include columns like `route_id`, `date`, `lon`, `lat`, and `route_type`.
 #' @param birdflow_route_df A data frame containing data for the `BirdFlowRoutes` class. It must include additional columns such as `x`, `y`, `i`, and `timestep`.
 #' @param birdflow_interval_df A data frame containing data for the `BirdFlowIntervals` class. It must include columns such as `lon1`, `lon2`, `y1`, `y2`, `i1`, `i2`, `timestep1`, `timestep2`.
+#' @param routes A `Routes` object.
+#' @param birdflow_routes A `BirdFlowRoutes` object.
+#' @param birdflow_intervals A `BirdFlowIntervals` object.
 #' @return These functions return nothing if validation succeeds. If validation fails, an error message is raised detailing the issue.
 #'
 #' @seealso
@@ -158,7 +161,6 @@ validate_BirdFlowRoutes <- function(birdflow_routes) {
   validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
   validate_BirdFlowRoutes_geom(birdflow_routes$geom)
   validate_BirdFlowRoutes_dates(birdflow_routes$dates)
-  validate_BirdFlowRoutes_source(birdflow_routes$source)
   
   # Validate data
   birdflow_route_df <-birdflow_routes$data
@@ -194,17 +196,16 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
   stopifnot(inherits(birdflow_intervals, 'list'))
   
   for (name in c('data', 'species', 'metadata', 'geom', 'dates', 'source')) {
-    if (!name %in% names(birdflow_routes)) {
+    if (!name %in% names(birdflow_intervals)) {
       stop(sprintf("'%s' is not found in the input object!", name))
     }
   }
   
   # validate elements
-  validate_BirdFlowRoutes_species(birdflow_routes$speices)
-  validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
-  validate_BirdFlowRoutes_geom(birdflow_routes$geom)
-  validate_BirdFlowRoutes_dates(birdflow_routes$dates)
-  validate_BirdFlowRoutes_source(birdflow_routes$source)
+  validate_BirdFlowRoutes_species(birdflow_intervals$speices)
+  validate_BirdFlowRoutes_metadata(birdflow_intervals$metadata)
+  validate_BirdFlowRoutes_geom(birdflow_intervals$geom)
+  validate_BirdFlowRoutes_dates(birdflow_intervals$dates)
   
   # Validate data
   birdflow_interval_df <-birdflow_intervals$data
@@ -354,6 +355,8 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #'   - `validate_BirdFlowRoutes_date()`,
 #'   - `validate_BirdFlowRoutes_stay_id()`, `validate_BirdFlowRoutes_stay_len()`
 #'   - `validate_BirdFlowRoutes_species()`
+#' - BirdFlowIntervals Validators:
+#'   - `validate_BirdFlowIntervals_interval_id()`
 #' - Geometry and Dates and Metadata:
 #'   - `validate_BirdFlowRoutes_geom()`
 #'   - `validate_BirdFlowRoutes_dates()`
@@ -481,9 +484,9 @@ validate_BirdFlowRoutes_date <- function(route_id_vector, date_vector) {
   
   tmp_new_df <- data.frame(list(route_id=route_id_vector, date_=date_vector))
   duplicated_date_check <- tmp_new_df |>
-    dplyr::group_by(route_id) |>
+    dplyr::group_by(.data[['route_id']]) |>
     dplyr::summarize(
-      duplicated_date = any(duplicated(date_)),
+      duplicated_date = any(duplicated(.data[['date_']])),
       .groups = "drop"
     )
   

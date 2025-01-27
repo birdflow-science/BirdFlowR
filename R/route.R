@@ -173,26 +173,24 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   points <- data.frame(x, y, route_id, timestep, date,
                        i = as.vector(trajectory))
 
-  # Adjust dates -- If it cross the year boundary, add year by 1
+  # Adjust dates -- If it crosses the year boundary, add year by 1
   points$date <- as.Date(points$date)
+  check_whether_year_plus_one <- function(dates_) {
+    for (i in 2:length(dates_)) {
+      if (dates_[i] < dates_[i - 1]) {
+        dates_[i] <- dates_[i] + lubridate::years(1)
+      }
+    }
+    return(dates_)
+  }
   points <- points |>
-      dplyr::group_by(route_id) |>
+      dplyr::group_by(.data[['route_id']]) |>
       dplyr::mutate(
-          date = as.Date(unlist(purrr::accumulate(date, ~ ifelse(.y < .x, .y + lubridate::years(1), .y))))
+        date = check_whether_year_plus_one(.data[['date']])
       ) |>
       dplyr::ungroup() |>
       as.data.frame() |> 
       sort_by_id_and_dates()
-
-  # add_stay_id <- function(df) {
-  #   # Benjamin's function
-  #   df |>
-  #     dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
-  #                   stay_len = rep(rle(.data$stay_id)$lengths,
-  #                                  times = rle(.data$stay_id)$lengths))
-  # }
-
-  # points <- points |> dplyr::group_by(.data$route_id) |> add_stay_id()
 
   return(points)
 }

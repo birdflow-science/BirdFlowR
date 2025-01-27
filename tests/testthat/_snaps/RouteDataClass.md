@@ -61,14 +61,14 @@
       7      003  -45168.77  190782.0 182 -85.6298 40.8781       22 2025-06-01
       8      004 -994397.19 -988364.6 307 -95.3698 29.7604       18 2025-05-01
         route_type stay_id stay_len
-      1   tracking       1        8
-      2   tracking       1        8
-      3   tracking       2        1
-      4   tracking       3        1
-      5      motus       1        1
-      6      motus       2        1
-      7      motus       3        1
-      8      motus       1        1
+      1   tracking       1        7
+      2   tracking       1        7
+      3   tracking       2        0
+      4   tracking       3        0
+      5      motus       1        0
+      6      motus       2        0
+      7      motus       3        0
+      8      motus       1        0
       
       Number of routes:  3 
       Number of points:  8 
@@ -84,10 +84,16 @@
        
       --------------------------------------------- 
       Species: amewoo / Scolopax minor / American Woodcock 
+       
       
       --------------------------------------------- 
       Source:
-      NULL
+      $a
+      [1] "1"
+      
+      $b
+      [1] "2"
+      
       --------------------------------------------- 
 
 ---
@@ -135,9 +141,15 @@
        
       --------------------------------------------- 
       Species: amewoo / Scolopax minor / American Woodcock 
+       
       
       --------------------------------------------- 
       Source:
-      NULL
+      $a
+      [1] "1"
+      
+      $b
+      [1] "2"
+      
       --------------------------------------------- 
 

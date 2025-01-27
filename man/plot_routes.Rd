@@ -8,6 +8,7 @@
 plot_routes(
   routes,
   bf,
+  stay_units = "days",
   facet = FALSE,
   max_stay_len = NULL,
   use_seasonal_colors = TRUE,
@@ -24,6 +25,9 @@ plot_routes(
 \item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
 \item{bf, x}{A BirdFlow object.}
+
+\item{stay_units}{The unit to plot the stay length at each location. Default
+to \code{days}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -67,7 +71,7 @@ indicating the length of stay at each stop.
 As of 6/13/2023 \code{route()} returns an object of class \code{BirdFlowRoutes}
 that is a data frame with some extra attributes tacked on.
 
-That \code{route()} returns a data frame like object that contains the data
+That \code{route()} returns a object with feature data -- data frame that contains the data
 formerly in the \code{points} component with columns as described here is, I think
 finalized.
 
@@ -85,7 +89,9 @@ rts <- route(bf, n, season = "prebreeding")
 plot_routes(rts, bf)
 
 # One panel per route
-plot_routes(rts[rts$route_id \%in\% 1:4, ], bf, facet = TRUE)
+new_rts <- rts
+new_rts$data <- new_rts$data[new_rts$data$route_id \%in\% 1:4, ]
+plot_routes(new_rts, bf, facet = TRUE)
 
 # Returned plot object can be edited
 # Here we change the title and add an additional sf

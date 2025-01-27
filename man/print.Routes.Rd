@@ -26,6 +26,7 @@ route_df <- data.frame(
   lat = c(40, 41, 42),
   route_type = c("tracking", "banding", "unknown")
 )
+
 routes <- Routes(route_df)
 print(routes)
 }

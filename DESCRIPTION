@@ -35,7 +35,6 @@ Imports:
     Matrix (>= 1.5-2),
     methods,
     progress,
-    purrr,
     rhdf5,
     rlang,
     rnaturalearth,

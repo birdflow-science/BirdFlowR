@@ -10,12 +10,12 @@
 \alias{new_BirdFlowIntervals}
 \title{RouteDataClass Creation Functions}
 \usage{
-Routes(route_df, species = NULL, metadata = NULL, source = NULL)
+Routes(data, species = NULL, metadata = NULL, source = NULL)
 
-new_Routes(route_df, species, metadata, source)
+new_Routes(data, species, metadata, source)
 
 BirdFlowRoutes(
-  birdflow_route_df,
+  data,
   species,
   metadata,
   geom,
@@ -28,7 +28,7 @@ BirdFlowRoutes(
 )
 
 new_BirdFlowRoutes(
-  birdflow_route_df,
+  data,
   species,
   metadata,
   geom,
@@ -38,34 +38,18 @@ new_BirdFlowRoutes(
   stay_calculate_timediff_unit = "days"
 )
 
-BirdFlowIntervals(
-  birdflow_intervals,
-  species,
-  metadata,
-  geom,
-  dates,
-  source = NULL
-)
+BirdFlowIntervals(data, species, metadata, geom, dates, source = NULL)
 
-new_BirdFlowIntervals(
-  birdflow_intervals,
-  species,
-  metadata,
-  geom,
-  dates,
-  source
-)
+new_BirdFlowIntervals(data, species, metadata, geom, dates, source)
 }
 \arguments{
-\item{route_df}{A data frame containing route data for \code{Routes}.}
+\item{data}{A data frame containing route/interval data for \code{Routes}, \code{BirdFlowRoutes} or \code{BirdFlowIntervals}.}
 
 \item{species}{A list with species metadata, including \code{species_code}, \code{scientific_name}, and \code{common_name}.}
 
 \item{metadata}{A list with additional metadata.}
 
 \item{source}{A character string indicating the source of the data.}
-
-\item{birdflow_route_df}{A data frame containing route data for \code{BirdFlowRoutes}.}
 
 \item{geom}{A list describing spatial geometry, such as \code{nrow}, \code{ncol}, \code{crs}, and \code{mask}.}
 
@@ -78,8 +62,6 @@ new_BirdFlowIntervals(
 \item{stay_calculate_col}{The column name for calculating the stay_id and stay_len in BirdFlowRoutes object. Default to \code{date}.}
 
 \item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes object. Default to \code{days}.}
-
-\item{birdflow_intervals}{A data frame containing interval data for \code{BirdFlowIntervals}.}
 }
 \value{
 Each function returns an S3 object of the corresponding class (\code{Routes}, \code{BirdFlowRoutes}, or \code{BirdFlowIntervals}).
@@ -119,7 +101,8 @@ routes_obj <- Routes(route_df, species=species, metadata=metadata, source=source
 ## 1. convert from `Routes`
 bf <- BirdFlowModels::amewoo
 birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, 
-# and sources will be inherited from the bf object. The attributes of the routes_obj will be ignored.
+# and sources will be inherited from the bf object. 
+# The attributes of the routes_obj will be ignored.
 
 ## 2. Directly from dataframe
 birdflow_route_df <- data.frame(
@@ -132,9 +115,11 @@ birdflow_route_df <- data.frame(
   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-  route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', "motus", "motus", "motus", "motus")
+  route_type = c("tracking", 'tracking', "tracking", 'tracking', 
+  'tracking', "motus", "motus", "motus", "motus")
 )
-geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)
+geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, 
+mask = NULL, dynamic_mask = NULL)
 dates <- data.frame(
     timestep = 1:2,
     date = as.Date(c("2022-01-04", "2022-01-11")),
@@ -166,8 +151,8 @@ birdflow_intervals <- data.frame(
   x2 = c(1100, 1200, 1300),
   y1 = c(500, 600, 700),
   y2 = c(600, 700, 800),
-  i1 = c(1, 2, 3),
-  i2 = c(2, 3, 4),
+  i1 = as.integer(c(1, 2, 3)),
+  i2 = as.integer(c(2, 3, 4)),
   date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
   date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
   timestep1 = as.integer(c(1, 2, 3)),
@@ -175,7 +160,7 @@ birdflow_intervals <- data.frame(
   route_type = c("tracking", "tracking", "banding")
 )
 birdflow_intervals_obj <- BirdFlowIntervals(
-  birdflow_intervals = birdflow_intervals,
+  birdflow_intervals,
   species = species,
   metadata = metadata,
   geom = geom,

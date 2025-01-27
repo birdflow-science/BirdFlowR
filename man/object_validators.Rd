@@ -5,6 +5,9 @@
 \alias{validate_Routes_route_df}
 \alias{validate_BirdFlowRoutes_birdflow_route_df}
 \alias{validate_BirdFlowIntervals_birdflow_intervals}
+\alias{validate_Routes}
+\alias{validate_BirdFlowRoutes}
+\alias{validate_BirdFlowIntervals}
 \title{Object Validators}
 \usage{
 validate_Routes_route_df(route_df)
@@ -12,6 +15,12 @@ validate_Routes_route_df(route_df)
 validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
 
 validate_BirdFlowIntervals_birdflow_intervals(birdflow_interval_df)
+
+validate_Routes(routes)
+
+validate_BirdFlowRoutes(birdflow_routes)
+
+validate_BirdFlowIntervals(birdflow_intervals)
 }
 \arguments{
 \item{route_df}{A data frame containing data for the \code{Routes} class. It must include columns like \code{route_id}, \code{date}, \code{lon}, \code{lat}, and \code{route_type}.}
@@ -19,6 +28,12 @@ validate_BirdFlowIntervals_birdflow_intervals(birdflow_interval_df)
 \item{birdflow_route_df}{A data frame containing data for the \code{BirdFlowRoutes} class. It must include additional columns such as \code{x}, \code{y}, \code{i}, and \code{timestep}.}
 
 \item{birdflow_interval_df}{A data frame containing data for the \code{BirdFlowIntervals} class. It must include columns such as \code{lon1}, \code{lon2}, \code{y1}, \code{y2}, \code{i1}, \code{i2}, \code{timestep1}, \code{timestep2}.}
+
+\item{routes}{A \code{Routes} object.}
+
+\item{birdflow_routes}{A \code{BirdFlowRoutes} object.}
+
+\item{birdflow_intervals}{A \code{BirdFlowIntervals} object.}
 }
 \value{
 These functions return nothing if validation succeeds. If validation fails, an error message is raised detailing the issue.

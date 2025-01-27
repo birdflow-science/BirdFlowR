@@ -8,7 +8,7 @@
 #' As of 6/13/2023 `route()` returns an object of class `BirdFlowRoutes`
 #' that is a data frame with some extra attributes tacked on.
 #'
-#' That `route()` returns a data frame like object that contains the data
+#' That `route()` returns a object with feature data -- data frame that contains the data
 #' formerly in the `points` component with columns as described here is, I think
 #' finalized.
 #'
@@ -21,6 +21,8 @@
 #' @param bf,x A BirdFlow object.
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
+#' @param stay_units The unit to plot the stay length at each location. Default 
+#' to `days`. Other options include `sec`, `mins`, `hours` and `weeks`.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
 #' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
@@ -52,7 +54,9 @@
 #'plot_routes(rts, bf)
 #'
 #'# One panel per route
-#'plot_routes(rts[rts$route_id %in% 1:4, ], bf, facet = TRUE)
+#'new_rts <- rts
+#'new_rts$data <- new_rts$data[new_rts$data$route_id %in% 1:4, ]
+#'plot_routes(new_rts, bf, facet = TRUE)
 #'
 #'# Returned plot object can be edited
 #'# Here we change the title and add an additional sf
@@ -70,7 +74,8 @@
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE,
 #'             pal = c("red", "yellow", "blue"))
 #'}
-plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
+plot_routes <- function(routes, bf, stay_units = "days", facet = FALSE, 
+                        max_stay_len = NULL,
                         use_seasonal_colors = TRUE, pal = NULL,
                         barheight = 8,
                         route_linewidth = .85,
@@ -124,10 +129,10 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   #----------------------------------------------------------------------------#
   if (missing(bf) && inherits(routes, "BirdFlowRoutes")) {
     bf <- new_BirdFlow()
-    bf$dates <- attr(routes, "dates")
-    bf$geom <- attr(routes, "geom")
-    bf$metadata <- attr(routes, "metadata")
-    bf$species <- attr(routes, "species")
+    bf$dates <- routes$dates
+    bf$geom <- routes$geom
+    bf$metadata <- routes$metadata
+    bf$species <- routes$species
   }
 
   #----------------------------------------------------------------------------#
@@ -154,27 +159,27 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   #  stay_len is 4 there will be values 1:4 for the four points that
   #  represent that stay.
 
-  routes$date <- lubridate::as_date(routes$date)
-  routes$pyear <- proportion_of_year(routes$date)
+  routes$data$date <- lubridate::as_date(routes$data$date)
+  routes$data$pyear <- proportion_of_year(routes$data$date)
 
   # Calculate Elapsed time at location - used by animate_routes()
-  routes <- routes |>
+  routes$data <- routes$data |>
     dplyr::group_by(.data$route_id, .data$stay_id) |>
-    dplyr::mutate(elapsed_stay = dplyr::row_number()) |>
+    dplyr::mutate(elapsed_stay = as.numeric(date - min(date), units = stay_units)) |>
     as.data.frame()
 
   # Calculate year number (input to HPY calculation)
-  routes <- routes |>
+  routes$data <- routes$data |>
     dplyr::group_by(.data$route_id) |>
     dplyr::mutate(year_number = calc_year_number(.data$timestep)) |>
     as.data.frame()
-  if (!all(routes$year_number %in% c(1, 2)))
+  if (!all(routes$data$year_number %in% c(1, 2)))
     stop("Track passes through parts of three distinct years and",
          " so cannot be plotted.")
 
   # CalculateHPV) 0 to 0.5 for the first year
   # 0.5 to 1 for the second year (if track crosses year boundary)
-  routes$hpy <- 0.5 * routes$pyear + 0.5 * (routes$year_number - 1)
+  routes$data$hpy <- 0.5 * routes$data$pyear + 0.5 * (routes$data$year_number - 1)
 
   # Make raster showing which cells are active in the model
   rast <- rasterize_distr(rep(TRUE, n_active(bf)), bf, format = "dataframe")
@@ -188,21 +193,23 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
 
   # Maximum length of stay
   if (is.null(max_stay_len))
-    max_stay_len <- max(routes$elapsed_stay)
+    max_stay_len <- max(routes$data$elapsed_stay)
   # must be at least 2 so range isn't a point
   max_stay_len <- max(max_stay_len, 2)
 
   # Set breaks for stay length (label values in legend)
-  stay_len_range <- c(1, max_stay_len) # range of stay length
-  stay_len_breaks <- unique(sort(c(1, 2, 5, 10, max_stay_len))) # label values
+  stay_len_range <- c(0, max_stay_len) # range of stay length
+  stay_len_breaks <- unique(sort(c(0, 
+                                   round(exp(seq(log(1), log(max_stay_len), length.out = 5)))[2:5]
+                                   ))) # label values
   stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
 
   # Calculate the range and breaks in half proportional year values
-  hpy_range <- range(routes$hpy)
+  hpy_range <- range(routes$data$hpy)
   hpy_breaks <- make_pyear_breaks(hpy_range, bf)
 
   # Set subtitle based on unique date ranges in the data
-  date_ranges <- routes |>
+  date_ranges <- routes$data |>
     dplyr::group_by(.data$route_id) |>
     dplyr::summarize(first = dplyr::first(.data$hpy),
                      last = dplyr::last(.data$hpy)) |>
@@ -249,7 +256,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
   # Assemble the plot
   #----------------------------------------------------------------------------#
 
-  p <- ggplot2::ggplot(data = routes,
+  p <- ggplot2::ggplot(data = routes$data,
                        ggplot2::aes(x = .data$x, y = .data$y)) +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank()) +
@@ -294,7 +301,7 @@ plot_routes <- function(routes, bf, facet = FALSE, max_stay_len = NULL,
     ggplot2::scale_size_area(limits = stay_len_range,
                              max_size = dot_sizes[2],
                              breaks = stay_len_breaks,
-                             name = "Stay Length",
+                             name = paste0("Stay Length\n", "(", stay_units, ")"),
                              guide = ggplot2::guide_legend(order = 0))
 
   # Plot coastal data

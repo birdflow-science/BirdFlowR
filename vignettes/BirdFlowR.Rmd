@@ -281,13 +281,13 @@ points(x, y)
 
 ## Generate routes
 `route()` will generate synthetic routes for each starting position.
-`route()` returns a BirdFlowRoutes object which is at it's core a data frame 
+`route()` returns a BirdFlowRoutes object which has a `data` feature for data frame 
 with a row for each timestep of each route, but also includes some additional
 spatial and temporal information from the BirdFlow object.
 
 ```{r route, fig.show='hide'}
 rts <- route(bf, x_coord = x, y_coord = y, start = start, end = end)
-head(rts$points, 4)
+head(rts$data, 4)
 ```
 
 The `route()` function can sample starting locations from the distribution for
@@ -320,10 +320,15 @@ pt_col <- rgb(0, 0, 0, .5)
 plot(summer)
 points(x, y, cex = .4, col = pt_col, pch = 16) # starting points
 
-lines <- sf::st_as_sf(rts, type = "line")  # convert to sf lines
-plot(lines, add = TRUE, col = line_col)  # routes
+rts_sf <- sf::st_as_sf(rts$data, coords = c("x", "y"), crs = rts$geom$crs)
+lines_sf <- rts_sf |>
+  dplyr::group_by(route_id) |>
+  dplyr::summarize(geometry = st_combine(geometry)) |>
+  sf::st_cast("LINESTRING")
 
-end_pts <- rts[rts$timestep == end, ]  # end points
+plot(lines_sf, add = TRUE, col = line_col)  # routes
+
+end_pts <- rts$data[rts$data$timestep == end, ]  # end points
 points(x = end_pts$x, y = end_pts$y,
        cex = 0.4, pch = 12, col = pt_col)
 

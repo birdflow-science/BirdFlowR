@@ -93,7 +93,7 @@ get_distance_metric <- function(intervals, observations, bf){
   if (length(unique(observations$BAND_TRACK)) < 2) {
     return(NA)
   }
-  b_e <- observations |> dplyr::group_by(BAND_TRACK) |> dplyr::filter(max(distance, na.rm = TRUE) > 100) |> dplyr::ungroup()
+  b_e <- observations |> dplyr::group_by(.data[['BAND_TRACK']]) |> dplyr::filter(max(.data[['distance']], na.rm = TRUE) > 100) |> dplyr::ungroup()
 
   # weekly distributions directly from S&T
   st_dists <- get_distr(bf, which = "all", from_marginals = FALSE)
@@ -102,7 +102,7 @@ get_distance_metric <- function(intervals, observations, bf){
   gcd <- great_circle_distances(bf)
 
   # Calculate distance metric
-  observations <- observations |> dplyr::group_by(BAND_TRACK) |> dplyr::filter(max(distance, na.rm = TRUE) > 100) |> dplyr::ungroup()
+  observations <- observations |> dplyr::group_by(.data[['BAND_TRACK']]) |> dplyr::filter(max(.data[['distance']], na.rm = TRUE) > 100) |> dplyr::ungroup()
   band_tracks <- split(observations, observations$BAND_TRACK)
 
   band_tracks <- sample(band_tracks, min(1000, length(band_tracks)))
@@ -112,12 +112,12 @@ get_distance_metric <- function(intervals, observations, bf){
   dists <- as.data.frame(dists)
   dists$win <- dists$st - dists$pred
   
-  dists_dropna <- na.omit(dists)
+  dists_dropna <- stats::na.omit(dists)
   wining_proba <- sum(dists_dropna$global_prob_of_the_banding_starting / sum(dists_dropna$global_prob_of_the_banding_starting) *dists_dropna$YK_win_prob)
   
-  dists$wining_proba_by_distance_metric <- mean(na.omit(dists$win)>0)
+  dists$wining_proba_by_distance_metric <- mean(stats::na.omit(dists$win)>0)
   dists$wining_proba_by_conditional_probability_YK <- wining_proba
 
-  return(mean(na.omit(dists$wining_proba_by_distance_metric)))
+  return(mean(stats::na.omit(dists$wining_proba_by_distance_metric)))
 }
 
