@@ -203,7 +203,7 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
   data <- data |>
     sort_by_id_and_dates() |>
     dplyr::group_by(.data$route_id) |>
-    add_stay_id_with_varied_intervals(timestep_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |> 
+    add_stay_id_with_varied_intervals(date_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |> 
     # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. 
     # It takes 'timestep' as input so account for varying intervals, 
     # if the data is not sampled in a frequency.
