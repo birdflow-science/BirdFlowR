@@ -153,3 +153,98 @@
       
       --------------------------------------------- 
 
+# If no intervals can be sampled, return NULL
+
+    Code
+      my_routes
+    Output
+      --------------------------------------------- 
+      Routes Object: 
+      
+        route_id       date lon lat route_type
+      1        1 2024-01-01 -90  40   tracking
+      2        2 2024-01-02 -89  41    banding
+      3        3 2024-01-03 -88  42    unknown
+      
+      Number of routes:  3 
+      Number of points:  3 
+      Date range:        2024-01-01 to 2024-01-03 
+      Longitude range:   -90 -88 
+      Latitude range:    40 42 
+      --------------------------------------------- 
+      Route Type: banding
+      Unique Routes: 1; Unique Points: 1
+      
+      Route Type: tracking
+      Unique Routes: 1; Unique Points: 1
+      
+      Route Type: unknown
+      Unique Routes: 1; Unique Points: 1
+       
+      --------------------------------------------- 
+      Species:
+      aa
+      
+      --------------------------------------------- 
+      Source:
+      $a
+      [1] "1"
+      
+      $b
+      [1] "2"
+      
+      --------------------------------------------- 
+
+---
+
+    Code
+      my_bfroutes
+    Output
+      --------------------------------------------- 
+      BirdFlowRoutes Object: 
+      
+        route_id         x        y   i lon lat timestep       date route_type
+      1        1 -418677.1 104481.4 196 -90  40        1 2024-01-01   tracking
+      2        2 -328543.5 211299.2 180 -89  41        1 2024-01-02    banding
+      3        3 -240792.8 319118.5 163 -88  42        1 2024-01-03    unknown
+        stay_id stay_len
+      1       1        0
+      2       1        0
+      3       1        0
+      
+      Number of routes:  3 
+      Number of points:  3 
+      Date range:        2024-01-01 to 2024-01-03 
+      Longitude range:   -90 -88 
+      Latitude range:    40 42 
+      --------------------------------------------- 
+      Route Type: banding
+      Unique Routes: 1; Unique Points: 1
+      
+      Route Type: tracking
+      Unique Routes: 1; Unique Points: 1
+      
+      Route Type: unknown
+      Unique Routes: 1; Unique Points: 1
+       
+      --------------------------------------------- 
+      Species: amewoo / Scolopax minor / American Woodcock 
+       
+      
+      --------------------------------------------- 
+      Source:
+      $a
+      [1] "1"
+      
+      $b
+      [1] "2"
+      
+      --------------------------------------------- 
+
+---
+
+    Code
+      my_intervals
+    Output
+      NULL
+

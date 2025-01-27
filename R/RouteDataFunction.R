@@ -240,6 +240,8 @@ format_summary_route_type <- function(summary_route_type) {
 #'
 #' @param routes A `Routes` object.
 #' @param bf A `BirdFlow` object for spatial and temporal reference.
+#' @param aggregate The aggregation method if more than one timestep is presented in a route.
+#' Options include `mean`, `median`, `midweek`, `random`. Default to `random`.
 #' @param valid_only Logical. Should only valid points be included? Defaults to `TRUE`.
 #' @param sort_id_and_dates Logical. Should data be sorted by route ID and date? Defaults to `TRUE`.
 #' @param reset_index Logical. Should indices be reset after sorting? Defaults to `FALSE`.
@@ -258,7 +260,8 @@ format_summary_route_type <- function(summary_route_type) {
 #' routes_obj <- Routes(route_df)
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_routes <- as_BirdFlowRoutes(routes_obj, bf)
-as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates = TRUE, reset_index=FALSE){
+#' @seealso [snap_to_birdflow()], [as_BirdFlowIntervals()]
+as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRUE, sort_id_and_dates = TRUE, reset_index=FALSE){
   # Check input
   stopifnot(inherits(routes, 'Routes'))
   stopifnot(inherits(bf, 'BirdFlow'))
@@ -275,24 +278,31 @@ as_BirdFlowRoutes <- function(routes, bf, valid_only = TRUE, sort_id_and_dates =
   }
   
   # Conversion
-  ## Spatial
-  xy <- BirdFlowR::latlon_to_xy(lat = routes$data$lat, lon = routes$data$lon, bf = bf)
-  routes$data$x <- xy$x
-  routes$data$y <- xy$y
-  routes$data$i <- as.integer(BirdFlowR::xy_to_i(x = routes$data$x, y = routes$data$y, bf))
+  old_routes_info <- routes$data |> dplyr::select(dplyr::any_of(c('route_id', 'route_type','info')))
   
-  ## Temporal
-  routes$data$date <- lubridate::as_date(routes$data[['date']])
-  routes$data$timestep <- as.integer(BirdFlowR::lookup_timestep(routes$data$date, bf, allow_failure = TRUE))
-  
+  routes$data <- snap_to_birdflow(
+    routes$data,
+    bf=bf,
+    x_col = "lon", y_col = "lat",
+    date_col = "date",
+    id_cols = "route_id",
+    crs = "EPSG:4326",
+    aggregate = aggregate)
+
   # Only sucessfully converted spatiotemporal points will be included
   if (valid_only){
     routes$data <- routes$data |>
       dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]))
   }
   
-  # Randomly select only one data point per timestep per routes
-  routes$data <- routes$data |> dplyr::group_by(.data[['route_id']], .data[['timestep']]) |> dplyr::slice_sample(n = 1) |> dplyr::ungroup() |> as.data.frame()
+  # add some attributes (e.g., lon and lat) back, and convert data type.
+  latlon <- xy_to_latlon(x=routes$data$x, y=routes$data$y, bf=bf)
+  routes$data$lat <- latlon$lat
+  routes$data$lon <- latlon$lon
+  routes$data <- merge(routes$data, old_routes_info |> dplyr::distinct(), by='route_id', all.x=TRUE)
+  routes$data$timestep <- as.integer(routes$data$timestep)
+  routes$data$i <- as.integer(routes$data$i)
+  routes$data <- routes$data |> dplyr::select(-dplyr::all_of(c('n', 'error', 'message')))
   
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.

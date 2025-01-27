@@ -47,6 +47,7 @@
 #'  * `midweek` The observation that is closest to the middle of the week is
 #'  used to represent the week. With ties the observation that occurs first
 #'  is used.
+#'  * `random` One observation is randomly selected for each week.
 #'
 #'  Pending ideas, not yet implemented:
 #'  * `gmedian` [geometric median](https://cran.r-project.org/web/packages/Gmedian/index.html)
@@ -227,11 +228,18 @@ snap_to_birdflow <- function(d, bf,
                 date = .data$date[closest(.data$date, .data$mid)],
                 n = dplyr::n())
               d$mid <- NULL
-              d
+              d},
+           "random" = {
+             d |> 
+               dplyr::slice_sample(n = 1) |>
+               dplyr::summarize(x = .data$x,
+                                y = .data$y,
+                                date = .data$date,
+                                n = dplyr::n())
            },
 
            # If none of the above match
-           stop("aggregate should be \"mean\" or \"median\"")
+           stop("aggregate should be \"mean\" or \"median\" or \"midweek\" or \"random\"")
            )
 
     d <- as.data.frame(d)
