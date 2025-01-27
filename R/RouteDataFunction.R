@@ -150,7 +150,7 @@ print.BirdFlowRoutes <- function(x, ...){
 #' )
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, 
-#' metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
+#' metadata = NULL, geom = bf$geom, dates = get_dates(bf))
 print.BirdFlowIntervals <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
@@ -278,7 +278,8 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   }
   
   # Conversion
-  old_routes_info <- routes$data |> dplyr::select(dplyr::any_of(c('route_id', 'route_type','info')))
+  original_routes_info <- routes$data |> dplyr::select(dplyr::any_of(c('route_id', 'route_type','info')))
+  original_meta_data <- routes$metadata
   
   routes$data <- snap_to_birdflow(
     routes$data,
@@ -299,14 +300,14 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   latlon <- xy_to_latlon(x=routes$data$x, y=routes$data$y, bf=bf)
   routes$data$lat <- latlon$lat
   routes$data$lon <- latlon$lon
-  routes$data <- merge(routes$data, old_routes_info |> dplyr::distinct(), by='route_id', all.x=TRUE)
+  routes$data <- merge(routes$data, original_routes_info |> dplyr::distinct(), by='route_id', all.x=TRUE)
   routes$data$timestep <- as.integer(routes$data$timestep)
   routes$data$i <- as.integer(routes$data$i)
   routes$data <- routes$data |> dplyr::select(-dplyr::all_of(c('n', 'error', 'message')))
   
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
-  metadata <- bf$metadata
+  metadata <- original_meta_data
   geom <- bf$geom
   dates <- get_dates(bf) # use the up-to-date dates dataframe
   
@@ -395,7 +396,7 @@ add_stay_id <- function(df) {
 #' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals, if the data is not sampled in the same frequency.
 #'
 #' @param df A data frame with spatial and temporal data.
-#' @param timestep_col The name of the column containing time steps. Defaults to `"date"`.
+#' @param date_col The name of the column containing the date information. Defaults to `"date"`.
 #' @param timediff_unit The unit of 'stay_len'.
 #' @return A data frame with `stay_id` and `stay_len` columns added.
 #' @export
@@ -408,21 +409,21 @@ add_stay_id <- function(df) {
 #'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
 #' ))
 #' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
-add_stay_id_with_varied_intervals <- function(df, timestep_col = "date", timediff_unit = "days") {
+add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_unit = "days") {
   
   # Ensure the data is sorted by timestep
-  df <- df |> dplyr::arrange(.data[[timestep_col]])
+  df <- df |> dplyr::arrange(.data[[date_col]])
   
   new_df <- df |>
     dplyr::mutate(
-      timestep_diff = c(1, as.numeric(diff(.data[[timestep_col]]), units = timediff_unit)),  # Time differences
+      timestep_diff = c(1, as.numeric(diff(.data[[date_col]]), units = timediff_unit)),  # Time differences
       i_change = c(1, as.numeric(diff(.data$i)) != 0),    # Changes in 'i'
       stay_id = cumsum(.data[['i_change']])
     ) |>
     # Now the stay_id is assigned, calculate the duration (time difference) of each stay
     dplyr::group_by(.data[['route_id']], .data[['stay_id']]) |>
     dplyr::mutate(
-      stay_len = as.numeric(max(.data[[timestep_col]]) - min(.data[[timestep_col]]), units = timediff_unit)
+      stay_len = as.numeric(max(.data[[date_col]]) - min(.data[[date_col]]), units = timediff_unit)
     ) |>
     dplyr::select(-dplyr::all_of(c('timestep_diff', 'i_change')))
   
