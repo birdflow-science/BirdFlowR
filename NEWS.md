@@ -4,7 +4,8 @@
 * Add generic data classes (in `RouteDataClass.R`):
   *  `Routes`: Creates a `Routes` object from a data frame. The input dataframe must have columns `route_id`, `date`, `lon`, `lat`, and `route_type`.
   *  `BirdFlowRoutes`: Creates a `BirdFlowRoutes` object, extending `Routes` with additional BirdFlow-specific spatial and temporal information. It can be created by applying `as_BirdFlowRoutes(routes, bf)` on a `Routes` object, or directly input data frame with columns `x`, `y`, `i`, `timestep` (in addition to the columns in the `Routes` onject). This object is in "BirdFlow spatiotemporal coordinates". Besides the mentioned columns, the `as_BirdFlowRoutes(routes, bf)` will automatically calculate the stopover informations -- `stay_len` and `stay_id`.
-  * `BirdFlowIntervals`: Creates a `BirdFlowIntervals` object, representing the sampled intervals between timesteps in BirdFlow data. It can be created by calling `as_BirdFlowIntervals`The output dataframe should have columns `x1`, `x2`, `y1`, `y2`, `i1`, `i2`, `lon1`, `lon2`, `lat1`, `lat2`, `date1`, `date2`, `timestep1`, `timestep2`, `route_id`, `route_type`, `interval_id`.
+  * `BirdFlowIntervals`: Creates a `BirdFlowIntervals` object, representing the sampled intervals between timesteps in BirdFlow data. It can be created by calling `as_BirdFlowIntervals`. The output dataframe should have columns `x1`, `x2`, `y1`, `y2`, `i1`, `i2`, `lon1`, `lon2`, `lat1`, `lat2`, `date1`, `date2`, `timestep1`, `timestep2`, `route_id`, `route_type`, `interval_id`.
+  * General pipeline: `Routes(route_df) |> as_BirdFlowRoutes(bf=bf)` to get a `BirdFlowRoutes` object.
   * General pipeline: `Routes(route_df) |> as_BirdFlowRoutes(bf=bf) |> BirdFlowIntervals(n=500)` to get intervals.
 
 * Add validation functions. All in `validate_RouteDataClass.R`.  
