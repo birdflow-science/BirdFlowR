@@ -175,14 +175,12 @@ format_trajectory <- function(trajectory, bf, timesteps) {
 
   # Adjust dates -- If it crosses the year boundary, add year by 1
   points$date <- as.Date(points$date)
+  
   check_whether_year_plus_one <- function(dates_) {
-    for (i in 2:length(dates_)) {
-      if (dates_[i] < dates_[i - 1]) {
-        dates_[i] <- dates_[i] + lubridate::years(1)
-      }
-    }
-    return(dates_)
+    year_shifts <- c(0, cumsum(dates_[-1] < dates_[-length(dates_)]))
+    return(dates_ + lubridate::years(year_shifts))
   }
+  
   points <- points |>
       dplyr::group_by(.data[['route_id']]) |>
       dplyr::mutate(

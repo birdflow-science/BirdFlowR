@@ -4,12 +4,21 @@
 \alias{calculate_interval_sampling_strategy}
 \title{Calculate Interval Sampling Strategy}
 \usage{
-calculate_interval_sampling_strategy(routes, n)
+calculate_interval_sampling_strategy(
+  routes,
+  n,
+  min_day_interval,
+  min_km_interval
+)
 }
 \arguments{
-\item{routes}{A \code{Routes} or similar object with \code{route_id} and time point data.}
+\item{routes}{A dataframe similar to the data feature in \code{Routes} -- with columns \code{route_id}, \code{date}, \code{lon} and \code{lat}.}
 
 \item{n}{The total maximum number of intervals to sample. Notice: The actual output of intervals might be less than n, because of data deficiency. But never larger than n.}
+
+\item{min_day_interval}{The minimum days required in an interval.}
+
+\item{min_km_interval}{The minimum distance required for an interval}
 }
 \value{
 A data frame with the columns:
@@ -27,6 +36,9 @@ Ensures an even distribution across routes when possible.
 \examples{
 # Example usage
 routes <- data.frame(route_id = c("A", "A", "B", "B", "B"),
-                     date = as.Date("2024-01-01") + 0:4)
-sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10)
+                      lon=c(100,101,102,103,104),
+                      lat=c(40,42,44,46,48),
+                     date = as.Date("2024-01-01") + (0:4)*10)
+sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10, 
+min_day_interval=20, min_km_interval=100)
 }

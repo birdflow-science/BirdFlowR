@@ -40,17 +40,6 @@ Columns may vary depending on whether the context is for input or output process
 }
 }
 }
-\examples{
-# Get input columns for Routes
-get_target_columns_Routes(type = "input")
-
-# Get output columns for BirdFlowRoutes
-get_target_columns_BirdFlowRoutes(type = "output")
-
-# Get input columns for BirdFlowIntervals
-get_target_columns_BirdFlowIntervals(type = "input")
-
-}
 \seealso{
 \itemize{
 \item \href{?object_validators}{Object Validators}

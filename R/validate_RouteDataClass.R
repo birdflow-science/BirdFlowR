@@ -264,24 +264,13 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
 #' @param type A character string specifying the context for the columns. Either `'input'` (default) 
 #' for required input columns or `'output'` for columns expected after processing.
 #' @return A character vector containing the expected column names.
-#'
-#' @examples
-#' # Get input columns for Routes
-#' get_target_columns_Routes(type = "input")
-#'
-#' # Get output columns for BirdFlowRoutes
-#' get_target_columns_BirdFlowRoutes(type = "output")
-#'
-#' # Get input columns for BirdFlowIntervals
-#' get_target_columns_BirdFlowIntervals(type = "input")
-#'
+#' 
 #' @seealso
 #' - [Object Validators](?object_validators)
 #' - [Attribute Validators](?attribute_validators)
 NULL
 
 #' @rdname target_columns
-#' @export
 get_target_columns_Routes <- function(type='input'){
   if (type=='input'){
     return(c('route_id', 'date', 'lon', 'lat', 'route_type'))
@@ -293,7 +282,6 @@ get_target_columns_Routes <- function(type='input'){
 }
 
 #' @rdname target_columns
-#' @export
 get_target_columns_BirdFlowRoutes <- function(type='input'){
   if (type=='input'){
     return(c('route_id', 'x', 'y', 'i', 'lon', 'lat', 'timestep', 'date', 'route_type'))  # 'stay_id', 'stay_len' is not necessary in this phase
@@ -305,7 +293,6 @@ get_target_columns_BirdFlowRoutes <- function(type='input'){
 }
 
 #' @rdname target_columns
-#' @export
 get_target_columns_BirdFlowIntervals <- function(type='input'){
   if (type=='input'){
     return(c("interval_id", "route_id", "x1", "x2", "y1", "y2", "i1", "i2", "lon1", "lon2", "lat1", "lat2", "date1", "date2", "timestep1", "timestep2", 'route_type')) 

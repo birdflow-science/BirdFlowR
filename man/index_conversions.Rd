@@ -92,7 +92,7 @@ coordinates corresponding to the index, \code{i} of the vector state space.}
 space index corresponding to x and y coordinates or row and column indices.}
 }
 
-\item{\code{latlon_to_xy(lat, lon)}}{Returns a two column matrix of the x
+\item{\code{latlon_to_xy(lat, lon, bf)}}{Returns a two column matrix of the x
 and y coordinates corresponding to the supplied latitude and longitude. The
 output is in the CRS of \code{bf} (\code{crs(bf)}).}
 

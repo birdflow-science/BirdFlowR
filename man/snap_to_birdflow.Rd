@@ -54,6 +54,7 @@ week.
 \item \code{midweek} The observation that is closest to the middle of the week is
 used to represent the week. With ties the observation that occurs first
 is used.
+\item \code{random} One observation is randomly selected for each week.
 }
 
 Pending ideas, not yet implemented:

@@ -4,12 +4,21 @@
 \alias{as_BirdFlowIntervals}
 \title{Convert BirdFlowRoutes to BirdFlowIntervals}
 \usage{
-as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
+as_BirdFlowIntervals(
+  birdflow_routes,
+  max_n = 1000,
+  min_day_interval = 7,
+  min_km_interval = 200
+)
 }
 \arguments{
 \item{birdflow_routes}{A \code{BirdFlowRoutes} object.}
 
 \item{max_n}{The maximum number of intervals to sample. Defaults to 1000.}
+
+\item{min_day_interval}{The minimum days required in an interval.}
+
+\item{min_km_interval}{The minimum distance required for an interval}
 }
 \value{
 A \code{BirdFlowIntervals} object.
@@ -25,7 +34,7 @@ route_df <- data.frame(
  "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
- route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking', 
+ route_type = c("tracking", 'tracking', "tracking", 'tracking', 'tracking',
  "motus", "motus", "motus", "motus")
 )
 routes_obj <- Routes(route_df)

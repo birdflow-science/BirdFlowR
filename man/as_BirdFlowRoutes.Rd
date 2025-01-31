@@ -7,6 +7,7 @@
 as_BirdFlowRoutes(
   routes,
   bf,
+  aggregate = "random",
   valid_only = TRUE,
   sort_id_and_dates = TRUE,
   reset_index = FALSE
@@ -16,6 +17,9 @@ as_BirdFlowRoutes(
 \item{routes}{A \code{Routes} object.}
 
 \item{bf}{A \code{BirdFlow} object for spatial and temporal reference.}
+
+\item{aggregate}{The aggregation method if more than one timestep is presented in a route.
+Options include \code{mean}, \code{median}, \code{midweek}, \code{random}. Default to \code{random}.}
 
 \item{valid_only}{Logical. Should only valid points be included? Defaults to \code{TRUE}.}
 
@@ -40,4 +44,7 @@ route_df <- data.frame(
 routes_obj <- Routes(route_df)
 bf <- BirdFlowModels::amewoo
 birdflow_routes <- as_BirdFlowRoutes(routes_obj, bf)
+}
+\seealso{
+\code{\link[=snap_to_birdflow]{snap_to_birdflow()}}, \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}
 }

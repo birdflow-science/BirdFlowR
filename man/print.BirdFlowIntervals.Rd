@@ -41,5 +41,5 @@ interval_df <- data.frame(
 )
 bf <- BirdFlowModels::amewoo
 birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, 
-metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf))
+metadata = NULL, geom = bf$geom, dates = get_dates(bf))
 }
