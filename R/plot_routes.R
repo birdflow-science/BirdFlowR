@@ -22,7 +22,7 @@
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
 #' @param stay_units The unit to plot the stay length at each location. Default 
-#' to `days`. Other options include `sec`, `mins`, `hours` and `weeks`.
+#' to `weeks`. Other options include `sec`, `mins`, `hours` and `weeks`.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
 #' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
@@ -74,7 +74,7 @@
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE,
 #'             pal = c("red", "yellow", "blue"))
 #'}
-plot_routes <- function(routes, bf, stay_units = "days", facet = FALSE, 
+plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE, 
                         max_stay_len = NULL,
                         use_seasonal_colors = TRUE, pal = NULL,
                         barheight = 8,

@@ -476,7 +476,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
     all_pairs <- as.data.frame(t(utils::combn(seq_len(nrow(this_route)), 2)))
     all_pairs$interval_days <- abs(as.numeric(this_route[all_pairs$V2,'date'] - this_route[all_pairs$V1,'date'], unit='days'))
     all_pairs <- all_pairs[all_pairs$interval_days>=min_day_interval,]
-    sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$interval_pairs, replace = FALSE), ]
+    sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$intervals_to_sample, replace = FALSE), ]
     sampled_pairs <- sampled_pairs[, !names(sampled_pairs) %in% c("interval_days")]
     
     idx1 <- sampled_pairs[, 1]
@@ -602,17 +602,21 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
     if (sum(rest_samplable_route_counts$to_sample) > rest){
       # Because of the ceiling rounding, the total sampling planned might exceed the `rest`,
       # In that case, reduce the amount based on proportion, step by step
-      to_reduce <- sum(rest_samplable_route_counts$to_sample) - rest
+      to_reduce <- sum(rest_samplable_route_counts$to_sample) - n
       
       while (to_reduce > 0) {
+        
         # Apply proportional reduction, constrained by `to_reduce`
         sampled_index <- sample(
           seq_len(nrow(rest_samplable_route_counts)),
           size = 1, 
           prob = rest_samplable_route_counts$proportion
         )
+
         if (rest_samplable_route_counts[sampled_index, 'to_sample'] <= 1){
           # Should leave at least one sample for that route
+          print(sampled_index)
+          print(rest_samplable_route_counts[sampled_index, 'to_sample'])
           next
         }
         rest_samplable_route_counts[sampled_index, 'to_sample'] <- rest_samplable_route_counts[sampled_index, 'to_sample'] - 1
