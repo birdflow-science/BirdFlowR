@@ -74,6 +74,12 @@ test_that("Reset index in BirdFlowRoutes works", {
         julian = c(4, 11),
         week = c(1, 2)
     )
+    species <- list(
+        species_code = "amewoo",
+        scientific_name = "Scolopax minor",
+        common_name = "American Woodcock"
+    )
+    metadata <- list()
     expect_no_error(birdflowroutes_object <- BirdFlowRoutes(
         birdflow_route_df,
         species = species,

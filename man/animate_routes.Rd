@@ -17,7 +17,7 @@ animate_routes(routes, bf, ...)
     \item{\code{facet}}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
     \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
-to \code{days}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
     \item{\code{max_stay_len}}{Used to scale the stay length dots. If \code{NULL}
 (the default) it will be set to the maximum \code{"stay_len"} value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}

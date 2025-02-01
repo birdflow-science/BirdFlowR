@@ -8,7 +8,7 @@
 plot_routes(
   routes,
   bf,
-  stay_units = "days",
+  stay_units = "weeks",
   facet = FALSE,
   max_stay_len = NULL,
   use_seasonal_colors = TRUE,
@@ -27,7 +27,7 @@ plot_routes(
 \item{bf, x}{A BirdFlow object.}
 
 \item{stay_units}{The unit to plot the stay length at each location. Default
-to \code{days}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
