@@ -13,6 +13,12 @@
 * add `calc_predictive_distance_metirc.R` -- prototype, will be updated in the future.
 
 
+Breaking Changes:
+
+- Old route objects will no longer plot with the updated plot_routes().
+- Anyone who is using plot_routes() to plot data not generated with route() will have to update their objects. Please update the package and get routes using the new `route` function.
+
+
 # BirdFlowR 0.1.0.9069
 2024-10-17
 

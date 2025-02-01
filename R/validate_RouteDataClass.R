@@ -111,7 +111,6 @@ validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
 #' @export
 validate_Routes <- function(routes) {
   stopifnot(inherits(routes, 'Routes'))
-  stopifnot(inherits(routes, 'list'))
   
   for (name in c('data', 'species', 'metadata', 'source')){
     if (!name %in% names(routes)) {
@@ -148,7 +147,6 @@ validate_Routes <- function(routes) {
 validate_BirdFlowRoutes <- function(birdflow_routes) {
   stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
   stopifnot(inherits(birdflow_routes, 'Routes'))
-  stopifnot(inherits(birdflow_routes, 'list'))
   
   for (name in c('data', 'species', 'metadata', 'geom', 'dates', 'source')) {
     if (!name %in% names(birdflow_routes)) {
@@ -157,7 +155,7 @@ validate_BirdFlowRoutes <- function(birdflow_routes) {
   }
   
   # validate elements
-  validate_BirdFlowRoutes_species(birdflow_routes$speices)
+  validate_BirdFlowRoutes_species(birdflow_routes$species)
   validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
   validate_BirdFlowRoutes_geom(birdflow_routes$geom)
   validate_BirdFlowRoutes_dates(birdflow_routes$dates)
@@ -193,7 +191,6 @@ validate_BirdFlowRoutes <- function(birdflow_routes) {
 #' @export
 validate_BirdFlowIntervals <- function(birdflow_intervals) {
   stopifnot(inherits(birdflow_intervals, 'BirdFlowIntervals'))
-  stopifnot(inherits(birdflow_intervals, 'list'))
   
   for (name in c('data', 'species', 'metadata', 'geom', 'dates', 'source')) {
     if (!name %in% names(birdflow_intervals)) {
@@ -202,7 +199,7 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
   }
   
   # validate elements
-  validate_BirdFlowRoutes_species(birdflow_intervals$speices)
+  validate_BirdFlowRoutes_species(birdflow_intervals$species)
   validate_BirdFlowRoutes_metadata(birdflow_intervals$metadata)
   validate_BirdFlowRoutes_geom(birdflow_intervals$geom)
   validate_BirdFlowRoutes_dates(birdflow_intervals$dates)
