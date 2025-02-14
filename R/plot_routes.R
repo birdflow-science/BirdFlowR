@@ -21,7 +21,7 @@
 #' @param bf,x A BirdFlow object.
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
-#' @param stay_units The unit to plot the stay length at each location. Default 
+#' @param stay_units The unit to plot the stay length at each location. Default
 #' to `weeks`. Other options include `sec`, `mins`, `hours` and `weeks`.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
 #' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
@@ -74,13 +74,14 @@
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE,
 #'             pal = c("red", "yellow", "blue"))
 #'}
-plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE, 
+plot_routes <- function(routes, bf, facet = FALSE,
                         max_stay_len = NULL,
                         use_seasonal_colors = TRUE, pal = NULL,
                         barheight = 8,
                         route_linewidth = .85,
                         dot_sizes = c(1.1, 3.5),
-                        coast_linewidth =  .25) {
+                        coast_linewidth =  .25,
+                        stay_units = "weeks") {
 
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range
@@ -139,14 +140,6 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
   # Data reformatting and preparation
   #----------------------------------------------------------------------------#
 
-  # Check for full output from route() and select just point component
-  # This is to ease the transition in return format for route()
-  # (from a list with $points and $lines to just the $points component)
-  if (is.list(routes) && all(names(routes) %in% c("points", "lines")) &&
-      is.data.frame(routes$points)) {
-    routes <- routes$points
-  }
-
   # Reformat and add additional columns to routes
   # date is a date formatted version of the original character date
   # pyear is the date represented as proportion of year (0 to 1 for full year)
@@ -199,7 +192,7 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
 
   # Set breaks for stay length (label values in legend)
   stay_len_range <- c(0, max_stay_len) # range of stay length
-  stay_len_breaks <- unique(sort(c(0, 
+  stay_len_breaks <- unique(sort(c(0,
                                    round(exp(seq(log(1), log(max_stay_len), length.out = 5)))[2:5]
                                    ))) # label values
   stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
