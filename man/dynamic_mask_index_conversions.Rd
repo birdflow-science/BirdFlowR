@@ -2,9 +2,12 @@
 % Please edit documentation in R/dmi_to_i.R
 \name{dmi_to_i}
 \alias{dmi_to_i}
+\alias{i_to_dmi}
 \title{Convert between dynamic mask index and static location index}
 \usage{
 dmi_to_i(dmi, timestep, bf)
+
+i_to_dmi(i, timestep, bf)
 }
 \arguments{
 \item{dmi}{Dynamic mask index values.  These will always be integers between

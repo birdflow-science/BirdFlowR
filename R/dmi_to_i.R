@@ -1,6 +1,7 @@
-
-#' Convert between dynamic mask index and static location index
+#' @rdname dynamic_mask_index_conversions
+#' @title Convert between dynamic mask index and static location index
 #'
+#' @description
 #' `dmi_to_i()` and `i_to_dmi()` are for internal and advanced use;
 #' they are not likely to be helpful to most users.
 #' See [index conversions](i_to_x) for, likely, more useful conversions.
@@ -10,6 +11,7 @@
 #' This conversion requires knowing the `timestep`
 #' associated with each `dmi` or `i` value
 #' as the mapping between the two is different for each timestep.
+#'
 #' @param dmi Dynamic mask index values.  These will always be integers between
 #' `1` and the sum of the dynamic mask for the given timestep.
 #' @param i Location index. This indicates a location based on an index of the
@@ -60,7 +62,8 @@ dmi_to_i <- function(dmi, timestep, bf) {
 
 }
 
-
+#' @rdname dynamic_mask_index_conversions
+#' @export
 i_to_dmi <- function(i, timestep, bf) {
 
   # Expand timestep out to have one element for each input i
