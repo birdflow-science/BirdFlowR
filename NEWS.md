@@ -1,3 +1,7 @@
+2025-02-14
+* Add `dmi_to_i()` and `i_to_dmi()` to convert between standard location 
+indices (`i`) and dynamic mask indices (`dmi`).
+
 # BirdFlowR 0.1.0.9069
 2024-10-17
 

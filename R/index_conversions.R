@@ -31,7 +31,7 @@
 #'  containing row and column indices in columns 1 and 2 respectively can be
 #'  passed to `row` in which case the `col` argument should be omitted.
 #'@param lat,lon The latitude and longitude in WGS 1984 (EPSG:4326). A two
-#'  column matrix or data frame can also be passed to lat.
+#'  column matrix or data frame can also be passed to `lat`.
 #'@param i The index along a state vector that contains the data for
 #'  unmasked cells.
 #'@param bf A BirdFlow model.
@@ -74,6 +74,9 @@
 #'   equivalent.
 #' * [rasterize_distr()] converts a vector distribution into a
 #'   [terra::SpatRaster] - similar to those created by [terra::rast()].
+#'  * [dmi_to_i()] and [i_to_dmi()] convert between location indices (`i`) along
+#'  cells included by the static mask and dynamic mask indices (`dmi`)
+#'  along the cells included in the dynamic mask for a given timestep.
 #'
 NULL # required object for above roxygen2 page documentation
 # shared by functions below
