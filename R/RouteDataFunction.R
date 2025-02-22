@@ -441,8 +441,10 @@ add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_un
 #'
 #' @param birdflow_routes A `BirdFlowRoutes` object.
 #' @param max_n The maximum number of intervals to sample. Defaults to 1000.
-#' @param min_day_interval The minimum days required in an interval.
-#' @param min_km_interval The minimum distance required for an interval
+#' @param min_day_interval The minimum days required in an interval. Defaults to 7.
+#' @param max_day_interval The maximum days required in an interval. Defaults to 180.
+#' @param min_km_interval The minimum distance required for an interval. Defaults to 200.
+#' @param max_km_interval The maximum distance required for an interval. Defaults to 2000.
 #' @return A `BirdFlowIntervals` object.
 #' @export
 #'
@@ -460,12 +462,12 @@ add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_un
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf=bf)
 #' birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
-as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7, min_km_interval=200) {
+as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7, max_day_interval=180, min_km_interval=200, max_km_interval=8000) {
   stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
   stopifnot(is.numeric(max_n))
   
   # Conversion
-  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes$data, max_n, min_day_interval, min_km_interval)
+  sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes$data, max_n, min_day_interval, max_day_interval, min_km_interval, max_km_interval)
 
   # sampling_strategy_df: a dataframe with columns `time_points`, `interval_pairs`, and `intervals_to_sample`
   intervals <- list()
@@ -475,9 +477,11 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
     
     all_pairs <- as.data.frame(t(utils::combn(seq_len(nrow(this_route)), 2)))
     all_pairs$interval_days <- abs(as.numeric(this_route[all_pairs$V2,'date'] - this_route[all_pairs$V1,'date'], unit='days'))
-    all_pairs <- all_pairs[all_pairs$interval_days>=min_day_interval,]
+    all_pairs$interval_km <- great_circle_distance(this_route[all_pairs$V1,'lat'], this_route[all_pairs$V1,'lon'], this_route[all_pairs$V2,'lat'], this_route[all_pairs$V2,'lon'])
+    
+    all_pairs <- all_pairs[(all_pairs$interval_days>=min_day_interval) & (all_pairs$interval_days<=max_day_interval) & (all_pairs$interval_km>=min_km_interval) & (all_pairs$interval_km<=max_km_interval),]
     sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$intervals_to_sample, replace = FALSE), ]
-    sampled_pairs <- sampled_pairs[, !names(sampled_pairs) %in% c("interval_days")]
+    sampled_pairs <- sampled_pairs[, !names(sampled_pairs) %in% c("interval_days", "interval_km")]
     
     idx1 <- sampled_pairs[, 1]
     idx2 <- sampled_pairs[, 2]
@@ -531,7 +535,9 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
 #' @param routes A dataframe similar to the data feature in `Routes` -- with columns `route_id`, `date`, `lon` and `lat`.
 #' @param n The total maximum number of intervals to sample. Notice: The actual output of intervals might be less than n, because of data deficiency. But never larger than n.
 #' @param min_day_interval The minimum days required in an interval.
+#' @param max_day_interval The maximum days required in an interval.
 #' @param min_km_interval The minimum distance required for an interval
+#' @param max_km_interval The maximum distance required for an interval
 #' @return A data frame with the columns:
 #' - `route_id`: The route ID.
 #' - `time_points`: The number of time points in the route.
@@ -548,7 +554,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
 #'                      date = as.Date("2024-01-01") + (0:4)*10)
 #' sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10, 
 #' min_day_interval=20, min_km_interval=100)
-calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, min_km_interval) {
+calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, max_day_interval, min_km_interval, max_km_interval) {
   # Group by route_id and count the number of time points in each route
   route_counts <- routes |>
     dplyr::group_by(.data[['route_id']]) |>
@@ -568,7 +574,9 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
           
           valid_pairs <- sum(
             diff_matrix[upper.tri(diff_matrix)] >= min_day_interval &
-            distance_matrix[upper.tri(distance_matrix)] >= min_km_interval
+              diff_matrix[upper.tri(diff_matrix)] <= max_day_interval &
+            distance_matrix[upper.tri(distance_matrix)] >= min_km_interval &
+              distance_matrix[upper.tri(distance_matrix)] <= max_km_interval
           ) # Total valid pairs
           
         } else {
@@ -632,4 +640,34 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
   }
   return(sampled_route_counts)
 }
+
+
+#' Calcualte the great circle distance
+#'
+#' @description Calcualte the great circle distance
+#'
+#' @param lat1 latitude of point 1
+#' @param lon1 longitude of point 1
+#' @param lat2 latitude of point 2
+#' @param lon2 longitude of point 2
+#' @return the great circle distance
+#' @export
+#'
+great_circle_distance <- function(lat1, lon1, lat2, lon2) {
+  rad <- pi / 180  # Conversion factor for degrees to radians
+  lat1 <- lat1 * rad
+  lon1 <- lon1 * rad
+  lat2 <- lat2 * rad
+  lon2 <- lon2 * rad
+  
+  dlat <- lat2 - lat1
+  dlon <- lon2 - lon1
+  
+  a <- sin(dlat / 2)^2 + cos(lat1) * cos(lat2) * sin(dlon / 2)^2
+  c <- 2 * atan2(sqrt(a), sqrt(1 - a))
+  
+  R <- 6371  # Earth's radius in kilometers
+  R * c
+}
+
 
