@@ -8,7 +8,9 @@ calculate_interval_sampling_strategy(
   routes,
   n,
   min_day_interval,
-  min_km_interval
+  max_day_interval,
+  min_km_interval,
+  max_km_interval
 )
 }
 \arguments{
@@ -18,7 +20,11 @@ calculate_interval_sampling_strategy(
 
 \item{min_day_interval}{The minimum days required in an interval.}
 
+\item{max_day_interval}{The maximum days required in an interval.}
+
 \item{min_km_interval}{The minimum distance required for an interval}
+
+\item{max_km_interval}{The maximum distance required for an interval}
 }
 \value{
 A data frame with the columns:

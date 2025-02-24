@@ -477,7 +477,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
     
     all_pairs <- as.data.frame(t(utils::combn(seq_len(nrow(this_route)), 2)))
     all_pairs$interval_days <- abs(as.numeric(this_route[all_pairs$V2,'date'] - this_route[all_pairs$V1,'date'], unit='days'))
-    all_pairs$interval_km <- great_circle_distance(this_route[all_pairs$V1,'lat'], this_route[all_pairs$V1,'lon'], this_route[all_pairs$V2,'lat'], this_route[all_pairs$V2,'lon'])
+    all_pairs$interval_km <- great_circle_distance_lonlat_input(this_route[all_pairs$V1,'lat'], this_route[all_pairs$V1,'lon'], this_route[all_pairs$V2,'lat'], this_route[all_pairs$V2,'lon'])
     
     all_pairs <- all_pairs[(all_pairs$interval_days>=min_day_interval) & (all_pairs$interval_days<=max_day_interval) & (all_pairs$interval_km>=min_km_interval) & (all_pairs$interval_km<=max_km_interval),]
     sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$intervals_to_sample, replace = FALSE), ]
@@ -653,7 +653,7 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, ma
 #' @return the great circle distance
 #' @export
 #'
-great_circle_distance <- function(lat1, lon1, lat2, lon2) {
+great_circle_distance_lonlat_input <- function(lat1, lon1, lat2, lon2) {
   rad <- pi / 180  # Conversion factor for degrees to radians
   lat1 <- lat1 * rad
   lon1 <- lon1 * rad

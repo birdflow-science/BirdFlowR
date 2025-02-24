@@ -8,7 +8,9 @@ as_BirdFlowIntervals(
   birdflow_routes,
   max_n = 1000,
   min_day_interval = 7,
-  min_km_interval = 200
+  max_day_interval = 180,
+  min_km_interval = 200,
+  max_km_interval = 8000
 )
 }
 \arguments{
@@ -16,9 +18,13 @@ as_BirdFlowIntervals(
 
 \item{max_n}{The maximum number of intervals to sample. Defaults to 1000.}
 
-\item{min_day_interval}{The minimum days required in an interval.}
+\item{min_day_interval}{The minimum days required in an interval. Defaults to 7.}
 
-\item{min_km_interval}{The minimum distance required for an interval}
+\item{max_day_interval}{The maximum days required in an interval. Defaults to 180.}
+
+\item{min_km_interval}{The minimum distance required for an interval. Defaults to 200.}
+
+\item{max_km_interval}{The maximum distance required for an interval. Defaults to 2000.}
 }
 \value{
 A \code{BirdFlowIntervals} object.
