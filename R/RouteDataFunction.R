@@ -6,8 +6,8 @@
 #' @description Custom print method for `Routes` objects, summarizing their contents and metadata.
 #'
 #' @param x A `Routes` object to print.
-#' @param ... Additional arguments passed to `print.data.frame`.
-#' 
+#' @param ... other arguments not used by this method.
+#'
 #' @return Invisibly returns the input `routes` object.
 #' @method print Routes
 #' @export
@@ -21,49 +21,72 @@
 #'   lat = c(40, 41, 42),
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
-#' 
+#'
 #' routes <- Routes(route_df)
 #' print(routes)
 print.Routes <- function(x, ...){
   stopifnot(inherits(x,'Routes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
-  
-  # Print the data.frame part
-  print.data.frame(x$data, ...)
-  cat('\n')
-  
+  cat(sprintf("%s Object", class(x)[1]), '\n\n')
+
   pad_width <- 18
+  species <- unlist(x$species[c( "common_name", "scientific_name",
+                                 "species_code")])
+  if(!all(is.na(species))) {
+    species <- species[!is.na(species)]
+    cat(format("Species: ", width = pad_width),
+        paste(species, collapse = " / "), "\n")
+  }
+  types <- unique(x$data$route_type)
+  type_label <- ifelse(length(types) > 1, "Types: ", "Type: ")
+  cat(format(type_label, width = pad_width), paste(types, collapse = ", "), "\n")
   cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
   cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
   cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
   cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
   cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
   cat(crossline,'\n')
-  
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
-  cat(formatted_summary_route_type, '\n')
-  
-  if ('info' %in% colnames(x$data)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
+
+  if(length(types) > 1) {
+    # Breakdown by type is redundant if only one type
+    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
+    cat(crossline, "\n")
   }
-  cat(crossline,'\n')
-  cat("Species:\n", toString(x$species), "\n\n", sep = "")
-  cat(crossline,'\n')
-  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
-  cat(crossline,'\n')
+
+  # info column
+  if ('info' %in% colnames(x$data)){
+    # only print the head 20 characters
+    cat(format("Info: ", width = pad_width),
+        ifelse(length(x$data$info)>20,
+               paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n")
+    cat(crossline,'\n')
+  }
+
+  # source
+  if (!is.null(x$source) && !is.na(x$source)) {
+    cat("Source:\n")
+    print(source)
+    cat(crossline,'\n')
+  }
+
+  # Print the data.frame part
+  print(head(x$data, 5))
+  if(nrow(x$data) > 5) {
+    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
+  }
+
   invisible(x)
 }
 
 #' Print a BirdFlowRoutes Object
 #'
-#' @description Custom print method for `BirdFlowRoutes` objects, summarizing their contents, metadata, 
+#' @description Custom print method for `BirdFlowRoutes` objects, summarizing their contents, metadata,
 #' and BirdFlow-specific attributes.
 #'
 #' @param x A `BirdFlowRoutes` object to print.
-#' @param ... Additional arguments passed to `print.data.frame`.
-#' 
+#' @param ... other arguments not used by this method.
+#'
 #' @return Invisibly returns the input `birdflow_routes` object.
 #' @method print BirdFlowRoutes
 #' @export
@@ -77,7 +100,7 @@ print.Routes <- function(x, ...){
 #'   lat = c(40, 41, 42),
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
-#' routes <- Routes(route_df)
+#' routes <- Routes(route_df, species = "American Woodcock")
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_routes <- as_BirdFlowRoutes(routes, bf)
 #' print(birdflow_routes)
@@ -85,44 +108,69 @@ print.BirdFlowRoutes <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowRoutes'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
-  # Print the data.frame part
-  print.data.frame(x$data, ...)
-  cat('\n')
-  
+  cat(sprintf("%s Object", class(x)[1]), '\n\n')
+
   pad_width <- 18
+
+  species <- unlist(x$species[c( "common_name", "scientific_name",
+                                 "species_code")])
+  if(!all(is.na(species))) {
+    species <- species[!is.na(species)]
+    cat(format("Species: ", width = pad_width),
+        paste(species, collapse = " / "), "\n")
+  }
+  types <- unique(x$data$route_type)
+  type_label <- ifelse(length(types) > 1, "Types: ", "Type: ")
+  cat(format(type_label, width = pad_width), paste(types, collapse = ", "), "\n")
   cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
   cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
   cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
   cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
   cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
   cat(crossline,'\n')
-  
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
-  cat(formatted_summary_route_type, '\n')
-  
+
+  if(length(types) > 1) {
+    # Breakdown by type is redundant if only one type
+    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
+    cat(crossline, "\n")
+  }
+
   if ('info' %in% colnames(x$data)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
+    cat(format("Info: ", width = pad_width),
+        ifelse(length(x$data$info)>20,
+               paste0(substr(x$data$info, 1, 20),' ...'),
+               x$data$info), "\n") # only print the head 20 characters
+    cat(crossline,'\n')
+  }
+
+  # source
+  if (!is.null(x$source) && !is.na(x$source)) {
+    cat("Source:\n")
+    print(x$source)
+    cat(crossline,'\n')
+  }
+
+  # data
+  cat("Data:\n")
+  print(head(x$data, 5))
+  if (nrow(x$data) > 5) {
+    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
   }
   cat(crossline,'\n')
-  cat(sprintf("Species: %s / %s / %s \n", 
-              x$species$species_code, x$species$scientific_name, x$species$common_name),
-      "\n\n")
-  cat(crossline,'\n')
-  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
-  cat(crossline,'\n')
+
   invisible(x)
 }
 
 
 #' Print a BirdFlowIntervals Object
 #'
-#' @description Custom print method for `BirdFlowIntervals` objects, summarizing interval data 
+#' @description Print method for `BirdFlowIntervals` objects,
+#' summarizing interval data
 #' and metadata, including temporal and spatial ranges.
 #'
 #' @param x A `BirdFlowIntervals` object to print.
-#' @param ... Additional arguments passed to `print.data.frame`.
-#' 
+#' @param ... other arguments not used by this method.
+#'
 #' @return Invisibly returns the input `birdflow_intervals` object.
 #' @method print BirdFlowIntervals
 #' @export
@@ -149,18 +197,29 @@ print.BirdFlowRoutes <- function(x, ...){
 #'   route_type = c("tracking", "tracking", "banding")
 #' )
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species, 
+#' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species,
 #' metadata = NULL, geom = bf$geom, dates = get_dates(bf))
 print.BirdFlowIntervals <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
   cat(sprintf("%s Object:", class(x)[1]), '\n\n')
-  # Print the data.frame part
-  print.data.frame(x$data, ...)
-  cat('\n')
-  
+
+
   pad_width <- 18
+
+
+  species <- unlist(x$species[c( "common_name", "scientific_name",
+                                 "species_code")])
+  if(!all(is.na(species))) {
+    species <- species[!is.na(species)]
+    cat(format("Species: ", width = pad_width),
+        paste(species, collapse = " / "), "\n")
+  }
+  types <- unique(x$data$route_type)
+  type_label <- ifelse(length(types) > 1, "Types: ", "Type:")
+
+
   cat(format("Number of intervals: ", width = pad_width), nrow(x$data), "\n")
   cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
   cat(format("Date range: ", width = pad_width), format(min(x$data$date1, x$data$date2)), "to", format(max(x$data$date1, x$data$date2)), "\n")
@@ -169,20 +228,35 @@ print.BirdFlowIntervals <- function(x, ...){
   cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', min(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
   cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', max(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
   cat(crossline,'\n')
-  
-  formatted_summary_route_type <- format_summary_route_type(summarize_route_type(x$data))
-  cat(formatted_summary_route_type, '\n')
-  
+
+  if(length(types) > 1) {
+    # Breakdown by type is redundant if only one type
+    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
+    cat(crossline, "\n")
+  }
+
   if ('info' %in% colnames(x$data)){
-    cat(format("Info: ", width = pad_width), ifelse(length(x$data$info)>20, paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n") # only print the head 20 characters
+    cat(format("Info: ", width = pad_width),
+        ifelse(length(x$data$info) > 20,
+               paste0(substr(x$data$info, 1, 20),' ...'), x$data$info), "\n")
+    cat(crossline,'\n')
+  }
+
+  # source
+  if (!is.null(x$source) && !is.na(x$source)) {
+    cat("Source:\n")
+    print(source)
+    cat(crossline,'\n')
+  }
+
+  # Print the data.frame part
+  cat("Data:\n")
+  print(head(x$data, 5))
+  if(nrow(x$data) > 5) {
+    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
   }
   cat(crossline,'\n')
-  cat(sprintf("Species: %s / %s / %s \n", 
-              x$species$species_code, x$species$scientific_name, x$species$common_name),
-      "\n\n")
-  cat(crossline,'\n')
-  cat("Source:\n", paste(utils::capture.output(print(x$source)), collapse = "\n"), "\n", sep = "")
-  cat(crossline,'\n')
+
   invisible(x)
 }
 
@@ -201,7 +275,7 @@ summarize_route_type <- function(routes) {
   routes |>
     dplyr::group_by(.data[['route_type']]) |>
     dplyr::summarize(
-      unique_route_count = dplyr::n_distinct(.data[['route_id']]), 
+      unique_route_count = dplyr::n_distinct(.data[['route_id']]),
       unique_point_count = dplyr::n(),
       .groups = "drop"
     )
@@ -217,13 +291,13 @@ summarize_route_type <- function(routes) {
 #' @keywords internal
 format_summary_route_type <- function(summary_route_type) {
   stopifnot(inherits(summary_route_type,'data.frame'))
-  
+
   summary_str <- paste0(
     "Route Type: ", summary_route_type$route_type, "\n",
     "Unique Routes: ", summary_route_type$unique_route_count, "; ",
     "Unique Points: ", summary_route_type$unique_point_count, "\n"
   )
-  
+
   # Collapse into a single string
   result <- paste(summary_str, collapse = "\n")
   return(result)
@@ -267,7 +341,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   stopifnot(is.logical(sort_id_and_dates))
   stopifnot(is.logical(reset_index))
   stopifnot(is.logical(valid_only))
-  
+
   # Sort & reindex
   if (sort_id_and_dates){
     routes$data <- (routes$data |> sort_by_id_and_dates())
@@ -275,11 +349,10 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   if (reset_index){
     routes$data <- (routes$data |> reset_index())
   }
-  
+
   # Conversion
   original_routes_info <- routes$data |> dplyr::select(dplyr::any_of(c('route_id', 'route_type','info')))
-  original_meta_data <- routes$metadata
-  
+
   routes$data <- snap_to_birdflow(
     routes$data,
     bf=bf,
@@ -294,7 +367,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
     routes$data <- routes$data |>
       dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]))
   }
-  
+
   # add some attributes (e.g., lon and lat) back, and convert data type.
   latlon <- xy_to_latlon(x=routes$data$x, y=routes$data$y, bf=bf)
   routes$data$lat <- latlon$lat
@@ -303,13 +376,16 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   routes$data$timestep <- as.integer(routes$data$timestep)
   routes$data$i <- as.integer(routes$data$i)
   routes$data <- routes$data |> dplyr::select(-dplyr::all_of(c('n', 'error', 'message')))
-  
+
   # Transform species to the BirdFlow species list
   species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
-  metadata <- original_meta_data
   geom <- bf$geom
   dates <- get_dates(bf) # use the up-to-date dates dataframe
-  
+
+  # Make metadata
+  required_md_names <- c("n_active", "ebird_version_year")
+  metadata <- bf$metadata[required_md_names]
+
   # Transform to BirdFlowRoutes
   routes <- BirdFlowRoutes(data = routes$data,
                            species = species,
@@ -333,13 +409,13 @@ reset_index <- function(routes) {
   # Get unique route_ids and create a mapping
   unique_ids <- unique(routes$route_id)
   new_ids <- paste0("route_", seq_along(unique_ids))
-  
+
   # Create a lookup table
   id_mapping <- stats::setNames(new_ids, unique_ids)
-  
+
   # Replace
   routes$route_id <- id_mapping[routes$route_id]
-  
+
   return(routes)
 }
 
@@ -372,7 +448,7 @@ sort_by_id_and_dates <- function(routes){
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
 #'   i = c(1, 1, 2, 2, 3, 4, 4, 5),
 #'   date = as.Date(c(
-#'     "2024-01-01", "2024-01-02", "2024-01-03", 
+#'     "2024-01-01", "2024-01-02", "2024-01-03",
 #'     "2024-01-04", "2024-01-05", "2024-01-06",
 #'     "2024-01-07", "2024-01-08"
 #'   )))
@@ -393,7 +469,7 @@ add_stay_id <- function(df) {
 #'
 #' @description Adds stay IDs to a data frame, considering changes in spatial indices.
 #' Should only be applied on a single route, not multiple.
-#' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals, 
+#' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals,
 #' if the data is not sampled in the same frequency.
 #'
 #' @param df A data frame with spatial and temporal data.
@@ -406,15 +482,15 @@ add_stay_id <- function(df) {
 #' routes <- data.frame(list(
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
 #'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
-#'   date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
+#'   date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06',
 #'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
 #' ))
 #' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
 add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_unit = "days") {
-  
+
   # Ensure the data is sorted by timestep
-  df <- df |> dplyr::arrange(.data[[date_col]])
-  
+  # df <- df |> dplyr::arrange(.data[[date_col]])
+
   new_df <- df |>
     dplyr::mutate(
       timestep_diff = c(1, as.numeric(diff(.data[[date_col]]), units = timediff_unit)),  # Time differences
@@ -427,7 +503,7 @@ add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_un
       stay_len = as.numeric(max(.data[[date_col]]) - min(.data[[date_col]]), units = timediff_unit)
     ) |>
     dplyr::select(-dplyr::all_of(c('timestep_diff', 'i_change')))
-  
+
   return(new_df)
 }
 
@@ -436,7 +512,7 @@ add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_un
 
 #' Convert BirdFlowRoutes to BirdFlowIntervals
 #'
-#' @description Converts a `BirdFlowRoutes` object into a `BirdFlowIntervals` object, 
+#' @description Converts a `BirdFlowRoutes` object into a `BirdFlowIntervals` object,
 #' sampling interval pairs between time points.
 #'
 #' @param birdflow_routes A `BirdFlowRoutes` object.
@@ -463,7 +539,7 @@ add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_un
 as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7, min_km_interval=200) {
   stopifnot(inherits(birdflow_routes, 'BirdFlowRoutes'))
   stopifnot(is.numeric(max_n))
-  
+
   # Conversion
   sampling_strategy_df <- calculate_interval_sampling_strategy(birdflow_routes$data, max_n, min_day_interval, min_km_interval)
 
@@ -472,13 +548,13 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
   for (row_id in seq_len(nrow(sampling_strategy_df))){
     this_row <- sampling_strategy_df[row_id, ]
     this_route <- birdflow_routes$data[birdflow_routes$data$route_id==this_row$route_id,]
-    
+
     all_pairs <- as.data.frame(t(utils::combn(seq_len(nrow(this_route)), 2)))
     all_pairs$interval_days <- abs(as.numeric(this_route[all_pairs$V2,'date'] - this_route[all_pairs$V1,'date'], unit='days'))
     all_pairs <- all_pairs[all_pairs$interval_days>=min_day_interval,]
     sampled_pairs <- all_pairs[sample(seq_len(nrow(all_pairs)), size = this_row$intervals_to_sample, replace = FALSE), ]
     sampled_pairs <- sampled_pairs[, !names(sampled_pairs) %in% c("interval_days")]
-    
+
     idx1 <- sampled_pairs[, 1]
     idx2 <- sampled_pairs[, 2]
     formatted_intervals <- data.frame(list(
@@ -493,25 +569,25 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
       route_type = this_route$route_type[idx1]
     ), stringsAsFactors = FALSE # Avoid factor conversion
     )
-    
+
     intervals[[row_id]] <- formatted_intervals
   }
-  
+
   intervals <- do.call(rbind, intervals)
 
   target_columns <- get_target_columns_BirdFlowIntervals(type='input')
 
   if (is.null(intervals)) {
-    
+
     return(NULL)
-    
+
   } else {
     intervals$i1 <- as.integer(intervals$i1)
     intervals$i2 <- as.integer(intervals$i2)
     intervals$interval_id <- paste0("interval_", seq_len(nrow(intervals)))
     rownames(intervals) <- NULL
     intervals <- intervals[, c(target_columns, setdiff(names(intervals), target_columns))]
-    
+
     obs <- BirdFlowIntervals(data = intervals,
                              species = birdflow_routes$species,
                              metadata = birdflow_routes$metadata,
@@ -525,7 +601,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
 
 #' Calculate Interval Sampling Strategy
 #'
-#' @description Determines how to sample intervals for each route based on the total number of intervals requested. 
+#' @description Determines how to sample intervals for each route based on the total number of intervals requested.
 #' Ensures an even distribution across routes when possible.
 #'
 #' @param routes A dataframe similar to the data feature in `Routes` -- with columns `route_id`, `date`, `lon` and `lat`.
@@ -546,14 +622,14 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n=1000, min_day_interval=7
 #'                       lon=c(100,101,102,103,104),
 #'                       lat=c(40,42,44,46,48),
 #'                      date = as.Date("2024-01-01") + (0:4)*10)
-#' sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10, 
+#' sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10,
 #' min_day_interval=20, min_km_interval=100)
 calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, min_km_interval) {
   # Group by route_id and count the number of time points in each route
   route_counts <- routes |>
     dplyr::group_by(.data[['route_id']]) |>
     dplyr::summarize(time_points = dplyr::n())
-  
+
   # Calculate interval pairs valid for sampling for each route
   route_counts <- routes |>
     dplyr::group_by(.data[['route_id']]) |>
@@ -562,15 +638,15 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
         if (length(.data[['date']]) > 1) {
           date_ <- as.Date(.data[['date']])
           diff_matrix <- abs(outer(date_, date_, "-")) # differences in dates
-          
+
           sf_points <- sf::st_as_sf(data.frame(lon = .data[['lon']], lat = .data[['lat']]), coords = c("lon", "lat"), crs = 4326)
           distance_matrix <- sf::st_distance(sf_points, sf_points) |> units::set_units("km") |> units::drop_units()
-          
+
           valid_pairs <- sum(
             diff_matrix[upper.tri(diff_matrix)] >= min_day_interval &
             distance_matrix[upper.tri(distance_matrix)] >= min_km_interval
           ) # Total valid pairs
-          
+
         } else {
           valid_pairs <- 0
         }
@@ -579,7 +655,7 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
     ) |>
     # Filter routes with at least one valid pair
     dplyr::filter(.data[['interval_pairs']] > 0)
-  
+
   if (n <= nrow(route_counts)){
     # The requested interval count is smaller than the total routes, so sample one interval per route
     sampled_route_counts <- route_counts |> dplyr::slice_sample(n = n, replace = FALSE)
@@ -593,23 +669,23 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
     ## Fist, we should have one sample per route, to give an even sampling
     part1 <- nrow(route_counts)
     rest <- n - part1
-    
+
     rest_samplable_route_counts <- route_counts
     rest_samplable_route_counts$sampable_amount <- rest_samplable_route_counts$interval_pairs - 1
     rest_samplable_route_counts$proportion <- rest_samplable_route_counts$sampable_amount / sum(rest_samplable_route_counts$sampable_amount)
     rest_samplable_route_counts$to_sample <- pmin(ceiling(rest_samplable_route_counts$proportion * rest) + 1, rest_samplable_route_counts$sampable_amount)
-    
+
     if (sum(rest_samplable_route_counts$to_sample) > rest){
       # Because of the ceiling rounding, the total sampling planned might exceed the `rest`,
       # In that case, reduce the amount based on proportion, step by step
       to_reduce <- sum(rest_samplable_route_counts$to_sample) - n
-      
+
       while (to_reduce > 0) {
-        
+
         # Apply proportional reduction, constrained by `to_reduce`
         sampled_index <- sample(
           seq_len(nrow(rest_samplable_route_counts)),
-          size = 1, 
+          size = 1,
           prob = rest_samplable_route_counts$proportion
         )
 
@@ -622,10 +698,10 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, mi
         rest_samplable_route_counts[sampled_index, 'to_sample'] <- rest_samplable_route_counts[sampled_index, 'to_sample'] - 1
         to_reduce <- to_reduce - 1
       }
-      
+
       sampled_route_counts <- route_counts
       sampled_route_counts$intervals_to_sample <- rest_samplable_route_counts$to_sample
-      
+
     } else if (sum(rest_samplable_route_counts$to_sample) < rest) {
       stop('Not possible error. The sampling has problems.')
     }
