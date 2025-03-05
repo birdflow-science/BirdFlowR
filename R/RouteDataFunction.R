@@ -1,4 +1,10 @@
 
+
+# Required metadata items for BirdFlowRoutes used in route() and
+# as_BirdFlowRoutes
+BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
+
+
 # S3 generic methods --------------------------------------------------------
 
 #' Print a Routes Object
@@ -383,8 +389,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   dates <- get_dates(bf) # use the up-to-date dates dataframe
 
   # Make metadata
-  required_md_names <- c("n_active", "ebird_version_year")
-  metadata <- bf$metadata[required_md_names]
+  metadata <- bf$metadata[BirdFlowRoutes_metadata_items]
 
   # Transform to BirdFlowRoutes
   routes <- BirdFlowRoutes(data = routes$data,

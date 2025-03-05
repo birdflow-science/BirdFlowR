@@ -8,7 +8,6 @@
 plot_routes(
   routes,
   bf,
-  stay_units = "weeks",
   facet = FALSE,
   max_stay_len = NULL,
   use_seasonal_colors = TRUE,
@@ -16,18 +15,17 @@ plot_routes(
   barheight = 8,
   route_linewidth = 0.85,
   dot_sizes = c(1.1, 3.5),
-  coast_linewidth = 0.25
+  coast_linewidth = 0.25,
+  stay_units = "weeks",
+  crs = NULL
 )
 
 \method{plot}{BirdFlowRoutes}(x, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
+\item{routes, x}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
 
-\item{bf, x}{A BirdFlow object.}
-
-\item{stay_units}{The unit to plot the stay length at each location. Default
-to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
+\item{bf}{A BirdFlow object.}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -55,6 +53,9 @@ the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
 used to represent stay length.}
 
 \item{coast_linewidth}{Line width used for coastlines.}
+
+\item{stay_units}{The unit to plot the stay length at each location. Default
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
 
 \item{...}{Passed to \code{plot_routes()}}
 }

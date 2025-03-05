@@ -28,3 +28,72 @@ make_fake_routes_one_point_per_route <- function(){
 }
 
 
+# Make synthetic routes and then interpolate to a defined
+# interval while adding a little noise.
+
+make_fake_tracking_data <- function(bf, n,
+                                    interval =  as.difftime(.1, units = "days"),
+                                    ...) {
+
+  bf <- BirdFlowModels::amewoo
+  n_rts <- n
+  rts <- route(bf = bf, n = n_rts, ...)
+  d <- rts$data
+
+  # These parameters control the noise added to the interpolated
+  # track.  sd sets the magnitude, bandwidth controls
+  # autocorrelation bandwidth in the added noise
+  bandwidth <- 100
+  sd <- 3000
+
+  year_sd <- 5  # controls random difftime offset to entire track
+
+  from <- min(d$date) |> lubridate::as_datetime()
+  to <- max(d$date) |> lubridate::as_datetime()
+  date_times <- seq(from = from, to = to, by = interval)
+
+
+  interp_list <- vector(mode = "list", length = n_rts)
+  for (i in seq_len(n_rts)) {
+    route <- d[d$route_id == i, ]
+    new_location <- which(c(TRUE, route$i[-1] != route$i[-nrow(route)]))
+    route <- route[new_location, , drop = FALSE]
+    route$date <- lubridate::as_datetime(route$date)
+    interp <- data.frame(date_time = date_times,
+                         x = approx(x = route$date,
+                                    y = route$x,
+                                     xout = date_times)$y,
+                         y = approx(x = route$date,
+                                    y = route$y,
+                                    xout = date_times)$y,
+                         route_id = i)
+
+
+    x_noise <- filter(rnorm(nrow(interp), sd = sd),
+                      filter = rep(1, bandwidth),
+                      circular = TRUE)
+    y_noise <- filter(rnorm(nrow(interp), sd = sd),
+                      filter = rep(1, bandwidth),
+                      circular = TRUE)
+
+    interp$x <- interp$x + as.numeric(x_noise)
+    interp$y <- interp$y + as.numeric(y_noise)
+
+    interp$date_time <- interp$date_time +
+      as.difftime(rnorm(1, sd = year_sd) * 365, units = "days")
+
+    interp_list[[i]] <- interp
+
+  }
+
+  track <- do.call(rbind, args = interp_list)
+
+  lat_lon <- xy_to_latlon(track[c("x", "y")], bf = bf)
+  track <- dplyr::rename(track, date = .data$date_time)  |>
+    cbind(lat_lon)
+  track$route_type <- "tracking"
+
+  track <- track[!is.na(track$lat) & !is.na(track$lon), , drop = FALSE]
+
+  return(track)
+}

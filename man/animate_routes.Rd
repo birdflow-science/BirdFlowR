@@ -7,8 +7,6 @@
 animate_routes(routes, bf, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
-
 \item{bf}{A BirdFlow object}
 
 \item{...}{
@@ -16,8 +14,6 @@ animate_routes(routes, bf, ...)
   \describe{
     \item{\code{facet}}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
-    \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
-to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
     \item{\code{max_stay_len}}{Used to scale the stay length dots. If \code{NULL}
 (the default) it will be set to the maximum \code{"stay_len"} value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
@@ -35,6 +31,8 @@ the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
     \item{\code{coast_linewidth}}{Line width used for coastlines.}
     \item{\code{dot_sizes}}{Two numbers indicating the smallest and largest dot sizes
 used to represent stay length.}
+    \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
   }}
 }
 \value{

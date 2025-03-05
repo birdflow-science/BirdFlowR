@@ -13,9 +13,9 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
 
     expect_snapshot(my_routes)
     expect_snapshot(my_bfroutes)
-    expect_snapshot(my_intervals) 
+    expect_snapshot(my_intervals)
 
-    # Here we will randomly select only one data point for route 001 at timestep 1, 
+    # Here we will randomly select only one data point for route 001 at timestep 1,
     # so the snapshot is not necessarily the same.
     # But we are using seed, so it will always be the same.
 })
@@ -36,7 +36,7 @@ test_that("If no intervals can be sampled, return NULL", {
 
     expect_snapshot(my_routes)
     expect_snapshot(my_bfroutes)
-    expect_snapshot(my_intervals) 
+    expect_snapshot(my_intervals)
 
 })
 
@@ -55,7 +55,7 @@ test_that("Reset index in converting Routes to BirdFlowRoutes works", {
 test_that("Reset index in BirdFlowRoutes works", {
     birdflow_route_df <- data.frame(
         route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
-        date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", 
+        date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
         "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
         lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
         lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
@@ -63,7 +63,7 @@ test_that("Reset index in BirdFlowRoutes works", {
         y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
         i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
         timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-        route_type = c("tracking", 'tracking', "tracking", 'tracking', 
+        route_type = c("tracking", 'tracking', "tracking", 'tracking',
         'tracking', "motus", "motus", "motus", "motus")
     )
     geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, mask = NULL, dynamic_mask = NULL)

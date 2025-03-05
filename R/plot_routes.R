@@ -17,12 +17,10 @@
 #' experimental aspects then call `as.data.frame(rts)` to convert to a standard
 #' data.frame.
 #'
-#' @param routes The output of [route()] or a similarly structured data frame.
-#' @param bf,x A BirdFlow object.
+#' @param routes,x The output of [route()] or a similarly structured data frame.
+#' @param bf A BirdFlow object.
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
-#' @param stay_units The unit to plot the stay length at each location. Default
-#' to `weeks`. Other options include `sec`, `mins`, `hours` and `weeks`.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
 #' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
@@ -40,6 +38,9 @@
 #' @param coast_linewidth Line width used for coastlines.
 #' @param dot_sizes Two numbers indicating the smallest and largest dot sizes
 #'  used to represent stay length.
+#' @param stay_units The unit to plot the stay length at each location. Default
+#' to `weeks`. Other options include `sec`, `mins`, `hours` and `weeks`.
+#'
 #' @param ... Passed to `plot_routes()`
 #'
 #' @return A ggplot object. Use [print()] to display it.
@@ -81,7 +82,8 @@ plot_routes <- function(routes, bf, facet = FALSE,
                         route_linewidth = .85,
                         dot_sizes = c(1.1, 3.5),
                         coast_linewidth =  .25,
-                        stay_units = "weeks") {
+                        stay_units = "weeks",
+                        crs = NULL) {
 
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range
@@ -127,6 +129,8 @@ plot_routes <- function(routes, bf, facet = FALSE,
   # that work directly with the routes object instead of making a fake BirdFlow
   # object to use locally.
   #
+  # As of March 2025 the Routes and BirdFlowRoutes classes have been formalized
+  # and are now built around a list object.
   #----------------------------------------------------------------------------#
   if (missing(bf) && inherits(routes, "BirdFlowRoutes")) {
     bf <- new_BirdFlow()
@@ -135,6 +139,16 @@ plot_routes <- function(routes, bf, facet = FALSE,
     bf$metadata <- routes$metadata
     bf$species <- routes$species
   }
+
+  if(missing(bf) && inherits(routs, "Routes")) {
+    if (is.null(crs)) {
+      warning("Using latitude and longitude for plotting this will",
+              "create a lot of distortion. Use the bf or crs argument to",
+              "set a coordinate reference system for plotting")
+    }
+
+  }
+
 
   #----------------------------------------------------------------------------#
   # Data reformatting and preparation
@@ -164,7 +178,7 @@ plot_routes <- function(routes, bf, facet = FALSE,
   # Calculate year number (input to HPY calculation)
   routes$data <- routes$data |>
     dplyr::group_by(.data$route_id) |>
-    dplyr::mutate(year_number = calc_year_number(.data$timestep)) |>
+    dplyr::mutate(year_number = calc_year_number(.data$date)) |>
     as.data.frame()
   if (!all(routes$data$year_number %in% c(1, 2)))
     stop("Track passes through parts of three distinct years and",
@@ -172,12 +186,14 @@ plot_routes <- function(routes, bf, facet = FALSE,
 
   # CalculateHPV) 0 to 0.5 for the first year
   # 0.5 to 1 for the second year (if track crosses year boundary)
-  routes$data$hpy <- 0.5 * routes$data$pyear + 0.5 * (routes$data$year_number - 1)
+  routes$data$hpy <- 0.5 * routes$data$pyear +
+    0.5 * (routes$data$year_number - 1)
 
   # Make raster showing which cells are active in the model
-  rast <- rasterize_distr(rep(TRUE, n_active(bf)), bf, format = "dataframe")
+  rast <- rasterize_distr(rep(TRUE, times = n_active(bf)),
+                              bf, format = "dataframe")
   rast$value[is.na(rast$value)] <- FALSE
-  rast$value <- rast$value
+  # rast$value <- rast$value
 
 
   #----------------------------------------------------------------------------#
@@ -211,7 +227,25 @@ plot_routes <- function(routes, bf, facet = FALSE,
                   label = paste0(.data$first, " - ", .data$last)) |>
     dplyr::select(dplyr::last_col()) |>
     dplyr::distinct()
-  subtitle <- paste(date_ranges$label, collapse = ", ")
+
+
+  if(length(date_ranges$label) == 1){
+    # All same range likely either synthetic routes or
+    # a single real route
+    subtitle <- paste(date_ranges$label, collapse = ", ")
+  } else {
+    # Varied date ranges use the entire date window for routes
+    # with year
+    date_range <- range(routes$data$date)
+    subtitle <-   paste(lubridate::month(date_range,
+                                         label = TRUE,
+                                         abbr = FALSE),
+                        " ",
+                        lubridate::day(date_range),
+                        ", ",
+                        lubridate::year(date_range),
+                        collapse = " - ", sep = "")
+  }
 
   #----------------------------------------------------------------------------#
   # Set parameters that control plot aesthetics
@@ -346,3 +380,15 @@ plot_routes <- function(routes, bf, facet = FALSE,
 plot.BirdFlowRoutes <- function(x, ...) {
   plot_routes(x, ...)
 }
+
+
+# Internal helper function to determine the year number associated with
+# a series of dates. It returns 1 for the earliest year in dates
+# and every subsequent year increments by 1.  It is agnostic to the
+# order of the dates
+calc_year_number <- function(dates){
+  years <- lubridate::year(dates)
+  year_number <- years - min(years) + 1
+  return(year_number)
+}
+

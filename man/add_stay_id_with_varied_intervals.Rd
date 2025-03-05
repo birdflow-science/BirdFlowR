@@ -30,7 +30,7 @@ if the data is not sampled in the same frequency.
 routes <- data.frame(list(
   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
-  date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06', 
+  date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06',
   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
 ))
 df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")

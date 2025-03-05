@@ -80,3 +80,35 @@ test_that("route() works with full (not sparse) marginals", {
                                 n = 1, start = 1, end = 5))
 
 })
+
+
+test_that("route() works with backwards routes", {
+  bf <- BirdFlowModels::amewoo
+  rts <- route(bf, n = 1, start = 4, end = 50, direction = "backward")
+  years <- rts$data$date |>
+    lubridate::as_date() |>
+    lubridate::year()
+  expect_equal(length(unique(years)), 2)
+  expect_setequal(unique(diff(years)), c(0, -1))
+  expect_equal(max(years) - min(years), 1)
+  bf_year <- get_dates(bf)$date[1] |>
+    lubridate::as_date() |>
+    lubridate::year()
+
+  expect_equal(years[1], bf_year)
+  expect_equal(years, bf_year + c(rep(0, 4),rep(-1, 3)))
+})
+
+
+test_that("calc_year_number() works", {
+  dates <- seq(from = lubridate::as_date("2004-12-25"),
+               to = lubridate::as_date("2005-01-10"),
+               by = 1)
+  expect_equal(calc_year_number(dates), c(rep(1, 7), rep(2, 10)))
+
+  # Backwards
+  expect_equal(calc_year_number(rev(dates)), c(rep(2, 10), rep(1, 7)))
+
+})
+
+

@@ -39,6 +39,6 @@ routes <- data.frame(route_id = c("A", "A", "B", "B", "B"),
                       lon=c(100,101,102,103,104),
                       lat=c(40,42,44,46,48),
                      date = as.Date("2024-01-01") + (0:4)*10)
-sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10, 
+sampling_strategy <- calculate_interval_sampling_strategy(routes, n = 10,
 min_day_interval=20, min_km_interval=100)
 }

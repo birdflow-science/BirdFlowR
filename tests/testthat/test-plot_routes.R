@@ -51,3 +51,27 @@ test_that("plot_routes() works without bf", {
   expect_no_error(print(p))
 
 })
+
+test_that("plot_routes() works with backwards routes", {
+ bf <- BirdFlowModels::amewoo
+ set.seed(1)
+ rts <- route(bf, n = 3, start = 15, end = 49, direction = "backward")
+ expect_no_error(print(plot(rts)))
+
+})
+
+test_that("plot_routes() works with data derived from tracks", {
+
+  tracks <- make_fake_tracking_data(bf, 12, season = "prebreeding")
+
+  expect_no_error(routes <- Routes(data = tracks,
+                                   species = list(common_name = "amewoo")))
+
+
+  expect_no_error(bf_rts <- as_BirdFlowRoutes(routes, bf))
+
+  expect_no_error(print(plot(bf_rts, )))
+
+})
+
+
