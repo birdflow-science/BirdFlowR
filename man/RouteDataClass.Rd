@@ -10,9 +10,9 @@
 \alias{new_BirdFlowIntervals}
 \title{RouteDataClass Creation Functions}
 \usage{
-Routes(data, species = NULL, metadata = NULL, source = NULL)
+Routes(data, species = NULL, source = NULL)
 
-new_Routes(data, species, metadata, source)
+new_Routes(data, species, source)
 
 BirdFlowRoutes(
   data,
@@ -35,7 +35,8 @@ new_BirdFlowRoutes(
   dates,
   source,
   stay_calculate_col = "date",
-  stay_calculate_timediff_unit = "days"
+  stay_calculate_timediff_unit = "days",
+  sort_id_and_dates = FALSE
 )
 
 BirdFlowIntervals(data, species, metadata, geom, dates, source = NULL)
@@ -43,13 +44,19 @@ BirdFlowIntervals(data, species, metadata, geom, dates, source = NULL)
 new_BirdFlowIntervals(data, species, metadata, geom, dates, source)
 }
 \arguments{
-\item{data}{A data frame containing route/interval data for \code{Routes}, \code{BirdFlowRoutes} or \code{BirdFlowIntervals}.}
+\item{data}{A data frame containing route/interval data for \code{Routes},
+\code{BirdFlowRoutes} or \code{BirdFlowIntervals}.}
 
-\item{species}{A list with species metadata, including \code{species_code}, \code{scientific_name}, and \code{common_name}.}
-
-\item{metadata}{A list with additional metadata.}
+\item{species}{Either a single character that will be passed to
+\code{\link[ebirdst:get_species]{ebirdst::get_species()}} to lookup species information or a list with
+species metadata which must include \code{common_name} and can optionally
+also include \code{scientific_name} and  \code{species_code} or any other standard
+BirdFlow species metadata. See \code{\link[=species_info]{species_info()}} for a description
+of the full list.}
 
 \item{source}{A character string indicating the source of the data.}
+
+\item{metadata}{A list with additional metadata.}
 
 \item{geom}{A list describing spatial geometry, such as \code{nrow}, \code{ncol}, \code{crs}, and \code{mask}.}
 
@@ -100,14 +107,14 @@ routes_obj <- Routes(route_df, species=species, metadata=metadata, source=source
 # Create a BirdFlowRoutes object
 ## 1. convert from `Routes`
 bf <- BirdFlowModels::amewoo
-birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, 
-# and sources will be inherited from the bf object. 
+birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata,
+# and sources will be inherited from the bf object.
 # The attributes of the routes_obj will be ignored.
 
 ## 2. Directly from dataframe
 birdflow_route_df <- data.frame(
   route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
-  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", 
+  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
   "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
   lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
   lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
@@ -115,10 +122,10 @@ birdflow_route_df <- data.frame(
   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-  route_type = c("tracking", 'tracking', "tracking", 'tracking', 
+  route_type = c("tracking", 'tracking', "tracking", 'tracking',
   'tracking', "motus", "motus", "motus", "motus")
 )
-geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, 
+geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL,
 mask = NULL, dynamic_mask = NULL)
 dates <- data.frame(
     timestep = 1:2,

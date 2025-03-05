@@ -10,8 +10,15 @@
 #'
 #' All objects are internally validated during creation, ensuring required columns, valid data types, and proper formats. Non-exported `new_*` functions handle the final assembly of the object after validation.
 #'
-#' @param data A data frame containing route/interval data for `Routes`, `BirdFlowRoutes` or `BirdFlowIntervals`.
-#' @param species A list with species metadata, including `species_code`, `scientific_name`, and `common_name`.
+#' @param data A data frame containing route/interval data for `Routes`,
+#' `BirdFlowRoutes` or `BirdFlowIntervals`.
+#' @param species Either a single character that will be passed to
+#' [ebirdst::get_species()] to lookup species information or a list with
+#' species metadata which must include `common_name` and can optionally
+#' also include `scientific_name` and  `species_code` or any other standard
+#' BirdFlow species metadata. See [species_info()] for a description
+#' of the full list.
+#'
 #' @param metadata A list with additional metadata.
 #' @param geom A list describing spatial geometry, such as `nrow`, `ncol`, `crs`, and `mask`.
 #' @param dates A data frame with date-related information, including `date`, `start`, `end`, and `timestep`.
@@ -40,18 +47,18 @@
 #' metadata <- list(info1='Additional information')
 #' sources <- 'Unknown sources'
 #' routes_obj <- Routes(route_df, species=species, metadata=metadata, source=sources)
-#' 
+#'
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata, 
-#' # and sources will be inherited from the bf object. 
+#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata,
+#' # and sources will be inherited from the bf object.
 #' # The attributes of the routes_obj will be ignored.
-#' 
+#'
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
 #'   route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
-#'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10", 
+#'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
 #'   "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
 #'   lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
 #'   lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
@@ -59,10 +66,10 @@
 #'   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
 #'   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
 #'   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-#'   route_type = c("tracking", 'tracking', "tracking", 'tracking', 
+#'   route_type = c("tracking", 'tracking', "tracking", 'tracking',
 #'   'tracking', "motus", "motus", "motus", "motus")
 #' )
-#' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL, 
+#' geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL,
 #' mask = NULL, dynamic_mask = NULL)
 #' dates <- data.frame(
 #'     timestep = 1:2,
@@ -82,7 +89,7 @@
 #' # Create a BirdFlowIntervals object
 #' ## 1. convert from `BirdFlowRoutes`
 #' birdflow_intervals_obj <- birdflowroutes_object |> as_BirdFlowIntervals()
-#' 
+#'
 #' ## 2. Directly from dataframe
 #' birdflow_intervals <- data.frame(
 #'   interval_id = 1:3,
@@ -116,39 +123,61 @@
 #' - [Object Validators](?object_validators)
 #' - [as_BirdFlowRoutes](?as_BirdFlowRoutes)
 #' - [as_BirdFlowIntervals](?as_BirdFlowIntervals)
-#' 
+#'
 NULL
 
 #' @rdname RouteDataClass
 #' @export
-Routes <- function(data, species = NULL, metadata = NULL, source = NULL) {
+Routes <- function(data, species = NULL, source = NULL) {
   # Check input
   stopifnot(is.data.frame(data))
   validate_Routes_route_df(data)
 
+  # Resolve species
+  if(!is.list(species) && !is.null(species) && !is.na(species) &&
+     length(species == 1))  {
+    suppressMessages(
+      species <- lookup_species_metadata(species)
+    )
+  } else {
+    if(!is.list(species) && !"common_name" %in% names(species)) {
+      stop("Routes() requires a species either as valid input to ",
+           "ebirdst::get_species() or a list with at a minimum a ",
+           "\"common_name\" element.")
+    }
+    # Back fill required names with NA if missing and then
+    # drop all species list items that aren't standard
+    required_names <- c("species_code", "scientific_name", "common_name")
+    missing_names <- setdiff(required_names, names(species))
+    for(name in missing_names)
+      species[[name]] <- NA
+    allowed_names <- names(new_BirdFlow()$species)
+    final_names <- allowed_names[allowed_names %in% names(species)]
+    species <- species[final_names]
+  }
+
+  validate_BirdFlowRoutes_species(species)
   # Make new Routes object
-  obj <- new_Routes(data, species, metadata, source)
+  obj <- new_Routes(data, species, source)
   return(obj)
 }
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_Routes <- function(data, species, metadata, source) {
+new_Routes <- function(data, species, source) {
   # Sort columns
   target_ordered_columns <- get_target_columns_Routes(type = "output")
-  data <- data[, 
-                 c(target_ordered_columns, 
+  data <- data[,
+                 c(target_ordered_columns,
                    setdiff(names(data), target_ordered_columns)
                    )
                  ]
-
   obj <- list(
     data = data,
     species = species,
-    metadata = metadata,
     source = source
   )
-  
+
   class(obj) <- c("Routes")
   return(obj)
 }
@@ -163,7 +192,7 @@ BirdFlowRoutes <- function(data,
                            source = NULL,
                            sort_id_and_dates = TRUE,
                            reset_index = FALSE,
-                           stay_calculate_col = "date", 
+                           stay_calculate_col = "date",
                            stay_calculate_timediff_unit = "days") {
   # Check input
   stopifnot(inherits(data, "data.frame"))
@@ -172,7 +201,7 @@ BirdFlowRoutes <- function(data,
   validate_BirdFlowRoutes_metadata(metadata)
   validate_BirdFlowRoutes_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
-  
+
   # Make the BirdFlowRoutes object
   birdflow_routes_obj <- new_BirdFlowRoutes(data = data,
                             species = species,
@@ -181,7 +210,8 @@ BirdFlowRoutes <- function(data,
                             dates = dates,
                             source = source,
                             stay_calculate_col = stay_calculate_col,
-                            stay_calculate_timediff_unit = stay_calculate_timediff_unit)
+                            stay_calculate_timediff_unit = stay_calculate_timediff_unit,
+                            sort_id_and_dates = sort_id_and_dates)
 
   # Sort & reindex
   if (sort_id_and_dates) {
@@ -190,29 +220,33 @@ BirdFlowRoutes <- function(data,
   if (reset_index) {
     birdflow_routes_obj$data <- birdflow_routes_obj$data |> reset_index()
   }
-  
+
   return(birdflow_routes_obj)
 }
 
 #' @rdname RouteDataClass
 #' @keywords internal
-new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source, 
-                               stay_calculate_col = "date", stay_calculate_timediff_unit = "days") {
+new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
+                               stay_calculate_col = "date",
+                               stay_calculate_timediff_unit = "days",
+                               sort_id_and_dates = FALSE) {
+
+  if(sort_id_and_dates)
+    data <- sort_by_id_and_dates(data)
 
   ## Add stay id
   data <- data |>
-    sort_by_id_and_dates() |>
     dplyr::group_by(.data$route_id) |>
-    add_stay_id_with_varied_intervals(date_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |> 
-    # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id. 
-    # It takes 'timestep' as input so account for varying intervals, 
+    add_stay_id_with_varied_intervals(date_col = stay_calculate_col, timediff_unit = stay_calculate_timediff_unit) |>
+    # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id.
+    # It takes 'timestep' as input so account for varying intervals,
     # if the data is not sampled in a frequency.
     dplyr::ungroup() |>
     as.data.frame()
 
   # Sort columns
   target_ordered_columns <- get_target_columns_BirdFlowRoutes(type = "output")
-  data <- data[, 
+  data <- data[,
                  c(
                    target_ordered_columns,
                    setdiff(
@@ -229,9 +263,9 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
     dates = dates,
     source = source
   )
-  
+
   class(obj) <- c("BirdFlowRoutes", "Routes")
-  
+
   return(obj)
 }
 
@@ -272,11 +306,11 @@ new_BirdFlowIntervals <- function(data,
 
   # Sort columns
   target_ordered_columns <- get_target_columns_BirdFlowIntervals(type = "output")
-  data <- data[, 
+  data <- data[,
                  c(
-                   target_ordered_columns, 
+                   target_ordered_columns,
                    setdiff(
-                     names(data), 
+                     names(data),
                      target_ordered_columns)
                    )
                  ]
@@ -288,8 +322,8 @@ new_BirdFlowIntervals <- function(data,
     dates = dates,
     source = source
   )
-  
+
   class(obj) <- c("BirdFlowIntervals")
-  
+
   return(obj)
 }
