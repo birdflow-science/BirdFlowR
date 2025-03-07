@@ -135,12 +135,10 @@ Routes <- function(data, species = NULL, source = NULL) {
 
   # Resolve species
   if(!is.list(species) && !is.null(species) && !is.na(species) &&
-     length(species == 1))  {
-    suppressMessages(
-      species <- lookup_species_metadata(species)
-    )
+     length(species == 1)) {
+    species <- lookup_species_metadata(species, quiet = TRUE)
   } else {
-    if(!is.list(species) && !"common_name" %in% names(species)) {
+    if(!is.list(species) || !"common_name" %in% names(species)) {
       stop("Routes() requires a species either as valid input to ",
            "ebirdst::get_species() or a list with at a minimum a ",
            "\"common_name\" element.")

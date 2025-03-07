@@ -15,8 +15,14 @@
 
 Breaking Changes:
 
-- Old route objects will no longer plot with the updated plot_routes().
-- Anyone who is using plot_routes() to plot data not generated with route() will have to update their objects. Please update the package and get routes using the new `route` function.
+- Old route objects will no longer plot with the updated `plot_routes()` or 
+  with `plot()`.
+- Anyone using `plot_routes()` to plot data not generated with `route()` 
+  will have to update their objects. Please update the package and then use
+  `Routes()`   possibly followed by `as_BirdFlowRoutes()` to convert eith 
+  
+  
+  routes using the new `route` function.
 
 
 # BirdFlowR 0.1.0.9069

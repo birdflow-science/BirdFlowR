@@ -4,7 +4,12 @@
 \alias{lookup_species_metadata}
 \title{Lookup eBird species metadata}
 \usage{
-lookup_species_metadata(species, skip_checks = FALSE, min_season_quality = 3)
+lookup_species_metadata(
+  species,
+  skip_checks = FALSE,
+  min_season_quality = 3,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{species}{An eBird species code, common name, or scientific name. It
@@ -16,6 +21,8 @@ and for migrant status. Defaults to \code{TRUE} - do the tests.}
 \item{min_season_quality}{If \code{skip_checks = FALSE} and the model
 quality for any of the four seasons drops below this threshold an error
 is thrown.}
+
+\item{quiet}{Set to \code{TRUE} to supress messages.}
 }
 \value{
 A list of species information derived from ebirdst.

@@ -12,6 +12,7 @@
 #' @param min_season_quality If `skip_checks = FALSE` and the model
 #' quality for any of the four seasons drops below this threshold an error
 #' is thrown.
+#' @param quiet Set to `TRUE` to supress messages.
 #' @returns A list of species information derived from ebirdst.
 #' See [species_info()] for a description of the items.
 #' @seealso
@@ -22,7 +23,8 @@
 #' @keywords internal
 lookup_species_metadata <- function(species,
                                     skip_checks = FALSE,
-                                    min_season_quality = 3) {
+                                    min_season_quality = 3,
+                                    quiet = FALSE) {
 
   if(is.na(ebirdst_pkg_ver()))
     stop("Cannot lookup species metadata unless ebirdst is installed")
@@ -32,12 +34,16 @@ lookup_species_metadata <- function(species,
   #----------------------------------------------------------------------------#
   species <- ebirdst::get_species(species) # convert to ebirst species code
 
+  if(is.na(species))
+    stop("Unable to resolve species: ", species, " with ebirdst::get_species()")
+
   er <- ebirdst::ebirdst_runs
   names(er)[names(er) == "is_resident"] <- "resident" # restore 2021 name
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
-  bf_msg("Species resolved to: '", species, "' (", spmd$common_name, ")\n")
-
+  if(!quiet) {
+    bf_msg("Species resolved to: '", species, "' (", spmd$common_name, ")\n")
+  }
   # Reformat dates as strings
   date_to_char <- function(x) {
     if (inherits(x, "Date"))

@@ -9,13 +9,14 @@
 \arguments{
 \item{x}{A \code{BirdFlowIntervals} object to print.}
 
-\item{...}{Additional arguments passed to \code{print.data.frame}.}
+\item{...}{other arguments not used by this method.}
 }
 \value{
 Invisibly returns the input \code{birdflow_intervals} object.
 }
 \description{
-Custom print method for \code{BirdFlowIntervals} objects, summarizing interval data
+Print method for \code{BirdFlowIntervals} objects,
+summarizing interval data
 and metadata, including temporal and spatial ranges.
 }
 \examples{
@@ -42,4 +43,7 @@ interval_df <- data.frame(
 bf <- BirdFlowModels::amewoo
 birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species,
 metadata = NULL, geom = bf$geom, dates = get_dates(bf))
+
+print(birdflow_intervals)
+
 }

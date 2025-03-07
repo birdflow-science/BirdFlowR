@@ -2,20 +2,20 @@
 % Please edit documentation in R/RouteDataFunction.R
 \name{print.Routes}
 \alias{print.Routes}
-\title{Print a Routes Object}
+\title{Print Routes and BirdFlowRoutes objects}
 \usage{
 \method{print}{Routes}(x, ...)
 }
 \arguments{
-\item{x}{A \code{Routes} object to print.}
+\item{x}{A \code{Routes} or \code{BirdFlowRoutes} object to print.}
 
-\item{...}{Additional arguments passed to \code{print.data.frame}.}
+\item{...}{other arguments not used by this method.}
 }
 \value{
-Invisibly returns the input \code{routes} object.
+Invisibly returns the input object.
 }
 \description{
-Custom print method for \code{Routes} objects, summarizing their contents and metadata.
+Print a summary of a \code{Routes} and \code{BirdFlowRoutes} objects
 }
 \examples{
 # Create a Routes object
@@ -26,7 +26,12 @@ route_df <- data.frame(
   lat = c(40, 41, 42),
   route_type = c("tracking", "banding", "unknown")
 )
+routes <- Routes(route_df, species = list(common_name = "American Woodcock"))
 
-routes <- Routes(route_df)
 print(routes)
+
+# BirdFlowRoutes
+bf <- BirdFlowModels::amewoo
+bf_routes <- as_BirdFlowRoutes(routes, bf)
+
 }

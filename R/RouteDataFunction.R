@@ -7,14 +7,14 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 
 # S3 generic methods --------------------------------------------------------
 
-#' Print a Routes Object
+#' Print Routes and BirdFlowRoutes objects
 #'
-#' @description Custom print method for `Routes` objects, summarizing their contents and metadata.
+#' @description Print a summary of a `Routes` and `BirdFlowRoutes` objects
 #'
-#' @param x A `Routes` object to print.
+#' @param x A `Routes` or `BirdFlowRoutes` object to print.
 #' @param ... other arguments not used by this method.
 #'
-#' @return Invisibly returns the input `routes` object.
+#' @return Invisibly returns the input object.
 #' @method print Routes
 #' @export
 #'
@@ -27,11 +27,16 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #'   lat = c(40, 41, 42),
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
+#' routes <- Routes(route_df, species = list(common_name = "American Woodcock"))
 #'
-#' routes <- Routes(route_df)
 #' print(routes)
+#'
+#' # BirdFlowRoutes
+#' bf <- BirdFlowModels::amewoo
+#' bf_routes <- as_BirdFlowRoutes(routes, bf)
+#'
 print.Routes <- function(x, ...){
-  stopifnot(inherits(x,'Routes'))
+  stopifnot(inherits(x,'Routes')) # TRUE for BirdFlowRoutes
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
   cat(sprintf("%s Object", class(x)[1]), '\n\n')
@@ -41,24 +46,37 @@ print.Routes <- function(x, ...){
                                  "species_code")])
   if(!all(is.na(species))) {
     species <- species[!is.na(species)]
-    cat(format("Species: ", width = pad_width),
-        paste(species, collapse = " / "), "\n")
+    cat(format("Species:", width = pad_width),
+        paste(species, collapse = " / "), "\n", sep = "")
   }
+
   types <- unique(x$data$route_type)
   type_label <- ifelse(length(types) > 1, "Types: ", "Type: ")
-  cat(format(type_label, width = pad_width), paste(types, collapse = ", "), "\n")
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
+  pad <- function(x) format(x, width = pad_width)
+  cat(format(type_label, width = pad_width), paste(types, collapse = ", "),
+      "\n", sep = "")
+  cat(pad("Number of routes:"), length(unique(x$data$route_id)), "\n", sep = "")
+  cat(pad("Number of points: "), nrow(x$data), "\n", sep = "")
+  cat(pad("Date range:"),
+      format(min(x$data$date)), ", ", format(max(x$data$date)), "\n", sep = "")
+  cat(pad("Longitude range:"),
+      range(x$data$lon) |> format(nsmall = 4) |> paste(collapse = ", "),
+      "\n", sep = "")
+  cat(pad("Latitude range:"),
+      range(x$data$lat) |> format(nsmall = 4) |> paste(collapse = ", "),
+      "\n", sep = "")
+
+
+  if(inherits(x, "BirdFlowRoutes")) {
+    cat(pad("Dimensions:"), x$geom$nrow, ", ",  x$geom$ncol,
+        "  (nrow, ncol)\n", sep = "")
+    cat(pad("Resolution:"),  paste(x$geom$res, collapse = ", "),
+        " m (x, y)\n", sep = "")
+  }
+
   cat(crossline,'\n')
 
-  if(length(types) > 1) {
-    # Breakdown by type is redundant if only one type
-    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
-    cat(crossline, "\n")
-  }
+  print_type_breakdown(x, crossline)
 
   # info column
   if ('info' %in% colnames(x$data)){
@@ -70,103 +88,20 @@ print.Routes <- function(x, ...){
   }
 
   # source
-  if (!is.null(x$source) && !is.na(x$source)) {
+  if (!is.null(x$source)) {
     cat("Source:\n")
-    print(source)
+    print(x$source)
     cat(crossline,'\n')
   }
 
   # Print the data.frame part
   print(head(x$data, 5))
   if(nrow(x$data) > 5) {
-    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
+    cat("(", nrow(x$data) - 5, " lines omitted)\n", sep = "")
   }
 
   invisible(x)
 }
-
-#' Print a BirdFlowRoutes Object
-#'
-#' @description Custom print method for `BirdFlowRoutes` objects, summarizing their contents, metadata,
-#' and BirdFlow-specific attributes.
-#'
-#' @param x A `BirdFlowRoutes` object to print.
-#' @param ... other arguments not used by this method.
-#'
-#' @return Invisibly returns the input `birdflow_routes` object.
-#' @method print BirdFlowRoutes
-#' @export
-#'
-#' @examples
-#' # Create a BirdFlowRoutes object
-#' route_df <- data.frame(
-#'   route_id = 1:3,
-#'   date = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-#'   lon = c(-90, -89, -88),
-#'   lat = c(40, 41, 42),
-#'   route_type = c("tracking", "banding", "unknown")
-#' )
-#' routes <- Routes(route_df, species = "American Woodcock")
-#' bf <- BirdFlowModels::amewoo
-#' birdflow_routes <- as_BirdFlowRoutes(routes, bf)
-#' print(birdflow_routes)
-print.BirdFlowRoutes <- function(x, ...){
-  stopifnot(inherits(x,'BirdFlowRoutes'))
-  crossline <- '---------------------------------------------'
-  cat(crossline,'\n')
-  cat(sprintf("%s Object", class(x)[1]), '\n\n')
-
-  pad_width <- 18
-
-  species <- unlist(x$species[c( "common_name", "scientific_name",
-                                 "species_code")])
-  if(!all(is.na(species))) {
-    species <- species[!is.na(species)]
-    cat(format("Species: ", width = pad_width),
-        paste(species, collapse = " / "), "\n")
-  }
-  types <- unique(x$data$route_type)
-  type_label <- ifelse(length(types) > 1, "Types: ", "Type: ")
-  cat(format(type_label, width = pad_width), paste(types, collapse = ", "), "\n")
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
-  cat(format("Number of points: ", width = pad_width), length(x$data$date), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$data$date)), "to", format(max(x$data$date)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$data$lon), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$data$lat), "\n")
-  cat(crossline,'\n')
-
-  if(length(types) > 1) {
-    # Breakdown by type is redundant if only one type
-    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
-    cat(crossline, "\n")
-  }
-
-  if ('info' %in% colnames(x$data)){
-    cat(format("Info: ", width = pad_width),
-        ifelse(length(x$data$info)>20,
-               paste0(substr(x$data$info, 1, 20),' ...'),
-               x$data$info), "\n") # only print the head 20 characters
-    cat(crossline,'\n')
-  }
-
-  # source
-  if (!is.null(x$source) && !is.na(x$source)) {
-    cat("Source:\n")
-    print(x$source)
-    cat(crossline,'\n')
-  }
-
-  # data
-  cat("Data:\n")
-  print(head(x$data, 5))
-  if (nrow(x$data) > 5) {
-    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
-  }
-  cat(crossline,'\n')
-
-  invisible(x)
-}
-
 
 #' Print a BirdFlowIntervals Object
 #'
@@ -205,14 +140,17 @@ print.BirdFlowRoutes <- function(x, ...){
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_intervals <- BirdFlowIntervals(interval_df, species = bf$species,
 #' metadata = NULL, geom = bf$geom, dates = get_dates(bf))
+#'
+#' print(birdflow_intervals)
+#'
 print.BirdFlowIntervals <- function(x, ...){
   stopifnot(inherits(x,'BirdFlowIntervals'))
   crossline <- '---------------------------------------------'
   cat(crossline,'\n')
-  cat(sprintf("%s Object:", class(x)[1]), '\n\n')
+  cat(class(x)[1], "Object", '\n\n')
 
 
-  pad_width <- 18
+  pad_width <- 21
 
 
   species <- unlist(x$species[c( "common_name", "scientific_name",
@@ -220,26 +158,37 @@ print.BirdFlowIntervals <- function(x, ...){
   if(!all(is.na(species))) {
     species <- species[!is.na(species)]
     cat(format("Species: ", width = pad_width),
-        paste(species, collapse = " / "), "\n")
+        paste(species, collapse = " / ", sep = ""),
+        "\n", sep = "")
   }
   types <- unique(x$data$route_type)
   type_label <- ifelse(length(types) > 1, "Types: ", "Type:")
 
 
-  cat(format("Number of intervals: ", width = pad_width), nrow(x$data), "\n")
-  cat(format("Number of routes: ", width = pad_width), length(unique(x$data$route_id)), "\n")
-  cat(format("Date range: ", width = pad_width), format(min(x$data$date1, x$data$date2)), "to", format(max(x$data$date1, x$data$date2)), "\n")
-  cat(format("Longitude range: ", width = pad_width), range(x$data$lon1, x$data$lon2), "\n")
-  cat(format("Latitude range: ", width = pad_width), range(x$data$lat1, x$data$lat2), "\n")
-  cat(format("Minimum interval size: ", width = pad_width), min(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', min(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
-  cat(format("MAximum interval size: ", width = pad_width), max(as.numeric(x$data$date2 - x$data$date1, units = "days")), 'days / ', max(x$data$timestep2 - x$data$timestep1), 'timesteps', "\n")
+  cat(format("Number of intervals:", width = pad_width), nrow(x$data),
+      "\n", sep = "")
+  cat(format("Number of routes:", width = pad_width),
+      length(unique(x$data$route_id)), "\n", sep = "")
+  cat(format("Date range:", width = pad_width),
+      format(min(x$data$date1, x$data$date2)), ", ",
+      format(max(x$data$date1, x$data$date2)), "\n", sep = "")
+  cat(format("Longitude range:", width = pad_width),
+      paste(range(x$data$lon1, x$data$lon2) |> round(6), collapse = ", "),
+      "\n", sep = "")
+  cat(format("Latitude range:", width = pad_width),
+      paste(range(x$data$lat1, x$data$lat2) |> round(6), collapse = ", "),
+      "\n", sep = "")
+
+  cat(format("Min. interval size:", width = pad_width),
+      min(as.numeric(x$data$date2 - x$data$date1, units = "days")),
+      " days / ", min(x$data$timestep2 - x$data$timestep1), ' timesteps',
+      "\n", sep = "")
+  cat(format("Max. interval size:", width = pad_width),
+      max(as.numeric(x$data$date2 - x$data$date1, units = "days")), ' days / ',
+      max(x$data$timestep2 - x$data$timestep1), ' timesteps', "\n", sep = "")
   cat(crossline,'\n')
 
-  if(length(types) > 1) {
-    # Breakdown by type is redundant if only one type
-    summarize_route_type(x$data) |> format_summary_route_type() |> cat()
-    cat(crossline, "\n")
-  }
+  print_type_breakdown(x, crossline)
 
   if ('info' %in% colnames(x$data)){
     cat(format("Info: ", width = pad_width),
@@ -249,9 +198,9 @@ print.BirdFlowIntervals <- function(x, ...){
   }
 
   # source
-  if (!is.null(x$source) && !is.na(x$source)) {
+  if (!is.null(x$source)) {
     cat("Source:\n")
-    print(source)
+    print(x$source)
     cat(crossline,'\n')
   }
 
@@ -259,59 +208,58 @@ print.BirdFlowIntervals <- function(x, ...){
   cat("Data:\n")
   print(head(x$data, 5))
   if(nrow(x$data) > 5) {
-    cat("(", nrow(x$data) - 5, " lines ommitted)\n", sep = "")
+    cat("(", nrow(x$data) - 5, " lines omitted)\n", sep = "")
   }
   cat(crossline,'\n')
 
   invisible(x)
 }
 
-# Non-S3-generic methods for presentation (print, summary, plot) --------------------------------------------------------
+# ------------------------------------------------------------------------------
+# Non-S3-generic methods for presentation (print, summary, plot)
+# ------------------------------------------------------------------------------
 
-#' Summarize Route Types
+#' Print summary of route types, their count, and number of points
 #'
-#' @description Summarizes the number of unique routes and points for each route type.
+#' This internal helper function is for use in the print methods for the
+#' route and interval data classes.
 #'
-#' @param routes A `Routes` or `BirdFlowIntervals` object.
+#' It only prints the breakdown of routes by type if there is more than one type
+#' of route in `x`.  When there's only one type the output would be redundant.
 #'
-#' @return A data frame with columns `route_type`, `unique_route_count`, and `unique_point_count`.
+#' @param x A `Routes`, `BirdFlowROutes` or `BirdFlowIntervals` object.
+#' @param crossline Characters to be printed after printing the summary
+#'
+#' @returns invisibly returns the table
 #' @keywords internal
-summarize_route_type <- function(routes) {
-  stopifnot(inherits(routes,c('data.frame')))
-  routes |>
+print_type_breakdown <- function(x, crossline) {
+  stopifnot(inherits(x, "Routes") || inherits(x, "BirdFlowIntervals"))
+
+  # Only print type breakdown if there is more than one type
+  if(length(unique(x$data$route_type)) == 1)
+    return()
+
+  summary  <- x$data |>
     dplyr::group_by(.data[['route_type']]) |>
     dplyr::summarize(
-      unique_route_count = dplyr::n_distinct(.data[['route_id']]),
-      unique_point_count = dplyr::n(),
-      .groups = "drop"
-    )
+      Routes = dplyr::n_distinct(.data[['route_id']]),
+      Points = dplyr::n(),
+      .groups = "drop") |>
+    dplyr::rename(Type = "route_type") |>
+    as.data.frame()
+
+  print(summary, row.names = FALSE)
+  cat(crossline, "\n")
+
+  invisible(summary)
 }
 
-#' Format Route Type Summary
-#'
-#' @description Formats a summary of route types into a human-readable string.
-#'
-#' @param summary_route_type A data frame containing route type summaries.
-#'
-#' @return A formatted string summarizing route types.
-#' @keywords internal
-format_summary_route_type <- function(summary_route_type) {
-  stopifnot(inherits(summary_route_type,'data.frame'))
-
-  summary_str <- paste0(
-    "Route Type: ", summary_route_type$route_type, "\n",
-    "Unique Routes: ", summary_route_type$unique_route_count, "; ",
-    "Unique Points: ", summary_route_type$unique_point_count, "\n"
-  )
-
-  # Collapse into a single string
-  result <- paste(summary_str, collapse = "\n")
-  return(result)
-}
+# ------------------------------------------------------------------------------
+# Non-S3-generic methods for conversion of data and objects
+# ------------------------------------------------------------------------------
 
 
-# Non-S3-generic methods for conversion of data and objects --------------------------------------------------------
-## For Routes and BirdFlowRoutes --------------------------------------------------------
+## For Routes and BirdFlowRoutes -----------------------------------------------
 
 #' Convert Routes to BirdFlowRoutes
 #'
