@@ -59,17 +59,36 @@ get_interval_based_validation_one_transition_pair <- function(birdflow_interval_
   # LL
   null_ll <- log(final_st_distr[i_final] + 1e-8)
   ll <- log(preds_final[i_final] + 1e-8)
+
+  # effective_win_distance
+  effective_win_distance <- dist_mean_st/exp(null_ll) - dist_mean_pred/exp(ll)
+  
+  ## Energy Score Calculations (with beta = 1)
+  beta <- 1
+  # For the predicted distribution:
+  first_term_pred <- sum(preds_final * (gcd_final^beta))
+  second_term_pred <- 0.5 * sum(outer(preds_final, preds_final) * (gcd^beta)) #Second term: weighted average of pairwise distances (using full distance matrix gcd)
+  energy_score_pred <- first_term_pred - second_term_pred
+  # For the s&t distribution:
+  first_term_st <- sum(final_st_distr * (gcd_final^beta))
+  second_term_st <- 0.5 * sum(outer(final_st_distr, final_st_distr) * (gcd^beta))
+  energy_score_st <- first_term_st - second_term_st
+  
   
   # return
   return(c(pred = dist_mean_pred, st = dist_mean_st, 
     win_prob = win_prob,
     win_distance = win_distance,
     win_distance_fraction = (dist_mean_st - dist_mean_pred) / dist_mean_st,
-    global_prob_of_the_banding_starting = as.numeric(bf$distr[loc_i_starting,date_starting] / 52),
+    global_prob_of_the_starting = as.numeric(bf$distr[loc_i_starting,date_starting] / 52),
     elapsed_days = elapsed_days,
     elapsed_km = elapsed_km,
     null_ll = null_ll,
-    ll = ll
+    ll = ll,
+    effective_win_distance = effective_win_distance,
+    energy_score_bf = energy_score_pred,
+    energy_score_st = energy_score_st,
+    energy_improvement = energy_score_st - energy_score_pred
     ))
 }
 
@@ -93,49 +112,74 @@ get_interval_based_metrics <- function(birdflow_intervals, bf){
   dists <- t(dists)
 
   dists <- as.data.frame(dists)
+  # dists$ELC_distance <- exp(dists$ll) * dists$win_distance
+  # dists$ELC_prob <- exp(dists$ll) * dists$win_prob
+  # dists$RELC_distance <- exp(dists$ll - dists$null_ll) * dists$win_distance
+  # dists$RELC_prob <- exp(dists$ll - dists$null_ll) * dists$win_prob
   
   # integrated metric by time
   dists_agg <- dists |>
     dplyr::group_by(elapsed_days) |>
     dplyr::summarize(win_prob = mean(win_prob), 
+                     global_prob_of_the_starting = mean(global_prob_of_the_starting),
               win_distance = mean(win_distance), 
               win_distance_fraction = mean(win_distance_fraction),
               .groups = "drop")
   dists_agg <- dists_agg[order(dists_agg$elapsed_days), ]
+  dists_agg$prob_weight <- dists_agg$global_prob_of_the_starting / sum(dists_agg$global_prob_of_the_starting)
   dx <- diff(dists_agg$elapsed_days) # Trapezoidal Rule
-  area_win_prob_by_time <- sum(dx * (head(dists_agg$win_prob, -1) + tail(dists_agg$win_prob, -1)) / 2)
-  area_win_distance_by_time <- sum(dx * (head(dists_agg$win_distance, -1) + tail(dists_agg$win_distance, -1)) / 2)
-  area_win_distance_fraction_by_time <- sum(dx * (head(dists_agg$win_distance_fraction, -1) + tail(dists_agg$win_distance_fraction, -1)) / 2)
+  area_win_prob_by_time <- sum(dx * (head(dists_agg$win_prob * dists_agg$prob_weight, -1) + tail(dists_agg$win_prob * dists_agg$prob_weight, -1)) / 2)
+  area_win_distance_by_time <- sum(dx * (head(dists_agg$win_distance * dists_agg$prob_weight, -1) + tail(dists_agg$win_distance * dists_agg$prob_weight, -1)) / 2)
+  area_win_distance_fraction_by_time <- sum(dx * (head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) + tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)) / 2)
   
   # integrated metric by distance
   dists_agg <- dists |>
     dplyr::group_by(elapsed_km) |>
     dplyr::summarize(win_prob = mean(win_prob), 
+                     global_prob_of_the_starting = mean(global_prob_of_the_starting),
               win_distance = mean(win_distance), 
               win_distance_fraction = mean(win_distance_fraction),
               .groups = "drop")
   dists_agg <- dists_agg[order(dists_agg$elapsed_km), ]
+  dists_agg$prob_weight <- dists_agg$global_prob_of_the_starting / sum(dists_agg$global_prob_of_the_starting)
   dx <- diff(dists_agg$elapsed_km) # Trapezoidal Rule
-  area_win_prob_by_distance <- sum(dx * (head(dists_agg$win_prob, -1) + tail(dists_agg$win_prob, -1)) / 2)
-  area_win_distance_by_distance <- sum(dx * (head(dists_agg$win_distance, -1) + tail(dists_agg$win_distance, -1)) / 2)
-  area_win_distance_fraction_by_distance <- sum(dx * (head(dists_agg$win_distance_fraction, -1) + tail(dists_agg$win_distance_fraction, -1)) / 2)
+  area_win_prob_by_distance <- sum(dx * (head(dists_agg$win_prob * dists_agg$prob_weight, -1) + tail(dists_agg$win_prob * dists_agg$prob_weight, -1)) / 2)
+  area_win_distance_by_distance <- sum(dx * (head(dists_agg$win_distance * dists_agg$prob_weight, -1) + tail(dists_agg$win_distance * dists_agg$prob_weight, -1)) / 2)
+  area_win_distance_fraction_by_distance <- sum(dx * (head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) + tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)) / 2)
   
   n_intervals <- nrow(birdflow_intervals$data)
   
   output <- colMeans(dists)
   names(output) <- paste0('mean_',names(output))
-  output <-c(output, 
-             c(
-               area_win_prob_by_time=area_win_prob_by_time,
-               area_win_distance_by_time=area_win_distance_by_time,
-               area_win_distance_fraction_by_time=area_win_distance_fraction_by_time,
-               area_win_prob_by_distance=area_win_prob_by_distance,
-               area_win_distance_by_distance=area_win_distance_by_distance,
-               area_win_distance_fraction_by_distance=area_win_distance_fraction_by_distance,
-               n_intervals=n_intervals
-               )
-             )
   
-  return(output)
+  output <- c(output, 
+              c(
+                weighted_mean_win_prob=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$win_prob),
+                weighted_mean_win_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$win_distance),
+                weighted_mean_null_ll=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$null_ll),
+                weighted_mean_ll=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ll),
+                
+                # weighted_mean_ELC_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ELC_distance),
+                # weighted_mean_ELC_prob=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ELC_prob),
+                # weighted_mean_RELC_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$RELC_distance),
+                # weighted_mean_RELC_prob=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$RELC_prob),
+
+                weighted_mean_effective_win_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$effective_win_distance),
+                weighted_energy_improvement=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$energy_improvement),
+                weighted_energy_improvement_days_integral=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$energy_improvement * dists$elapsed_days),
+                weighted_energy_improvement_kms_integral=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$energy_improvement * dists$elapsed_km),
+                
+                area_win_prob_by_time=area_win_prob_by_time,
+                area_win_distance_by_time=area_win_distance_by_time,
+                area_win_distance_fraction_by_time=area_win_distance_fraction_by_time,
+                area_win_prob_by_distance=area_win_prob_by_distance,
+                area_win_distance_by_distance=area_win_distance_by_distance,
+                area_win_distance_fraction_by_distance=area_win_distance_fraction_by_distance,
+                n_intervals=n_intervals
+                  )
+              )
+  
+  
+  return(list(output, dists))
 }
 

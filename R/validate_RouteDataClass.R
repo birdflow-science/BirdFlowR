@@ -406,7 +406,7 @@ validate_Routes_lat <- function(lat_vector) {
 
 #' @rdname attribute_validators
 validate_Routes_route_type <- function(route_type_vector){
-  valid_route_types <- c("tracking", "banding", "motus", "unknown")
+  valid_route_types <- c("tracking", "banding", "motus", "synthetic", "unknown")
   if (!all(unique(route_type_vector) %in% valid_route_types)) {
     invalid_types <- unique(route_type_vector)[!unique(route_type_vector) %in% valid_route_types]
     stop(sprintf(
