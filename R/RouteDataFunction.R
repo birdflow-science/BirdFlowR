@@ -292,7 +292,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random', valid_only = TRU
   # Only successfully converted spatiotemporal points will be included
   if (valid_only){
     routes$data <- routes$data |>
-      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]))
+      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]) & !.data[['error']])
   }
   
   # add some attributes (e.g., lon and lat) back, and convert data type.
@@ -623,8 +623,6 @@ calculate_interval_sampling_strategy <- function(routes, n, min_day_interval, ma
 
         if (rest_samplable_route_counts[sampled_index, 'to_sample'] <= 1){
           # Should leave at least one sample for that route
-          print(sampled_index)
-          print(rest_samplable_route_counts[sampled_index, 'to_sample'])
           next
         }
         rest_samplable_route_counts[sampled_index, 'to_sample'] <- rest_samplable_route_counts[sampled_index, 'to_sample'] - 1
