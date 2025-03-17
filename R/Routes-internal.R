@@ -1,14 +1,22 @@
-#' @name RouteDataClass
-#' @title RouteDataClass Creation Functions
-#' @description Functions to create and validate `Routes`, `BirdFlowRoutes`, and `BirdFlowIntervals` objects.
-#' These functions ensure input data meets the required structure and standards for use within BirdFlow models.
+#' @name Routes-internal
+#' @title Internal (private) routes and intervals class creation functions
+#' @description Internal (private) functions to create and validate
+#' `Routes`, `BirdFlowRoutes`, and `BirdFlowIntervals` objects.
+#'
+#' These functions ensure input data meets the required structure and standard
+#' for use within BirdFlow models.
 #'
 #' @details
 #' - **`Routes()`**: Creates a `Routes` object from a data frame.
-#' - **`BirdFlowRoutes()`**: Creates a `BirdFlowRoutes` object, extending `Routes` with additional BirdFlow-specific spatial and temporal information.
-#' - **`BirdFlowIntervals()`**: Creates a `BirdFlowIntervals` object, representing intervals between timesteps in BirdFlow data.
+#' - **`BirdFlowRoutes()`**: Creates a `BirdFlowRoutes` object,
+#' extending `Routes` with additional BirdFlow-specific spatial and
+#' temporal information.
+#' - **`BirdFlowIntervals()`**: Creates a `BirdFlowIntervals` object,
+#' representing intervals between timesteps in BirdFlow data.
 #'
-#' All objects are internally validated during creation, ensuring required columns, valid data types, and proper formats. Non-exported `new_*` functions handle the final assembly of the object after validation.
+#' All objects are internally validated during creation, ensuring required
+#' columns, valid data types, and proper formats. Non-exported `new_*`
+#' functions handle the final assembly of the object after validation.
 #'
 #' @param data A data frame containing route/interval data for `Routes`,
 #' `BirdFlowRoutes` or `BirdFlowIntervals`.
@@ -28,9 +36,15 @@
 #' @param stay_calculate_col The column name for calculating the stay_id and stay_len in BirdFlowRoutes object. Default to `date`.
 #' @param stay_calculate_timediff_unit The unit of stay_len in BirdFlowRoutes object. Default to `days`.
 #'
-#' @return Each function returns an S3 object of the corresponding class (`Routes`, `BirdFlowRoutes`, or `BirdFlowIntervals`).
-#'
+#' @return Each function returns an S3 object of the corresponding class
+#' (`Routes`, `BirdFlowRoutes`, or `BirdFlowIntervals`).
+#' @keywords internal
 #' @examples
+#'
+#' # Examples here use private functions so can't be run except after
+#' # devtools::load_all() during package development.
+#' \dontrun{
+#'
 #' # Create a Routes object
 #' route_df <- data.frame(
 #'   route_id = 1:3,
@@ -44,16 +58,14 @@
 #'     scientific_name = "Scolopax minor",
 #'     common_name = "American Woodcock"
 #' )
-#' metadata <- list(info1='Additional information')
 #' sources <- 'Unknown sources'
-#' routes_obj <- Routes(route_df, species=species, metadata=metadata, source=sources)
+#' routes_obj <- Routes(route_df, species=species, source=sources)
 #'
 #' # Create a BirdFlowRoutes object
 #' ## 1. convert from `Routes`
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf) # the species, metadata,
-#' # and sources will be inherited from the bf object.
-#' # The attributes of the routes_obj will be ignored.
+#' birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf)
+#' # the species, metadata, and sources will be inherited from the bf object.
 #'
 #' ## 2. Directly from dataframe
 #' birdflow_route_df <- data.frame(
@@ -118,49 +130,19 @@
 #'   dates = dates,
 #'   source = "example_source"
 #' )
+#' }
 #'
 #' @seealso
-#' - [Object Validators](?object_validators)
-#' - [as_BirdFlowRoutes](?as_BirdFlowRoutes)
-#' - [as_BirdFlowIntervals](?as_BirdFlowIntervals)
+#' - [Routes()] Create a `Routes` object
+#' - [as_BirdFlowRoutes()] Convert `Routes` to `BirdFlowRoutes`
+#' - [as_BirdFlowIntervals()] Extract movement between pairs of locations
+#'   from [BirdFlowRoutes] for use with model evaluation.
+#' - [Object Validators](?object_validators) Private functions for validating
+#'   routes and intervals.
 #'
 NULL
 
-#' @rdname RouteDataClass
-#' @export
-Routes <- function(data, species = NULL, source = NULL) {
-  # Check input
-  stopifnot(is.data.frame(data))
-  validate_Routes_route_df(data)
-
-  # Resolve species
-  if(!is.list(species) && !is.null(species) && !is.na(species) &&
-     length(species == 1)) {
-    species <- lookup_species_metadata(species, quiet = TRUE)
-  } else {
-    if(!is.list(species) || !"common_name" %in% names(species)) {
-      stop("Routes() requires a species either as valid input to ",
-           "ebirdst::get_species() or a list with at a minimum a ",
-           "\"common_name\" element.")
-    }
-    # Back fill required names with NA if missing and then
-    # drop all species list items that aren't standard
-    required_names <- c("species_code", "scientific_name", "common_name")
-    missing_names <- setdiff(required_names, names(species))
-    for(name in missing_names)
-      species[[name]] <- NA
-    allowed_names <- names(new_BirdFlow()$species)
-    final_names <- allowed_names[allowed_names %in% names(species)]
-    species <- species[final_names]
-  }
-
-  validate_BirdFlowRoutes_species(species)
-  # Make new Routes object
-  obj <- new_Routes(data, species, source)
-  return(obj)
-}
-
-#' @rdname RouteDataClass
+#' @rdname Routes-internal
 #' @keywords internal
 new_Routes <- function(data, species, source) {
   # Sort columns
@@ -180,8 +162,7 @@ new_Routes <- function(data, species, source) {
   return(obj)
 }
 
-#' @rdname RouteDataClass
-#' @export
+#' @rdname Routes-internal
 BirdFlowRoutes <- function(data,
                            species,
                            metadata,
@@ -197,7 +178,7 @@ BirdFlowRoutes <- function(data,
   validate_BirdFlowRoutes_birdflow_route_df(data)
   validate_BirdFlowRoutes_species(species)
   validate_BirdFlowRoutes_metadata(metadata)
-  validate_BirdFlowRoutes_geom(geom)
+  validate_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
 
   # Make the BirdFlowRoutes object
@@ -222,7 +203,7 @@ BirdFlowRoutes <- function(data,
   return(birdflow_routes_obj)
 }
 
-#' @rdname RouteDataClass
+#' @rdname Routes-internal
 #' @keywords internal
 new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
                                stay_calculate_col = "date",
@@ -267,7 +248,7 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
   return(obj)
 }
 
-#' @rdname RouteDataClass
+#' @rdname Routes-internal
 #' @export
 BirdFlowIntervals <- function(data,
                               species,
@@ -279,7 +260,7 @@ BirdFlowIntervals <- function(data,
   validate_BirdFlowIntervals_birdflow_intervals(data)
   validate_BirdFlowRoutes_species(species)
   validate_BirdFlowRoutes_metadata(metadata)
-  validate_BirdFlowRoutes_geom(geom)
+  validate_geom(geom)
   validate_BirdFlowRoutes_dates(dates)
 
   # Make the BirdFlowIntervals object
@@ -293,7 +274,7 @@ BirdFlowIntervals <- function(data,
   return(obj)
 }
 
-#' @rdname RouteDataClass
+#' @rdname Routes-internal
 #' @keywords internal
 new_BirdFlowIntervals <- function(data,
                                   species,
@@ -325,3 +306,120 @@ new_BirdFlowIntervals <- function(data,
 
   return(obj)
 }
+
+
+
+## For Routes and BirdFlowRoutes -----------------------------------------------
+
+#' Reset Route Indices
+#'
+#' @description Resets the route IDs in a `Routes` object to a new sequential numbering.
+#'
+#' @param routes A `Routes` or data frame object.
+#'
+#' @return A data frame with updated route IDs.
+#' @keywords internal
+reset_index <- function(routes) {
+  stopifnot(inherits(routes,'data.frame'))
+  # Get unique route_ids and create a mapping
+  unique_ids <- unique(routes$route_id)
+  new_ids <- paste0("route_", seq_along(unique_ids))
+
+  # Create a lookup table
+  id_mapping <- stats::setNames(new_ids, unique_ids)
+
+  # Replace
+  routes$route_id <- id_mapping[routes$route_id]
+
+  return(routes)
+}
+
+#' Sort Routes by ID and Date
+#'
+#' @description Sorts a `Routes` or data frame object by route ID and date.
+#'
+#' @param routes A `Routes` or data frame object.
+#'
+#' @return A sorted data frame.
+#' @export
+sort_by_id_and_dates <- function(routes){
+  stopifnot(inherits(routes,'data.frame'))
+  sorted_routes <- routes |> dplyr::arrange(.data[["route_id"]], .data[["date"]])
+  return(sorted_routes)
+}
+
+
+#' Add Stay IDs
+#'
+#' @description Adds stay IDs to a data frame based on changes in spatial indices.
+#'
+#' @param df A data frame with spatial indices.
+#'
+#' @return A data frame with `stay_id` and `stay_len` columns added.
+#' @export
+#'
+#' @examples
+#' routes <- data.frame(list(
+#'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
+#'   i = c(1, 1, 2, 2, 3, 4, 4, 5),
+#'   date = as.Date(c(
+#'     "2024-01-01", "2024-01-02", "2024-01-03",
+#'     "2024-01-04", "2024-01-05", "2024-01-06",
+#'     "2024-01-07", "2024-01-08"
+#'   )))
+#' )
+#' routes$i <- as.integer(routes$i)
+#' df_with_stay_ids <- add_stay_id(routes)
+add_stay_id <- function(df) {
+  new_df <- df |>
+    dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
+                  stay_len = rep(
+                    rle(.data$stay_id)$lengths,
+                    times = rle(.data$stay_id)$lengths)
+    )
+  return(new_df)
+}
+
+#' Add Stay IDs with Temporal Thresholds
+#'
+#' @description Adds stay IDs to a data frame, considering changes in spatial indices.
+#' Should only be applied on a single route, not multiple.
+#' Using add_stay_id_with_varied_intervals, rather than add_stay_id: It takes 'date' as input so account for varying intervals,
+#' if the data is not sampled in the same frequency.
+#'
+#' @param df A data frame with spatial and temporal data.
+#' @param date_col The name of the column containing the date information. Defaults to `"date"`.
+#' @param timediff_unit The unit of 'stay_len'.
+#' @return A data frame with `stay_id` and `stay_len` columns added.
+#' @export
+#'
+#' @examples
+#' routes <- data.frame(list(
+#'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
+#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)),  # Spatial index
+#'   date = as.Date(c('2010-01-01', '2010-01-02', '2010-01-05', '2010-01-06',
+#'   '2010-01-10', '2010-01-15', '2010-01-16', '2010-01-20'))  # Time steps with varying intervals
+#' ))
+#' df_with_varied_stay_ids <- add_stay_id_with_varied_intervals(routes, "date", "days")
+add_stay_id_with_varied_intervals <- function(df, date_col = "date", timediff_unit = "days") {
+
+  # Ensure the data is sorted by timestep
+  # df <- df |> dplyr::arrange(.data[[date_col]])
+
+  new_df <- df |>
+    dplyr::mutate(
+      timestep_diff = c(1, as.numeric(diff(.data[[date_col]]), units = timediff_unit)),  # Time differences
+      i_change = c(1, as.numeric(diff(.data$i)) != 0),    # Changes in 'i'
+      stay_id = cumsum(.data[['i_change']])
+    ) |>
+    # Now the stay_id is assigned, calculate the duration (time difference) of each stay
+    dplyr::group_by(.data[['route_id']], .data[['stay_id']]) |>
+    dplyr::mutate(
+      stay_len = as.numeric(max(.data[[date_col]]) - min(.data[[date_col]]), units = timediff_unit)
+    ) |>
+    dplyr::select(-dplyr::all_of(c('timestep_diff', 'i_change')))
+
+  return(new_df)
+}
+
+

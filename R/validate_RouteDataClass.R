@@ -112,7 +112,7 @@ validate_BirdFlowIntervals_birdflow_intervals <- function(birdflow_interval_df){
 validate_Routes <- function(routes) {
   stopifnot(inherits(routes, 'Routes'))
 
-  for (name in c('data', 'species', 'metadata', 'source')){
+  for (name in c('data', 'species', 'source')){
     if (!name %in% names(routes)) {
       stop(sprintf("'%s' is not found in the input object!", name))
     }
@@ -157,7 +157,7 @@ validate_BirdFlowRoutes <- function(birdflow_routes) {
   # validate elements
   validate_BirdFlowRoutes_species(birdflow_routes$species)
   validate_BirdFlowRoutes_metadata(birdflow_routes$metadata)
-  validate_BirdFlowRoutes_geom(birdflow_routes$geom)
+  validate_geom(birdflow_routes$geom)
   validate_BirdFlowRoutes_dates(birdflow_routes$dates)
 
   # Validate data
@@ -201,7 +201,7 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
   # validate elements
   validate_BirdFlowRoutes_species(birdflow_intervals$species)
   validate_BirdFlowRoutes_metadata(birdflow_intervals$metadata)
-  validate_BirdFlowRoutes_geom(birdflow_intervals$geom)
+  validate_geom(birdflow_intervals$geom)
   validate_BirdFlowRoutes_dates(birdflow_intervals$dates)
 
   # Validate data
@@ -341,8 +341,7 @@ get_target_columns_BirdFlowIntervals <- function(type='input'){
 #'   - `validate_BirdFlowRoutes_species()`
 #' - BirdFlowIntervals Validators:
 #'   - `validate_BirdFlowIntervals_interval_id()`
-#' - Geometry and Dates and Metadata:
-#'   - `validate_BirdFlowRoutes_geom()`
+#' - Dates and Metadata:
 #'   - `validate_BirdFlowRoutes_dates()`
 #'   - `validate_BirdFlowRoutes_metadata()`
 #'
@@ -406,7 +405,7 @@ validate_Routes_lat <- function(lat_vector) {
 
 #' @rdname attribute_validators
 validate_Routes_route_type <- function(route_type_vector){
-  valid_route_types <- c("tracking", "banding", "motus", "unknown")
+  valid_route_types <- c("tracking", "banding", "motus", "unknown", "synthetic")
   if (!all(unique(route_type_vector) %in% valid_route_types)) {
     invalid_types <- unique(route_type_vector)[!unique(route_type_vector) %in% valid_route_types]
     stop(sprintf(
@@ -514,30 +513,21 @@ validate_BirdFlowRoutes_species <- function(species) {
 
 #' @rdname attribute_validators
 validate_BirdFlowRoutes_metadata <- function(metadata) {
-  # Does nothing and returns nothing
+  stopifnot(inherits(metadata, "list"))
+  stopifnot(all(BirdFlowRoutes_metadata_items %in% names(metadata)))
 }
 
-#' @rdname attribute_validators
-validate_BirdFlowRoutes_geom <- function(geom) {
-  exists_names <- names(geom)
-  target_name_list <- c("nrow", "ncol", "res", "ext", "crs", "mask", "dynamic_mask")
-  for (name in target_name_list){
-    if (!(name %in% exists_names)) {
-      stop(sprintf("%s component not found in geom!", name))
-    }
-  }
-}
 
 #' @rdname attribute_validators
 validate_BirdFlowRoutes_dates <- function(dates) {
   stopifnot(inherits(dates, "data.frame"))
-  exists_names <- colnames(dates)
-  target_name_list <- c("timestep", "date", "label", "julian", "week")
-  for (name in target_name_list){
-    if (!(name %in% exists_names)) {
-      stop(sprintf("%s component not found in dates!", name))
-    }
-  }
+  existing_names <- colnames(dates)
+  target_names <- c("timestep", "date", "label", "julian", "week")
+  miss <- setdiff(target_names, existing_names)
+  if(length(miss) > 0)
+    stop("\"", paste(miss, collapse = '", "'),
+         ifelse(length(miss) > 1, "\" are", "\" is"),
+         " missing from dates")
 }
 
 #' @rdname attribute_validators

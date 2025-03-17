@@ -17,7 +17,6 @@
 \alias{validate_BirdFlowRoutes_stay_len}
 \alias{validate_BirdFlowRoutes_species}
 \alias{validate_BirdFlowRoutes_metadata}
-\alias{validate_BirdFlowRoutes_geom}
 \alias{validate_BirdFlowRoutes_dates}
 \alias{validate_BirdFlowIntervals_interval_id}
 \title{Attribute Validators}
@@ -52,8 +51,6 @@ validate_BirdFlowRoutes_species(species)
 
 validate_BirdFlowRoutes_metadata(metadata)
 
-validate_BirdFlowRoutes_geom(geom)
-
 validate_BirdFlowRoutes_dates(dates)
 
 validate_BirdFlowIntervals_interval_id(interval_id)
@@ -82,9 +79,9 @@ Must not have duplicates within a \code{route_id} (for \code{BirdFlowRoutes}; bu
 
 \item{metadata}{A list with additional metadata.}
 
-\item{geom}{A list containing geometry attributes. Must include \code{nrow}, \code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
-
 \item{dates}{A data frame with date-related information. Must include \code{interval}, \code{date}, \code{midpoint}, \code{start}, \code{end}, \code{doy}, and \code{week}.}
+
+\item{geom}{A list containing geometry attributes. Must include \code{nrow}, \code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
 }
 \value{
 Each function returns \code{TRUE} if validation succeeds. If validation fails, an error is raised with details about the issue.
@@ -141,9 +138,8 @@ These functions are intended for internal use and are not exported for user-faci
 \itemize{
 \item \code{validate_BirdFlowIntervals_interval_id()}
 }
-\item Geometry and Dates and Metadata:
+\item Dates and Metadata:
 \itemize{
-\item \code{validate_BirdFlowRoutes_geom()}
 \item \code{validate_BirdFlowRoutes_dates()}
 \item \code{validate_BirdFlowRoutes_metadata()}
 }
