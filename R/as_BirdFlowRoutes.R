@@ -7,8 +7,6 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #'
 #' @description Convert `Routes` objects to `BirdFlowRoutes`,
 #' adding BirdFlow-specific spatiotemporal coordinates.
-#' Every location is moved to the center of the closest cell in the BirdFlow
-#' model and every date (or date-time) is moved to a timestep in the model.
 #' This may require aggregating multiple observations within the same timestep
 #' (week) which is controlled with the `aggregate` argument.
 #' @param routes A `Routes` object.
