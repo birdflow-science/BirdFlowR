@@ -33,6 +33,9 @@ make_fake_routes_one_point_per_route <- function(){
 
 make_fake_tracking_data <- function(bf, n,
                                     interval =  as.difftime(.1, units = "days"),
+                                    year_sd = 5,
+                                    bandwidth = 100,
+                                    sd = 3000,
                                     ...) {
 
   bf <- BirdFlowModels::amewoo
@@ -40,13 +43,12 @@ make_fake_tracking_data <- function(bf, n,
   rts <- route(bf = bf, n = n_rts, ...)
   d <- rts$data
 
-  # These parameters control the noise added to the interpolated
-  # track.  sd sets the magnitude, bandwidth controls
-  # autocorrelation bandwidth in the added noise
-  bandwidth <- 100
-  sd <- 3000
 
-  year_sd <- 5  # controls random difftime offset to entire track
+  # sd sets the magnitude of noise, bandwidt (in points) sets
+  # how far the autocorrelations spreads
+  # autocorrelation bandwidth in the added noise
+
+   # year_sd controls random difftime offset to entire track
 
   from <- min(d$date) |> lubridate::as_datetime()
   to <- max(d$date) |> lubridate::as_datetime()
@@ -56,8 +58,8 @@ make_fake_tracking_data <- function(bf, n,
   interp_list <- vector(mode = "list", length = n_rts)
   for (i in seq_len(n_rts)) {
     route <- d[d$route_id == i, ]
-    new_location <- which(c(TRUE, route$i[-1] != route$i[-nrow(route)]))
-    route <- route[new_location, , drop = FALSE]
+  #  new_location <- which(c(TRUE, route$i[-1] != route$i[-nrow(route)]))
+  #  route <- route[new_location, , drop = FALSE]
     route$date <- lubridate::as_datetime(route$date)
     interp <- data.frame(date_time = date_times,
                          x = approx(x = route$date,
@@ -89,11 +91,13 @@ make_fake_tracking_data <- function(bf, n,
   track <- do.call(rbind, args = interp_list)
 
   lat_lon <- xy_to_latlon(track[c("x", "y")], bf = bf)
-  track <- dplyr::rename(track, date = .data$date_time)  |>
+  track <- dplyr::rename(track, date = "date_time")  |>
     cbind(lat_lon)
   track$route_type <- "tracking"
 
   track <- track[!is.na(track$lat) & !is.na(track$lon), , drop = FALSE]
+
+  track <- track[, !names(track) %in% c("x", "y")]
 
   return(track)
 }
