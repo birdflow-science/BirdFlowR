@@ -38,8 +38,6 @@ A\code{BirdFlowRoutes} object.
 \description{
 Convert \code{Routes} objects to \code{BirdFlowRoutes},
 adding BirdFlow-specific spatiotemporal coordinates.
-Every location is moved to the center of the closest cell in the BirdFlow
-model and every date (or date-time) is moved to a timestep in the model.
 This may require aggregating multiple observations within the same timestep
 (week) which is controlled with the \code{aggregate} argument.
 }
