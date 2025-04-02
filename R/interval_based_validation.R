@@ -36,6 +36,8 @@ get_interval_based_validation_one_transition_pair <- function(birdflow_interval_
   dist_mean_pred <- sum(preds_final * gcd_final)
   dist_mean_st   <- sum(final_st_distr * gcd_final)
   win_distance <- dist_mean_st - dist_mean_pred
+  pred_elapsed_dist_by_pred <- sum(preds_final * gcd[,which(d_initial == 1)])
+  pred_elapsed_dist_by_st <- sum(final_st_distr * gcd[,which(d_initial == 1)])
   
   # Normalized distance metric
   win_distance_fraction = (dist_mean_st - dist_mean_pred) / dist_mean_st
@@ -88,7 +90,9 @@ get_interval_based_validation_one_transition_pair <- function(birdflow_interval_
     effective_win_distance = effective_win_distance,
     energy_score_bf = energy_score_pred,
     energy_score_st = energy_score_st,
-    energy_improvement = energy_score_st - energy_score_pred
+    energy_improvement = energy_score_st - energy_score_pred,
+    pred_elapsed_dist_by_pred = pred_elapsed_dist_by_pred,
+    pred_elapsed_dist_by_st = pred_elapsed_dist_by_st
     ))
 }
 
