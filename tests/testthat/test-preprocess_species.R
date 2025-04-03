@@ -16,7 +16,7 @@ test_that("preprocess_species runs on test dataset", {
   div_results <- ext(a)[, ] %/% xres(a) # exact division
   expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))   # Test if origin is at 0, 0
 
-  # Snapshot test of first 12 non-zero values in the 5th distribibution
+  # Snapshot test of first 12 non-zero values in the 5th distribution
   d <- get_distr(a, 5)
   df <- data.frame(i = seq_along(d), density = d)
   df <- df[!df$density == 0, ]
@@ -291,7 +291,7 @@ test_that("preprocess_species() works with trim_quantile", {
     get_distr(bf_trim, c(1, 10, 20, 40)) |> plot_distr(bf_trim)
   }
 
-  skip("Slow test of quatile trimming on Robins - always skipped.")
+  skip("Slow test of quantile trimming on Robins - always skipped.")
 
   # This test requires a valid ebirdst key as well
 

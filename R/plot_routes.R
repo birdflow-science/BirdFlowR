@@ -1,28 +1,19 @@
 #' @rdname plot_routes
 #' @title Plot Routes
 #' @description
-#' Plot routes as lines with color indicating the passage of time and dot size
-#' indicating the length of stay at each stop.
+#' Plot `Routes` and `BirdFlowRoutes` objects as as lines with color indicating
+#' the passage of time. For `BirdFlowRoutes` the end point of each week
+#' is shown as a dot and the size of the dot corresponds to how long the birds
+#' stayed at that location.
 #' @details `plot.BirdFlowRoutes()` calls `plot_routes()`.
 #'
-#' As of 6/13/2023 `route()` returns an object of class `BirdFlowRoutes`
-#' that is a data frame with some extra attributes tacked on.
 #'
-#' That `route()` returns a object with feature data -- data frame that contains the data
-#' formerly in the `points` component with columns as described here is, I think
-#' finalized.
-#'
-#' However, whether we keep it an S3 class and whether we keep the extra
-#' attributes is experimental. If you want to be defensive and not use the
-#' experimental aspects then call `as.data.frame(rts)` to convert to a standard
-#' data.frame.
-#'
-#' @param routes The output of [route()] or a similarly structured data frame.
-#' @param bf,x A BirdFlow object.
+#' @param routes,x An object of class `Routes` or  `BirdFlowRoutes`.  Likely the
+#' the output of  [route()], [as_BirdFlowRoutes], or [Routes()].
+#' @param bf A BirdFlow object. Only used if `x` is a `Routes` object, in
+#' which case it provides the CRS and
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
-#' @param stay_units The unit to plot the stay length at each location. Default 
-#' to `weeks`. Other options include `sec`, `mins`, `hours` and `weeks`.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
 #' (the default) it will be set to the maximum `"stay_len"` value in `routes`.
 #' Set it manually to keep the dot scaling consistent across multiple plots.
@@ -40,8 +31,15 @@
 #' @param coast_linewidth Line width used for coastlines.
 #' @param dot_sizes Two numbers indicating the smallest and largest dot sizes
 #'  used to represent stay length.
-#' @param ... Passed to `plot_routes()`
-#'
+#' @param stay_units The unit to plot the stay length at each location. Default
+#' to `weeks`. Other options include `sec`, `mins`, `hours`, `days` and `weeks`.
+#' @param show_mask Should the BirdFlowModel's (`bf`) static mask be displayed.
+#' @param crs Only used when `bf` is missing.  `crs` sets the Coordinate
+#' Reference system used for plotting. See [terra::crs()].
+#' @param static For internal use. It is set to `FALSE` when `plot_routes()` is
+#' called from [animate_routes()].
+#' @param ... Passed to `plot_routes()` from `plot()` for `Route` and
+#' `BirdFlowRoutes` objects.
 #' @return A ggplot object. Use [print()] to display it.
 #' @export
 #' @importFrom rlang .data
@@ -74,13 +72,21 @@
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE,
 #'             pal = c("red", "yellow", "blue"))
 #'}
-plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE, 
+plot_routes <- function(routes,
+                        bf,
+                        facet = FALSE,
                         max_stay_len = NULL,
-                        use_seasonal_colors = TRUE, pal = NULL,
+                        use_seasonal_colors = TRUE,
+                        pal = NULL,
                         barheight = 8,
                         route_linewidth = .85,
                         dot_sizes = c(1.1, 3.5),
-                        coast_linewidth =  .25) {
+                        coast_linewidth =  .25,
+                        stay_units = "weeks",
+                        show_mask = TRUE,
+                        crs = NULL,
+                        res = NULL,
+                        static = TRUE) {
 
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range
@@ -126,26 +132,55 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
   # that work directly with the routes object instead of making a fake BirdFlow
   # object to use locally.
   #
+  # As of March 2025 the Routes and BirdFlowRoutes classes have been formalized
+  # and are now built around a list object.
   #----------------------------------------------------------------------------#
-  if (missing(bf) && inherits(routes, "BirdFlowRoutes")) {
+  has_bf <- !missing(bf)
+  has_stays <- has_bf
+  if(has_bf) {
+    ## Back compatibility code to guarantee the bf$dates object matches
+    # the current format
+    bf$dates <- get_dates(bf)
+  }
+
+
+  if (!has_bf && inherits(routes, "BirdFlowRoutes")) {
+    # Make psuedo BirdFlow object from BirDFlowRoutes components
     bf <- new_BirdFlow()
     bf$dates <- routes$dates
     bf$geom <- routes$geom
     bf$metadata <- routes$metadata
     bf$species <- routes$species
+    has_bf <- TRUE
+    has_stays <- TRUE
   }
+
+  # If "Routes" object supplied add x and y and set crs
+  if(inherits(routes, "Routes") && !inherits(routes, "BirdFlowRoutes")) {
+    if(has_bf) {
+      has_stays <- FALSE
+    }
+
+    if(!has_bf) {
+      if (is.null(crs)) {
+        warning("Using latitude and longitude for plotting. This will",
+                "create a lot of distortion. Use the bf or crs argument to",
+                "set a coordinate reference system for plotting")
+        crs <- terra::crs("EPSG:4326")
+      }
+      crs <- terra::crs(crs)
+      has_bf <- FALSE
+
+      # Add  x and y columns (in CRS) to data
+      xy <- latlon_to_xy(lat = routes$data$lat, lon = routes$data$lon, bf = crs)
+      routes$data$x <- xy$x
+      routes$data$y <- xy$y
+    }
+  } # end Routes object
 
   #----------------------------------------------------------------------------#
   # Data reformatting and preparation
   #----------------------------------------------------------------------------#
-
-  # Check for full output from route() and select just point component
-  # This is to ease the transition in return format for route()
-  # (from a list with $points and $lines to just the $points component)
-  if (is.list(routes) && all(names(routes) %in% c("points", "lines")) &&
-      is.data.frame(routes$points)) {
-    routes <- routes$points
-  }
 
   # Reformat and add additional columns to routes
   # date is a date formatted version of the original character date
@@ -163,15 +198,17 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
   routes$data$pyear <- proportion_of_year(routes$data$date)
 
   # Calculate Elapsed time at location - used by animate_routes()
-  routes$data <- routes$data |>
-    dplyr::group_by(.data$route_id, .data$stay_id) |>
-    dplyr::mutate(elapsed_stay = as.numeric(date - min(date), units = stay_units)) |>
-    as.data.frame()
+  if (has_stays){
+    routes$data <- routes$data |>
+      dplyr::group_by(.data$route_id, .data$stay_id) |>
+      dplyr::mutate(elapsed_stay = as.numeric(date - min(date), units = stay_units)) |>
+      as.data.frame()
+  }
 
   # Calculate year number (input to HPY calculation)
   routes$data <- routes$data |>
     dplyr::group_by(.data$route_id) |>
-    dplyr::mutate(year_number = calc_year_number(.data$timestep)) |>
+    dplyr::mutate(year_number = calc_year_number(.data$date)) |>
     as.data.frame()
   if (!all(routes$data$year_number %in% c(1, 2)))
     stop("Track passes through parts of three distinct years and",
@@ -179,34 +216,40 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
 
   # CalculateHPV) 0 to 0.5 for the first year
   # 0.5 to 1 for the second year (if track crosses year boundary)
-  routes$data$hpy <- 0.5 * routes$data$pyear + 0.5 * (routes$data$year_number - 1)
+  routes$data$hpy <- 0.5 * routes$data$pyear +
+    0.5 * (routes$data$year_number - 1)
+
 
   # Make raster showing which cells are active in the model
-  rast <- rasterize_distr(rep(TRUE, n_active(bf)), bf, format = "dataframe")
-  rast$value[is.na(rast$value)] <- FALSE
-  rast$value <- rast$value
-
+  if (has_bf && show_mask) {
+    rast <- rasterize_distr(rep(TRUE, times = n_active(bf)),
+                            bf, format = "dataframe")
+    rast$value[is.na(rast$value)] <- FALSE
+  }
 
   #----------------------------------------------------------------------------#
   # Data summary
   #----------------------------------------------------------------------------#
+  if (has_stays) {
+    # Maximum length of stay
+    if (is.null(max_stay_len))
+      max_stay_len <- max(routes$data$elapsed_stay)
+    # must be at least 2 so range isn't a point
+    max_stay_len <- max(max_stay_len, 2)
 
-  # Maximum length of stay
-  if (is.null(max_stay_len))
-    max_stay_len <- max(routes$data$elapsed_stay)
-  # must be at least 2 so range isn't a point
-  max_stay_len <- max(max_stay_len, 2)
+    # Set breaks for stay length (label values in legend)
+    stay_len_range <- c(0, max_stay_len) # range of stay length
+    stay_len_breaks <- unique(sort(c(0,
+                                     round(exp(seq(log(1), log(max_stay_len), length.out = 5)))[2:5]
+    ))) # label values
+    stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
 
-  # Set breaks for stay length (label values in legend)
-  stay_len_range <- c(0, max_stay_len) # range of stay length
-  stay_len_breaks <- unique(sort(c(0, 
-                                   round(exp(seq(log(1), log(max_stay_len), length.out = 5)))[2:5]
-                                   ))) # label values
-  stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
+  }
 
   # Calculate the range and breaks in half proportional year values
   hpy_range <- range(routes$data$hpy)
-  hpy_breaks <- make_pyear_breaks(hpy_range, bf)
+  hpy_breaks <- make_pyear_breaks(hpy_range,
+                                  dates = ifelse(has_bf, bf$dates, NA))
 
   # Set subtitle based on unique date ranges in the data
   date_ranges <- routes$data |>
@@ -218,7 +261,27 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
                   label = paste0(.data$first, " - ", .data$last)) |>
     dplyr::select(dplyr::last_col()) |>
     dplyr::distinct()
-  subtitle <- paste(date_ranges$label, collapse = ", ")
+
+
+  if(length(date_ranges$label) == 1){
+    # All same range likely either synthetic routes or
+    # a single real route
+    subtitle <- paste(date_ranges$label, collapse = ", ")
+  } else {
+    # Varied date ranges use the entire date window for routes
+    # with year
+    date_range <- range(routes$data$date)
+    subtitle <-   paste(lubridate::month(date_range,
+                                         label = TRUE,
+                                         abbr = FALSE),
+                        " ",
+                        lubridate::day(date_range),
+                        ", ",
+                        lubridate::year(date_range),
+                        collapse = " - ", sep = "")
+  }
+
+  plot_title <- ifelse(has_bf, species(bf), routes$species$common_name)
 
   #----------------------------------------------------------------------------#
   # Set parameters that control plot aesthetics
@@ -264,20 +327,37 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
     ggplot2::guides(fill = "none") +
 
     ggplot2::scale_fill_manual(values = c(`TRUE` = active_cell_color,
-                                          `FALSE` = inactive_cell_color)) +
+                                          `FALSE` = inactive_cell_color))
 
-    # Add the raster (showing active vs inactive cells in shades of grey)
-    ggplot2::geom_raster(data = rast,
-                         ggplot2::aes(fill = .data$value)) +
+  if (has_bf && show_mask) {
+    p <- p +
+      # Add the raster (showing active vs inactive cells in shades of grey)
+      ggplot2::geom_raster(data = rast,
+                           ggplot2::aes(fill = .data$value))
+  }
 
-    # Add stay dots
-    # Note group is a seq along the time axis
-    # and not the route (or line id) so that it works properly with
-    # transition_reveal (see last example in ?transition_reveal)
-    ggplot2::geom_point(
-      ggplot2::aes(size = .data$elapsed_stay,
-                   color = .data$hpy,
-                   group = seq_along(.data$hpy))) +
+  if (has_stays) {
+    p <- p +
+      # Add stay dots
+      # Note group is a seq along the time axis
+      # and not the route (or line id) so that it works properly with
+      # transition_reveal (see last example in ?transition_reveal)
+      ggplot2::geom_point(
+        ggplot2::aes(size = .data$elapsed_stay,
+                     color = .data$hpy,
+                     group = seq_along(.data$hpy))) +
+
+
+      # Setup stay dot scale and legend
+
+      ggplot2::scale_size_area(limits = stay_len_range,
+                               max_size = dot_sizes[2],
+                               breaks = stay_len_breaks,
+                               name = paste0("Stay Length\n", "(", stay_units, ")"),
+                               guide = ggplot2::guide_legend(order = 0))
+  } # end has stays
+
+  p <- p +
 
     # Add route lines
     ggplot2::geom_path(ggplot2::aes(color = .data$hpy,
@@ -295,25 +375,37 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
       limits = hpy_range,
       guide = ggplot2::guide_colorbar(reverse = TRUE,
                                       barheight = barheight,
-                                      order = 1)) +
-
-    # Setup stay dot scale and legend
-    ggplot2::scale_size_area(limits = stay_len_range,
-                             max_size = dot_sizes[2],
-                             breaks = stay_len_breaks,
-                             name = paste0("Stay Length\n", "(", stay_units, ")"),
-                             guide = ggplot2::guide_legend(order = 0))
+                                      order = 1))
 
   # Plot coastal data
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
 
     # Coastline for this model
-    suppress_specific_warnings({
-      coast <- get_coastline(bf)
-    }, "No objects within extent. Returning empty sf object.")
+    if(has_bf) {
+      suppress_specific_warnings({
+        coast <- get_coastline(bf)
+      }, "No objects within extent. Returning empty sf object.")
+    } else {
+      buffer_prop <- 0.05
+      xmin <- min(routes$data$x)
+      xmax <- max(routes$data$x)
+      ymin <- min(routes$data$y)
+      ymax <- max(routes$data$y)
+      xbuffer <- (xmax - xmin) * buffer_prop
+      ybuffer <- (ymax - ymin) * buffer_prop
+      xmin  <- xmin - xbuffer
+      xmax <- xmax + xbuffer
+      ymin <- ymin - ybuffer
+      ymax <- ymax + ybuffer
+
+      corners <- data.frame(x = c(xmin, xmax, xmax, xmin),
+                            y = c(ymin, ymin, ymax, ymax))
+      sf_corners <- sf::st_as_sf(corners, coords = c("x", "y"), crs = crs)
+
+      coast <- get_coastline(sf_corners)
+    }
 
     if (nrow(coast) > 0) {
-
       p <- p +
         ggplot2::geom_sf(data = coast,
                          inherit.aes = FALSE,
@@ -324,12 +416,11 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
 
   # coord_sf is required to adjust coordinates while using geom_sf
   # Here we are preventing expanding the extent of the plot.
-  p  <- p +
-    ggplot2::coord_sf(expand = FALSE) +
 
+  p  <- p +
     # Add title and subtitle
     ggplot2::ggtitle(
-      label = species(bf),
+      label = plot_title,
       subtitle = subtitle)
 
   if (facet) {
@@ -344,6 +435,18 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
                      axis.ticks.y = ggplot2::element_blank()
       )
   }
+
+  if(!has_bf) {
+    p <- p +
+      ggplot2::coord_sf(xlim = c(xmin, xmax),
+                        ylim = c(ymin, ymax),
+                        expand = FALSE)
+
+  } else {
+    p  <- p +
+      ggplot2::coord_sf(expand = FALSE)
+  }
+
   return(p)
 }
 
@@ -353,3 +456,15 @@ plot_routes <- function(routes, bf, stay_units = "weeks", facet = FALSE,
 plot.BirdFlowRoutes <- function(x, ...) {
   plot_routes(x, ...)
 }
+
+
+# Internal helper function to determine the year number associated with
+# a series of dates. It returns 1 for the earliest year in dates
+# and every subsequent year increments by 1.  It is agnostic to the
+# order of the dates
+calc_year_number <- function(dates){
+  years <- lubridate::year(dates)
+  year_number <- years - min(years) + 1
+  return(year_number)
+}
+

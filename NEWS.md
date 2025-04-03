@@ -15,9 +15,16 @@
 
 Breaking Changes:
 
-- Old route objects will no longer plot with the updated plot_routes().
-- Anyone who is using plot_routes() to plot data not generated with route() will have to update their objects. Please update the package and get routes using the new `route` function.
-
+- `route()` now produces objects of the `BirdFlowRoutes` class. This class
+  is based on a list object with the primary data within  `$data`.
+- Old route objects will no longer plot with the updated `plot_routes()` or 
+  with `plot()`.
+- Anyone using `plot_routes()` to plot data not generated with `route()` 
+  will have to update their objects. Please update the package and then use
+  `Routes()`   possibly followed by `as_BirdFlowRoutes()` to convert.
+- `snap_to_birdflow()` no longer coerces date-time input to dates before
+  aggregating, and, if the input is date-time the output will be as well.
+  
 
 # BirdFlowR 0.1.0.9069
 2024-10-17

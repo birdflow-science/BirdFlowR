@@ -7,8 +7,6 @@
 animate_routes(routes, bf, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
-
 \item{bf}{A BirdFlow object}
 
 \item{...}{
@@ -16,8 +14,6 @@ animate_routes(routes, bf, ...)
   \describe{
     \item{\code{facet}}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
-    \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
-to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours} and \code{weeks}.}
     \item{\code{max_stay_len}}{Used to scale the stay length dots. If \code{NULL}
 (the default) it will be set to the maximum \code{"stay_len"} value in \code{routes}.
 Set it manually to keep the dot scaling consistent across multiple plots.}
@@ -35,6 +31,13 @@ the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
     \item{\code{coast_linewidth}}{Line width used for coastlines.}
     \item{\code{dot_sizes}}{Two numbers indicating the smallest and largest dot sizes
 used to represent stay length.}
+    \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours}, \code{days} and \code{weeks}.}
+    \item{\code{show_mask}}{Should the BirdFlowModel's (\code{bf}) static mask be displayed.}
+    \item{\code{crs}}{Only used when \code{bf} is missing.  \code{crs} sets the Coordinate
+Reference system used for plotting. See \code{\link[terra:crs]{terra::crs()}}.}
+    \item{\code{static}}{For internal use. It is set to \code{FALSE} when \code{plot_routes()} is
+called from \code{\link[=animate_routes]{animate_routes()}}.}
   }}
 }
 \value{
@@ -53,7 +56,8 @@ one point per route, resulting in a message:
 ℹ Do you need to adjust the group aesthetic?"
 This will possibly be repeated while individuals remain in one location.
 It can be safely ignored. The error is thrown while rendering and not
-from within \code{animate_routes()} where it could not be suppressed."
+from within \code{animate_routes()} so cannot be suppressed by code in
+\pkg{BirdFlowR}.
 }
 \examples{
 
@@ -64,7 +68,7 @@ anim <- animate_routes(rts, bf)
 
 \dontrun{
   # example render
-  timesteps <- unique(rts$timestep)
+  timesteps <- unique(rts$data$timestep)
   gif <- gganimate::animate(anim,
                             device = "ragg_png", # is fast and pretty
                             width = 7, height = 6,

@@ -8,10 +8,11 @@ test_that("Validations of Routes, BirdFlowRoutes, and BirdFlowIntervals work", {
         scientific_name = "Scolopax minor",
         common_name = "American Woodcock"
     )
-    metadata <- NULL
-    source1 <- list(a=c('1'), b=c('2'))
+    source1 <- "Maine"
 
-    expect_no_error(my_routes <- Routes(fake_routes, species = species, metadata = metadata, source = source1))
+    expect_no_error(my_routes <- Routes(fake_routes, species = species,
+                                        source = source1))
+
     expect_no_error(validate_Routes(my_routes))
     expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf=bf))
     expect_no_error(validate_BirdFlowRoutes(my_bfroutes))

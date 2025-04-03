@@ -138,6 +138,9 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
     trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1])
   }
 
+  # Generate route metadata
+  metadata <- bf$metadata[BirdFlowRoutes_metadata_items]
+
   # trajectory to BirdFlowRoutes object
   rts <- format_trajectory(trajectory, bf, timesteps)
   latlon <- xy_to_latlon(rts$x, rts$y, bf)
@@ -146,7 +149,10 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   rts$timestep <- as.integer(rts$timestep)
   rts$route_type <- 'synthetic'
   rts$date <- as.Date(rts$date)
-  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = bf$metadata, geom = bf$geom, dates = get_dates(bf), source='Synthesized from a BirdFlow model')
+  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = bf$metadata,
+                        geom = bf$geom, dates = get_dates(bf),
+                        source='Synthesized from a BirdFlow model',
+                        sort_id_and_dates = FALSE)
 
   return(rts)
 }
@@ -163,32 +169,24 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   #  x, y : coordinates of position
   #  timestep : integer timestep, corresponds to rows in the dates element of x
   #  route : integer route ID
-  #  date : the date associated with the timestep
+  #  date : the date associated with the timestep, adjusted to always be
+  #  monotonic (year will advance)
   x <- as.vector(i_to_x(trajectory, bf))
   y <- as.vector(i_to_y(trajectory, bf))
   timestep <- rep(timesteps, times = ncol(trajectory))
+  year_offsets <- rep(calc_year_offset(timesteps), times = ncol(trajectory))
   route_id <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
-  date <- get_dates(bf)$date[timestep]
+  date <- get_dates(bf)$date[timestep] |> lubridate::as_date()
+
+  # Add year offset to dates to make monotonic
+  lubridate::year(date) <- lubridate::year(date) + year_offsets
+
 
   points <- data.frame(x, y, route_id, timestep, date,
                        i = as.vector(trajectory))
 
-  # Adjust dates -- If it crosses the year boundary, add year by 1
-  points$date <- as.Date(points$date)
-  
-  check_whether_year_plus_one <- function(dates_) {
-    year_shifts <- c(0, cumsum(dates_[-1] < dates_[-length(dates_)]))
-    return(dates_ + lubridate::years(year_shifts))
-  }
-  
-  points <- points |>
-      dplyr::group_by(.data[['route_id']]) |>
-      dplyr::mutate(
-        date = check_whether_year_plus_one(.data[['date']])
-      ) |>
-      dplyr::ungroup() |>
-      as.data.frame() |> 
-      sort_by_id_and_dates()
+  # Note sorting by ID and dates (1) should not be necessary here, and
+  # (2) will break routes that are backwards in time.
 
   return(points)
 }
