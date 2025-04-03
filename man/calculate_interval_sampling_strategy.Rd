@@ -22,9 +22,9 @@ calculate_interval_sampling_strategy(
 
 \item{max_day_interval}{The maximum days required in an interval.}
 
-\item{min_km_interval}{The minimum distance required for an interval}
+\item{min_km_interval}{The minimum distance required for an interval.}
 
-\item{max_km_interval}{The maximum distance required for an interval}
+\item{max_km_interval}{The maximum distance required for an interval.}
 }
 \value{
 A data frame with the columns:

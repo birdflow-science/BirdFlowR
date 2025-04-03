@@ -162,11 +162,6 @@ get_interval_based_metrics <- function(birdflow_intervals, bf){
                 weighted_mean_win_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$win_distance),
                 weighted_mean_null_ll=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$null_ll),
                 weighted_mean_ll=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ll),
-                
-                # weighted_mean_ELC_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ELC_distance),
-                # weighted_mean_ELC_prob=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$ELC_prob),
-                # weighted_mean_RELC_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$RELC_distance),
-                # weighted_mean_RELC_prob=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$RELC_prob),
 
                 weighted_mean_effective_win_distance=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$effective_win_distance),
                 weighted_energy_improvement=sum((dists$global_prob_of_the_starting / sum(dists$global_prob_of_the_starting)) * dists$energy_improvement),

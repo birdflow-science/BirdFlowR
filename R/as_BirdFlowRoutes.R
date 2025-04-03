@@ -82,7 +82,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random',
   # Only successfully converted spatiotemporal points will be included
   if (valid_only){
     routes$data <- routes$data |>
-      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]))
+      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]) & !.data[['error']])
   }
 
   # add some attributes (e.g., lon and lat) back, and convert data type.
