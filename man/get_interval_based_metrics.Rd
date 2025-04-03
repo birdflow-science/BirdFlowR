@@ -2,7 +2,8 @@
 % Please edit documentation in R/interval_based_validation.R
 \name{get_interval_based_metrics}
 \alias{get_interval_based_metrics}
-\title{Get interval based metrics, including distance metrics for all transition pairs}
+\title{Get interval based metrics, including distance metrics
+for all transition pairs}
 \usage{
 get_interval_based_metrics(birdflow_intervals, bf)
 }
@@ -15,5 +16,6 @@ get_interval_based_metrics(birdflow_intervals, bf)
 mean metrics across transition pairs
 }
 \description{
-Get interval based metrics, including distance metrics for all transition pairs
+Get interval based metrics, including distance metrics
+for all transition pairs
 }

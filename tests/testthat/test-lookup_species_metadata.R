@@ -5,7 +5,7 @@ test_that("lookup_species_metadata() has consistent output", {
 
   v <- ebirdst_pkg_ver()
   v_year <- v[1, 2]
-  if(is.na(v) || !v_year == 2022)
+  if (is.na(v) || !v_year == 2022)
     skip("Test expects ebirdst year to be 2022")
 
   expect_snapshot(lookup_species_metadata("amewoo"))

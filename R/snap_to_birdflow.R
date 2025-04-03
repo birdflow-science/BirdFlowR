@@ -50,7 +50,8 @@
 #'  * `random` One observation is randomly selected for each week.
 #'
 #'  Pending ideas, not yet implemented:
-#'  * `gmedian` [geometric median](https://cran.r-project.org/web/packages/Gmedian/index.html)
+#'  * `gmedian` 
+#'  [geometric median](https://cran.r-project.org/web/packages/Gmedian/index.html)
 #'  * `central` The point closest to the centroid of all the points is used to
 #'  represent the week.
 #' @return A data frame with columns
@@ -158,7 +159,7 @@ snap_to_birdflow <- function(d, bf,
   # Standardize date column name, date format, and add timesteps
   # BUT allow date-time objects to stay in their original format
   # so that aggregation works on date + time
-  if(!inherits(d$date, c("Date", "POSIXct", "POSIXlt"))) {
+  if (!inherits(d$date, c("Date", "POSIXct", "POSIXlt"))) {
     d$date <- suppressWarnings(lubridate::as_date(d[[date_col]]))
   }
   errors$err_date[is.na(d$date)]  <- TRUE
@@ -221,7 +222,7 @@ snap_to_birdflow <- function(d, bf,
               d$mid <- lookup_date(d$timestep, bf)
 
               # If using date-times add 12 hours so noon is the midpoint
-              if(inherits(d$date, c("POSIXct", "POSIXlt"))){
+              if (inherits(d$date, c("POSIXct", "POSIXlt"))) {
                 d$mid <- as.POSIXct(d$mid) + as.difftime(12, units = "hours")
               }
               # find which element in x is closest to y
@@ -238,7 +239,7 @@ snap_to_birdflow <- function(d, bf,
                 y = .data$y[closest(.data$date, .data$mid)],
                 date = .data$date[closest(.data$date, .data$mid)],
                 n = dplyr::n())
-              # d$mid <- NULL
+
               d},
            "random" = {
              d |>
@@ -250,7 +251,8 @@ snap_to_birdflow <- function(d, bf,
            },
 
            # If none of the above match
-           stop("aggregate should be \"mean\" or \"median\" or \"midweek\" or \"random\"")
+           stop("aggregate should be \"mean\" or 
+           \"median\" or \"midweek\" or \"random\"")
            )
 
     d <- as.data.frame(d)

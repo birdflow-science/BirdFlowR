@@ -2,8 +2,11 @@
 % Please edit documentation in R/interval_based_validation.R
 \name{get_interval_based_validation_one_transition_pair}
 \alias{get_interval_based_validation_one_transition_pair}
-\title{Calculate the interval based validation, including predictive distance metric, log likelihood, and log likelihood baseline
-For distance metrics: What is the distance and probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?
+\title{Calculate the interval based validation, including predictive distance metric
+, log likelihood, and log likelihood baseline
+For distance metrics: What is the distance and probability that BirdFlow
+model prediction beats the naive S&T probability
+distribution-based prediction?
 Get the interval based validation metrics for one transition pair}
 \usage{
 get_interval_based_validation_one_transition_pair(
@@ -27,7 +30,10 @@ location as rows, probability as values.}
 A named vector with distance metrics
 }
 \description{
-Calculate the interval based validation, including predictive distance metric, log likelihood, and log likelihood baseline
-For distance metrics: What is the distance and probability that BirdFlow model prediction beats the naive S&T probability distribution-based prediction?
+Calculate the interval based validation, including predictive distance metric
+, log likelihood, and log likelihood baseline
+For distance metrics: What is the distance and probability that BirdFlow
+model prediction beats the naive S&T probability
+distribution-based prediction?
 Get the interval based validation metrics for one transition pair
 }

@@ -59,7 +59,8 @@ is used.
 
 Pending ideas, not yet implemented:
 \itemize{
-\item \code{gmedian} \href{https://cran.r-project.org/web/packages/Gmedian/index.html}{geometric median}
+\item \code{gmedian}
+\href{https://cran.r-project.org/web/packages/Gmedian/index.html}{geometric median}
 \item \code{central} The point closest to the centroid of all the points is used to
 represent the week.
 }}

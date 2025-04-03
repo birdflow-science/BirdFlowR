@@ -48,7 +48,7 @@ make_pyear_breaks <- function(range, dates, target_n = 8, hpy = TRUE) {
 
   fifteenths <- proportion_of_year(paste0("2023-", 12:1, "-15"))
 
-  if(is.na(dates)) {
+  if (is.na(dates)) {
     model_timesteps <-  (seq_len(52) - 0.5) / 52
   } else {
     model_timesteps <- proportion_of_year(dates$date)

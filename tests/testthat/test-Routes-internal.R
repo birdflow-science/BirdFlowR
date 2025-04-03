@@ -30,8 +30,8 @@ test_that("Reset index in BirdFlowRoutes works", {
     y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
     i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
     timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-    route_type = c("tracking", 'tracking', "tracking", 'tracking',
-                   'tracking', "motus", "motus", "motus", "motus")
+    route_type = c("tracking", "tracking", "tracking", "tracking",
+                   "tracking", "motus", "motus", "motus", "motus")
   )
   geom <- bf$geom
 
@@ -78,12 +78,11 @@ test_that("Extra columns are retained and don't cause problems", {
     my_routes <- Routes(fake_routes, species = species1, source = source1))
 
   expect_no_error(
-    my_bfroutes <- as_BirdFlowRoutes(my_routes, bf=bf))
+    my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf))
 
   expect_no_error(
     my_intervals <- as_BirdFlowIntervals(my_bfroutes))
 
-  my_intervals$data$info <- 'Some random info for the intervals'
+  my_intervals$data$info <- "Some random info for the intervals"
 
 })
-

@@ -14,9 +14,8 @@ test_that("Validations of Routes, BirdFlowRoutes, and BirdFlowIntervals work", {
                                         source = source1))
 
     expect_no_error(validate_Routes(my_routes))
-    expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf=bf))
+    expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf))
     expect_no_error(validate_BirdFlowRoutes(my_bfroutes))
     expect_no_error(my_intervals <- as_BirdFlowIntervals(my_bfroutes))
     expect_no_error(validate_BirdFlowIntervals(my_intervals))
 })
-

@@ -14,9 +14,12 @@ calculate_interval_sampling_strategy(
 )
 }
 \arguments{
-\item{routes}{A data frame similar to the data feature in \code{Routes} -- with columns \code{route_id}, \code{date}, \code{lon} and \code{lat}.}
+\item{routes}{A data frame similar to the data feature in \code{Routes} --
+with columns \code{route_id}, \code{date}, \code{lon} and \code{lat}.}
 
-\item{n}{The total maximum number of intervals to sample. Notice: The actual output of intervals might be less than n, because of data deficiency. But never larger than n.}
+\item{n}{The total maximum number of intervals to sample. Notice:
+The actual output of intervals might be less than n,
+because of data deficiency. But never larger than n.}
 
 \item{min_day_interval}{The minimum days required in an interval.}
 
@@ -31,7 +34,8 @@ A data frame with the columns:
 \itemize{
 \item \code{route_id}: The route ID.
 \item \code{time_points}: The number of time points in the route.
-\item \code{interval_pairs}: The total number of possible interval pairs for the route.
+\item \code{interval_pairs}: The total number of possible interval
+pairs for the route.
 \item \code{intervals_to_sample}: The number of intervals to sample for the route.
 }
 }

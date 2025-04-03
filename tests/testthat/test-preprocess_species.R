@@ -14,7 +14,8 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
   div_results <- ext(a)[, ] %/% xres(a) # exact division
-  expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))   # Test if origin is at 0, 0
+  expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))
+  # Test if origin is at 0, 0
 
   # Snapshot test of first 12 non-zero values in the 5th distribution
   d <- get_distr(a, 5)

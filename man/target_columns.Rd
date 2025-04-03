@@ -14,29 +14,38 @@ get_target_columns_BirdFlowRoutes(type = "input")
 get_target_columns_BirdFlowIntervals(type = "input")
 }
 \arguments{
-\item{type}{A character string specifying the context for the columns. Either \code{'input'} (default)
-for required input columns or \code{'output'} for columns expected after processing.}
+\item{type}{A character string specifying the context for the columns.
+Either \code{'input'} (default)
+for required input columns or \code{'output'} for columns expected after
+processing.}
 }
 \value{
 A character vector containing the expected column names.
 }
 \description{
-A collection of internal utility functions to retrieve the required column names
-for \code{Routes}, \code{BirdFlowRoutes}, and \code{BirdFlowIntervals} objects. These functions ensure
+A collection of internal utility functions to retrieve the
+required column names
+for \code{Routes}, \code{BirdFlowRoutes}, and \code{BirdFlowIntervals} objects. These
+functions ensure
 consistency in data frame structures across different processing steps.
 }
 \details{
-These functions return the expected column names for \code{Routes}, \code{BirdFlowRoutes} and \code{BirdFlowIntervals} dataclasses.
-Columns may vary depending on whether the context is for input or output processing:
+These functions return the expected column names for \code{Routes},
+\code{BirdFlowRoutes} and \code{BirdFlowIntervals} dataclasses.
+Columns may vary depending on whether the context is for input or output
+processing:
 \itemize{
-\item \strong{Input Columns}: Columns required for validation or initial data ingestion.
+\item \strong{Input Columns}: Columns required for validation or initial data
+ingestion.
 \item \strong{Output Columns}: Columns expected after processing or transformation.
 }
 \subsection{Functions Included:}{
 \itemize{
 \item \code{get_target_columns_Routes()}: Returns column names for \code{Routes} objects.
-\item \code{get_target_columns_BirdFlowRoutes()}: Returns column names for \code{BirdFlowRoutes} objects.
-\item \code{get_target_columns_BirdFlowIntervals()}: Returns column names for \code{BirdFlowIntervals} objects.
+\item \code{get_target_columns_BirdFlowRoutes()}: Returns column names for
+\code{BirdFlowRoutes} objects.
+\item \code{get_target_columns_BirdFlowIntervals()}: Returns column names for
+\code{BirdFlowIntervals} objects.
 }
 }
 }

@@ -26,46 +26,62 @@
 #' bf <- BirdFlowModels::amewoo
 #' bf_routes <- as_BirdFlowRoutes(routes, bf)
 #'
-print.Routes <- function(x, ...){
-  stopifnot(inherits(x,'Routes')) # TRUE for BirdFlowRoutes
-  crossline <- '---------------------------------------------'
-  cat(crossline,'\n')
-  cat(sprintf("%s Object", class(x)[1]), '\n\n')
+print.Routes <- function(x, ...) {
+  stopifnot(inherits(x, "Routes")) # TRUE for BirdFlowRoutes
+  crossline <- "---------------------------------------------"
+  cat(crossline, "\n")
+  cat(sprintf("%s Object", class(x)[1]), "\n\n")
 
   pad_width <- 18
-  species <- unlist(x$species[c( "common_name", "scientific_name",
-                                 "species_code")])
-  if(!all(is.na(species))) {
+  species <- unlist(x$species[c(
+    "common_name", "scientific_name",
+    "species_code"
+  )])
+  if (!all(is.na(species))) {
     species <- species[!is.na(species)]
     cat(format("Species:", width = pad_width),
-        paste(species, collapse = " / "), "\n", sep = "")
+      paste(species, collapse = " / "), "\n",
+      sep = ""
+    )
   }
 
   types <- unique(x$data$route_type)
   type_label <- ifelse(length(types) > 1, "Types: ", "Type: ")
   pad <- function(x) format(x, width = pad_width)
   cat(format(type_label, width = pad_width), paste(types, collapse = ", "),
-      "\n", sep = "")
+    "\n",
+    sep = ""
+  )
   cat(pad("Number of routes:"), length(unique(x$data$route_id)), "\n", sep = "")
   cat(pad("Number of points: "), nrow(x$data), "\n", sep = "")
   cat(pad("Date range:"),
-      format(min(x$data$date)), ", ", format(max(x$data$date)), "\n", sep = "")
+    format(min(x$data$date)), ", ", format(max(x$data$date)), "\n",
+    sep = ""
+  )
   cat(pad("Longitude range:"),
-      range(x$data$lon) |> format(nsmall = 4) |> paste(collapse = ", "),
-      "\n", sep = "")
+    range(x$data$lon) |> format(nsmall = 4) |> paste(collapse = ", "),
+    "\n",
+    sep = ""
+  )
   cat(pad("Latitude range:"),
-      range(x$data$lat) |> format(nsmall = 4) |> paste(collapse = ", "),
-      "\n", sep = "")
+    range(x$data$lat) |> format(nsmall = 4) |> paste(collapse = ", "),
+    "\n",
+    sep = ""
+  )
 
 
-  if(inherits(x, "BirdFlowRoutes")) {
-    cat(pad("Dimensions:"), x$geom$nrow, ", ",  x$geom$ncol,
-        "  (nrow, ncol)\n", sep = "")
-    cat(pad("Resolution:"),  paste(x$geom$res, collapse = ", "),
-        " m (x, y)\n", sep = "")
+  if (inherits(x, "BirdFlowRoutes")) {
+    cat(pad("Dimensions:"), x$geom$nrow, ", ", x$geom$ncol,
+      "  (nrow, ncol)\n",
+      sep = ""
+    )
+    cat(pad("Resolution:"), paste(x$geom$res, collapse = ", "),
+      " m (x, y)\n",
+      sep = ""
+    )
   }
 
-  cat(crossline,'\n')
+  cat(crossline, "\n")
 
   print_type_breakdown(x, crossline)
 
@@ -75,7 +91,7 @@ print.Routes <- function(x, ...){
 
   # Print the data.frame part
   print(head(x$data, 5))
-  if(nrow(x$data) > 5) {
+  if (nrow(x$data) > 5) {
     cat("(", nrow(x$data) - 5, " lines omitted)\n", sep = "")
   }
 
@@ -106,15 +122,17 @@ print_type_breakdown <- function(x, crossline) {
   stopifnot(inherits(x, "Routes") || inherits(x, "BirdFlowIntervals"))
 
   # Only print type breakdown if there is more than one type
-  if(length(unique(x$data$route_type)) == 1)
+  if (length(unique(x$data$route_type)) == 1) {
     return()
+  }
 
-  summary  <- x$data |>
-    dplyr::group_by(.data[['route_type']]) |>
+  summary <- x$data |>
+    dplyr::group_by(.data[["route_type"]]) |>
     dplyr::summarize(
-      Routes = dplyr::n_distinct(.data[['route_id']]),
+      Routes = dplyr::n_distinct(.data[["route_id"]]),
       Points = dplyr::n(),
-      .groups = "drop") |>
+      .groups = "drop"
+    ) |>
     dplyr::rename(Type = "route_type") |>
     as.data.frame()
 
@@ -129,10 +147,9 @@ print_type_breakdown <- function(x, crossline) {
 print_source <- function(x, crossline) {
   stopifnot(inherits(x, "Routes") || inherits(x, "BirdFlowIntervals"))
   # source
-  if (!is.null(x$source) && is.character(x$source) && !all(is.na(x$source)))  {
+  if (!is.null(x$source) && is.character(x$source) && !all(is.na(x$source))) {
     cat("Source", ifelse(length(x$source) > 1, "s", ""), ":\n", sep = "")
     cat(x$source, sep = "\n")
-    cat(crossline,'\n')
+    cat(crossline, "\n")
   }
-
 }

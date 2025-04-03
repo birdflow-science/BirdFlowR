@@ -56,49 +56,67 @@ validate_BirdFlowRoutes_dates(dates)
 validate_BirdFlowIntervals_interval_id(interval_id)
 }
 \arguments{
-\item{route_id}{A vector of route IDs (character or numeric). Must not contain missing values.}
+\item{route_id}{A vector of route IDs (character or numeric). Must not
+contain missing values.}
 
-\item{date_vector}{A vector of dates (\code{Date}, \code{POSIXct}, or \code{POSIXlt}). Must not contain missing values;
-Must not have duplicates within a \code{route_id} (for \code{BirdFlowRoutes}; but not for \code{Routes}).}
+\item{date_vector}{A vector of dates (\code{Date}, \code{POSIXct}, or \code{POSIXlt}).
+Must not contain missing values;
+Must not have duplicates within a \code{route_id} (for \code{BirdFlowRoutes}; but
+not for \code{Routes}).}
 
-\item{lon_vector, }{lat_vector Numeric vectors for longitude and latitude. Must not contain missing values and must be within valid ranges.}
+\item{lon_vector, }{lat_vector Numeric vectors for longitude and latitude.
+Must not contain missing values and must be within valid ranges.}
 
-\item{route_type_vector}{A character vector of route types. Must only contain valid types.}
+\item{route_type_vector}{A character vector of route types. Must only contain
+valid types.}
 
-\item{x_vector, }{y_vector Numeric vectors for spatial coordinates. Must not contain missing values.}
+\item{x_vector, }{y_vector Numeric vectors for spatial coordinates. Must not
+contain missing values.}
 
-\item{i_vector}{An integer vector for spatial indices. Must not contain missing values.}
+\item{i_vector}{An integer vector for spatial indices. Must not contain
+missing values.}
 
-\item{timestep_vector}{An integer vector for timesteps, paired with \code{route_id_vector}.}
+\item{timestep_vector}{An integer vector for timesteps, paired with
+\code{route_id_vector}.}
 
-\item{stay_id_vector}{A numeric or character vector for stay IDs. Must not contain missing values.}
+\item{stay_id_vector}{A numeric or character vector for stay IDs. Must not
+contain missing values.}
 
-\item{stay_len_vector}{An integer vector for stay lengths. Must not contain missing values.}
+\item{stay_len_vector}{An integer vector for stay lengths. Must not contain
+missing values.}
 
-\item{species}{A list with species information. Must include \code{species_code}, \code{scientific_name}, and \code{common_name}.}
+\item{species}{A list with species information. Must include \code{species_code},
+\code{scientific_name}, and \code{common_name}.}
 
 \item{metadata}{A list with additional metadata.}
 
-\item{dates}{A data frame with date-related information. Must include \code{interval}, \code{date}, \code{midpoint}, \code{start}, \code{end}, \code{doy}, and \code{week}.}
+\item{dates}{A data frame with date-related information. Must include
+\code{interval}, \code{date}, \code{midpoint}, \code{start}, \code{end}, \code{doy}, and \code{week}.}
 
-\item{geom}{A list containing geometry attributes. Must include \code{nrow}, \code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
+\item{geom}{A list containing geometry attributes. Must include \code{nrow},
+\code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
 }
 \value{
-Each function returns \code{TRUE} if validation succeeds. If validation fails, an error is raised with details about the issue.
+Each function returns \code{TRUE} if validation succeeds. If validation
+fails, an error is raised with details about the issue.
 }
 \description{
-A collection of internal utility functions to validate individual attributes
-within \code{Routes}, \code{BirdFlowRoutes}, and \code{BirdFlowIntervals}, and related objects. These functions ensure the correctness,
+A collection of internal utility functions to validate
+individual attributes
+within \code{Routes}, \code{BirdFlowRoutes}, and \code{BirdFlowIntervals}, and related
+objects. These functions ensure the correctness,
 consistency, and validity of attributes used in BirdFlow data structures.
 }
 \details{
-These functions validate specific attributes or columns in input data frames. They check:
+These functions validate specific attributes or columns in input
+data frames. They check:
 \itemize{
 \item \strong{General Attributes}:
 \itemize{
 \item \code{route_id}: Ensures IDs are valid and non-missing.
 \item \code{date}: Ensures date formats and non-missing values.
-\item \code{lon} and \code{lat}: Ensure longitude and latitude values are within valid ranges.
+\item \code{lon} and \code{lat}: Ensure longitude and latitude values are within
+valid ranges.
 \item \code{route_type}: Ensures only valid route types are present.
 }
 \item \strong{Spatial Attributes} (for \code{BirdFlowRoutes}):
@@ -116,7 +134,8 @@ These functions validate specific attributes or columns in input data frames. Th
 }
 }
 
-These functions are intended for internal use and are not exported for user-facing functionality.
+These functions are intended for internal use and are not exported for
+user-facing functionality.
 \subsection{Functions Included:}{
 \itemize{
 \item General Validators:

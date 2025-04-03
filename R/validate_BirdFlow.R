@@ -416,10 +416,12 @@ validate_geom <- function(geom, n_active, throw_error = TRUE) {
 
   # Catastrophic problems that prevent other checks
   if (!is.list(geom) || !all(expected_elements %in% names(geom))) {
-    if(!is.list(geom))
-      p <- add_prob("geom is not a list or is missing required elements", "error", p)
+    if (!is.list(geom))
+      p <- add_prob(
+        "geom is not a list or is missing required elements", "error", p
+        )
 
-    if(throw_error && any(p$type == "error")) {
+    if (throw_error && any(p$type == "error")) {
       err <- p$problem[p$type == "error"]
       stop("geometry problems found: ", paste(err, collapse = ", "))
     }
@@ -448,11 +450,10 @@ validate_geom <- function(geom, n_active, throw_error = TRUE) {
     }
   }
 
-  if(throw_error && any(p$type == "error")) {
+  if (throw_error && any(p$type == "error")) {
     err <- p$problem[p$type == "error"]
     stop("geometry problems found: ", paste(err, collapse = ", "))
   }
 
   return(invisible(p))
 }
-

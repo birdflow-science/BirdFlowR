@@ -45,57 +45,69 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #'   route_type = c("tracking", "banding", "unknown")
 #' )
 #' bf <- BirdFlowModels::amewoo
-#' routes<- Routes(route_data,   species = species(bf), source = "Pkg. example")
+#' routes <- Routes(route_data, species = species(bf), source = "Pkg. example")
 #'
 #' bf_routes <- as_BirdFlowRoutes(routes, bf)
 #'
-as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random',
+as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
                               valid_only = TRUE, sort_id_and_dates = TRUE,
-                              reset_index=FALSE){
+                              reset_index = FALSE) {
   # Check input
-  stopifnot(inherits(routes, 'Routes'))
-  stopifnot(inherits(bf, 'BirdFlow'))
+  stopifnot(inherits(routes, "Routes"))
+  stopifnot(inherits(bf, "BirdFlow"))
   stopifnot(is.logical(sort_id_and_dates))
   stopifnot(is.logical(reset_index))
   stopifnot(is.logical(valid_only))
 
   # Sort & reindex
-  if (sort_id_and_dates){
+  if (sort_id_and_dates) {
     routes$data <- (routes$data |> sort_by_id_and_dates())
   }
-  if (reset_index){
+  if (reset_index) {
     routes$data <- (routes$data |> reset_index())
   }
 
   # Conversion
-  original_routes_info <- routes$data |> dplyr::select(dplyr::any_of(c('route_id', 'route_type','info')))
+  original_routes_info <- routes$data |>
+    dplyr::select(dplyr::any_of(c("route_id", "route_type", "info")))
 
   routes$data <- snap_to_birdflow(
     routes$data,
-    bf=bf,
+    bf = bf,
     x_col = "lon", y_col = "lat",
     date_col = "date",
     id_cols = "route_id",
     crs = "EPSG:4326",
-    aggregate = aggregate)
+    aggregate = aggregate
+  )
 
   # Only successfully converted spatiotemporal points will be included
-  if (valid_only){
+  if (valid_only) {
     routes$data <- routes$data |>
-      dplyr::filter(!is.na(.data[['x']]) & !is.na(.data[['y']]) & !is.na(.data[['i']]) & !is.na(.data[['timestep']]) & !.data[['error']])
+      dplyr::filter(!is.na(.data[["x"]]) &
+        !is.na(.data[["y"]]) &
+        !is.na(.data[["i"]]) &
+        !is.na(.data[["timestep"]]) &
+        !.data[["error"]])
   }
 
   # add some attributes (e.g., lon and lat) back, and convert data type.
-  latlon <- xy_to_latlon(x=routes$data$x, y=routes$data$y, bf=bf)
+  latlon <- xy_to_latlon(x = routes$data$x, y = routes$data$y, bf = bf)
   routes$data$lat <- latlon$lat
   routes$data$lon <- latlon$lon
-  routes$data <- merge(routes$data, original_routes_info |> dplyr::distinct(), by='route_id', all.x=TRUE)
+  routes$data <- merge(routes$data, original_routes_info |>
+    dplyr::distinct(),
+  by = "route_id", all.x = TRUE
+  )
   routes$data$timestep <- as.integer(routes$data$timestep)
   routes$data$i <- as.integer(routes$data$i)
-  routes$data <- routes$data |> dplyr::select(-dplyr::all_of(c('n', 'error', 'message')))
+  routes$data <- routes$data |>
+    dplyr::select(-dplyr::all_of(c("n", "error", "message")))
 
   # Transform species to the BirdFlow species list
-  species <- bf$species # Regardless of what the species in the `routes` is -- if using bf, then the species is the species of bf model.
+  species <- bf$species
+  # Regardless of what the species in the `routes` is --
+  # if using bf, then the species is the species of bf model.
   geom <- bf$geom
   dates <- get_dates(bf) # use the up-to-date dates dataframe
 
@@ -103,15 +115,13 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = 'random',
   metadata <- bf$metadata[BirdFlowRoutes_metadata_items]
 
   # Transform to BirdFlowRoutes
-  routes <- BirdFlowRoutes(data = routes$data,
-                           species = species,
-                           metadata = metadata,
-                           geom = geom,
-                           dates = dates,
-                           source = routes$source)
+  routes <- BirdFlowRoutes(
+    data = routes$data,
+    species = species,
+    metadata = metadata,
+    geom = geom,
+    dates = dates,
+    source = routes$source
+  )
   return(routes)
 }
-
-
-
-

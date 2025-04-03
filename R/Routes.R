@@ -44,11 +44,11 @@ Routes <- function(data, species = NULL, source = NULL) {
   validate_Routes_route_df(data)
 
   # Resolve species
-  if(!is.list(species) && !is.null(species) && !is.na(species) &&
+  if (!is.list(species) && !is.null(species) && !is.na(species) &&
      length(species == 1)) {
     species <- lookup_species_metadata(species, quiet = TRUE)
   } else {
-    if(!is.list(species) || !"common_name" %in% names(species)) {
+    if (!is.list(species) || !"common_name" %in% names(species)) {
       stop("Routes() requires a species either as valid input to ",
            "ebirdst::get_species() or a list with at a minimum a ",
            "\"common_name\" element.")
@@ -57,17 +57,17 @@ Routes <- function(data, species = NULL, source = NULL) {
     # drop all species list items that aren't standard
     required_names <- c("species_code", "scientific_name", "common_name")
     missing_names <- setdiff(required_names, names(species))
-    for(name in missing_names)
+    for (name in missing_names)
       species[[name]] <- NA
     allowed_names <- names(new_BirdFlow()$species)
     final_names <- allowed_names[allowed_names %in% names(species)]
     species <- species[final_names]
   }
 
-  if(is.null(source)) {
+  if (is.null(source)) {
     source <- NA_character_
   } else {
-    if(!is.character(source)) {
+    if (!is.character(source)) {
       stop("source should be a character, or character vector")
     }
   }
@@ -77,5 +77,3 @@ Routes <- function(data, species = NULL, source = NULL) {
   obj <- new_Routes(data, species, source)
   return(obj)
 }
-
-

@@ -96,7 +96,7 @@ test_that("route() works with backwards routes", {
     lubridate::year()
 
   expect_equal(years[1], bf_year)
-  expect_equal(years, bf_year + c(rep(0, 4),rep(-1, 3)))
+  expect_equal(years, bf_year + c(rep(0, 4), rep(-1, 3)))
 })
 
 
@@ -110,5 +110,3 @@ test_that("calc_year_number() works", {
   expect_equal(calc_year_number(rev(dates)), c(rep(2, 10), rep(1, 7)))
 
 })
-
-

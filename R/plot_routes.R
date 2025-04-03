@@ -22,7 +22,7 @@
 #' consistent mapping of dates to colors regardless of the range of dates
 #' plotted. If `FALSE` then the data will be plotted using the full color scale.
 #' @param pal The color palette to use for plotting when `use_seasonal_cols` is
-#'`FALSE`. Defaults to [viridisLite::viridis(n = 5)][viridisLite::viridis()].
+#' `FALSE`. Defaults to [viridisLite::viridis(n = 5)][viridisLite::viridis()].
 #' @param barheight The height of the color gradient legend bar. Passed to
 #' [ggplot2::guide_colorbar()] as `barheight` argument. Depending on the output
 #' resolution and plot size this may need to be adjusted. Can take a number or
@@ -44,34 +44,36 @@
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#'bf <- BirdFlowModels::amewoo
-#'n <- 10
-#'rts <- route(bf, n, season = "prebreeding")
+#' bf <- BirdFlowModels::amewoo
+#' n <- 10
+#' rts <- route(bf, n, season = "prebreeding")
 #'
-#'# Multiple routes on one plot
-#'plot_routes(rts, bf)
+#' # Multiple routes on one plot
+#' plot_routes(rts, bf)
 #'
-#'# One panel per route
-#'new_rts <- rts
-#'new_rts$data <- new_rts$data[new_rts$data$route_id %in% 1:4, ]
-#'plot_routes(new_rts, bf, facet = TRUE)
+#' # One panel per route
+#' new_rts <- rts
+#' new_rts$data <- new_rts$data[new_rts$data$route_id %in% 1:4, ]
+#' plot_routes(new_rts, bf, facet = TRUE)
 #'
-#'# Returned plot object can be edited
-#'# Here we change the title and add an additional sf
-#'# layer with country boundaries
-#'library(ggplot2)
-#'p <- plot_routes(rts, bf) +
-#'  ggtitle(paste0(species(bf), " (with countries)")) +
-#'  geom_sf(data = get_countries(bf),  inherit.aes = FALSE,  fill = NA) +
-#'  coord_sf(expand = FALSE)
+#' # Returned plot object can be edited
+#' # Here we change the title and add an additional sf
+#' # layer with country boundaries
+#' library(ggplot2)
+#' p <- plot_routes(rts, bf) +
+#'   ggtitle(paste0(species(bf), " (with countries)")) +
+#'   geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
+#'   coord_sf(expand = FALSE)
 #' p
-#'\dontrun{
-#'# Use alternate color palettes
-#' plot_routes(rts, bf,  use_seasonal_colors = FALSE )
+#' \dontrun{
+#' # Use alternate color palettes
+#' plot_routes(rts, bf, use_seasonal_colors = FALSE)
 #'
-#' plot_routes(rts, bf, use_seasonal_colors = FALSE,
-#'             pal = c("red", "yellow", "blue"))
-#'}
+#' plot_routes(rts, bf,
+#'   use_seasonal_colors = FALSE,
+#'   pal = c("red", "yellow", "blue")
+#' )
+#' }
 plot_routes <- function(routes,
                         bf,
                         facet = FALSE,
@@ -81,13 +83,12 @@ plot_routes <- function(routes,
                         barheight = 8,
                         route_linewidth = .85,
                         dot_sizes = c(1.1, 3.5),
-                        coast_linewidth =  .25,
+                        coast_linewidth = .25,
                         stay_units = "weeks",
                         show_mask = TRUE,
                         crs = NULL,
                         res = NULL,
                         static = TRUE) {
-
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range
   #    and the full color gradient is then used.
@@ -137,7 +138,7 @@ plot_routes <- function(routes,
   #----------------------------------------------------------------------------#
   has_bf <- !missing(bf)
   has_stays <- has_bf
-  if(has_bf) {
+  if (has_bf) {
     ## Back compatibility code to guarantee the bf$dates object matches
     # the current format
     bf$dates <- get_dates(bf)
@@ -156,16 +157,18 @@ plot_routes <- function(routes,
   }
 
   # If "Routes" object supplied add x and y and set crs
-  if(inherits(routes, "Routes") && !inherits(routes, "BirdFlowRoutes")) {
-    if(has_bf) {
+  if (inherits(routes, "Routes") && !inherits(routes, "BirdFlowRoutes")) {
+    if (has_bf) {
       has_stays <- FALSE
     }
 
-    if(!has_bf) {
+    if (!has_bf) {
       if (is.null(crs)) {
-        warning("Using latitude and longitude for plotting. This will",
-                "create a lot of distortion. Use the bf or crs argument to",
-                "set a coordinate reference system for plotting")
+        warning(
+          "Using latitude and longitude for plotting. This will",
+          "create a lot of distortion. Use the bf or crs argument to",
+          "set a coordinate reference system for plotting"
+        )
         crs <- terra::crs("EPSG:4326")
       }
       crs <- terra::crs(crs)
@@ -198,10 +201,11 @@ plot_routes <- function(routes,
   routes$data$pyear <- proportion_of_year(routes$data$date)
 
   # Calculate Elapsed time at location - used by animate_routes()
-  if (has_stays){
+  if (has_stays) {
     routes$data <- routes$data |>
       dplyr::group_by(.data$route_id, .data$stay_id) |>
-      dplyr::mutate(elapsed_stay = as.numeric(date - min(date), units = stay_units)) |>
+      dplyr::mutate(elapsed_stay = as.numeric(date - min(date), 
+                                              units = stay_units)) |>
       as.data.frame()
   }
 
@@ -210,9 +214,12 @@ plot_routes <- function(routes,
     dplyr::group_by(.data$route_id) |>
     dplyr::mutate(year_number = calc_year_number(.data$date)) |>
     as.data.frame()
-  if (!all(routes$data$year_number %in% c(1, 2)))
-    stop("Track passes through parts of three distinct years and",
-         " so cannot be plotted.")
+  if (!all(routes$data$year_number %in% c(1, 2))) {
+    stop(
+      "Track passes through parts of three distinct years and",
+      " so cannot be plotted."
+    )
+  }
 
   # CalculateHPV) 0 to 0.5 for the first year
   # 0.5 to 1 for the second year (if track crosses year boundary)
@@ -223,7 +230,9 @@ plot_routes <- function(routes,
   # Make raster showing which cells are active in the model
   if (has_bf && show_mask) {
     rast <- rasterize_distr(rep(TRUE, times = n_active(bf)),
-                            bf, format = "dataframe")
+      bf,
+      format = "dataframe"
+    )
     rast$value[is.na(rast$value)] <- FALSE
   }
 
@@ -232,38 +241,46 @@ plot_routes <- function(routes,
   #----------------------------------------------------------------------------#
   if (has_stays) {
     # Maximum length of stay
-    if (is.null(max_stay_len))
+    if (is.null(max_stay_len)) {
       max_stay_len <- max(routes$data$elapsed_stay)
+    }
     # must be at least 2 so range isn't a point
     max_stay_len <- max(max_stay_len, 2)
 
     # Set breaks for stay length (label values in legend)
     stay_len_range <- c(0, max_stay_len) # range of stay length
-    stay_len_breaks <- unique(sort(c(0,
-                                     round(exp(seq(log(1), log(max_stay_len), length.out = 5)))[2:5]
+    stay_len_breaks <- unique(sort(c(
+      0,
+      round(exp(seq(log(1), log(max_stay_len),
+        length.out = 5
+      )))[2:5]
     ))) # label values
     stay_len_breaks <- stay_len_breaks[stay_len_breaks <= max_stay_len]
-
   }
 
   # Calculate the range and breaks in half proportional year values
   hpy_range <- range(routes$data$hpy)
   hpy_breaks <- make_pyear_breaks(hpy_range,
-                                  dates = ifelse(has_bf, bf$dates, NA))
+    dates = ifelse(has_bf, bf$dates, NA)
+  )
 
   # Set subtitle based on unique date ranges in the data
   date_ranges <- routes$data |>
     dplyr::group_by(.data$route_id) |>
-    dplyr::summarize(first = dplyr::first(.data$hpy),
-                     last = dplyr::last(.data$hpy)) |>
-    dplyr::mutate(first = format_pyear(.data$first),
-                  last = format_pyear(.data$last),
-                  label = paste0(.data$first, " - ", .data$last)) |>
+    dplyr::summarize(
+      first = dplyr::first(.data$hpy),
+      last = dplyr::last(.data$hpy)
+    ) |>
+    dplyr::mutate(
+      first = format_pyear(.data$first),
+      last = format_pyear(.data$last),
+      label = paste0(.data$first, " - ", .data$last)
+    ) |>
     dplyr::select(dplyr::last_col()) |>
     dplyr::distinct()
 
 
-  if(length(date_ranges$label) == 1){
+  if (length(date_ranges$label) == 1) {
     # All same range likely either synthetic routes or
     # a single real route
     subtitle <- paste(date_ranges$label, collapse = ", ")
@@ -271,14 +288,17 @@ plot_routes <- function(routes,
     # Varied date ranges use the entire date window for routes
     # with year
     date_range <- range(routes$data$date)
-    subtitle <-   paste(lubridate::month(date_range,
-                                         label = TRUE,
-                                         abbr = FALSE),
-                        " ",
-                        lubridate::day(date_range),
-                        ", ",
-                        lubridate::year(date_range),
-                        collapse = " - ", sep = "")
+    subtitle <- paste(
+      lubridate::month(date_range,
+        label = TRUE,
+        abbr = FALSE
+      ),
+      " ",
+      lubridate::day(date_range),
+      ", ",
+      lubridate::year(date_range),
+      collapse = " - ", sep = ""
+    )
   }
 
   plot_title <- ifelse(has_bf, species(bf), routes$species$common_name)
@@ -300,7 +320,6 @@ plot_routes <- function(routes,
     year_cols <- paste0(year_cols, as.hexmode(as.integer(alpha * 255)))
     pal <- year_cols
     rescaler <- scales::rescale_none
-
   } else {
     if (is.null(pal)) {
       pal <- viridisLite::viridis(n = 5)
@@ -319,21 +338,27 @@ plot_routes <- function(routes,
   # Assemble the plot
   #----------------------------------------------------------------------------#
 
-  p <- ggplot2::ggplot(data = routes$data,
-                       ggplot2::aes(x = .data$x, y = .data$y)) +
-    ggplot2::theme(axis.title = ggplot2::element_blank(),
-                   strip.background = ggplot2::element_blank()) +
-
+  p <- ggplot2::ggplot(
+    data = routes$data,
+    ggplot2::aes(x = .data$x, y = .data$y)
+  ) +
+    ggplot2::theme(
+      axis.title = ggplot2::element_blank(),
+      strip.background = ggplot2::element_blank()
+    ) +
     ggplot2::guides(fill = "none") +
-
-    ggplot2::scale_fill_manual(values = c(`TRUE` = active_cell_color,
-                                          `FALSE` = inactive_cell_color))
+    ggplot2::scale_fill_manual(values = c(
+      `TRUE` = active_cell_color,
+      `FALSE` = inactive_cell_color
+    ))
 
   if (has_bf && show_mask) {
     p <- p +
       # Add the raster (showing active vs inactive cells in shades of grey)
-      ggplot2::geom_raster(data = rast,
-                           ggplot2::aes(fill = .data$value))
+      ggplot2::geom_raster(
+        data = rast,
+        ggplot2::aes(fill = .data$value)
+      )
   }
 
   if (has_stays) {
@@ -343,27 +368,37 @@ plot_routes <- function(routes,
       # and not the route (or line id) so that it works properly with
       # transition_reveal (see last example in ?transition_reveal)
       ggplot2::geom_point(
-        ggplot2::aes(size = .data$elapsed_stay,
-                     color = .data$hpy,
-                     group = seq_along(.data$hpy))) +
+        ggplot2::aes(
+          size = .data$elapsed_stay,
+          color = .data$hpy,
+          group = seq_along(.data$hpy)
+        )
+      ) +
 
 
       # Setup stay dot scale and legend
 
-      ggplot2::scale_size_area(limits = stay_len_range,
-                               max_size = dot_sizes[2],
-                               breaks = stay_len_breaks,
-                               name = paste0("Stay Length\n", "(", stay_units, ")"),
-                               guide = ggplot2::guide_legend(order = 0))
+      ggplot2::scale_size_area(
+        limits = stay_len_range,
+        max_size = dot_sizes[2],
+        breaks = stay_len_breaks,
+        name =
+          paste0("Stay Length\n", "(", stay_units, ")"),
+        guide = ggplot2::guide_legend(order = 0)
+      )
   } # end has stays
 
   p <- p +
 
     # Add route lines
-    ggplot2::geom_path(ggplot2::aes(color = .data$hpy,
-                                    group = .data$route_id),
-                       linewidth = route_linewidth,
-                       lineend = "round") +
+    ggplot2::geom_path(
+      ggplot2::aes(
+        color = .data$hpy,
+        group = .data$route_id
+      ),
+      linewidth = route_linewidth,
+      lineend = "round"
+    ) +
 
     # Set color for route lines and stay dots
     ggplot2::scale_color_gradientn(
@@ -373,18 +408,23 @@ plot_routes <- function(routes,
       breaks = hpy_breaks,
       rescaler = rescaler,
       limits = hpy_range,
-      guide = ggplot2::guide_colorbar(reverse = TRUE,
-                                      barheight = barheight,
-                                      order = 1))
+      guide = ggplot2::guide_colorbar(
+        reverse = TRUE,
+        barheight = barheight,
+        order = 1
+      )
+    )
 
   # Plot coastal data
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
-
     # Coastline for this model
-    if(has_bf) {
-      suppress_specific_warnings({
-        coast <- get_coastline(bf)
-      }, "No objects within extent. Returning empty sf object.")
+    if (has_bf) {
+      suppress_specific_warnings(
+        {
+          coast <- get_coastline(bf)
+        },
+        "No objects within extent. Returning empty sf object."
+      )
     } else {
       buffer_prop <- 0.05
       xmin <- min(routes$data$x)
@@ -393,13 +433,15 @@ plot_routes <- function(routes,
       ymax <- max(routes$data$y)
       xbuffer <- (xmax - xmin) * buffer_prop
       ybuffer <- (ymax - ymin) * buffer_prop
-      xmin  <- xmin - xbuffer
+      xmin <- xmin - xbuffer
       xmax <- xmax + xbuffer
       ymin <- ymin - ybuffer
       ymax <- ymax + ybuffer
 
-      corners <- data.frame(x = c(xmin, xmax, xmax, xmin),
-                            y = c(ymin, ymin, ymax, ymax))
+      corners <- data.frame(
+        x = c(xmin, xmax, xmax, xmin),
+        y = c(ymin, ymin, ymax, ymax)
+      )
       sf_corners <- sf::st_as_sf(corners, coords = c("x", "y"), crs = crs)
 
       coast <- get_coastline(sf_corners)
@@ -407,43 +449,48 @@ plot_routes <- function(routes,
 
     if (nrow(coast) > 0) {
       p <- p +
-        ggplot2::geom_sf(data = coast,
-                         inherit.aes = FALSE,
-                         linewidth = coast_linewidth,
-                         color = coast_color)
+        ggplot2::geom_sf(
+          data = coast,
+          inherit.aes = FALSE,
+          linewidth = coast_linewidth,
+          color = coast_color
+        )
     }
   }
 
   # coord_sf is required to adjust coordinates while using geom_sf
   # Here we are preventing expanding the extent of the plot.
 
-  p  <- p +
+  p <- p +
     # Add title and subtitle
     ggplot2::ggtitle(
       label = plot_title,
-      subtitle = subtitle)
+      subtitle = subtitle
+    )
 
   if (facet) {
     p <- p +
-      ggplot2::facet_wrap(~.data$route_id) +
+      ggplot2::facet_wrap(~ .data$route_id) +
 
       # Remove axis labels and ticks
       # facet plot is cluttered if you leave these in.
-      ggplot2::theme(axis.text.x = ggplot2::element_blank(),
-                     axis.ticks.x = ggplot2::element_blank(),
-                     axis.text.y = ggplot2::element_blank(),
-                     axis.ticks.y = ggplot2::element_blank()
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_blank(),
+        axis.ticks.x = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_blank(),
+        axis.ticks.y = ggplot2::element_blank()
       )
   }
 
-  if(!has_bf) {
+  if (!has_bf) {
     p <- p +
-      ggplot2::coord_sf(xlim = c(xmin, xmax),
-                        ylim = c(ymin, ymax),
-                        expand = FALSE)
-
+      ggplot2::coord_sf(
+        xlim = c(xmin, xmax),
+        ylim = c(ymin, ymax),
+        expand = FALSE
+      )
   } else {
-    p  <- p +
+    p <- p +
       ggplot2::coord_sf(expand = FALSE)
   }
 
@@ -462,9 +509,8 @@ plot.BirdFlowRoutes <- function(x, ...) {
 # a series of dates. It returns 1 for the earliest year in dates
 # and every subsequent year increments by 1.  It is agnostic to the
 # order of the dates
-calc_year_number <- function(dates){
+calc_year_number <- function(dates) {
   years <- lubridate::year(dates)
   year_number <- years - min(years) + 1
   return(year_number)
 }
-

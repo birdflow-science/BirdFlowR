@@ -10,7 +10,8 @@ test_that("plot_routes() works", {
   expect_no_error(print(p))
 
   fall_rts <- route(bf, n_fall, season = "fall")
-  fall_rts$data$route_id <- fall_rts$data$route_id + n_spring # for unique routes
+  fall_rts$data$route_id <- fall_rts$data$route_id + n_spring
+  # for unique routes
   fall_rts$data <- rbind(fall_rts$data, points$data)
   expect_no_error(p <- plot_routes(fall_rts, bf))
   expect_no_error(print(p))
@@ -76,5 +77,3 @@ test_that("plot_routes() works with data derived from tracks", {
   expect_no_error(print(plot(bf_rts)))
 
 })
-
-

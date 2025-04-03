@@ -23,11 +23,17 @@ validate_BirdFlowRoutes(birdflow_routes)
 validate_BirdFlowIntervals(birdflow_intervals)
 }
 \arguments{
-\item{route_df}{A data frame containing data for the \code{Routes} class. It must include columns like \code{route_id}, \code{date}, \code{lon}, \code{lat}, and \code{route_type}.}
+\item{route_df}{A data frame containing data for the \code{Routes} class.
+It must include columns like \code{route_id}, \code{date}, \code{lon}, \code{lat},
+and \code{route_type}.}
 
-\item{birdflow_route_df}{A data frame containing data for the \code{BirdFlowRoutes} class. It must include additional columns such as \code{x}, \code{y}, \code{i}, and \code{timestep}.}
+\item{birdflow_route_df}{A data frame containing data for the
+\code{BirdFlowRoutes} class. It must include additional columns such as
+\code{x}, \code{y}, \code{i}, and \code{timestep}.}
 
-\item{birdflow_interval_df}{A data frame containing data for the \code{BirdFlowIntervals} class. It must include columns such as \code{lon1}, \code{lon2}, \code{y1}, \code{y2}, \code{i1}, \code{i2}, \code{timestep1}, \code{timestep2}.}
+\item{birdflow_interval_df}{A data frame containing data for the
+\code{BirdFlowIntervals} class. It must include columns such as \code{lon1}, \code{lon2},
+\code{y1}, \code{y2}, \code{i1}, \code{i2}, \code{timestep1}, \code{timestep2}.}
 
 \item{routes}{A \code{Routes} object.}
 
@@ -36,26 +42,35 @@ validate_BirdFlowIntervals(birdflow_intervals)
 \item{birdflow_intervals}{A \code{BirdFlowIntervals} object.}
 }
 \value{
-These functions return nothing if validation succeeds. If validation fails, an error message is raised detailing the issue.
+These functions return nothing if validation succeeds.
+If validation fails, an error message is raised detailing the issue.
 }
 \description{
-A collection of functions to validate input data frames for \code{Routes}, \code{BirdFlowRoutes},
-and \code{BirdFlowIntervals}. These validators ensure that the data frames contain all required columns,
-conform to expected data types, and adhere to additional constraints specific to each object class.
+A collection of functions to validate input data frames for
+\code{Routes}, \code{BirdFlowRoutes},
+and \code{BirdFlowIntervals}. These validators ensure that the data frames
+contain all required columns,
+conform to expected data types, and adhere to additional constraints
+specific to each object class.
 }
 \details{
-These functions perform comprehensive checks to ensure data integrity. They verify that:
+These functions perform comprehensive checks to ensure data
+integrity. They verify that:
 \itemize{
 \item All required columns are present.
 \item Data types match expected formats (e.g., numeric, character, Date).
 \item No missing or invalid values are present in critical fields.
-\item Additional constraints specific to the class, such as unique timesteps for routes, are satisfied.
+\item Additional constraints specific to the class, such as unique timesteps
+for routes, are satisfied.
 }
 \subsection{Functions Included:}{
 \itemize{
-\item \code{validate_Routes_route_df()}: Validates the input data frame for the \code{Routes} class.
-\item \code{validate_BirdFlowRoutes_birdflow_route_df()}: Validates the input data frame for the \code{BirdFlowRoutes} class.
-\item \code{validate_BirdFlowIntervals_birdflow_intervals()}: Validates the input data frame for the \code{BirdFlowIntervals} class.
+\item \code{validate_Routes_route_df()}: Validates the input data frame for the
+\code{Routes} class.
+\item \code{validate_BirdFlowRoutes_birdflow_route_df()}: Validates the input data
+frame for the \code{BirdFlowRoutes} class.
+\item \code{validate_BirdFlowIntervals_birdflow_intervals()}: Validates the input
+data frame for the \code{BirdFlowIntervals} class.
 }
 }
 }

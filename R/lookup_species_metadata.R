@@ -25,29 +25,31 @@ lookup_species_metadata <- function(species,
                                     skip_checks = FALSE,
                                     min_season_quality = 3,
                                     quiet = FALSE) {
-
-  if(is.na(ebirdst_pkg_ver()))
+  if (is.na(ebirdst_pkg_ver())) {
     stop("Cannot lookup species metadata unless ebirdst is installed")
+  }
 
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
   species <- ebirdst::get_species(species) # convert to ebirst species code
 
-  if(is.na(species))
+  if (is.na(species)) {
     stop("Unable to resolve species: ", species, " with ebirdst::get_species()")
+  }
 
   er <- ebirdst::ebirdst_runs
   names(er)[names(er) == "is_resident"] <- "resident" # restore 2021 name
   spmd <- as.list(er[er$species_code == species, , drop = FALSE])
 
-  if(!quiet) {
+  if (!quiet) {
     bf_msg("Species resolved to: '", species, "' (", spmd$common_name, ")\n")
   }
   # Reformat dates as strings
   date_to_char <- function(x) {
-    if (inherits(x, "Date"))
+    if (inherits(x, "Date")) {
       x <- as.character(x)
+    }
     return(x)
   }
   spmd <- lapply(spmd, date_to_char)
@@ -56,57 +58,77 @@ lookup_species_metadata <- function(species,
   # in ebirdst 2.2021.1 all columns are stored as characters.
   # it was fixed in 2.2021.3 so this is now extra security against
   # future format changes
-  logical_variables <- intersect(c("resident",
-                                   "breeding_range_modeled",
-                                   "nonbreeding_range_modeled",
-                                   "postbreeding_migration_range_modeled",
-                                   "prebreeding_migration_range_modeled"),
-                                 names(spmd))
+  logical_variables <- intersect(
+    c(
+      "resident",
+      "breeding_range_modeled",
+      "nonbreeding_range_modeled",
+      "postbreeding_migration_range_modeled",
+      "prebreeding_migration_range_modeled"
+    ),
+    names(spmd)
+  )
 
-  numeric_variables <- intersect(c("breeding_quality",
-                                   "nonbreeding_quality",
-                                   "postbreeding_migration_quality",
-                                   "prebreeding_migration_quality"),
-                                 names(spmd))
+  numeric_variables <- intersect(
+    c(
+      "breeding_quality",
+      "nonbreeding_quality",
+      "postbreeding_migration_quality",
+      "prebreeding_migration_quality"
+    ),
+    names(spmd)
+  )
 
   spmd[logical_variables] <- as.logical(spmd[logical_variables])
   spmd[numeric_variables] <- as.numeric(spmd[numeric_variables])
 
 
   # used for check prior to ebirds 3.2022.0 and to drop these columns (any v.)
-  model_coverage_variables <- c("breeding_range_modeled",
-                                "nonbreeding_range_modeled",
-                                "postbreeding_migration_range_modeled",
-                                "prebreeding_migration_range_modeled")
+  model_coverage_variables <- c(
+    "breeding_range_modeled",
+    "nonbreeding_range_modeled",
+    "postbreeding_migration_range_modeled",
+    "prebreeding_migration_range_modeled"
+  )
 
   # used for checks with ebirdst >= 3.2022.0
-  model_quality_variables <- c("breeding_quality",
-                               "nonbreeding_quality",
-                               "postbreeding_migration_quality",
-                               "prebreeding_migration_quality")
+  model_quality_variables <- c(
+    "breeding_quality",
+    "nonbreeding_quality",
+    "postbreeding_migration_quality",
+    "prebreeding_migration_quality"
+  )
 
 
   # Check that ebirdst species data supports BirdFlow modeling
-  if(!skip_checks){
-    if (spmd$resident)
-      stop(spmd$common_name, " (", spmd$species_code, ") is a resident ",
-           "(non-migratory) species and is therefore a poor candidate for ",
-           "BirdFlow modeling.")
+  if (!skip_checks) {
+    if (spmd$resident) {
+      stop(
+        spmd$common_name, " (", spmd$species_code, ") is a resident ",
+        "(non-migratory) species and is therefore a poor candidate for ",
+        "BirdFlow modeling."
+      )
+    }
 
     # Check eBird data quality
     if (ebirdst_pkg_ver() < "3.2022.0") {
-      if (!all(unlist(spmd[model_coverage_variables])))
-        stop("eBird status and trends models do not cover the full range for ",
-             spmd$common_name, " (", spmd$species_code, ")")
+      if (!all(unlist(spmd[model_coverage_variables]))) {
+        stop(
+          "eBird status and trends models do not cover the full range for ",
+          spmd$common_name, " (", spmd$species_code, ")"
+        )
+      }
     } else {
       # ebirdst >= 3.2022.0
-      if (any(unlist(spmd[model_quality_variables]) < min_season_quality))
+      if (any(unlist(spmd[model_quality_variables]) < min_season_quality)) {
         stop("eBird status and trends model quality is less than ",
-             min_season_quality,
-             " in one or more seasons for ",
-             spmd$common_name, " (", spmd$species_code, ")", sep = "")
+          min_season_quality,
+          " in one or more seasons for ",
+          spmd$common_name, " (", spmd$species_code, ")",
+          sep = ""
+        )
+      }
     }
-
   } # end checks
 
   # Drop the variables that aren't relevant to BirdFlow
@@ -117,7 +139,7 @@ lookup_species_metadata <- function(species,
   spmd$resident <- NULL
   spmd$resident_quality <- NULL
   spmd$resident_end <- NULL
-  spmd$resident_start  <- NULL
+  spmd$resident_start <- NULL
 
   # As of ebirdst 3.2022 we also need to drop trends variables
   spmd[grep("trends", names(spmd))] <- NULL
@@ -130,5 +152,4 @@ lookup_species_metadata <- function(species,
   stopifnot(all(names(spmd) == names(new_bf$species)))
 
   return(spmd)
-
 }
