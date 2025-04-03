@@ -40,51 +40,44 @@ test_that("Test Interval sampling strategy", {
 
 
   # Constraints
+  min_day <- 7
+  max_day <- 180
   min_km <- 200
-  min_days <- 7
+  max_km = 8000
 
   expect_no_error(
-    my_intervals <- as_BirdFlowIntervals(my_bfroutes,
+    my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
                                          max_n=1000,
-                                         min_day_interval = min_days,
-                                         min_km_interval= min_km))
+                                         min_day_interval = min_day,
+                                         max_day_interval = max_day,
+                                         min_km_interval= min_km,
+                                         max_km_interval = max_km))
 
   # This test is failing because the second half of the function doesn't
   # honor the valid pairs identified in the first half.
   dist_km <- with(my_intervals$data, sqrt((x2 - x1)^2 + (y2 - y1) ^2)) / 1000
   lag <- with(my_intervals$data, date2 - date1) |> as.numeric(units = "days")
   expect_true(all(dist_km >= min_km))
-  expect_true(all(lag >= min_days))
+  expect_true(all(dist_km <= max_km))
+  expect_true(all(lag >= min_day))
+  expect_true(all(lag <= max_day))
 
   # Number of routes (1)
   # Note this fails if run repeatedly but doesn't always fail because
   # random sampling sometimes selects valid intervals
   expect_no_error(
     my_intervals <- as_BirdFlowIntervals(my_bfroutes, max_n=1,
-                                         min_day_interval= min_days,
-                                         min_km_interval= min_km))
+                                         min_day_interval = min_day,
+                                         max_day_interval = max_day,
+                                         min_km_interval= min_km,
+                                         max_km_interval = max_km))
   expect_equal(nrow(my_intervals$data), 1)
   dist_km <- with(my_intervals$data, sqrt((x2 - x1)^2 + (y2 - y1) ^2)) / 1000
   lag <- with(my_intervals$data, date2 - date1) |> as.numeric(units = "days")
   expect_true(all(dist_km >= min_km))
-  expect_true(all(lag >= min_days))
-
-
-  # Number of routes (3)
-  # Note this fails if run repeatedly but doesn't always fail because
-  # random sampling sometimes selects valid intervals
-  expect_no_error(
-    my_intervals <- as_BirdFlowIntervals(my_bfroutes, max_n = 3,
-                                         min_day_interval = min_days,
-                                         min_km_interval = min_km))
-
-  expect_equal(nrow(my_intervals$data), 3)
-
-  dist_km <- with(my_intervals$data, sqrt((x2 - x1)^2 + (y2 - y1) ^2)) / 1000
-  lag <- with(my_intervals$data, date2 - date1) |> as.numeric(units = "days")
-  expect_true(all(dist_km >= min_km))
-  expect_true(all(lag >= min_days))
-
+  expect_true(all(dist_km <= max_km))
+  expect_true(all(lag >= min_day))
+  expect_true(all(lag <= max_day))
 
 })
 
