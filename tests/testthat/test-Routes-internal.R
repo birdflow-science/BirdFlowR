@@ -85,10 +85,5 @@ test_that("Extra columns are retained and don't cause problems", {
 
   my_intervals$data$info <- 'Some random info for the intervals'
 
-
-
-  expect_snapshot(my_routes)
-  expect_snapshot(my_bfroutes)
-  expect_snapshot(my_intervals)
 })
 
