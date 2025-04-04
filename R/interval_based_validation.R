@@ -148,13 +148,13 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
 
   # integrated metric by time
   dists_agg <- dists |>
-    dplyr::group_by(elapsed_days) |>
+    dplyr::group_by(.data[['elapsed_days']]) |>
     dplyr::summarize(
-      win_prob = mean(win_prob),
+      win_prob = mean(.data[['win_prob']]),
       global_prob_of_the_starting =
-        mean(global_prob_of_the_starting),
-      win_distance = mean(win_distance),
-      win_distance_fraction = mean(win_distance_fraction),
+        mean(.data[['global_prob_of_the_starting']]),
+      win_distance = mean(.data[['win_distance']]),
+      win_distance_fraction = mean(.data[['win_distance_fraction']]),
       .groups = "drop"
     )
   dists_agg <- dists_agg[order(dists_agg$elapsed_days), ]
@@ -163,30 +163,30 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
   dx <- diff(dists_agg$elapsed_days) # Trapezoidal Rule
   area_win_prob_by_time <- sum(
     dx * (
-      head(dists_agg$win_prob * dists_agg$prob_weight, -1) +
-        tail(dists_agg$win_prob * dists_agg$prob_weight, -1)
+      utils::head(dists_agg$win_prob * dists_agg$prob_weight, -1) +
+        utils::tail(dists_agg$win_prob * dists_agg$prob_weight, -1)
     ) / 2
   )
   area_win_distance_by_time <- sum(
-    dx * (head(dists_agg$win_distance * dists_agg$prob_weight, -1) +
-      tail(dists_agg$win_distance * dists_agg$prob_weight, -1)) / 2
+    dx * (utils::head(dists_agg$win_distance * dists_agg$prob_weight, -1) +
+            utils::tail(dists_agg$win_distance * dists_agg$prob_weight, -1)) / 2
   )
   area_win_distance_fraction_by_time <- sum(
     dx * (
-      head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) +
-        tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)
+      utils::head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) +
+        utils::tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)
     ) / 2
   )
 
   # integrated metric by distance
   dists_agg <- dists |>
-    dplyr::group_by(elapsed_km) |>
+    dplyr::group_by(.data[['elapsed_km']]) |>
     dplyr::summarize(
-      win_prob = mean(win_prob),
+      win_prob = mean(.data[['win_prob']]),
       global_prob_of_the_starting =
-        mean(global_prob_of_the_starting),
-      win_distance = mean(win_distance),
-      win_distance_fraction = mean(win_distance_fraction),
+        mean(.data[['global_prob_of_the_starting']]),
+      win_distance = mean(.data[['win_distance']]),
+      win_distance_fraction = mean(.data[['win_distance_fraction']]),
       .groups = "drop"
     )
   dists_agg <- dists_agg[order(dists_agg$elapsed_km), ]
@@ -195,20 +195,20 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
   dx <- diff(dists_agg$elapsed_km) # Trapezoidal Rule
   area_win_prob_by_distance <- sum(
     dx * (
-      head(dists_agg$win_prob * dists_agg$prob_weight, -1) +
-        tail(dists_agg$win_prob * dists_agg$prob_weight, -1)
+      utils::head(dists_agg$win_prob * dists_agg$prob_weight, -1) +
+        utils::tail(dists_agg$win_prob * dists_agg$prob_weight, -1)
     ) / 2
   )
   area_win_distance_by_distance <- sum(
     dx * (
-      head(dists_agg$win_distance * dists_agg$prob_weight, -1) +
-        tail(dists_agg$win_distance * dists_agg$prob_weight, -1)
+      utils::head(dists_agg$win_distance * dists_agg$prob_weight, -1) +
+        utils::tail(dists_agg$win_distance * dists_agg$prob_weight, -1)
     ) / 2
   )
   area_win_distance_fraction_by_distance <- sum(
     dx * (
-      head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) +
-        tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)
+      utils::head(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1) +
+        utils::tail(dists_agg$win_distance_fraction * dists_agg$prob_weight, -1)
     ) / 2
   )
 

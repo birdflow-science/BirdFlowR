@@ -7,6 +7,9 @@
 animate_routes(routes, bf, ...)
 }
 \arguments{
+\item{routes}{An object of class \code{Routes} or  \code{BirdFlowRoutes}.  Likely the
+the output of  \code{\link[=route]{route()}}, \link{as_BirdFlowRoutes}, or \code{\link[=Routes]{Routes()}}.}
+
 \item{bf}{A BirdFlow object}
 
 \item{...}{

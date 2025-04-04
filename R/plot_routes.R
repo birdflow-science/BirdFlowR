@@ -87,7 +87,6 @@ plot_routes <- function(routes,
                         stay_units = "weeks",
                         show_mask = TRUE,
                         crs = NULL,
-                        res = NULL,
                         static = TRUE) {
   # ggplot2 translates values to a color gradient based on a range of 0 to 1
   #    This usually means that the color variable is rescaled to that range

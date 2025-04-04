@@ -19,6 +19,7 @@
 \alias{validate_BirdFlowRoutes_metadata}
 \alias{validate_BirdFlowRoutes_dates}
 \alias{validate_BirdFlowIntervals_interval_id}
+\alias{validate_BirdFlowIntervals_metadata}
 \title{Attribute Validators}
 \usage{
 validate_Routes_route_id(route_id)
@@ -54,6 +55,8 @@ validate_BirdFlowRoutes_metadata(metadata)
 validate_BirdFlowRoutes_dates(dates)
 
 validate_BirdFlowIntervals_interval_id(interval_id)
+
+validate_BirdFlowIntervals_metadata(metadata)
 }
 \arguments{
 \item{route_id}{A vector of route IDs (character or numeric). Must not

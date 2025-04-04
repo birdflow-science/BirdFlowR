@@ -639,3 +639,9 @@ validate_BirdFlowIntervals_interval_id <- function(interval_id) {
                  Missing values are not allowded."))
   }
 }
+
+#' @rdname attribute_validators
+validate_BirdFlowIntervals_metadata <- function(metadata) {
+  stopifnot(inherits(metadata, "list") | is.null(metadata))
+}
+

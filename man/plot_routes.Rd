@@ -19,7 +19,6 @@ plot_routes(
   stay_units = "weeks",
   show_mask = TRUE,
   crs = NULL,
-  res = NULL,
   static = TRUE
 )
 

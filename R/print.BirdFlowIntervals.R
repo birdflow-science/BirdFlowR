@@ -110,7 +110,7 @@ print.BirdFlowIntervals <- function(x, ...) {
 
     # Print the data.frame part
     cat("Data:\n")
-    print(head(x$data, 5))
+    print(utils::head(x$data, 5))
     if (nrow(x$data) > 5) {
         cat("(", nrow(x$data) - 5, " lines omitted)\n", sep = "")
     }
