@@ -103,15 +103,17 @@ plot_routes(new_rts, bf, facet = TRUE)
 # layer with country boundaries
 library(ggplot2)
 p <- plot_routes(rts, bf) +
- ggtitle(paste0(species(bf), " (with countries)")) +
- geom_sf(data = get_countries(bf),  inherit.aes = FALSE,  fill = NA) +
- coord_sf(expand = FALSE)
+  ggtitle(paste0(species(bf), " (with countries)")) +
+  geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
+  coord_sf(expand = FALSE)
 p
 \dontrun{
 # Use alternate color palettes
-plot_routes(rts, bf,  use_seasonal_colors = FALSE )
+plot_routes(rts, bf, use_seasonal_colors = FALSE)
 
-plot_routes(rts, bf, use_seasonal_colors = FALSE,
-            pal = c("red", "yellow", "blue"))
+plot_routes(rts, bf,
+  use_seasonal_colors = FALSE,
+  pal = c("red", "yellow", "blue")
+)
 }
 }

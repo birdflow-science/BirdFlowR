@@ -32,13 +32,13 @@ gs <- great_circle_distances(bf)
 # Compare to euclidean distances in projected CRS space
 i <- seq_len(n_active(bf))
 xy <- as.data.frame(i_to_xy(i, bf))
-eu <- as.matrix(dist(xy)) / 1000  # euclidean in CRS (km)
+eu <- as.matrix(dist(xy)) / 1000 # euclidean in CRS (km)
 
 error_prop <- abs(gs - eu) / gs
 error_prop[is.nan(error_prop)] <- 0
 
 mean_error <- apply(error_prop, 1, mean) # mean error for cell
-max_error <-  apply(error_prop, 1, max)  # max error for cell
+max_error <- apply(error_prop, 1, max) # max error for cell
 
 # Calculate maximum error lines for each cell
 mel <- data.frame(i1 = 1:n_active(bf), i2 = apply(error_prop, 1, which.max))
@@ -50,7 +50,9 @@ ys <- t(cbind(i_to_y(mel$i1, bf), i_to_y(mel$i2, bf)))
 plot(rasterize_distr(as.numeric(max_error), bf))
 title(main = "Max proportional error")
 matlines(xs, ys, col = rgb(0, 0, 0, .25), lty = 1, lwd = 1)
-mtext(paste0("lines connect cells to the cell which have greatest",
-" proportional error in distance"), line = 0, cex = 0.7)
+mtext(paste0(
+  "lines connect cells to the cell which have greatest",
+  " proportional error in distance"
+), line = 0, cex = 0.7)
 }
 \keyword{internal}

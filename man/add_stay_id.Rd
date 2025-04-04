@@ -13,7 +13,8 @@ add_stay_id(df)
 A data frame with \code{stay_id} and \code{stay_len} columns added.
 }
 \description{
-Adds stay IDs to a data frame based on changes in spatial indices.
+Adds stay IDs to a data frame based on
+changes in spatial indices.
 }
 \examples{
 routes <- data.frame(list(
@@ -23,8 +24,8 @@ routes <- data.frame(list(
     "2024-01-01", "2024-01-02", "2024-01-03",
     "2024-01-04", "2024-01-05", "2024-01-06",
     "2024-01-07", "2024-01-08"
-  )))
-)
+  ))
+))
 routes$i <- as.integer(routes$i)
 df_with_stay_ids <- add_stay_id(routes)
 }

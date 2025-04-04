@@ -55,17 +55,23 @@ of the full list.}
 
 \item{metadata}{A list with additional metadata.}
 
-\item{geom}{A list describing spatial geometry, such as \code{nrow}, \code{ncol}, \code{crs}, and \code{mask}.}
+\item{geom}{A list describing spatial geometry,
+such as \code{nrow}, \code{ncol}, \code{crs}, and \code{mask}.}
 
-\item{dates}{A data frame with date-related information, including \code{date}, \code{start}, \code{end}, and \code{timestep}.}
+\item{dates}{A data frame with date-related information,
+including \code{date}, \code{start}, \code{end}, and \code{timestep}.}
 
-\item{sort_id_and_dates}{Logical. Should the data be sorted by \code{route_id} and \code{dates}?}
+\item{sort_id_and_dates}{Logical. Should the data be sorted by \code{route_id}
+and \code{dates}?}
 
-\item{reset_index}{Logical. Should the index of the data frame be reset after sorting?}
+\item{reset_index}{Logical. Should the index of the data frame be reset
+after sorting?}
 
-\item{stay_calculate_col}{The column name for calculating the stay_id and stay_len in BirdFlowRoutes object. Default to \code{date}.}
+\item{stay_calculate_col}{The column name for calculating the stay_id and
+stay_len in BirdFlowRoutes object. Default to \code{date}.}
 
-\item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes object. Default to \code{days}.}
+\item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes
+object. Default to \code{days}.}
 }
 \value{
 Each function returns an S3 object of the corresponding class
@@ -107,41 +113,50 @@ route_df <- data.frame(
   route_type = c("tracking", "banding", "unknown")
 )
 species <- list(
-    species_code = "amewoo",
-    scientific_name = "Scolopax minor",
-    common_name = "American Woodcock"
+  species_code = "amewoo",
+  scientific_name = "Scolopax minor",
+  common_name = "American Woodcock"
 )
-sources <- 'Unknown sources'
-routes_obj <- Routes(route_df, species=species, source=sources)
+sources <- "Unknown sources"
+routes_obj <- Routes(route_df, species = species, source = sources)
 
 # Create a BirdFlowRoutes object
 ## 1. convert from `Routes`
 bf <- BirdFlowModels::amewoo
-birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf=bf)
+birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf = bf)
 # the species, metadata, and sources will be inherited from the bf object.
 
 ## 2. Directly from dataframe
 birdflow_route_df <- data.frame(
-  route_id = c("001", "001", "001", "001", "001", "003", "003", "003", "004"),
-  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
-  "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
-  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298, -89.6298, -85.6298, -95.3698),
-  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781, 40.8781, 29.7604),
+  route_id = c("001", "001", "001", "001", "001", "003", "003",
+  "003", "004"),
+  date = as.Date(c(
+    "2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
+    "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01"
+  )),
+  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298,
+  -89.6298, -85.6298, -95.3698),
+  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781,
+  40.8781, 29.7604),
   x = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
   y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
   i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
   timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-  route_type = c("tracking", 'tracking', "tracking", 'tracking',
-  'tracking', "motus", "motus", "motus", "motus")
+  route_type = c(
+    "tracking", "tracking", "tracking", "tracking",
+    "tracking", "motus", "motus", "motus", "motus"
+  )
 )
-geom <- list(nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL,
-mask = NULL, dynamic_mask = NULL)
+geom <- list(
+  nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL,
+  mask = NULL, dynamic_mask = NULL
+)
 dates <- data.frame(
-    timestep = 1:2,
-    date = as.Date(c("2022-01-04", "2022-01-11")),
-    label = c("January 4", "January 11"),
-    julian = c(4, 11),
-    week = c(1, 2)
+  timestep = 1:2,
+  date = as.Date(c("2022-01-04", "2022-01-11")),
+  label = c("January 4", "January 11"),
+  julian = c(4, 11),
+  week = c(1, 2)
 )
 birdflowroutes_object <- BirdFlowRoutes(
   birdflow_route_df,

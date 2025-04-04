@@ -13,6 +13,7 @@ reset_index(routes)
 A data frame with updated route IDs.
 }
 \description{
-Resets the route IDs in a \code{Routes} object to a new sequential numbering.
+Resets the route IDs in a \code{Routes}
+object to a new sequential numbering.
 }
 \keyword{internal}
