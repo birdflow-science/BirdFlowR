@@ -104,7 +104,7 @@ get_interval_based_validation_one_transition_pair <- function(
     pred = dist_mean_pred, st = dist_mean_st,
     win_prob = win_prob,
     win_distance = win_distance,
-    win_distance_fraction = (dist_mean_st - dist_mean_pred) / dist_mean_st,
+    win_distance_fraction = win_distance_fraction,
     global_prob_of_the_starting = as.numeric(
       bf$distr[loc_i_starting, date_starting] / 52
     ),
@@ -148,13 +148,13 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
 
   # integrated metric by time
   dists_agg <- dists |>
-    dplyr::group_by(.data[['elapsed_days']]) |>
+    dplyr::group_by(.data[["elapsed_days"]]) |>
     dplyr::summarize(
-      win_prob = mean(.data[['win_prob']]),
+      win_prob = mean(.data[["win_prob"]]),
       global_prob_of_the_starting =
-        mean(.data[['global_prob_of_the_starting']]),
-      win_distance = mean(.data[['win_distance']]),
-      win_distance_fraction = mean(.data[['win_distance_fraction']]),
+        mean(.data[["global_prob_of_the_starting"]]),
+      win_distance = mean(.data[["win_distance"]]),
+      win_distance_fraction = mean(.data[["win_distance_fraction"]]),
       .groups = "drop"
     )
   dists_agg <- dists_agg[order(dists_agg$elapsed_days), ]
@@ -180,13 +180,13 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
 
   # integrated metric by distance
   dists_agg <- dists |>
-    dplyr::group_by(.data[['elapsed_km']]) |>
+    dplyr::group_by(.data[["elapsed_km"]]) |>
     dplyr::summarize(
-      win_prob = mean(.data[['win_prob']]),
+      win_prob = mean(.data[["win_prob"]]),
       global_prob_of_the_starting =
-        mean(.data[['global_prob_of_the_starting']]),
-      win_distance = mean(.data[['win_distance']]),
-      win_distance_fraction = mean(.data[['win_distance_fraction']]),
+        mean(.data[["global_prob_of_the_starting"]]),
+      win_distance = mean(.data[["win_distance"]]),
+      win_distance_fraction = mean(.data[["win_distance_fraction"]]),
       .groups = "drop"
     )
   dists_agg <- dists_agg[order(dists_agg$elapsed_km), ]

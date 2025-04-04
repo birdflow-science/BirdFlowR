@@ -68,7 +68,7 @@ test_that("Extra columns are retained and don't cause problems", {
   set.seed(42)
 
   fake_routes <- make_fake_routes()
-  fake_routes$info <- 'AABB some info'
+  fake_routes$info <- "AABB some info"
   bf <- BirdFlowModels::amewoo
   species1 <- "amewoo"
 
