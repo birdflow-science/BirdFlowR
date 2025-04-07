@@ -38,9 +38,7 @@
 #' @param reset_index Logical. Should the index of the data frame be reset
 #' after sorting?
 #' @param stay_calculate_col The column name for calculating the stay_id and
-#' stay_len in BirdFlowRoutes object. Default to `date`.
-#' @param stay_calculate_timediff_unit The unit of stay_len in BirdFlowRoutes
-#' object. Default to `days`.
+#' stay_len in BirdFlowRoutes object. Default to `timestep`.
 #'
 #' @return Each function returns an S3 object of the corresponding class
 #' (`Routes`, `BirdFlowRoutes`, or `BirdFlowIntervals`).
@@ -193,8 +191,7 @@ BirdFlowRoutes <- function(data,
                            source = NULL,
                            sort_id_and_dates = TRUE,
                            reset_index = FALSE,
-                           stay_calculate_col = "date",
-                           stay_calculate_timediff_unit = "days") {
+                           stay_calculate_col = "timestep") {
   # Check input
   stopifnot(inherits(data, "data.frame"))
   validate_BirdFlowRoutes_birdflow_route_df(data)
@@ -212,7 +209,6 @@ BirdFlowRoutes <- function(data,
     dates = dates,
     source = source,
     stay_calculate_col = stay_calculate_col,
-    stay_calculate_timediff_unit = stay_calculate_timediff_unit,
     sort_id_and_dates = sort_id_and_dates
   )
 
@@ -231,19 +227,31 @@ BirdFlowRoutes <- function(data,
 #' @rdname Routes-internal
 #' @keywords internal
 new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
-                               stay_calculate_col = "date",
-                               stay_calculate_timediff_unit = "days",
+                               stay_calculate_col = "timestep",
                                sort_id_and_dates = FALSE) {
   if (sort_id_and_dates) {
     data <- sort_by_id_and_dates(data)
   }
-
+  
+  is_date_ordered <- function(df) {
+    dates <- df[["date"]]
+    ascending <- all(diff(dates) >= 0)
+    descending <- all(diff(dates) <= 0)
+    return(ascending || descending)
+  }
+  all_ordered <- all((data |> 
+                        dplyr::group_by(.data[['route_id']]) |> 
+                        dplyr::summarize(ordered = is_date_ordered(.data))
+                      )[['ordered']])
+  if (!all_ordered){
+    stop("input data should either be sorted as ascending order or descending order.")
+  }
+  
   ## Add stay id
   data <- data |>
     dplyr::group_by(.data$route_id) |>
     add_stay_id_with_varied_intervals(
-      date_col = stay_calculate_col,
-      timediff_unit = stay_calculate_timediff_unit
+      timestep_col = stay_calculate_col, max_timestep=max(dates$timestep)
       ) |>
     # Here, using add_stay_id_with_varied_intervals, rather than add_stay_id.
     # It takes 'timestep' as input so account for varying intervals,
@@ -423,47 +431,51 @@ add_stay_id <- function(df) {
 #' considering changes in spatial indices.
 #' Should only be applied on a single route, not multiple.
 #' Using add_stay_id_with_varied_intervals, rather than add_stay_id:
-#' It takes 'date' as input so account for varying intervals,
+#' It takes 'timestep' as input so account for varying intervals,
 #' if the data is not sampled in the same frequency.
 #'
 #' @param df A data frame with spatial and temporal data.
-#' @param date_col The name of the column containing the
-#' date information. Defaults to `"date"`.
-#' @param timediff_unit The unit of 'stay_len'.
+#' @param timestep_col The name of the column containing the
+#' timestep information. Defaults to `"timestep"`.
+#' @param max_timestep The maximum timestep of the year. Used for padding
+#' scenarios where the trajectory traverse the year boundary.
 #' @return A data frame with `stay_id` and `stay_len` columns added.
 #' @export
 #'
 #' @examples
 #' routes <- data.frame(list(
 #'   route_id = c(1, 1, 1, 2, 2, 3, 3, 3),
-#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)), # Spatial index
+#'   i = as.integer(c(1, 1, 2, 2, 3, 4, 4, 5)), # Spatial index,
+#'   timestep = as.integer(c(1,2,5,6,10,15,16,20)), # Spatial index
 #'   date = as.Date(c(
 #'     "2010-01-01", "2010-01-02", "2010-01-05", "2010-01-06",
 #'     "2010-01-10", "2010-01-15", "2010-01-16", "2010-01-20"
-#'   )) # Time steps with varying intervals
+#'   ))
 #' ))
-#' df_with_varied_stay_ids <-
-#'  add_stay_id_with_varied_intervals(routes, "date", "days")
+#' add_stay_id_with_varied_intervals(routes, timestep_col = 'timestep', max_timestep=365)
 add_stay_id_with_varied_intervals <- function(
-  df, date_col = "date", timediff_unit = "days"
+  df, timestep_col = "timestep", max_timestep=52
   ) {
-  # Ensure the data is sorted by timestep
-
+  
+  # Decide whether the trajectories are ascending or descending
+  one_route_data <- df[df['route_id']==df['route_id'][1],]
+  ascending <- all(diff(one_route_data$date) >= 0)
+  padding <- ifelse(ascending, 1, -1)
+  
   new_df <- df |>
+    dplyr::mutate(year_val = lubridate::year(date)) |>
     dplyr::mutate(
-      timestep_diff = c(1, as.numeric(diff(.data[[date_col]]),
-      units = timediff_unit)), # Time differences
-      i_change = c(1, as.numeric(diff(.data$i)) != 0), # Changes in 'i'
-      stay_id = cumsum(.data[["i_change"]])
+      i_change = c(1, diff(i) != 0),
+      stay_id = cumsum(i_change)
     ) |>
     # Now the stay_id is assigned,
     # calculate the duration (time difference) of each stay
     dplyr::group_by(.data[["route_id"]], .data[["stay_id"]]) |>
     dplyr::mutate(
-      stay_len = as.numeric(max(.data[[date_col]]) -
-                  min(.data[[date_col]]), units = timediff_unit)
+      timestep_diff = c(padding, diff(year_val) * max_timestep + diff(timestep)),
+      stay_len = abs(sum(.data[['timestep_diff']]) - padding)
     ) |>
-    dplyr::select(-dplyr::all_of(c("timestep_diff", "i_change")))
+    dplyr::select(-dplyr::all_of(c("timestep_diff", "i_change", "year_val")))
 
   return(new_df)
 }
