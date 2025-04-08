@@ -21,7 +21,7 @@ Print a summary of a \code{Routes} and \code{BirdFlowRoutes} objects
 \examples{
 # Create a Routes object
 route_df <- data.frame(
-  route_id = c("001", "001", "001", "001", "001", 
+  route_id = c("001", "001", "001", "001", "001",
   "003", "003", "003", "004"),
   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21",
   "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
