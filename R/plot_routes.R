@@ -203,7 +203,7 @@ plot_routes <- function(routes,
   if (has_stays) {
     routes$data <- routes$data |>
       dplyr::group_by(.data$route_id, .data$stay_id) |>
-      dplyr::mutate(elapsed_stay = as.numeric(date - min(date), 
+      dplyr::mutate(elapsed_stay = as.numeric(date - min(date),
                                               units = stay_units)) |>
       as.data.frame()
   }
