@@ -91,16 +91,23 @@ If you have a polygon shapefile already you could use
 `polys <- sf::read_sf(shapefile_path)` 
 and skip this section.
 
-```{r rnaturalearth, warning = FALSE} 
-# In March of 2025 downloading from the census became less reliable.
-# This section is an alternative approach which uses get_states()
-
+```{r rnaturalearth, warning = FALSE, eval = FALSE} 
+#  Note this code requires the rnaturalearthhighres package so is not
+# run when building the vignette. 
 
 polys <- get_states(bf, country = "United States of America", 
-                    keep_buffer = TRUE, keep_attributes = TRUE)
+                    keep_buffer = TRUE, 
+                    keep_attributes = TRUE), 
+                    scale = "Low")
 
 polys <- dplyr::select(polys, NAME = gn_name)
 
+```
+
+```{r echo = FALSE, eval = TRUE}
+# This loads very low resolution state boundaries 
+# in a way that does not add dependencies or slow downloads
+polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
 
 ```
 
