@@ -38,7 +38,7 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #'
 #' @examples
 #' route_data <- data.frame(
-#'   route_id = c("001", "001", "001", "001", "001",
+#'   route_id = c("001", "001", "001", "001", "001", 
 #'   "003", "003", "003", "004"),
 #'   date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21",
 #'   "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
@@ -94,10 +94,9 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
         !is.na(.data[["i"]]) &
         !is.na(.data[["timestep"]]) &
         !.data[["error"]])
-
+    
     if (nrow(routes$data) == 0) {
-      stop("All points falling fail to convert to the BirdFlow spatiotemporal 
-           coordinates.")
+      stop('All points falling fail to convert to the BirdFlow spatiotemporal coordinates.')
     }
   }
 
