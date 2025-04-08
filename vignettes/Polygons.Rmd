@@ -81,40 +81,26 @@ population <- 3500000
 plot_distr(get_distr(bf, start), bf)
 ```
 
-## Download and read polygons
+## Load Polygons
 
-Download state boundaries from the U.S. Census, read, and cleanup.
-Any set of spatial polygons with a defined CRS would work equally well.
+Use `get_states()` to get the state boundaries within  BirdFlow
+object extent from the[Natural Earth](https://www.naturalearthdata.com/) 
+data set. 
 
 If you have a polygon shapefile already you could use 
 `polys <- sf::read_sf(shapefile_path)` 
 and skip this section.
 
-```{r download polygons}
-options(timeout = 600)
+```{r rnaturalearth, warning = FALSE} 
+# In March of 2025 downloading from the census became less reliable.
+# This section is an alternative approach which uses get_states()
 
-# Download and unzip state boundaries
-url <- "http://www2.census.gov/geo/tiger/TIGER2012/STATE/tl_2012_us_state.zip"
-dir <- tempdir()
-shp_dir <- file.path(dir, "shapefile")
-dir.create(shp_dir)
-local_zip <- file.path(dir, basename(url))
-utils::download.file(url, destfile = local_zip)
-utils::unzip(local_zip, exdir = shp_dir)
-shp_path <- list.files(shp_dir, pattern = "\\.shp$", full.names = TRUE)
 
-# Load state boundaries
-# Variable names are generic to make sense with any set of polygons.
-polys <- sf::read_sf(shp_path)
+polys <- get_states(bf, country = "United States of America", 
+                    keep_buffer = TRUE, keep_attributes = TRUE)
 
-# Drop non-contigous
-to_drop <- c("Hawaii", "Commonwealth of the Northern Mariana Islands", 
-             "Puerto Rico", "United States Virgin Islands", "Alaska", "Guam", 
-             "American Samoa")
-polys <- polys[!polys$NAME %in% to_drop, ]
+polys <- dplyr::select(polys, NAME = gn_name)
 
-# Select columns
-polys <- polys[ , c("GEOID", "STUSPS", "NAME") ]
 
 ```
 
@@ -133,7 +119,7 @@ polys$id <- polys$NAME
 # Order by id (optional)
 polys <- polys[order(polys$id), ]
 
-# Transform to match the BirdFlow model CRS
+# Transform to match the BirdFlow model CRS 
 polys <- sf::st_transform(polys, crs(bf))
 
 # add sq_km to polygons 
