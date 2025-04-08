@@ -87,8 +87,6 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
     bf = bf,
     aggregate = "random"
   ))
-  my_bfroutes$data$stay_len <- my_bfroutes$data$stay_len %/% 7
-  tail(my_bfroutes$data, 20)
 
   expect_snapshot(my_bfroutes$data[1:10, c("route_id", "i", "timestep")])
 })
