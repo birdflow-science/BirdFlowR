@@ -12,7 +12,7 @@ get_interval_based_validation_one_transition_pair(
 )
 }
 \arguments{
-\item{birdflow_interval_row}{A row of data in the BirdFlowIntervals object}
+\item{birdflow_interval_row}{A row of data in the \code{BirdFlowIntervals} object}
 
 \item{bf}{BirdFlow model}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.BirdFlowIntervals.R
 \name{print.BirdFlowIntervals}
 \alias{print.BirdFlowIntervals}
-\title{Print a BirdFlowIntervals Object}
+\title{Print a \code{BirdFlowIntervals} Object}
 \usage{
 \method{print}{BirdFlowIntervals}(x, ...)
 }

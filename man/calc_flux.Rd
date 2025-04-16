@@ -66,7 +66,7 @@ that sums all the marginal probability for transitions that pass within a
 fixed distance of the point.  If \code{TRUE} assign a weight to the point and
 transition combo that then is multiplied by the marginal probability before
 summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behaviour when set to \code{TRUE} may
+to the old version. The argument name and behavior when set to \code{TRUE} may
 change.}
 }
 \value{

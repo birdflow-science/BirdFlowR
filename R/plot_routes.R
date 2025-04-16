@@ -33,7 +33,7 @@
 #'  used to represent stay length.
 #' @param stay_units The unit to plot the stay length at each location. Default
 #' to `weeks`. Other options include `sec`, `mins`, `hours`, `days` and `weeks`.
-#' @param show_mask Should the BirdFlowModel's (`bf`) static mask be displayed.
+#' @param show_mask Should the BirdFlow Model's (`bf`) static mask be displayed.
 #' @param crs Only used when `bf` is missing.  `crs` sets the Coordinate
 #' Reference system used for plotting. See [terra::crs()].
 #' @param static For internal use. It is set to `FALSE` when `plot_routes()` is

@@ -280,7 +280,7 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
 #' consistency in data frame structures across different processing steps.
 #'
 #' @details These functions return the expected column names for `Routes`,
-#' `BirdFlowRoutes` and `BirdFlowIntervals` dataclasses.
+#' `BirdFlowRoutes` and `BirdFlowIntervals` data classes.
 #' Columns may vary depending on whether the context is for input or output
 #' processing:
 #' - **Input Columns**: Columns required for validation or initial data
@@ -393,13 +393,13 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #'   - `validate_Routes_date()`
 #'   - `validate_Routes_lon()`, `validate_Routes_lat()`
 #'   - `validate_Routes_route_type()`
-#' - BirdFlowRoutes Validators:
+#' - `BirdFlowRoutes` Validators:
 #'   - `validate_BirdFlowRoutes_x()`, `validate_BirdFlowRoutes_y()`
 #'   - `validate_BirdFlowRoutes_i()`, `validate_BirdFlowRoutes_timestep()`,
 #'   - `validate_BirdFlowRoutes_date()`,
 #'   - `validate_BirdFlowRoutes_stay_id()`, `validate_BirdFlowRoutes_stay_len()`
 #'   - `validate_BirdFlowRoutes_species()`
-#' - BirdFlowIntervals Validators:
+#' - `BirdFlowIntervals` Validators:
 #'   - `validate_BirdFlowIntervals_interval_id()`
 #' - Dates and Metadata:
 #'   - `validate_BirdFlowRoutes_dates()`
@@ -411,11 +411,11 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #' Must not contain missing values;
 #' Must not have duplicates within a `route_id` (for `BirdFlowRoutes`; but
 #' not for `Routes`).
-#' @param lon_vector, lat_vector Numeric vectors for longitude and latitude.
+#' @param lon_vector,lat_vector Numeric vectors for longitude and latitude.
 #' Must not contain missing values and must be within valid ranges.
 #' @param route_type_vector A character vector of route types. Must only contain
 #' valid types.
-#' @param x_vector, y_vector Numeric vectors for spatial coordinates. Must not
+#' @param x_vector,y_vector Numeric vectors for spatial coordinates. Must not
 #' contain missing values.
 #' @param i_vector An integer vector for spatial indices. Must not contain
 #' missing values.

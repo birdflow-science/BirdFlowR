@@ -67,13 +67,13 @@ Must not contain missing values;
 Must not have duplicates within a \code{route_id} (for \code{BirdFlowRoutes}; but
 not for \code{Routes}).}
 
-\item{lon_vector, }{lat_vector Numeric vectors for longitude and latitude.
+\item{lon_vector, lat_vector}{Numeric vectors for longitude and latitude.
 Must not contain missing values and must be within valid ranges.}
 
 \item{route_type_vector}{A character vector of route types. Must only contain
 valid types.}
 
-\item{x_vector, }{y_vector Numeric vectors for spatial coordinates. Must not
+\item{x_vector, y_vector}{Numeric vectors for spatial coordinates. Must not
 contain missing values.}
 
 \item{i_vector}{An integer vector for spatial indices. Must not contain
@@ -148,7 +148,7 @@ user-facing functionality.
 \item \code{validate_Routes_lon()}, \code{validate_Routes_lat()}
 \item \code{validate_Routes_route_type()}
 }
-\item BirdFlowRoutes Validators:
+\item \code{BirdFlowRoutes} Validators:
 \itemize{
 \item \code{validate_BirdFlowRoutes_x()}, \code{validate_BirdFlowRoutes_y()}
 \item \code{validate_BirdFlowRoutes_i()}, \code{validate_BirdFlowRoutes_timestep()},
@@ -156,7 +156,7 @@ user-facing functionality.
 \item \code{validate_BirdFlowRoutes_stay_id()}, \code{validate_BirdFlowRoutes_stay_len()}
 \item \code{validate_BirdFlowRoutes_species()}
 }
-\item BirdFlowIntervals Validators:
+\item \code{BirdFlowIntervals} Validators:
 \itemize{
 \item \code{validate_BirdFlowIntervals_interval_id()}
 }

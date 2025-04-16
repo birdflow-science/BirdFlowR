@@ -41,7 +41,7 @@ adding BirdFlow-specific spatiotemporal coordinates.
 This may require aggregating multiple observations within the same timestep
 (week) which is controlled with the \code{aggregate} argument.
 Note the coordinates and dates in the result will be snapped to the
-cell and timestep (week) centers of the BirdFLow model (\code{bf}).
+cell and timestep (week) centers of the BirdFlow model (\code{bf}).
 }
 \examples{
 route_data <- data.frame(

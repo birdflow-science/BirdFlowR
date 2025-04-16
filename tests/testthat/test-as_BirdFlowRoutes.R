@@ -2,10 +2,14 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
 
   # Helper - snaps x, y, and date to bf
   snap <- function(df, bf) {
-    df[, c("x", "y")] <- df[, c("x", "y")] |>
-      xy_to_i(bf = bf) |> i_to_xy(bf = bf)
+    df[, c("x", "y")] <-
+      df[, c("x", "y")] |>
+      xy_to_i(bf = bf) |>
+      i_to_xy(bf = bf)
     years <- lubridate::year(df$date)
-    df$date <- df$date |> lookup_timestep(bf) |> lookup_date(bf)
+    df$date <- df$date |>
+      lookup_timestep(bf) |>
+      lookup_date(bf)
     lubridate::year(df$date) <- years
     df
   }
@@ -56,8 +60,8 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
     dplyr::summarize(
       x = mean(x),
       y = mean(y),
-      date = mean(date)
-    ) |> as.data.frame()
+      date = mean(date)) |>
+    as.data.frame()
 
   means <- snap(means, bf)
 

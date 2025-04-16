@@ -28,7 +28,7 @@ Thus the flow of data is
   Routes(species = species) |>     # Routes
   as_BirdFlowRoutes(bf = bd) |>    # BirdFlowRoutes
   as_BirdFlowIntervals(n = n) |>   # BirdFlowIntervals
-  calculate_inteval_metrics()      # metrics
+  calculate_interval_metrics()      # metrics
 ```  
 
 ## New public functions
@@ -89,10 +89,10 @@ Move `build_collection_index()` to **BirdFlowPipeline**
 the parameterization is not yet right and it will likely need some optimization
 to run on non-trivial models. 
 
-* Add `weight_betweeness()` which returns betweenness weights in a manner similar
+* Add `weight_between()` which returns betweenness weights in a manner similar
 to `is_between()`.
 * Add `calc_distance_weights()`,`calc_martern_variance()` and some related 
-helper functions that support `weight_betweeness()`
+helper functions that support `weight_between()`
 * Update `calc_flux()` with argument `weighted` which switches between
  the old binary betweenness with linear paths and the new probabilistic flux 
  with weighted betweenness in which the probability spreads in the middle of the 

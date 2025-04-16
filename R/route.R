@@ -149,7 +149,7 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   rts$timestep <- as.integer(rts$timestep)
   rts$route_type <- "synthetic"
   rts$date <- as.Date(rts$date)
-  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = bf$metadata,
+  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = metadata,
                         geom = bf$geom, dates = get_dates(bf),
                         source = "Synthesized from a BirdFlow model",
                         sort_id_and_dates = FALSE)

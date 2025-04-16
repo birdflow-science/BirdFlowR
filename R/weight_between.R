@@ -30,7 +30,7 @@ if (FALSE) {
 #' their results when calculated on the same model.
 #'
 #' 1, The number of included reference points may differ.
-#' 2. The betweeness array will be real weights from 0 to 1 with
+#' 2. The betweenness array will be real weights from 0 to 1 with
 #' `weight_between()` and logical with `is_between()`
 #'
 #'
@@ -40,7 +40,7 @@ if (FALSE) {
 #' active cells in the model will be used. This is calculated by comparing the
 #' cell centers to a buffered convex hull around the active cell centers.
 #' @param radius The probability density along a transect perpendicular to
-#' the line and intersecting the point is summed over the inteval within
+#' the line and intersecting the point is summed over the interval within
 #' `radius` meters of the point. `radius` defaults to half the cell
 #' size (`mean(res(bf))/2`).
 #' @param n_directions The number of (equally spaced) directional bins to
@@ -67,7 +67,7 @@ if (FALSE) {
 #'  `i` will be `NA` for points that are not within the mask but
 #'  fall between active cells.}
 #'  \item{radius}{The radius of the circle in meters.}
-#'  @seealso [is_between()] and [calc_flux()]
+#' @seealso [is_between()] and [calc_flux()]
 #' @keywords internal
 weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
                            n_directions = 1, skip_unconnected = TRUE,
@@ -282,7 +282,7 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
 
 
     # Add is a matrix defining the new cells with weight to
-    # add to the betweeness array
+    # add to the betweenness array
     # The first three columns are the index in the three dimensional
     # array of a cell (from state, to state, flux point index).
     # The fourth is the weight of the cell.

@@ -65,11 +65,8 @@ and \code{dates}?}
 \item{reset_index}{Logical. Should the index of the data frame be reset
 after sorting?}
 
-\item{stay_calculate_col}{The column name for calculating the stay_id and
-stay_len in BirdFlowRoutes object. Default to \code{date}.}
-
-\item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes
-object. Default to \code{days}.}
+\item{stay_calculate_col}{The column name for calculating the \code{stay_id} and
+\code{stay_len} in \code{BirdFlowRoutes} object. Defaults to \code{date}.}
 }
 \value{
 Each function returns an S3 object of the corresponding class

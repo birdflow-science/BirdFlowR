@@ -131,7 +131,6 @@ plot_flux <- function(flux,
 
   # Start plot
   p <- flux |>
-    #dplyr::filter(transition %in% transitions[seq(4, 50, 4)]) |>
     ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
                                  fill = .data$flux)) +
     ggplot2::geom_raster() +

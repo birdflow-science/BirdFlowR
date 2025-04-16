@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_BirdFlowIntervals.R
 \name{as_BirdFlowIntervals}
 \alias{as_BirdFlowIntervals}
-\title{Convert BirdFlowRoutes to BirdFlowIntervals}
+\title{Convert \code{BirdFlowRoutes} to \code{BirdFlowIntervals}}
 \usage{
 as_BirdFlowIntervals(
   birdflow_routes,

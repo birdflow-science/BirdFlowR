@@ -10,7 +10,7 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' This may require aggregating multiple observations within the same timestep
 #' (week) which is controlled with the `aggregate` argument.
 #' Note the coordinates and dates in the result will be snapped to the
-#' cell and timestep (week) centers of the BirdFLow model (`bf`).
+#' cell and timestep (week) centers of the BirdFlow model (`bf`).
 #' @param routes A `Routes` object.
 #' @param bf A `BirdFlow` object for spatial and temporal reference.
 #' @param aggregate The aggregation method if more than one timestep is

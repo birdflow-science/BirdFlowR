@@ -12,7 +12,7 @@
 #' @param min_season_quality If `skip_checks = FALSE` and the model
 #' quality for any of the four seasons drops below this threshold an error
 #' is thrown.
-#' @param quiet Set to `TRUE` to supress messages.
+#' @param quiet Set to `TRUE` to suppress messages.
 #' @returns A list of species information derived from ebirdst.
 #' See [species_info()] for a description of the items.
 #' @seealso

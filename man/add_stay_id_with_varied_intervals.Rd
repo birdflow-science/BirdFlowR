@@ -16,7 +16,7 @@ add_stay_id_with_varied_intervals(
 \item{date_col}{The name of the column containing the
 date information. Defaults to \code{"date"}.}
 
-\item{timediff_unit}{The unit of 'stay_len'.}
+\item{timediff_unit}{The unit of \code{stay_len}.}
 }
 \value{
 A data frame with \code{stay_id} and \code{stay_len} columns added.
@@ -25,8 +25,8 @@ A data frame with \code{stay_id} and \code{stay_len} columns added.
 Adds stay IDs to a data frame,
 considering changes in spatial indices.
 Should only be applied on a single route, not multiple.
-Using add_stay_id_with_varied_intervals, rather than add_stay_id:
-It takes 'date' as input so account for varying intervals,
+Using \code{add_stay_id_with_varied_intervals()}, rather than \code{add_stay_id()}:
+It takes \code{date} as input so account for varying intervals,
 if the data is not sampled in the same frequency.
 }
 \examples{

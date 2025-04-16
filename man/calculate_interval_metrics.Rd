@@ -7,9 +7,9 @@
 calculate_interval_metrics(birdflow_intervals, bf)
 }
 \arguments{
-\item{birdflow_intervals}{A BirdFlowIntervals object}
+\item{birdflow_intervals}{A \code{BirdFlowIntervals} object}
 
-\item{bf}{BF model}
+\item{bf}{A \code{BirdFlow} model}
 }
 \value{
 mean metrics across transition pairs

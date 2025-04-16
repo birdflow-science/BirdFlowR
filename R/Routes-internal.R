@@ -37,11 +37,8 @@
 #' and `dates`?
 #' @param reset_index Logical. Should the index of the data frame be reset
 #' after sorting?
-#' @param stay_calculate_col The column name for calculating the stay_id and
-#' stay_len in BirdFlowRoutes object. Default to `date`.
-#' @param stay_calculate_timediff_unit The unit of stay_len in BirdFlowRoutes
-#' object. Default to `days`.
-#'
+#' @param stay_calculate_col The column name for calculating the `stay_id` and
+#' `stay_len` in `BirdFlowRoutes` object. Defaults to `date`.
 #' @return Each function returns an S3 object of the corresponding class
 #' (`Routes`, `BirdFlowRoutes`, or `BirdFlowIntervals`).
 #' @keywords internal
@@ -235,7 +232,7 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
                                sort_id_and_dates = FALSE) {
 
   # BirdFlowRoutes stay units are by definition weeks
-  stay_calculate_timediff_unit = "weeks"
+  stay_calculate_timediff_unit <- "weeks"
 
   if (sort_id_and_dates) {
     data <- sort_by_id_and_dates(data)
@@ -428,14 +425,14 @@ add_stay_id <- function(df) {
 #' @description Adds stay IDs to a data frame,
 #' considering changes in spatial indices.
 #' Should only be applied on a single route, not multiple.
-#' Using add_stay_id_with_varied_intervals, rather than add_stay_id:
-#' It takes 'date' as input so account for varying intervals,
+#' Using `add_stay_id_with_varied_intervals()`, rather than `add_stay_id()`:
+#' It takes `date` as input so account for varying intervals,
 #' if the data is not sampled in the same frequency.
 #'
 #' @param df A data frame with spatial and temporal data.
 #' @param date_col The name of the column containing the
 #' date information. Defaults to `"date"`.
-#' @param timediff_unit The unit of 'stay_len'.
+#' @param timediff_unit The unit of `stay_len`.
 #' @return A data frame with `stay_id` and `stay_len` columns added.
 #' @export
 #'

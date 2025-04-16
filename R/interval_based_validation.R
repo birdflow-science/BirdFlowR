@@ -8,7 +8,7 @@
 
 #' Get the interval based validation metrics for one transition pair
 #'
-#' @param birdflow_interval_row A row of data in the BirdFlowIntervals object
+#' @param birdflow_interval_row A row of data in the `BirdFlowIntervals` object
 #' @param bf BirdFlow model
 #' @param gcd Matrix of great circle distance
 #' @param st_dists Matrix of S&T distribution with weeks as columns,
@@ -127,8 +127,8 @@ get_interval_based_validation_one_transition_pair <- function(
 #' Calculate interval based metrics, including distance metrics
 #' for all transition pairs.
 #'
-#' @param birdflow_intervals A BirdFlowIntervals object
-#' @param bf BF model
+#' @param birdflow_intervals A `BirdFlowIntervals` object
+#' @param bf A `BirdFlow` model
 #'
 #' @return  mean metrics across transition pairs
 #' @export
@@ -141,7 +141,7 @@ calculate_interval_metrics <- function(birdflow_intervals, bf) {
 
   # Calculate distance metric & ll
   dists <- sapply(
-    split(birdflow_intervals$data, seq(nrow(birdflow_intervals$data))),
+    split(birdflow_intervals$data, seq_len(nrow(birdflow_intervals$data))),
     get_interval_based_validation_one_transition_pair, bf, gcd, st_dists
   )
   dists <- t(dists)

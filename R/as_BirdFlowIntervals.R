@@ -1,6 +1,6 @@
 ## as_BirdFlowIntervals --------------------------------------------------------
 
-#' Convert BirdFlowRoutes to BirdFlowIntervals
+#' Convert `BirdFlowRoutes` to `BirdFlowIntervals`
 #'
 #' @description Converts a `BirdFlowRoutes` object into a `BirdFlowIntervals`
 #' object, sampling interval pairs between time points. `BirdFlowIntervals`

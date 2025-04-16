@@ -22,7 +22,7 @@ and for migrant status. Defaults to \code{TRUE} - do the tests.}
 quality for any of the four seasons drops below this threshold an error
 is thrown.}
 
-\item{quiet}{Set to \code{TRUE} to supress messages.}
+\item{quiet}{Set to \code{TRUE} to suppress messages.}
 }
 \value{
 A list of species information derived from ebirdst.
