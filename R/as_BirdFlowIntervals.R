@@ -27,7 +27,7 @@
 #' @return A `BirdFlowIntervals` object.
 #' @seealso
 #' * [Routes()] for converting observational data into a formal `Routes` object
-#' * [as_BirdflowRoutes()] for converting `Routes` to `BirdFlowRoutes`.
+#' * [as_BirdFlowRoutes()] for converting `Routes` to `BirdFlowRoutes`.
 #'
 #'
 #' @export
