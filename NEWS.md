@@ -1,29 +1,69 @@
 # BirdFlowR 0.1.0.9070
-2025-04-04
+2025-04-16
 
-* Add generic data classes (in `Routes.R` and `Routes-internal.R`):
-  *  `Routes`: Creates a `Routes` object from a data frame. The input dataframe must have columns `route_id`, `date`, `lon`, `lat`, and `route_type`.
-  *  `BirdFlowRoutes`: Creates a `BirdFlowRoutes` object, extending `Routes` with additional BirdFlow-specific spatial and temporal information. It can be created by applying `as_BirdFlowRoutes(routes, bf)` on a `Routes` object, or directly input data frame with columns `x`, `y`, `i`, `timestep` (in addition to the columns in the `Routes` object). This object is in "BirdFlow spatiotemporal coordinates". Besides the mentioned columns, the `as_BirdFlowRoutes(routes, bf)` will automatically calculate the stopover informations -- `stay_len` and `stay_id`.
-  * `BirdFlowIntervals`: Creates a `BirdFlowIntervals` object, representing the sampled intervals between timesteps in BirdFlow data. It can be created by calling `as_BirdFlowIntervals`. The output dataframe should have columns `x1`, `x2`, `y1`, `y2`, `i1`, `i2`, `lon1`, `lon2`, `lat1`, `lat2`, `date1`, `date2`, `timestep1`, `timestep2`, `route_id`, `route_type`, `interval_id`.
-  * General pipeline: `Routes(route_df) |> as_BirdFlowRoutes(bf=bf)` to get a `BirdFlowRoutes` object.
-  * General pipeline: `Routes(route_df) |> as_BirdFlowRoutes(bf=bf) |> BirdFlowIntervals(n=500)` to get intervals.
-
-* Add validation functions. All in `validate_RouteDataClass.R`.  
-* Add supporting functions in `as_BirdFlowRoutes.R`, `as_BirdFlowIntervals.R` and `print.Routes.R`.
-* Functions in this package is updated correspondingly for those new data classes.
-* add `interval_based_validation.R` -- prototype, will be updated in the future.
+This update defines several classes for storing both real and synthetic 
+movement data and functions to work with those classes.
 
 
-Breaking Changes:
+## New Classes
 
-- `route()` now produces objects of the `BirdFlowRoutes` class. This class
-  is based on a list object with the primary data within  `$data`.
-- Old route objects will no longer plot with the updated `plot_routes()` or 
-  with `plot()`.
-- Anyone using `plot_routes()` to plot data not generated with `route()` 
-  will have to update their objects. Please update the package and then use
-  `Routes()`   possibly followed by `as_BirdFlowRoutes()` to convert.
-- `snap_to_birdflow()` no longer coerces date-time input to dates before
+There are three important classes defined in this update. 
+
+  * `Routes` contain full-precision information on bird movements in a 
+  standard format.`Routes` objects can contain information on multiple birds
+  and they can mix route types, but each object can only contain information 
+  on a single species species.
+  * `BirdFlowRoutes` contain either synthetic or real bird movements
+  that align with the cell and week centers of a `BirdFlow` model and contain
+  at most one observation per week for each bird. 
+  * `BirdFlowIntervals` represent sampled intervals from 
+  `BirdFlowRoutes`. Each row within the object contain a movement between a
+  starting and ending location and time. The start and end time
+  cannot be the same but the locations can. `BirdFlowIntervals` are intended
+  to be used to evaluate the performance of a Bird Flow model.  
+
+Thus the flow of data is
+```
+ bird_data |> 
+  Routes(species = species) |>     # Routes
+  as_BirdFlowRoutes(bf = bd) |>    # BirdFlowRoutes
+  as_BirdFlowIntervals(n = n) |>   # BirdFlowIntervals
+  calculate_inteval_metrics()      # metrics
+```  
+
+## New public functions
+
+  * `Routes()` creates a `Routes` object from bird movement data and requires
+  the species name, and a data frame with columns: `route_id`, `date`, 
+  `lon`, `lat`, and `route_type`.
+  * `as_BirdFlowRoutes()` converts `Routes` into `BirdFlowRoutes`.
+  * `as_BirdFlowIntervals()` samples `BirdFlowRoutes` to make `BirdFlowIntervals`
+  * `print()` methods for the new classes.
+  * `calculate_interval_metrics()` calculates performance metrics for
+   a `BirdFlow` model based on the movements from the `BirdFlowInterals`.
+   This is a prototype and the output format and arguments may change. 
+   
+
+## Updated Functions
+  * `route()` now produces the objects in the revised `BirdFlowRoutes` class.
+  * `plot_routes()` and the `plot` methods for `Routes` and `BirdFlowRoutes`
+  all use the same code and have been updated to work with 
+  the both route classes. Note: this adds the new capability of plotting bird 
+  tracking data with `plot_routes()` which previously wasn't possible.
+  * Similarly `animate_routes()` now works with both `Routes` and
+  `BirdFlowRoutes` and so can also be used on real movement data.
+  
+
+## Breaking Changes
+
+  *  `route()` now produces objects of the revised `BirdFlowRoutes` class. 
+  This class is based on a list object with the primary data within  `$data`.
+  * Old route objects will no longer plot with the updated `plot_routes()` or 
+   `plot()`.
+  *  Anyone using `plot_routes()` to plot data not generated with `route()` 
+  will have to update their objects. Use `Routes()` followed by 
+  `as_BirdFlowRoutes()` to convert data to the new classes.
+  * `snap_to_birdflow()` no longer coerces date-time input to dates before
   aggregating, and, if the input is date-time the output will be as well.
   
 

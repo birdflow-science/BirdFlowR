@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_distance_matrix.R
 \name{great_circle_distance_lonlat_input}
 \alias{great_circle_distance_lonlat_input}
-\title{Calcualte the great circle distance based on longitude and latitude}
+\title{Calculate the great circle distance based on longitude and latitude}
 \usage{
 great_circle_distance_lonlat_input(lat1, lon1, lat2, lon2)
 }
@@ -19,5 +19,5 @@ great_circle_distance_lonlat_input(lat1, lon1, lat2, lon2)
 the great circle distance
 }
 \description{
-Calcualte the great circle distance
+Calculate the great circle distance
 }
