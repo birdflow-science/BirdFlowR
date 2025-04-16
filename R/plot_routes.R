@@ -164,9 +164,9 @@ plot_routes <- function(routes,
     if (!has_bf) {
       if (is.null(crs)) {
         warning(
-          "Using latitude and longitude for plotting. This will",
-          "create a lot of distortion. Use the bf or crs argument to",
-          "set a coordinate reference system for plotting"
+          "Using latitude and longitude for plotting. This will ",
+          "create a lot of distortion. Use the bf or crs argument to ",
+          "set a coordinate reference system for plotting."
         )
         crs <- terra::crs("EPSG:4326")
       }
@@ -441,9 +441,12 @@ plot_routes <- function(routes,
         x = c(xmin, xmax, xmax, xmin),
         y = c(ymin, ymin, ymax, ymax)
       )
-      sf_corners <- sf::st_as_sf(corners, coords = c("x", "y"), crs = crs)
-
+      suppressMessages(
+        sf_corners <- sf::st_as_sf(corners, coords = c("x", "y"), crs = crs)
+      )
+      suppressMessages(
       coast <- get_coastline(sf_corners)
+      )
     }
 
     if (nrow(coast) > 0) {
