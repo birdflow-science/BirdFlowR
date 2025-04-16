@@ -20,8 +20,7 @@ BirdFlowRoutes(
   source = NULL,
   sort_id_and_dates = TRUE,
   reset_index = FALSE,
-  stay_calculate_col = "date",
-  stay_calculate_timediff_unit = "days"
+  stay_calculate_col = "date"
 )
 
 new_BirdFlowRoutes(
@@ -32,7 +31,6 @@ new_BirdFlowRoutes(
   dates,
   source,
   stay_calculate_col = "date",
-  stay_calculate_timediff_unit = "days",
   sort_id_and_dates = FALSE
 )
 

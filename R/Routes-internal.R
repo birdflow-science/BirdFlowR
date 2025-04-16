@@ -193,8 +193,9 @@ BirdFlowRoutes <- function(data,
                            source = NULL,
                            sort_id_and_dates = TRUE,
                            reset_index = FALSE,
-                           stay_calculate_col = "date",
-                           stay_calculate_timediff_unit = "days") {
+                           stay_calculate_col = "date") {
+
+
   # Check input
   stopifnot(inherits(data, "data.frame"))
   validate_BirdFlowRoutes_birdflow_route_df(data)
@@ -212,7 +213,6 @@ BirdFlowRoutes <- function(data,
     dates = dates,
     source = source,
     stay_calculate_col = stay_calculate_col,
-    stay_calculate_timediff_unit = stay_calculate_timediff_unit,
     sort_id_and_dates = sort_id_and_dates
   )
 
@@ -232,8 +232,11 @@ BirdFlowRoutes <- function(data,
 #' @keywords internal
 new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
                                stay_calculate_col = "date",
-                               stay_calculate_timediff_unit = "days",
                                sort_id_and_dates = FALSE) {
+
+  # BirdFlowRoutes stay units are by definition weeks
+  stay_calculate_timediff_unit = "weeks"
+
   if (sort_id_and_dates) {
     data <- sort_by_id_and_dates(data)
   }
@@ -250,6 +253,9 @@ new_BirdFlowRoutes <- function(data, species, metadata, geom, dates, source,
     # if the data is not sampled in a frequency.
     dplyr::ungroup() |>
     as.data.frame()
+
+  # Some eBird weeks have 8 days, rounding to make all weeks equal
+  data$stay_len <- round(data$stay_len)
 
   # Sort columns
   target_ordered_columns <- get_target_columns_BirdFlowRoutes(type = "output")

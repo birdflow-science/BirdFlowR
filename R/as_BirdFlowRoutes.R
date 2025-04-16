@@ -9,6 +9,8 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' adding BirdFlow-specific spatiotemporal coordinates.
 #' This may require aggregating multiple observations within the same timestep
 #' (week) which is controlled with the `aggregate` argument.
+#' Note the coordinates and dates in the result will be snapped to the
+#' cell and timestep (week) centers of the BirdFLow model (`bf`).
 #' @param routes A `Routes` object.
 #' @param bf A `BirdFlow` object for spatial and temporal reference.
 #' @param aggregate The aggregation method if more than one timestep is
@@ -25,15 +27,16 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' * [route()] for creating synthetic routes from a `BirdFlow` model.
 #' * [Routes()] for converting observational data into a formal `Routes` object
 #' suitable for use with this function.
-#' * [plot_routes()] for plotting arguments used when calling `plot` on
+#' * [plot_routes()] for plotting arguments used when calling `plot()` on
 #' `Routes` and `BirdFlowRoutes` objects.
-#' `plot`
 #' * [snap_to_birdflow()] to align observational data with a BirdFlow model
-#' without making a formal  `Routes ` object
+#' without making a formal  `Routes ` object. This function also provides more
+#' details when errors arise - usually due to the data not overlapping the
+#' modeled states as defined by the mask and dynamic mask within `bf`.
 #' * [as_BirdFlowIntervals()] for making intervals from the `BirdFlowModels`
-#'  `BirdFlowIntervalse` define movements between pair of locations,
-#'  which can used to evaluate model performance.
-#' @return A`BirdFlowRoutes` object.
+#'  `BirdFlowIntervals` define movements between pair of locations. Typically
+#'  they are used to evaluate model performance.
+#' @return A `BirdFlowRoutes` object.
 #' @export
 #'
 #' @examples
@@ -96,12 +99,23 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
         !.data[["error"]])
 
     if (nrow(routes$data) == 0) {
-      stop("All points falling fail to convert to the BirdFlow spatiotemporal 
+      stop("All points falling fail to convert to the BirdFlow spatiotemporal
            coordinates.")
     }
   }
 
+  # Note snap_to_birdflow resolves the timestep and  location index (i)
+  # that coordinate with a cell center but doesn't update the date
+  # or x,y coordinates.  Here we move the coordinates to the week and cell
+  # center.
+  years <- lubridate::year(routes$data$date)
+  routes$data$date <- lookup_date(routes$data$timestep, bf)
+  lubridate::year(routes$data$date) <- years
+  routes$data[, c("x", "y")] <- i_to_xy(routes$data$i, bf)
+
+
   # add some attributes (e.g., lon and lat) back, and convert data type.
+  # lat,lon are now cell centers
   latlon <- xy_to_latlon(x = routes$data$x, y = routes$data$y, bf = bf)
   routes$data$lat <- latlon$lat
   routes$data$lon <- latlon$lon
@@ -115,9 +129,15 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
     dplyr::select(-dplyr::all_of(c("n", "error", "message")))
 
   # Transform species to the BirdFlow species list
+  if (!routes$species$common_name == bf$species$common_name) {
+    warning("The BirdFlow model species, ",
+            '"', bf$species$common_name, "',",
+            " Does not match Routes, ",
+            '"', routes$species$common_name, '"')
+  }
+  # The model species information - which should always be complete -
+  # takes precedence.
   species <- bf$species
-  # Regardless of what the species in the `routes` is --
-  # if using bf, then the species is the species of bf model.
   geom <- bf$geom
   dates <- get_dates(bf) # use the up-to-date dates dataframe
 
@@ -131,7 +151,9 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
     metadata = metadata,
     geom = geom,
     dates = dates,
-    source = routes$source
+    source = routes$source,
+    sort_id_and_dates = sort_id_and_dates,
+    reset_index = reset_index
   )
   return(routes)
 }
