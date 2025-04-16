@@ -1,4 +1,16 @@
 test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
+
+  # Helper - snaps x, y, and date to bf
+  snap <- function(df, bf) {
+    df[, c("x", "y")] <- df[, c("x", "y")] |>
+      xy_to_i(bf = bf) |> i_to_xy(bf = bf)
+    years <- lubridate::year(df$date)
+    df$date <- df$date |> lookup_timestep(bf) |> lookup_date(bf)
+    lubridate::year(df$date) <- years
+    df
+  }
+
+
   set.seed(42)
   bf <- BirdFlowModels::amewoo
 
@@ -45,8 +57,9 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
       x = mean(x),
       y = mean(y),
       date = mean(date)
-    ) |>
-    as.data.frame()
+    ) |> as.data.frame()
+
+  means <- snap(means, bf)
 
   expect_equal(my_bfroutes$data[, cols], means[, cols])
 
@@ -65,6 +78,9 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
       date = median(date)
     ) |>
     as.data.frame()
+
+  medians <- snap(medians, bf)
+
   expect_equal(my_bfroutes$data[, cols], medians[, cols])
 
 
@@ -74,13 +90,9 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
     aggregate = "midweek"
   ))
 
-  # Multiple observations per day so midweek observation should always be
-  # on the midweek day
   result_dates <- my_bfroutes$data$date |> lubridate::as_date()
   expected_dates <- my_bfroutes$data$timestep |> lookup_date(bf = bf)
   expect_equal(result_dates, expected_dates)
-
-
 
   set.seed(1)
   expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes,
@@ -89,4 +101,5 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
   ))
 
   expect_snapshot(my_bfroutes$data[1:10, c("route_id", "i", "timestep")])
+
 })

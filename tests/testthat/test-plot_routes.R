@@ -68,9 +68,9 @@ test_that("plot_routes() works with data derived from tracks", {
   tracks <- make_fake_tracking_data(bf, 12, season = "prebreeding")
 
   expect_no_error(routes <- Routes(data = tracks,
-                                   species = list(common_name = "amewoo")))
+                                   species = list(common_name = species(bf))))
 
-  plot_routes(routes)
+  expect_warning(plot_routes(routes))
 
   expect_no_error(bf_rts <- as_BirdFlowRoutes(routes, bf))
 
