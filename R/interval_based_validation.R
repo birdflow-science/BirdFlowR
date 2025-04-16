@@ -1,5 +1,7 @@
-#' Calculate the interval based validation, including predictive distance metric
-#' , log likelihood, and log likelihood baseline
+#' Evaluate model performance using intervals (movement data)
+#'
+#' Calculate the interval based validation, including predictive
+#' distance metric, log likelihood, and log likelihood baseline
 #' For distance metrics: What is the distance and probability that BirdFlow
 #' model prediction beats the naive S&T probability
 #' distribution-based prediction?
@@ -11,9 +13,7 @@
 #' @param gcd Matrix of great circle distance
 #' @param st_dists Matrix of S&T distribution with weeks as columns,
 #' location as rows, probability as values.
-#'
 #' @return A named vector with distance metrics
-#' @export
 get_interval_based_validation_one_transition_pair <- function(
     birdflow_interval_row, bf, gcd, st_dists) {
   # latlong data for banding and encounter location
@@ -122,15 +122,17 @@ get_interval_based_validation_one_transition_pair <- function(
 }
 
 
-#' Get interval based metrics, including distance metrics
-#' for all transition pairs
+#' Calculate interval metrics
+#'
+#' Calculate interval based metrics, including distance metrics
+#' for all transition pairs.
 #'
 #' @param birdflow_intervals A BirdFlowIntervals object
 #' @param bf BF model
 #'
-#' @return mean metrics across transition pairs
+#' @return  mean metrics across transition pairs
 #' @export
-get_interval_based_metrics <- function(birdflow_intervals, bf) {
+calculate_interval_metrics <- function(birdflow_intervals, bf) {
   # weekly distributions directly from S&T
   st_dists <- get_distr(bf, which = "all", from_marginals = FALSE)
 
