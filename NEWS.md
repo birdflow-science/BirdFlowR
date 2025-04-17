@@ -1,3 +1,10 @@
+
+# BirdFlowR 0.1.0.9071
+2025-04-16
+* Add `dmi_to_i()` and `i_to_dmi()` to convert between standard location 
+indices (`i`) and dynamic mask indices (`dmi`).
+
+
 # BirdFlowR 0.1.0.9070
 2025-04-16
 
@@ -66,6 +73,7 @@ Thus the flow of data is
   * `snap_to_birdflow()` no longer coerces date-time input to dates before
   aggregating, and, if the input is date-time the output will be as well.
   
+>>>>>>> main
 
 # BirdFlowR 0.1.0.9069
 2024-10-17
