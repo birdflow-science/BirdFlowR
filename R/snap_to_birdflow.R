@@ -47,19 +47,22 @@
 #'  * `midweek` The observation that is closest to the middle of the week is
 #'  used to represent the week. With ties the observation that occurs first
 #'  is used.
+#'  * `random` One observation is randomly selected for each week.
 #'
 #'  Pending ideas, not yet implemented:
-#'  * `gmedian` [geometric median](https://cran.r-project.org/web/packages/Gmedian/index.html)
+#'  * `gmedian` 
+#'  [geometric median](https://cran.r-project.org/web/packages/Gmedian/index.html)
 #'  * `central` The point closest to the centroid of all the points is used to
 #'  represent the week.
 #' @return A data frame with columns
-#' \item{`<id_cols>`}{The columns identified with `id_cols` will be retained
+#' \item{id_cols}{The columns identified with `id_cols` will be retained
 #' and be leftmost.}
 #' \item{date}{This column will have information from `date_col` but not retain
 #' its name or original formatting. If aggregate is NULL the input dates
 #' will be retained, if not the date will vary with the aggregation method but
 #' will represent the dates that went into the summary and not the mid-week
-#' date associated with `timestep`.
+#' date associated with `timestep`. If the input `date_col` is a date-time
+#' class then the output date column will be as well.
 #' For example with `aggregate = "mean"` the date will be the average date of
 #' the points in the week.}
 #'  \item{timestep}{The model timestep associated with `date`.}
@@ -154,7 +157,11 @@ snap_to_birdflow <- function(d, bf,
   errors <- make_error_table(nrow(d))
 
   # Standardize date column name, date format, and add timesteps
-  d$date <- suppressWarnings(lubridate::as_date(d[[date_col]]))
+  # BUT allow date-time objects to stay in their original format
+  # so that aggregation works on date + time
+  if (!inherits(d$date, c("Date", "POSIXct", "POSIXlt"))) {
+    d$date <- suppressWarnings(lubridate::as_date(d[[date_col]]))
+  }
   errors$err_date[is.na(d$date)]  <- TRUE
   errors <- update_errors(errors)
   d$timestep <- lookup_timestep(d$date, bf, allow_failure = TRUE)
@@ -196,7 +203,6 @@ snap_to_birdflow <- function(d, bf,
     }
 
     # Add coordinates  - and drop any pre-existing x or y columns
-    # work with a temporary copy
     d <- dplyr::group_by(d, dplyr::pick({{id_cols}}), .data$timestep)
 
     d <- switch(aggregate,
@@ -215,9 +221,16 @@ snap_to_birdflow <- function(d, bf,
            "midweek" = {
               d$mid <- lookup_date(d$timestep, bf)
 
+              # If using date-times add 12 hours so noon is the midpoint
+              if (inherits(d$date, c("POSIXct", "POSIXlt"))) {
+                d$mid <- as.POSIXct(d$mid) + as.difftime(12, units = "hours")
+              }
               # find which element in x is closest to y
               closest <- function(x, y) {
-                which.min(abs(x - y))
+                difftime(y, x) |>
+                  as.numeric(units = "days") |>
+                  abs() |>
+                  which.min()
               }
 
               d <- dplyr::summarize(
@@ -226,12 +239,20 @@ snap_to_birdflow <- function(d, bf,
                 y = .data$y[closest(.data$date, .data$mid)],
                 date = .data$date[closest(.data$date, .data$mid)],
                 n = dplyr::n())
-              d$mid <- NULL
-              d
+
+              d},
+           "random" = {
+             d |>
+               dplyr::slice_sample(n = 1) |>
+               dplyr::summarize(x = .data$x,
+                                y = .data$y,
+                                date = .data$date,
+                                n = dplyr::n())
            },
 
            # If none of the above match
-           stop("aggregate should be \"mean\" or \"median\"")
+           stop("aggregate should be \"mean\" or 
+           \"median\" or \"midweek\" or \"random\"")
            )
 
     d <- as.data.frame(d)

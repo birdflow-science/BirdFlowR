@@ -15,14 +15,20 @@ print.BirdFlow <- function(x, ...) {
   cat("BirdFlow model\n")
 
   nc <- 15 # n characters before colon
-  pad <- function(x) stringr::str_pad(x, width = nc, side = "right", pad = " ")
+  pad <- function(x) format(x, width = nc)
   cat(pad("  dimensions"), ": ",
-      paste(nrow(x), ncol(x), n_timesteps(x), sep = ", "),
-      "  (nrow, ncol, ntimesteps)\n", sep = "")
+    paste(nrow(x), ncol(x), n_timesteps(x), sep = ", "),
+    "  (nrow, ncol, ntimesteps)\n",
+    sep = ""
+  )
   cat(pad("  resolution"), ": ", paste(res(x), collapse = ", "),
-      "  (x, y)\n", sep = "")
+    "  (x, y)\n",
+    sep = ""
+  )
   cat(pad("  active cells"), ": ", n_active(x), "\n", sep = "")
-  cat(pad("  size"), ": ", format(utils::object.size(x), unit =  "auto"),
-      "\n", sep = "")  # drop size before package release
+  cat(pad("  size"), ": ", format(utils::object.size(x), unit = "auto"),
+    "\n",
+    sep = ""
+  ) # drop size before package release
   invisible(x)
 }

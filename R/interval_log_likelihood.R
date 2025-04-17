@@ -78,30 +78,37 @@
 #' observations <- BirdFlowModels::rewbla_observations
 #' intervals <- BirdFlowModels::rewbla_intervals
 #' intervals <- intervals[1:20, ] # toy example
-#' intervals  <- interval_log_likelihood(intervals, observations, bf)
+#' intervals <- interval_log_likelihood(intervals, observations, bf)
 #' head(intervals, 3)
 interval_log_likelihood <- function(intervals, observations, bf,
-                                   one_at_a_time = FALSE) {
-
+                                    one_at_a_time = FALSE) {
   verbose <- birdflow_options("verbose")
 
-  stopifnot("date" %in% names(observations),
-            "lon" %in% names(observations),
-            "lat" %in% names(observations),
-            "id" %in% names(observations))
+  stopifnot(
+    "date" %in% names(observations),
+    "lon" %in% names(observations),
+    "lat" %in% names(observations),
+    "id" %in% names(observations)
+  )
 
-  stopifnot("from" %in% names(intervals),
-            "to" %in% names(intervals))
+  stopifnot(
+    "from" %in% names(intervals),
+    "to" %in% names(intervals)
+  )
 
   retained_new_columns <-
-    c("log_likelihood", "null_ll", "lag", "exclude", "not_active",
-      "dynamic_mask", "sparse", "same_timestep", "bad_date")
+    c(
+      "log_likelihood", "null_ll", "lag", "exclude", "not_active",
+      "dynamic_mask", "sparse", "same_timestep", "bad_date"
+    )
   new_column_types <- c(rep(list(numeric(0)), 3), rep(list(logical(0)), 6))
 
   if (any(retained_new_columns %in% names(intervals))) {
     conflicts <- intersect(retained_new_columns, names(intervals))
     warning("These columns will be replaced in the output: '",
-            paste0(conflicts, collapse = "', '"), "'", sep = "")
+      paste0(conflicts, collapse = "', '"), "'",
+      sep = ""
+    )
     intervals <- intervals[, !names(intervals) %in% conflicts, drop = FALSE]
   }
 
@@ -117,10 +124,12 @@ interval_log_likelihood <- function(intervals, observations, bf,
   }
 
 
-  if (!all(intv$from %in% obs$id))
+  if (!all(intv$from %in% obs$id)) {
     stop("Not all `from` values are in the id column of observations")
-  if (!all(intv$to %in% obs$id))
+  }
+  if (!all(intv$to %in% obs$id)) {
     stop("Not all `to` values are in the id column of observations")
+  }
 
   # Set distribution timestep labeling to "t1" etc,
   original_time_format <- birdflow_options("time_format")
@@ -140,7 +149,7 @@ interval_log_likelihood <- function(intervals, observations, bf,
     obs$x > xmax(bf) | obs$x < xmin(bf) | obs$y > ymax(bf) | obs$y < ymin(bf)
   obs$i <- NA
   sv <- !obs$beyond_extent
-  obs$i[sv] <-  xy_to_i(obs$x[sv], obs$y[sv], bf)
+  obs$i[sv] <- xy_to_i(obs$x[sv], obs$y[sv], bf)
 
   # Convert date to timestep
   obs$ts <- lookup_timestep(obs$date, bf)
@@ -157,7 +166,7 @@ interval_log_likelihood <- function(intervals, observations, bf,
 
   # Determine the lag  (weeks between observations)
   cyclical <- n_transitions(bf) == n_timesteps(bf)
-  same_year <-   intv$t1 <= intv$t2
+  same_year <- intv$t1 <= intv$t2
   intv$lag <- NA_integer_
   intv$lag[same_year] <- intv$t2[same_year] - intv$t1[same_year]
   if (cyclical) {
@@ -169,17 +178,17 @@ interval_log_likelihood <- function(intervals, observations, bf,
 
   # Add logical columns for problems and exclusions
   intv$bad_date <- intv$same_timestep <- intv$not_active <-
-    intv$dynamic_mask <- intv$sparse <-  intv$exclude  <- FALSE
+    intv$dynamic_mask <- intv$sparse <- intv$exclude <- FALSE
 
   # Exclude NA lags (these are caused by date issues)
   sv <- is.na(intv$lag)
-  intv$exclude[sv]  <- TRUE
+  intv$exclude[sv] <- TRUE
   intv$bad_date[sv] <- TRUE
 
   # Exclude intervals where the starting or ending location aren't within
   # active cells.
   sv <- is.na(intv$i1) | is.na(intv$i2)
-  intv$not_active[sv] <-  TRUE
+  intv$not_active[sv] <- TRUE
   intv$exclude[sv] <- TRUE
 
   # Exclude locations that are not modeled at the given timestep
@@ -201,10 +210,12 @@ interval_log_likelihood <- function(intervals, observations, bf,
   # about 4 times as long.
   if (one_at_a_time) {
     rows <- which(!intv$exclude)
-    if (verbose)
+    if (verbose) {
       pb <- progress::progress_bar$new(
         total = length(rows),
-        format = " Calculating log likelihoods [:bar] :percent eta: :eta")
+        format = " Calculating log likelihoods [:bar] :percent eta: :eta"
+      )
+    }
     likelihood <- rep(NA_real_, nrow(intv))
     null_likelihood <- rep(NA_real_, nrow(intv))
 
@@ -216,19 +227,20 @@ interval_log_likelihood <- function(intervals, observations, bf,
       i2 <- intv$i2[r]
       d1 <- rep(0, n_active(bf))
       d1[i1] <- 1
-      pred_d <- predict(bf, distr = d1, start = t1, end = t2,
-                        direction = "forward")
+      pred_d <- predict(bf,
+        distr = d1, start = t1, end = t2,
+        direction = "forward"
+      )
       likelihood[r] <- pred_d[i2, ncol(pred_d)]
 
       # Null likelihood based on random sample from full distribution
       full_d <- get_distr(bf, t2)
       null_likelihood[r] <- full_d[i2]
-      if (verbose)
+      if (verbose) {
         pb$tick()
+      }
     }
-
   } else {
-
     # Batch implementation
 
     # Process in batches based on shared starting timestep. The predict()
@@ -248,14 +260,15 @@ interval_log_likelihood <- function(intervals, observations, bf,
     if (verbose) {
       pb <- progress::progress_bar$new(
         total = sum(!intv$exclude),
-        format = " Calculating log likelihoods [:bar] :percent eta: :eta")
+        format = " Calculating log likelihoods [:bar] :percent eta: :eta"
+      )
     }
 
     likelihood <- rep(NA_real_, nrow(intv))
     null_likelihood <- rep(NA_real_, nrow(intv))
 
     for (j in seq_along(starting_timesteps)) {
-      t1 <- starting_timesteps[j]  # starting timestep (common to all)
+      t1 <- starting_timesteps[j] # starting timestep (common to all)
       sv <- intv$t1 == t1 & !intv$exclude
       i1s <- intv$i1[sv] # starting locations
       i2s <- intv$i2[sv] # ending locations
@@ -278,28 +291,30 @@ interval_log_likelihood <- function(intervals, observations, bf,
       # Pull out probability of ending location and time
       time_index <- match(paste0("t", t2s), dimnames(ds)[[3]])
       sel <- cbind(i2s, seq_along(i1s), time_index)
-      likelihood[sv] <-  ds[sel]
+      likelihood[sv] <- ds[sel]
 
       # Retrieve values for ending location from the distributions for the
       # species (eBird S&T distribution) at the ending timesteps
       full_distr <- get_distr(bf, which = t2s)
-      if (!is.matrix(full_distr))
+      if (!is.matrix(full_distr)) {
         full_distr <- matrix(full_distr, ncol = 1)
+      }
       null_likelihood[sv] <- full_distr[cbind(i2s, seq_along(i2s))]
 
-      if (verbose)
+      if (verbose) {
         pb$tick(len = sum(sv))
+      }
     }
   }
 
   intv$log_likelihood <- log(likelihood)
-  intv$null_ll  <- log(null_likelihood)
+  intv$null_ll <- log(null_likelihood)
 
   # Given that we've already excluded intervals that start and
   # end at dropped states, all of these zero probability intervals
   # should be because sparsification eliminated all the routes that connect
   # the pair of observations.
-  sv <- likelihood %in%  0
+  sv <- likelihood %in% 0
   intv$sparse[sv] <- TRUE
   intv$exclude[sv] <- TRUE
   intv$log_likelihood[sv] <- NA
@@ -308,5 +323,4 @@ interval_log_likelihood <- function(intervals, observations, bf,
   stopifnot(all(intv$from == intervals$from, intv$to == intervals$to))
 
   return(cbind(intervals, intv[, retained_new_columns]))
-
 }

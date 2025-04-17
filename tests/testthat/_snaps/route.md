@@ -3,7 +3,10 @@
     Code
       pts
     Output
-              x       y route_id timestep       date   i stay_id stay_len
-      1 -225000 -375000        1        5 2021-02-01 246       1        4
-      5  -75000  375000        1        9 2021-03-01 164       2        7
+        route_id       x       y   i       lon      lat timestep       date
+      1        1 -225000 -375000 246 -87.58125 35.75464        5 2021-02-01
+      5        1  -75000  375000 164 -86.00650 42.53498        9 2021-03-01
+        route_type stay_id stay_len
+      1  synthetic       1        3
+      5  synthetic       2        6
 

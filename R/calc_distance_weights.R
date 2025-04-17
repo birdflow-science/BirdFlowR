@@ -18,7 +18,7 @@
 #' projecting it  onto the line (m)
 #' @param line_lengths How long is the line (m)
 #' @param radius_m The radius of the transect at the flux points - used to
-#' determine the band of brobability desnity that will be added to form
+#' determine the band of probability density that will be added to form
 #' the weight.
 #' @param res_m The resolution of the associated bird flow model, used to
 #' determine the nugget added to the variance to represent the uncertainty in
@@ -26,7 +26,7 @@
 #'
 #' @param method  The method used for calculating the standard deviation
 #' in the probability distribution.  Currently `"m3"`, Martern 3/2; and
-#' `"bb"`, brownian bridge are supported.
+#' `"bb"`, Brownian bridge are supported.
 #'
 #' @return A vector of weights of the same length as the first three arguments.
 #' @keywords internal

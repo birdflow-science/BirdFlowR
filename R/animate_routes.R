@@ -9,7 +9,10 @@
 #'  ℹ Do you need to adjust the group aesthetic?"
 #'  This will possibly be repeated while individuals remain in one location.
 #'  It can be safely ignored. The error is thrown while rendering and not
-#'  from within `animate_routes()` where it could not be suppressed."
+#'  from within `animate_routes()` so cannot be suppressed by code in
+#'  \pkg{BirdFlowR}.
+#' @param routes An object of class `Routes` or  `BirdFlowRoutes`.  Likely the
+#' the output of  [route()], [as_BirdFlowRoutes], or [Routes()].
 #' @param bf A BirdFlow object
 #' @inheritParams plot_routes
 #' @inheritDotParams plot_routes -routes -bf
@@ -26,7 +29,7 @@
 #'
 #' \dontrun{
 #'   # example render
-#'   timesteps <- unique(rts$timestep)
+#'   timesteps <- unique(rts$data$timestep)
 #'   gif <- gganimate::animate(anim,
 #'                             device = "ragg_png", # is fast and pretty
 #'                             width = 7, height = 6,
@@ -44,6 +47,7 @@
 #' }
 #'
 animate_routes <- function(routes, bf, ...) {
+
   p <- plot_routes(routes, bf, ...)
 
 

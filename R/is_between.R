@@ -33,7 +33,7 @@ if (FALSE) {
 #' @param radius A point is considered between two locations if it is within
 #' `radius` meters (along a great circle) of the great circle line between the
 #' locations. `radius` defaults to half the cell size (`mean(res(bf))/2`).
-#' @param n_direction The number of (equally spaced) directional bins to
+#' @param n_directions The number of (equally spaced) directional bins to
 #' classify bearings into.  Currently only `1` is supported.
 #' @param skip_unconnected If `TRUE` then only connections that exist in `bf`
 #' will be evaluated, and between matrix will erroneously indicate that

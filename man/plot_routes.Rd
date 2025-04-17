@@ -15,15 +15,21 @@ plot_routes(
   barheight = 8,
   route_linewidth = 0.85,
   dot_sizes = c(1.1, 3.5),
-  coast_linewidth = 0.25
+  coast_linewidth = 0.25,
+  stay_units = "weeks",
+  show_mask = TRUE,
+  crs = NULL,
+  static = TRUE
 )
 
 \method{plot}{BirdFlowRoutes}(x, ...)
 }
 \arguments{
-\item{routes}{The output of \code{\link[=route]{route()}} or a similarly structured data frame.}
+\item{routes, x}{An object of class \code{Routes} or  \code{BirdFlowRoutes}.  Likely the
+the output of  \code{\link[=route]{route()}}, \link{as_BirdFlowRoutes}, or \code{\link[=Routes]{Routes()}}.}
 
-\item{bf, x}{A BirdFlow object.}
+\item{bf}{A BirdFlow object. Only used if \code{x} is a \code{Routes} object, in
+which case it provides the CRS and}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -52,29 +58,31 @@ used to represent stay length.}
 
 \item{coast_linewidth}{Line width used for coastlines.}
 
-\item{...}{Passed to \code{plot_routes()}}
+\item{stay_units}{The unit to plot the stay length at each location. Default
+to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours}, \code{days} and \code{weeks}.}
+
+\item{show_mask}{Should the BirdFlow Model's (\code{bf}) static mask be displayed.}
+
+\item{crs}{Only used when \code{bf} is missing.  \code{crs} sets the Coordinate
+Reference system used for plotting. See \code{\link[terra:crs]{terra::crs()}}.}
+
+\item{static}{For internal use. It is set to \code{FALSE} when \code{plot_routes()} is
+called from \code{\link[=animate_routes]{animate_routes()}}.}
+
+\item{...}{Passed to \code{plot_routes()} from \code{plot()} for \code{Route} and
+\code{BirdFlowRoutes} objects.}
 }
 \value{
 A ggplot object. Use \code{\link[=print]{print()}} to display it.
 }
 \description{
-Plot routes as lines with color indicating the passage of time and dot size
-indicating the length of stay at each stop.
+Plot \code{Routes} and \code{BirdFlowRoutes} objects as as lines with color indicating
+the passage of time. For \code{BirdFlowRoutes} the end point of each week
+is shown as a dot and the size of the dot corresponds to how long the birds
+stayed at that location.
 }
 \details{
 \code{plot.BirdFlowRoutes()} calls \code{plot_routes()}.
-
-As of 6/13/2023 \code{route()} returns an object of class \code{BirdFlowRoutes}
-that is a data frame with some extra attributes tacked on.
-
-That \code{route()} returns a data frame like object that contains the data
-formerly in the \code{points} component with columns as described here is, I think
-finalized.
-
-However, whether we keep it an S3 class and whether we keep the extra
-attributes is experimental. If you want to be defensive and not use the
-experimental aspects then call \code{as.data.frame(rts)} to convert to a standard
-data.frame.
 }
 \examples{
 bf <- BirdFlowModels::amewoo
@@ -85,22 +93,26 @@ rts <- route(bf, n, season = "prebreeding")
 plot_routes(rts, bf)
 
 # One panel per route
-plot_routes(rts[rts$route_id \%in\% 1:4, ], bf, facet = TRUE)
+new_rts <- rts
+new_rts$data <- new_rts$data[new_rts$data$route_id \%in\% 1:4, ]
+plot_routes(new_rts, bf, facet = TRUE)
 
 # Returned plot object can be edited
 # Here we change the title and add an additional sf
 # layer with country boundaries
 library(ggplot2)
 p <- plot_routes(rts, bf) +
- ggtitle(paste0(species(bf), " (with countries)")) +
- geom_sf(data = get_countries(bf),  inherit.aes = FALSE,  fill = NA) +
- coord_sf(expand = FALSE)
+  ggtitle(paste0(species(bf), " (with countries)")) +
+  geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
+  coord_sf(expand = FALSE)
 p
 \dontrun{
 # Use alternate color palettes
-plot_routes(rts, bf,  use_seasonal_colors = FALSE )
+plot_routes(rts, bf, use_seasonal_colors = FALSE)
 
-plot_routes(rts, bf, use_seasonal_colors = FALSE,
-            pal = c("red", "yellow", "blue"))
+plot_routes(rts, bf,
+  use_seasonal_colors = FALSE,
+  pal = c("red", "yellow", "blue")
+)
 }
 }

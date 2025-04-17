@@ -217,6 +217,7 @@ xy_to_i <- function(x, y, bf) {
   return(rc_to_i(row, col, bf))
 }
 
+
 #' @rdname index_conversions
 #' @export
 latlon_to_xy <- function(lat, lon, bf) {
@@ -245,6 +246,7 @@ latlon_to_xy <- function(lat, lon, bf) {
     latlon$lon <= 180 &
     latlon$lat >= -90 &
     latlon$lat <= 90
+
   pts <-
     sf::st_as_sf(latlon[sv, , drop = FALSE], coords = c("lon", "lat"),
                  crs = sf::st_crs("EPSG:4326")) |>

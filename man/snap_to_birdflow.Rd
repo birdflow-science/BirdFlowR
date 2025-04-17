@@ -54,24 +54,27 @@ week.
 \item \code{midweek} The observation that is closest to the middle of the week is
 used to represent the week. With ties the observation that occurs first
 is used.
+\item \code{random} One observation is randomly selected for each week.
 }
 
 Pending ideas, not yet implemented:
 \itemize{
-\item \code{gmedian} \href{https://cran.r-project.org/web/packages/Gmedian/index.html}{geometric median}
+\item \code{gmedian}
+\href{https://cran.r-project.org/web/packages/Gmedian/index.html}{geometric median}
 \item \code{central} The point closest to the centroid of all the points is used to
 represent the week.
 }}
 }
 \value{
 A data frame with columns
-\item{\verb{<id_cols>}}{The columns identified with \code{id_cols} will be retained
+\item{id_cols}{The columns identified with \code{id_cols} will be retained
 and be leftmost.}
 \item{date}{This column will have information from \code{date_col} but not retain
 its name or original formatting. If aggregate is NULL the input dates
 will be retained, if not the date will vary with the aggregation method but
 will represent the dates that went into the summary and not the mid-week
-date associated with \code{timestep}.
+date associated with \code{timestep}. If the input \code{date_col} is a date-time
+class then the output date column will be as well.
 For example with \code{aggregate = "mean"} the date will be the average date of
 the points in the week.}
 \item{timestep}{The model timestep associated with \code{date}.}

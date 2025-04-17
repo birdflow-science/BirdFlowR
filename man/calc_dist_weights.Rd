@@ -22,7 +22,7 @@ projecting it  onto the line (m)}
 \item{line_lengths}{How long is the line (m)}
 
 \item{radius_m}{The radius of the transect at the flux points - used to
-determine the band of brobability desnity that will be added to form
+determine the band of probability density that will be added to form
 the weight.}
 
 \item{res_m}{The resolution of the associated bird flow model, used to
@@ -31,7 +31,7 @@ the starting and ending location of the transition.}
 
 \item{method}{The method used for calculating the standard deviation
 in the probability distribution.  Currently \code{"m3"}, Martern 3/2; and
-\code{"bb"}, brownian bridge are supported.}
+\code{"bb"}, Brownian bridge are supported.}
 }
 \value{
 A vector of weights of the same length as the first three arguments.
