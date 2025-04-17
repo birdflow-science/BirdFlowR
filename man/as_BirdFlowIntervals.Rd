@@ -75,6 +75,6 @@ birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
 \seealso{
 \itemize{
 \item \code{\link[=Routes]{Routes()}} for converting observational data into a formal \code{Routes} object
-\item \code{\link[=as_BirdflowRoutes]{as_BirdflowRoutes()}} for converting \code{Routes} to \code{BirdFlowRoutes}.
+\item \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} for converting \code{Routes} to \code{BirdFlowRoutes}.
 }
 }
