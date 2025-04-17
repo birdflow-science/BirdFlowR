@@ -17,7 +17,7 @@ in a BirdFlow object's coordinate reference system (CRS)."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9070</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9071</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,7 +120,7 @@ unmasked cells.</p></dd>
 
 <dt id="arg-lat-lon">lat, lon<a class="anchor" aria-label="anchor" href="#arg-lat-lon"></a></dt>
 <dd><p>The latitude and longitude in WGS 1984 (EPSG:4326). A two
-column matrix or data frame can also be passed to lat.</p></dd>
+column matrix or data frame can also be passed to <code>lat</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -192,6 +192,9 @@ equivalent or a matrix (representing multiple distributions) into an array
 equivalent.</p></li>
 <li><p><code><a href="rasterize.html">rasterize_distr()</a></code> converts a vector distribution into a
 <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> - similar to those created by <code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">terra::rast()</a></code>.</p></li>
+<li><p><code><a href="dynamic_mask_index_conversions.html">dmi_to_i()</a></code> and <code><a href="dynamic_mask_index_conversions.html">i_to_dmi()</a></code> convert between location indices (<code>i</code>) along
+cells included by the static mask and dynamic mask indices (<code>dmi</code>)
+along the cells included in the dynamic mask for a given timestep.</p></li>
 </ul></div>
     </div>
 
