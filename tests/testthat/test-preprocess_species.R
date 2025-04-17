@@ -13,9 +13,11 @@ test_that("preprocess_species runs on test dataset", {
   expect_no_error(a <- preprocess_species("example_data", hdf5 = FALSE))
   expect_no_error(validate_BirdFlow(a, allow_incomplete = TRUE))
   expect_error(validate_BirdFlow(a))
-  expect_true(all((ext(a)[, ] %% xres(a)) < 1e-9))  # Test if origin is at 0, 0
+  div_results <- ext(a)[, ] %/% xres(a) # exact division
+  expect_no_error(all(abs(div_results * xres(a) - ext(a)[, ]) < 1e-9))
+  # Test if origin is at 0, 0
 
-  # Snapshot test of first 12 non-zero values in the 5th distribibution
+  # Snapshot test of first 12 non-zero values in the 5th distribution
   d <- get_distr(a, 5)
   df <- data.frame(i = seq_along(d), density = d)
   df <- df[!df$density == 0, ]
@@ -207,9 +209,40 @@ test_that("preprocess_species() works with crs arg", {
   # Create and commit to cleaning up a temporary dir
   dir <- local_test_dir("preprocess_crs")
 
+  test_crs <-
+    'PROJCRS["Western Mollweide",
+      BASEGEOGCRS["WGS 84",
+          DATUM["World Geodetic System 1984",
+              ELLIPSOID["WGS 84",6378137,298.257223563,
+                  LENGTHUNIT["metre",1]]],
+          PRIMEM["Greenwich",0,
+              ANGLEUNIT["Degree",0.0174532925199433]]],
+      CONVERSION["Western Mollweide",
+          METHOD["Mollweide"],
+          PARAMETER["Longitude of natural origin",-90,
+              ANGLEUNIT["Degree",0.0174532925199433],
+              ID["EPSG",8802]],
+          PARAMETER["False easting",0,
+              LENGTHUNIT["metre",1],
+              ID["EPSG",8806]],
+          PARAMETER["False northing",0,
+              LENGTHUNIT["metre",1],
+              ID["EPSG",8807]]],
+      CS[Cartesian,2],
+          AXIS["(E)",east,
+              ORDER[1],
+              LENGTHUNIT["metre",1]],
+          AXIS["(N)",north,
+              ORDER[2],
+              LENGTHUNIT["metre",1]],
+      USAGE[
+          SCOPE["Not known."],
+          AREA["World."],
+          BBOX[-90,-180,90,180]]]'
+
   expect_no_error(
     bf <- preprocess_species(species = "example_data", res = 400, hdf5 = FALSE,
-                             crs = birdflow_crs)
+                             crs = test_crs)
   )
 })
 
@@ -259,7 +292,7 @@ test_that("preprocess_species() works with trim_quantile", {
     get_distr(bf_trim, c(1, 10, 20, 40)) |> plot_distr(bf_trim)
   }
 
-  skip("Slow test of quatile trimming on Robins - always skipped.")
+  skip("Slow test of quantile trimming on Robins - always skipped.")
 
   # This test requires a valid ebirdst key as well
 

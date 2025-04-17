@@ -218,93 +218,13 @@ preprocess_species <- function(species = NULL,
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
-  er <- ebirdst::ebirdst_runs
-  names(er)[names(er) == "is_resident"] <- "resident" # restore 2021 name
-  spmd <- as.list(er[er$species_code == species, , drop = FALSE])
-
-  bf_msg("Species resolved to: '", species, "' (", spmd$common_name, ")\n")
-
-  # Reformat dates as strings
-  date_to_char <- function(x) {
-    if (inherits(x, "Date"))
-      x <- as.character(x)
-    return(x)
-  }
-  spmd <- lapply(spmd, date_to_char)
-
-  # Check that ebirdst species data supports BirdFlow modeling
-  if (spmd$resident)
-    stop(spmd$common_name, " (", spmd$species_code, ") is a resident ",
-         "(non-migratory) species and is therefore a poor candidate for ",
-         "BirdFlow modeling.")
-
-  # Restore formatting to ebirdst columns
-  # in ebirdst 2.2021.1 all columns are stored as characters.
-  # it was fixed in 2.2021.3 so this is now extra security against
-  # future format changes
-  logical_variables <- intersect(c("resident",
-                                   "breeding_range_modeled",
-                                   "nonbreeding_range_modeled",
-                                   "postbreeding_migration_range_modeled",
-                                   "prebreeding_migration_range_modeled"),
-                                 names(spmd))
-
-  numeric_variables <- intersect(c("breeding_quality",
-                                   "nonbreeding_quality",
-                                   "postbreeding_migration_quality",
-                                   "prebreeding_migration_quality"),
-                                 names(spmd))
-
-  spmd[logical_variables] <- as.logical(spmd[logical_variables])
-  spmd[numeric_variables] <- as.numeric(spmd[numeric_variables])
-
-
-  # Check eBird data quality
-
-  # used for check prior to ebirds 3.2022.0 and to drop these columns (any v.)
-  model_coverage_variables <- c("breeding_range_modeled",
-                                "nonbreeding_range_modeled",
-                                "postbreeding_migration_range_modeled",
-                                "prebreeding_migration_range_modeled")
-
-  if (ebirdst_pkg_ver() < "3.2022.0") {
-    if (!skip_quality_checks && ! all(unlist(spmd[model_coverage_variables])))
-      stop("eBird status and trends models do not cover the full range for ",
-           spmd$common_name, " (", spmd$species_code, ")")
-  } else {
-    # ebirdst >= 3.2022.0
-    model_quality_variables <- c("breeding_quality",
-                                 "nonbreeding_quality",
-                                 "postbreeding_migration_quality",
-                                 "prebreeding_migration_quality")
-    if (!skip_quality_checks &&
-        any(unlist(spmd[model_quality_variables]) < min_season_quality))
-      stop("eBird status and trends model quality is less than ",
-           min_season_quality,
-           " in one or more seasons for ",
-           spmd$common_name, " (", spmd$species_code, ")", sep = "")
-  }
-
-  # Drop the variables that aren't relevant to BirdFlow
-  # * The model_coverage_variables were dropped from ebirdst with v 3.2022
-  #   and have always been dropped from BirdFlow objects
-  # * Resident information dropped b/c we only fit BirdFlow models to migrants
-  spmd <- spmd[!names(spmd) %in% model_coverage_variables]
-  spmd$resident <- NULL
-  spmd$resident_quality <- NULL
-  spmd$resident_end <- NULL
-  spmd$resident_start  <- NULL
-
-  # As of ebirdst 3.2022 we also need to drop trends variables
-  spmd[grep("trends", names(spmd))] <- NULL
-  spmd$rsquared <- NULL # trends fit quality
-  spmd$beta0 <- NULL # trends model intercept
-
-  # check contents against new_BirdFlow() for consistency
-  stopifnot(all(names(spmd) == names(export$species)))
+  spmd <- lookup_species_metadata(species,
+                                  skip_checks = skip_quality_checks,
+                                  min_season_quality = min_season_quality)
 
   # Save species metadata for export
   export$species <- spmd
+
 
   # Add ebirdst versions to  metadata
   v <- ebirdst::ebirdst_version()

@@ -138,15 +138,21 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
     trajectory[i + 1, ] <- extract_positions(distr, timestep = timesteps[i + 1])
   }
 
-  rts <- format_trajectory(trajectory, bf, timesteps)
-  attr(rts, "geom") <- bf$geom
-  attr(rts, "species") <- bf$species
+  # Generate route metadata
+  metadata <- bf$metadata[BirdFlowRoutes_metadata_items]
 
-  md <- bf$metadata
-  md$route_type <- "synthetic"
-  attr(rts, "metadata") <- md
-  attr(rts, "dates") <- bf$dates
-  class(rts) <- c("BirdFlowRoutes", class(rts))
+  # trajectory to BirdFlowRoutes object
+  rts <- format_trajectory(trajectory, bf, timesteps)
+  latlon <- xy_to_latlon(rts$x, rts$y, bf)
+  rts$lon <- latlon$lon
+  rts$lat <- latlon$lat
+  rts$timestep <- as.integer(rts$timestep)
+  rts$route_type <- "synthetic"
+  rts$date <- as.Date(rts$date)
+  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = metadata,
+                        geom = bf$geom, dates = get_dates(bf),
+                        source = "Synthesized from a BirdFlow model",
+                        sort_id_and_dates = FALSE)
 
   return(rts)
 }
@@ -163,25 +169,24 @@ format_trajectory <- function(trajectory, bf, timesteps) {
   #  x, y : coordinates of position
   #  timestep : integer timestep, corresponds to rows in the dates element of x
   #  route : integer route ID
-  #  date : the date associated with the timestep
+  #  date : the date associated with the timestep, adjusted to always be
+  #  monotonic (year will advance)
   x <- as.vector(i_to_x(trajectory, bf))
   y <- as.vector(i_to_y(trajectory, bf))
   timestep <- rep(timesteps, times = ncol(trajectory))
+  year_offsets <- rep(calc_year_offset(timesteps), times = ncol(trajectory))
   route_id <- rep(seq_len(ncol(trajectory)), each = nrow(trajectory))
-  date <- get_dates(bf)$date[timestep]
+  date <- get_dates(bf)$date[timestep] |> lubridate::as_date()
+
+  # Add year offset to dates to make monotonic
+  lubridate::year(date) <- lubridate::year(date) + year_offsets
+
 
   points <- data.frame(x, y, route_id, timestep, date,
                        i = as.vector(trajectory))
 
-  add_stay_id <- function(df) {
-    # Benjamin's function
-    df |>
-      dplyr::mutate(stay_id = cumsum(c(1, as.numeric(diff(.data$i)) != 0)),
-                    stay_len = rep(rle(.data$stay_id)$lengths,
-                                   times = rle(.data$stay_id)$lengths))
-  }
+  # Note sorting by ID and dates (1) should not be necessary here, and
+  # (2) will break routes that are backwards in time.
 
-  points <- points |> dplyr::group_by(.data$route_id) |> add_stay_id()
-
-  return(as.data.frame(points))
+  return(points)
 }

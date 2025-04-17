@@ -16,7 +16,7 @@ test_that("animate_routes() runs", {
   rts <- route(bf, x_coord = xy$x, y_coord = xy$y, start = start, end = end)
   expect_no_error(anim <- animate_routes(rts, bf))
 
-  timesteps <- sort(unique(rts$timestep))
+  timesteps <- sort(unique(rts$data$timestep))
 
   skip_if_not_installed("ragg")
 

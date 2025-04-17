@@ -26,6 +26,9 @@ cell centers to a buffered convex hull around the active cell centers.}
 \code{radius} meters (along a great circle) of the great circle line between the
 locations. \code{radius} defaults to half the cell size (\code{mean(res(bf))/2}).}
 
+\item{n_directions}{The number of (equally spaced) directional bins to
+classify bearings into.  Currently only \code{1} is supported.}
+
 \item{skip_unconnected}{If \code{TRUE} then only connections that exist in \code{bf}
 will be evaluated, and between matrix will erroneously indicate that
 no points are between locations that are not connected.
@@ -41,9 +44,6 @@ of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
 is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
 that range the algorithm is likely to yield distorted results.
 \code{0.5 * mean(res(bf))} is the default, and recommended radius.}
-
-\item{n_direction}{The number of (equally spaced) directional bins to
-classify bearings into.  Currently only \code{1} is supported.}
 }
 \value{
 A list with:

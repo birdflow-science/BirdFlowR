@@ -26,7 +26,7 @@ test_that("interval_log_likelihood returns expected values", {
   end <- start + nsteps
   i <- get_distr(bf, start) |> sample_distr() |> as.logical() |> which()
   observations <- route(bf, x_coord = i_to_x(i, bf), y_coord = i_to_y(i, bf),
-              start = start, end = end)
+              start = start, end = end)$data
   observations$id <- seq_len(nrow(observations))
   sf_obs <- sf::st_as_sf(observations, coords = c("x", "y"), crs = crs(bf))
   wgs <- sf::st_transform(sf_obs, sf::st_crs("EPSG:4326")) |>

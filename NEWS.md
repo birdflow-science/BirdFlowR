@@ -1,3 +1,72 @@
+# BirdFlowR 0.1.0.9070
+2025-04-16
+
+This update defines several classes for storing both real and synthetic 
+movement data and functions to work with those classes.
+
+
+## New Classes
+
+There are three important classes defined in this update. 
+
+  * `Routes` contain full-precision information on bird movements in a 
+  standard format.`Routes` objects can contain information on multiple birds
+  and they can mix route types, but each object can only contain information 
+  on a single species species.
+  * `BirdFlowRoutes` contain either synthetic or real bird movements
+  that align with the cell and week centers of a `BirdFlow` model and contain
+  at most one observation per week for each bird. 
+  * `BirdFlowIntervals` represent sampled intervals from 
+  `BirdFlowRoutes`. Each row within the object contain a movement between a
+  starting and ending location and time. The start and end time
+  cannot be the same but the locations can. `BirdFlowIntervals` are intended
+  to be used to evaluate the performance of a Bird Flow model.  
+
+Thus the flow of data is
+```
+ bird_data |> 
+  Routes(species = species) |>     # Routes
+  as_BirdFlowRoutes(bf = bd) |>    # BirdFlowRoutes
+  as_BirdFlowIntervals(n = n) |>   # BirdFlowIntervals
+  calculate_interval_metrics()      # metrics
+```  
+
+## New public functions
+
+  * `Routes()` creates a `Routes` object from bird movement data and requires
+  the species name, and a data frame with columns: `route_id`, `date`, 
+  `lon`, `lat`, and `route_type`.
+  * `as_BirdFlowRoutes()` converts `Routes` into `BirdFlowRoutes`.
+  * `as_BirdFlowIntervals()` samples `BirdFlowRoutes` to make `BirdFlowIntervals`
+  * `print()` methods for the new classes.
+  * `calculate_interval_metrics()` calculates performance metrics for
+   a `BirdFlow` model based on the movements from the `BirdFlowInterals`.
+   This is a prototype and the output format and arguments may change. 
+   
+
+## Updated Functions
+  * `route()` now produces the objects in the revised `BirdFlowRoutes` class.
+  * `plot_routes()` and the `plot` methods for `Routes` and `BirdFlowRoutes`
+  all use the same code and have been updated to work with 
+  the both route classes. Note: this adds the new capability of plotting bird 
+  tracking data with `plot_routes()` which previously wasn't possible.
+  * Similarly `animate_routes()` now works with both `Routes` and
+  `BirdFlowRoutes` and so can also be used on real movement data.
+  
+
+## Breaking Changes
+
+  *  `route()` now produces objects of the revised `BirdFlowRoutes` class. 
+  This class is based on a list object with the primary data within  `$data`.
+  * Old route objects will no longer plot with the updated `plot_routes()` or 
+   `plot()`.
+  *  Anyone using `plot_routes()` to plot data not generated with `route()` 
+  will have to update their objects. Use `Routes()` followed by 
+  `as_BirdFlowRoutes()` to convert data to the new classes.
+  * `snap_to_birdflow()` no longer coerces date-time input to dates before
+  aggregating, and, if the input is date-time the output will be as well.
+  
+
 # BirdFlowR 0.1.0.9069
 2024-10-17
 
@@ -20,10 +89,10 @@ Move `build_collection_index()` to **BirdFlowPipeline**
 the parameterization is not yet right and it will likely need some optimization
 to run on non-trivial models. 
 
-* Add `weight_betweeness()` which returns betweenness weights in a manner similar
+* Add `weight_between()` which returns betweenness weights in a manner similar
 to `is_between()`.
 * Add `calc_distance_weights()`,`calc_martern_variance()` and some related 
-helper functions that support `weight_betweeness()`
+helper functions that support `weight_between()`
 * Update `calc_flux()` with argument `weighted` which switches between
  the old binary betweenness with linear paths and the new probabilistic flux 
  with weighted betweenness in which the probability spreads in the middle of the 

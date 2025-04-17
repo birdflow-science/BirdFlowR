@@ -25,9 +25,12 @@ active cells in the model will be used. This is calculated by comparing the
 cell centers to a buffered convex hull around the active cell centers.}
 
 \item{radius}{The probability density along a transect perpendicular to
-the line and intersecting the point is summed over the inteval within
+the line and intersecting the point is summed over the interval within
 \code{radius} meters of the point. \code{radius} defaults to half the cell
 size (\code{mean(res(bf))/2}).}
+
+\item{n_directions}{The number of (equally spaced) directional bins to
+classify bearings into.  Currently only \code{1} is supported.}
 
 \item{skip_unconnected}{If \code{TRUE} then only connections that exist in \code{bf}
 will be evaluated, and between matrix will erroneously indicate that
@@ -39,14 +42,6 @@ those missing connections would always have zero probability.}
 at a time. A smaller
 \code{batch_size} will conserve memory at a slight performance cost.  The number
 of batches will be less than or equal to \code{n_active(bf)^2 / batch_size}.}
-
-\item{n_direction}{The number of (equally spaced) directional bins to
-classify bearings into.  Currently only \code{1} is supported.}
-
-\item{check_radius}{If  \code{TRUE} an error will be thrown if the radius
-is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
-that range the algorithm is likely to yield distorted results.
-\code{mean(res(bf)) / 2} is the default, and recommended radius.}
 }
 \value{
 A list with:
@@ -62,7 +57,6 @@ corresponding to the third dimension in \code{between}.
 \code{i} will be \code{NA} for points that are not within the mask but
 fall between active cells.}
 \item{radius}{The radius of the circle in meters.}
-@seealso \code{\link[=is_between]{is_between()}} and \code{\link[=calc_flux]{calc_flux()}}
 }
 \description{
 This internal function is used to create a betweenness weights array
@@ -87,7 +81,10 @@ almost always more than just the active cells.
 their results when calculated on the same model.
 
 1, The number of included reference points may differ.
-2. The betweeness array will be real weights from 0 to 1 with
+2. The betweenness array will be real weights from 0 to 1 with
 \code{weight_between()} and logical with \code{is_between()}
+}
+\seealso{
+\code{\link[=is_between]{is_between()}} and \code{\link[=calc_flux]{calc_flux()}}
 }
 \keyword{internal}

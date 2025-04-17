@@ -360,29 +360,8 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
     }
   } # end n_active consistency check
 
-  # check geometry contents
-  if (!is.matrix(x$geom$mask)) {
-    p <- add_prob("x$geom$mask is not a matrix", "error", p)
-  } else { # mask is matrix
-    if (!is.logical(x$geom$mas))
-      p <- add_prob("mask isn't logical", "error", p)
-    if (is.na(n_active(x)) || !n_active(x) == sum(x$geom$mask))
-      p <- add_prob("mask isn't consistent with n_active", "error", p)
-    if (is.null(nrow(x))) {
-      p <- add_prob("nrow(x) is NULL", "error", p)
-    } else {
-      if (is.na(nrow(x)) || ! nrow(x) == nrow(x$geom$mask))
-        p <- add_prob("nrow(mask) not equal to nrow(x)", "error", p)
-    }
-    if (is.null(ncol(x))) {
-      p <- add_prob("ncol(x) is NULL", "error", p)
-    } else {
-      if (is.na(ncol(x)) || !ncol(x) == ncol(x$geom$mask))
-        p <- add_prob
-    }
-  }
-
-
+  p <- rbind(p, validate_geom(x$geom, n_active = n_active(x),
+                              throw_error =  FALSE))
 
   # check marginal names and index
   if ("marginals" %in% names(x) && is.list(x$marginals)) {
@@ -405,3 +384,76 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
 
 } # end validation function
 # nolint end
+
+
+
+#' Validate geom component of a BirdFlow or related object
+#'
+#' This is called from `validate_BirdFlow`, as well
+#' as some of the route and interval validation functions
+#' @param geom A geom list
+#' @param n_active The number of active cells in the model
+#'  see `n_active()` also stored in `bf$metadat$n_active`
+#' @param throw_error If `TRUE` throw errors that are
+#' found. IF false return a problem data frame.
+#' throw_error = FALSE is for compatibility with
+#' `validate_BirdFlow`
+#'
+#' @returns a problem data frame
+validate_geom <- function(geom, n_active, throw_error = TRUE) {
+
+  # Setup for tracking problems
+  p <- data.frame(problem = character(0), type = character(0))
+  add_prob <- function(problem, type, problems) {
+    stopifnot(type %in% c("error", "incomplete"))
+    return(rbind(problems, data.frame(problem = problem, type = type)))
+  }
+
+
+  expected_elements <- c("nrow", "ncol", "res", "ext", "crs", "mask",
+                         "dynamic_mask")
+
+
+  # Catastrophic problems that prevent other checks
+  if (!is.list(geom) || !all(expected_elements %in% names(geom))) {
+    if (!is.list(geom))
+      p <- add_prob(
+        "geom is not a list or is missing required elements", "error", p
+        )
+
+    if (throw_error && any(p$type == "error")) {
+      err <- p$problem[p$type == "error"]
+      stop("geometry problems found: ", paste(err, collapse = ", "))
+    }
+    return(invisible(p))
+  }
+
+  # Check geometry contents
+  if (!is.matrix(geom$mask)) {
+    p <- add_prob("geom$mask is not a matrix", "error", p)
+  } else { # mask is matrix
+    if (!is.logical(geom$mask))
+      p <- add_prob("mask isn't logical", "error", p)
+    if (!missing(n_active) && (is.na(n_active) || !n_active == sum(geom$mask)))
+      p <- add_prob("mask isn't consistent with n_active", "error", p)
+    if (is.null(geom$nrow)) {
+      p <- add_prob("nrow is NULL", "error", p)
+    } else {
+      if (is.na(geom$nrow) || ! geom$nrow == nrow(geom$mask))
+        p <- add_prob("nrow(mask) not equal to geom$nrow", "error", p)
+    }
+    if (is.null(geom$ncol)) {
+      p <- add_prob("ncol is NULL", "error", p)
+    } else {
+      if (is.na(geom$ncol) || !geom$ncol == ncol(geom$mask))
+        p <- add_prob("ncol(mask) not equal to geom$ncow", "error", p)
+    }
+  }
+
+  if (throw_error && any(p$type == "error")) {
+    err <- p$problem[p$type == "error"]
+    stop("geometry problems found: ", paste(err, collapse = ", "))
+  }
+
+  return(invisible(p))
+}
