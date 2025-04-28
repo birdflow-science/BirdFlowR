@@ -7,7 +7,8 @@
 load_model(
   model,
   update = TRUE,
-  collection_url = birdflow_options("collection_url")
+  collection_url = birdflow_options("collection_url"),
+  timeout = 600
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ the server); or if working offline.}
 
 \item{collection_url}{The url of a collection. Should be the path to
 the base directory (not an index.html file).}
+
+\item{timeout}{The number of seconds to allow for downloading.  The default
+is 600  (ten minutes).}
 }
 \value{
 The designated BirdFlow model is returned.
