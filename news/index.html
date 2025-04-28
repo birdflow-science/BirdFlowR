@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9071</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9072</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,11 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9072" id="birdflowr-0109072">BirdFlowR 0.1.0.9072<a class="anchor" aria-label="anchor" href="#birdflowr-0109072"></a></h2>
+<p>2025-04-28</p>
+<p>Add <code>timeout</code> argument to <code><a href="../reference/load_model.html">load_model()</a></code> and set default to 10 minutes. Previously R’s global <code>timeout</code> option was used which defaults to 1 minute. This should fix the <a href="https://github.com/birdflow-science/BirdFlowR/issues/211" class="external-link">timeout issue</a> that some users experienced with <code><a href="../reference/load_model.html">load_model()</a></code>.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9071" id="birdflowr-0109071">BirdFlowR 0.1.0.9071<a class="anchor" aria-label="anchor" href="#birdflowr-0109071"></a></h2>
 <p>2025-04-16 * Add <code><a href="../reference/dynamic_mask_index_conversions.html">dmi_to_i()</a></code> and <code><a href="../reference/dynamic_mask_index_conversions.html">i_to_dmi()</a></code> to convert between standard location indices (<code>i</code>) and dynamic mask indices (<code>dmi</code>).</p>
