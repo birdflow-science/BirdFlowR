@@ -1,3 +1,11 @@
+# BirdFlowR 0.1.0.9072
+2025-04-28
+
+Add `timeout` argument to `load_model()` and set default to 10 minutes.
+Previously R's global `timeout` option was used which defaults to 1 minute.
+This should fix the 
+[timeout issue](https://github.com/birdflow-science/BirdFlowR/issues/211)
+that some users experienced with `load_model()`.
 
 # BirdFlowR 0.1.0.9071
 2025-04-16
