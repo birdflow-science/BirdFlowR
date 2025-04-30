@@ -11,6 +11,7 @@ BirdFlowPy
 BirdFlowRoutes
 BirdFlowModels
 BirdFlowOverview
+BirdFlowPipeline
 BugReports
 CMD
 Cornwell
@@ -30,9 +31,12 @@ HPY
 Jax
 Julian
 MacOS
+Martern
+Motus
 Mollweide
 Nakagawa
 NDM
+polygonized
 PROJ
 Preprocess
 Probabilistically
@@ -129,6 +133,7 @@ rnaturalearthdata
 sparsification
 sparsified
 sparsify
+spatiotemporal
 spatRaster
 terra
 testthat
@@ -149,3 +154,5 @@ yml
 zig
 zag
 ℹ
+validators
+vectorized

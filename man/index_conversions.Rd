@@ -65,7 +65,7 @@ passed to \code{row} in which case the \code{col} argument should be omitted.}
 unmasked cells.}
 
 \item{lat, lon}{The latitude and longitude in WGS 1984 (EPSG:4326). A two
-column matrix or data frame can also be passed to lat.}
+column matrix or data frame can also be passed to \code{lat}.}
 }
 \value{
 \describe{
@@ -126,5 +126,8 @@ equivalent or a matrix (representing multiple distributions) into an array
 equivalent.
 \item \code{\link[=rasterize_distr]{rasterize_distr()}} converts a vector distribution into a
 \link[terra:SpatRaster-class]{terra::SpatRaster} - similar to those created by \code{\link[terra:rast]{terra::rast()}}.
+\item \code{\link[=dmi_to_i]{dmi_to_i()}} and \code{\link[=i_to_dmi]{i_to_dmi()}} convert between location indices (\code{i}) along
+cells included by the static mask and dynamic mask indices (\code{dmi})
+along the cells included in the dynamic mask for a given timestep.
 }
 }

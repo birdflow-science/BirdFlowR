@@ -14,6 +14,8 @@
 #' the server); or if working offline.
 #' @param collection_url The url of a collection. Should be the path to
 #' the base directory (not an index.html file).
+#' @param timeout The number of seconds to allow for downloading.  The default
+#' is 600  (ten minutes).
 #' @return The designated BirdFlow model is returned.
 #' @seealso [load_collection_index()]
 #' @examples
@@ -26,8 +28,12 @@
 #'
 #' @export
 load_model <- function(model, update = TRUE,
-                       collection_url = birdflow_options("collection_url")) {
+                       collection_url = birdflow_options("collection_url"),
+                       timeout = 600) {
 
+  original_timeout <- options("timeout")$timeout
+  on.exit(options(timeout = original_timeout))
+  options(timeout = timeout)
 
   collection_url <- gsub("/*$", "/", collection_url) # force trailing slash
 

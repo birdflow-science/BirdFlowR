@@ -36,7 +36,7 @@ the output from \code{\link[ggplot2:reexports]{ggplot2::unit()}}.}
 used to represent stay length.}
     \item{\code{stay_units}}{The unit to plot the stay length at each location. Default
 to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours}, \code{days} and \code{weeks}.}
-    \item{\code{show_mask}}{Should the BirdFlowModel's (\code{bf}) static mask be displayed.}
+    \item{\code{show_mask}}{Should the BirdFlow Model's (\code{bf}) static mask be displayed.}
     \item{\code{crs}}{Only used when \code{bf} is missing.  \code{crs} sets the Coordinate
 Reference system used for plotting. See \code{\link[terra:crs]{terra::crs()}}.}
     \item{\code{static}}{For internal use. It is set to \code{FALSE} when \code{plot_routes()} is

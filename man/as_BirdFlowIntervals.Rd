@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_BirdFlowIntervals.R
 \name{as_BirdFlowIntervals}
 \alias{as_BirdFlowIntervals}
-\title{Convert BirdFlowRoutes to BirdFlowIntervals}
+\title{Convert \code{BirdFlowRoutes} to \code{BirdFlowIntervals}}
 \usage{
 as_BirdFlowIntervals(
   birdflow_routes,
@@ -36,8 +36,14 @@ A \code{BirdFlowIntervals} object.
 }
 \description{
 Converts a \code{BirdFlowRoutes} object into a \code{BirdFlowIntervals}
-object,
-sampling interval pairs between time points.
+object, sampling interval pairs between time points. \code{BirdFlowIntervals}
+define specific movements between states in a  \code{BirdFlow} model.  The two
+points in each interval will always differ in time (week  / timestep).
+They can occupy the same location (raster cell) in the model or
+represent a movement between two locations.
+
+\code{BirdFlowIntervals} are primarily used to evaluate model performance with
+\code{calculate_interval_metrics()}.
 }
 \examples{
 route_df <- data.frame(
@@ -65,4 +71,10 @@ routes_obj <- Routes(route_df, species = "amewoo")
 bf <- BirdFlowModels::amewoo
 birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf = bf)
 birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
+}
+\seealso{
+\itemize{
+\item \code{\link[=Routes]{Routes()}} for converting observational data into a formal \code{Routes} object
+\item \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} for converting \code{Routes} to \code{BirdFlowRoutes}.
+}
 }

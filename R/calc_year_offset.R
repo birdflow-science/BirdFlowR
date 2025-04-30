@@ -41,7 +41,7 @@ calc_year_offset <- function(x) {
   }
 
   calculate_year_offset <- function(timesteps) {
-    offset <- c(0, cumsum(timesteps[-1] < timesteps[-length(timesteps)]))
+    c(0, cumsum(timesteps[-1] < timesteps[-length(timesteps)]))
   }
 
   year_offset <- calculate_year_offset(x)

@@ -20,8 +20,7 @@ BirdFlowRoutes(
   source = NULL,
   sort_id_and_dates = TRUE,
   reset_index = FALSE,
-  stay_calculate_col = "date",
-  stay_calculate_timediff_unit = "days"
+  stay_calculate_col = "date"
 )
 
 new_BirdFlowRoutes(
@@ -32,7 +31,6 @@ new_BirdFlowRoutes(
   dates,
   source,
   stay_calculate_col = "date",
-  stay_calculate_timediff_unit = "days",
   sort_id_and_dates = FALSE
 )
 
@@ -67,11 +65,8 @@ and \code{dates}?}
 \item{reset_index}{Logical. Should the index of the data frame be reset
 after sorting?}
 
-\item{stay_calculate_col}{The column name for calculating the stay_id and
-stay_len in BirdFlowRoutes object. Default to \code{date}.}
-
-\item{stay_calculate_timediff_unit}{The unit of stay_len in BirdFlowRoutes
-object. Default to \code{days}.}
+\item{stay_calculate_col}{The column name for calculating the \code{stay_id} and
+\code{stay_len} in \code{BirdFlowRoutes} object. Defaults to \code{date}.}
 }
 \value{
 Each function returns an S3 object of the corresponding class

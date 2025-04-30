@@ -33,13 +33,15 @@ Defaults to \code{TRUE}.}
 Defaults to \code{FALSE}.}
 }
 \value{
-A\code{BirdFlowRoutes} object.
+A \code{BirdFlowRoutes} object.
 }
 \description{
 Convert \code{Routes} objects to \code{BirdFlowRoutes},
 adding BirdFlow-specific spatiotemporal coordinates.
 This may require aggregating multiple observations within the same timestep
 (week) which is controlled with the \code{aggregate} argument.
+Note the coordinates and dates in the result will be snapped to the
+cell and timestep (week) centers of the BirdFlow model (\code{bf}).
 }
 \examples{
 route_data <- data.frame(
@@ -65,13 +67,14 @@ bf_routes <- as_BirdFlowRoutes(routes, bf)
 \item \code{\link[=route]{route()}} for creating synthetic routes from a \code{BirdFlow} model.
 \item \code{\link[=Routes]{Routes()}} for converting observational data into a formal \code{Routes} object
 suitable for use with this function.
-\item \code{\link[=plot_routes]{plot_routes()}} for plotting arguments used when calling \code{plot} on
+\item \code{\link[=plot_routes]{plot_routes()}} for plotting arguments used when calling \code{plot()} on
 \code{Routes} and \code{BirdFlowRoutes} objects.
-\code{plot}
 \item \code{\link[=snap_to_birdflow]{snap_to_birdflow()}} to align observational data with a BirdFlow model
-without making a formal  \code{Routes } object
+without making a formal  \code{Routes } object. This function also provides more
+details when errors arise - usually due to the data not overlapping the
+modeled states as defined by the mask and dynamic mask within \code{bf}.
 \item \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}} for making intervals from the \code{BirdFlowModels}
-\code{BirdFlowIntervalse} define movements between pair of locations,
-which can used to evaluate model performance.
+\code{BirdFlowIntervals} define movements between pair of locations. Typically
+they are used to evaluate model performance.
 }
 }

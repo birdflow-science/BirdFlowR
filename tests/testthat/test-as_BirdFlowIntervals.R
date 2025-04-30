@@ -48,8 +48,7 @@ test_that("Test Interval sampling strategy", {
     )
   )
 
-  # This test is failing because the second half of the function doesn't
-  # honor the valid pairs identified in the first half.
+  # Check that constraints are honored
   dist_km <- with(my_intervals$data, sqrt((x2 - x1)^2 + (y2 - y1)^2)) / 1000
   lag <- with(my_intervals$data, date2 - date1) |> as.numeric(units = "days")
   expect_true(all(dist_km >= min_km))
@@ -58,8 +57,6 @@ test_that("Test Interval sampling strategy", {
   expect_true(all(lag <= max_day))
 
   # Number of routes (1)
-  # Note this fails if run repeatedly but doesn't always fail because
-  # random sampling sometimes selects valid intervals
   expect_no_error(
     my_intervals <- as_BirdFlowIntervals(my_bfroutes,
       max_n = 1,

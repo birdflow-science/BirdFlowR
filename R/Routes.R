@@ -4,7 +4,7 @@
 #' data into a formal `Routes` object with the same data.
 #'
 #' @param data A data frame with data on bird movement. Likely
-#' tracking, banding, or motus data on real birds; or possibly
+#' tracking, banding, or Motus data on real birds; or possibly
 #' synthetic versions of the same.It must have the following columns:
 #' \describe{
 #' \item{`date`}{Date or Date Time object of class `Date`, `POSIXlt`,

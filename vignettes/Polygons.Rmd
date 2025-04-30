@@ -93,19 +93,18 @@ and skip this section.
 
 ```{r rnaturalearth, warning = FALSE, eval = FALSE} 
 #  Note this code requires the rnaturalearthhighres package so is not
-# run when building the vignette. 
+# run when building the vignette.
 
-polys <- get_states(bf, country = "United States of America", 
-                    keep_buffer = TRUE, 
-                    keep_attributes = TRUE), 
-                    scale = "Low")
+polys <- get_states(bf, country = "United States of America",
+                    keep_buffer = TRUE,
+                    keep_attributes = TRUE)
 
 polys <- dplyr::select(polys, NAME = gn_name)
 
 ```
 
 ```{r echo = FALSE, eval = TRUE}
-# This loads very low resolution state boundaries 
+# This loads very low resolution state boundaries
 # in a way that does not add dependencies or slow downloads
 polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
 
@@ -120,16 +119,16 @@ polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
 
 ```{r prepare polygons}
 
-# Add generic "id" column (use state name) 
+# Add generic "id" column (use state name)
 polys$id <- polys$NAME
 
 # Order by id (optional)
 polys <- polys[order(polys$id), ]
 
-# Transform to match the BirdFlow model CRS 
+# Transform to match the BirdFlow model CRS
 polys <- sf::st_transform(polys, crs(bf))
 
-# add sq_km to polygons 
+# add sq_km to polygons
 # This assumes the projection is in meters which is true for BirdFlow models
 polys$sq_km <- sf::st_area(polys)  / 1000^2  |> as.vector()
 
@@ -150,28 +149,28 @@ overlaps the polygon.
 
 # Convert active cells to polygons
 cell_polys <- rasterize_distr(seq_len(n_active(bf)), bf, format = "terra") |>
- terra::as.polygons() |> 
+ terra::as.polygons() |>
   sf::st_as_sf()
 names(cell_polys)[1] <- "i" # BirdFlow location index "i"
 
 # Intersect cells with polygons
-suppressWarnings( # Attribute values assumed to be spatially constant... 
-  intersection_polys <- sf::st_intersection(cell_polys, polys) 
+suppressWarnings( # Attribute values assumed to be spatially constant...
+  intersection_polys <- sf::st_intersection(cell_polys, polys)
 )
-intersection_polys <- intersection_polys[ , c("i", "id")]
+intersection_polys <- intersection_polys[, c("i", "id")]
 intersection_polys$area <- sf::st_area(intersection_polys)
-sq_m_per_cell <- prod(res(bf)) 
+sq_m_per_cell <- prod(res(bf))
 intersection_polys$prop_of_cell <- intersection_polys$area / sq_m_per_cell
 
 # Calculate the proportion of each cell that overlaps each polygon
-# Rows = active cells, columns = polygons 
-overlap <- matrix(0, nrow = n_active(bf), ncol = nrow(polys), 
+# Rows = active cells, columns = polygons
+overlap <- matrix(0, nrow = n_active(bf), ncol = nrow(polys),
                   dimnames = list(i = seq_len(n_active(bf)),
                                   id = polys$id))
 intersection_polys$row <- match(intersection_polys$i, seq_len(n_active(bf)))
-intersection_polys$col <- match(intersection_polys$id, polys$id)                  
-row_col_index <- intersection_polys[ , c("row", "col")] |> 
-  sf::st_drop_geometry() |> 
+intersection_polys$col <- match(intersection_polys$id, polys$id)
+row_col_index <- intersection_polys[, c("row", "col")] |>
+  sf::st_drop_geometry() |>
   as.matrix()
 overlap[row_col_index] <- intersection_polys$prop_of_cell |> as.vector()
 
@@ -189,12 +188,12 @@ has a column (distribution) for each polygon in `polys`.
  
 ```{r }
 
-start_distr <- matrix(get_distr(bf, start), 
-                              nrow = n_active(bf), 
-                              ncol = nrow(polys), 
-                              byrow = FALSE, 
-                              dimnames = list(i = NULL, 
-                             start_poly = polys$id)) 
+start_distr <- matrix(get_distr(bf, start),
+                              nrow = n_active(bf),
+                              ncol = nrow(polys),
+                              byrow = FALSE,
+                              dimnames = list(i = NULL,
+                             start_poly = polys$id))
 
 start_distr <- start_distr * overlap
 
@@ -212,11 +211,11 @@ for the polygon with the highest initial abundance (`r polys$id[sel]`).
 
 ```{r visualize largest distribution, warning = FALSE, message = FALSE}
 sel <- which.max(apply(start_distr, 2, sum))
-plot_distr(start_distr, bf, subset = sel) + 
-  ggplot2::geom_sf(data = polys, 
-                   inherit.aes = FALSE, 
-                   linewidth = 0.2, 
-                   color = "black", 
+plot_distr(start_distr, bf, subset = sel) +
+  ggplot2::geom_sf(data = polys,
+                   inherit.aes = FALSE,
+                   linewidth = 0.2,
+                   color = "black",
                    fill = NA)
 ```
 
@@ -235,11 +234,11 @@ active cell (rows).
 # Project distributions forward to end date
 pred <- predict(bf, distr = start_distr, start = start, end = end)
 
-# Just keep last distribution 
-end_distr <- pred[ , , dim(pred)[3]] 
+# Just keep last distribution
+end_distr <- pred[, , dim(pred)[3]]
 
 # Preserve dimension names
-dimnames(end_distr) <- dimnames(start_distr) 
+dimnames(end_distr) <- dimnames(start_distr)
 
 ```
 
@@ -250,10 +249,10 @@ This shows the ending distribution for the birds that started in
 
 ```{r visualize ending distribution, message = FALSE, warning = FALSE} 
 plot_distr(end_distr, bf, sel) +
-  ggplot2::geom_sf(data = polys, 
-                   inherit.aes = FALSE, 
-                   linewidth = 0.2, 
-                   color = "black", 
+  ggplot2::geom_sf(data = polys,
+                   inherit.aes = FALSE,
+                   linewidth = 0.2,
+                   color = "black",
                    fill = NA)
 ```
 
@@ -277,12 +276,12 @@ if (slow) {
   # one by one.
   n <- nrow(polys)
   move <- matrix(NA, n, n, dimnames = list(from = polys$id, to = polys$id))
-  for(from_i in seq_len(n)) for (to_i in seq_len(n)) {
-    # Rows are source polygons, columns for destination polygons. 
+  for (from_i in seq_len(n)) for (to_i in seq_len(n)) {
+    # Rows are source polygons, columns for destination polygons.
     # Values are the proportion of the total population making the transition
     # between the corresponding polygons.
     move[from_i, to_i] <- sum(end_distr[, from_i] * overlap[, to_i])
-  } 
+  }
 } else {
   # Use matrix multiplication to do the same thing faster
   move <- t(end_distr) %*% overlap
@@ -303,11 +302,11 @@ gradient_colors <-
       c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
         "#9D189D", "#7401A8", "#48039F", "#0D0887")
 
-ggplot2::ggplot(data = polys) + 
-  ggplot2::geom_sf(ggplot2::aes(fill = Proportion)) + 
-   ggplot2::scale_fill_gradientn(colors = gradient_colors) + 
-  ggplot2::ggtitle(paste0(species(bf), " movement from ", polys$id[sel]), 
-                   subtitle = paste0(lookup_date(start, bf), " to ", 
+ggplot2::ggplot(data = polys) +
+  ggplot2::geom_sf(ggplot2::aes(fill = Proportion)) +
+  ggplot2::scale_fill_gradientn(colors = gradient_colors) +
+  ggplot2::ggtitle(paste0(species(bf), " movement from ", polys$id[sel]),
+                   subtitle = paste0(lookup_date(start, bf), " to ",
                                      lookup_date(end, bf)))
 
 ```
@@ -319,7 +318,7 @@ estimated the number of individuals making each movement. This is likely
 necessary to aggregate or compare output across species. 
 
 ```{r adjust for population}
-# Convert to absolute numbers of Birds expected to move between 
+# Convert to absolute numbers of Birds expected to move between
 # each pair of polygons
 move_count  <- move * population
 ```
@@ -364,8 +363,8 @@ at least `r plot_count_threshold` individuals.
 
 ```{r plot connections}
 n <- nrow(polys)
-long <- data.frame(from =  rep(polys$id, times = n), 
-                   to = rep(polys$id, each = n), 
+long <- data.frame(from =  rep(polys$id, times = n),
+                   to = rep(polys$id, each = n),
                    count = as.vector(move_count))
 
 # Add coordinates of centroids of to and from polygons
@@ -378,17 +377,17 @@ long$t_y <- polys$y[t_mv]
 
 long <- long[long$count >= plot_count_threshold, ]
 
-ggplot2::ggplot(long) + 
-  ggplot2::geom_segment(ggplot2::aes(x = f_x, y = f_y, 
-                                     xend = t_x, yend = t_y, 
+ggplot2::ggplot(long) +
+  ggplot2::geom_segment(ggplot2::aes(x = f_x, y = f_y,
+                                     xend = t_x, yend = t_y,
                                      linewidth = count),
-                        color = rgb(0, 0, 0, .15)) + 
-  ggplot2::scale_linewidth(range = c(0.2, 4)) + 
+                        color = rgb(0, 0, 0, .15)) +
+  ggplot2::scale_linewidth(range = c(0.2, 4)) +
   ggplot2::theme(axis.title = ggplot2::element_blank(),
                  strip.background = ggplot2::element_blank()) +
-  ggplot2::geom_sf(data = polys, 
-                   inherit.aes = FALSE, 
-                   linewidth = 0.2, 
-                   color = "black", 
+  ggplot2::geom_sf(data = polys,
+                   inherit.aes = FALSE,
+                   linewidth = 0.2,
+                   color = "black",
                    fill = NA)
 ```

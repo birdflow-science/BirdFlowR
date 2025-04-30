@@ -1,10 +1,17 @@
 ## as_BirdFlowIntervals --------------------------------------------------------
 
-#' Convert BirdFlowRoutes to BirdFlowIntervals
+#' Convert `BirdFlowRoutes` to `BirdFlowIntervals`
 #'
 #' @description Converts a `BirdFlowRoutes` object into a `BirdFlowIntervals`
-#' object,
-#' sampling interval pairs between time points.
+#' object, sampling interval pairs between time points. `BirdFlowIntervals`
+#' define specific movements between states in a  `BirdFlow` model.  The two
+#' points in each interval will always differ in time (week  / timestep).
+#' They can occupy the same location (raster cell) in the model or
+#' represent a movement between two locations.
+#'
+#' `BirdFlowIntervals` are primarily used to evaluate model performance with
+#'  `calculate_interval_metrics()`.
+#'
 #'
 #' @param birdflow_routes A `BirdFlowRoutes` object.
 #' @param max_n The maximum number of intervals to sample.
@@ -18,6 +25,11 @@
 #' @param max_km_interval The maximum distance required for an interval.
 #' Defaults to 2000.
 #' @return A `BirdFlowIntervals` object.
+#' @seealso
+#' * [Routes()] for converting observational data into a formal `Routes` object
+#' * [as_BirdFlowRoutes()] for converting `Routes` to `BirdFlowRoutes`.
+#'
+#'
 #' @export
 #'
 #' @examples

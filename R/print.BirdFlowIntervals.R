@@ -1,4 +1,4 @@
-#' Print a BirdFlowIntervals Object
+#' Print a `BirdFlowIntervals` Object
 #'
 #' @description Print method for `BirdFlowIntervals` objects,
 #' summarizing interval data
@@ -62,9 +62,6 @@ print.BirdFlowIntervals <- function(x, ...) {
             sep = ""
         )
     }
-    types <- unique(x$data$route_type)
-    type_label <- ifelse(length(types) > 1, "Types: ", "Type:")
-
 
     cat(format("Number of intervals:", width = pad_width), nrow(x$data),
         "\n",

@@ -61,7 +61,7 @@ used to represent stay length.}
 \item{stay_units}{The unit to plot the stay length at each location. Default
 to \code{weeks}. Other options include \code{sec}, \code{mins}, \code{hours}, \code{days} and \code{weeks}.}
 
-\item{show_mask}{Should the BirdFlowModel's (\code{bf}) static mask be displayed.}
+\item{show_mask}{Should the BirdFlow Model's (\code{bf}) static mask be displayed.}
 
 \item{crs}{Only used when \code{bf} is missing.  \code{crs} sets the Coordinate
 Reference system used for plotting. See \code{\link[terra:crs]{terra::crs()}}.}

@@ -281,9 +281,9 @@ points(x, y)
 
 ## Generate routes
 `route()` will generate synthetic routes for each starting position.
-`route()` returns a BirdFlowRoutes object which has a `data` feature for data frame 
+`route()` returns a `BirdFlowRoutes` object which has a `$data` element 
 with a row for each timestep of each route, but also includes some additional
-spatial and temporal information from the BirdFlow object.
+spatial, temporal, and species information from the `BirdFlow` object.
 
 ```{r route, fig.show='hide'}
 rts <- route(bf, x_coord = x, y_coord = y, start = start, end = end)
@@ -335,11 +335,12 @@ points(x = end_pts$x, y = end_pts$y,
 title(main = species(bf))
 ```
 
-## Or use plot_routes()
+## Or use the plot() method
 
-`plot_routes()` will visualize time as a color gradient using **ggplot2** with
-stop point dots that indicate how long a bird was at each stopping point.
+`plot()` will visualize `Routes` and `BirdFlowRoutes` objects 
+with time as a color gradient and stop point dots that indicate how long a 
+bird was at each location.
 
 ```{r plot routes}
-plot_routes(rts, bf)
+plot(rts, bf)
 ```

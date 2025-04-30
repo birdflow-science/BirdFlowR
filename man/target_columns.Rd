@@ -31,7 +31,7 @@ consistency in data frame structures across different processing steps.
 }
 \details{
 These functions return the expected column names for \code{Routes},
-\code{BirdFlowRoutes} and \code{BirdFlowIntervals} dataclasses.
+\code{BirdFlowRoutes} and \code{BirdFlowIntervals} data classes.
 Columns may vary depending on whether the context is for input or output
 processing:
 \itemize{
