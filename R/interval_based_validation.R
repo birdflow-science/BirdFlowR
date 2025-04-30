@@ -232,6 +232,12 @@ get_interval_based_metrics <- function(birdflow_intervals, bf) {
               sum(dists$global_prob_of_the_starting)
           ) * dists$win_distance
         ),
+        weighted_mean_win_distance_fraction = sum(
+          (
+            dists$global_prob_of_the_starting /
+              sum(dists$global_prob_of_the_starting)
+          ) * dists$win_distance_fraction
+        ),
         weighted_mean_null_ll = sum(
           (dists$global_prob_of_the_starting /
             sum(dists$global_prob_of_the_starting)
