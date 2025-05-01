@@ -5,7 +5,7 @@
 \title{\code{Routes()} is used to convert data frames containing bird movement
 data into a formal \code{Routes} object with the same data.}
 \usage{
-Routes(data, species = NULL, source = NULL)
+Routes(data, species = NULL, source = NULL, skip_checks = FALSE)
 }
 \arguments{
 \item{data}{A data frame with data on bird movement. Likely
@@ -35,6 +35,9 @@ conform to eBird's taxonomy.}
 
 \item{source}{Optional text describing the source of the data.
 \code{source()} must be of class \code{character} can have one or more elements.}
+
+\item{skip_checks}{Set to \code{TRUE} to skip the checks for eBird model quality
+and for migrant status. Defaults to \code{TRUE} - do the tests.}
 }
 \value{
 An object of class \code{Routes} which has the following components
