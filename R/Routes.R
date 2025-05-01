@@ -39,7 +39,7 @@
 #' \item{source}{Same as the input `source`}
 #'
 #' @export
-Routes <- function(data, species = NULL, source = NULL, skip_checks=FALSE) {
+Routes <- function(data, species = NULL, source = NULL, skip_checks=FALSE, min_season_quality = 3) {
   # Check input
   stopifnot(is.data.frame(data))
   validate_Routes_route_df(data)
@@ -47,7 +47,7 @@ Routes <- function(data, species = NULL, source = NULL, skip_checks=FALSE) {
   # Resolve species
   if (!is.list(species) && !is.null(species) && !is.na(species) &&
      length(species == 1)) {
-    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks)
+    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks, min_season_quality)
   } else {
     if (!is.list(species) || !"common_name" %in% names(species)) {
       stop("Routes() requires a species either as valid input to ",

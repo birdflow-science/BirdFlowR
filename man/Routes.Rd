@@ -5,7 +5,13 @@
 \title{\code{Routes()} is used to convert data frames containing bird movement
 data into a formal \code{Routes} object with the same data.}
 \usage{
-Routes(data, species = NULL, source = NULL, skip_checks = FALSE)
+Routes(
+  data,
+  species = NULL,
+  source = NULL,
+  skip_checks = FALSE,
+  min_season_quality = 3
+)
 }
 \arguments{
 \item{data}{A data frame with data on bird movement. Likely
@@ -38,6 +44,10 @@ conform to eBird's taxonomy.}
 
 \item{skip_checks}{Set to \code{TRUE} to skip the checks for eBird model quality
 and for migrant status. Defaults to \code{TRUE} - do the tests.}
+
+\item{min_season_quality}{If \code{skip_checks = FALSE} and the model
+quality for any of the four seasons drops below this threshold an error
+is thrown.}
 }
 \value{
 An object of class \code{Routes} which has the following components
