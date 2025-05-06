@@ -29,7 +29,6 @@
 #' conform to eBird's taxonomy.
 #' @param source Optional text describing the source of the data.
 #' `source()` must be of class `character` can have one or more elements.
-#' @inheritParams lookup_species_metadata
 #' @returns An object of class `Routes` which has the following components
 #' \item{data}{A data frame with the input `data`}
 #' \item{species}{A list with, at a minimum items
@@ -39,7 +38,7 @@
 #' \item{source}{Same as the input `source`}
 #'
 #' @export
-Routes <- function(data, species = NULL, source = NULL, skip_checks=FALSE, min_season_quality = 3) {
+Routes <- function(data, species = NULL, source = NULL) {
   # Check input
   stopifnot(is.data.frame(data))
   validate_Routes_route_df(data)
@@ -47,7 +46,7 @@ Routes <- function(data, species = NULL, source = NULL, skip_checks=FALSE, min_s
   # Resolve species
   if (!is.list(species) && !is.null(species) && !is.na(species) &&
      length(species == 1)) {
-    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks, min_season_quality)
+    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks = TRUE, min_season_quality = 0)
   } else {
     if (!is.list(species) || !"common_name" %in% names(species)) {
       stop("Routes() requires a species either as valid input to ",
