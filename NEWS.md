@@ -1,3 +1,10 @@
+# BirdFlowR 0.1.0.9073
+2025-05-09
+
+*   `Routes()` now works with species for which the eBird quality assessment is
+  low.  Previously it applied the default quality checks used by 
+  `preprocess_species()`.
+  
 # BirdFlowR 0.1.0.9072
 2025-04-28
 
