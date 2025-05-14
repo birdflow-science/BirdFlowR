@@ -25,7 +25,7 @@
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
 #' @return A `gganim` object. `print()` will plot it with default
-#' options, or use [animate()] to set the options. See the example for
+#' options, or use [gganimate::animate()] to set the options. See the example for
 #' recommended settings.
 #'
 #' @export

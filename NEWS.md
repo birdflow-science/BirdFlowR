@@ -1,3 +1,72 @@
+# BirdFlowR 0.1.0.9074
+2025-05-13
+
+Update for compatabality with **ebirdst** 3.2023.0, released 2025-05-07.
+
+**BirdFlowR** will work with either the 2022 or 2023 versions of the package.
+BirdFlow models retain all the species metadata and distributions they were
+trained on and don't rely on having the same version of **ebirdst** installed to
+make predictions and routes.
+
+The distribution data and the species metadata has changed in the new release
+so that will be different. The dates defining the seasons for each species have
+changed a lot as well.
+
+## Changes to BirdFlowR
+
+* Update `lookup_species_metadata()` so it works with 3.2023.0 as well as 
+  3.2022.x.  The returned metadata will change between the two versions though,
+  (model release date etc.), but the metadata items and names stay the same for
+  BirdFlow models.
+  
+* New internal function `ebirdst_version_supported()` reports whether the
+  **ebirdst** version is supported by different components of **BirdFlowR** and 
+  optionally throws an error if they aren't.  This is now called from
+  `preprocess_species()` and `lookup_species_metadata()`.  This is mainly for
+  convience when maintaining the package.
+  
+* Testing of routes and intervals now uses the full species object from a 
+  reference BirdFlow model. This means the tests aren't calling 
+  `lookup_species_metadata()` and so are agnostic to **ebirdst** version. 
+  
+* `NA` values in  `$metadata` are now converted to an empty string
+  prior to writing hdf5 with `export_birdflow()` and the empty string is 
+  converted back to `NA` when reading with `import_birdflow()`. 
+  This approach has been used with the species information for a long time
+  but now is required with metadata because `access_end_date` is no longer
+  defined by **ebirdst** so is `NA` in models trained with 3.2023.0.
+  
+* Cleaned up Notes generated while checking the package.
+  
+## Changes in **eBirdst**
+
+This is NOT a complete list but here are the changes I encountered
+while updating the package.
+
+* `ebirdst::ebirdst_version()` now uses `status_version_year` in place of 
+  the old `version_year` and drops `access_end_date`.  These were both 
+  metadata items retained by BirdFlow which still uses `version_year` but 
+  pulls it from the updated name.  `access_end_date` is still in the BirdFlow
+  metadata but will be `NA` with the new version of **ebirdst**.  
+  Related to this 
+  `ebirdst::ebirdst_runs` has new columns including  `"status_version_year"`
+  currently every model has a value of`2003` but having it in the table suggest
+  they in future updates they might have different version years for different
+  species. `preprocess_species()` should pull the version year from the 
+  runs table if this happens.
+* With `amewoo` the season dates have changed substantially. 
+  I'm not sure how widespread the date changes are. 
+* The release notes for **ebirdst** say 
+  "Northern Goshawk species code was incorrect" so heads up if you are using 
+  that model.
+
+# BirdFlowR 0.1.0.9073
+2025-05-09
+
+*   `Routes()` now works with species for which the eBird quality assessment is
+  low.  Previously it applied the default quality checks used by 
+  `preprocess_species()`.
+  
 # BirdFlowR 0.1.0.9072
 2025-04-28
 

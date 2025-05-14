@@ -10,9 +10,22 @@
 #' @keywords internal
 make_dates <- function(version_year = NULL) {
 
-  # With 2023 data release potentiall date format
-  if (is.null(version_year))
-    version_year <- ebirdst::ebirdst_version()$version_year
+  # With 2023 name changed to "status_version_year"
+  if (is.null(version_year)){
+    v <- ebirdst::ebirdst_version()
+
+    if("status_version_year" %in% names(v)){ # Beginning with 3.2023.0
+      version_year <- v$status_version_year
+    } else { # Prior to 3.2023.0
+      version_year <- v$version_year
+    }
+  }
+
+  if(is.null(version_year)) {
+    stop("Could not lookup ebirdst version year.",
+         "This is likely due to a change in ebirdst::ebirdst_version().")
+  }
+
 
   if (version_year < 2022) {
     # Reformat and export dates

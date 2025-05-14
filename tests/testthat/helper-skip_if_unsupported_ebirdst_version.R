@@ -1,15 +1,10 @@
 
-skip_if_unsupported_ebirdst_version <- function() { # nolint: object_length_linter, line_length_linter
-  v <- packageVersion("ebirdst")
+skip_if_unsupported_ebirdst_version <- function(use = "package") { # nolint: object_length_linter, line_length_linter
+  supported <- ebirdst_ver_supported(use = use, throw_error = FALSE)
 
-  if (v >= as.package_version("4.2023.0")) {
-
-    #skip(paste0(
-    #  "ebirdst version ", as.character(v),
-    #     " not supported for preprocessing."))
-    warning("ebirdst ", v, "released. BirdFlowR may need to be updated.")
-
-  } else {
-    invisible()
+  v <- ebirdst_pkg_ver()
+  if(!supported) {
+    skip(message = paste0("ebirdst version:", v, " not supported by ", use))
   }
+  invisible()
 }

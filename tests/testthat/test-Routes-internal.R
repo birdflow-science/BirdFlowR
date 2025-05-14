@@ -3,11 +3,11 @@ test_that("Reset index in converting Routes to BirdFlowRoutes works", {
   set.seed(42)
   fake_routes <- make_fake_routes_one_point_per_route()
   bf <- BirdFlowModels::amewoo
-  species1 <- "amewoo"
-  source1 <- "Unkown"
 
-  expect_no_error(my_routes <- Routes(fake_routes, species = species1,
-                                      source = source1))
+  species <- bf$species
+
+  expect_no_error(my_routes <- Routes(fake_routes, species = species,
+                                      source = "test"))
   expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf,
                                                    reset_index = TRUE))
 })
@@ -70,7 +70,7 @@ test_that("Extra columns are retained and don't cause problems", {
   fake_routes <- make_fake_routes()
   fake_routes$info <- "AABB some info"
   bf <- BirdFlowModels::amewoo
-  species1 <- "amewoo"
+  species1 <- bf$species
 
   source1 <- c("eBird", "BirdFlowR")
 

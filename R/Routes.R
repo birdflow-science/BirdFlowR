@@ -46,7 +46,7 @@ Routes <- function(data, species = NULL, source = NULL) {
   # Resolve species
   if (!is.list(species) && !is.null(species) && !is.na(species) &&
      length(species == 1)) {
-    species <- lookup_species_metadata(species, quiet = TRUE)
+    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks = TRUE, min_season_quality = 0)
   } else {
     if (!is.list(species) || !"common_name" %in% names(species)) {
       stop("Routes() requires a species either as valid input to ",

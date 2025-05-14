@@ -143,6 +143,31 @@ import_birdflow_v3 <- function(hdf5) {
       bf$metadata[[a]] <- as.vector(metadata[[a]])
   }
 
+  # Replace empty strings in metadata with NA of the right class
+  is_scalar_empty <- function(x) {
+    is.atomic(x) && length(x) == 1 && is.character(x) && x == ""
+  }
+  empty_elements <- sapply(bf$metadata, is_scalar_empty) |>
+    as.logical() |> which()
+  ref_md <- new_BirdFlow()$metadata
+  for(i in empty_elements) {
+    name <- names(bf$metadata)[i]
+    if(name %in% names(ref_md)) {
+    new_na_value <- switch(class(ref_md[[i]]),
+                           "integer" = NA_integer_,
+                           "real" = NA_real_,
+                           "numeric" = NA_real_,
+                           "character" = NA_character_,
+                           "logical" = NA,
+                           NA)
+    } else {
+      new_na_value <- NA
+    }
+
+    bf$metadata[[i]] <- new_na_value
+  }
+
+
   # hyperparameters
   if (is_fitted_model) {
 
