@@ -40,6 +40,31 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9074" id="birdflowr-0109074">BirdFlowR 0.1.0.9074<a class="anchor" aria-label="anchor" href="#birdflowr-0109074"></a></h2>
+<p>2025-05-13</p>
+<p>Update for compatabality with <strong>ebirdst</strong> 3.2023.0, released 2025-05-07.</p>
+<p><strong>BirdFlowR</strong> will work with either the 2022 or 2023 versions of the package. BirdFlow models retain all the species metadata and distributions they were trained on and don’t rely on having the same version of <strong>ebirdst</strong> installed to make predictions and routes.</p>
+<p>The distribution data and the species metadata has changed in the new release so that will be different. The dates defining the seasons for each species have changed a lot as well.</p>
+<div class="section level3">
+<h3 id="changes-to-birdflowr-0-1-0-9074">Changes to BirdFlowR<a class="anchor" aria-label="anchor" href="#changes-to-birdflowr-0-1-0-9074"></a></h3>
+<ul><li><p>Update <code><a href="../reference/lookup_species_metadata.html">lookup_species_metadata()</a></code> so it works with 3.2023.0 as well as 3.2022.x. The returned metadata will change between the two versions though, (model release date etc.), but the metadata items and names stay the same for BirdFlow models.</p></li>
+<li><p>New internal function <code>ebirdst_version_supported()</code> reports whether the <strong>ebirdst</strong> version is supported by different components of <strong>BirdFlowR</strong> and optionally throws an error if they aren’t. This is now called from <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> and <code><a href="../reference/lookup_species_metadata.html">lookup_species_metadata()</a></code>. This is mainly for convience when maintaining the package.</p></li>
+<li><p>Testing of routes and intervals now uses the full species object from a reference BirdFlow model. This means the tests aren’t calling <code><a href="../reference/lookup_species_metadata.html">lookup_species_metadata()</a></code> and so are agnostic to <strong>ebirdst</strong> version.</p></li>
+<li><p><code>NA</code> values in <code>$metadata</code> are now converted to an empty string prior to writing hdf5 with <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> and the empty string is converted back to <code>NA</code> when reading with <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code>. This approach has been used with the species information for a long time but now is required with metadata because <code>access_end_date</code> is no longer defined by <strong>ebirdst</strong> so is <code>NA</code> in models trained with 3.2023.0.</p></li>
+<li><p>Cleaned up Notes generated while checking the package.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-in-ebirdst-0-1-0-9074">Changes in <strong>eBirdst</strong>
+<a class="anchor" aria-label="anchor" href="#changes-in-ebirdst-0-1-0-9074"></a></h3>
+<p>This is NOT a complete list but here are the changes I encountered while updating the package.</p>
+<ul><li>
+<code><a href="https://ebird.github.io/ebirdst/reference/ebirdst_version.html" class="external-link">ebirdst::ebirdst_version()</a></code> now uses <code>status_version_year</code> in place of the old <code>version_year</code> and drops <code>access_end_date</code>. These were both metadata items retained by BirdFlow which still uses <code>version_year</code> but pulls it from the updated name. <code>access_end_date</code> is still in the BirdFlow metadata but will be <code>NA</code> with the new version of <strong>ebirdst</strong>.<br>
+Related to this <code><a href="https://ebird.github.io/ebirdst/reference/ebirdst_runs.html" class="external-link">ebirdst::ebirdst_runs</a></code> has new columns including <code>"status_version_year"</code> currently every model has a value of<code>2003</code> but having it in the table suggest they in future updates they might have different version years for different species. <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> should pull the version year from the runs table if this happens.</li>
+<li>With <code>amewoo</code> the season dates have changed substantially. I’m not sure how widespread the date changes are.</li>
+<li>The release notes for <strong>ebirdst</strong> say “Northern Goshawk species code was incorrect” so heads up if you are using that model.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9073" id="birdflowr-0109073">BirdFlowR 0.1.0.9073<a class="anchor" aria-label="anchor" href="#birdflowr-0109073"></a></h2>
 <p>2025-05-09</p>
 <ul><li>
