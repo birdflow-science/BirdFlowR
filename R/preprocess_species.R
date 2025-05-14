@@ -132,15 +132,18 @@ preprocess_species <- function(species = NULL,
   # I anticipate a group of users who work with fit models provided by the
   # BirdFlow team but don't fit their own models, and my initial installation
   # of ebirdst was tricky so I didn't want all users to need to import it.
-  a <- requireNamespace("ebirdst",
-                        versionCheck = list(op = ">=", version = "2.2021.0"),
-                        quietly = !birdflow_options("verbose"))
-  if (!a) {
-    stop("Install ebirdst >= 2.2021.0 to use preprocess_species()")
-  }
+
+
+  # ebirdst_ver_supported("preprocess_species", throw_error = TRUE)
 
   # Define local variables
   st_year <- ebirdst::ebirdst_version()$version_year
+  if(is.null(st_year))
+    st_year <- ebirdst::ebirdst_version()$status_version_year
+  if(is.null(st_year))
+    stop("Couldn't lookup ebirdst version year.",
+         "Likely that package has changed")
+
   any_output <- hdf5
   max_param_per_gb <- birdflow_options("max_param_per_gpu_gb")
   project_method <- "bilinear"
@@ -228,7 +231,9 @@ preprocess_species <- function(species = NULL,
 
   # Add ebirdst versions to  metadata
   v <- ebirdst::ebirdst_version()
-  export$metadata$ebird_version_year <- v$version_year
+  if(!"access_end_date" %in% names(v)) # dropped in 3.2023.0
+    v$access_end_date <- NA_character_
+  export$metadata$ebird_version_year <- st_year
   export$metadata$ebird_release_year <- v$release_year
   export$metadata$ebirdst_version <- as.character(ebirdst_pkg_ver())
   export$metadata$ebird_access_end_date <- as.character(v$access_end_date)

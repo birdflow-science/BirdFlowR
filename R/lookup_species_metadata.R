@@ -29,6 +29,7 @@ lookup_species_metadata <- function(species,
     stop("Cannot lookup species metadata unless ebirdst is installed")
   }
 
+  ebirdst_ver_supported("lookup_species_metadata", throw_error = TRUE)
   #----------------------------------------------------------------------------#
   # format species metadata                                                 ####
   #----------------------------------------------------------------------------#
@@ -99,6 +100,8 @@ lookup_species_metadata <- function(species,
     "prebreeding_migration_quality"
   )
 
+  #  These are retained in the returned object
+  final_variables <- new_BirdFlow()$species |> names()
 
   # Check that ebirdst species data supports BirdFlow modeling
   if (!skip_checks) {
@@ -148,8 +151,17 @@ lookup_species_metadata <- function(species,
 
 
   new_bf <- new_BirdFlow()
-  # check contents against new_BirdFlow() for consistency
-  stopifnot(all(names(spmd) == names(new_bf$species)))
+
+  # Make sure all required names are there
+  miss <- setdiff(final_variables, names(spmd))
+  if (length(miss) > 0) {
+    stop("Some expected species metadata missing from eBirdst::ebirdst_runs:",
+         " \"", paste(miss, collapse = "\", ", sep = ""), "\"",
+         "This is most likely due to updates in ebirdst.")
+    }
+
+  # subset and reorder
+  spmd <- spmd[final_variables]
 
   return(spmd)
 }

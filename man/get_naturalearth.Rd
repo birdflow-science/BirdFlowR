@@ -45,7 +45,8 @@ get_countries(
 )
 }
 \arguments{
-\item{x}{A BirdFlow, \link[terra:SpatRaster-class]{terra::SpatRaster}, \link[=sf]{sf::sf}, or any other object
+\item{x}{A BirdFlow, \link[terra:SpatRaster-class]{terra::SpatRaster},
+\link[sf:st_as_sf]{sf}, or any other object
 on which you can call \code{\link[terra:ext]{terra::ext()}} and \code{\link[terra:crs]{terra::crs()}}.}
 
 \item{type}{The type of data to retrieve. One of "coastline", "country", or

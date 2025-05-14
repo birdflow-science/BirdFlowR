@@ -3,7 +3,7 @@
 test_that("preprocess_species runs on test dataset", {
 
   skip_on_cran()
-  skip_if_unsupported_ebirdst_version()
+  skip_if_unsupported_ebirdst_version(use = "preprocess_species")
 
   # Temporarily suppress BirdFlowR chatter
   local_quiet()
@@ -47,7 +47,7 @@ test_that("preprocess_species runs on test dataset", {
 #3
 test_that("preprocess_species catches error conditions", {
 
-  skip_if_unsupported_ebirdst_version()
+  skip_if_unsupported_ebirdst_version(use = "preprocess_species")
 
   # Temporarily suppress BirdFlowR chatter
   local_quiet()
@@ -133,7 +133,7 @@ test_that("preprocess_species catches error conditions", {
 test_that("preprocess_species() works with clip", {
 
   skip_on_cran()
-  skip_if_unsupported_ebirdst_version()
+  skip_if_unsupported_ebirdst_version(use = "preprocess_species")
 
 
   # Temporarily suppress BirdFlowR chatter
@@ -159,6 +159,7 @@ test_that("preprocess_species() works with clip", {
   sp_path <- ebirdst::get_species_path(sp)
 
 
+  #### Back compatibility
   if (ebirdst_pkg_ver() < "3.2022.0") {
     proj <- ebirdst::load_fac_map_parameters(sp_path)$custom_projection
   } else {
@@ -185,10 +186,22 @@ test_that("preprocess_species() works with clip", {
   )
 
 
-  # Test that expect file was created
+  # Test that expected file was created
   created_files <- list.files(dir)
-  expect_in(created_files,  c("example_data_2021_30km.hdf5",  # ebird 2021
-                              "yebsap-example_2022_30km.hdf5")) # 2022
+  v_year <- ebirdst_pkg_ver()[1, 2]
+  expect_in(created_files,
+            c("example_data_2021_30km.hdf5",     # ebird 2021
+              "yebsap-example_2022_30km.hdf5",   # 2022
+              paste0("yebsap-example_", v_year, "_30km.hdf5")))  # 2023+
+
+
+
+  if (interactive()) {
+    # Plot "Full" abundance for "example_data" and our clipping polygon
+    plot_distr(get_distr(b, 1), b) +
+      ggplot2::geom_sf(data = poly, inherit.aes = FALSE, fill = NA)
+
+  }
 
   skip_if_wrong_ebirdst_for_snapshot()
 
@@ -204,7 +217,7 @@ test_that("preprocess_species() works with crs arg", {
   skip_on_ci()
   local_quiet()
 
-  skip_if_unsupported_ebirdst_version()
+  skip_if_unsupported_ebirdst_version(use = "preprocess_species")
 
   # Create and commit to cleaning up a temporary dir
   dir <- local_test_dir("preprocess_crs")
@@ -250,6 +263,7 @@ test_that("preprocess_species() works with crs arg", {
 test_that("preprocess_species() works with trim_quantile", {
   skip_on_cran()
   skip_on_ci()
+  skip_if_unsupported_ebirdst_version("preprocess_species")
   local_quiet()
 
   bf <- preprocess_species(species = "example_data",

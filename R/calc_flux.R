@@ -46,7 +46,7 @@
 #' @param points A set of points to calculate movement through. If `points` is
 #' `NULL` they will default to the BirdFlow model cells that are either active
 #' or fall between two active cells. Otherwise a data frame with `x` and  `y`
-#' columns containing point coordinates in [crs(bf)][crs()].
+#' columns containing point coordinates in [crs(bf)][terra::crs()].
 #' @param radius The radius in meters around the points used to assess whether
 #' a movement line passes by (or through) the point. If a point is farther than
 #' `radius` from a great circle line between two cells centers then it is not

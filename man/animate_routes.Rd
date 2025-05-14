@@ -45,7 +45,7 @@ called from \code{\link[=animate_routes]{animate_routes()}}.}
 }
 \value{
 A \code{gganim} object. \code{print()} will plot it with default
-options, or use \code{\link[=animate]{animate()}} to set the options. See the example for
+options, or use \code{\link[gganimate:animate]{gganimate::animate()}} to set the options. See the example for
 recommended settings.
 }
 \description{

@@ -3,7 +3,7 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
 
   fake_routes <- make_fake_routes()
   bf <- BirdFlowModels::amewoo
-  species1 <- "amewoo"
+  species1 <- bf$species
   source1 <- "BirdFlow"
 
   expect_no_error(my_routes <- Routes(fake_routes,
@@ -22,7 +22,7 @@ test_that("Test Interval sampling strategy", {
   # Setup
   fake_routes <- make_fake_routes()
   bf <- BirdFlowModels::amewoo
-  species1 <- species(bf)
+  species1 <- bf$species
   source1 <- "Testing"
 
   expect_no_error(my_routes <- Routes(fake_routes,
@@ -80,7 +80,7 @@ test_that("If no intervals can be sampled, return NULL", {
   set.seed(42)
   fake_routes <- make_fake_routes_one_point_per_route()
   bf <- BirdFlowModels::amewoo
-  species1 <- "amewoo"
+  species1 <- bf$species
   source1 <- "BirdFlow"
 
   expect_no_error(my_routes <- Routes(fake_routes,

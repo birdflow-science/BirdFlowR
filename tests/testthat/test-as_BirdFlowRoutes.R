@@ -26,7 +26,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
     bandwidth = 20,
     year_sd = 0
   )
-  species1 <- "amewoo"
+  species1 <- bf$species
   source1 <- "eBird"
   expect_no_error(
     my_routes <- Routes(fake_tracks, species = species1, source = source1)
