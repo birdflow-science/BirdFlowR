@@ -1,8 +1,8 @@
 #' @title ebirdst version compatibility functions:
 #'
 #' @description
-#' Internal functions to facilitate working with both the 2021 and 2022
-#' versions of \pkg{ebirdst} despite the significant changes to the API.
+#' Internal functions to facilitate working with both multiple versions of
+#' of \pkg{ebirdst} despite the changes to the API between 2021 and 2022.
 #'
 #' @name ebirdst-compatibility
 NULL
@@ -20,6 +20,55 @@ ebirdst_pkg_ver <- function() {
     return(NA)
   res
 }
+
+#' @section `ebirdst_ver_supported()`:
+#' `ebirdst_ver_supported()` Check whether the installed \pkg{ebirdst} is
+#' suppored by \pkg{BirdFlowR} for a particular use.
+#' @param use The particular use that is being checked against. `package` is
+#' whether all package functions are supported fully.  `preprocess_species`
+#' checks that function which has stricter requirments than most funcitons.
+#' `lookup_species_metadata` checks that function which is called by
+#' `Routes()`.
+#' @param throw_error if `TRUE` an error will be thrown if \pkg{ebirdst} is not
+#' supported by `use`.
+#' @return `ebirdst_ver_supported`: `TRUE` if the specified `use` is supported,
+#'  `FALSE` otherwise.
+#' @keywords internal
+#' @rdname ebirdst-compatibility
+ebirdst_ver_supported <- function(use = "package", throw_error = FALSE) {
+
+  ver <- ebirdst_pkg_ver()
+
+  earliest_supported <- "2.2021.0"
+
+  # Set valid version ranges for different ebirdst use cases
+  switch(use,
+         package = { # (Entire package supported including preprocessing)
+           not_yet_supported <- NA # NA for no limit
+         },
+         preprocess_species = {
+           not_yet_supported <- NA# "3.2023.0"  |> as.package_version()
+         },
+         lookup_species_metadata = {
+           not_yet_supported <-  NA
+         },
+         stop("Unsupported use argument for ebirdst_ver_supported(): ", use)
+         )
+
+  supported <- !is.na(ver) && ver >= earliest_supported &&
+                  (is.na(not_yet_supported) || ver < not_yet_supported)
+
+  if (throw_error && !supported) {
+    stop("ebirdst version >= ", earliest_supported,
+         ifelse(is.na(not_yet_supported), "",
+                paste0(" and < ", not_yet_supported)),
+         " required to use ", use, sep = "")
+  }
+
+  return(supported)
+}
+
+
 
 
 #' @section `res_label()`:

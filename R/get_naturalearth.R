@@ -56,7 +56,8 @@
 #'  \code{ install.packages("devtools") # if you don't have it already
 #'  devtools::install_github("ropensci/rnaturalearthhires") }
 #'
-#' @param x A BirdFlow, [terra::SpatRaster], [sf::sf][sf], or any other object
+#' @param x A BirdFlow, [terra::SpatRaster],
+#'  [sf][sf::st_as_sf()], or any other object
 #'  on which you can call [terra::ext()] and [terra::crs()].
 #' @param type The type of data to retrieve. One of "coastline", "country", or
 #'   "states" for data included in \pkg{rnaturalearth}; or any value accepted by

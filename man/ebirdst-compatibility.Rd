@@ -3,12 +3,15 @@
 \name{ebirdst-compatibility}
 \alias{ebirdst-compatibility}
 \alias{ebirdst_pkg_ver}
+\alias{ebirdst_ver_supported}
 \alias{res_label}
 \alias{date_to_week}
 \alias{ebirdst_example_species}
 \title{ebirdst version compatibility functions:}
 \usage{
 ebirdst_pkg_ver()
+
+ebirdst_ver_supported(use = "package", throw_error = FALSE)
 
 res_label(res)
 
@@ -17,6 +20,15 @@ date_to_week(dates, version = 2022)
 ebirdst_example_species()
 }
 \arguments{
+\item{use}{The particular use that is being checked against. \code{package} is
+whether all package functions are supported fully.  \code{preprocess_species}
+checks that function which has stricter requirments than most funcitons.
+\code{lookup_species_metadata} checks that function which is called by
+\code{Routes()}.}
+
+\item{throw_error}{if \code{TRUE} an error will be thrown if \pkg{ebirdst} is not
+supported by \code{use}.}
+
 \item{res}{A resolution label. One of "lr", "mr", "hr", "27km", "9km", or
 "3km}
 
@@ -32,6 +44,9 @@ the closest of those two. The output of
 \code{ebirdst_pkg_ver()}: The installed \pkg{ebirdst} package version or
 \code{NA} if none.
 
+\code{ebirdst_ver_supported}: \code{TRUE} if the specified \code{use} is supported,
+\code{FALSE} otherwise.
+
 \code{res_label()}: resolution labels appropriate for installed version
 of \pkg{ebirdst}.
 
@@ -41,13 +56,19 @@ of \pkg{ebirdst}.
 \pkg{ebirdst}
 }
 \description{
-Internal functions to facilitate working with both the 2021 and 2022
-versions of \pkg{ebirdst} despite the significant changes to the API.
+Internal functions to facilitate working with both multiple versions of
+of \pkg{ebirdst} despite the changes to the API between 2021 and 2022.
 }
 \section{\code{ebirdst_pkg_ver()}}{
 
 \code{ebirdst_pkg_ver()} Look up the version of the currently installed
 \pkg{ebirdst}.
+}
+
+\section{\code{ebirdst_ver_supported()}}{
+
+\code{ebirdst_ver_supported()} Check whether the installed \pkg{ebirdst} is
+suppored by \pkg{BirdFlowR} for a particular use.
 }
 
 \section{\code{res_label()}}{

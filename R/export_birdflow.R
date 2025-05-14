@@ -66,11 +66,16 @@ export_birdflow <- function(bf, file = NULL,
     }
   }
 
-  # Replace NA in $species component with ""
+  # Replace NA in $species and $metadata component with ""
   # This is for the rare species like magfri where some of the data has
   # NA.  The goal here is to bipass issues writing NA to hdf5 files
-  has_na <- sapply(bf$species, is.na) |> as.logical()
-  bf$species[has_na] <- ""
+  sp_has_na <- sapply(bf$species, is.na) |> as.logical()
+  bf$species[sp_has_na] <- ""
+
+  is_scalar_na <- function(x) is.atomic(x) && length(x) == 1 && is.na(x)
+  md_has_na <- sapply(bf$metadata, is_scalar_na) |> as.logical()
+  bf$metadata[md_has_na] <- ""
+
 
   # Write HDF5
   ns <- names(bf)

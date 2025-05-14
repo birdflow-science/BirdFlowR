@@ -28,7 +28,7 @@
 #' \describe{
 #' \item{time_format}{Indicates what time format to use to label dimensions of
 #' distribution tables and layers of raster objects returned by [get_distr()],
-#' [rast()], [rasterize_distr()], and [predict()].  It does not affect
+#' [terra::rast()], [rasterize_distr()], and [predict()].  It does not affect
 #' internally stored distribution column labels (which are always t1, t2, etc.).
 #' Default is "month_day".
 #'
