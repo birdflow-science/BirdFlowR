@@ -2,7 +2,7 @@
 % Please edit documentation in R/interval_based_validation.R
 \name{get_interval_based_validation_one_transition_pair}
 \alias{get_interval_based_validation_one_transition_pair}
-\title{Evaluate model performance using intervals (movement data)}
+\title{Evaluate model performance using intervals (transitions data)}
 \usage{
 get_interval_based_validation_one_transition_pair(
   birdflow_interval_row,
@@ -22,13 +22,39 @@ get_interval_based_validation_one_transition_pair(
 location as rows, probability as values.}
 }
 \value{
-A named vector with distance metrics
+A named vector with various metrics
+\describe{
+\item{pred}{Weighted average great-circle distance (km) from
+the BF prediction distribution to the actual encounter cell}
+\item{st}{Weighted average great-circle distance (km) from the S\&T
+empirical distribution to the actual encounter cell}
+\item{win_prob}{Probability that BF is closer than S\&T
+(i.e.\ “win” probability of BF vs.\ S\&T)}
+\item{win_distance}{Absolute distance improvement (km): \code{st – pred}}
+  \item{win_distance_fraction}{Normalized distance improvement:
+\code{(st – pred) / st}}
+  \item{global_prob_of_the_starting}{Probability (relative abundance) of the
+starting cell in the BF distribution at the start date}
+\item{elapsed_days}{Elapsed time of the interval (days) between banding
+(\code{date1}) and encounter (\code{date2})}
+\item{elapsed_km}{Observed great-circle distance (km) between banding
+and encounter locations}
+\item{null_ll}{Log-likelihood of the encounter cell under the S\&T
+distribution: \code{log(final_st_distr[i_final])}}
+\item{ll}{Log-likelihood of the encounter cell under the BF prediction:
+\code{log(preds_final[i_final])}}
+\item{energy_score_bf}{Energy score of the BF predictive distribution
+(with \eqn{\beta=1}{beta=1})}
+\item{energy_score_st}{Energy score of the S\&T empirical distribution
+(with \eqn{\beta=1}{beta=1})}
+\item{energy_improvement}{Difference in energy score:
+\code{energy_score_st – energy_score_bf}}
+  \item{pred_elapsed_dist_by_pred}{Predicted elapsed distance (km) from
+starting cell, weighted by BF predictions}
+\item{pred_elapsed_dist_by_st}{Predicted elapsed distance (km) from
+starting cell, weighted by S\&T distribution}
+}
 }
 \description{
-Calculate the interval based validation, including predictive
-distance metric, log likelihood, and log likelihood baseline
-For distance metrics: What is the distance and probability that BirdFlow
-model prediction beats the naive S&T probability
-distribution-based prediction?
 Get the interval based validation metrics for one transition pair
 }
