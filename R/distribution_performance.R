@@ -70,7 +70,7 @@
 #' distribution_performance(bf, season = "prebreeding_migration")
 #'
 #' @export
-distribution_performance <- function(x, metrics = NULL, log=FALSE, ...) {
+distribution_performance <- function(x, metrics = NULL, ...) {
 
   stopifnot(inherits(x, "BirdFlow"))
 
@@ -128,11 +128,6 @@ distribution_performance <- function(x, metrics = NULL, log=FALSE, ...) {
       start_distr <- get_distr(x, from, from_marginals = FALSE)
       marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
       start_dm <- get_dynamic_mask(x, from)
-      if (log) {
-        distr_cor[i] <- cor(log(start_distr[start_dm]), log(marginal_start_distr[start_dm]))
-      } else {
-        distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
-      }
       
       distr_states[i] <- sum(marginal_start_distr != 0)
 
@@ -141,14 +136,6 @@ distribution_performance <- function(x, metrics = NULL, log=FALSE, ...) {
         end_distr <- get_distr(x, to, from_marginals = FALSE)
         projected <- predict(x, distr = start_distr, start = from, end = to)
         end_dm <- get_dynamic_mask(x, to) # end dynamic mask
-
-        if (log) {
-          single_step_cor[i] <- cor(log(end_distr[end_dm]),
-                                  log(projected[end_dm, ncol(projected)]))
-        } else {
-          single_step_cor[i] <- cor(end_distr[end_dm],
-                                  projected[end_dm, ncol(projected)])
-        }
       }
     } # end loop through transitions
 
@@ -177,19 +164,12 @@ distribution_performance <- function(x, metrics = NULL, log=FALSE, ...) {
     projected <- projected[, , dim(projected)[3]] # subset to last timestep
     end_dm <- get_dynamic_mask(x, end)
 
-    if (log) {
-      # Two traverse correlations
-      # "st_" starts with eBird S&T distribution
-      st_traverse_cor <- cor(log(end_distr[end_dm]), log(projected[end_dm, 1]))
-      # "md_" starts with marginal distribution
-      md_traverse_cor <- cor(log(end_distr[end_dm]), log(projected[end_dm, 2]))
-    } else {
-      # Two traverse correlations
-      # "st_" starts with eBird S&T distribution
-      st_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 1])
-      # "md_" starts with marginal distribution
-      md_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 2])
-    }
+    # Two traverse correlations
+    # "st_" starts with eBird S&T distribution
+    st_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 1])
+    # "md_" starts with marginal distribution
+    md_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 2])
+
   } # end traverse
 
   result <- list(mean_step_cor = mean_step_cor,
