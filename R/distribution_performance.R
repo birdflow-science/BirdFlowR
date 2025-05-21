@@ -128,6 +128,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       start_distr <- get_distr(x, from, from_marginals = FALSE)
       marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
       start_dm <- get_dynamic_mask(x, from)
+      distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
       
       distr_states[i] <- sum(marginal_start_distr != 0)
 
@@ -136,6 +137,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
         end_distr <- get_distr(x, to, from_marginals = FALSE)
         projected <- predict(x, distr = start_distr, start = from, end = to)
         end_dm <- get_dynamic_mask(x, to) # end dynamic mask
+        single_step_cor[i] <- cor(end_distr[end_dm],
+                                  projected[end_dm, ncol(projected)])
       }
     } # end loop through transitions
 
