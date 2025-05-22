@@ -11,10 +11,10 @@
 #' \describe{
 #'   \item{pred}{Weighted average great-circle distance (km) from 
 #'   the BF prediction distribution to the actual encounter cell}
-#'   \item{st}{Weighted average great-circle distance (km) from the S\&T 
+#'   \item{st}{Weighted average great-circle distance (km) from the S&T 
 #'   empirical distribution to the actual encounter cell}
-#'   \item{win_prob}{Probability that BF is closer than S\&T 
-#'   (i.e.\ “win” probability of BF vs.\ S\&T)}
+#'   \item{win_prob}{Probability that BF is closer than S&T 
+#'   (i.e.“win” probability of BF vs. S&T)}
 #'   \item{win_distance}{Absolute distance improvement (km): \code{st – pred}}
 #'   \item{win_distance_fraction}{Normalized distance improvement: 
 #'   \code{(st – pred) / st}}
@@ -24,20 +24,20 @@
 #'   (\code{date1}) and encounter (\code{date2})}
 #'   \item{elapsed_km}{Observed great-circle distance (km) between banding 
 #'   and encounter locations}
-#'   \item{null_ll}{Log-likelihood of the encounter cell under the S\&T 
+#'   \item{null_ll}{Log-likelihood of the encounter cell under the S&T 
 #'   distribution: \code{log(final_st_distr[i_final])}}
 #'   \item{ll}{Log-likelihood of the encounter cell under the BF prediction: 
 #'   \code{log(preds_final[i_final])}}
 #'   \item{energy_score_bf}{Energy score of the BF predictive distribution 
 #'   (with \eqn{\beta=1}{beta=1})}
-#'   \item{energy_score_st}{Energy score of the S\&T empirical distribution 
+#'   \item{energy_score_st}{Energy score of the S&T empirical distribution 
 #'   (with \eqn{\beta=1}{beta=1})}
 #'   \item{energy_improvement}{Difference in energy score: 
 #'   \code{energy_score_st – energy_score_bf}}
 #'   \item{pred_elapsed_dist_by_pred}{Predicted elapsed distance (km) from 
 #'   starting cell, weighted by BF predictions}
 #'   \item{pred_elapsed_dist_by_st}{Predicted elapsed distance (km) from 
-#'   starting cell, weighted by S\&T distribution}
+#'   starting cell, weighted by S&T distribution}
 #' }
 get_interval_based_validation_one_transition_pair <- function(
     birdflow_interval_row, bf, gcd, st_dists) {
@@ -159,25 +159,25 @@ get_interval_based_validation_one_transition_pair <- function(
 #'     \describe{
 #'       \item{mean_pred}{Mean weighted average distance (km) from 
 #'       BF predictions}
-#'       \item{mean_st}{Mean weighted average distance (km) from S\&T 
+#'       \item{mean_st}{Mean weighted average distance (km) from S&T 
 #'       distributions}
-#'       \item{mean_win_prob}{Mean win probability (BF vs. S\&T)}
+#'       \item{mean_win_prob}{Mean win probability (BF vs. S&T)}
 #'       \item{mean_win_distance}{Mean absolute distance improvement (km)}
 #'       \item{mean_win_distance_fraction}{Mean normalized distance improvement}
 #'       \item{mean_global_prob_of_the_starting}{Mean relative abundance at 
 #'       start cells}
 #'       \item{mean_elapsed_days}{Mean elapsed days per interval}
 #'       \item{mean_elapsed_km}{Mean observed great‐circle distance (km)}
-#'       \item{mean_null_ll}{Mean log‐likelihood under the S\&T null 
+#'       \item{mean_null_ll}{Mean log‐likelihood under the S&T null 
 #'       distribution}
 #'       \item{mean_ll}{Mean log‐likelihood under the BF prediction}
 #'       \item{mean_energy_score_bf}{Mean energy score of BF predictions}
-#'       \item{mean_energy_score_st}{Mean energy score of S\&T distributions}
+#'       \item{mean_energy_score_st}{Mean energy score of S&T distributions}
 #'       \item{mean_energy_improvement}{Mean difference in energy score}
 #'       \item{mean_pred_elapsed_dist_by_pred}{Mean predicted elapsed distance 
 #'       by BF}
 #'       \item{mean_pred_elapsed_dist_by_st}{Mean predicted elapsed distance 
-#'       by S\&T}
+#'       by S&T}
 #'       \item{weighted_mean_win_prob}{Global‐abundance‐weighted mean win 
 #'       probability}
 #'       \item{weighted_mean_win_distance}{Global‐abundance‐weighted mean win 

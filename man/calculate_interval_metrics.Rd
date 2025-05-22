@@ -20,25 +20,25 @@ intervals:
 \describe{
 \item{mean_pred}{Mean weighted average distance (km) from
 BF predictions}
-\item{mean_st}{Mean weighted average distance (km) from S\&T
+\item{mean_st}{Mean weighted average distance (km) from S&T
 distributions}
-\item{mean_win_prob}{Mean win probability (BF vs. S\&T)}
+\item{mean_win_prob}{Mean win probability (BF vs. S&T)}
 \item{mean_win_distance}{Mean absolute distance improvement (km)}
 \item{mean_win_distance_fraction}{Mean normalized distance improvement}
 \item{mean_global_prob_of_the_starting}{Mean relative abundance at
 start cells}
 \item{mean_elapsed_days}{Mean elapsed days per interval}
 \item{mean_elapsed_km}{Mean observed great‐circle distance (km)}
-\item{mean_null_ll}{Mean log‐likelihood under the S\&T null
+\item{mean_null_ll}{Mean log‐likelihood under the S&T null
 distribution}
 \item{mean_ll}{Mean log‐likelihood under the BF prediction}
 \item{mean_energy_score_bf}{Mean energy score of BF predictions}
-\item{mean_energy_score_st}{Mean energy score of S\&T distributions}
+\item{mean_energy_score_st}{Mean energy score of S&T distributions}
 \item{mean_energy_improvement}{Mean difference in energy score}
 \item{mean_pred_elapsed_dist_by_pred}{Mean predicted elapsed distance
 by BF}
 \item{mean_pred_elapsed_dist_by_st}{Mean predicted elapsed distance
-by S\&T}
+by S&T}
 \item{weighted_mean_win_prob}{Global‐abundance‐weighted mean win
 probability}
 \item{weighted_mean_win_distance}{Global‐abundance‐weighted mean win

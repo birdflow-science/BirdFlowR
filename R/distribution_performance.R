@@ -22,7 +22,6 @@
 #' @param x A BirdFlow object
 #' @param metrics If NULL calculate all metrics.  Otherwise set to a subset of
 #'   the metric names to calculate only those metrics.
-#' @param log Whether to use log before pearson correlation
 #' @inheritDotParams lookup_timestep_sequence -x
 #'   n
 #' @return

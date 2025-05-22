@@ -30,8 +30,6 @@ of timesteps to extend the season by at each end.}
 \code{start} in \code{direction}; and the resulting sequence will have \code{n_step}
 transitions and \code{n_steps + 1}  timesteps.}
   }}
-
-\item{log}{Whether to use log before pearson correlation}
 }
 \value{
 \describe{
