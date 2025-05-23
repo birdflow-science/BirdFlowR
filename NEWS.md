@@ -1,3 +1,11 @@
+# BirdFlowR 0.1.0.9075
+2025-05-21
+
+* Finalize the interval based validation metrics in function `calculate_interval_metrics` 
+  of file `interval_based_validation.R`.
+* Fixed some small documentation bugs where the arguments are not used but described.
+  
+
 # BirdFlowR 0.1.0.9074
 2025-05-13
 
