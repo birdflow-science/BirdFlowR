@@ -39,7 +39,8 @@
 #'   \item{pred_elapsed_dist_by_st}{Predicted elapsed distance (km) from 
 #'   starting cell, weighted by S&T distribution}
 #' }
-get_interval_based_validation_one_transition_pair <- function(
+#' @keywords internal
+calc_single_interval_metrics <- function(
     birdflow_interval_row, bf, gcd, st_dists) {
   # latlong data for banding and encounter location
   point_df_initial <- data.frame(
@@ -237,7 +238,7 @@ get_interval_based_validation_one_transition_pair <- function(
 #' eval_res <- calculate_interval_metrics(my_intervals, bf)
 #' single_value_outputs <- eval_res[[1]]
 #' transition_level_outputs <- eval_res[[2]]
-calculate_interval_metrics <- function(birdflow_intervals, bf) {
+calc_interval_metrics <- function(birdflow_intervals, bf) {
   # weekly distributions directly from S&T
   st_dists <- get_distr(bf, which = "all", from_marginals = FALSE)
 
