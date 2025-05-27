@@ -100,7 +100,7 @@ my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
                                                 max_km_interval = max_km
 )
 
-eval_res <- calculate_interval_metrics(my_intervals, bf)
+eval_res <- calc_interval_metrics(my_intervals, bf)
 single_value_outputs <- eval_res[[1]]
 transition_level_outputs <- eval_res[[2]]
 }
