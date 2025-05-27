@@ -27,7 +27,7 @@ test_that("Interval validation works", {
     max_km_interval = max_km
   )
 
-  expect_no_error(eval_res <- calculate_interval_metrics(my_intervals, bf))
+  expect_no_error(eval_res <- calc_interval_metrics(my_intervals, bf))
   single_value_outputs <- eval_res[[1]]
   expect_true(single_value_outputs['n_intervals']>0)
   transition_level_outputs <- eval_res[[2]]
