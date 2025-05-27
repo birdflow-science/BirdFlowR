@@ -235,7 +235,7 @@ calc_single_interval_metrics <- function(
 #'                                                 max_km_interval = max_km
 #' )
 #' 
-#' eval_res <- calculate_interval_metrics(my_intervals, bf)
+#' eval_res <- calc_interval_metrics(my_intervals, bf)
 #' single_value_outputs <- eval_res[[1]]
 #' transition_level_outputs <- eval_res[[2]]
 calc_interval_metrics <- function(birdflow_intervals, bf) {
@@ -248,7 +248,7 @@ calc_interval_metrics <- function(birdflow_intervals, bf) {
   # Calculate distance metric & ll
   dists <- sapply(
     split(birdflow_intervals$data, seq_len(nrow(birdflow_intervals$data))),
-    get_interval_based_validation_one_transition_pair, bf, gcd, st_dists
+    calc_single_interval_metrics, bf, gcd, st_dists
   )
   dists <- t(dists)
   dists <- as.data.frame(dists)
