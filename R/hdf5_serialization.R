@@ -68,6 +68,10 @@ write_r_object_h5 <- function(obj, file, path = "/") {
                      h5loc = "/",
                      h5obj = file,
                      name  = "class")
+    h5writeAttribute(attr = names(obj),
+                     h5loc = "/",
+                     h5obj = file,
+                     name  = "names")
   }
   
   h5file <- H5Fopen(file)
@@ -77,20 +81,68 @@ write_r_object_h5 <- function(obj, file, path = "/") {
     rel <- sub("^/", "", loc)
     
     if (!is.list(x) || inherits(x, c("Date","POSIXt")) || is.factor(x)) {
-      if (inherits(x, c("Date","POSIXt","factor"))) {
-        x <- as.character(x)
-      }
+      if (inherits(x, c("Date","POSIXt","factor"))) {x <- as.character(x)}
       parent <- dirname(rel)
-      if (parent != "" && parent != "." && !H5Lexists(h5file, parent)) {
+      if (parent != "" && parent != "." && !H5Lexists(h5file, parent))
         h5createGroup(h5file, parent)
-      }
       h5write(x, h5file, rel)
-      # write dataset attribute by filename+loc
-      h5writeAttribute(attr = class(x),
-                       h5loc = paste0("/", rel),
-                       h5obj = file,
-                       name  = "class")
-      return()
+      
+      # 1) record its R class
+      h5writeAttribute(
+        attr = class(x),
+        h5loc = paste0("/", rel),
+        h5obj = file,
+        name  = "class"
+      )
+      
+      # 2) record element‐names if present
+      if (!is.null(names(x))) {
+        h5writeAttribute(
+          attr = names(x),
+          h5loc = paste0("/", rel),
+          h5obj = file,
+          name  = "names"
+        )
+      }
+      
+      # 3) record dims if this was an array/matrix
+      if (!is.null(dim(x))) {
+        h5writeAttribute(
+          attr = dim(x),
+          h5loc = paste0("/", rel),
+          h5obj = file,
+          name  = "dim"
+        )
+        
+        ## record dimnames (row & column names) if present
+        dnm <- dimnames(x)
+        if (!is.null(dnm)) {
+          # names of the two dims (e.g. c("i","time"))
+          if (!is.null(names(dnm))) {
+            h5writeAttribute(
+              attr   = names(dnm),
+              h5loc  = paste0("/", rel),
+              h5obj  = file,
+              name   = "dimnames_names"
+            )
+          }
+          # the actual character vectors
+          h5writeAttribute(
+            attr   = dnm[[1]],
+            h5loc  = paste0("/", rel),
+            h5obj  = file,
+            name   = "dimnames1"
+          )
+          if (length(dnm) > 1) {
+            h5writeAttribute(
+              attr   = dnm[[2]],
+              h5loc  = paste0("/", rel),
+              h5obj  = file,
+              name   = "dimnames2"
+            )
+          }
+        }
+      }
     }
     
     # group
@@ -99,6 +151,10 @@ write_r_object_h5 <- function(obj, file, path = "/") {
         h5createGroup(h5file, rel)
       }
       # write group attribute by filename+loc
+      h5writeAttribute(attr = names(x), # the items order
+                       h5loc = loc, 
+                       h5obj = file, 
+                       name = "names")
       h5writeAttribute(attr = class(x),
                        h5loc = loc,
                        h5obj = file,
@@ -134,9 +190,61 @@ read_r_object_h5 <- function(file) {
   # 4) Recursive reader
   read_node <- function(loc) {
     children <- info$name[info$group == loc]
-    # Leaf: no children → dataset
+    
+    # Recover the naming order of objects
+    attrs <- h5readAttributes(file, loc)
+    children <- info$name[info$group == loc]
+    if (!is.null(attrs$names)) {
+      ordered <- intersect(attrs$names, children)
+      children <- c(ordered, setdiff(children, ordered))
+    }
+    
+    # Leaf: no children -> dataset
     if (length(children) == 0) {
-      return(h5read(fid, loc))
+      x <- h5read(fid, loc)
+      
+      # grab back the attrs
+      attrs <- h5readAttributes(file, loc)
+      
+      # 1) if we recorded an exact dim(), restore it
+      if ("dim" %in% names(attrs)) {
+        dim(x) <- as.integer(attrs$dim)
+        # 1b) restore dimnames if recorded
+        if ("dimnames1" %in% names(attrs) || "dimnames2" %in% names(attrs)) {
+          dn1 <- as.character(attrs$dimnames1)
+          dn2 <- as.character(attrs$dimnames2)
+          dimnames(x) <- list(dn1, dn2)
+          # restore the names of each dim (e.g. "i","time")
+          if ("dimnames_names" %in% names(attrs)) {
+            names(dimnames(x)) <- attrs$dimnames_names
+          }
+        }
+        
+      # 2) otherwise, flatten any 1-D array back to an atomic vector
+      } else if (!is.null(dim(x)) && length(dim(x)) == 1L) {
+        x <- as.vector(x)
+        
+      # 3) for true multi-D, just drop any singleton dimensions
+      } else if (!is.null(dim(x))) {
+        x <- drop(x)
+      }
+      
+      # 4) restore element-names if we recorded them
+      if ("names" %in% names(attrs)) {
+        names(x) <- attrs$names
+      }
+      
+      # 5) now restore the R classes (Date/POSIX/factor/…)
+      if (!is.null(attrs$class)) {
+        cl <- as.character(attrs$class)
+        if ("Date"   %in% cl) x <- as.Date(x)
+        if ("POSIXt" %in% cl) x <- as.POSIXct(x)
+        if ("factor" %in% cl) x <- factor(x)
+        other <- setdiff(cl, c("Date","POSIXt","factor"))
+        if (length(other)) class(x) <- other
+      }
+      
+      return(x)
     }
     
     # Otherwise, build a list of child nodes
@@ -148,12 +256,16 @@ read_r_object_h5 <- function(file) {
     
     # Restore S3 class (and data.frame coercion) based on stored attribute
     attrs <- h5readAttributes(file, loc)
-    if ("data.frame" %in% attrs$class) {
-      # Coerce list → data.frame (as.data.frame adds the "data.frame" class)
+    cl_attr <- attrs$class
+    if (!is.null(cl_attr) && (is.array(cl_attr) || is.list(cl_attr))) {
+      cl_attr <- as.character(cl_attr)
+    }
+    
+    if ("data.frame" %in% cl_attr) {
+      # Coerce list → data.frame
       out <- as.data.frame(out, stringsAsFactors = FALSE)
-    } else if ("class" %in% names(attrs)) {
-      # Assign any other S3 class (e.g. custom list classes)
-      class(out) <- attrs$class
+    } else if (!is.null(cl_attr)) {
+      class(out) <- cl_attr
     }
     
     out
@@ -166,6 +278,8 @@ read_r_object_h5 <- function(file) {
   rattrs <- h5readAttributes(file, "/")
   if ("class" %in% names(rattrs)) {
     cl <- rattrs$class
+    if (is.array(cl) || is.list(cl)) cl <- as.character(cl)
+    
     # If root was atomic, coerce back
     if (!is.list(root)) {
       if ("Date"   %in% cl) root <- as.Date(root)
