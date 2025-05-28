@@ -295,54 +295,71 @@ read_r_object_h5 <- function(file) {
   return(root)
 }
 
-# Routes
+
+
 #' @rdname hdf5_serialization
-#' @param obj_path The Routes object path to read from
+#' @title Generic function for writing Routes and 
+#' BirdFlowRoutes objects to HDF5.
+#'
+#' @param obj The Routes or BirdFlowRoutes object.
+#' @param obj_path Path to write the HDF5 file.
 #' @export
-read_Rotues <- function(obj_path) {
+write_routes <- function(obj, obj_path) {
+  UseMethod("write_routes")
+}
+
+#' @rdname hdf5_serialization
+#' @method write_routes Routes
+#' @export
+write_routes.Routes <- function(obj, obj_path) {
+  validate_Routes(obj)
+  suppressWarnings(write_r_object_h5(obj, obj_path))
+  invisible(obj)
+}
+
+#' @rdname hdf5_serialization
+#' @method write_routes BirdFlowRoutes
+#' @export
+write_routes.BirdFlowRoutes <- function(obj, obj_path) {
+  validate_BirdFlowRoutes(obj)
+  suppressWarnings(write_r_object_h5(obj, obj_path))
+  invisible(obj)
+}
+
+#' @rdname hdf5_serialization
+#' @method write_routes default
+#' @export
+write_routes.default <- function(obj, obj_path) {
+  warning(sprintf(
+    "write_routes only supports objects of class 'Routes' or 
+    'BirdFlowRoutes'; If you are writing BirdFlowIntervals object, please use
+    'write_BirdFlowIntervals'; got class '%s'", 
+    paste(class(obj), collapse = ", ")
+  ))
+  invisible(obj)
+}
+
+#' @rdname hdf5_serialization
+#' @title A psudo-generic function for reading Routes and BirdFlowRoutes objects
+#' from HDF5 files.
+#' 
+#' @param obj_path Path to write the HDF5 file.
+#' @export
+read_routes <- function(obj_path) {
   suppressWarnings(
     obj <- read_r_object_h5(obj_path)
   )
   obj$data$date <- as.Date(obj$data$date)
-  validate_Routes(obj)
+  if ("BirdFlowRoutes" %in% class(obj)) {
+    validate_BirdFlowRoutes(obj)
+  } else if ('Routes' %in% class(obj)) {
+    validate_Routes(obj)
+  } else {
+    stop("The loaded object is neither Routes nor BirdFlowRoutes. 
+         If you are reading BirdFlowIntervals object, please use
+         `read_BirdFlowIntervals`")
+  }
   return(obj)
-}
-
-#' @rdname hdf5_serialization
-#' @param obj The Routes object to write
-#' @param obj_path The path to write
-#' @export
-write_Rotues <- function(obj, obj_path) {
-  validate_Routes(obj)
-  suppressWarnings(
-    obj <- write_r_object_h5(obj, obj_path)
-  )
-  invisible(obj)
-}
-
-# BirdFlowRoutes
-#' @rdname hdf5_serialization
-#' @param obj_path The BirdFlowRoutes object path to read from
-#' @export
-read_BirdFlowRotues <- function(obj_path) {
-  suppressWarnings(
-    obj <- read_r_object_h5(obj_path)
-  )
-  obj$data$date <- as.Date(obj$data$date)
-  validate_BirdFlowRoutes(obj)
-  return(obj)
-}
-
-#' @rdname hdf5_serialization
-#' @param obj The BirdFlowRoutes object to write
-#' @param obj_path The path to write
-#' @export
-write_BirdFlowRotues <- function(obj, obj_path) {
-  validate_BirdFlowRoutes(obj)
-  suppressWarnings(
-    obj <- write_Rotues(obj, obj_path)
-  )
-  invisible(obj)
 }
 
 # BirdFlowIntervals
@@ -370,5 +387,3 @@ write_BirdFlowIntervals <- function(obj, obj_path) {
   )
   invisible(obj)
 }
-
-

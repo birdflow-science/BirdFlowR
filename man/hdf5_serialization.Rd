@@ -10,24 +10,31 @@
 \alias{write_BirdFlowRotues}
 \alias{read_BirdFlowIntervals}
 \alias{write_BirdFlowIntervals}
+\alias{write_routes}
+\alias{write_routes.Routes}
+\alias{write_routes.BirdFlowRoutes}
+\alias{write_routes.default}
+\alias{read_routes}
 \title{HDF5-based Serialization and Deserialization of R Objects}
 \usage{
-read_Rotues(obj_path)
+write_routes(obj, obj_path)
 
-write_Rotues(obj, obj_path)
+\method{write_routes}{Routes}(obj, obj_path)
 
-read_BirdFlowRotues(obj_path)
+\method{write_routes}{BirdFlowRoutes}(obj, obj_path)
 
-write_BirdFlowRotues(obj, obj_path)
+\method{write_routes}{default}(obj, obj_path)
+
+read_routes(obj_path)
 
 read_BirdFlowIntervals(obj_path)
 
 write_BirdFlowIntervals(obj, obj_path)
 }
 \arguments{
-\item{obj_path}{The path to write}
-
 \item{obj}{The BirdFlowIntervals object to write}
+
+\item{obj_path}{The path to write}
 }
 \value{
 \itemize{

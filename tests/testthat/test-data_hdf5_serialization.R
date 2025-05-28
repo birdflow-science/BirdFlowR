@@ -12,8 +12,8 @@ test_that("Data reading and writing from/to hdf5 files work", {
                         species = species1,
                         source = source1
     )
-    write_Rotues(my_routes1, "./my_routes.hdf5")
-    my_routes2 <- read_Rotues("./my_routes.hdf5")
+    write_routes(my_routes1, "./my_routes.hdf5")
+    my_routes2 <- read_routes("./my_routes.hdf5")
     expect_true(identical(my_routes1, my_routes2))
     if (file.exists("./my_routes.hdf5")) {file.remove("./my_routes.hdf5")}
   })
@@ -21,8 +21,8 @@ test_that("Data reading and writing from/to hdf5 files work", {
   expect_no_error({
     # BirdFlowRoutes
     my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
-    write_BirdFlowRotues(my_bfroutes1, "./my_birdflowroutes.hdf5")
-    my_bfroutes2 <- read_BirdFlowRotues("./my_birdflowroutes.hdf5")
+    write_routes(my_bfroutes1, "./my_birdflowroutes.hdf5")
+    my_bfroutes2 <- read_routes("./my_birdflowroutes.hdf5")
     expect_true(identical(my_bfroutes1, my_bfroutes2))
     if (file.exists("./my_birdflowroutes.hdf5")) {
       file.remove("./my_birdflowroutes.hdf5")
@@ -58,16 +58,16 @@ test_that("Data reading and writing from/to hdf5 files work
                          source = source1
     )
     my_routes1$species$prebreeding_migration_end <- NA
-    write_Rotues(my_routes1, "./my_routes.hdf5")
-    my_routes2 <- read_Rotues("./my_routes.hdf5")
+    write_routes(my_routes1, "./my_routes.hdf5")
+    my_routes2 <- read_routes("./my_routes.hdf5")
     expect_true(identical(my_routes1, my_routes2))
     if (file.exists("./my_routes.hdf5")) {file.remove("./my_routes.hdf5")}
 
     # BirdFlowRoutes
     my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
     my_bfroutes1$species$prebreeding_migration_end <- NA
-    write_BirdFlowRotues(my_bfroutes1, "./my_birdflowroutes.hdf5")
-    my_bfroutes2 <- read_BirdFlowRotues("./my_birdflowroutes.hdf5")
+    write_routes(my_bfroutes1, "./my_birdflowroutes.hdf5")
+    my_bfroutes2 <- read_routes("./my_birdflowroutes.hdf5")
     expect_true(identical(my_bfroutes1, my_bfroutes2))
     if (file.exists("./my_birdflowroutes.hdf5")) {
       file.remove("./my_birdflowroutes.hdf5")
@@ -102,8 +102,8 @@ test_that("Data reading and writing from/to hdf5 files work
                            source = source1
       )
       my_routes1$species$prebreeding_migration_end <- NULL
-      write_Rotues(my_routes1, "./my_routes.hdf5")
-      my_routes2 <- read_Rotues("./my_routes.hdf5")
+      write_routes(my_routes1, "./my_routes.hdf5")
+      my_routes2 <- read_routes("./my_routes.hdf5")
       expect_true(identical(my_routes1, my_routes2))
       if (file.exists("./my_routes.hdf5")) {
         file.remove("./my_routes.hdf5")
@@ -112,8 +112,8 @@ test_that("Data reading and writing from/to hdf5 files work
       # BirdFlowRoutes
       my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
       my_bfroutes1$species$prebreeding_migration_end <- NULL
-      write_BirdFlowRotues(my_bfroutes1, "./my_birdflowroutes.hdf5")
-      my_bfroutes2 <- read_BirdFlowRotues("./my_birdflowroutes.hdf5")
+      write_routes(my_bfroutes1, "./my_birdflowroutes.hdf5")
+      my_bfroutes2 <- read_routes("./my_birdflowroutes.hdf5")
       expect_true(identical(my_bfroutes1, my_bfroutes2))
       if (file.exists("./my_birdflowroutes.hdf5")) {
         file.remove("./my_birdflowroutes.hdf5")
