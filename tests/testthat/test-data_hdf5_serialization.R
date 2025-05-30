@@ -32,8 +32,8 @@ test_that("Data reading and writing from/to hdf5 files work", {
   expect_no_error({
     # BirdFlowIntervals
     my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
-    write_BirdFlowIntervals(my_intervals1, "./my_birdflowintervals.hdf5")
-    my_intervals2 <- read_BirdFlowIntervals("./my_birdflowintervals.hdf5")
+    write_intervals(my_intervals1, "./my_birdflowintervals.hdf5")
+    my_intervals2 <- read_intervals("./my_birdflowintervals.hdf5")
     expect_true(identical(my_intervals1, my_intervals2))
     if (file.exists("./my_birdflowintervals.hdf5")) {
       file.remove("./my_birdflowintervals.hdf5")
@@ -76,8 +76,8 @@ test_that("Data reading and writing from/to hdf5 files work
     # BirdFlowIntervals
     my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
     my_intervals1$species$prebreeding_migration_end <- NA
-    write_BirdFlowIntervals(my_intervals1, "./my_birdflowintervals.hdf5")
-    my_intervals2 <- read_BirdFlowIntervals("./my_birdflowintervals.hdf5")
+    write_intervals(my_intervals1, "./my_birdflowintervals.hdf5")
+    my_intervals2 <- read_intervals("./my_birdflowintervals.hdf5")
     expect_true(identical(my_intervals1, my_intervals2))
     if (file.exists("./my_birdflowintervals.hdf5")) {
       file.remove("./my_birdflowintervals.hdf5")
@@ -122,8 +122,8 @@ test_that("Data reading and writing from/to hdf5 files work
       # BirdFlowIntervals
       my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
       my_intervals1$species$prebreeding_migration_end <- NULL
-      write_BirdFlowIntervals(my_intervals1, "./my_birdflowintervals.hdf5")
-      my_intervals2 <- read_BirdFlowIntervals("./my_birdflowintervals.hdf5")
+      write_intervals(my_intervals1, "./my_birdflowintervals.hdf5")
+      my_intervals2 <- read_intervals("./my_birdflowintervals.hdf5")
       expect_true(identical(my_intervals1, my_intervals2))
       if (file.exists("./my_birdflowintervals.hdf5")) {
         file.remove("./my_birdflowintervals.hdf5")

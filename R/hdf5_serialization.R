@@ -3,7 +3,7 @@
 #' @aliases write_r_object_h5 read_r_object_h5
 #' @aliases read_Rotues write_Rotues
 #' @aliases read_BirdFlowRotues write_BirdFlowRotues
-#' @aliases read_BirdFlowIntervals write_BirdFlowIntervals
+#' @aliases read_intervals write_intervals
 #'
 #' @title HDF5-based Serialization and Deserialization of R Objects
 #'
@@ -18,10 +18,8 @@
 #'   they handle the recursive traversal of R lists (including data.frames,
 #'   Date/POSIX/Facter vectors) and store both data and class attributes
 #'   in the HDF5 file hierarchy.  
-#' - The higher-level helpers (**read_Rotues**, **write_Rotues**,
-#'   **read_BirdFlowRotues**, **write_BirdFlowRotues**, 
-#'   **read_BirdFlowIntervals**,
-#'   **write_BirdFlowIntervals**) wrap these internals to provide
+#' - The higher-level helpers (**read_rotues**, **write_rotues**,
+#'   **read_intervals**, **write_intervals**) wrap these internals to provide
 #'   suppressed warnings and post-processing such as coercing date columns
 #'   back to `Date` objects.
 #'
@@ -333,7 +331,7 @@ write_routes.default <- function(obj, obj_path) {
   warning(sprintf(
     "write_routes only supports objects of class 'Routes' or 
     'BirdFlowRoutes'; If you are writing BirdFlowIntervals object, please use
-    'write_BirdFlowIntervals'; got class '%s'", 
+    'write_intervals'; got class '%s'", 
     paste(class(obj), collapse = ", ")
   ))
   invisible(obj)
@@ -357,7 +355,7 @@ read_routes <- function(obj_path) {
   } else {
     stop("The loaded object is neither Routes nor BirdFlowRoutes. 
          If you are reading BirdFlowIntervals object, please use
-         `read_BirdFlowIntervals`")
+         `read_intervals`")
   }
   return(obj)
 }
@@ -366,7 +364,7 @@ read_routes <- function(obj_path) {
 #' @rdname hdf5_serialization
 #' @param obj_path The BirdFlowIntervals object path to read from
 #' @export
-read_BirdFlowIntervals <- function(obj_path) {
+read_intervals <- function(obj_path) {
   suppressWarnings(
     obj <- read_r_object_h5(obj_path)
   )
@@ -380,7 +378,7 @@ read_BirdFlowIntervals <- function(obj_path) {
 #' @param obj The BirdFlowIntervals object to write
 #' @param obj_path The path to write
 #' @export
-write_BirdFlowIntervals <- function(obj, obj_path) {
+write_intervals <- function(obj, obj_path) {
   validate_BirdFlowIntervals(obj)
   suppressWarnings(
     obj <- write_r_object_h5(obj, obj_path)

@@ -8,8 +8,8 @@
 \alias{write_Rotues}
 \alias{read_BirdFlowRotues}
 \alias{write_BirdFlowRotues}
-\alias{read_BirdFlowIntervals}
-\alias{write_BirdFlowIntervals}
+\alias{read_intervals}
+\alias{write_intervals}
 \alias{write_routes}
 \alias{write_routes.Routes}
 \alias{write_routes.BirdFlowRoutes}
@@ -27,9 +27,9 @@ write_routes(obj, obj_path)
 
 read_routes(obj_path)
 
-read_BirdFlowIntervals(obj_path)
+read_intervals(obj_path)
 
-write_BirdFlowIntervals(obj, obj_path)
+write_intervals(obj, obj_path)
 }
 \arguments{
 \item{obj}{The BirdFlowIntervals object to write}
@@ -56,10 +56,8 @@ objects (routes and intervals), automatically restoring Date columns.
 they handle the recursive traversal of R lists (including data.frames,
 Date/POSIX/Facter vectors) and store both data and class attributes
 in the HDF5 file hierarchy.
-\item The higher-level helpers (\strong{read_Rotues}, \strong{write_Rotues},
-\strong{read_BirdFlowRotues}, \strong{write_BirdFlowRotues},
-\strong{read_BirdFlowIntervals},
-\strong{write_BirdFlowIntervals}) wrap these internals to provide
+\item The higher-level helpers (\strong{read_rotues}, \strong{write_rotues},
+\strong{read_intervals}, \strong{write_intervals}) wrap these internals to provide
 suppressed warnings and post-processing such as coercing date columns
 back to \code{Date} objects.
 }
