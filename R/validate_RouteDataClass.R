@@ -428,8 +428,6 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #' @param species A list with species information. Must include `species_code`,
 #' `scientific_name`, and `common_name`.
 #' @param metadata A list with additional metadata.
-#' @param geom A list containing geometry attributes. Must include `nrow`,
-#' `ncol`, `res`, `ext`, `crs`, `mask`, and `dynamic_mask`.
 #' @param dates A data frame with date-related information. Must include
 #' `interval`, `date`, `midpoint`, `start`, `end`, `doy`, and `week`.
 #'
