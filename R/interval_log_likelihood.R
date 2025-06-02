@@ -1,9 +1,15 @@
 #' Calculate log likelihoods of observed bird movements
 #'
-#' This function calculates the log likelihoods of inferred bird movement
-#' based on two observation points (in time and space). The second point must
-#' have a different timestep (week) than the first, but the location can remain
-#' the same.
+#' `interval_log_likelihood()` calculates the log likelihoods of inferred bird
+#' movement based on two observation points (in time and space).
+#' The second point must have a different timestep (week) than the first,
+#' but the location can remain the same.
+#' Note `interval_log_likelihood()` predates the `BirdFlowIntervals`
+#' class and so is now deprecated.
+#' If you are thinking of using this function in new code please consider
+#' [Routes()], [as_BirdFlowRoutes()], [as_BirdFlowIntervals()], and
+#' [calc_interval_metrics()] to make `BirdFlowIntervals` and then calculate
+#' a full suite of metrics including log likelihood.
 #'
 #' @details
 #' The core of this function is calling `predict()` on a distribution that has
@@ -20,6 +26,7 @@
 #' there are a lot of choices to be made and this function leaves those
 #' decisions to the user.
 #'
+#' @seealso [calc_interval_metrics()]
 #' @param intervals  A data.frame that describes intervals (movements or
 #' stationary periods) for which log likelihood will be calculated by
 #' referencing the `id` column in `observations`.

@@ -57,6 +57,8 @@
 #'  states  (locations in space and time) that can be reached in the model.}
 #'
 #' }
+#' @seealso [calc_interval_metrics()] to evaluate a BirdFlow model using
+#' movement data from real birds.
 #'
 #' @examples
 #'  bf <- BirdFlowModels::amewoo
@@ -128,7 +130,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
       start_dm <- get_dynamic_mask(x, from)
       distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
-      
+
       distr_states[i] <- sum(marginal_start_distr != 0)
 
       # Calculate single step projection correlations
