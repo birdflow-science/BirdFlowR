@@ -1,7 +1,14 @@
+# BirdFlowR 0.1.0.9075
+2025-05-21
+
+* Finalize the interval based validation metrics in `calc_interval_metrics()`
+* Fixed some small documentation bugs where the arguments are not used but 
+  described.
+
 # BirdFlowR 0.1.0.9074
 2025-05-13
 
-Update for compatabality with **ebirdst** 3.2023.0, released 2025-05-07.
+Update for compatibility with **ebirdst** 3.2023.0, released 2025-05-07.
 
 **BirdFlowR** will work with either the 2022 or 2023 versions of the package.
 BirdFlow models retain all the species metadata and distributions they were
@@ -23,7 +30,7 @@ changed a lot as well.
   **ebirdst** version is supported by different components of **BirdFlowR** and 
   optionally throws an error if they aren't.  This is now called from
   `preprocess_species()` and `lookup_species_metadata()`.  This is mainly for
-  convience when maintaining the package.
+  convenience when maintaining the package.
   
 * Testing of routes and intervals now uses the full species object from a 
   reference BirdFlow model. This means the tests aren't calling 
@@ -38,7 +45,7 @@ changed a lot as well.
   
 * Cleaned up Notes generated while checking the package.
   
-## Changes in **eBirdst**
+## Changes in **ebirdst**
 
 This is NOT a complete list but here are the changes I encountered
 while updating the package.

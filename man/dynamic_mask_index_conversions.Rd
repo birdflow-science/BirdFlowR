@@ -26,7 +26,7 @@ fill in by row.}
 }
 \value{
 The location index,\code{i}, of each location indicated by \code{dmi} or
-vis-versa.
+vice versa.
 }
 \description{
 \code{dmi_to_i()} and \code{i_to_dmi()} are for internal and advanced use;

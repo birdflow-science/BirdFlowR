@@ -57,6 +57,8 @@
 #'  states  (locations in space and time) that can be reached in the model.}
 #'
 #' }
+#' @seealso [calc_interval_metrics()] to evaluate a BirdFlow model using
+#' movement data from real birds.
 #'
 #' @examples
 #'  bf <- BirdFlowModels::amewoo
@@ -128,6 +130,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
       start_dm <- get_dynamic_mask(x, from)
       distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
+
       distr_states[i] <- sum(marginal_start_distr != 0)
 
       # Calculate single step projection correlations
@@ -164,11 +167,13 @@ distribution_performance <- function(x, metrics = NULL, ...) {
 
     projected <- projected[, , dim(projected)[3]] # subset to last timestep
     end_dm <- get_dynamic_mask(x, end)
+
     # Two traverse correlations
     # "st_" starts with eBird S&T distribution
     st_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 1])
     # "md_" starts with marginal distribution
     md_traverse_cor <- cor(end_distr[end_dm], projected[end_dm, 2])
+
   } # end traverse
 
   result <- list(mean_step_cor = mean_step_cor,

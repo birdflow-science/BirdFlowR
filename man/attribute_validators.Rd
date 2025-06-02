@@ -95,9 +95,6 @@ missing values.}
 
 \item{dates}{A data frame with date-related information. Must include
 \code{interval}, \code{date}, \code{midpoint}, \code{start}, \code{end}, \code{doy}, and \code{week}.}
-
-\item{geom}{A list containing geometry attributes. Must include \code{nrow},
-\code{ncol}, \code{res}, \code{ext}, \code{crs}, \code{mask}, and \code{dynamic_mask}.}
 }
 \value{
 Each function returns \code{TRUE} if validation succeeds. If validation

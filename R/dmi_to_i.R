@@ -23,7 +23,7 @@
 #' @param bf A BirdFlowR model. Note the conversion is specific to this
 #' model and not valid for any others.
 #' @returns The location index,`i`, of each location indicated by `dmi` or
-#' vis-versa.
+#' vice versa.
 #' @export
 #' @examples
 #'  bf <- BirdFlowModels::amewoo
