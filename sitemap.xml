@@ -34,9 +34,10 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_single_interval_metrics.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_offset.html</loc></url>
-<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calculate_interval_metrics.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calculate_interval_sampling_strategy.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc></url>
@@ -59,7 +60,6 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dates.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_distr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc></url>
-<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_interval_based_validation_one_transition_pair.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_loss.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_marginal.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc></url>
