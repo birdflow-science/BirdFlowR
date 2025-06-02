@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_interval_metrics.R
 \name{calc_single_interval_metrics}
 \alias{calc_single_interval_metrics}
-\title{Evaluate model performance using intervals (transitions data)}
+\title{Calculate interval metrics for a single interval}
 \usage{
 calc_single_interval_metrics(birdflow_interval_row, bf, gcd, st_dists)
 }
@@ -51,6 +51,11 @@ starting cell, weighted by S&T distribution}
 }
 }
 \description{
-Get the interval based validation metrics for one transition pair
+This internal function evaluates model performance using as single interval
+which is a pair of observations of a real bird separated by at least
+a week.  This is a helper function for \verb{[calc_interval_metrics()}
+}
+\seealso{
+\code{\link[=calc_interval_metrics]{calc_interval_metrics()}}
 }
 \keyword{internal}
