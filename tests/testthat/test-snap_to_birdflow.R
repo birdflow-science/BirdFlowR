@@ -60,6 +60,8 @@ test_that("snap_to_birdflow() works with preprocessed models", {
   skip_on_covr()
   skip_on_ci()
 
+  bf <- BirdFlowModels::amewoo
+
   # And it requires and ebirdst access key
   err <- tryCatch(bf <- preprocess_species("amewoo", res = 150, hdf5 = FALSE),
                   error = identity)
