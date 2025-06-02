@@ -23,10 +23,10 @@ ebirdst_pkg_ver <- function() {
 
 #' @section `ebirdst_ver_supported()`:
 #' `ebirdst_ver_supported()` Check whether the installed \pkg{ebirdst} is
-#' suppored by \pkg{BirdFlowR} for a particular use.
+#' supported by \pkg{BirdFlowR} for a particular use.
 #' @param use The particular use that is being checked against. `package` is
 #' whether all package functions are supported fully.  `preprocess_species`
-#' checks that function which has stricter requirments than most funcitons.
+#' checks that function which has stricter requirements than most functions.
 #' `lookup_species_metadata` checks that function which is called by
 #' `Routes()`.
 #' @param throw_error if `TRUE` an error will be thrown if \pkg{ebirdst} is not
