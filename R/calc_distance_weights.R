@@ -2,7 +2,7 @@
 # Brownian bridge based weighting. This is a placeholder for now to allow
 # implementing weight_betweeness.
 
-#'  calculate the weights of transitions for flux points
+#'  calculate the weights of transitions for bmtr points
 #'
 #'  `calc_dist_weights()` is an internal function that takes summary stats
 #'  on the relationship between points and a transition line and returns
@@ -17,7 +17,7 @@
 #' @param dist_along_line How far along the line is the point, after
 #' projecting it  onto the line (m)
 #' @param line_lengths How long is the line (m)
-#' @param radius_m The radius of the transect at the flux points - used to
+#' @param radius_m The radius of the transect at the bmtr points - used to
 #' determine the band of probability density that will be added to form
 #' the weight.
 #' @param res_m The resolution of the associated bird flow model, used to

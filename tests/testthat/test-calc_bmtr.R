@@ -1,49 +1,49 @@
-test_that("calc_flux() works without directionality", {
+test_that("calc_bmtr() works without directionality", {
   local_quiet()
   # Sparsify and truncate to speed things up
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)
   bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
 
-  expect_no_error(f <- calc_flux(bf))
+  expect_no_error(f <- calc_bmtr(bf))
 
   # Snapshot of first 6 non-zero movements
-  top <- head(f[!f$flux == 0, ], 6)
-  top$flux <- signif(top$flux, 4)
+  top <- head(f[!f$bmtr == 0, ], 6)
+  top$bmtr <- signif(top$bmtr, 4)
   expect_snapshot(top)
 
   # Visualizations
-  expect_no_error(plot_flux(f, bf))
-  expect_no_error(animate_flux(f, bf))
+  expect_no_error(plot_bmtr(f, bf))
+  expect_no_error(animate_bmtr(f, bf))
 
 })
 
-test_that("calc_flux() works with weights", {
+test_that("calc_bmtr() works with weights", {
   local_quiet()
   # Sparsify and truncate to speed things up
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)
   bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
 
-  expect_no_error(f <- calc_flux(bf, weighted = TRUE))
+  expect_no_error(f <- calc_bmtr(bf, weighted = TRUE))
 
   # Snapshot of first 6 non-zero movements
-  top <- head(f[!f$flux == 0, ], 6)
-  top$flux <- signif(top$flux, 4)
+  top <- head(f[!f$bmtr == 0, ], 6)
+  top$bmtr <- signif(top$bmtr, 4)
   # --- expect_snapshot(top)  --- wait for final parameters to save snapshot
 
   # Visualizations
-  expect_no_error(plot_flux(f, bf))
-  expect_no_error(animate_flux(f, bf))
+  expect_no_error(plot_bmtr(f, bf))
+  expect_no_error(animate_bmtr(f, bf))
 
 })
 
 
-test_that("Test sensativity of flux to radius", {
+test_that("Test sensativity of bmtr to radius", {
   local_quiet()
-  testthat::skip("In depth flux radius analysis - always skipped")
+  testthat::skip("In depth bmtr radius analysis - always skipped")
 
-  # This is an exploration of how flux varies across a very wide range
+  # This is an exploration of how bmtr varies across a very wide range
   # of values for the radius parameter.
   # It's a "test" only in the sense that it improves understanding of the
   # functions behavior, but this seemed as good a place to save it as any.
@@ -54,54 +54,54 @@ test_that("Test sensativity of flux to radius", {
   bf <- truncate_birdflow(bf, start = 1, end = 5)
   bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
 
-  # Set radii to calculate fluxes for
+  # Set radii to calculate bmtrs for
   rads <- mean(res(bf)) / 2 * c(0.1, 0.25, 0.5, 1, 4, 8, 16, 32, 64)
 
-  # Calculate fluxes
-  fluxes <- vector(mode = "list", length(rads))
+  # Calculate bmtrs
+  bmtrs <- vector(mode = "list", length(rads))
   for (i in seq_along(rads)) {
-    fluxes[[i]] <- calc_flux(bf, radius = rads[i], check_radius = FALSE)
+    bmtrs[[i]] <- calc_bmtr(bf, radius = rads[i], check_radius = FALSE)
   }
 
 
-  # Plot fluxes
+  # Plot BMTR
   plot_dir <- tempdir()
   files <- file.path(plot_dir,
-                     paste0("flux_", rads * 2 / 1000, ".png"))
+                     paste0("bmtr_", rads * 2 / 1000, ".png"))
   for (i in seq_along(rads)) {
     ragg::agg_png(filename = files[i], width = 6, height = 6,
                   res = 150, units = "in")
-    plot_flux(fluxes[[i]], bf,
+    plot_bmtr(bmtrs[[i]], bf,
               title = paste0("Radius: ", rads[i] / 1000, " km")) |>
       print()
 
     dev.off()
   }
 
-  # Assess how total flux changes with radius
+  # Assess how total bmtr changes with radius
 
 
-  # Total flux
+  # Total bmtr
   # With larger radius more response points are added
-  tf <- sapply(fluxes, function(x) sum(x$flux))
+  tf <- sapply(bmtrs, function(x) sum(x$bmtr))
 
   # Create uniform set of points by filtering to just the points that are
-  # in the smallest radius flux
+  # in the smallest radius bmtr
   add_id <- function(x) {
     x$id <- paste0(x$x, "-", x$y)
     x
   }
-  fluxes <- lapply(fluxes, add_id)
-  ids <- unique(fluxes[[1]]$id)
-  fluxes2 <- lapply(fluxes, function(x) x[x$id %in% ids, , drop = FALSE])
+  bmtrs <- lapply(bmtrs, add_id)
+  ids <- unique(bmtrs[[1]]$id)
+  bmtrs2 <- lapply(bmtrs, function(x) x[x$id %in% ids, , drop = FALSE])
 
-  # total flux by radius with fixed points
-  tf2 <- sapply(fluxes2, function(x) sum(x$flux))
+  # total bmtr by radius with fixed points
+  tf2 <- sapply(bmtrs2, function(x) sum(x$bmtr))
 
   # Prep for plotting
   df <- data.frame(radius = rads, expanding = tf, fixed = tf2)
   ldf <- tidyr::pivot_longer(df, cols = c(expanding, fixed),
-                             values_to = "flux",
+                             values_to = "bmtr",
                              names_to = "points")
   ldf$diameter <- 2 * ldf$radius / 1000  # diameter in km
   dim <- mean(res(bf)) / 1000
@@ -110,9 +110,9 @@ test_that("Test sensativity of flux to radius", {
   width <- e[2] - e[1]
   height <- e[4] - e[3]
 
-  # Make plot of how the total flux changes with diameter
+  # Make plot of how the total bmtr changes with diameter
   p <- ggplot2::ggplot(data = ldf, ggplot2::aes(x = .data$diameter,
-                                  y = .data$flux,
+                                  y = .data$bmtr,
                                   color = .data$points)) +
     ggplot2::geom_line() + ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = c(dim, width, height), color = dim_col) +
@@ -134,21 +134,21 @@ test_that("Test sensativity of flux to radius", {
                                                    " km)"),
                                     y = 0.044),
                        color = dim_col, angle = 90) +
-    ggplot2::ggtitle("Total Flux") +
+    ggplot2::ggtitle("Total BMTR") +
     ggplot2::scale_x_log10()
 
-  ragg::agg_png(filename = file.path(plot_dir, "total_flux_diam.png"),
+  ragg::agg_png(filename = file.path(plot_dir, "total_bmtr_diam.png"),
       width = 6, height = 6, res = 150, units = "in")
 
   print(p)
   dev.off()
 
   # I think there are a few things going on here:
-  # 1. As radius approaches zero the flux increases. I suspect this is because
+  # 1. As radius approaches zero the bmtr increases. I suspect this is because
   #  the response points are on the same grid as the starting and ending
-  #  locations.  As the radius approaches zero you multiply the flux by a number
+  #  locations.  As the radius approaches zero you multiply the bmtr by a number
   #  that approaches infinity but our points are positioned such that the
-  #  flux value doesn't fall off as fast as we would expect given say, random
+  #  bmtr value doesn't fall off as fast as we would expect given say, random
   # points.
   # 2. As radius increases substantially beyond the cell size than you can pick
   #    up points that are beyond the movement line.  This means it begins

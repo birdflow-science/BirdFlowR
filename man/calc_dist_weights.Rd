@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_distance_weights.R
 \name{calc_dist_weights}
 \alias{calc_dist_weights}
-\title{calculate the weights of transitions for flux points}
+\title{calculate the weights of transitions for bmtr points}
 \usage{
 calc_dist_weights(
   dist_to_line,
@@ -21,7 +21,7 @@ projecting it  onto the line (m)}
 
 \item{line_lengths}{How long is the line (m)}
 
-\item{radius_m}{The radius of the transect at the flux points - used to
+\item{radius_m}{The radius of the transect at the bmtr points - used to
 determine the band of probability density that will be added to form
 the weight.}
 

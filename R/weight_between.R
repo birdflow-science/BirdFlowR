@@ -18,7 +18,7 @@ if (FALSE) {
 #' The third dimension represents reference points that might be between each
 #' connection.
 #' Cell values are the weight to use when adding the transition probabilities
-#' to the reference point flux.
+#' to the reference point BMTR
 #'
 #' If `points`  are `NULL` they default to the center of all cells within
 #' the BirdFlow extent that fall between any active cells.
@@ -67,7 +67,7 @@ if (FALSE) {
 #'  `i` will be `NA` for points that are not within the mask but
 #'  fall between active cells.}
 #'  \item{radius}{The radius of the circle in meters.}
-#' @seealso [is_between()] and [calc_flux()]
+#' @seealso [is_between()] and [calc_bmtr()]
 #' @keywords internal
 weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
                            n_directions = 1, skip_unconnected = TRUE,
@@ -284,7 +284,7 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
     # Add is a matrix defining the new cells with weight to
     # add to the betweenness array
     # The first three columns are the index in the three dimensional
-    # array of a cell (from state, to state, flux point index).
+    # array of a cell (from state, to state, bmtr point index).
     # The fourth is the weight of the cell.
 
     add <-  cbind(b_pairs$from[valid_line_index],

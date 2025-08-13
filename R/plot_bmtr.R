@@ -1,13 +1,13 @@
-#' Plot bird flux
+#' Plot BirdFlow Migration Traffic Rate (BMTR)
 #'
-#' @param flux A flux object as created by
-#'   [calc_flux(format = "dataframe")][calc_flux]
+#' @param bmtr A data frame created by
+#'   [calc_bmtr(format = "dataframe")][calc_bmtr]
 #' @param bf A BirdFlow object
-#' @param subset A subset of the transitions in `flux` to plot, can be
-#' a logical vector of the same length as the number of transitions in `flux`;
-#' a numeric index of transitions in `flux`, or a subset of the transition names
-#' in `flux`.
-#' @param limits Two numbers representing the range in flux values to
+#' @param subset A subset of the transitions in `bmrt` to plot, can be
+#' a logical vector of the same length as the number of transitions in `bmtr`;
+#' a numeric index of transitions in `bmtr`, or a subset of the transition names
+#' in `bmtr`.
+#' @param limits Two numbers representing the range in bmtr values to
 #' display. Values outside of this range will be truncated to the range. With
 #' the default of `NULL` the entire range is plotted.
 #' @param dynamic_scale  If `TRUE` then the range of the data in each
@@ -18,21 +18,21 @@
 #' to skip plotting the coastline.
 #' @param coast_color The color used to plot the coastline, or `NULL` to skip
 #' plotting the coastline.
-#' @param gradient_colors The colors palette used to represent the flux
+#' @param gradient_colors The colors palette used to represent the BMTR
 #' intensity.
 #' @param title The plot title
-#' @param value_label The label for the flux values.
+#' @param value_label The label for the BMTR values.
 #' @param transform A transformation to apply to the color scaling.
 #' `"identity"`, and `"sqrt"` are recommended.
 #' If `"log"` is used zeros will be replaced with
 #' 1/2 the smallest non-zero value prior to transforming.
 #' Legend will still reflect the original values.
-#' Passed to [ggplot2::scale_color_gradientn()].
-#' @return `plot_flux` returns a **ggplot2** object.  It can be displayed with
+#' Passed to [ggplot2::scale_color_gradient()].
+#' @return `plot_bmtr` returns a **ggplot2** object.  It can be displayed with
 #' `print()`.
 #' @export
-#' @inherit calc_flux examples
-plot_flux <- function(flux,
+#' @inherit calc_bmtr examples
+plot_bmtr <- function(bmtr,
                       bf,
                       subset = NULL,
                       limits = NULL,
@@ -41,51 +41,53 @@ plot_flux <- function(flux,
                       coast_color = gray(0.5),
                       gradient_colors = NULL,
                       title = species(bf),
-                      value_label = "Flux",
+                      value_label = "BMTR",
                       transform = "identity") {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
   }
 
+  if("flux" %in% names(bmtr))
+    names(bmtr)[names(bmtr) == "flux"] <- "bmtr" ### back compatibility
 
   if (dynamic_scale) {
 
     # Scale each transition 0 to 1
-    for (t in unique(flux$transition)) {
-      sv <- flux$transition == t
-      flux$flux[sv] <- range_rescale(flux$flux[sv])
+    for (t in unique(bmtr$transition)) {
+      sv <- bmtr$transition == t
+      bmtr$bmtr[sv] <- range_rescale(bmtr$bmtr[sv])
     }
 
   }
 
   if (transform == "log") {
-    min_non_zero <- min(flux$flux[!flux$flux == 0], na.rm = TRUE)
+    min_non_zero <- min(bmtr$bmtr[!bmtr$bmtr == 0], na.rm = TRUE)
     if (min_non_zero < 0)
-      stop("Can't log transflorm flux with negative values.")
+      stop("Can't log transflorm bmtr with negative values.")
 
-    flux$flux[flux$flux == 0] <- min_non_zero / 2
+    bmtr$bmtr[bmtr$bmtr == 0] <- min_non_zero / 2
   }
 
   # Add "<Month> <mday>" labels as ordered factor
-  dates <- lubridate::as_date(flux$date)
+  dates <- lubridate::as_date(bmtr$date)
   label <- paste0(lubridate::month(dates, label = TRUE, abbr = FALSE), " ",
                   lubridate::mday(dates))
   ud <- sort(unique(dates))
   ul <- paste0(lubridate::month(ud, label = TRUE, abbr = FALSE), " ",
                lubridate::mday(ud))
   label <- ordered(label, levels = ul)
-  flux$label <- label
+  bmtr$label <- label
 
   if (is.null(limits)) {
-    limits <- range(flux$flux, na.rm = TRUE)
+    limits <- range(bmtr$bmtr, na.rm = TRUE)
   } else {
     stopifnot(is.numeric(limits), length(limits) == 2, all(!is.na(limits)),
               limits[1] < limits[2])
     # Truncate to limits
 
-    flux$flux[flux$flux < limits[1]] <- limits[1]
-    flux$flux[flux$flux > limits[2]] <- limits[2]
+    bmtr$bmtr[bmtr$bmtr < limits[1]] <- limits[1]
+    bmtr$bmtr[bmtr$bmtr > limits[2]] <- limits[2]
   }
 
 
@@ -99,7 +101,7 @@ plot_flux <- function(flux,
 
   if (!is.null(subset)) {
 
-    transitions <- unique(flux$transition)
+    transitions <- unique(bmtr$transition)
 
     if (is.logical(subset)) {
       if (!length(subset) == length(transitions))
@@ -118,21 +120,21 @@ plot_flux <- function(flux,
     } else if (is.character(subset)) {
       if (!all(subset %in% names(transitions))) {
         stop("Character subset should contain only transition names",
-             " in (flux$transtion).")
+             " in (bmtr$transtion).")
       }
       transitions <- transitions[transitions %in% subset]
     }
 
-    flux <- flux[flux$transition %in% transitions, , drop = FALSE]
+    bmtr <- bmtr[bmtr$transition %in% transitions, , drop = FALSE]
 
   }
-  transitions <- unique(flux$transition)
+  transitions <- unique(bmtr$transition)
 
 
   # Start plot
-  p <- flux |>
+  p <- bmtr |>
     ggplot2::ggplot(ggplot2::aes(x = .data$x, y = .data$y,
-                                 fill = .data$flux)) +
+                                 fill = .data$bmtr)) +
     ggplot2::geom_raster() +
     ggplot2::scale_fill_gradientn(colors = gradient_colors,
                                   name = value_label,
@@ -148,7 +150,7 @@ plot_flux <- function(flux,
   } else {
     # Single transition add species title AND date subtitle
     p <- p +
-      ggplot2::ggtitle(title, subtitle = flux$label[1])
+      ggplot2::ggtitle(title, subtitle = bmtr$label[1])
   }
 
 
@@ -179,3 +181,21 @@ plot_flux <- function(flux,
 
   return(p)
 }
+
+
+
+
+#' Plot Bird Flow Migration Traffic Rate (BMTR)
+#'
+#' DEPRECATED FUNCTION.  Please use [plot_bmtr()] instead.
+#' @inheritDotParams plot_bmtr -bmtr
+#' @param flux the output from [calc_bmtr()] or, deprecated, [calc_flux()]
+#' @inherit plot_bmtr return
+#' @export
+plot_flux <- function(flux, ...){
+  warning("plot_flux() is deprecated. ",
+          "Please use plot_bmtr() instead.")
+  plot_bmtr(flux, ...)
+
+}
+
