@@ -1,9 +1,20 @@
+# BirdFlowR 0.1.0.9076
+2025-05-25
+
+* Add read and write functions of the `Routes`, `BirdFlowRoutes`, 
+`BirdFlowIntervals` in a hdf5 serialization format:
+  * `read_Routes`, `write_Routes`
+  * `read_BirdFlowRoutes`, `write_BirdFlowRoutes`
+  * `read_BirdFlowIntervals`, `write_BirdFlowIntervals`
+  
 # BirdFlowR 0.1.0.9075
 2025-05-21
 
-* Finalize the interval based validation metrics in `calc_interval_metrics()`
-* Fixed some small documentation bugs where the arguments are not used but 
-  described.
+* Finalize the interval based validation metrics in function 
+  `calculate_interval_metrics` of file `interval_based_validation.R`.
+* Fixed some small documentation bugs where the arguments are not 
+  used but described.
+  
 
 # BirdFlowR 0.1.0.9074
 2025-05-13
@@ -157,7 +168,6 @@ Thus the flow of data is
   * `snap_to_birdflow()` no longer coerces date-time input to dates before
   aggregating, and, if the input is date-time the output will be as well.
   
->>>>>>> main
 
 # BirdFlowR 0.1.0.9069
 2024-10-17
