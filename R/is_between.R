@@ -87,12 +87,12 @@ is_between <- function(bf,  points = NULL, radius = NULL, n_directions = 1,
   if (is.null(radius)) {
     radius <- mean(res(bf)) / 2
   } else if (check_radius) {
-    # Analysis of the effect of changing radius is in test-calc_flux.R
+    # Analysis of the effect of changing radius is in test-calc_bmtr.R
 
     radius_cells <- radius / mean(res(bf)) # radius converted to cells
     if (radius_cells <= 0.25 || radius_cells >= 1) {
       stop("radius should be less than the resolution and more than 1/4 the ",
-           "resolution or the flux is likely to be biased. ",
+           "resolution or BMTR is likely to be biased. ",
            "Set check_radius to FALSE to ignore this advice.")
     }
   }

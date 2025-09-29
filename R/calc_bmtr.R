@@ -1,6 +1,6 @@
-#' Estimate bird flux
+#' Estimate BirdFlow Migration Traffic Rate (BMTR)
 #'
-#' `calc_flux()` estimates the proportion of the species that passes near
+#' `calc_bmtr()` estimates the proportion of the species that passes near
 #' a set of points during each transition in a BirdFlow model.
 #'
 #' @section Units:
@@ -18,14 +18,14 @@
 #'
 #' @section Limitations:
 #'
-#' `calc_flux()` makes the incorrect simplifying assumption
+#' `calc_bmtr()` makes the incorrect simplifying assumption
 #'  that birds follow the shortest (great circle) path
 #' between the center of the the source and destination raster cells.  Caution
 #' should be used when interpreting the results especially around
 #' major geographic features such as coasts, large lakes, mountain ranges, and
 #' ecological system boundaries that might result in non-linear migration paths.
 #'
-#' `calc_flux()` assumes that a line passes by a point if any part of the line
+#' `calc_bmtr()` assumes that a line passes by a point if any part of the line
 #' is within the radius of the point.  This assumption breaks down if the
 #' radius is much larger than the movement lengths as points that are ahead of
 #' the line may still be within a radius of the line.  In the extreme a large
@@ -34,9 +34,9 @@
 #' the default points and radius as the points ahead of the line will never be
 #' within the radius.
 #'
-#' The default points for `calc_flux()` are aligned with the cell centers as
+#' The default points for `calc_bmtr()` are aligned with the cell centers as
 #' are the movement lines. This alignment means that a very small radius will
-#' result in an overestimate of flux. The default value of half the cell size
+#' result in an overestimate of bmtr. The default value of half the cell size
 #' is sufficient for this not to be a problem, as we are capturing and
 #' standardizing the units based on the entire cell area that that point
 #' represents.
@@ -56,13 +56,13 @@
 #' or an even number. This is a placeholder, currently only `1` is supported.
 #' @param format The format to return the results in one of:
 #' \describe{
-#' \item{`"points"`}{Returns a list with `flux` a matrix or array of
-#'  flux values, and `points` a data frame of either the input `points` or the
+#' \item{`"points"`}{Returns a list with `bmtr` a matrix or array of
+#'  bmtr values, and `points` a data frame of either the input `points` or the
 #'  default cell center derived points.}
 #' \item{`"dataframe"`}{Returns a "long" data frame with columns:
 #' * `x` and `y` coordinates of the points.
 #' * `transition` Transition code.
-#' * `flux` The flux at the point. See "Units" below  .
+#' * `bmtr` The bmtr at the point. See "Units" below  .
 #' * `date` The date associated with the transition, will be at the midpoint
 #'          between timesteps.
 #'
@@ -71,7 +71,7 @@
 #' transition.}
 #'}
 #' @inheritParams is_between
-#' @param weighted If `FALSE` use the original and quicker version of flux
+#' @param weighted If `FALSE` use the original and quicker version of bmtr
 #' that sums all the marginal probability for transitions that pass within a
 #' fixed distance of the point.  If `TRUE` assign a weight to the point and
 #' transition combo that then is multiplied by the marginal probability before
@@ -86,25 +86,25 @@
 #'
 #' \dontrun{
 #' bf <- BirdFlowModels::amewoo
-#' flux <- calc_flux(bf)
+#' bmtr <- calc_bmtr(bf)
 #'
-#' plot_flux(flux, bf)
+#' plot_bmtr(bmtr, bf)
 #'
-#' animate_flux(flux, bf)
+#' animate_bmtr(bmtr, bf)
 #' }
 #'
-calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
+calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
                       format = NULL, batch_size = 5e5, check_radius = TRUE,
                       weighted = FALSE) {
 
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
-    stop("The SparseArray package is required to use calc_flux(). ",
+    stop("The SparseArray package is required to use calc_bmtr(). ",
          "Please install it prior to calling this function.")
   }
 
   if (n_directions != 1)
-    stop("Only one directional flux is supported at the moment.")
+    stop("Only one directional bmtr is supported at the moment.")
 
   if (is.null(format)) {
     if (is.null(points)) {
@@ -131,7 +131,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   points <- result$points
   radius_km <- result$radius / 1000
 
-  bf_msg("Calculating Flux\n")
+  bf_msg("Calculating BMTR\n")
 
   timesteps <- lookup_timestep_sequence(bf)
   transitions <- lookup_transitions(bf)
@@ -174,12 +174,12 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
     }
   }
 
-  bf_msg("  Formatting flux\n")
+  bf_msg("  Formatting BMTR\n")
   # Standardize to P of population to pass through KM of transect in a week
   net_movement <- net_movement / (radius_km * 2)
 
   if (format == "points") {
-    return(list(flux = net_movement, point = points))
+    return(list(bmtr = net_movement, point = points))
   }
 
   if (format == "spatraster") {
@@ -205,7 +205,7 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
     wide <- cbind(as.data.frame(points)[, c("x", "y")],
                   net_movement)
     long <- tidyr::pivot_longer(wide, cols = setdiff(names(wide), c("x", "y")),
-                                names_to = "transition", values_to = "flux")
+                                names_to = "transition", values_to = "bmtr")
 
     long$date <- as.character(lookup_date(long$transition, bf))
 
@@ -214,4 +214,21 @@ calc_flux <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   }
 
   stop(format, "is not a recoginized format.") # shouldn't ever get here
+}
+
+
+
+
+#' Calculate Bird Flow Migration Traffic Rate
+#'
+#' DEPRECATED FUNCTION.  Please use [calc_bmtr()] instead.
+#' @inheritDotParams calc_bmtr
+#'
+#' @inherit calc_bmtr return
+#' @export
+calc_flux <- function(...){
+  warning("calc_flux() is deprecated. ",
+          "Please use calc_bmtr() instead.")
+  calc_bmtr(...)
+
 }

@@ -68,7 +68,7 @@ between  pairs of locations within the BirdFlow model and both have
 The third dimension represents reference points that might be between each
 connection.
 Cell values are the weight to use when adding the transition probabilities
-to the reference point flux.
+to the reference point BMTR
 }
 \details{
 If \code{points}  are \code{NULL} they default to the center of all cells within
@@ -85,6 +85,6 @@ their results when calculated on the same model.
 \code{weight_between()} and logical with \code{is_between()}
 }
 \seealso{
-\code{\link[=is_between]{is_between()}} and \code{\link[=calc_flux]{calc_flux()}}
+\code{\link[=is_between]{is_between()}} and \code{\link[=calc_bmtr]{calc_bmtr()}}
 }
 \keyword{internal}

@@ -1,3 +1,9 @@
+# BirdFlowR 0.1.0.9077
+2025-09-29
+
+Rename `calc_flux()` to `calc_bmtr()` 
+The old function now wraps the new with a deprecation warning.
+
 # BirdFlowR 0.1.0.9076
 2025-05-25
 
