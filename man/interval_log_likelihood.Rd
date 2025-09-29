@@ -64,10 +64,16 @@ The returned table rows will have a 1:1 correspondence with the input
 \code{intervals} table.
 }
 \description{
-This function calculates the log likelihoods of inferred bird movement
-based on two observation points (in time and space). The second point must
-have a different timestep (week) than the first, but the location can remain
-the same.
+\code{interval_log_likelihood()} calculates the log likelihoods of inferred bird
+movement based on two observation points (in time and space).
+The second point must have a different timestep (week) than the first,
+but the location can remain the same.
+Note \code{interval_log_likelihood()} predates the \code{BirdFlowIntervals}
+class and so is now deprecated.
+If you are thinking of using this function in new code please consider
+\code{\link[=Routes]{Routes()}}, \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}}, \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}, and
+\code{\link[=calc_interval_metrics]{calc_interval_metrics()}} to make \code{BirdFlowIntervals} and then calculate
+a full suite of metrics including log likelihood.
 }
 \details{
 The core of this function is calling \code{predict()} on a distribution that has
@@ -91,4 +97,7 @@ intervals <- BirdFlowModels::rewbla_intervals
 intervals <- intervals[1:20, ] # toy example
 intervals <- interval_log_likelihood(intervals, observations, bf)
 head(intervals, 3)
+}
+\seealso{
+\code{\link[=calc_interval_metrics]{calc_interval_metrics()}}
 }

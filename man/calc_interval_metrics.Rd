@@ -92,12 +92,12 @@ max_day <- 180
 min_km <- 200
 max_km <- 8000
 
-my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
-                                                max_n = 1000,
-                                                min_day_interval = min_day,
-                                                max_day_interval = max_day,
-                                                min_km_interval = min_km,
-                                                max_km_interval = max_km
+my_intervals <- as_BirdFlowIntervals(my_bfroutes,
+                                     max_n = 1000,
+                                     min_day_interval = min_day,
+                                     max_day_interval = max_day,
+                                     min_km_interval = min_km,
+                                     max_km_interval = max_km
 )
 
 eval_res <- calc_interval_metrics(my_intervals, bf)

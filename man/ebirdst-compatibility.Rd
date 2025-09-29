@@ -22,7 +22,7 @@ ebirdst_example_species()
 \arguments{
 \item{use}{The particular use that is being checked against. \code{package} is
 whether all package functions are supported fully.  \code{preprocess_species}
-checks that function which has stricter requirments than most funcitons.
+checks that function which has stricter requirements than most functions.
 \code{lookup_species_metadata} checks that function which is called by
 \code{Routes()}.}
 
@@ -68,7 +68,7 @@ of \pkg{ebirdst} despite the changes to the API between 2021 and 2022.
 \section{\code{ebirdst_ver_supported()}}{
 
 \code{ebirdst_ver_supported()} Check whether the installed \pkg{ebirdst} is
-suppored by \pkg{BirdFlowR} for a particular use.
+supported by \pkg{BirdFlowR} for a particular use.
 }
 
 \section{\code{res_label()}}{

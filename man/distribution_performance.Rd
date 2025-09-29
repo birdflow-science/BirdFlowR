@@ -96,3 +96,7 @@ distribution_performance(bf)
 distribution_performance(bf, season = "prebreeding_migration")
 
 }
+\seealso{
+\code{\link[=calc_interval_metrics]{calc_interval_metrics()}} to evaluate a BirdFlow model using
+movement data from real birds.
+}

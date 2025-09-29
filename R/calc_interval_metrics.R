@@ -1,6 +1,13 @@
-#' Evaluate model performance using intervals (transitions data)
+# This file defines a private helper: calc_single_interval_metrics() that
+# works on a single interval and a public function `calc_interval_metrics()`
+# that process BirdFlowIntervals.
+
+
+#' Calculate interval metrics for a single interval
 #'
-#' Get the interval based validation metrics for one transition pair
+#' This internal function evaluates model performance using as single interval
+#' which is a pair of observations of a real bird separated by at least
+#' a week.  This is a helper function for `[calc_interval_metrics()`
 #'
 #' @param birdflow_interval_row A row of data in the `BirdFlowIntervals` object
 #' @param bf BirdFlow model
@@ -39,6 +46,7 @@
 #'   \item{pred_elapsed_dist_by_st}{Predicted elapsed distance (km) from
 #'   starting cell, weighted by S&T distribution}
 #' }
+#' @seealso [calc_interval_metrics()]
 #' @keywords internal
 calc_single_interval_metrics <- function(
     birdflow_interval_row, bf, gcd, st_dists) {
@@ -214,27 +222,27 @@ calc_single_interval_metrics <- function(
 #' bf <- BirdFlowModels::amewoo
 #' species1 <- bf$species
 #' source1 <- "Testing"
-#' 
+#'
 #' my_routes <- Routes(route_df,
 #'                     species = species1,
 #'                     source = source1
 #' )
 #' my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf)
-#' 
+#'
 #' # Constraints
 #' min_day <- 7
 #' max_day <- 180
 #' min_km <- 200
 #' max_km <- 8000
-#' 
-#' my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
-#'                                                 max_n = 1000,
-#'                                                 min_day_interval = min_day,
-#'                                                 max_day_interval = max_day,
-#'                                                 min_km_interval = min_km,
-#'                                                 max_km_interval = max_km
+#'
+#' my_intervals <- as_BirdFlowIntervals(my_bfroutes,
+#'                                      max_n = 1000,
+#'                                      min_day_interval = min_day,
+#'                                      max_day_interval = max_day,
+#'                                      min_km_interval = min_km,
+#'                                      max_km_interval = max_km
 #' )
-#' 
+#'
 #' eval_res <- calc_interval_metrics(my_intervals, bf)
 #' single_value_outputs <- eval_res[[1]]
 #' transition_level_outputs <- eval_res[[2]]
