@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9075</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9076</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,10 +40,24 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9076" id="birdflowr-0109076">BirdFlowR 0.1.0.9076<a class="anchor" aria-label="anchor" href="#birdflowr-0109076"></a></h2>
+<p>2025-05-25</p>
+<ul><li>Add read and write functions of the <code>Routes</code>, <code>BirdFlowRoutes</code>, <code>BirdFlowIntervals</code> in a hdf5 serialization format:
+<ul><li>
+<code>read_Routes</code>, <code>write_Routes</code>
+</li>
+<li>
+<code>read_BirdFlowRoutes</code>, <code>write_BirdFlowRoutes</code>
+</li>
+<li>
+<code>read_BirdFlowIntervals</code>, <code>write_BirdFlowIntervals</code>
+</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9075" id="birdflowr-0109075">BirdFlowR 0.1.0.9075<a class="anchor" aria-label="anchor" href="#birdflowr-0109075"></a></h2>
 <p>2025-05-21</p>
-<ul><li>Finalize the interval based validation metrics in <code><a href="../reference/calc_interval_metrics.html">calc_interval_metrics()</a></code>
-</li>
+<ul><li>Finalize the interval based validation metrics in function <code>calculate_interval_metrics</code> of file <code>interval_based_validation.R</code>.</li>
 <li>Fixed some small documentation bugs where the arguments are not used but described.</li>
 </ul></div>
     <div class="section level2">
@@ -136,22 +150,7 @@ Related to this <code><a href="https://ebird.github.io/ebirdst/reference/ebirdst
 <li>Anyone using <code><a href="../reference/plot_routes.html">plot_routes()</a></code> to plot data not generated with <code><a href="../reference/route.html">route()</a></code> will have to update their objects. Use <code><a href="../reference/Routes.html">Routes()</a></code> followed by <code><a href="../reference/as_BirdFlowRoutes.html">as_BirdFlowRoutes()</a></code> to convert data to the new classes.</li>
 <li>
 <code><a href="../reference/snap_to_birdflow.html">snap_to_birdflow()</a></code> no longer coerces date-time input to dates before aggregating, and, if the input is date-time the output will be as well.</li>
-</ul><blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>main</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</div>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9069" id="birdflowr-0109069">BirdFlowR 0.1.0.9069<a class="anchor" aria-label="anchor" href="#birdflowr-0109069"></a></h2>
