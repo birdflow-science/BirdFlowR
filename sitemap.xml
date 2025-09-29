@@ -17,6 +17,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/add_stay_id.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/add_stay_id_with_varied_intervals.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_flux.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.html</loc></url>
@@ -32,6 +33,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/cache_path.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.html</loc></url>
@@ -94,6 +96,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/object_validators.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/pad_timestep.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_flux.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_loss.html</loc></url>
