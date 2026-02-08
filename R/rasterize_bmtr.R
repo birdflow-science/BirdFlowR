@@ -1,12 +1,16 @@
 #' Rasterize BMTR Data
 #'
-#' Converts a BMTR dataframe into a multi-layer raster, with each unique transition as a separate layer.
+#' Converts a BMTR dataframe into a multi-layer raster,
+#' with each unique transition as a separate layer.
+#'
 #' The `x` and `y` coordinates are mapped to raster columns and rows.
 #'
-#' @param bmtr A dataframe returned by `calc_bmtr`, containing columns `x`, `y`, `transition`, `bmtr`, and `date`.
+#' @param bmtr A dataframe returned by `calc_bmtr`, containing
+#' columns `x`, `y`, `transition`, `bmtr`, and `date`.
 #' @param bf A BirdFlow model. For example: `BirdFlowModels::amewoo`
 #'
-#' @return A `SpatRaster` object (from `terra`) with layers corresponding to unique transitions.
+#' @return A `SpatRaster` object (from `terra`) with
+#' layers corresponding to unique transitions.
 #' Missing values in `bmtr` are represented as `NA`.
 #'
 #' @examples
