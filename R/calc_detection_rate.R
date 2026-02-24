@@ -1,5 +1,3 @@
-# Copied over from weight_between.R
-
 
 if (FALSE) {
   bf <- BirdFlowModels::amewoo
@@ -7,6 +5,22 @@ if (FALSE) {
   radius <- NULL
   between <- is_between(bf)
 }
+
+
+calc_detection_rate <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
+                                n_directions = 1, skip_unconnected = TRUE,
+                                batch_size = 1e5, euclidean = FALSE, ...) {
+  if(euclidean) {
+    calc_euclidean_detection_rate(bf, weight_fun, points, radius, n_directions,
+                                  skip_unconnected, batch_size, ...)
+  }
+  else {
+    calc_spherical_detection_rate(bf, weight_fun, points, radius, n_directions,
+                                  skip_unconnected, batch_size, ...)
+  }
+
+}
+
 
 #' Assign weights to points based on how close they are to the great circle
 #' line associated with each transition
@@ -28,12 +42,12 @@ if (FALSE) {
 #' (in spherical coordinates) around the active cells in `bf` and thus is
 #' almost always more than just the active cells.
 #'
-#' `calc_detection_rate()` and `is_between()` should only differ slightly in
+#' `calc_spherical_detection_rate()` and `is_between()` should only differ slightly in
 #' their results when calculated on the same model.
 #'
 #' 1, The number of included reference points may differ.
 #' 2. The betweenness array will be real weights from 0 to 1 with
-#' `calc_detection_rate()` and logical with `is_between()`
+#' `calc_spherical_detection_rate()` and logical with `is_between()`
 #'
 #'
 #' @param bf A BirdFlow model
@@ -71,10 +85,9 @@ if (FALSE) {
 #'  \item{radius}{The radius of the circle in meters.}
 #' @seealso [is_between()] and [calc_bmtr()]
 #' @keywords internal
-calc_detection_rate <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
-                           n_directions = 1, skip_unconnected = TRUE,
-                           batch_size = 1e5, ...) {
-
+calc_spherical_detection_rate <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
+                                          n_directions = 1, skip_unconnected = TRUE,
+                                          batch_size = 1e5, ...) {
   bf_msg("Generating between weigts.\n")
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
