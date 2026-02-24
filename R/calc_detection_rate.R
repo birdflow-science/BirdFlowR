@@ -497,42 +497,80 @@ calc_euclidean_detection_rate <- function(bf, weight_fun = NULL, points = NULL, 
   }
 
 
-  S <- active[pairs$from, c("x", "y")]
-  E <- active[pairs$to, c("x", "y")]
-  P <- points[, c("x", "y")]
-  S <- as.matrix(S); E <- as.matrix(E); P <- as.matrix(P) # make sure they are matrices
-  m <- nrow(P)  # number of points
-  n <- nrow(S)  # number of lines
-  V <- E - S
-  VV <- rowSums(V^2)  # squared length for each line. This is the denominator in the vector projection formula. vv is an (n x 1) matrix
+  # S <- active[pairs$from, c("x", "y")]
+  # E <- active[pairs$to, c("x", "y")]
+  # P <- points[, c("x", "y")]
+  # S <- as.matrix(S); E <- as.matrix(E); P <- as.matrix(P) # make sure they are matrices
+  # m <- nrow(P)  # number of points
+  # n <- nrow(S)  # number of lines
+  # V <- E - S
+  # VV <- rowSums(V^2)  # squared length for each line. This is the denominator in the vector projection formula. vv is an (n x 1) matrix
+  #
+  #
+  # # EXTRA TEST CODE
+  # print(paste("Number of points (m):", m))
+  # print(paste("Number of lines (n):", n))
+  #
+  #
+  # projection_result <- project_points_simple(S = S, E = E, P = P, m = m, n = n, V = V, vv = VV)
 
-  projection_result <- project_points_simple(S = S, E = E, P = P, m = m, n = n, V = V, vv = VV)
-  D <- as.vector(projection_result$dist_to_line)
-  t <- as.vector(projection_result$dist_along)
-  T_ <- sqrt(VV)   # T_ = T = length of each line segment (can't use T as a variable name)
-
-  line_index <- rep(seq_len(n), each = m)
-  point_index <- rep(seq_len(m), times = n)
-  T_rep <- rep(T_, each = m)
-
-  valid <- !is.na(t) & t > 0 & t < T_rep  # May be redundant depending on clamp = TRUE/FALSE
-  weights <- calc_dist_weights(
-    D[valid],
-    t[valid],
-    T_rep[valid],
-    res_m = mean(res(bf)),
-    radius_m = radius,
-    method = "m3"
+  # Batching
+  P <- as.matrix(points[, c("x", "y")])
+  m = nrow(P)   # number of points
+  n_total <- nrow(pairs)
+  batch_ids <- split(
+    seq_len(n_total),
+    ceiling(seq_len(n_total) / batch_size)
   )
-  add <- cbind(
-    pairs$from[line_index[valid]],
-    pairs$to[line_index[valid]],
-    point_index[valid],
-    weights
-  )
-  add <- add[add[,4] != 0, , drop = FALSE]
-  between[add[,c(1,2,3)]] <- add[,4]
-  between[add[,c(2,1,3)]] <- add[,4]
+
+  for(b in seq_along(batch_ids)) {
+    idx <- batch_ids[[b]]
+    pairs_batch <- pairs[idx, , drop = FALSE]
+
+    S <- active[pairs_batch$from, c("x", "y")]
+    E <- active[pairs_batch$to, c("x", "y")]
+    S <- as.matrix(S); E <- as.matrix(E)
+
+    n <- nrow(S)
+
+    V <- E - S
+    VV <- rowSums(V^2)
+
+    projection_result <- project_points_simple(
+      S = S, E = E, P = P,
+      m = m, n = n,
+      V = V, vv = VV
+    )
+    D <- as.vector(projection_result$dist_to_line)
+    t <- as.vector(projection_result$dist_along)
+    T_ <- sqrt(VV)   # T_ = T = length of each line segment (can't use T as a variable name)
+
+    line_index <- rep(seq_len(n), each = m)
+    point_index <- rep(seq_len(m), times = n)
+    T_rep <- rep(T_, each = m)
+
+    valid <- !is.na(t) & t > 0 & t < T_rep  # May be redundant depending on clamp = TRUE/FALSE
+    weights <- calc_dist_weights(
+      D[valid],
+      t[valid],
+      T_rep[valid],
+      res_m = mean(res(bf)),
+      radius_m = radius,
+      method = "m3"
+    )
+    add <- cbind(
+      pairs_batch$from[line_index[valid]],
+      pairs_batch$to[line_index[valid]],
+      point_index[valid],
+      weights
+    )
+    add <- add[add[,4] != 0, , drop = FALSE]
+    between[add[,c(1,2,3)]] <- add[,4]
+    between[add[,c(2,1,3)]] <- add[,4]
+
+  }
+
+
 
   return(list(between = between, points = points, radius = radius))
 }
