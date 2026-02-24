@@ -369,3 +369,305 @@ calc_spherical_detection_rate <- function(bf, weight_fun = NULL, points = NULL, 
 
   return(list(between = between, points = points, radius = radius))
 }
+
+
+
+calc_euclidean_detection_rate <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
+                                          n_directions = 1, skip_unconnected = TRUE,
+                                          batch_size = 1e5, ...) {
+  bf_msg("Generating between weights.\n")
+
+  if (!requireNamespace("SparseArray", quietly = TRUE)) {
+    stop("The SparseArray package is required to use is_between(). ",
+         "Please install it prior to calling this function.")
+  }
+
+  if (!n_directions == 1) {
+    stop("Currently only one direction is supported.")
+  }
+  # Dimensions
+  # 1 from location  n_active()
+  # 2 to location    n_active()
+  # 3 points  (if NULL use cell centers)
+  # 4 (pending) n_direction, directional bins.
+
+
+  radius <- mean(res(bf))
+
+  # Old
+  if (is.null(points)) {
+    bf_msg("  Creating points\n")
+    # Create points at all cell centers in the rectangular raster
+    points <- rasterize_distr(get_distr(bf, 1), bf, format = "dataframe")
+    points <- points[, c("x", "y", "i")]
+    active <- points[!is.na(points$i), , drop = FALSE]
+  }
+
+  # New
+  if (is.null(points)) {
+    bf_msg("  Creating points\n")
+    # Create points at all cell centers in the rectangular raster
+    points <- rasterize_distr(get_distr(bf, 1), bf, format = "dataframe")
+    points <- points[, c("x", "y", "i")]
+    active <- points[!is.na(points$i), , drop = FALSE]
+
+    bf_msg("  Transforming to spherical coordinates\n")
+
+    # Make a buffered convex hull around the active cells in lat lon
+    hull <- sf::st_union(active) |>
+      sf::st_convex_hull() |>
+      sf::st_buffer(hull, dist = units::set_units(radius, "m"))
+
+    # Selection vector for points that are active or between active cells
+    sv <- points |>
+      sf::st_intersects(y = hull, sparse = FALSE) |>
+      as.vector()
+
+    if (FALSE) {
+      # visualize
+      plot(hull)
+      plot(points, col = "grey", add = TRUE)
+      plot(points[sv, ], col = "black", add = TRUE)
+      plot(active, col = "red", add = TRUE)
+    }
+
+    # Subset to the cells that are active or between other active cells
+    # Note this is in back in original projection
+    points <- points[sv, , drop = FALSE]
+  }
+
+  bf_msg("  Initializing arrays. \n")
+
+  # Initialize sparse array (All FALSE) to hold betweenness
+  # This is a hack because there's no creation method that allows setting a
+  # dimension, but I can make an empty "random" array.
+  between <- SparseArray::randomSparseArray(
+    dim = c(n_active(bf), n_active(bf), nrow(points)),
+    density = 0) != 0
+  dimnames(between) <- list(from = paste0("F_", seq_len(n_active(bf))),
+                            to = paste0("T_", seq_len(n_active(bf))),
+                            loc = paste0("L_", seq_len(nrow(points))))
+
+
+  # Generate table of active cell x, y, and i (in birdflow CRS)
+  active <- i_to_xy(seq_len(n_active(bf)), bf)
+  active$i <- seq_len(n_active(bf))
+
+  # All possible pairs of active points
+  all_pairs <- expand.grid(from = seq_len(n_active(bf)),
+                           to = seq_len(n_active(bf)))
+  all_pairs$id <- NA_character_
+  sv <- all_pairs$from < all_pairs$to
+  all_pairs$id[sv] <- paste(all_pairs$from[sv], "-", all_pairs$to[sv])
+  all_pairs$id[!sv] <- paste(all_pairs$to[!sv], "-", all_pairs$from[!sv])
+
+  # Unique pairs of points disregarding order
+  pairs <- all_pairs[!duplicated(all_pairs$id), , drop = FALSE]
+
+  # Drop self, self pairs.
+  # They represent stop overs or seasonal residence, not migratory movement
+  pairs <- pairs[pairs$from != pairs$to, , drop = FALSE]
+
+  # Drop pairs that aren't ever connected
+  if (skip_unconnected) {
+    # Create matrix indicating which active cells are connected to
+    # each other via a non-zero marginal at any timestep
+    # With sparse models this will eliminate a lot of connections
+    # With non-sparse models it will still eliminate some
+    #  due to dynamic masking.
+    ever_connected <- matrix(FALSE, n_active(bf), n_active(bf))
+    dm <- get_dynamic_mask(bf)
+    mi <- bf$marginals$index
+    mi <- mi[mi$direction == "forward", ]
+
+    for (i in seq_len(nrow(mi))) {
+      from_dm <- dm[, mi$from[i]]
+      to_dm <- dm[, mi$to[i]]
+      marg <- get_marginal(bf, mi$marginal[i])
+      ever_connected[from_dm, to_dm] <- as.matrix(marg != 0)
+    }
+    ever_connected <- ever_connected | t(ever_connected) # backwards counts
+
+    connected_pairs <- data.frame(from = row(ever_connected)[ever_connected],
+                                  to = col(ever_connected)[ever_connected])
+    connected_pairs$id <- with(connected_pairs, paste(from, "-", to))
+
+    pairs <- pairs[pairs$id %in% connected_pairs$id, , drop = FALSE]
+
+  }
+
+
+  S <- active[pairs$from, c("x", "y")]
+  E <- active[pairs$to, c("x", "y")]
+  P <- points[, c("x", "y")]
+  S <- as.matrix(S); E <- as.matrix(E); P <- as.matrix(P) # make sure they are matrices
+  m <- nrow(P)  # number of points
+  n <- nrow(S)  # number of lines
+  V <- E - S
+  VV <- rowSums(V^2)  # squared length for each line. This is the denominator in the vector projection formula. vv is an (n x 1) matrix
+
+  projection_result <- project_points_simple(S = S, E = E, P = P, m = m, n = n, V = V, vv = VV)
+  D <- as.vector(projection_result$dist_to_line)
+  t <- as.vector(projection_result$dist_along)
+  T_ <- sqrt(VV)   # T_ = T = length of each line segment (can't use T as a variable name)
+
+  line_index <- rep(seq_len(n), each = m)
+  point_index <- rep(seq_len(m), times = n)
+  T_rep <- rep(T_, each = m)
+
+  valid <- !is.na(t) & t > 0 & t < T_rep  # May be redundant depending on clamp = TRUE/FALSE
+  weights <- calc_dist_weights(
+    D[valid],
+    t[valid],
+    T_rep[valid],
+    res_m = mean(res(bf)),
+    radius_m = radius,
+    method = "m3"
+  )
+  add <- cbind(
+    pairs$from[line_index[valid]],
+    pairs$to[line_index[valid]],
+    point_index[valid],
+    weights
+  )
+  add <- add[add[,4] != 0, , drop = FALSE]
+  between[add[,c(1,2,3)]] <- add[,4]
+  between[add[,c(2,1,3)]] <- add[,4]
+
+  return(list(between = between, points = points, radius = radius))
+}
+
+
+project_points_simple <- function(S, E, P, m, n, V, vv, clamp = FALSE, tol = 0) {
+
+  # S: n x 2 matrix of segment starts (columns: x,y)
+  # E: n x 2 matrix of segment ends
+  # P: m x 2 matrix of points
+
+  # 1.
+  # Use Matrix Multiplication to get dot products (m x n)
+  # (P %*% t(V)) gets P_i · V_j. The transpose is needed because both P is (m x 2) and V is (n x 2).
+  # rowSums(S * V) gets S_j · V_j
+  # i = index over m points and j = index over n lines/starting-points/ending-points/lengths
+  t_frac <- (P %*% t(V) - rep(rowSums(S * V), each = m)) / rep(vv, each = m)
+  # t_frac is an (m x n) matrix
+  # t_frac[i, j] = t/T for point 'j' projected onto line 'i'
+
+  # Handle lines with lengths <= tol threshold by setting their 't' to 0
+  t_frac[, vv <= tol] <- 0
+
+  # 3.
+  # Clamping
+  # If clamp = TRUE, constrain 't' between [0, 1] inclusive.
+  # If clamp = FALSE, set any 't' beyond [0, 1] to NA
+  # t_frac contains 1 't' value for each (point, line) combination
+  if (clamp) {
+    t_frac <- pmax(0, pmin(1, t_frac))
+  }
+  else {
+    t_frac[t_frac < 0 | t_frac > 1] <- NA
+  }
+
+  # 4.
+  # Calculate projections using outer products/recycling
+  # Each line segment coordinate (x and y of S and V) has to be repeated 'm' times because there are 'm' points
+  projx <- rep(S[,1], each = m) + t_frac * rep(V[,1], each = m)
+  projy <- rep(S[,2], each = m) + t_frac * rep(V[,2], each = m)
+
+  # 5.
+  # Distance between point and line using distance formula.
+  # P matrix gives the point coordinates, and projx/projy give the coordinates of the projection point.
+  # Each point coordinate (x and y) has to be repeated 'n' times because there are 'n' lines
+  dist_to_line <- sqrt((rep(P[,1], times = n) - projx)^2 +
+                         (rep(P[,2], times = n) - projy)^2)
+
+  # 6.
+  # Distance from the starting point to the projected point (t)
+  dist_along <- t_frac * rep(sqrt(vv), each = m)
+
+  list(
+    dist_to_line = dist_to_line,
+    dist_along = dist_along
+  )
+}
+
+
+
+
+
+
+
+project_points_to_all_segments <- function(S, E, P, clamp = NA, tol = 0) {
+  # S: n x 2 matrix of segment starts (columns: x,y)
+  # E: n x 2 matrix of segment ends
+  # P: m x 2 matrix of points
+  # clamp: if TRUE clamp t to [0,1] (segment); if FALSE treat infinite lines
+  # tol: treat vv <= tol as degenerate (zero-length) segment
+  S <- as.matrix(S); E <- as.matrix(E); P <- as.matrix(P)
+  if (ncol(S) != 2 || ncol(E) != 2 || ncol(P) != 2)
+    stop("S, E, and P must be matrices with two columns (x,y).")
+
+  n <- nrow(S); m <- nrow(P)
+  V <- E - S                 # n x 2
+  vv <- rowSums(V * V)       # length n (squared lengths)     Note: This is the same as T^2
+  zero_lines <- vv <= tol
+
+  # Compute numerator: (P dot V_j) - (S_j dot V_j)
+  M1 <- P %*% t(V)                   # m x n matrix of P_i · V_j
+  sdot <- rowSums(S * V)             # length n, S_j · V_j
+  numer <- sweep(M1, 2, sdot, FUN = "-")  # m x n
+
+  # t parameter for infinite line
+  # avoid division by zero for degenerate segments by setting t = 0 for those columns
+  denom <- vv
+  denom[zero_lines] <- 1   # temporary to avoid division by zero
+  tmat <- sweep(numer, 2, denom, FUN = "/")  # m x n
+
+  # For degenerate segments, define projection at S (t = 0)
+  if (any(zero_lines)) {
+    tmat[, zero_lines] <- 0
+  }
+
+
+
+  # NEW CODE
+  if (!is.na(clamp) && clamp)
+    tmat <- pmin(pmax(tmat, 0), 1)
+
+  if (is.na(clamp)) {
+    outside_segment <- tmat < 0 | tmat > 1
+    tmat[outside_segment] <- NA
+  }
+
+
+
+
+  # Build replicated matrices for S and V to compute projected coordinates
+  Sx_mat <- matrix(S[,1], nrow = m, ncol = n, byrow = TRUE)
+  Sy_mat <- matrix(S[,2], nrow = m, ncol = n, byrow = TRUE)
+  Vx_mat <- matrix(V[,1], nrow = m, ncol = n, byrow = TRUE)
+  Vy_mat <- matrix(V[,2], nrow = m, ncol = n, byrow = TRUE)
+
+  projx <- Sx_mat + tmat * Vx_mat
+  projy <- Sy_mat + tmat * Vy_mat
+
+  # replicate P coordinates so each column corresponds to a line
+  Px_mat <- matrix(P[,1], nrow = m, ncol = n)
+  Py_mat <- matrix(P[,2], nrow = m, ncol = n)
+
+  dist_to_line <- sqrt((Px_mat - projx)^2 + (Py_mat - projy)^2)
+
+  # distance along the (original) segment from S to projected point
+  seg_lengths <- sqrt(vv)
+  dist_along <- tmat * matrix(seg_lengths, nrow = m, ncol = n, byrow = TRUE)
+
+  # For degenerate segments, dist_to_line is distance from P to S (already handled by proj=S),
+  # and dist_along is zero (since seg_length=0).
+  list(
+    t = tmat,                       # fraction along segment (clamped)
+    projx = projx,
+    projy = projy,
+    dist_to_line = dist_to_line,
+    dist_along = dist_along
+  )
+}
