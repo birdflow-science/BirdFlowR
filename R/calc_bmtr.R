@@ -95,7 +95,7 @@
 #'
 calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
                       format = NULL, batch_size = 5e5, check_radius = TRUE,
-                      weighted = FALSE) {
+                      weighted = FALSE, euclidean = FALSE) {
 
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
