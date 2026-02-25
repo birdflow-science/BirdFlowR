@@ -1,17 +1,4 @@
-test_that("rasterize_bmtr() does not throw error with simple BMTR object", {
-  local_quiet()
-
-  # Amewoo BirdFlow model
-  bf <- BirdFlowModels::amewoo
-
-  # Unweighted BMTR object
-  bmtr_uw <- calc_bmtr(bf, weighted = FALSE)
-
-  expect_no_error(raster_uw <- rasterize_bmtr(bmtr_uw, bf))
-  expect_no_error(terra::plot(raster_uw))
-})
-
-test_that("raster and model have the same extent and number of timesteps", {
+test_that("rasterize_bmtr() returns a valid, plottable raster with the same extent and number of timesteps as the original model", {
   local_quiet()
 
   # Amewoo BirdFlow model
@@ -21,6 +8,9 @@ test_that("raster and model have the same extent and number of timesteps", {
   bmtr_uw <- calc_bmtr(bf, weighted = FALSE)
 
   raster_uw <- rasterize_bmtr(bmtr_uw, bf)
+
+  expect_no_error(raster_uw <- rasterize_bmtr(bmtr_uw, bf))   # rasterize_bmtr() does not throw error with simple BMTR object
+  expect_no_error(terra::plot(raster_uw))   # generates a plot without any errors
 
   expect_true(ext(bf) == ext(raster_uw))  # compare extent
   expect_true(bf$metadata$n_timesteps == terra::nlyr(raster_uw))  # compare number of timesteps
