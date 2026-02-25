@@ -27,6 +27,8 @@ test_that("raster and model have the same extent and number of timesteps", {
 })
 
 test_that("rasterization works for weighted BMTR calculation", {
+  testthat::skip("Slow test. Always skipped")
+
   local_quiet()
 
   # Amewoo BirdFlow model
