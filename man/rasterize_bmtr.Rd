@@ -7,16 +7,21 @@
 rasterize_bmtr(bmtr, bf)
 }
 \arguments{
-\item{bmtr}{A dataframe returned by \code{calc_bmtr}, containing columns \code{x}, \code{y}, \code{transition}, \code{bmtr}, and \code{date}.}
+\item{bmtr}{A dataframe returned by \code{calc_bmtr}, containing
+columns \code{x}, \code{y}, \code{transition}, \code{bmtr}, and \code{date}.}
 
 \item{bf}{A BirdFlow model. For example: \code{BirdFlowModels::amewoo}}
 }
 \value{
-A \code{SpatRaster} object (from \code{terra}) with layers corresponding to unique transitions.
+A \code{SpatRaster} object (from \code{terra}) with
+layers corresponding to unique transitions.
 Missing values in \code{bmtr} are represented as \code{NA}.
 }
 \description{
-Converts a BMTR dataframe into a multi-layer raster, with each unique transition as a separate layer.
+Converts a BMTR dataframe into a multi-layer raster,
+with each unique transition as a separate layer.
+}
+\details{
 The \code{x} and \code{y} coordinates are mapped to raster columns and rows.
 }
 \examples{
