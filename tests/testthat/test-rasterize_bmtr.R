@@ -11,7 +11,7 @@ test_that("rasterize_bmtr() does not throw error with simple BMTR object", {
   expect_no_error(terra::plot(raster_uw))
 })
 
-test_that("raster extent matches model extent", {
+test_that("raster and model have the same extent and number of timesteps", {
   local_quiet()
 
   # Amewoo BirdFlow model
@@ -22,21 +22,8 @@ test_that("raster extent matches model extent", {
 
   raster_uw <- rasterize_bmtr(bmtr_uw, bf)
 
-  expect_true(ext(bf) == ext(raster_uw))
-})
-
-test_that("number of layers in raster matches number of timesteps in model", {
-  local_quiet()
-
-  # Amewoo BirdFlow model
-  bf <- BirdFlowModels::amewoo
-
-  # Unweighted BMTR object
-  bmtr_uw <- calc_bmtr(bf, weighted = FALSE)
-
-  raster_uw <- rasterize_bmtr(bmtr_uw, bf)
-
-  expect_true(bf$metadata$n_timesteps == terra::nlyr(raster_uw))
+  expect_true(ext(bf) == ext(raster_uw))  # compare extent
+  expect_true(bf$metadata$n_timesteps == terra::nlyr(raster_uw))  # compare number of timesteps
 })
 
 test_that("rasterization works for weighted BMTR calculation", {
