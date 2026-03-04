@@ -1,0 +1,35 @@
+# Internal function to determine how much padding to use with transition numbers.
+
+Return the level of padding that is used with timestep numbers in
+transition and marginal names.
+
+## Usage
+
+``` r
+get_timestep_padding(bf)
+```
+
+## Arguments
+
+- bf:
+
+## Value
+
+An integer indicating how much to pad the numbers in transition names.
+
+## Details
+
+So far (June 2023) in all BirdFlow models the padding used for timesteps
+in marginal and transition names has always been 2, as that's what's
+necessary to support 52 weeks (e.g. T_01-02) but this has, to date, been
+determined from the number of timesteps in the model. The idea was to
+not constrain the models to less than 100 transitions if in a
+hypothetical future we decided say, to have, 3 day timesteps instead of
+weekly.
+
+In June 2023 I added the ability to truncate models (to part of year),
+and didn't want to change the level of padding when truncating, so
+instead decided to store the padding in `metadat$timestep_padding`.
+
+This function is designed to work with any model regardless of whether
+the padding is stored in the metadata.

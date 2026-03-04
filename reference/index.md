@@ -1,0 +1,286 @@
+# Package index
+
+## All functions
+
+- [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
+  :
+
+  [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
+  is used to convert data frames containing bird movement data into a
+  formal `Routes` object with the same data.
+
+- [`add_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.md)
+  : Convert a BirdFlow object without a dynamic mask into one with a
+  dynamic mask
+
+- [`add_stay_id()`](https://birdflow-science.github.io/BirdFlowR/reference/add_stay_id.md)
+  : Add Stay IDs
+
+- [`add_stay_id_with_varied_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/add_stay_id_with_varied_intervals.md)
+  : Add Stay IDs with Temporal Thresholds
+
+- [`animate_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_bmtr.md)
+  : Animate BirdFlow Migration Traffic Rate (BMTR)
+
+- [`animate_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.md)
+  : Animate distributions
+
+- [`animate_flux()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_flux.md)
+  : Animate Bird Flow Migration Traffic Rate (BMTR)
+
+- [`animate_movement_vectors()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_movement_vectors.md)
+  : Animate movement vectors
+
+- [`animate_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_routes.md)
+  : Animate routes
+
+- [`as_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowIntervals.md)
+  :
+
+  Convert `BirdFlowRoutes` to `BirdFlowIntervals`
+
+- [`as_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md)
+  : Convert Routes to BirdFlowRoutes
+
+- [`as_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/as_distr.md)
+  : Convert to a BirdFlow distribution
+
+- [`as_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/as_transitions.md)
+  : Convert a sequence of timesteps into a sequence of transition names
+
+- [`birdflow_options()`](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md)
+  : Set and retrieve BirdFlowR options
+
+- [`build_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.md)
+  [`drop_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/build_transitions.md)
+  : Add or drop transition matrices
+
+- [`calc_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_bmtr.md)
+  : Estimate BirdFlow Migration Traffic Rate (BMTR)
+
+- [`calc_flux()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.md)
+  : Calculate Bird Flow Migration Traffic Rate
+
+- [`calc_interval_metrics()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.md)
+  : Calculate interval metrics
+
+- [`calc_movement_vectors()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.md)
+  : Calculate the average movement for cells in a BirdFlow model
+
+- [`combine_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.md)
+  : Function to combine a sequence of transition matrices into one
+
+- [`compareGeom(`*`<BirdFlow>`*`,`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.md)
+  [`compareGeom(`*`<SpatRaster>`*`,`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.md)
+  [`compareGeom(`*`<BirdFlow>`*`,`*`<SpatRaster>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.md)
+  : BirdFlow compareGeom methods
+
+- [`nrow(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`ncol(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`dim(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`n_timesteps()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`n_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`n_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`n_active()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`crs(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`ext(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`res(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`xres(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`yres(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`xmin(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`ymin(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`xmax(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`ymax(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`is_cyclical()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  [`n_parameters()`](https://birdflow-science.github.io/BirdFlowR/reference/dimensions.md)
+  : Dimensions of a BirdFlow object
+
+- [`distribution_performance()`](https://birdflow-science.github.io/BirdFlowR/reference/distribution_performance.md)
+  : Evaluate a BirdFlow models ability to recreate training
+  distributions
+
+- [`dmi_to_i()`](https://birdflow-science.github.io/BirdFlowR/reference/dynamic_mask_index_conversions.md)
+  [`i_to_dmi()`](https://birdflow-science.github.io/BirdFlowR/reference/dynamic_mask_index_conversions.md)
+  : Convert between dynamic mask index and static location index
+
+- [`export_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md)
+  [`import_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md)
+  : Export and import BirdFlow models in HDF5 format
+
+- [`extend_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/extend_birdflow.md)
+  : Extend BirdFlow extent
+
+- [`flatten_raster()`](https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.md)
+  : Convert a raster bird distribution into its flattened, vector
+  equivalent
+
+- [`get_dates()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dates.md)
+  : Retrieve dates component of a BirdFlow model
+
+- [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+  : Extract distributions from BirdFlow models
+
+- [`get_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.md)
+  : Get the dynamic mask from a BirdFlow object
+
+- [`get_loss()`](https://birdflow-science.github.io/BirdFlowR/reference/get_loss.md)
+  : Get loss values for each step in the model fitting process
+
+- [`get_marginal()`](https://birdflow-science.github.io/BirdFlowR/reference/get_marginal.md)
+  : Return a marginal matrix from a BirdFlowR model
+
+- [`get_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_mask.md)
+  : Extract mask from BirdFlow model
+
+- [`get_metadata()`](https://birdflow-science.github.io/BirdFlowR/reference/get_metadata.md)
+  : Retrieve BirdFlow metadata
+
+- [`get_naturalearth()`](https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.md)
+  [`get_states()`](https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.md)
+  [`get_coastline()`](https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.md)
+  [`get_countries()`](https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.md)
+  : Retrieve, crop, and transform Natural Earth data
+
+- [`get_transition()`](https://birdflow-science.github.io/BirdFlowR/reference/get_transition.md)
+  : Return a transition matrix from a BirdFlowR model
+
+- [`great_circle_distance_lonlat_input()`](https://birdflow-science.github.io/BirdFlowR/reference/great_circle_distance_lonlat_input.md)
+  : Calculate the great circle distance based on longitude and latitude
+
+- [`has_marginals()`](https://birdflow-science.github.io/BirdFlowR/reference/has.md)
+  [`has_transitions()`](https://birdflow-science.github.io/BirdFlowR/reference/has.md)
+  [`has_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/has.md)
+  [`has_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/has.md)
+  : Does a BirdFlow object have certain components
+
+- [`x_to_col()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`y_to_row()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`row_to_y()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`col_to_x()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_rc()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_row()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_col()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_x()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_y()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`i_to_xy()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`rc_to_i()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`xy_to_i()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`latlon_to_xy()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  [`xy_to_latlon()`](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
+  : Functions to convert among spatial indices
+
+- [`interval_log_likelihood()`](https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.md)
+  : Calculate log likelihoods of observed bird movements
+
+- [`is_location_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+  [`is_distr_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+  : Are locations and distributions covered by the model for the given
+  time
+
+- [`load_collection_index()`](https://birdflow-science.github.io/BirdFlowR/reference/load_collection_index.md)
+  : Load the index to a remote model collection
+
+- [`load_model()`](https://birdflow-science.github.io/BirdFlowR/reference/load_model.md)
+  : Load BirdFlow models from a collection
+
+- [`lookup_date()`](https://birdflow-science.github.io/BirdFlowR/reference/lookup_date.md)
+  : Retrieve date associated with timesteps, transitions, or marginals
+
+- [`lookup_season_timesteps()`](https://birdflow-science.github.io/BirdFlowR/reference/lookup_season_timesteps.md)
+  : Lookup breeding, non-breeding, or migration season timesteps
+
+- [`lookup_timestep()`](https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep.md)
+  : Lookup timestep
+
+- [`lookup_timestep_sequence()`](https://birdflow-science.github.io/BirdFlowR/reference/lookup_timestep_sequence.md)
+  : Lookup a sequence of timesteps
+
+- [`validate_Routes_route_df()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  [`validate_BirdFlowRoutes_birdflow_route_df()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  [`validate_BirdFlowIntervals_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  [`validate_Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  [`validate_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  [`validate_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  : Object Validators
+
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md)
+  : Plot BirdFlow Migration Traffic Rate (BMTR)
+
+- [`plot_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.md)
+  : Plot distributions
+
+- [`plot_flux()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_flux.md)
+  : Plot Bird Flow Migration Traffic Rate (BMTR)
+
+- [`plot_loss()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_loss.md)
+  : Plot changes in component and total loss during model fitting
+
+- [`plot_movement_vectors()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.md)
+  : Plot bird movement vectors
+
+- [`plot_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_routes.md)
+  [`plot(`*`<BirdFlowRoutes>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/plot_routes.md)
+  : Plot Routes
+
+- [`predict(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
+  : Predict bird distributions
+
+- [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
+  : Prepare eBird Status and Trends data for BirdFlow model fitting
+
+- [`print(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlow.md)
+  : Print BirdFlow models
+
+- [`print(`*`<BirdFlowIntervals>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlowIntervals.md)
+  :
+
+  Print a `BirdFlowIntervals` Object
+
+- [`print(`*`<Routes>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/print.Routes.md)
+  : Print Routes and BirdFlowRoutes objects
+
+- [`rasterize_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/rasterize.md)
+  [`rast(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/rasterize.md)
+  : Convert a BirdFlow distribution into a raster
+
+- [`rasterize_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/rasterize_bmtr.md)
+  : Rasterize BMTR Data
+
+- [`read_geom()`](https://birdflow-science.github.io/BirdFlowR/reference/read_geom.md)
+  : Read geom component of a BirdFlow hdf5
+
+- [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
+  : Generate BirdFlow routes
+
+- [`sample_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.md)
+  : Sample locations from a distribution
+
+- [`shrink_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/shrink_birdflow.md)
+  : Shrink BirdFlow extent
+
+- [`snap_to_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/snap_to_birdflow.md)
+  : Assign cells and timesteps to coordinates and dates
+
+- [`sort_by_id_and_dates()`](https://birdflow-science.github.io/BirdFlowR/reference/sort_by_id_and_dates.md)
+  : Sort Routes by ID and Date
+
+- [`sparsify()`](https://birdflow-science.github.io/BirdFlowR/reference/sparsify.md)
+  : sparsify BirdFlow models
+
+- [`species_info()`](https://birdflow-science.github.io/BirdFlowR/reference/species_info.md)
+  [`species()`](https://birdflow-science.github.io/BirdFlowR/reference/species_info.md)
+  : Retrieve species information from a BirdFlow model
+
+- [`get_target_columns_Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/target_columns.md)
+  [`get_target_columns_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/target_columns.md)
+  [`get_target_columns_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/target_columns.md)
+  : Get Target Columns for Data Frames
+
+- [`truncate_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow.md)
+  : Truncate the timespan of a BirdFlow model
+
+- [`validate_BirdFlow()`](https://birdflow-science.github.io/BirdFlowR/reference/validate_BirdFlow.md)
+  : Function to validate a BirdFlow object
+
+- [`validate_geom()`](https://birdflow-science.github.io/BirdFlowR/reference/validate_geom.md)
+  : Validate geom component of a BirdFlow or related object
