@@ -1,3 +1,15 @@
+# BirdFlowR 0.1.0.9078
+2026-03-20
+
+* Add `route_between()`: sample synthetic migration routes conditioned on
+  observed locations at specific times, using an HMM
+  forward-filtering-backward-sampling algorithm. Supports hard observations
+  (coordinates + dates) and soft observation potentials.
+* Add `predict_between()`: compute marginal probability distributions at each
+  timestep conditioned on observed locations, using a forward-backward
+  algorithm. Returns log-likelihood of observations as attribute `log_z`.
+* Add vignette demonstrating both functions with American Woodcock.
+
 # BirdFlowR 0.1.0.9077
 2025-09-29
 
