@@ -24,6 +24,13 @@
 #' @inheritDotParams lookup_timestep_sequence -x
 #' @return A [BirdFlowRoutes] object. Same format as [route()].
 #' @seealso [route()], [predict()]
+#' @examples
+#' bf <- BirdFlowModels::amewoo
+#' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
+#' rts <- route_between(bf, n = 5,
+#'                      x_coord = xy$x, y_coord = xy$y,
+#'                      date = c("2023-02-15", "2023-05-01"))
+#' plot_routes(rts)
 #' @export
 #' @importFrom Matrix Matrix
 #' @importMethodsFrom Matrix t %*%

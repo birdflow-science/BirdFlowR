@@ -11,6 +11,13 @@
 #'   timestep. Same format as [predict()]. The log-likelihood of the
 #'   observations is stored as attribute `log_z`.
 #' @seealso [predict()], [route_between()]
+#' @examples
+#' bf <- BirdFlowModels::amewoo
+#' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
+#' distr <- predict_between(bf,
+#'                          x_coord = xy$x, y_coord = xy$y,
+#'                          date = c("2023-02-15", "2023-05-01"))
+#' plot_distr(distr, bf, dynamic_scale = TRUE)
 #' @export
 #' @importFrom Matrix Matrix t
 #' @importMethodsFrom Matrix t %*%
