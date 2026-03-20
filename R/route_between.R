@@ -58,7 +58,8 @@ route_between <- function(bf, n,
 
     obs_i <- xy_to_i(x_coord, y_coord, bf)
     if (any(is.na(obs_i)))
-      stop("One or more coordinates fall outside the model extent or active cells.")
+      stop("One or more coordinates fall outside the model extent or active ",
+           "cells.")
 
     n_act <- n_active(bf)
     potential_list <- lapply(seq_along(obs_timesteps), function(k) {
@@ -85,11 +86,12 @@ route_between <- function(bf, n,
            "date argument.")
     }
 
-    potential_list <- lapply(seq_len(ncol(potentials)), function(k) potentials[, k])
+    potential_list <- lapply(seq_len(ncol(potentials)),
+                             function(k) potentials[, k])
     names(potential_list) <- as.character(obs_timesteps)
   }
 
-  # --- Determine computation timesteps (all steps between first and last obs) ---
+  # --- Determine computation timesteps (first to last obs) ---
   obs_range <- range(obs_timesteps)
   comp_timesteps <- lookup_timestep_sequence(bf, start = obs_range[1],
                                              end = obs_range[2])
@@ -183,10 +185,10 @@ backward_sample <- function(bf, timesteps, alphas, n) {
     # = T[dmi_next[r], ] * alpha_curr   (elementwise over x_t)
     #
     # Extract one row per route from T: result is n x sum(dm_curr)
-    T_rows <- as.matrix(tm[dmi_next, , drop = FALSE])
+    t_rows <- as.matrix(tm[dmi_next, , drop = FALSE])
 
     # Multiply each row by alpha_curr (broadcast)
-    weights <- sweep(T_rows, 2, alpha_curr, `*`)
+    weights <- sweep(t_rows, 2, alpha_curr, `*`)
 
     # Normalize rows and sample
     row_sums <- rowSums(weights)

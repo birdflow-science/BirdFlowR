@@ -9,8 +9,9 @@
 # @param bf A BirdFlow object (must already have dynamic_mask added).
 # @param timesteps Integer vector of consecutive timesteps to filter over.
 # @param potentials Named list of observation potentials. Names are timesteps
-#   as character strings; values are non-negative vectors of length n_active(bf).
-#   Timesteps not in the list are treated as unobserved (potential = 1 everywhere).
+#   as character strings; values are non-negative vectors of length
+#   n_active(bf). Timesteps not in the list are treated as unobserved
+#   (potential = 1 everywhere).
 # @return A list with:
 #   \item{alphas}{List of normalized alpha vectors (one per timestep), each in
 #     the dynamically masked subspace for that timestep.}
@@ -40,7 +41,8 @@ forward_filter <- function(bf, timesteps, potentials) {
   s <- sum(alpha)
   if (s == 0)
     stop("Forward filter: potential at first timestep (", t_start, ") has ",
-         "zero mass. Check that the starting location is within the model extent.")
+         "zero mass. Check that the starting location is within the model ",
+         "extent.")
   log_z <- log_z + log(s)
   alpha <- alpha / s
   alphas[[1]] <- alpha
@@ -58,9 +60,10 @@ forward_filter <- function(bf, timesteps, potentials) {
 
     s <- sum(alpha)
     if (s == 0)
-      stop("Forward filter collapsed to zero probability at timestep ", t_next,
-           ". Observations may be incompatible with the model (e.g. a location ",
-           "in a masked cell, or unreachable given the transition probabilities).")
+      stop("Forward filter collapsed to zero probability at timestep ",
+           t_next, ". Observations may be incompatible with the model ",
+           "(e.g. a location in a masked cell, or unreachable given the ",
+           "transition probabilities).")
     log_z <- log_z + log(s)
     alpha <- alpha / s
     alphas[[step + 1]] <- alpha
