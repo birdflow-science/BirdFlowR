@@ -15,6 +15,7 @@ calc_detection_rate <- function(bf, weight_fun = NULL, points = NULL, radius = N
                                   skip_unconnected, batch_size, ...)
   }
   else {
+    stop("ERROR - EUCLIDEAN IS FALSE in calc_delection_rate()")
     calc_spherical_detection_rate(bf, weight_fun, points, radius, n_directions,
                                   skip_unconnected, batch_size, ...)
   }

@@ -122,6 +122,7 @@ calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   # in the second it is a weight between 0 and 1 (non zero indicates some
   # level of betweeness".
   if (!weighted) {
+    stop("ERROR - WEIGHTED IS FALSE in calc_bmtr")
     result <- is_between(bf, points, radius, n_directions)
   } else {
     result <- calc_detection_rate(bf, points, radius, n_directions, euclidean = euclidean)
