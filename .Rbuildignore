@@ -15,3 +15,5 @@
 ^man/figures/BirdFlowR_logo.R
 ^\.lintr
 ^data-raw$
+^dev$
+^CLAUDE\.md$
