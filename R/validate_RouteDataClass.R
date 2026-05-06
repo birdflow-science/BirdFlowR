@@ -373,7 +373,7 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #'   - `date`: Ensures date formats and non-missing values.
 #'   - `lon` and `lat`: Ensure longitude and latitude values are within
 #'   valid ranges.
-#'   - `route_type`: Ensures only valid route types are present.
+#'   - `route_type`: Warns when non-standard route types are present.
 #' - **Spatial Attributes** (for `BirdFlowRoutes`):
 #'   - `x` and `y`: Ensure numeric spatial coordinates.
 #'   - `i`: Ensures valid spatial indices as integers.
@@ -413,8 +413,8 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #' not for `Routes`).
 #' @param lon_vector,lat_vector Numeric vectors for longitude and latitude.
 #' Must not contain missing values and must be within valid ranges.
-#' @param route_type_vector A character vector of route types. Must only contain
-#' valid types.
+#' @param route_type_vector A character vector of route types. Any character
+#' values are accepted; non-standard values produce a warning.
 #' @param x_vector,y_vector Numeric vectors for spatial coordinates. Must not
 #' contain missing values.
 #' @param i_vector An integer vector for spatial indices. Must not contain
@@ -491,8 +491,8 @@ validate_Routes_route_type <- function(route_type_vector) {
     invalid_types <-
       unique(route_type_vector)[!unique(route_type_vector) %in%
         valid_route_types]
-    stop(sprintf(
-      "Invalid 'route_type' values found: %s. 'route_type' must be one of: %s",
+    warning(sprintf(
+      "Non-standard 'route_type' values: %s. The standard values are: %s.",
       paste(invalid_types, collapse = ", "),
       paste(valid_route_types, collapse = ", ")
     ))
@@ -505,8 +505,8 @@ validate_BirdFlowRoutes_route_type <- function(route_type_vector) {
   if (!all(unique(route_type_vector) %in% valid_route_types)) {
     invalid_types <- unique(route_type_vector)[!unique(route_type_vector) %in%
       valid_route_types]
-    stop(sprintf(
-      "Invalid 'route_type' values found: %s. 'route_type' must be one of: %s",
+    warning(sprintf(
+      "Non-standard 'route_type' values: %s. The standard values are: %s.",
       paste(invalid_types, collapse = ", "),
       paste(valid_route_types, collapse = ", ")
     ))

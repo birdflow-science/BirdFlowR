@@ -19,3 +19,20 @@ test_that("Validations of Routes, BirdFlowRoutes, and BirdFlowIntervals work", {
     expect_no_error(my_intervals <- as_BirdFlowIntervals(my_bfroutes))
     expect_no_error(validate_BirdFlowIntervals(my_intervals))
 })
+
+test_that("non-standard route_type values warn but do not error", {
+  fake_routes <- make_fake_routes()
+  fake_routes$route_type[1:2] <- "genoscape"
+  species <- list(species_code = "amewoo",
+                  scientific_name = "Scolopax minor",
+                  common_name = "American Woodcock")
+
+  # Construction succeeds with a warning naming the offending value.
+  expect_warning(
+    rts <- Routes(fake_routes, species = species, source = "Maine"),
+    "Non-standard 'route_type'.*genoscape"
+  )
+
+  # And the value round-trips through the object.
+  expect_true("genoscape" %in% rts$data$route_type)
+})
