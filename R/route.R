@@ -101,6 +101,20 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   # These aren't dynamically masked
   initial_distr <- Matrix::Matrix(0, nrow = n_active(bf), ncol = length(row))
   indices <- rc_to_i(row, col, bf)
+
+  # User-supplied starting coordinates may land on cells that are masked
+  # out (statically or by the dynamic mask at `start`); without this check
+  # such routes silently start with zero probability mass and produce
+  # degenerate output. Sampled starts are valid by construction.
+  if (from_coordinates) {
+    valid <- is_location_valid(bf, i = indices, timestep = start)
+    if (!all(valid)) {
+      bad <- which(!valid)
+      stop("Starting coordinates are not valid for the model at timestep ",
+           start, " (rows ", paste(bad, collapse = ", "),
+           "). See `is_location_valid()`.")
+    }
+  }
   sel <- cbind(indices,  seq_len(length(indices)))
   initial_distr[sel] <- 1
 

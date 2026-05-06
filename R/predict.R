@@ -47,6 +47,20 @@ predict.BirdFlow <- function(object, distr, ...) {
   transitions <- as_transitions(timesteps, object)
   start <- timesteps[1]
 
+  # Reject starting distributions that put probability mass on cells the
+  # model can't represent at `start` (e.g. masked-out cells in a sparsified
+  # model). Without this, predict() silently zeros that mass on the first
+  # multiplication and the result no longer integrates to 1.
+  valid <- is_distr_valid(object, distr, timestep = start)
+  if (!all(valid)) {
+    bad <- which(!valid)
+    stop("Starting distribution is not valid for the model at timestep ",
+         start,
+         if (multiple_distributions)
+           paste0(" (column", if (length(bad) > 1) "s" else "",
+                  " ", paste(bad, collapse = ", "), ")"),
+         ". See `is_distr_valid()`.")
+  }
 
   current_dm <- dyn_mask[, start]
 
