@@ -81,3 +81,21 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
   expect_equal(bf, bf2)
 
 })
+
+test_that("import_birdflow() does not leak rhdf5 handles across calls", {
+  local_quiet()
+  skip_on_cran()
+
+  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 1, end = 3)
+  f <- withr::local_tempfile(fileext = ".hdf5")
+  export_birdflow(bf, f)
+
+  # Prime: ensure no stray handles linger from earlier tests / setup.
+  rhdf5::h5closeAll()
+
+  # First import sets the baseline; subsequent imports must not increase
+  # the count of open handles. Pre-fix this triggered the rhdf5 message
+  # "An open HDF5 file handle exists ..." reported in #197.
+  for (i in 1:3) import_birdflow(f)
+  expect_length(rhdf5::h5validObjects(), 0L)
+})

@@ -8,10 +8,15 @@
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
+#' @importFrom rhdf5 h5closeAll
 #' @keywords internal
 import_birdflow_v3 <- function(hdf5) {
 
   stopifnot(file.exists(hdf5))
+
+  # See note in import_birdflow(): close any rhdf5 handles opened by the
+  # h5read() calls below, even on error. Closes #197.
+  on.exit(h5closeAll(), add = TRUE)
 
   #----------------------------------------------------------------------------#
   #   Construct empty object

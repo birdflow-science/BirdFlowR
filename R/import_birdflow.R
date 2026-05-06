@@ -64,9 +64,18 @@
 #' @importFrom Matrix Matrix
 #' @importFrom rhdf5 h5ls
 #' @importFrom rhdf5 h5read
+#' @importFrom rhdf5 h5closeAll
 #' @rdname export_import_birdflow
 #' @export
 import_birdflow <- function(hdf5, ..., version) {
+
+  # rhdf5 keeps an internal table of open file IDs; the h5read() calls
+  # below (and inside import_birdflow_v3()) leak IDs that accumulate
+  # across calls until rhdf5 prints "An open HDF5 file handle exists ...
+  # Run 'h5closeAll()' to close all open HDF5 object handles." Closing
+  # everything on exit silences this and matches the recommendation in
+  # rhdf5's own message. Closes #197.
+  on.exit(h5closeAll(), add = TRUE)
 
   current_version <- new_BirdFlow()$metadata$birdflow_version
 
