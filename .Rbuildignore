@@ -17,3 +17,4 @@
 ^data-raw$
 ^dev$
 ^CLAUDE\.md$
+^\.claude$
