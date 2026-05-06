@@ -73,7 +73,7 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
                            n_directions = 1, skip_unconnected = TRUE,
                            batch_size = 1e5, ...) {
 
-  bf_msg("Generating between weigts.\n")
+  bf_msg("Generating between weights.\n")
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
     stop("The SparseArray package is required to use is_between(). ",
