@@ -12,9 +12,8 @@ sparsify(x, method, p = 0.99, fix = TRUE, p_protected = 0.1)
 \item{method}{One of ``"conditional"\verb{, }"marginal"`, or `"model"`.
 See "Methods" section below for details.}
 
-\item{p}{Required to control the proportion of the
-probability density retained in the sparsification process. See "Methods"
-below.}
+\item{p}{Controls the proportion of the probability density retained in
+the sparsification process. Defaults to \code{0.99}. See "Methods" below.}
 
 \item{fix}{If TRUE call \code{\link[=fix_dead_ends]{fix_dead_ends()}} to eliminate dead ends
 in the sparse model, but only honored if the method produces dead ends.}

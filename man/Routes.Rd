@@ -16,9 +16,10 @@ synthetic versions of the same.It must have the following columns:
 or \code{POSIXct}}
 \item{\code{lat},\code{lon}}{The latitude and longitude of the location in
 WGS84 (EPSG::4326)}
-\item{\code{route_type}}{The type of route - one of
-\code{"tracking"}, \code{"banding"}, \code{"motus"}, \code{"unknown"}, or \code{"synthetic"}
-Types can be mixed in the column.
+\item{\code{route_type}}{The type of route. Standard values are
+\code{"tracking"}, \code{"banding"}, \code{"motus"}, \code{"unknown"}, and \code{"synthetic"},
+but any character value is accepted; non-standard values produce a
+warning. Types can be mixed in the column.
 }
 }
 Other columns are permitted and will be retained in \code{Routes} object

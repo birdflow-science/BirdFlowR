@@ -70,8 +70,8 @@ not for \code{Routes}).}
 \item{lon_vector, lat_vector}{Numeric vectors for longitude and latitude.
 Must not contain missing values and must be within valid ranges.}
 
-\item{route_type_vector}{A character vector of route types. Must only contain
-valid types.}
+\item{route_type_vector}{A character vector of route types. Any character
+values are accepted; non-standard values produce a warning.}
 
 \item{x_vector, y_vector}{Numeric vectors for spatial coordinates. Must not
 contain missing values.}
@@ -117,7 +117,7 @@ data frames. They check:
 \item \code{date}: Ensures date formats and non-missing values.
 \item \code{lon} and \code{lat}: Ensure longitude and latitude values are within
 valid ranges.
-\item \code{route_type}: Ensures only valid route types are present.
+\item \code{route_type}: Warns when non-standard route types are present.
 }
 \item \strong{Spatial Attributes} (for \code{BirdFlowRoutes}):
 \itemize{
