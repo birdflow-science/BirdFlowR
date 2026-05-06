@@ -136,7 +136,13 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       # Calculate single step projection correlations
       if (do_step) {
         end_distr <- get_distr(x, to, from_marginals = FALSE)
-        projected <- predict(x, distr = start_distr, start = from, end = to)
+        # eBird-derived start_distr legitimately has mass outside the
+        # marginal-derived support; predict() warns about that, but here
+        # we know and tolerate it.
+        projected <- suppress_specific_warnings(
+          predict(x, distr = start_distr, start = from, end = to),
+          patterns = "mass on cells the model can't represent"
+        )
         end_dm <- get_dynamic_mask(x, to) # end dynamic mask
         single_step_cor[i] <- cor(end_distr[end_dm],
                                   projected[end_dm, ncol(projected)])
@@ -162,8 +168,14 @@ distribution_performance <- function(x, metrics = NULL, ...) {
 
 
     end_distr <- get_distr(x, end, from_marginals = FALSE)
-    projected <- predict(x, distr =  start_distr, start =  start,
-                         end =  end, direction =  "forward")
+    # See note above: eBird start_distr can carry mass outside the
+    # marginal support; the warning is meaningful for direct callers but
+    # noise here.
+    projected <- suppress_specific_warnings(
+      predict(x, distr =  start_distr, start =  start,
+              end =  end, direction =  "forward"),
+      patterns = "mass on cells the model can't represent"
+    )
 
     projected <- projected[, , dim(projected)[3]] # subset to last timestep
     end_dm <- get_dynamic_mask(x, end)
