@@ -62,7 +62,10 @@ A \link{BirdFlowRoutes} object. Same format as \code{\link[=route]{route()}}.
 \description{
 \code{route_between()} generates synthetic migration routes conditioned on
 observed locations at specific times, using a Hidden Markov Model
-forward-filtering-backward-sampling algorithm.
+forward-filtering-backward-sampling algorithm. Use \code{route_between()}
+when you have information about where a bird or population is
+at two or more points in time and want to produce routes that
+pass through those locations.
 }
 \examples{
 bf <- BirdFlowModels::amewoo
@@ -73,5 +76,8 @@ rts <- route_between(bf, n = 5,
 plot_routes(rts)
 }
 \seealso{
-\code{\link[=route]{route()}}, \code{\link[=predict]{predict()}}
+\code{\link[=route]{route()}} generates routes that rely only on the location at
+the start of the route. \code{\link[=predict_between]{predict_between()}} has the same inputs as
+\code{route_between()} but returns distributions at the intermediate times
+instead of sampled routes.
 }

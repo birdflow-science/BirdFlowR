@@ -2,7 +2,10 @@
 #'
 #' `route_between()` generates synthetic migration routes conditioned on
 #' observed locations at specific times, using a Hidden Markov Model
-#' forward-filtering-backward-sampling algorithm.
+#' forward-filtering-backward-sampling algorithm. Use `route_between()`
+#' when you have information about where a bird or population is
+#' at two or more points in time and want to produce routes that
+#' pass through those locations.
 #'
 #' @param bf A BirdFlow object.
 #' @param n Number of routes to sample.
@@ -23,7 +26,10 @@
 #'   together with `x_coord`/`y_coord`.
 #' @inheritDotParams lookup_timestep_sequence -x
 #' @return A [BirdFlowRoutes] object. Same format as [route()].
-#' @seealso [route()], [predict()]
+#' @seealso [route()] generates routes that rely only on the location at
+#' the start of the route. [predict_between()] has the same inputs as
+#' `route_between()` but returns distributions at the intermediate times
+#' instead of sampled routes.
 #' @examples
 #' bf <- BirdFlowModels::amewoo
 #' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)

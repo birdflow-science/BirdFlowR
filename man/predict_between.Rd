@@ -62,7 +62,10 @@ observations is stored as attribute \code{log_z}.
 \description{
 \code{predict_between()} computes marginal probability distributions at each
 timestep conditioned on observed locations at specific times, using a
-Hidden Markov Model forward-backward algorithm.
+Hidden Markov Model forward-backward algorithm. Use \code{predict_between()}
+to produce predictions of where birds were at intermediate times when
+you have information about their locations or distributions at two
+or more points in time.
 }
 \examples{
 bf <- BirdFlowModels::amewoo
@@ -73,5 +76,7 @@ distr <- predict_between(bf,
 plot_distr(distr, bf, dynamic_scale = TRUE)
 }
 \seealso{
-\code{\link[=predict]{predict()}}, \code{\link[=route_between]{route_between()}}
+\code{\link[=predict]{predict()}} for predictions from a single point in time,
+\code{\link[=route_between]{route_between()}} for creating routes from the same inputs
+as \code{predict_between()}.
 }

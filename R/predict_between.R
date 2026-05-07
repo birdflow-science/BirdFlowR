@@ -2,7 +2,10 @@
 #'
 #' `predict_between()` computes marginal probability distributions at each
 #' timestep conditioned on observed locations at specific times, using a
-#' Hidden Markov Model forward-backward algorithm.
+#' Hidden Markov Model forward-backward algorithm. Use `predict_between()`
+#' to produce predictions of where birds were at intermediate times when
+#' you have information about their locations or distributions at two
+#' or more points in time.
 #'
 #' @inheritParams route_between
 #' @inheritDotParams lookup_timestep_sequence -x
@@ -10,7 +13,9 @@
 #'   marginal probability distributions p(x_t | observations), one column per
 #'   timestep. Same format as [predict()]. The log-likelihood of the
 #'   observations is stored as attribute `log_z`.
-#' @seealso [predict()], [route_between()]
+#' @seealso [predict()] for predictions from a single point in time,
+#'  [route_between()] for creating routes from the same inputs
+#'   as `predict_between()`.
 #' @examples
 #' bf <- BirdFlowModels::amewoo
 #' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
