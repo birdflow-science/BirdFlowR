@@ -48,3 +48,7 @@ docs
 
 # Rendered html from rmarkdown template
 inst/markdown_templates/collection_index.html
+.positai
+
+# MacOS clutter
+.DS_store
