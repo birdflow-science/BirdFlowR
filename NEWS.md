@@ -1,3 +1,12 @@
+# BirdFlowR 0.1.0.9079
+2026-05-07
+
+* Fix `preprocess_species()` failure under terra >= 1.9-25 with
+  "[write] unknown option(s): xscale,yscale". Internal projections that
+  needed `origin = 0, res = ...` against a CRS string now go through a
+  new internal `project_aligned()` helper that builds an explicit
+  template raster (the path terra's regression doesn't touch).
+
 # BirdFlowR 0.1.0.9078
 2026-03-20
 
