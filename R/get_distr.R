@@ -4,12 +4,28 @@
 #' single distribution will be returned as a vector; if multiple they will be
 #' columns in a matrix.
 #'
-#' If the BirdFlow object has stored distributions they will be the training
-#' distributions and will be returned by default unless `from_marginals = TRUE`
-#' in which case distributions calculated from the marginal will be returned.
+#' @section Distribution types:
 #'
-#' The training distributions and the distributions calculated from the marginal
-#' are very similar.
+#' The `type` argument controls how the distribution is computed:
+#'
+#' \describe{
+#'   \item{`"normalized"`}{ The default. Returns the eBird-derived stored
+#'     distributions, normalized so each timestep sums to 1. Equivalent to
+#'     the previous behavior with `from_marginals = FALSE`.}
+#'   \item{`"marginal"`}{ Calculates the distribution from the marginals
+#'     instead of the stored distributions. Useful for diagnostics; the
+#'     two are very similar in practice. Equivalent to the previous
+#'     behavior with `from_marginals = TRUE`.}
+#'   \item{`"raw"`}{ Returns the eBird abundance values prior to the
+#'     standardize-to-1 normalization, by multiplying the stored normalized
+#'     distribution by the per-timestep totals captured during
+#'     [preprocess_species()] (`x$metadata$abundance$totals`). This requires
+#'     a model that recorded those totals — older models will trigger an
+#'     error pointing at re-preprocessing.
+#'     Note that quantile trimming via the `trim_quantile` argument is also
+#'     a lossy step: `"raw"` recovers values from before normalization but
+#'     after any trimming.}
+#' }
 #'
 #' @seealso Distributions can be passed to [predict()][predict.BirdFlow] or
 #'   converted to rasters with [expand_distr()] or converted to
@@ -21,21 +37,58 @@
 #'   integers indicating timesteps; character dates in the format
 #'   year-month-day e.g. `"2019-02-25"`; [`Date`][base::Dates] objects;
 #'   or `"all"` which will return distributions for all timesteps.
-#' @param from_marginals If TRUE and `x` has marginals the distribution will be
-#'   from the marginals even if `x` also has distributions.
+#' @param type One of `"normalized"` (the default), `"marginal"`, or `"raw"`.
+#'   See "Distribution types" for details.
+#' @param from_marginals Deprecated. Use `type = "marginal"` instead.
+#'   When supplied, `from_marginals = TRUE` is translated to
+#'   `type = "marginal"` and `from_marginals = FALSE` to
+#'   `type = "normalized"`, with a warning.
 #' @return Either a vector with a distribution for a single timestep or a matrix
 #'   with a column for each distribution.
 #' @export
 #'
-get_distr <- function(x, which = "all", from_marginals = FALSE) {
+get_distr <- function(x, which = "all",
+                      type = c("normalized", "marginal", "raw"),
+                      from_marginals) {
+
+  # Soft-deprecate from_marginals: translate to type and warn.
+  if (!missing(from_marginals)) {
+    warning("`from_marginals` is deprecated. ",
+            "Please use `type = \"marginal\"` instead.")
+    type <- if (isTRUE(from_marginals)) "marginal" else "normalized"
+  } else {
+    type <- match.arg(type)
+  }
 
   # Resolve which into integer timesteps
   which <- lookup_timestep(which, x)
 
-  if (x$metadata$has_distr && !from_marginals) {
+  use_marginals <- type == "marginal"
+
+  if (x$metadata$has_distr && !use_marginals) {
     # Return stored distribution
 
     d <- x$distr[, which]
+
+    if (type == "raw") {
+      totals <- x$metadata$abundance$totals
+      if (is.null(totals) || (length(totals) == 1 && is.na(totals))) {
+        stop("type = \"raw\" requires that ",
+             "`x$metadata$abundance$totals` be populated, which is only ",
+             "true for models preprocessed with BirdFlowR >= 0.1.0.9081. ",
+             "Re-run preprocess_species() to enable raw recovery.")
+      }
+      if (any(which > length(totals))) {
+        stop("type = \"raw\" cannot be returned for timesteps beyond the ",
+             "length of `x$metadata$abundance$totals`.")
+      }
+      if (length(which) == 1) {
+        d <- d * totals[which]
+      } else {
+        d <- d * matrix(rep(totals[which], each = nrow(d)), nrow = nrow(d))
+      }
+    }
+
     if (length(which) == 1) {
       attr(d, "time") <- paste0("t", which)
     }
@@ -44,12 +97,17 @@ get_distr <- function(x, which = "all", from_marginals = FALSE) {
   } else {
     # Or calculate from marginals
     if (!x$metadata$has_marginals) {
-      if (from_marginals) {
+      if (use_marginals) {
         stop("The BirdFlow model has no marginals to ",
              "calculate distribution from.")
       } else {
         stop("No distributions available in the BirdFlow object.")
       }
+    }
+
+    if (type == "raw") {
+      stop("type = \"raw\" is only available when stored distributions ",
+           "are present (has_distr = TRUE).")
     }
 
     d <- vector(mode = "list", length = length(which))

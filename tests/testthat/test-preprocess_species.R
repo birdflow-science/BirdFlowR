@@ -41,7 +41,49 @@ test_that("preprocess_species runs on test dataset", {
   expect_equal(n_timesteps(bf), 52)
   expect_equal(n_transitions(bf), 52)
 
+  # Unclipped models report clipped = FALSE and have no recoverable polygon
+  expect_false(is_clipped(bf))
+  expect_null(get_clip(bf))
 
+  # Per-timestep abundance totals are recorded so that
+  # get_distr(x, type = "raw") can recover pre-normalization values.
+  # `bf` is a cyclical preprocessed model, so totals is padded to
+  # ncol(bf$distr) (= n_timesteps + 1) and the trailing entry is the
+  # duplicate of the first.
+  expect_true(is.list(bf$metadata$abundance))
+  expect_equal(length(bf$metadata$abundance$totals), ncol(bf$distr))
+  expect_equal(bf$metadata$abundance$totals[ncol(bf$distr)],
+               bf$metadata$abundance$totals[1])
+  expect_true(all(bf$metadata$abundance$totals > 0))
+
+  raw <- get_distr(bf, 1, type = "raw")
+  norm <- get_distr(bf, 1)
+  expect_equal(as.numeric(raw),
+               as.numeric(norm) * bf$metadata$abundance$totals[1],
+               tolerance = 1e-10)
+
+  # eBird model coverage is a 3D logical array [row, col, time]
+  cov <- bf$metadata$ebird_model_coverage
+  expect_true(is.array(cov))
+  expect_equal(length(dim(cov)), 3L)
+  expect_equal(dim(cov)[1:2], dim(bf$geom$mask))
+  expect_equal(dim(cov)[3], ncol(bf$distr))
+  expect_type(cov, "logical")
+  expect_equal(names(dimnames(cov)), c("row", "col", "time"))
+  expect_equal(dimnames(cov)$time, paste0("t", seq_len(dim(cov)[3])))
+  # Cyclical extra layer duplicates layer 1
+  expect_equal(cov[, , 1], cov[, , dim(cov)[3]],
+               ignore_attr = TRUE)
+
+
+})
+
+
+# Legacy fixture that predates clip metadata
+test_that("is_clipped() and get_clip() handle legacy models", {
+  skip_if_not_installed("BirdFlowModels")
+  expect_true(is.na(is_clipped(BirdFlowModels::amewoo)))
+  expect_null(get_clip(BirdFlowModels::amewoo))
 })
 
 #3
@@ -194,6 +236,19 @@ test_that("preprocess_species() works with clip", {
               "yebsap-example_2022_30km.hdf5",   # 2022
               paste0("yebsap-example_", v_year, "_30km.hdf5")))  # 2023+
 
+  # Clip metadata is captured and round-trips through HDF5
+  expect_true(is_clipped(b))
+  recovered <- get_clip(b)
+  expect_s3_class(recovered, "sf")
+  expect_equal(length(b$metadata$clip$percent_lost), n_timesteps(b))
+  expect_true(all(b$metadata$clip$percent_lost >= 0,
+                  na.rm = TRUE))
+
+  hdf5_path <- file.path(dir, created_files[grep("\\.hdf5$", created_files)[1]])
+  b2 <- import_birdflow(hdf5_path)
+  expect_true(is_clipped(b2))
+  expect_s3_class(get_clip(b2), "sf")
+  expect_equal(b2$metadata$clip$percent_lost, b$metadata$clip$percent_lost)
 
 
   if (interactive()) {
@@ -279,6 +334,18 @@ test_that("preprocess_species() works with trim_quantile", {
                                   trim_quantile = 0.99)
   )
 
+  expect_no_error(
+    bf_trim_vec <- preprocess_species(species = "example_data",
+                                      res = 200,
+                                      hdf5 = FALSE,
+                                      trim_quantile = rep(0.995, 52))
+  )
+
+  # trim_quantile metadata is stored: NA_real_ for no trim, length-52 for
+  # length-1 (expanded) and length-52 inputs.
+  expect_identical(bf$metadata$trim_quantile, NA_real_)
+  expect_equal(bf_trim$metadata$trim_quantile, rep(0.99, 52))
+  expect_equal(bf_trim_vec$metadata$trim_quantile, rep(0.995, 52))
 
   dt <- get_distr(bf_trim)
   d <- get_distr(bf)

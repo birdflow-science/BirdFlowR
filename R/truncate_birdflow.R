@@ -86,6 +86,32 @@ truncate_birdflow <- function(bf, ...) {
   bf$metadata$n_timesteps <- nrow(bf$dates)
   bf$metadata$n_transitions <- nrow(bf$dates) - 1
 
+  # Subset per-timestep metadata so it stays aligned with the surviving
+  # timesteps. trim_quantile is intentionally left untouched: it records
+  # what was applied during preprocessing, regardless of any later
+  # truncation.
+  if (is.list(bf$metadata$abundance) &&
+      !is.null(bf$metadata$abundance$totals) &&
+      length(bf$metadata$abundance$totals) >= max(old_timesteps)) {
+    bf$metadata$abundance$totals <-
+      bf$metadata$abundance$totals[old_timesteps]
+  }
+  if (is.list(bf$metadata$clip) &&
+      !is.null(bf$metadata$clip$percent_lost) &&
+      length(bf$metadata$clip$percent_lost) >= max(old_timesteps)) {
+    bf$metadata$clip$percent_lost <-
+      bf$metadata$clip$percent_lost[old_timesteps]
+  }
+  cov <- bf$metadata$ebird_model_coverage
+  if (is.array(cov) && length(dim(cov)) == 3 &&
+      dim(cov)[3] >= max(old_timesteps)) {
+    new_cov <- cov[, , old_timesteps, drop = FALSE]
+    dimnames(new_cov) <- list(row = NULL,
+                              col = NULL,
+                              time = paste0("t", seq_along(old_timesteps)))
+    bf$metadata$ebird_model_coverage <- new_cov
+  }
+
   # Marginals
   if (has_marginals(bf)) {
     mi <- bf$marginals$index
@@ -148,6 +174,18 @@ truncate_birdflow <- function(bf, ...) {
     stopifnot(all(colnames(dm) == d_cw$old))
     colnames(dm) <- d_cw$new
     bf$geom$dynamic_mask <- dm
+  }
+
+  # uci and lci are only present on preprocessed (not-yet-fitted) models;
+  # keep them aligned with the surviving timesteps.
+  for (nm in c("uci", "lci")) {
+    m <- bf[[nm]]
+    if (!is.null(m) && is.matrix(m) && all(d_cw$old %in% colnames(m))) {
+      mv <- match(d_cw$old, colnames(m))
+      m <- m[, mv, drop = FALSE]
+      colnames(m) <- d_cw$new
+      bf[[nm]] <- m
+    }
   }
 
   return(bf)

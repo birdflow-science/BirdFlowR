@@ -81,6 +81,33 @@
 #' for detailed justification.
 #' @inheritDotParams lookup_timestep_sequence -x
 #'
+#' @section Captured metadata:
+#'
+#' `preprocess_species()` records several pieces of information in
+#' `metadata` so that they survive the round-trip through HDF5 and can be
+#' inspected on a fitted model:
+#'
+#' * `metadata$trim_quantile` — the value(s) used for `trim_quantile`,
+#'   or `NA_real_` if no trimming was applied.
+#' * `metadata$clip` — `clipped` flag, the clip polygon stored as a flat
+#'   data frame, and the per-timestep percent of distribution density
+#'   removed by clipping. See [is_clipped()] and [get_clip()].
+#' * `metadata$abundance$totals` — the per-timestep abundance totals used to
+#'   normalize each timestep's distribution to sum to 1. Multiplying the
+#'   stored normalized distribution by these totals (see
+#'   [get_distr()] with `type = "raw"`) recovers the pre-normalization
+#'   abundance. Note that quantile trimming, when used, is also lossy: the
+#'   recovered values reflect the post-trim, pre-normalize abundance.
+#' * `metadata$ebird_model_coverage` — a 3D logical array with
+#'   dimensions `[row, col, time]` matching the model's grid and the
+#'   number of stored distributions, with `dimnames =
+#'   list(row = NULL, col = NULL, time = c("t1", "t2", ...))`. Each
+#'   cell `[r, c, t]` is `TRUE` iff that cell was within eBird's
+#'   modeled extent at timestep `t`. eBird 2023 onwards uses `NA` for
+#'   cells with insufficient data, distinct from cells with zero
+#'   abundance; this array preserves that signal per timestep even
+#'   though the stored `distr` substitutes zeros.
+#'
 #' @return Returns a BirdFlow model object that lacks marginals, but is
 #'   otherwise complete.  It is suitable for fitting with
 #'   [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy).
@@ -241,6 +268,13 @@ preprocess_species <- function(species = NULL,
   export$metadata$birdflowr_preprocess_version <-
     as.character(utils::packageVersion("BirdFlowR"))
 
+  # Record trim_quantile that was applied. NA_real_ means no trimming was
+  # done; otherwise the length-52 vector of per-week quantiles that was used
+  # (reflecting the value supplied during preprocessing, even if the model is
+  # later truncated to a subset of timesteps).
+  export$metadata$trim_quantile <-
+    if (is.null(trim_quantile)) NA_real_ else trim_quantile
+
   #----------------------------------------------------------------------------#
   # Download abundance data                                                 ####
   # Download - requires setting code with set_ebirdst_access_key()
@@ -345,6 +379,30 @@ preprocess_species <- function(species = NULL,
   export$distr <- a$distr
   export$uci <- a$uci
   export$lci <- a$lci
+
+  # Record clip metadata: whether the model was clipped, the polygon used
+  # (in the model's CRS), and the per-timestep percent of distribution
+  # density removed by clipping. Unclipped models record only
+  # `clipped = FALSE`; older models from before this metadata existed
+  # report `clipped = NA` via the schema default.
+  if (is.null(clip)) {
+    export$metadata$clip <- list(clipped = FALSE)
+  } else {
+    export$metadata$clip <- list(
+      clipped = TRUE,
+      polygon = clip_to_dataframe(clip),
+      percent_lost = if (is.null(a$clip_percent_lost)) NA_real_
+                     else as.numeric(a$clip_percent_lost)
+    )
+  }
+
+  # Record per-timestep abundance totals (the divisor used when
+  # normalizing the distribution to sum to 1) so that callers can recover
+  # raw weekly abundance values via `get_distr(x, type = "raw")`. Also
+  # record the eBird model coverage matrix indicating which cells were
+  # within eBird's modeled area at any timestep.
+  export$metadata$abundance <- list(totals = as.numeric(a$abundance_totals))
+  export$metadata$ebird_model_coverage <- a$ebird_model_coverage
 
   #----------------------------------------------------------------------------#
   #  Define geom                                                            ####
@@ -460,6 +518,31 @@ preprocess_species <- function(species = NULL,
     export$uci <- uci
     export$lci <- lci
     export$geom$dynamic_mask <- dynamic_mask
+
+    # Per-timestep metadata must stay aligned with the new ncol(distr)
+    # so that get_distr() etc. can index any column safely. The cyclical
+    # column is a duplicate of column 1, so each per-timestep slot gets
+    # its first entry duplicated onto the end. The duplicate is removed
+    # again on import for fitted models (see the `is_fitted_model`
+    # cleanup in import_birdflow_v3()).
+    totals <- export$metadata$abundance$totals
+    if (is.numeric(totals) && length(totals) >= 1) {
+      export$metadata$abundance$totals <- c(totals, totals[1])
+    }
+    pct_lost <- export$metadata$clip$percent_lost
+    if (is.numeric(pct_lost) && length(pct_lost) >= 1) {
+      export$metadata$clip$percent_lost <- c(pct_lost, pct_lost[1])
+    }
+    cov <- export$metadata$ebird_model_coverage
+    if (is.array(cov) && length(dim(cov)) == 3) {
+      d <- dim(cov)
+      first_layer <- cov[, , 1]
+      new_cov <- array(c(cov, first_layer), dim = c(d[1], d[2], d[3] + 1))
+      dimnames(new_cov) <- list(row = NULL,
+                                col = NULL,
+                                time = paste0("t", seq_len(d[3] + 1)))
+      export$metadata$ebird_model_coverage <- new_cov
+    }
 
   }
 

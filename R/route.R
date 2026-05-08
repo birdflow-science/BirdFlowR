@@ -85,7 +85,9 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
         stop("If starting from coordinates use both x_coord and y_coord, ",
              "if not both should be NULL")
     }
-    loc <- get_distr(bf, start, from_marginals = from_marginals) |>
+    loc <- get_distr(bf, start,
+                     type = if (isTRUE(from_marginals)) "marginal"
+                            else "normalized") |>
       sample_distr(n = n, format = "i", bf = bf)
     row <- i_to_row(loc, bf)
     col <- i_to_col(loc, bf)

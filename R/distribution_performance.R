@@ -126,8 +126,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
       # Calculate distribution correlations (marginal vs S&T for each step)
       from <- timesteps[i]
       to <- timesteps[i + 1]
-      start_distr <- get_distr(x, from, from_marginals = FALSE)
-      marginal_start_distr <- get_distr(x, from, from_marginals = TRUE)
+      start_distr <- get_distr(x, from)
+      marginal_start_distr <- get_distr(x, from, type = "marginal")
       start_dm <- get_dynamic_mask(x, from)
       distr_cor[i] <- cor(start_distr[start_dm], marginal_start_distr[start_dm])
 
@@ -135,7 +135,7 @@ distribution_performance <- function(x, metrics = NULL, ...) {
 
       # Calculate single step projection correlations
       if (do_step) {
-        end_distr <- get_distr(x, to, from_marginals = FALSE)
+        end_distr <- get_distr(x, to)
         # eBird-derived start_distr legitimately has mass outside the
         # marginal-derived support; predict() warns about that, but here
         # we know and tolerate it.
@@ -163,11 +163,11 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   # Calculate Traverse Correlation
   if (do_traverse) {
 
-    start_distr <- cbind(get_distr(x, start, from_marginals = FALSE), # st_
-                         get_distr(x, start, from_marginals = TRUE))  # md_
+    start_distr <- cbind(get_distr(x, start),                       # st_
+                         get_distr(x, start, type = "marginal"))    # md_
 
 
-    end_distr <- get_distr(x, end, from_marginals = FALSE)
+    end_distr <- get_distr(x, end)
     # See note above: eBird start_distr can carry mass outside the
     # marginal support; the warning is meaningful for direct callers but
     # noise here.

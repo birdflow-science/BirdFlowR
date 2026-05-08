@@ -40,6 +40,10 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
   ### BirdFlowModels::amewoo model, Needed for BirdFlowModels 0.0.2.9002
   sbf2$metadata$ebirdst_version <- NULL
   sbf2$metadata$birdflowr_preprocess_version <- NULL
+  for (m in c("trim_quantile", "clip", "ebird_model_coverage",
+              "abundance")) {
+    sbf2$metadata[[m]] <- NULL
+  }
 
 
   expect_equal(sbf, sbf2)

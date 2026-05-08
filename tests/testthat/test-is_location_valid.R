@@ -2,12 +2,12 @@ test_that("distr_is_valid() returns true for distributions from model", {
   bf <- BirdFlowModels::amewoo
 
   # Several
-  distr <- get_distr(bf, 1:2, from_marginals = TRUE)
+  distr <- get_distr(bf, 1:2, type = "marginal")
   expect_no_error(valid <- is_distr_valid(bf, distr = distr, timestep = 1:2))
   expect_true(all(valid))
 
   # Singular
-  distr <- get_distr(bf, 1, from_marginals = TRUE)
+  distr <- get_distr(bf, 1, type = "marginal")
   expect_no_error(valid <- is_distr_valid(bf, distr = distr, timestep = 1))
   expect_true(all(valid))
 })
@@ -16,7 +16,7 @@ test_that("distr_is_valid() returns FALSE when it should", {
   bf <- BirdFlowModels::amewoo
 
   # Several
-  distr <- get_distr(bf, 1:2, from_marginals = TRUE)
+  distr <- get_distr(bf, 1:2, type = "marginal")
   a_zero_cell <- which(distr[, 1] == 0)[1]
   distr[1, 1] <- .001
   distr[, 1] <- distr[, 1] / sum(distr[, 1]) # restandarize
@@ -34,7 +34,7 @@ test_that("distr_is_valid() returns appropriate mask", {
   bf <- BirdFlowModels::amewoo
 
   # Several
-  distr <- get_distr(bf, 5:7, from_marginals = TRUE)
+  distr <- get_distr(bf, 5:7, type = "marginal")
   mask <- is_distr_valid(bf, distr, timestep = 5:7, return_mask = TRUE)
   expect_equal(nrow(distr), nrow(mask))
   expect_equal(ncol(distr), ncol(mask))
@@ -42,7 +42,7 @@ test_that("distr_is_valid() returns appropriate mask", {
   expect_equal(mask, mask2, ignore_attr = TRUE)
 
   # Singular
-  distr <- get_distr(bf, 22, from_marginals = TRUE)
+  distr <- get_distr(bf, 22, type = "marginal")
   mask <- is_distr_valid(bf, distr, timestep = 22, return_mask = TRUE)
   expect_equal(nrow(distr), nrow(mask))
   expect_equal(ncol(distr), ncol(mask))
@@ -56,7 +56,7 @@ test_that("is_location_valid() returns TRUE for valid inputs", {
 
   # Several
   timestep <- 12
-  distr <- get_distr(bf, timestep, from_marginals = TRUE)
+  distr <- get_distr(bf, timestep, type = "marginal")
   locs <- sample_distr(distr, n = 3)
   i <- apply(locs, 2, function(x)  which(as.logical(x)))
   x <- i_to_x(i, bf)
@@ -94,7 +94,7 @@ test_that("is_location_valid() returns FALSE when it should", {
 
   # Several
   timestep <- 12
-  distr <- get_distr(bf, which = rep(timestep, 2), from_marginals = TRUE)
+  distr <- get_distr(bf, which = rep(timestep, 2), type = "marginal")
   set.seed(1)
   i <- apply(distr, 2, function(x) sample(which(x == 0), 1))
   x <- i_to_x(i, bf)

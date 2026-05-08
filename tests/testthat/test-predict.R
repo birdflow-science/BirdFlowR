@@ -53,7 +53,7 @@ test_that("predict() warns on starting distributions with unrepresentable mass",
 
   # Place all probability mass on a cell that has zero in the
   # marginal-derived distribution at timestep 1.
-  d1 <- get_distr(bf, 1, from_marginals = TRUE)
+  d1 <- get_distr(bf, 1, type = "marginal")
   bad_i <- which(d1 == 0)[1]
   bad_distr <- numeric(n_active(bf))
   bad_distr[bad_i] <- 1

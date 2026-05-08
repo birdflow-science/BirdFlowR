@@ -36,14 +36,13 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
     start <- season_timesteps[1]
     end <- utils::tail(season_timesteps, 1)
 
-    start_distr_ebirdst <- BirdFlowR::get_distr(x, start,
-                                                from_marginals = FALSE)
+    start_distr_ebirdst <- BirdFlowR::get_distr(x, start)
     start_distr_marginals <- BirdFlowR::get_distr(x, start,
-                                                  from_marginals = TRUE)
+                                                  type = "marginal")
     start_dm <- BirdFlowR::get_dynamic_mask(x, start)
     start_cor <- stats::cor(start_distr_ebirdst[start_dm],
                             start_distr_marginals[start_dm])
-    end_distr_ebirdst <- BirdFlowR::get_distr(x, end, from_marginals = FALSE)
+    end_distr_ebirdst <- BirdFlowR::get_distr(x, end)
     projected <- stats::predict(x, distr = start_distr_marginals, start = start,
                                 end = end, direction = "forward")
     end_dm <- BirdFlowR::get_dynamic_mask(x, end)

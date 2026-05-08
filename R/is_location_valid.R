@@ -49,7 +49,7 @@
 #' timestep  <- 3
 #'
 #' # Sample two valid locations from a distribution
-#' distr <- get_distr(bf, timestep, from_marginals = TRUE)
+#' distr <- get_distr(bf, timestep, type = "marginal")
 #' locs <- sample_distr(distr, n = 2)
 #' i <- apply(locs, 2, function(x) which(as.logical(x)))
 #' is_location_valid(bf, i, timestep = timestep)
@@ -87,7 +87,7 @@ is_location_valid <- function(bf, i, x, y, timestep, date) {
   # Locations are valid if the distr from the marginal is
   #  not zero for that location and timestep
   for (t in ut) {
-    d <- get_distr(bf, t, from_marginals = TRUE)
+    d <- get_distr(bf, t, type = "marginal")
     d_not_zero  <- d != 0
     sv <- valid &  timestep == t
     valid[sv] <- d_not_zero[i[sv]]
@@ -130,7 +130,7 @@ is_distr_valid <- function(bf, distr, timestep, date, return_mask = FALSE) {
   mask <- matrix(FALSE, nrow = nrow(distr), ncol = ncol(distr))
   for (t in ut) {
     sv <- valid &  timestep == t
-    bfd <- get_distr(bf, t, from_marginals = TRUE) # bird flow distribution
+    bfd <- get_distr(bf, t, type = "marginal") # bird flow distribution
     bf_has_value  <- bfd != 0  # is the bird flow distribution zero
     mask[, sv] <- bf_has_value
   }

@@ -172,6 +172,58 @@ import_birdflow_v3 <- function(hdf5) {
     bf$metadata[[i]] <- new_na_value
   }
 
+  # Clean nested clip metadata (introduced after birdflow_version 3 was
+  # standardized; older HDF5 files leave bf$metadata$clip as scalar NA via
+  # the schema default and are skipped here).
+  if (is.list(bf$metadata$clip)) {
+    cl <- bf$metadata$clip
+    if (!is.null(cl$clipped)) {
+      v <- cl$clipped
+      if (is.factor(v)) v <- as.logical(as.character(v))
+      cl$clipped <- as.logical(v)[1]
+    }
+    if (inherits(cl$polygon, "data.frame")) {
+      cl$polygon <- clean_hdf5_dataframe(cl$polygon)
+      if (!is.null(cl$polygon$hole)) {
+        cl$polygon$hole <- as.logical(cl$polygon$hole)
+      }
+    }
+    if (!is.null(cl$percent_lost)) {
+      cl$percent_lost <- as.numeric(as.vector(cl$percent_lost))
+    }
+    bf$metadata$clip <- cl
+  }
+
+  # Clean abundance metadata
+  if (is.list(bf$metadata$abundance)) {
+    ab <- bf$metadata$abundance
+    if (!is.null(ab$totals)) {
+      ab$totals <- as.numeric(as.vector(ab$totals))
+    }
+    bf$metadata$abundance <- ab
+  }
+
+  # ebird_model_coverage is stored as a 3D logical array
+  # [row, col, time]. The simple metadata loop above strips its dim
+  # attribute via as.vector(), and rhdf5's default reader transposes
+  # arrays on the way back in, so re-read it directly with native =
+  # TRUE. rhdf5 doesn't preserve dimnames, so restore them from the
+  # array's third dimension.
+  if ("metadata/ebird_model_coverage" %in% contents) {
+    cov <- h5read(hdf5, "metadata/ebird_model_coverage", native = TRUE)
+    if (is.array(cov) && length(dim(cov)) == 3) {
+      storage.mode(cov) <- "logical"
+      dimnames(cov) <- list(row = NULL,
+                            col = NULL,
+                            time = paste0("t", seq_len(dim(cov)[3])))
+    } else if (is.matrix(cov)) {
+      storage.mode(cov) <- "logical"
+    } else {
+      cov <- as.logical(cov)
+    }
+    bf$metadata$ebird_model_coverage <- cov
+  }
+
 
   # hyperparameters
   if (is_fitted_model) {
@@ -278,6 +330,44 @@ import_birdflow_v3 <- function(hdf5) {
     }
 
     bf$geom$dynamic_mask <- dm
+
+    # Per-timestep metadata vectors written by preprocess_species() carry
+    # the same cyclical extra entry that distr / dynamic_mask do. Trim it
+    # here so each vector ends up at length n_timesteps. The trailing
+    # entry is expected to equal the first by construction; mismatch
+    # signals a corrupted file, so error rather than silently trimming.
+    nt <- n_timesteps(bf)
+    if (is.list(bf$metadata$abundance) &&
+        is.numeric(bf$metadata$abundance$totals) &&
+        length(bf$metadata$abundance$totals) == nt + 1) {
+      tot <- bf$metadata$abundance$totals
+      if (!isTRUE(all.equal(tot[1], tot[length(tot)])))
+        stop("Expected first and last abundance$totals entries to match ",
+             "in circular BirdFlow model")
+      bf$metadata$abundance$totals <- tot[seq_len(nt)]
+    }
+    if (is.list(bf$metadata$clip) &&
+        is.numeric(bf$metadata$clip$percent_lost) &&
+        length(bf$metadata$clip$percent_lost) == nt + 1) {
+      pl <- bf$metadata$clip$percent_lost
+      if (!isTRUE(all.equal(pl[1], pl[length(pl)])))
+        stop("Expected first and last clip$percent_lost entries to match ",
+             "in circular BirdFlow model")
+      bf$metadata$clip$percent_lost <- pl[seq_len(nt)]
+    }
+    cov <- bf$metadata$ebird_model_coverage
+    if (is.array(cov) && length(dim(cov)) == 3 &&
+        dim(cov)[3] == nt + 1) {
+      if (!isTRUE(all.equal(cov[, , 1], cov[, , dim(cov)[3]],
+                            check.attributes = FALSE)))
+        stop("Expected first and last ebird_model_coverage layers to ",
+             "match in circular BirdFlow model")
+      new_cov <- cov[, , seq_len(nt), drop = FALSE]
+      dimnames(new_cov) <- list(row = NULL,
+                                col = NULL,
+                                time = paste0("t", seq_len(nt)))
+      bf$metadata$ebird_model_coverage <- new_cov
+    }
 
     # Make and save marginal index
     bf$marginals$index <- make_marginal_index(bf)
