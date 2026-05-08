@@ -5,7 +5,11 @@
   "[write] unknown option(s): xscale,yscale". Internal projections that
   needed `origin = 0, res = ...` against a CRS string now go through a
   new internal `project_aligned()` helper that builds an explicit
-  template raster (the path terra's regression doesn't touch).
+  template raster (the path terra's regression doesn't touch). The
+  upstream bug was reported as
+  [rspatial/terra#2081](https://github.com/rspatial/terra/issues/2081)
+  and fixed in terra commit `6cb07c7`; the workaround can be removed
+  once BirdFlowR's terra minimum is bumped past that fix.
 
 # BirdFlowR 0.1.0.9078
 2026-03-20
