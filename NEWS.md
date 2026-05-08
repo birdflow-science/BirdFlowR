@@ -23,6 +23,16 @@ Round-up of small fixes (closes #196, #115, #197, #219, #222):
   reject non-standard `route_type` values such as `"genoscape"`. The
   validator now warns instead of erroring.
 
+Most of these won't affect users but note:
+* New warnings may appear with `predict()` if some of the weight is
+  outside the dynamic mask.
+* `route()` will now throw an error if the route starts are
+  outside of the dynamic mask.  
+Use `is_distr_valid()` and is `is_location_valid()` to get
+more information on the problematic inputs. 
+  
+
+
 # BirdFlowR 0.1.0.9079
 2026-05-07
 
