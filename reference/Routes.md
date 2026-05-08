@@ -27,8 +27,10 @@ Routes(data, species = NULL, source = NULL)
 
   `route_type`
 
-  :   The type of route - one of `"tracking"`, `"banding"`, `"motus"`,
-      `"unknown"`, or `"synthetic"` Types can be mixed in the column.
+  :   The type of route. Standard values are `"tracking"`, `"banding"`,
+      `"motus"`, `"unknown"`, and `"synthetic"`, but any character value
+      is accepted; non-standard values produce a warning. Types can be
+      mixed in the column.
 
   Other columns are permitted and will be retained in `Routes` object
   but dropped if they are converted to `BirdFlowRoutes`.

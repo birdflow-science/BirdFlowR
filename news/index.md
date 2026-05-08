@@ -1,5 +1,63 @@
 # Changelog
 
+## BirdFlowR 0.1.0.9080
+
+2026-05-08
+
+Round-up of small fixes (closes
+[\#196](https://github.com/birdflow-science/BirdFlowR/issues/196),
+[\#115](https://github.com/birdflow-science/BirdFlowR/issues/115),
+[\#197](https://github.com/birdflow-science/BirdFlowR/issues/197),
+[\#219](https://github.com/birdflow-science/BirdFlowR/issues/219),
+[\#222](https://github.com/birdflow-science/BirdFlowR/issues/222)):
+
+- Fix typo “weigts” in the BMTR progress message printed by
+  [`weight_between()`](https://birdflow-science.github.io/BirdFlowR/reference/weight_between.md)
+  (and via `calc_bmtr(weighted = TRUE)` /
+  [`calc_flux()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.md)).
+- [`sparsify()`](https://birdflow-science.github.io/BirdFlowR/reference/sparsify.md)
+  now honors the documented `p = 0.99` default rather than erroring when
+  `p` is missing. Two adjacent typos in nearby error messages also
+  fixed.
+- [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
+  now warns when the starting distribution has mass on cells the model
+  can’t represent at the start timestep, naming the offending column(s);
+  [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
+  errors when user-supplied starting coordinates are invalid at the
+  start timestep. Both messages point at
+  [`is_distr_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+  /
+  [`is_location_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+  for diagnosis.
+- [`import_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md)
+  no longer leaks rhdf5 file handles across calls — the “An open HDF5
+  file handle exists …” nag is gone.
+- Suppress the rhdf5 “chunk size is equal to the dataset dimensions”
+  warning emitted by
+  [`export_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md)
+  under R \>= 4.5; chunk-size tuning is left as a follow-up if read
+  performance becomes a concern.
+- [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
+  /
+  [`BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md)
+  /
+  [`BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md)
+  no longer reject non-standard `route_type` values such as
+  `"genoscape"`. The validator now warns instead of erroring.
+
+Most of these won’t affect users but note: \* New warnings may appear
+with
+[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
+if some of the weight is outside the dynamic mask. \*
+[`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
+will now throw an error if the route starts are outside of the dynamic
+mask.  
+Use
+[`is_distr_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+and is
+[`is_location_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
+to get more information on the problematic inputs.
+
 ## BirdFlowR 0.1.0.9079
 
 2026-05-07

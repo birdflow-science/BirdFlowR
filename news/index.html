@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9079</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9080</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,23 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9080" id="birdflowr-0109080">BirdFlowR 0.1.0.9080<a class="anchor" aria-label="anchor" href="#birdflowr-0109080"></a></h2>
+<p>2026-05-08</p>
+<p>Round-up of small fixes (closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/196" class="external-link">#196</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/115" class="external-link">#115</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/197" class="external-link">#197</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/219" class="external-link">#219</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/222" class="external-link">#222</a>):</p>
+<ul><li>Fix typo “weigts” in the BMTR progress message printed by <code><a href="../reference/weight_between.html">weight_between()</a></code> (and via <code>calc_bmtr(weighted = TRUE)</code> / <code><a href="../reference/calc_flux.html">calc_flux()</a></code>).</li>
+<li>
+<code><a href="../reference/sparsify.html">sparsify()</a></code> now honors the documented <code>p = 0.99</code> default rather than erroring when <code>p</code> is missing. Two adjacent typos in nearby error messages also fixed.</li>
+<li>
+<code><a href="../reference/predict.BirdFlow.html">predict()</a></code> now warns when the starting distribution has mass on cells the model can’t represent at the start timestep, naming the offending column(s); <code><a href="../reference/route.html">route()</a></code> errors when user-supplied starting coordinates are invalid at the start timestep. Both messages point at <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> / <code><a href="../reference/is_location_valid.html">is_location_valid()</a></code> for diagnosis.</li>
+<li>
+<code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> no longer leaks rhdf5 file handles across calls — the “An open HDF5 file handle exists …” nag is gone.</li>
+<li>Suppress the rhdf5 “chunk size is equal to the dataset dimensions” warning emitted by <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> under R &gt;= 4.5; chunk-size tuning is left as a follow-up if read performance becomes a concern.</li>
+<li>
+<code><a href="../reference/Routes.html">Routes()</a></code> / <code><a href="../reference/Routes-internal.html">BirdFlowRoutes()</a></code> / <code><a href="../reference/Routes-internal.html">BirdFlowIntervals()</a></code> no longer reject non-standard <code>route_type</code> values such as <code>"genoscape"</code>. The validator now warns instead of erroring.</li>
+</ul><p>Most of these won’t affect users but note: * New warnings may appear with <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> if some of the weight is outside the dynamic mask. * <code><a href="../reference/route.html">route()</a></code> will now throw an error if the route starts are outside of the dynamic mask.<br>
+Use <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> and is <code><a href="../reference/is_location_valid.html">is_location_valid()</a></code> to get more information on the problematic inputs.</p>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9079" id="birdflowr-0109079">BirdFlowR 0.1.0.9079<a class="anchor" aria-label="anchor" href="#birdflowr-0109079"></a></h2>
 <p>2026-05-07</p>

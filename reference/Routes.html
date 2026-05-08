@@ -9,7 +9,7 @@ data into a formal Routes object with the same data."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9079</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9080</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,9 +69,10 @@ or <code>POSIXct</code></p></dd>
 WGS84 (EPSG::4326)</p></dd>
 
 <dt><code>route_type</code></dt>
-<dd><p>The type of route - one of
-<code>"tracking"</code>, <code>"banding"</code>, <code>"motus"</code>, <code>"unknown"</code>, or <code>"synthetic"</code>
-Types can be mixed in the column.</p></dd>
+<dd><p>The type of route. Standard values are
+<code>"tracking"</code>, <code>"banding"</code>, <code>"motus"</code>, <code>"unknown"</code>, and <code>"synthetic"</code>,
+but any character value is accepted; non-standard values produce a
+warning. Types can be mixed in the column.</p></dd>
 
 
 </dl><p>Other columns are permitted and will be retained in <code>Routes</code> object

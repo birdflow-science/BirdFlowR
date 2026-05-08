@@ -22,8 +22,8 @@ sparsify(x, method, p = 0.99, fix = TRUE, p_protected = 0.1)
 
 - p:
 
-  Required to control the proportion of the probability density retained
-  in the sparsification process. See "Methods" below.
+  Controls the proportion of the probability density retained in the
+  sparsification process. Defaults to `0.99`. See "Methods" below.
 
 - fix:
 

@@ -15,7 +15,7 @@ consistency, and validity of attributes used in BirdFlow data structures."><meta
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9079</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9080</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,8 +118,8 @@ Must not contain missing values and must be within valid ranges.</p></dd>
 
 
 <dt id="arg-route-type-vector">route_type_vector<a class="anchor" aria-label="anchor" href="#arg-route-type-vector"></a></dt>
-<dd><p>A character vector of route types. Must only contain
-valid types.</p></dd>
+<dd><p>A character vector of route types. Any character
+values are accepted; non-standard values produce a warning.</p></dd>
 
 
 <dt id="arg-x-vector-y-vector">x_vector, y_vector<a class="anchor" aria-label="anchor" href="#arg-x-vector-y-vector"></a></dt>
@@ -173,7 +173,7 @@ data frames. They check:</p><ul><li><p><strong>General Attributes</strong>:</p><
 <li><p><code>date</code>: Ensures date formats and non-missing values.</p></li>
 <li><p><code>lon</code> and <code>lat</code>: Ensure longitude and latitude values are within
 valid ranges.</p></li>
-<li><p><code>route_type</code>: Ensures only valid route types are present.</p></li>
+<li><p><code>route_type</code>: Warns when non-standard route types are present.</p></li>
 </ul></li>
 <li><p><strong>Spatial Attributes</strong> (for <code>BirdFlowRoutes</code>):</p><ul><li><p><code>x</code> and <code>y</code>: Ensure numeric spatial coordinates.</p></li>
 <li><p><code>i</code>: Ensures valid spatial indices as integers.</p></li>

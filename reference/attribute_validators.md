@@ -66,7 +66,8 @@ validate_BirdFlowIntervals_metadata(metadata)
 
 - route_type_vector:
 
-  A character vector of route types. Must only contain valid types.
+  A character vector of route types. Any character values are accepted;
+  non-standard values produce a warning.
 
 - x_vector, y_vector:
 
@@ -124,7 +125,7 @@ frames. They check:
   - `lon` and `lat`: Ensure longitude and latitude values are within
     valid ranges.
 
-  - `route_type`: Ensures only valid route types are present.
+  - `route_type`: Warns when non-standard route types are present.
 
 - **Spatial Attributes** (for `BirdFlowRoutes`):
 
