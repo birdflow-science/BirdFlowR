@@ -1,3 +1,28 @@
+# BirdFlowR 0.1.0.9079
+2026-05-07
+
+* Fix `preprocess_species()` failure under terra >= 1.9-25 with
+  "[write] unknown option(s): xscale,yscale". Internal projections that
+  needed `origin = 0, res = ...` against a CRS string now go through a
+  new internal `project_aligned()` helper that builds an explicit
+  template raster (the path terra's regression doesn't touch). The
+  upstream bug was reported as
+  [rspatial/terra#2081](https://github.com/rspatial/terra/issues/2081)
+  and fixed in terra commit `6cb07c7`; the workaround can be removed
+  once BirdFlowR's terra minimum is bumped past that fix.
+
+# BirdFlowR 0.1.0.9078
+2026-03-20
+
+* Add `route_between()`: sample synthetic migration routes conditioned on
+  observed locations at specific times, using an HMM
+  forward-filtering-backward-sampling algorithm. Supports hard observations
+  (coordinates + dates) and soft observation potentials.
+* Add `predict_between()`: compute marginal probability distributions at each
+  timestep conditioned on observed locations, using a forward-backward
+  algorithm. Returns log-likelihood of observations as attribute `log_z`.
+* Add vignette demonstrating both functions with American Woodcock.
+
 # BirdFlowR 0.1.0.9077
 2025-09-29
 

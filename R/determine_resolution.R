@@ -150,8 +150,8 @@ determine_resolution <- function(sp_path,
     if (factor < 1)
       factor <- 1
     reproject_res <- res_m / factor
-    trial_ref <-  terra::project(mask, crs, method = project_method,
-                                 origin = 0, res = reproject_res)
+    trial_ref <- project_aligned(mask, crs = crs, res_m = reproject_res,
+                                 method = project_method)
     trial <- terra::project(abunds, trial_ref, method = project_method)
 
     if (factor != 1) {

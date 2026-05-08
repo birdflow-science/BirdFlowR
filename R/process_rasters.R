@@ -128,8 +128,8 @@ process_rasters <- function(res,
     factor <- 1
   reproject_res <- res_m / factor
 
-  mask <- terra::project(mask, crs, method = project_method, origin = 0,
-                         res = reproject_res)
+  mask <- project_aligned(mask, crs = crs, res_m = reproject_res,
+                          method = project_method)
   if (!is.null(clip)) {
     # Note locally mask is a SpatRast that indicates which cells
     # have data (at any timestep). The terra mask function

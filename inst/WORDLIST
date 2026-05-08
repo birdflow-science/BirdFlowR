@@ -8,6 +8,7 @@ BirdFlow
 BirdFlow's
 BirdFlowExtras
 BirdFlowIntervals
+BMTR
 BirdFlowPy
 BirdFlowRoutes
 BirdFlowModels
@@ -58,6 +59,7 @@ amewoo
 amd
 bbdfc
 betweenness
+bmtr
 biocViews
 bioRxiv
 birdflow
@@ -76,6 +78,7 @@ easting
 epsg
 filetype
 filetypes
+geolocator
 geospatial
 gganimate
 ggplot
@@ -128,6 +131,7 @@ reproject
 reprojecting
 rescale
 rescaling
+resightings
 rhdf
 rnaturalearth
 rnaturalearthdata
