@@ -86,6 +86,68 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
 
 })
 
+test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
+
+  # Always skipped: model fitting requires BirdFlowPy (Python), which
+  # isn't available in standard R CI. Run manually after wiring up a
+  # working BirdFlowPy install to verify the full preprocess -> fit
+  # -> import lifecycle.
+  skip("Requires BirdFlowPy fit; always skipped. Run manually.")
+
+  skip_if_unsupported_ebirdst_version(use = "preprocess_species")
+  local_quiet()
+
+  # 1. Preprocess and write to HDF5. The cyclical extra timestep is
+  #    present at this point: ebird_model_coverage has n_timesteps + 1
+  #    layers, abundance$totals has n_timesteps + 1 entries, etc.
+  dir <- local_test_dir("full_lifecycle")
+  bf_pre <- preprocess_species("example_data",
+                               out_dir = dir,
+                               hdf5 = TRUE,
+                               res = 100)
+  hdf5_path <- list.files(dir, "\\.hdf5$", full.names = TRUE)[1]
+
+  expect_equal(dim(bf_pre$metadata$ebird_model_coverage)[3],
+               n_timesteps(bf_pre) + 1)
+
+  # 2. Fit the model with BirdFlowPy.
+  # --------------------------------------------------------------
+  # PLACEHOLDER. Replace with the actual fit invocation once
+  # BirdFlowPy is set up locally, e.g.:
+  #
+  #   system2("python", c("-m", "birdflow", "fit", hdf5_path))
+  #
+  # The fit step adds marginals and hyperparameters to the HDF5 file
+  # in place; the file is then a fitted model and `import_birdflow()`
+  # will route through the `is_fitted_model` cleanup branch on the
+  # next read.
+  # --------------------------------------------------------------
+
+  # 3. Re-import the fitted model.
+  bf_post <- import_birdflow(hdf5_path)
+
+  # 4. Inspect ebird_model_coverage on the imported, fitted model.
+  cov <- bf_post$metadata$ebird_model_coverage
+  expect_true(is.array(cov))
+  expect_equal(length(dim(cov)), 3L)
+  expect_equal(dim(cov)[1:2], dim(bf_post$geom$mask))
+  # On a fitted model the cyclical extra layer has been trimmed, so
+  # the time dimension equals n_timesteps(bf_post).
+  expect_equal(dim(cov)[3], n_timesteps(bf_post))
+  expect_type(cov, "logical")
+  expect_equal(names(dimnames(cov)), c("row", "col", "time"))
+  expect_equal(dimnames(cov)$time,
+               paste0("t", seq_len(n_timesteps(bf_post))))
+
+  # Coverage of the in-memory pre-fit model should match the imported,
+  # fitted, layer-trimmed coverage at the corresponding timesteps.
+  pre_cov <- bf_pre$metadata$ebird_model_coverage
+  expect_equal(cov,
+               pre_cov[, , seq_len(n_timesteps(bf_post)), drop = FALSE],
+               ignore_attr = TRUE)
+})
+
+
 test_that("import_birdflow() does not leak rhdf5 handles across calls", {
   local_quiet()
   skip_on_cran()
