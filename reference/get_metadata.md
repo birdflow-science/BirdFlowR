@@ -29,22 +29,22 @@ Metadata from the BirdFlow model. Potentially a list.
 
 `what` may be used with these options:
 
-|                            |                                                                                                                                                                                                                                        |
-|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `all`                      | Return the complete list, this is the default                                                                                                                                                                                          |
-| `has_marginals`            | Logical, indicates whether the model has marginals. Marginals encode forward and backward transitions, and distributions in an n by n matrix for each pair of adjacent timesteps.                                                      |
-| `has_transitions`          | Logical, indicates whether the model has stored transitions (separate from marginal)                                                                                                                                                   |
-| `has_distr`                | Logical, indicates whether the model has stored distributions (separate from marginals); if it does they are from ebirdst and are the distributions the model was trained on                                                           |
-| `n_transitions`            | Number of transitions in the model.                                                                                                                                                                                                    |
-| `n_active`                 | The number of active states in the model. This defines the dimensions of the marginals and transitions matrices and the number of columns in flattened distributions. In a full (not sparse) model all active states could be visited. |
-| `n_timesteps`              | The number of timesteps in the model.                                                                                                                                                                                                  |
-| `ebird_version_year`       | The version year for the eBird Status and Trends Data the model was trained on see [ebirdst_version()](https://ebird.github.io/ebirdst/reference/ebirdst_version.html)                                                                 |
-| `ebird_release_year`       | The year the eBird S & T data was released [ebirdst_version()](https://ebird.github.io/ebirdst/reference/ebirdst_version.html)                                                                                                         |
-| `ebird_access_end_date`    | The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model.                                                                                               |
-| `birdflow_preprocess_date` | The date the data was downloaded with ebirdst and formatted for BirdFlow model fitting (see [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)                                     |
-| `birdflow_model_date`      | The date the model was fitted and/or exported to hdf5 from Python.                                                                                                                                                                     |
-| `is_sparse`                | Logical, if `TRUE` the model is sparse. See [`sparsify()`](https://birdflow-science.github.io/BirdFlowR/reference/sparsify.md)                                                                                                         |
-| `sparse_stats`             | If the model is sparse this contains sparsification statistics (a list).                                                                                                                                                               |
+|  |  |
+|----|----|
+| `all` | Return the complete list, this is the default |
+| `has_marginals` | Logical, indicates whether the model has marginals. Marginals encode forward and backward transitions, and distributions in an n by n matrix for each pair of adjacent timesteps. |
+| `has_transitions` | Logical, indicates whether the model has stored transitions (separate from marginal) |
+| `has_distr` | Logical, indicates whether the model has stored distributions (separate from marginals); if it does they are from ebirdst and are the distributions the model was trained on |
+| `n_transitions` | Number of transitions in the model. |
+| `n_active` | The number of active states in the model. This defines the dimensions of the marginals and transitions matrices and the number of columns in flattened distributions. In a full (not sparse) model all active states could be visited. |
+| `n_timesteps` | The number of timesteps in the model. |
+| `ebird_version_year` | The version year for the eBird Status and Trends Data the model was trained on see [ebirdst_version()](https://ebird.github.io/ebirdst/reference/ebirdst_version.html) |
+| `ebird_release_year` | The year the eBird S & T data was released [ebirdst_version()](https://ebird.github.io/ebirdst/reference/ebirdst_version.html) |
+| `ebird_access_end_date` | The date at which the training eBirds S & T data will no longer be available. This does not prevent continued use of the BirdFlow model. |
+| `birdflow_preprocess_date` | The date the data was downloaded with ebirdst and formatted for BirdFlow model fitting (see [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md) |
+| `birdflow_model_date` | The date the model was fitted and/or exported to hdf5 from Python. |
+| `is_sparse` | Logical, if `TRUE` the model is sparse. See [`sparsify()`](https://birdflow-science.github.io/BirdFlowR/reference/sparsify.md) |
+| `sparse_stats` | If the model is sparse this contains sparsification statistics (a list). |
 
 ## See also
 

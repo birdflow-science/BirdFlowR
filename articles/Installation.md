@@ -7,7 +7,7 @@ both of those installed skip to step 3.
 
 1.  [Install R from CRAN](https://cran.r-project.org/) - follow links
     for your system in the upper right. I’m currently using R version
-    4.5.2 (2025-10-31) but I think any 4.2.x and above should work.
+    4.6.0 (2026-04-24) but I think any 4.2.x and above should work.
 
 2.  [Install RStudio IDE](https://posit.co/download/rstudio-desktop/)
     This isn’t strictly necessary, but RStudio is a significant upgrade
@@ -17,6 +17,7 @@ both of those installed skip to step 3.
     the console.
 
     ``` r
+
     installed <- rownames(installed.packages())
     if (!"remotes" %in% installed)
       install.packages("remotes")
@@ -31,6 +32,7 @@ both of those installed skip to step 3.
     RStudio console.
 
     ``` r
+
     installed <- rownames(installed.packages())
     if (!"pak" %in% installed)
       install.packages("pak")
@@ -123,6 +125,7 @@ request [via an online form](https://ebird.org/st/request).
 Once you have the code you should run (in the R or RStudio console):
 
 ``` r
+
 library(ebirdst)
 set_ebirdst_access_key("XXXXX")
 ```
@@ -137,6 +140,7 @@ Run these lines to see see if you’ve installed the two BirdFlow packages
 and their dependencies.
 
 ``` r
+
 library(BirdFlowModels)
 library(BirdFlowR)
 library(terra)

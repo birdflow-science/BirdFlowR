@@ -11,6 +11,7 @@ Function names and arguments may change.
 Install just the package:
 
 ``` r
+
 if(!require("remotes"))
   install.packages("remotes") 
 remotes::install_github("birdflow-science/BirdFlowR")
@@ -19,6 +20,7 @@ remotes::install_github("birdflow-science/BirdFlowR")
 Or to install with example data and vignette:
 
 ``` r
+
 installed <- rownames(installed.packages())
 if(!"remotes" %in% installed)
   install.packages("remotes")
@@ -49,6 +51,7 @@ migration window. We can use it to create synthetic routes for a
 species.
 
 ``` r
+
 library(BirdFlowR)
 library(BirdFlowModels)
 
@@ -69,6 +72,7 @@ plot_routes(rts, bf)
 Visualize the movement in the BirdFlow model for a timestep.
 
 ``` r
+
 
 plot_movement_vectors(bf, start = 12)
 ```
@@ -326,6 +330,9 @@ plot_movement_vectors(bf, start = 12)
 - [`predict(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
   : Predict bird distributions
 
+- [`predict_between()`](https://birdflow-science.github.io/BirdFlowR/reference/predict_between.md)
+  : Predict bird distributions conditioned on known locations
+
 - [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
   : Prepare eBird Status and Trends data for BirdFlow model fitting
 
@@ -352,6 +359,9 @@ plot_movement_vectors(bf, start = 12)
 
 - [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
   : Generate BirdFlow routes
+
+- [`route_between()`](https://birdflow-science.github.io/BirdFlowR/reference/route_between.md)
+  : Generate BirdFlow routes between known locations
 
 - [`sample_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.md)
   : Sample locations from a distribution
@@ -399,3 +409,5 @@ plot_movement_vectors(bf, start = 12)
   polygons](https://birdflow-science.github.io/BirdFlowR/articles/Polygons.md):
 - [Preprocess and
   sparsify](https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.md):
+- [Constrained routes and distributions with route_between() and
+  predict_between()](https://birdflow-science.github.io/BirdFlowR/articles/route_between.md):

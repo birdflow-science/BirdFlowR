@@ -167,11 +167,11 @@ The maximum number of parameters that can be fit is machine dependent.
 2023-02-10 we tested under different resolutions with "amewoo" and
 identified bounds on the maximum.
 
-|            |              |                      |                      |                 |
-|------------|--------------|----------------------|----------------------|-----------------|
-| Machine    | GPU Ram (GB) | Lower Bound (worked) | Upper Bound (failed) | Parameters / GB |
-| titanx GPU | 12GB         | 306804561            | 334693725            | 25567047        |
-| m40 GPU    | 24GB         | 557395226            | 610352178            | 23224801        |
+|  |  |  |  |  |
+|----|----|----|----|----|
+| Machine | GPU Ram (GB) | Lower Bound (worked) | Upper Bound (failed) | Parameters / GB |
+| titanx GPU | 12GB | 306804561 | 334693725 | 25567047 |
+| m40 GPU | 24GB | 557395226 | 610352178 | 23224801 |
 
 The number of parameters is the number of unmasked cells for the first
 timestep + the total number of cells in the marginals which is

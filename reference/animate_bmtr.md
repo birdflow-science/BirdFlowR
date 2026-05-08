@@ -88,6 +88,7 @@ object
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 bf <- BirdFlowModels::amewoo
 bmtr <- calc_bmtr(bf)

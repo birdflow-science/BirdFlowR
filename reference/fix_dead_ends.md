@@ -33,19 +33,19 @@ fix_dead_ends(bf, max_attempts = 100)
 
 \`find_dead_ends() returns a data.frame with columns:
 
-|                                                                                                                                                                |                                                      |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `timestep`                                                                                                                                                     | the timestep associated with the dead end            |
-|                                                                                                                                                                |                                                      |
-|                                                                                                                                                                | `direction`                                          |
-| either `"forward"` or `"backward"` indicating which direction the dead end is encountered in                                                                   |                                                      |
-|                                                                                                                                                                |                                                      |
-| `i`                                                                                                                                                            | the index of the model state that has a dead end     |
-|                                                                                                                                                                |                                                      |
-|                                                                                                                                                                | `mar`                                                |
-| the marginal which leads into the dead end (this marginal has non-zero value in the i'th column if direction is forward and i'th row if direction is backward) |                                                      |
-|                                                                                                                                                                |                                                      |
-| `x`, and `y`                                                                                                                                                   | the x and y coordinates corresponding with state `i` |
+|  |  |
+|----|----|
+| `timestep` | the timestep associated with the dead end |
+|  |  |
+|  | `direction` |
+| either `"forward"` or `"backward"` indicating which direction the dead end is encountered in |  |
+|  |  |
+| `i` | the index of the model state that has a dead end |
+|  |  |
+|  | `mar` |
+| the marginal which leads into the dead end (this marginal has non-zero value in the i'th column if direction is forward and i'th row if direction is backward) |  |
+|  |  |
+| `x`, and `y` | the x and y coordinates corresponding with state `i` |
 
 There will be a row for each dead end state, if no dead ends are found
 an empty (zero row) data.frame is returned.

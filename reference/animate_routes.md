@@ -124,6 +124,7 @@ suppressed by code in BirdFlowR.
 
 ``` r
 
+
 bf <- BirdFlowModels::amewoo
 rts <- route(bf, 10,  season = "prebreeding")
 anim <- animate_routes(rts, bf)

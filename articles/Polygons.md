@@ -54,6 +54,7 @@ Use
 for real work.
 
 ``` r
+
 bf <- BirdFlowModels::amewoo  # you will likely use load_model() instead
 start <- BirdFlowR::lookup_timestep("2024-01-15", bf)
 end <- BirdFlowR::lookup_timestep("2024-03-20", bf)
@@ -63,6 +64,7 @@ population <- 3500000
 ### Visualize the starting distribution from the model
 
 ``` r
+
 plot_distr(get_distr(bf, start), bf)
 ```
 
@@ -79,6 +81,7 @@ If you have a polygon shapefile already you could use
 `polys <- sf::read_sf(shapefile_path)` and skip this section.
 
 ``` r
+
 #  Note this code requires the rnaturalearthhighres package so is not
 # run when building the vignette.
 
@@ -97,6 +100,7 @@ polys <- dplyr::select(polys, NAME = gn_name)
 - Add centroid coordinates (`x`, `y`) in the BirdFlow CRS.
 
 ``` r
+
 
 # Add generic "id" column (use state name)
 polys$id <- polys$NAME
@@ -124,6 +128,7 @@ to the external polygons. The values are the proportion of the cell that
 overlaps the polygon.
 
 ``` r
+
 
 # Convert active cells to polygons
 cell_polys <- rasterize_distr(seq_len(n_active(bf)), bf, format = "terra") |>
@@ -166,6 +171,7 @@ rows. The matrix here has a column (distribution) for each polygon in
 
 ``` r
 
+
 start_distr <- matrix(get_distr(bf, start),
                               nrow = n_active(bf),
                               ncol = nrow(polys),
@@ -182,6 +188,7 @@ Visualize the initial distribution for the polygon with the highest
 initial abundance (North Carolina).
 
 ``` r
+
 sel <- which.max(apply(start_distr, 2, sum))
 plot_distr(start_distr, bf, subset = sel) +
   ggplot2::geom_sf(data = polys,
@@ -206,6 +213,7 @@ ended in each active cell (rows).
 
 ``` r
 
+
 # Project distributions forward to end date
 pred <- predict(bf, distr = start_distr, start = start, end = end)
 
@@ -222,6 +230,7 @@ This shows the ending distribution for the birds that started in North
 Carolina.
 
 ``` r
+
 plot_distr(end_distr, bf, sel) +
   ggplot2::geom_sf(data = polys,
                    inherit.aes = FALSE,
@@ -244,6 +253,7 @@ destination polygons, and values that are the proportion of the
 population making the transition between the two.
 
 ``` r
+
 slow <- FALSE
 if (slow) {
   # Here we loop through each cell of the movement matrix filling in values
@@ -269,6 +279,7 @@ Plot the proportion of the total population that moved from
 North Carolina to each each state.
 
 ``` r
+
 polys$Proportion  <- move[sel, ]
 
 gradient_colors <-
@@ -292,6 +303,7 @@ estimated the number of individuals making each movement. This is likely
 necessary to aggregate or compare output across species.
 
 ``` r
+
 # Convert to absolute numbers of Birds expected to move between
 # each pair of polygons
 move_count  <- move * population
@@ -318,6 +330,7 @@ them some of which is captured in the original BirdFlow cells.
 
 ``` r
 
+
 # Adjust for area if both the source and destination polgons
 n <- nrow(polys)
 from_area <- matrix(polys$sq_km, n, n, byrow = FALSE)
@@ -328,6 +341,7 @@ move_area <- move_count / from_area / to_area
 ## Visualize movement
 
 ``` r
+
 plot_count_threshold <- 1000 # only plot lines for big movements
 ```
 
@@ -336,6 +350,7 @@ indicate magnitude with line thickness. Lines are only shown for
 movements of at least 1000 individuals.
 
 ``` r
+
 n <- nrow(polys)
 long <- data.frame(from =  rep(polys$id, times = n),
                    to = rep(polys$id, each = n),

@@ -37,25 +37,25 @@ The `what` argument takes the column names used in
 [ebirdst::ebirdst_runs](https://ebird.github.io/ebirdst/reference/ebirdst_runs.html)
 as input (descriptions from ebirdst):
 
-|                                  |                                               |
-|----------------------------------|-----------------------------------------------|
-| `species_code`                   | Six letter eBird code in eBird Taxonomy v2018 |
-| `scientific_name`                | Scientific name from eBird Taxonomy v2018     |
-| `common_name`                    | English common name from eBird Taxonomy v2018 |
-| `breeding_quality`               | Breeding season quality                       |
-| `breeding_start`                 | Breeding season start date                    |
-| `breeding_end`                   | Breeding season end date                      |
-| `nonbreeding_quality`            | Non-breeding season quality                   |
-| `nonbreeding_start`              | Non-breeding season start date                |
-| `nonbreeding_end`                | Non-breeding season end date                  |
-| `postbreeding_migration_quality` | Post-breeding season quality                  |
-| `postbreeding_migration_start`   | Post-breeding season start date               |
-| `postbreeding_migration_end`     | Post-breeding season end date                 |
-| `prebreeding_migration_quality`  | Pre-breeding season quality                   |
-| `prebreeding_migration_start`    | Pre-breeding season start date                |
-| `prebreeding_migration_end`      | Pre-breeding season end date                  |
-|                                  |                                               |
-| `all`                            | returns the complete list                     |
+|  |  |
+|----|----|
+| `species_code` | Six letter eBird code in eBird Taxonomy v2018 |
+| `scientific_name` | Scientific name from eBird Taxonomy v2018 |
+| `common_name` | English common name from eBird Taxonomy v2018 |
+| `breeding_quality` | Breeding season quality |
+| `breeding_start` | Breeding season start date |
+| `breeding_end` | Breeding season end date |
+| `nonbreeding_quality` | Non-breeding season quality |
+| `nonbreeding_start` | Non-breeding season start date |
+| `nonbreeding_end` | Non-breeding season end date |
+| `postbreeding_migration_quality` | Post-breeding season quality |
+| `postbreeding_migration_start` | Post-breeding season start date |
+| `postbreeding_migration_end` | Post-breeding season end date |
+| `prebreeding_migration_quality` | Pre-breeding season quality |
+| `prebreeding_migration_start` | Pre-breeding season start date |
+| `prebreeding_migration_end` | Pre-breeding season end date |
+|  |  |
+| `all` | returns the complete list |
 
 For convenience the following short versions are also accepted:
 

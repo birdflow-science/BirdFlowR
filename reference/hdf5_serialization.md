@@ -75,10 +75,10 @@ See
 
 ## See also
 
-- [rhdf5::h5createFile](https://rdrr.io/pkg/rhdf5/man/h5_createFile.html),
-  [rhdf5::h5write](https://rdrr.io/pkg/rhdf5/man/h5_write.html),
-  [rhdf5::h5read](https://rdrr.io/pkg/rhdf5/man/h5_read.html) for
-  low-level HDF5 operations.
+- [rhdf5::h5createFile](https://huber-group-embl.github.io/rhdf5/reference/h5_createFile.html),
+  [rhdf5::h5write](https://huber-group-embl.github.io/rhdf5/reference/h5_write.html),
+  [rhdf5::h5read](https://huber-group-embl.github.io/rhdf5/reference/h5_read.html)
+  for low-level HDF5 operations.
 
 - [`import_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md),
   and

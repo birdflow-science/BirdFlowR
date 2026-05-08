@@ -128,6 +128,7 @@ functions handle the final assembly of the object after validation.
 ## Examples
 
 ``` r
+
 # Examples here use private functions so can't be run except after
 # devtools::load_all() during package development.
 if (FALSE) { # \dontrun{

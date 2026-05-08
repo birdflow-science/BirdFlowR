@@ -5,6 +5,7 @@
 #### Install packages
 
 ``` r
+
 installed <- rownames(installed.packages())
 if (!"remotes" %in% installed)
   install.packages("remotes")
@@ -17,10 +18,11 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 #### Load libraries
 
 ``` r
+
 library(BirdFlowModels)
 library(BirdFlowR)
 library(terra)
-#> terra 1.8.93
+#> terra 1.9.25
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 ```
@@ -35,6 +37,7 @@ species.
 We can also access the collection index through the package.
 
 ``` r
+
 # Load and print index
 index <- load_collection_index()
 #> Downloading collection index
@@ -51,6 +54,7 @@ from the index.
 **Note:** in the vignette this block isn’t executed.
 
 ``` r
+
 # Load a specific model
 bf <- load_model("amewoo_prebreeding") # caches locally and loads from cache
 ```
@@ -59,6 +63,7 @@ This loads the smaller example model instead for efficiency of package
 building and testing, but do not use this one for science!
 
 ``` r
+
 bf <- BirdFlowModels::amewoo # example and test dataset
 ```
 
@@ -79,6 +84,7 @@ report on temporal dimensions. If the model
 they will be equal.
 
 ``` r
+
 # Methods for base R functions:
 dim(bf)
 #> [1] 22 31
@@ -126,6 +132,7 @@ information. Dates associated with migration and resident seasons are
 likely to be useful.
 
 ``` r
+
 species(bf)
 #> [1] "American Woodcock"
 species(bf, "scientific")
@@ -164,6 +171,7 @@ is the same. BirdFlowR includes methods to compare BirdFlow models with
 each other and with terra objects.
 
 ``` r
+
 # Methods for terra functions:
 a <- crs(bf) # well known text (long)
 crs(bf, proj = TRUE)  # proj4 string
@@ -185,6 +193,7 @@ compareGeom(bf, rast(bf))
 BirdFlow objects also play nicely with the *sf* package.
 
 ``` r
+
 bb <- sf::st_bbox(bf)
 crs <- sf::st_crs(bf)
 ```
@@ -207,6 +216,7 @@ Retrieve the first distribution and compare its length to the number of
 active cells.
 
 ``` r
+
 d <- get_distr(bf, 1) # get first timestep distribution
 length(d)  # 1 distribution so d is a vector
 #> [1] 342
@@ -218,6 +228,7 @@ Get 5 distributions, the result is a matrix in which each column is a
 distribution with a row for each active cell.
 
 ``` r
+
 d <- get_distr(bf, 26:30)
 dim(d)
 #> [1] 342   5
@@ -233,6 +244,7 @@ We can also specify distributions with dates, or use “all” to retrieve
 all the distributions.
 
 ``` r
+
 d <- get_distr(bf, "2022-12-15") # from character date
 d <- get_distr(bf, "all")  # all distributions
 d <- get_distr(bf, Sys.Date())  # Using a Date object
@@ -245,6 +257,7 @@ The second argument, the BirdFlow model, is needed for the spatial
 information it contains.
 
 ``` r
+
 d <- get_distr(bf, c(1, 26)) # winter and summer
 r <- rasterize_distr(d, bf) # convert to SpatRaster
 ```
@@ -255,6 +268,7 @@ second (optional) argument `which` accepts the same inputs as `which` in
 [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
 
 ``` r
+
 r <- rast(bf) # all distributions
 r <- rast(bf, c(1, 26))  # 1st, and 26th timesteps.
 plot(r)
@@ -271,6 +285,7 @@ legacy packages you may see a warning about them, but **BirdFlowR** does
 not use the legacy packages or data formats itself.*
 
 ``` r
+
 r <- rast(bf, species_info(bf, "prebreeding_migration_start"))
 plot(r)
 coast <- get_coastline(bf)  # lines
@@ -289,6 +304,7 @@ the starting location.
 Set predict parameters.
 
 ``` r
+
     start <- 1     #  winter
     end <-  26     # summer
 ```
@@ -301,6 +317,7 @@ location per distribution. The result is one or more distributions with
 ones in the selected location(s) and zero elsewhere.
 
 ``` r
+
 set.seed(0)
 d <- get_distr(bf, start)
 location <- sample_distr(d)
@@ -322,6 +339,7 @@ spend their summer. The probability density spreads as the weeks
 progress.
 
 ``` r
+
 f <- predict(bf, distr = location, start = start, end = end,
              direction = "forward")
 
@@ -336,6 +354,7 @@ distribution and the distribution of the species as a whole at the same
 timestep.
 
 ``` r
+
 projected <- f[, ncol(f)]  # last projected distribution
 diff <-  projected - get_distr(bf, end)
 plot(rasterize_distr(diff, bf))
@@ -351,6 +370,7 @@ and generate routes to their summer grounds.
 Set route parameters.
 
 ``` r
+
 n_positions <-  15 # number of starting positions
 start <- 1         # starting timestep (winter)
 end <- 26          # ending timestep (summer)
@@ -364,6 +384,7 @@ result is a matrix in which each column has a single ‘1’ representing
 the sampled location.
 
 ``` r
+
 d <- get_distr(bf, start)
 locations  <- sample_distr(d, n = n_positions, bf = bf, format = "xy")
 x <- locations$x
@@ -373,6 +394,7 @@ y <- locations$y
 Plot the starting (winter) distribution and sampled locations.
 
 ``` r
+
 winter <- rasterize_distr(d, bf)
 plot(winter)
 points(x, y)
@@ -390,6 +412,7 @@ for each timestep of each route, but also includes some additional
 spatial, temporal, and species information from the `BirdFlow` object.
 
 ``` r
+
 rts <- route(bf, x_coord = x, y_coord = y, start = start, end = end)
 head(rts$data, 4)
 #>   route_id      x       y   i      lon      lat timestep       date route_type
@@ -411,6 +434,7 @@ starting timestep so the following is equivalent to the preceding two
 sections.
 
 ``` r
+
 rts2 <- route(bf,  n = n_positions,  start = start, end = end)
 ```
 
@@ -421,6 +445,7 @@ dates is to use the season argument. Here we route during the
 prebreeding migration.
 
 ``` r
+
 rts3 <- route(bf, n = n_positions, season = "prebreeding")
 ```
 
@@ -430,6 +455,7 @@ Plot the route lines over the summer distribution along with points at
 the starting and ending positions.
 
 ``` r
+
 d <- get_distr(bf, end)
 summer <- rasterize_distr(d, bf)
 
@@ -464,6 +490,7 @@ gradient and stop point dots that indicate how long a bird was at each
 location.
 
 ``` r
+
 plot(rts, bf)
 ```
 

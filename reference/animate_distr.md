@@ -132,6 +132,7 @@ See example for how to export to a file.
 ## Examples
 
 ``` r
+
 # Animate distributions from BirdFlow object - derived from
 # eBird Status and Trends:
 

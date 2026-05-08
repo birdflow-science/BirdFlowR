@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9077</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9079</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@
     <li><a class="dropdown-item" href="../articles/Installation.html">Detailed installation instructions</a></li>
     <li><a class="dropdown-item" href="../articles/Polygons.html">Calculate movement among polygons</a></li>
     <li><a class="dropdown-item" href="../articles/Preprocess.html">Preprocess and sparsify</a></li>
+    <li><a class="dropdown-item" href="../articles/route_between.html">Constrained routes and distributions with route_between() and predict_between()</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -39,6 +40,18 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9079" id="birdflowr-0109079">BirdFlowR 0.1.0.9079<a class="anchor" aria-label="anchor" href="#birdflowr-0109079"></a></h2>
+<p>2026-05-07</p>
+<ul><li>Fix <code><a href="../reference/preprocess_species.html">preprocess_species()</a></code> failure under terra &gt;= 1.9-25 with “[write] unknown option(s): xscale,yscale”. Internal projections that needed <code>origin = 0, res = ...</code> against a CRS string now go through a new internal <code><a href="../reference/project_aligned.html">project_aligned()</a></code> helper that builds an explicit template raster (the path terra’s regression doesn’t touch). The upstream bug was reported as <a href="https://github.com/rspatial/terra/issues/2081" class="external-link">rspatial/terra#2081</a> and fixed in terra commit <code>6cb07c7</code>; the workaround can be removed once BirdFlowR’s terra minimum is bumped past that fix.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9078" id="birdflowr-0109078">BirdFlowR 0.1.0.9078<a class="anchor" aria-label="anchor" href="#birdflowr-0109078"></a></h2>
+<p>2026-03-20</p>
+<ul><li>Add <code><a href="../reference/route_between.html">route_between()</a></code>: sample synthetic migration routes conditioned on observed locations at specific times, using an HMM forward-filtering-backward-sampling algorithm. Supports hard observations (coordinates + dates) and soft observation potentials.</li>
+<li>Add <code><a href="../reference/predict_between.html">predict_between()</a></code>: compute marginal probability distributions at each timestep conditioned on observed locations, using a forward-backward algorithm. Returns log-likelihood of observations as attribute <code>log_z</code>.</li>
+<li>Add vignette demonstrating both functions with American Woodcock.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9077" id="birdflowr-0109077">BirdFlowR 0.1.0.9077<a class="anchor" aria-label="anchor" href="#birdflowr-0109077"></a></h2>
 <p>2025-09-29</p>

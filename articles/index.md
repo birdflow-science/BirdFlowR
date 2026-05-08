@@ -11,3 +11,5 @@
   polygons](https://birdflow-science.github.io/BirdFlowR/articles/Polygons.md):
 - [Preprocess and
   sparsify](https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.md):
+- [Constrained routes and distributions with route_between() and
+  predict_between()](https://birdflow-science.github.io/BirdFlowR/articles/route_between.md):

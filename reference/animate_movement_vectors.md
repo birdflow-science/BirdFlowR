@@ -85,6 +85,7 @@ code.
 ## Examples
 
 ``` r
+
 bf <- BirdFlowModels::amewoo
 a <- animate_movement_vectors(bf)
 #> Creating vector fields

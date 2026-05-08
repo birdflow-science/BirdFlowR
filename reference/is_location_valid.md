@@ -93,6 +93,7 @@ locations that have non-zero values.
 ## Examples
 
 ``` r
+
 bf <- BirdFlowModels::amewoo
 timestep  <- 3
 

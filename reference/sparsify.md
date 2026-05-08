@@ -108,6 +108,7 @@ The thresholds are calculated and applied either to the whole model
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 # Full models are huge so we don't distribute them.
 # Assuming you have an hdf5 file with a full model you could run:

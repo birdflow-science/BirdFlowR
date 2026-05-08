@@ -10,6 +10,7 @@ ebirdst access
 code](https://cornelllabofornithology.github.io/ebirdst/articles/ebirdst.html#access).
 
 ``` r
+
 library(BirdFlowR)
 library(ebirdst)
 library(terra)
@@ -20,6 +21,7 @@ You’ll also have to setup a destination folder for the purpose of the
 vignette I’m going to use a temporary folder.
 
 ``` r
+
 dir <- tempdir()
 ```
 
@@ -29,6 +31,7 @@ BirdFlowModels directory to your home directory, to use for model
 output. This block is not run when building the vignette.
 
 ``` r
+
 dir <- "~/BirdFlowModels"
 dir.create(dir, showWarnings = FALSE)
 ```
@@ -42,6 +45,7 @@ and probably on a cluster. Here, we set `gb` to a small value to keep
 file size and memory requirements small.
 
 ``` r
+
 # Note:
 #   amewoo 100km resolution is equivalent to gpu_ram = 1
 #   amewoo 75 km resolution is equivalent to gpu_ram = 2.9
@@ -59,6 +63,7 @@ The rest of this vignette is predicated on having an .hdf5 file with a
 fitted model. Set the path to the file and import it.
 
 ``` r
+
 model_file <- file.path(dir, "fitted.hdf5")
 bf <- import_birdflow(model_file)
 ```
@@ -76,6 +81,7 @@ You can read more about sparsification methods in the help for
 `sparasify()`.
 
 ``` r
+
 bf <- sparsify(bf, method = "state")
 ```
 
@@ -86,6 +92,7 @@ it later. Here we write it as a serialized R object which is fast and
 efficient but not at all portable to other software.
 
 ``` r
+
 sparse_file <- file.path(dir, "sparse.Rds")  # change
 saveRDS(bf, file = sparse_file)
 ```
@@ -93,6 +100,7 @@ saveRDS(bf, file = sparse_file)
 In a later session we could then read it with.
 
 ``` r
+
 bf <- readRDS(sparse_file)
 ```
 

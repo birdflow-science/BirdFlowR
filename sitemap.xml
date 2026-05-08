@@ -9,6 +9,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Polygons.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/Preprocess.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/articles/index.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/articles/route_between.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/authors.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/index.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/news/index.html</loc></url>
@@ -103,6 +104,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_movement_vectors.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/plot_routes.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/predict_between.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/predict_params.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print.BirdFlow.html</loc></url>
@@ -110,6 +112,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print.Routes.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print_type_breakdown.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/process_rasters.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/project_aligned.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/read_geom.html</loc></url>
@@ -117,6 +120,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/reformat_timestep.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/reset_index.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/route.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/route_between.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/route_migration.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/shorten_distance_matrix.html</loc></url>

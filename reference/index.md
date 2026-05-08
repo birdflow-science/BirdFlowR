@@ -225,6 +225,9 @@
 - [`predict(`*`<BirdFlow>`*`)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
   : Predict bird distributions
 
+- [`predict_between()`](https://birdflow-science.github.io/BirdFlowR/reference/predict_between.md)
+  : Predict bird distributions conditioned on known locations
+
 - [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
   : Prepare eBird Status and Trends data for BirdFlow model fitting
 
@@ -251,6 +254,9 @@
 
 - [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
   : Generate BirdFlow routes
+
+- [`route_between()`](https://birdflow-science.github.io/BirdFlowR/reference/route_between.md)
+  : Generate BirdFlow routes between known locations
 
 - [`sample_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/sample_distr.md)
   : Sample locations from a distribution

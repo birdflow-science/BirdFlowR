@@ -11,6 +11,7 @@ Function names and arguments may change.
 Install just the package:
 
 ``` r
+
 if(!require("remotes"))
   install.packages("remotes") 
 remotes::install_github("birdflow-science/BirdFlowR")
@@ -19,6 +20,7 @@ remotes::install_github("birdflow-science/BirdFlowR")
 Or to install with example data and vignette:
 
 ``` r
+
 installed <- rownames(installed.packages())
 if(!"remotes" %in% installed)
   install.packages("remotes")
@@ -49,6 +51,7 @@ migration window. We can use it to create synthetic routes for a
 species.
 
 ``` r
+
 library(BirdFlowR)
 library(BirdFlowModels)
 
@@ -69,6 +72,7 @@ plot_routes(rts, bf)
 Visualize the movement in the BirdFlow model for a timestep.
 
 ``` r
+
 
 plot_movement_vectors(bf, start = 12)
 ```

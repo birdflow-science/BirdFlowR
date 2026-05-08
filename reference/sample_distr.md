@@ -63,6 +63,7 @@ format changes with the value of`format`:
 ## Examples
 
 ``` r
+
 bf <- BirdFlowModels::amewoo
 d <- get_distr(bf, 5)
 
