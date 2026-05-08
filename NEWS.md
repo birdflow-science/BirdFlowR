@@ -1,3 +1,38 @@
+# BirdFlowR 0.1.0.9080
+2026-05-08
+
+Round-up of small fixes (closes #196, #115, #197, #219, #222):
+
+* Fix typo "weigts" in the BMTR progress message printed by
+  `weight_between()` (and via `calc_bmtr(weighted = TRUE)` /
+  `calc_flux()`).
+* `sparsify()` now honors the documented `p = 0.99` default rather than
+  erroring when `p` is missing. Two adjacent typos in nearby error
+  messages also fixed.
+* `predict()` now warns when the starting distribution has mass on
+  cells the model can't represent at the start timestep, naming the
+  offending column(s); `route()` errors when user-supplied starting
+  coordinates are invalid at the start timestep. Both messages point
+  at `is_distr_valid()` / `is_location_valid()` for diagnosis.
+* `import_birdflow()` no longer leaks rhdf5 file handles across calls —
+  the "An open HDF5 file handle exists ..." nag is gone.
+* Suppress the rhdf5 "chunk size is equal to the dataset dimensions"
+  warning emitted by `export_birdflow()` under R >= 4.5; chunk-size
+  tuning is left as a follow-up if read performance becomes a concern.
+* `Routes()` / `BirdFlowRoutes()` / `BirdFlowIntervals()` no longer
+  reject non-standard `route_type` values such as `"genoscape"`. The
+  validator now warns instead of erroring.
+
+Most of these won't affect users but note:
+* New warnings may appear with `predict()` if some of the weight is
+  outside the dynamic mask.
+* `route()` will now throw an error if the route starts are
+  outside of the dynamic mask.  
+Use `is_distr_valid()` and is `is_location_valid()` to get
+more information on the problematic inputs. 
+  
+
+
 # BirdFlowR 0.1.0.9079
 2026-05-07
 

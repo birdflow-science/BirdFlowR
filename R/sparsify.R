@@ -56,9 +56,8 @@
 #' @param x A BirdFlow model.
 #' @param method One of ``"conditional"`, `"marginal"`, or `"model"`.
 #'   See "Methods" section below for details.
-#' @param p Required to control the proportion of the
-#'   probability density retained in the sparsification process. See "Methods"
-#'   below.
+#' @param p Controls the proportion of the probability density retained in
+#'   the sparsification process. Defaults to `0.99`. See "Methods" below.
 #' @param fix If TRUE call [fix_dead_ends()] to eliminate dead ends
 #'   in the sparse model, but only honored if the method produces dead ends.
 #' @param p_protected Only used with `"conditional` method.
@@ -91,7 +90,7 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
   if (!all(method %in% supported_methods)) {
     invalid <- setdiff(method, supported_methods)
     stop(paste(invalid, collapse = ", "),
-         ifelse(length(invalid) == 1, " is not a valid mathod.",
+         ifelse(length(invalid) == 1, " is not a valid method.",
                 " are not valid methods."))
   }
 
@@ -104,10 +103,6 @@ sparsify <- function(x, method, p = 0.99, fix = TRUE, p_protected = .10) {
     stop("Currently implemented sparsification only works with marginals")
   if (!has_distr(x))
     stop("Distributions required to evaluate model")
-
-
-  if (missing(p))
-    stop("p is required for for all methods")
 
   if (length(p) != 1 || !is.numeric(p) || ! p > 0 || ! p <= 1)
     stop("p should be a single numeric greater than zero and less than or ",

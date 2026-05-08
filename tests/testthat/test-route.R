@@ -100,6 +100,23 @@ test_that("route() works with backwards routes", {
 })
 
 
+test_that("route() rejects starting coordinates that are masked out at start", {
+  bf <- BirdFlowModels::amewoo
+  if (!has_dynamic_mask(bf))
+    bf <- add_dynamic_mask(bf)
+
+  start <- 1
+  d <- get_distr(bf, start, from_marginals = TRUE)
+  bad_i <- which(d == 0)[1]
+  bad_xy <- i_to_xy(bad_i, bf)
+
+  expect_error(
+    route(bf, x_coord = bad_xy[, "x"], y_coord = bad_xy[, "y"],
+          start = start, end = start + 3),
+    "not valid for the model at timestep 1"
+  )
+})
+
 test_that("calc_year_number() works", {
   dates <- seq(from = lubridate::as_date("2004-12-25"),
                to = lubridate::as_date("2005-01-10"),

@@ -11,9 +11,10 @@
 #'  or `POSIXct`}
 #' \item{`lat`,`lon`}{The latitude and longitude of the location in
 #' WGS84 (EPSG::4326)}
-#' \item{`route_type`}{The type of route - one of
-#' `"tracking"`, `"banding"`, `"motus"`, `"unknown"`, or `"synthetic"`
-#' Types can be mixed in the column.
+#' \item{`route_type`}{The type of route. Standard values are
+#' `"tracking"`, `"banding"`, `"motus"`, `"unknown"`, and `"synthetic"`,
+#' but any character value is accepted; non-standard values produce a
+#' warning. Types can be mixed in the column.
 #' }
 #' }
 #' Other columns are permitted and will be retained in `Routes` object

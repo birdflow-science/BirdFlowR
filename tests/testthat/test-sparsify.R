@@ -58,3 +58,31 @@ test_that("sparsification works", {
 
 
 })
+
+test_that("sparsify() uses default p = 0.99 when p is not supplied", {
+  o_verbose <- birdflow_options("verbose")
+  birdflow_options(verbose = FALSE)
+  on.exit(birdflow_options(verbose = o_verbose))
+
+  bf <- truncate_birdflow(BirdFlowModels::amewoo, start = 6, end = 8)
+
+  expect_no_error(default <- sparsify(bf, method = "marginal"))
+  explicit <- sparsify(bf, method = "marginal", p = 0.99)
+
+  # Same nonzero structure for both — confirms the default is 0.99,
+  # not some other value silently substituted by R's missing()-handling.
+  expect_identical(
+    lapply(default$marginals[grep("^M_", names(default$marginals))],
+           function(m) m != 0),
+    lapply(explicit$marginals[grep("^M_", names(explicit$marginals))],
+           function(m) m != 0)
+  )
+})
+
+test_that("sparsify() rejects out-of-range p", {
+  bf <- BirdFlowModels::amewoo
+  expect_error(sparsify(bf, method = "marginal", p = 0),
+               "p should be a single numeric")
+  expect_error(sparsify(bf, method = "marginal", p = 1.5),
+               "p should be a single numeric")
+})

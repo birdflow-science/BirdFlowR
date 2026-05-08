@@ -47,6 +47,23 @@ predict.BirdFlow <- function(object, distr, ...) {
   transitions <- as_transitions(timesteps, object)
   start <- timesteps[1]
 
+  # Warn if a starting distribution has mass on cells the model can't
+  # represent at `start` (e.g. the eBird distribution often has small mass
+  # on cells outside the marginal-derived support, and sparsification can
+  # zero out additional cells). predict() silently drops that mass on
+  # projection so the warning lets callers diagnose lost probability
+  # without breaking flows like distribution_performance() that
+  # intentionally start from the eBird distribution.
+  valid <- is_distr_valid(object, distr, timestep = start)
+  if (!all(valid)) {
+    bad <- which(!valid)
+    warning("Starting distribution has mass on cells the model can't ",
+            "represent at timestep ", start,
+            if (multiple_distributions)
+              paste0(" (column", if (length(bad) > 1) "s" else "",
+                     " ", paste(bad, collapse = ", "), ")"),
+            "; that mass will be dropped. See `is_distr_valid()`.")
+  }
 
   current_dm <- dyn_mask[, start]
 

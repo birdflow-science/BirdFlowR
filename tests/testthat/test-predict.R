@@ -45,3 +45,24 @@ test_that("predict() is consistent with marginals and transitions", {
   expect_no_error(t_pred <-  predict(t_bf, distr, start = 1, end = 3))
   expect_equal(pred, t_pred)
 })
+
+test_that("predict() warns on starting distributions with unrepresentable mass", {
+  bf <- BirdFlowModels::amewoo
+  if (!has_dynamic_mask(bf))
+    bf <- add_dynamic_mask(bf)
+
+  # Place all probability mass on a cell that has zero in the
+  # marginal-derived distribution at timestep 1.
+  d1 <- get_distr(bf, 1, from_marginals = TRUE)
+  bad_i <- which(d1 == 0)[1]
+  bad_distr <- numeric(n_active(bf))
+  bad_distr[bad_i] <- 1
+
+  expect_warning(predict(bf, bad_distr, start = 1, end = 3),
+                 "mass.*can't represent at timestep 1")
+
+  # Multi-distribution input names the offending column.
+  d_ok <- d1
+  expect_warning(predict(bf, cbind(d_ok, bad_distr), start = 1, end = 3),
+                 "column 2")
+})

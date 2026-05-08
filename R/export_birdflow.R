@@ -78,15 +78,26 @@ export_birdflow <- function(bf, file = NULL,
 
 
   # Write HDF5
+  #
+  # Under R >= 4.5 / current rhdf5, large marginals trigger
+  #   "You created a large dataset with compression and chunking.
+  #    The chunk size is equal to the dataset dimensions ..."
+  # We don't yet have benchmarks to pick better chunk dimensions, so we
+  # suppress this specific warning rather than emit it on every export.
+  # Tracked in #219; revisit if read performance becomes a concern.
   ns <- names(bf)
+  chunk_warning <- "chunk size is equal to the dataset dimensions"
   for (i in seq_along(ns)) {
     n <- ns[i]
-    rhdf5::h5write(bf[[n]],
-                   file = file,
-                   name = n,
-                   native = TRUE,
-                   write.attributes = FALSE,
-                   createnewfile = i == 1)  # TRUE for first object
+    suppress_specific_warnings(
+      rhdf5::h5write(bf[[n]],
+                     file = file,
+                     name = n,
+                     native = TRUE,
+                     write.attributes = FALSE,
+                     createnewfile = i == 1),  # TRUE for first object
+      patterns = chunk_warning
+    )
   }
 
   return(invisible(TRUE))
