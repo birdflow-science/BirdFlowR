@@ -160,7 +160,7 @@ recovered values reflect the post-trim, pre-normalize abundance.
 dimensions \verb{[row, col, time]} matching the model's grid and the
 number of stored distributions, with \code{dimnames = list(row = NULL, col = NULL, time = c("t1", "t2", ...))}. Each
 cell \verb{[r, c, t]} is \code{TRUE} iff that cell was within eBird's
-modeled extent at timestep \code{t}. eBird 2023 onwards uses \code{NA} for
+modeled extent at timestep \code{t}. eBird 2023 onward uses \code{NA} for
 cells with insufficient data, distinct from cells with zero
 abundance; this array preserves that signal per timestep even
 though the stored \code{distr} substitutes zeros.

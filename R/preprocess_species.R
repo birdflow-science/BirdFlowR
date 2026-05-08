@@ -103,7 +103,7 @@
 #'   number of stored distributions, with `dimnames =
 #'   list(row = NULL, col = NULL, time = c("t1", "t2", ...))`. Each
 #'   cell `[r, c, t]` is `TRUE` iff that cell was within eBird's
-#'   modeled extent at timestep `t`. eBird 2023 onwards uses `NA` for
+#'   modeled extent at timestep `t`. eBird 2023 onward uses `NA` for
 #'   cells with insufficient data, distinct from cells with zero
 #'   abundance; this array preserves that signal per timestep even
 #'   though the stored `distr` substitutes zeros.
