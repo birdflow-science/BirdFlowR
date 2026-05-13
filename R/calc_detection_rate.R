@@ -403,15 +403,22 @@ calc_euclidean_detection_rate <- function(bf, weight_fun = NULL, points = NULL, 
     points <- points[, c("x", "y", "i")]
     active <- points[!is.na(points$i), , drop = FALSE]
 
-    bf_msg("  Transforming to spherical coordinates\n")
+    bf_msg("  Preparing sf objects\n")
+    # Convert active and points to sf objects
+    active_sf <- active |>
+      sf::st_as_sf(coords = c("x", "y"), crs = crs(bf))
+    points_sf <- points |>
+      sf::st_as_sf(coords = c("x", "y"), crs = crs(bf))
 
-    # Make a buffered convex hull around the active cells in lat lon
-    hull <- sf::st_union(active) |>
+    bf_msg("  Creating buffered convex hull\n")
+    # Make a buffered convex hull around the active cells
+    hull <- sf::st_union(active_sf) |>
       sf::st_convex_hull() |>
-      sf::st_buffer(hull, dist = units::set_units(radius, "m"))
+      sf::st_buffer(dist = units::set_units(radius, "m"))
 
-    # Selection vector for points that are active or between active cells
-    sv <- points |>
+    bf_msg("  Selecting points inside hull\n")
+    # Keep the points inside the hull
+    sv <- points_sf |>
       sf::st_intersects(y = hull, sparse = FALSE) |>
       as.vector()
 
