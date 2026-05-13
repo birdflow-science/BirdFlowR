@@ -414,7 +414,7 @@ calc_euclidean_detection_rate <- function(bf, weight_fun = NULL, points = NULL, 
     # Make a buffered convex hull around the active cells
     hull <- sf::st_union(active_sf) |>
       sf::st_convex_hull() |>
-      sf::st_buffer(dist = units::set_units(radius, "m"))
+      sf::st_buffer(dist = units::set_units(2 * radius, "m"))
 
     bf_msg("  Selecting points inside hull\n")
     # Keep the points inside the hull
