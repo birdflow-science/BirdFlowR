@@ -395,15 +395,6 @@ calc_euclidean_detection_rate <- function(bf, weight_fun = NULL, points = NULL, 
 
   radius <- mean(res(bf))
 
-  # Old
-  if (is.null(points)) {
-    bf_msg("  Creating points\n")
-    # Create points at all cell centers in the rectangular raster
-    points <- rasterize_distr(get_distr(bf, 1), bf, format = "dataframe")
-    points <- points[, c("x", "y", "i")]
-    active <- points[!is.na(points$i), , drop = FALSE]
-  }
-
   # New
   if (is.null(points)) {
     bf_msg("  Creating points\n")
