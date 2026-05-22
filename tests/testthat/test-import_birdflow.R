@@ -88,43 +88,55 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
 
 test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
 
-  # Always skipped: model fitting requires BirdFlowPy (Python), which
-  # isn't available in standard R CI. Run manually after wiring up a
-  # working BirdFlowPy install to verify the full preprocess -> fit
-  # -> import lifecycle.
-  skip("Requires BirdFlowPy fit; always skipped. Run manually.")
+  # This test is only run on the Unity HPCC in all other situations it is
+  # skipped
+
+  on_unity <- dir.exists("/work/pi_drsheldon_umass_edu/birdflow_modeling")
+
+  if(!on_unity)
+     skip("This test requires Unity HPCC configured to fit models.")
 
   skip_if_unsupported_ebirdst_version(use = "preprocess_species")
+  skip_if_not_installed("BirdFlowPipeline")
+
   local_quiet()
 
   # 1. Preprocess and write to HDF5. The cyclical extra timestep is
   #    present at this point: ebird_model_coverage has n_timesteps + 1
   #    layers, abundance$totals has n_timesteps + 1 entries, etc.
-  dir <- local_test_dir("full_lifecycle")
-  bf_pre <- preprocess_species("example_data",
-                               out_dir = dir,
-                               hdf5 = TRUE,
-                               res = 100)
-  hdf5_path <- list.files(dir, "\\.hdf5$", full.names = TRUE)[1]
-
-  expect_equal(dim(bf_pre$metadata$ebird_model_coverage)[3],
-               n_timesteps(bf_pre) + 1)
+  dir <- "/work/pi_drsheldon_umass_edu/birdflow_modeling/plunkett/zzz_temp_testing/"
+  unlink(dir)
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  on.exit(unlink(dir))
 
   # 2. Fit the model with BirdFlowPy.
   # --------------------------------------------------------------
-  # PLACEHOLDER. Replace with the actual fit invocation once
-  # BirdFlowPy is set up locally, e.g.:
-  #
-  #   system2("python", c("-m", "birdflow", "fit", hdf5_path))
-  #
+  # Takes a couple of minutes
+  species <- "amewoo"
+  res <- 200
+
+  BirdFlowPipeline::batch_species(species, base_output_path = dir,
+                                  hdf_path = dir, res = res,
+                                  show_progress = TRUE)
+
+
+  result_dir <- file.path(dir, paste0(species, "_", res, "km"))
+
+  # Dir has preproecssed and post processed files.  Longest file is post.
+  hdf_paths <- list.files(result_dir, pattern = "\\.hdf5$", full.names = TRUE)
+  expect_equal(length(hdf_paths), 2)
+  post_path <- hdf_paths[which.max(nchar(hdf_paths))]
+  pre_path <- setdiff(hdf_paths, post_path)
+
   # The fit step adds marginals and hyperparameters to the HDF5 file
   # in place; the file is then a fitted model and `import_birdflow()`
   # will route through the `is_fitted_model` cleanup branch on the
   # next read.
   # --------------------------------------------------------------
 
-  # 3. Re-import the fitted model.
-  bf_post <- import_birdflow(hdf5_path)
+  # 3. Import the preprocessed and fitted models.
+  bf_pre <- import_birdflow(pre_path)
+  bf_post <- import_birdflow(post_path)
 
   # 4. Inspect ebird_model_coverage on the imported, fitted model.
   cov <- bf_post$metadata$ebird_model_coverage
@@ -139,12 +151,22 @@ test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
   expect_equal(dimnames(cov)$time,
                paste0("t", seq_len(n_timesteps(bf_post))))
 
-  # Coverage of the in-memory pre-fit model should match the imported,
+  # Coverage of the pre-fit model should match the imported,
   # fitted, layer-trimmed coverage at the corresponding timesteps.
   pre_cov <- bf_pre$metadata$ebird_model_coverage
   expect_equal(cov,
                pre_cov[, , seq_len(n_timesteps(bf_post)), drop = FALSE],
                ignore_attr = TRUE)
+
+  # Clip polygon
+
+  clip <- BirdFlowPipeline::set_pipeline_params()$clip
+  clip2 <- get_clip(bf_post)
+
+  # FAILS:
+  expect_equal(clip, clip2)
+
+
 })
 
 

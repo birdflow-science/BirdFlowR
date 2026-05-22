@@ -91,3 +91,15 @@ test_that("sf MULTIPOLYGON round-trips", {
                "MULTIPOLYGON")
   expect_true(all(sf::st_equals(clip, recovered, sparse = FALSE)))
 })
+
+
+test_that("Americas round-trips", {
+
+  skip_if_not_installed("BirdFlowPipeline")
+
+  clip <- BirdFlowPipeline::americas_clip
+  df <- clip_to_dataframe(clip)
+  clip2 <- dataframe_to_clip(df)
+  expect_equal(clip, clip2)
+})
+
