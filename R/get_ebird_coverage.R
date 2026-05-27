@@ -21,7 +21,7 @@
 #'     logical layer per timestep. Layer names match the timestep labels
 #'     (e.g. `"t1"`, `"t2"`, ...).
 #'   * `"array"` returns the raw 3-D logical array
-#'     `[row, col, time]` as stored in `metadata$ebird_model_coverage`.
+#'     `[row, col, time]` as stored in `metadata$ebird_coverage`.
 #'   * `"dataframe"` returns a long [data.frame] suitable for plotting with
 #'     [ggplot2::geom_raster()], with one row per cell × timestep and
 #'     columns:
@@ -41,9 +41,9 @@
 #' df  <- get_ebird_coverage(bf, "dataframe")  # long data frame for ggplot2
 #' }
 get_ebird_coverage <- function(bf, format = "SpatRaster") {
-  cov <- bf$metadata$ebird_model_coverage
+  cov <- bf$metadata$ebird_coverage
   if (is.null(cov) || (length(cov) == 1L && is.na(cov))) {
-    warning("This BirdFlow model does not have ebird_model_coverage metadata.")
+    warning("This BirdFlow model does not have ebird_coverage metadata.")
     return(NA)
   }
   format_raster_data(cov, bf, format, "coverage")

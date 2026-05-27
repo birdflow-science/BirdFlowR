@@ -98,7 +98,7 @@
 #'   [get_distr()] with `type = "raw"`) recovers the pre-normalization
 #'   abundance. Note that quantile trimming, when used, is also lossy: the
 #'   recovered values reflect the post-trim, pre-normalize abundance.
-#' * `metadata$ebird_model_coverage` — a 3D logical array with
+#' * `metadata$ebird_coverage` — a 3D logical array with
 #'   dimensions `[row, col, time]` matching the model's grid and the
 #'   number of stored distributions, with `dimnames =
 #'   list(row = NULL, col = NULL, time = c("t1", "t2", ...))`. Each
@@ -402,7 +402,7 @@ preprocess_species <- function(species = NULL,
   # record the eBird model coverage matrix indicating which cells were
   # within eBird's modeled area at any timestep.
   export$metadata$abundance <- list(totals = as.numeric(a$abundance_totals))
-  export$metadata$ebird_model_coverage <- a$ebird_model_coverage
+  export$metadata$ebird_coverage <- a$ebird_coverage
 
   #----------------------------------------------------------------------------#
   #  Define geom                                                            ####
@@ -533,7 +533,7 @@ preprocess_species <- function(species = NULL,
     if (is.numeric(pct_lost) && length(pct_lost) >= 1) {
       export$metadata$clip$percent_lost <- c(pct_lost, pct_lost[1])
     }
-    cov <- export$metadata$ebird_model_coverage
+    cov <- export$metadata$ebird_coverage
     if (is.array(cov) && length(dim(cov)) == 3) {
       d <- dim(cov)
       first_layer <- cov[, , 1]
@@ -541,7 +541,7 @@ preprocess_species <- function(species = NULL,
       dimnames(new_cov) <- list(row = NULL,
                                 col = NULL,
                                 time = paste0("t", seq_len(d[3] + 1)))
-      export$metadata$ebird_model_coverage <- new_cov
+      export$metadata$ebird_coverage <- new_cov
     }
 
   }

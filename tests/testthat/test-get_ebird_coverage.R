@@ -1,9 +1,9 @@
 
 ### Back compatibility
 ### `make_coverage_bf()` constructs a synthetic BirdFlow fixture because the
-### amewoo reference model predates ebird_model_coverage metadata. Remove this
+### amewoo reference model predates ebird_coverage metadata. Remove this
 ### helper and replace fixture usage with `BirdFlowModels::amewoo` once amewoo
-### is updated to include ebird_model_coverage.
+### is updated to include ebird_coverage.
 make_coverage_bf <- function() {
   bf <- new_BirdFlow()
   nr <- 3L; nc <- 4L; nt <- 2L
@@ -23,7 +23,7 @@ make_coverage_bf <- function() {
                                time = paste0("t", seq_len(nt))))
   cov[2, 2, 1] <- FALSE  # one FALSE in t1
   cov[1, 3, 2] <- FALSE  # one FALSE in t2
-  bf$metadata$ebird_model_coverage <- cov
+  bf$metadata$ebird_coverage <- cov
   bf
 }
 
@@ -46,7 +46,7 @@ test_that("get_ebird_coverage returns SpatRaster by default", {
 
 test_that("get_ebird_coverage SpatRaster values match array", {
   bf <- make_coverage_bf()
-  arr <- bf$metadata$ebird_model_coverage
+  arr <- bf$metadata$ebird_coverage
   r <- get_ebird_coverage(bf)
   # terra::values() returns layers column-by-column; the mask matrix is
   # row-major in R so compare via t() as in test-get_mask.R

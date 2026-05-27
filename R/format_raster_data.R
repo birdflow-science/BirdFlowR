@@ -5,7 +5,7 @@
 #' output formats.
 #'
 #' @param data A 2-D logical matrix (e.g. the model mask) or 3-D logical
-#'   array (e.g. `ebird_model_coverage`) aligned to the BirdFlow model grid.
+#'   array (e.g. `ebird_coverage`) aligned to the BirdFlow model grid.
 #'   For 3-D arrays the third dimension is time; its `dimnames$time` element
 #'   is used to name raster layers and the `timestep` column.
 #' @param bf A BirdFlow model (supplies grid geometry).

@@ -102,14 +102,14 @@ truncate_birdflow <- function(bf, ...) {
     bf$metadata$clip$percent_lost <-
       bf$metadata$clip$percent_lost[old_timesteps]
   }
-  cov <- bf$metadata$ebird_model_coverage
+  cov <- bf$metadata$ebird_coverage
   if (is.array(cov) && length(dim(cov)) == 3 &&
       dim(cov)[3] >= max(old_timesteps)) {
     new_cov <- cov[, , old_timesteps, drop = FALSE]
     dimnames(new_cov) <- list(row = NULL,
                               col = NULL,
                               time = paste0("t", seq_along(old_timesteps)))
-    bf$metadata$ebird_model_coverage <- new_cov
+    bf$metadata$ebird_coverage <- new_cov
   }
 
   # Marginals

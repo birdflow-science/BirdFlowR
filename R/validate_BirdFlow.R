@@ -127,7 +127,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
       # Older models predate these metadata slots entirely.
       "x$metadata missing:trim_quantile",
       "x$metadata missing:clip",
-      "x$metadata missing:ebird_model_coverage",
+      "x$metadata missing:ebird_coverage",
       "x$metadata missing:abundance"
     ))
 

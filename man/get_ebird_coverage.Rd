@@ -22,7 +22,7 @@ Otherwise the return type depends on \code{format}:
 logical layer per timestep. Layer names match the timestep labels
 (e.g. \code{"t1"}, \code{"t2"}, ...).
 \item \code{"array"} returns the raw 3-D logical array
-\verb{[row, col, time]} as stored in \code{metadata$ebird_model_coverage}.
+\verb{[row, col, time]} as stored in \code{metadata$ebird_coverage}.
 \item \code{"dataframe"} returns a long \link{data.frame} suitable for plotting with
 \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}, with one row per cell × timestep and
 columns:

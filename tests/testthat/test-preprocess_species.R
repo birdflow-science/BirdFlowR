@@ -63,7 +63,7 @@ test_that("preprocess_species runs on test dataset", {
                tolerance = 1e-10)
 
   # eBird model coverage is a 3D logical array [row, col, time]
-  cov <- bf$metadata$ebird_model_coverage
+  cov <- bf$metadata$ebird_coverage
   expect_true(is.array(cov))
   expect_equal(length(dim(cov)), 3L)
   expect_equal(dim(cov)[1:2], dim(bf$geom$mask))

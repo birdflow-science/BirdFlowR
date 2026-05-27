@@ -40,7 +40,7 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
   ### BirdFlowModels::amewoo model, Needed for BirdFlowModels 0.0.2.9002
   sbf2$metadata$ebirdst_version <- NULL
   sbf2$metadata$birdflowr_preprocess_version <- NULL
-  for (m in c("trim_quantile", "clip", "ebird_model_coverage",
+  for (m in c("trim_quantile", "clip", "ebird_coverage",
               "abundance")) {
     sbf2$metadata[[m]] <- NULL
   }
@@ -86,7 +86,7 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
 
 })
 
-test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
+test_that("preprocess -> fit -> import preserves ebird_coverage", {
 
   # This test is only run on the Unity HPCC in all other situations it is
   # skipped
@@ -102,7 +102,7 @@ test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
   local_quiet()
 
   # 1. Preprocess and write to HDF5. The cyclical extra timestep is
-  #    present at this point: ebird_model_coverage has n_timesteps + 1
+  #    present at this point: ebird_coverage has n_timesteps + 1
   #    layers, abundance$totals has n_timesteps + 1 entries, etc.
   dir <- "/work/pi_drsheldon_umass_edu/birdflow_modeling/plunkett/zzz_temp_testing/"
   unlink(dir)
@@ -138,8 +138,8 @@ test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
   bf_pre <- import_birdflow(pre_path)
   bf_post <- import_birdflow(post_path)
 
-  # 4. Inspect ebird_model_coverage on the imported, fitted model.
-  cov <- bf_post$metadata$ebird_model_coverage
+  # 4. Inspect ebird_coverage on the imported, fitted model.
+  cov <- bf_post$metadata$ebird_coverage
   expect_true(is.array(cov))
   expect_equal(length(dim(cov)), 3L)
   expect_equal(dim(cov)[1:2], dim(bf_post$geom$mask))
@@ -153,7 +153,7 @@ test_that("preprocess -> fit -> import preserves ebird_model_coverage", {
 
   # Coverage of the pre-fit model should match the imported,
   # fitted, layer-trimmed coverage at the corresponding timesteps.
-  pre_cov <- bf_pre$metadata$ebird_model_coverage
+  pre_cov <- bf_pre$metadata$ebird_coverage
   expect_equal(cov,
                pre_cov[, , seq_len(n_timesteps(bf_post)), drop = FALSE],
                ignore_attr = TRUE)

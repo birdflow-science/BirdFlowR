@@ -56,7 +56,7 @@ new_BirdFlow <- function() {
                    sparse = NA,
                    trim_quantile = NA_real_,
                    clip = NA,
-                   ebird_model_coverage = NA,
+                   ebird_coverage = NA,
                    abundance = NA
                   )),
             class = "BirdFlow")

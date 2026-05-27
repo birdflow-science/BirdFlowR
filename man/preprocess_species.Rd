@@ -156,7 +156,7 @@ stored normalized distribution by these totals (see
 \code{\link[=get_distr]{get_distr()}} with \code{type = "raw"}) recovers the pre-normalization
 abundance. Note that quantile trimming, when used, is also lossy: the
 recovered values reflect the post-trim, pre-normalize abundance.
-\item \code{metadata$ebird_model_coverage} — a 3D logical array with
+\item \code{metadata$ebird_coverage} — a 3D logical array with
 dimensions \verb{[row, col, time]} matching the model's grid and the
 number of stored distributions, with \code{dimnames = list(row = NULL, col = NULL, time = c("t1", "t2", ...))}. Each
 cell \verb{[r, c, t]} is \code{TRUE} iff that cell was within eBird's

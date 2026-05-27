@@ -208,14 +208,14 @@ import_birdflow_v3 <- function(hdf5) {
     bf$metadata$abundance <- ab
   }
 
-  # ebird_model_coverage is stored as a 3D logical array
+  # ebird_coverage is stored as a 3D logical array
   # [row, col, time]. The simple metadata loop above strips its dim
   # attribute via as.vector(), and rhdf5's default reader transposes
   # arrays on the way back in, so re-read it directly with native =
   # TRUE. rhdf5 doesn't preserve dimnames, so restore them from the
   # array's third dimension.
-  if ("metadata/ebird_model_coverage" %in% contents) {
-    cov <- h5read(hdf5, "metadata/ebird_model_coverage", native = TRUE)
+  if ("metadata/ebird_coverage" %in% contents) {
+    cov <- h5read(hdf5, "metadata/ebird_coverage", native = TRUE)
     if (is.array(cov) && length(dim(cov)) == 3) {
       storage.mode(cov) <- "logical"
       dimnames(cov) <- list(row = NULL,
@@ -226,7 +226,7 @@ import_birdflow_v3 <- function(hdf5) {
     } else {
       cov <- as.logical(cov)
     }
-    bf$metadata$ebird_model_coverage <- cov
+    bf$metadata$ebird_coverage <- cov
   }
 
 
@@ -360,18 +360,18 @@ import_birdflow_v3 <- function(hdf5) {
              "in circular BirdFlow model")
       bf$metadata$clip$percent_lost <- pl[seq_len(nt)]
     }
-    cov <- bf$metadata$ebird_model_coverage
+    cov <- bf$metadata$ebird_coverage
     if (is.array(cov) && length(dim(cov)) == 3 &&
         dim(cov)[3] == nt + 1) {
       if (!isTRUE(all.equal(cov[, , 1], cov[, , dim(cov)[3]],
                             check.attributes = FALSE)))
-        stop("Expected first and last ebird_model_coverage layers to ",
+        stop("Expected first and last ebird_coverage layers to ",
              "match in circular BirdFlow model")
       new_cov <- cov[, , seq_len(nt), drop = FALSE]
       dimnames(new_cov) <- list(row = NULL,
                                 col = NULL,
                                 time = paste0("t", seq_len(nt)))
-      bf$metadata$ebird_model_coverage <- new_cov
+      bf$metadata$ebird_coverage <- new_cov
     }
 
     # Make and save marginal index

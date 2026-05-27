@@ -50,7 +50,7 @@ test_that("extend_birdflow() works with hdf5", {
   # Metadata slots added by 0.1.0.9081 are populated to NA defaults on
   # round-trip but absent from legacy in-memory models; drop them on
   # both sides for the comparison.
-  for (m in c("trim_quantile", "clip", "ebird_model_coverage",
+  for (m in c("trim_quantile", "clip", "ebird_coverage",
               "abundance")) {
     bfe1$metadata[[m]] <- NULL
     bfe2$metadata[[m]] <- NULL

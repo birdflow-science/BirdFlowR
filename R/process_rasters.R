@@ -302,6 +302,6 @@ process_rasters <- function(res,
               mask = mask,
               clip_percent_lost = pct_lost,
               abundance_totals = as.numeric(totals),
-              ebird_model_coverage = ebird_coverage))
+              ebird_coverage = ebird_coverage))
 
 }

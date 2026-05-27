@@ -8,7 +8,7 @@ format_raster_data(data, bf, format, value_name)
 }
 \arguments{
 \item{data}{A 2-D logical matrix (e.g. the model mask) or 3-D logical
-array (e.g. \code{ebird_model_coverage}) aligned to the BirdFlow model grid.
+array (e.g. \code{ebird_coverage}) aligned to the BirdFlow model grid.
 For 3-D arrays the third dimension is time; its \code{dimnames$time} element
 is used to name raster layers and the \code{timestep} column.}
 

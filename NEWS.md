@@ -36,7 +36,7 @@ previously preserved.
   totals used to normalize each timestep's distribution to sum to 1,
   enabling recovery of pre-normalization values via
   `get_distr(x, type = "raw")`.
-* New `metadata$ebird_model_coverage` 3D logical array (dimensions
+* New `metadata$ebird_coverage` 3D logical array (dimensions
   `[row, col, time]` with `dimnames = list(row = NULL, col = NULL,
   time = c("t1", "t2", ...))`) preserves which cells were within
   eBird's modeled extent at each timestep; the eBird 2023 release
@@ -57,7 +57,7 @@ previously preserved.
   populated to NA defaults.
 * `clip_to_dataframe()` and `dataframe_to_clip()` are helpers that
   convert **sf** polygons into a more portable data frame and back.
-* New `get_ebird_coverage()` retrieves `metadata$ebird_model_coverage`
+* New `get_ebird_coverage()` retrieves `metadata$ebird_coverage`
   from a fitted model in any of three formats: a multi-layer
   [terra::SpatRaster] (default), the raw 3-D logical array, or a long
   data frame suitable for [ggplot2::geom_raster()].
