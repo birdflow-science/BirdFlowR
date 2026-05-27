@@ -53,7 +53,11 @@ new_BirdFlow <- function() {
                    birdflowr_version =
                      as.character(utils::packageVersion("BirdFlowR")),
                    is_sparse = FALSE,
-                   sparse = NA
+                   sparse = NA,
+                   trim_quantile = NA_real_,
+                   clip = NA,
+                   ebird_coverage = NA,
+                   abundance = NA
                   )),
             class = "BirdFlow")
 

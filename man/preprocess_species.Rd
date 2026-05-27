@@ -138,6 +138,35 @@ the smallest resolution that doesn't exceed \code{max_params} and then rounds to
 a slightly larger resolution (fewer parameters).
 }
 
+\section{Captured metadata}{
+
+
+\code{preprocess_species()} records several pieces of information in
+\code{metadata} so that they survive the round-trip through HDF5 and can be
+inspected on a fitted model:
+\itemize{
+\item \code{metadata$trim_quantile} — the value(s) used for \code{trim_quantile},
+or \code{NA_real_} if no trimming was applied.
+\item \code{metadata$clip} — \code{clipped} flag, the clip polygon stored as a flat
+data frame, and the per-timestep percent of distribution density
+removed by clipping. See \code{\link[=is_clipped]{is_clipped()}} and \code{\link[=get_clip]{get_clip()}}.
+\item \code{metadata$abundance$totals} — the per-timestep abundance totals used to
+normalize each timestep's distribution to sum to 1. Multiplying the
+stored normalized distribution by these totals (see
+\code{\link[=get_distr]{get_distr()}} with \code{type = "raw"}) recovers the pre-normalization
+abundance. Note that quantile trimming, when used, is also lossy: the
+recovered values reflect the post-trim, pre-normalize abundance.
+\item \code{metadata$ebird_coverage} — a 3D logical array with
+dimensions \verb{[row, col, time]} matching the model's grid and the
+number of stored distributions, with \code{dimnames = list(row = NULL, col = NULL, time = c("t1", "t2", ...))}. Each
+cell \verb{[r, c, t]} is \code{TRUE} iff that cell was within eBird's
+modeled extent at timestep \code{t}. eBird 2023 onward uses \code{NA} for
+cells with insufficient data, distinct from cells with zero
+abundance; this array preserves that signal per timestep even
+though the stored \code{distr} substitutes zeros.
+}
+}
+
 \examples{
 \dontrun{
 

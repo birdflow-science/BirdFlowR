@@ -277,7 +277,7 @@ snap_to_birdflow <- function(d, bf,
   # sm is the sparsified mask, locations where the dynamic mask is 1
   # but the marginal derived distribution is 0
   if (has_marginals(bf)) {
-    sm <- (get_distr(bf, from_marginals = TRUE) > 0) & dm
+    sm <- (get_distr(bf, type = "marginal") > 0) & dm
     no_err <- !errors$error  # only evaluate where there aren't other problems
     errors$err_sparse[no_err] <- !sm[cbind(d$i[no_err], d$timestep[no_err])]
     errors <- update_errors(errors)

@@ -119,7 +119,16 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
       "x$metadata extra:hyperparameters", # added by python
       "x$metadata extra:loss_values", # added by python
       "x$metadata missing:ebirdst_version", ### back compatibility
-      "x$metadata missing:birdflowr_preprocess_version" ### back compatibility
+      "x$metadata missing:birdflowr_preprocess_version", ### back compatibility
+      # The schema default for these is NA; they become lists only when
+      # populated by preprocess_species(). Either form is valid.
+      "x$metadata$clip should not be a list",
+      "x$metadata$abundance should not be a list",
+      # Older models predate these metadata slots entirely.
+      "x$metadata missing:trim_quantile",
+      "x$metadata missing:clip",
+      "x$metadata missing:ebird_coverage",
+      "x$metadata missing:abundance"
     ))
 
 

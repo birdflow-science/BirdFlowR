@@ -4,7 +4,12 @@
 \alias{get_distr}
 \title{Extract distributions from BirdFlow models}
 \usage{
-get_distr(x, which = "all", from_marginals = FALSE)
+get_distr(
+  x,
+  which = "all",
+  type = c("normalized", "marginal", "raw"),
+  from_marginals
+)
 }
 \arguments{
 \item{x}{A BirdFlow model}
@@ -14,8 +19,13 @@ integers indicating timesteps; character dates in the format
 year-month-day e.g. \code{"2019-02-25"}; \code{\link[base:Dates]{Date}} objects;
 or \code{"all"} which will return distributions for all timesteps.}
 
-\item{from_marginals}{If TRUE and \code{x} has marginals the distribution will be
-from the marginals even if \code{x} also has distributions.}
+\item{type}{One of \code{"normalized"} (the default), \code{"marginal"}, or \code{"raw"}.
+See "Distribution types" for details.}
+
+\item{from_marginals}{Deprecated. Use \code{type = "marginal"} instead.
+When supplied, \code{from_marginals = TRUE} is translated to
+\code{type = "marginal"} and \code{from_marginals = FALSE} to
+\code{type = "normalized"}, with a warning.}
 }
 \value{
 Either a vector with a distribution for a single timestep or a matrix
@@ -26,14 +36,31 @@ with a column for each distribution.
 single distribution will be returned as a vector; if multiple they will be
 columns in a matrix.
 }
-\details{
-If the BirdFlow object has stored distributions they will be the training
-distributions and will be returned by default unless \code{from_marginals = TRUE}
-in which case distributions calculated from the marginal will be returned.
+\section{Distribution types}{
 
-The training distributions and the distributions calculated from the marginal
-are very similar.
+
+The \code{type} argument controls how the distribution is computed:
+
+\describe{
+\item{\code{"normalized"}}{ The default. Returns the eBird-derived stored
+distributions, normalized so each timestep sums to 1. Equivalent to
+the previous behavior with \code{from_marginals = FALSE}.}
+\item{\code{"marginal"}}{ Calculates the distribution from the marginals
+instead of the stored distributions. Useful for diagnostics; the
+two are very similar in practice. Equivalent to the previous
+behavior with \code{from_marginals = TRUE}.}
+\item{\code{"raw"}}{ Returns the eBird abundance values prior to the
+standardize-to-1 normalization, by multiplying the stored normalized
+distribution by the per-timestep totals captured during
+\code{\link[=preprocess_species]{preprocess_species()}} (\code{x$metadata$abundance$totals}). This requires
+a model that recorded those totals — older models will trigger an
+error pointing at re-preprocessing.
+Note that quantile trimming via the \code{trim_quantile} argument is also
+a lossy step: \code{"raw"} recovers values from before normalization but
+after any trimming.}
 }
+}
+
 \seealso{
 Distributions can be passed to \link[=predict.BirdFlow]{predict()} or
 converted to rasters with \code{\link[=expand_distr]{expand_distr()}} or converted to

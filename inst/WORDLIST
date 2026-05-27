@@ -10,6 +10,8 @@ BirdFlowExtras
 BirdFlowIntervals
 BMTR
 BirdFlowPy
+BirdFlowR's
+BirdFlowR
 BirdFlowRoutes
 BirdFlowModels
 BirdFlowOverview
@@ -76,6 +78,7 @@ eBird's
 ebirdst
 easting
 epsg
+erroring
 filetype
 filetypes
 geolocator
@@ -128,6 +131,7 @@ readme
 repo
 repos
 reproject
+reprojected
 reprojecting
 rescale
 rescaling
@@ -135,18 +139,21 @@ resightings
 rhdf
 rnaturalearth
 rnaturalearthdata
+rspatial
 sparsification
 sparsified
 sparsify
 spatiotemporal
 spatRaster
 terra
+terra's
 testthat
 tibbles
 timespan
 timestep's
 titanx
 unresolvable
+validator
 viridis
 viridisLite
 wkt
@@ -161,3 +168,6 @@ zag
 ℹ
 validators
 vectorized
+lossy
+reconstructible
+unclipped

@@ -99,25 +99,26 @@ process_rasters <- function(res,
                                        resolution = res_label(load_res))
   }
 
-  # Overwrite NA with zero
-  # More often than not the NA represents very different habitat
-  # than nearby non-na values so is usually more appropriately t
-  # treated as non-habitat (zero) than as unkown.
-  for (name in c("abunds", "abunds_lci", "abunds_uci")) {
-    r <- get(name)
-    v <- terra::values(r)
-    v[is.na(v)] <- 0
-    terra::values(r) <- v
-    assign(name, r)
-  }
+  # Capture per-cell, per-timestep eBird coverage at source resolution
+  # BEFORE any NA -> 0 conversion, so we retain a record of "did eBird
+  # model this cell at this timestep?". The eBird 2023 release uses NA
+  # to mean "insufficient data" rather than "unsuitable habitat";
+  # carrying this signal through to metadata lets downstream callers
+  # distinguish data-gaps from genuine zeros. The source-resolution
+  # raster is projected to the model's grid further down once `mask`
+  # is finalised. Note that the *stored* `distr` still receives a NA
+  # -> 0 sweep after flattening because BirdFlowPy expects no NAs at
+  # fit time.
+  coverage_src <- !is.na(abunds)
 
 
   bf_msg("Creating mask in target resolution and projection\n")
 
   # Make mask in original coordinate system
   # TRUE if a cell has non-zero data in any layer (timestep) and
-  # will be cropped to extent of TRUE cells
-  mask <- make_mask(abunds, assume_no_na = TRUE)
+  # will be cropped to extent of TRUE cells. make_mask() handles NAs
+  # internally now that they are no longer pre-zeroed in `abunds`.
+  mask <- make_mask(abunds, assume_no_na = FALSE)
 
   # Re-project mask and re-crop to extent of data in new projection
   # set output resolution to be a factor of the target resolution so that
@@ -167,10 +168,17 @@ process_rasters <- function(res,
   bf_msg(" done.\n")
 
   # Clip data
+  pct_lost <- NULL
   if (!is.null(clip)) {
+    pre_clip_totals <- colSums(terra::values(abunds), na.rm = TRUE)
     abunds <- terra::mask(abunds, clip)
     abunds_uci <- terra::mask(abunds_uci, clip)
     abunds_lci <- terra::mask(abunds_lci, clip)
+    post_clip_totals <- colSums(terra::values(abunds), na.rm = TRUE)
+    pct_lost <- ifelse(pre_clip_totals > 0,
+                       (pre_clip_totals - post_clip_totals) /
+                         pre_clip_totals * 100,
+                       0)
   }
 
   # aggregate to target resolution
@@ -222,6 +230,28 @@ process_rasters <- function(res,
     abunds_lci_low_res <- terra::crop(abunds_lci_low_res, mask)
   }
 
+  # Project the source-resolution coverage raster (one layer per
+  # timestep) onto the final mask grid. method = "near" preserves the
+  # binary (1/0) values. The result is reshaped into a 3D logical array
+  # with dimensions [row, col, timestep] over the full model extent;
+  # cell `[r, c, t]` is TRUE iff that cell was within eBird's modeled
+  # area at timestep t.
+  coverage_proj <- terra::project(coverage_src, mask, method = "near")
+  cov_v <- terra::values(coverage_proj)
+  cov_v[is.na(cov_v)] <- 0
+  n_lyr <- ncol(cov_v)
+  ebird_coverage <- array(FALSE,
+                          dim = c(nrow(mask), ncol(mask), n_lyr))
+  for (k in seq_len(n_lyr)) {
+    ebird_coverage[, , k] <- matrix(as.logical(cov_v[, k]),
+                                    nrow = nrow(mask),
+                                    ncol = ncol(mask),
+                                    byrow = TRUE)
+  }
+  dimnames(ebird_coverage) <- list(row = NULL,
+                                   col = NULL,
+                                   time = paste0("t", seq_len(n_lyr)))
+
   #----------------------------------------------------------------------------#
   #  Flatten raster data (limit to active cells)                            ####
   #----------------------------------------------------------------------------#
@@ -269,6 +299,9 @@ process_rasters <- function(res,
               uci = uci,
               lci = lci,
               m = m,
-              mask = mask))
+              mask = mask,
+              clip_percent_lost = pct_lost,
+              abundance_totals = as.numeric(totals),
+              ebird_coverage = ebird_coverage))
 
 }

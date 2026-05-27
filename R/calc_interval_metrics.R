@@ -248,7 +248,7 @@ calc_single_interval_metrics <- function(
 #' transition_level_outputs <- eval_res[[2]]
 calc_interval_metrics <- function(birdflow_intervals, bf) {
   # weekly distributions directly from S&T
-  st_dists <- get_distr(bf, which = "all", from_marginals = FALSE)
+  st_dists <- get_distr(bf, which = "all")
 
   # Great circle distances between cells
   gcd <- great_circle_distances(bf)

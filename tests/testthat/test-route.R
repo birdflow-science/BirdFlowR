@@ -106,7 +106,7 @@ test_that("route() rejects starting coordinates that are masked out at start", {
     bf <- add_dynamic_mask(bf)
 
   start <- 1
-  d <- get_distr(bf, start, from_marginals = TRUE)
+  d <- get_distr(bf, start, type = "marginal")
   bad_i <- which(d == 0)[1]
   bad_xy <- i_to_xy(bad_i, bf)
 
