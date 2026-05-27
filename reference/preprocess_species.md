@@ -187,6 +187,40 @@ different resolution, a noisy process, so it iteratively tries to find
 the smallest resolution that doesn't exceed `max_params` and then rounds
 to a slightly larger resolution (fewer parameters).
 
+## Captured metadata
+
+`preprocess_species()` records several pieces of information in
+`metadata` so that they survive the round-trip through HDF5 and can be
+inspected on a fitted model:
+
+- `metadata$trim_quantile` — the value(s) used for `trim_quantile`, or
+  `NA_real_` if no trimming was applied.
+
+- `metadata$clip` — `clipped` flag, the clip polygon stored as a flat
+  data frame, and the per-timestep percent of distribution density
+  removed by clipping. See
+  [`is_clipped()`](https://birdflow-science.github.io/BirdFlowR/reference/is_clipped.md)
+  and
+  [`get_clip()`](https://birdflow-science.github.io/BirdFlowR/reference/get_clip.md).
+
+- `metadata$abundance$totals` — the per-timestep abundance totals used
+  to normalize each timestep's distribution to sum to 1. Multiplying the
+  stored normalized distribution by these totals (see
+  [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+  with `type = "raw"`) recovers the pre-normalization abundance. Note
+  that quantile trimming, when used, is also lossy: the recovered values
+  reflect the post-trim, pre-normalize abundance.
+
+- `metadata$ebird_coverage` — a 3D logical array with dimensions
+  `[row, col, time]` matching the model's grid and the number of stored
+  distributions, with
+  `dimnames = list(row = NULL, col = NULL, time = c("t1", "t2", ...))`.
+  Each cell `[r, c, t]` is `TRUE` iff that cell was within eBird's
+  modeled extent at timestep `t`. eBird 2023 onward uses `NA` for cells
+  with insufficient data, distinct from cells with zero abundance; this
+  array preserves that signal per timestep even though the stored
+  `distr` substitutes zeros.
+
 ## Examples
 
 ``` r

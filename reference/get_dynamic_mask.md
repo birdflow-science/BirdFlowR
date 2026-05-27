@@ -44,7 +44,7 @@ given timestep.
 
 ``` r
 library(terra) # For plotting of spatRaster
-#> terra 1.9.25
+#> terra 1.9.27
 bf <- BirdFlowModels::amewoo |> add_dynamic_mask()
 dm <- get_dynamic_mask(bf, c(1,  10, 21, 31, 42, 52))
 r <- rasterize_distr(dm, bf)

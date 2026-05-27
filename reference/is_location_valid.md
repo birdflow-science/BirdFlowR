@@ -98,7 +98,7 @@ bf <- BirdFlowModels::amewoo
 timestep  <- 3
 
 # Sample two valid locations from a distribution
-distr <- get_distr(bf, timestep, from_marginals = TRUE)
+distr <- get_distr(bf, timestep, type = "marginal")
 locs <- sample_distr(distr, n = 2)
 i <- apply(locs, 2, function(x) which(as.logical(x)))
 is_location_valid(bf, i, timestep = timestep)

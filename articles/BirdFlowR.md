@@ -22,7 +22,7 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 library(BirdFlowModels)
 library(BirdFlowR)
 library(terra)
-#> terra 1.9.25
+#> terra 1.9.27
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 ```

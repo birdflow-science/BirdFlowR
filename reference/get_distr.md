@@ -7,7 +7,12 @@ they will be columns in a matrix.
 ## Usage
 
 ``` r
-get_distr(x, which = "all", from_marginals = FALSE)
+get_distr(
+  x,
+  which = "all",
+  type = c("normalized", "marginal", "raw"),
+  from_marginals
+)
 ```
 
 ## Arguments
@@ -23,25 +28,50 @@ get_distr(x, which = "all", from_marginals = FALSE)
   e.g. `"2019-02-25"`; [`Date`](https://rdrr.io/r/base/Dates.html)
   objects; or `"all"` which will return distributions for all timesteps.
 
+- type:
+
+  One of `"normalized"` (the default), `"marginal"`, or `"raw"`. See
+  "Distribution types" for details.
+
 - from_marginals:
 
-  If TRUE and `x` has marginals the distribution will be from the
-  marginals even if `x` also has distributions.
+  Deprecated. Use `type = "marginal"` instead. When supplied,
+  `from_marginals = TRUE` is translated to `type = "marginal"` and
+  `from_marginals = FALSE` to `type = "normalized"`, with a warning.
 
 ## Value
 
 Either a vector with a distribution for a single timestep or a matrix
 with a column for each distribution.
 
-## Details
+## Distribution types
 
-If the BirdFlow object has stored distributions they will be the
-training distributions and will be returned by default unless
-`from_marginals = TRUE` in which case distributions calculated from the
-marginal will be returned.
+The `type` argument controls how the distribution is computed:
 
-The training distributions and the distributions calculated from the
-marginal are very similar.
+- `"normalized"`:
+
+  The default. Returns the eBird-derived stored distributions,
+  normalized so each timestep sums to 1. Equivalent to the previous
+  behavior with `from_marginals = FALSE`.
+
+- `"marginal"`:
+
+  Calculates the distribution from the marginals instead of the stored
+  distributions. Useful for diagnostics; the two are very similar in
+  practice. Equivalent to the previous behavior with
+  `from_marginals = TRUE`.
+
+- `"raw"`:
+
+  Returns the eBird abundance values prior to the standardize-to-1
+  normalization, by multiplying the stored normalized distribution by
+  the per-timestep totals captured during
+  [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
+  (`x$metadata$abundance$totals`). This requires a model that recorded
+  those totals — older models will trigger an error pointing at
+  re-preprocessing. Note that quantile trimming via the `trim_quantile`
+  argument is also a lossy step: `"raw"` recovers values from before
+  normalization but after any trimming.
 
 ## See also
 

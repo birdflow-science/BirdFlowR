@@ -1,5 +1,87 @@
 # Changelog
 
+## BirdFlowR 0.1.0.9081
+
+2026-05-08
+
+Retain more data through
+[`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
+(closes
+[\#235](https://github.com/birdflow-science/BirdFlowR/issues/235),
+[\#239](https://github.com/birdflow-science/BirdFlowR/issues/239),
+[\#226](https://github.com/birdflow-science/BirdFlowR/issues/226),
+[\#231](https://github.com/birdflow-science/BirdFlowR/issues/231),
+[\#229](https://github.com/birdflow-science/BirdFlowR/issues/229)):
+
+The intent of this update it to capture more information about the
+inputs to the BirdFlow model. Specifically the values of the `clip` and
+`trim_quantiles` arguments, and more information about the eBird model
+coverage and raw values.
+
+The changes here should not impact existing code or workflows with one
+exception. The `from_marginals` argument to
+[`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+is now deprecated. It will work as before but throw a warning. The
+preferred argument is `type` which defaults to `"normalized"` equivalent
+to the prior default of `from_marginals = FALSE`. Use
+`type = "marginal"` for the old `from_marginals = TRUE`, and a third
+option `type = "raw"` gives the eBird values prior to normalization,
+which were not previously preserved.
+
+### All changes
+
+- [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
+  now records `metadata$trim_quantile` (the per-week quantile vector
+  that was applied, or `NA_real_` when no trimming was used).
+- New `metadata$clip` slot captures whether and how the model was
+  clipped: a `clipped` flag, the polygon (as a flat data frame
+  reconstructible into an \[sf\]\[sf::sf\] polygon by
+  [`get_clip()`](https://birdflow-science.github.io/BirdFlowR/reference/get_clip.md)),
+  and the per-timestep percent of distribution density removed by
+  clipping. New exported helpers
+  [`is_clipped()`](https://birdflow-science.github.io/BirdFlowR/reference/is_clipped.md)
+  and
+  [`get_clip()`](https://birdflow-science.github.io/BirdFlowR/reference/get_clip.md)
+  expose this. Older models report `is_clipped() == NA` and
+  `get_clip() == NULL`.
+- New `metadata$abundance$totals` records the per-timestep abundance
+  totals used to normalize each timestep’s distribution to sum to 1,
+  enabling recovery of pre-normalization values via
+  `get_distr(x, type = "raw")`.
+- New `metadata$ebird_coverage` 3D logical array (dimensions
+  `[row, col, time]` with
+  `dimnames = list(row = NULL, col = NULL, time = c("t1", "t2", ...))`)
+  preserves which cells were within eBird’s modeled extent at each
+  timestep; the eBird 2023 release uses `NA` for “insufficient data”
+  rather than zero, and this array carries that signal per timestep
+  through to downstream callers even though the stored `distr` still
+  substitutes zeros for fitting.
+- [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+  gains a `type` argument with values `"normalized"` (the default,
+  equivalent to the previous `from_marginals = FALSE` behavior),
+  `"marginal"` (equivalent to `from_marginals = TRUE`), and `"raw"`
+  (recovers pre-normalization abundance using
+  `metadata$abundance$totals`). The `from_marginals` argument is
+  soft-deprecated and emits a warning.
+- [`truncate_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow.md)
+  now subsets `metadata$abundance$totals`, `metadata$clip$percent_lost`,
+  and the (previously unaligned) `uci`/`lci` matrices to match the
+  surviving timesteps.
+- HDF5 backwards compatibility: older v3 files that lack the new
+  metadata keys continue to import unchanged; missing keys are populated
+  to NA defaults.
+- [`clip_to_dataframe()`](https://birdflow-science.github.io/BirdFlowR/reference/clip_to_dataframe.md)
+  and
+  [`dataframe_to_clip()`](https://birdflow-science.github.io/BirdFlowR/reference/dataframe_to_clip.md)
+  are helpers that convert **sf** polygons into a more portable data
+  frame and back.
+- New
+  [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md)
+  retrieves `metadata$ebird_coverage` from a fitted model in any of
+  three formats: a multi-layer \[terra::SpatRaster\] (default), the raw
+  3-D logical array, or a long data frame suitable for
+  \[ggplot2::geom_raster()\].
+
 ## BirdFlowR 0.1.0.9080
 
 2026-05-08
@@ -11,7 +93,7 @@ Round-up of small fixes (closes
 [\#219](https://github.com/birdflow-science/BirdFlowR/issues/219),
 [\#222](https://github.com/birdflow-science/BirdFlowR/issues/222)):
 
-- Fix typo “weigts” in the BMTR progress message printed by
+- Fix typo `"weigts"` in the BMTR progress message printed by
   [`weight_between()`](https://birdflow-science.github.io/BirdFlowR/reference/weight_between.md)
   (and via `calc_bmtr(weighted = TRUE)` /
   [`calc_flux()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.md)).
@@ -64,10 +146,10 @@ to get more information on the problematic inputs.
 
 - Fix
   [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
-  failure under terra \>= 1.9-25 with “\[write\] unknown option(s):
-  xscale,yscale”. Internal projections that needed
-  `origin = 0, res = ...` against a CRS string now go through a new
-  internal
+  failure under terra \>= 1.9-25 with
+  `"[write] unknown option(s): xscale,yscale"`. Internal projections
+  that needed `origin = 0, res = ...` against a CRS string now go
+  through a new internal
   [`project_aligned()`](https://birdflow-science.github.io/BirdFlowR/reference/project_aligned.md)
   helper that builds an explicit template raster (the path terra’s
   regression doesn’t touch). The upstream bug was reported as

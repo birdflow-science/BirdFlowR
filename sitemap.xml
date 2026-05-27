@@ -42,9 +42,11 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_single_interval_metrics.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_offset.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calculate_interval_sampling_strategy.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/clip_to_dataframe.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/combine_transitions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compareGeom-BirdFlow.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/compare_list_item_names.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/dataframe_to_clip.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/determine_resolution.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/dimensions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/distribution_performance.html</loc></url>
@@ -60,9 +62,12 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_current_dead_ends.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/fix_dead_ends.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/flatten_raster.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/format_raster_data.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_clip.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dates.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_distr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_loss.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_marginal.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/get_mask.html</loc></url>
@@ -79,6 +84,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/is_between.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/is_clipped.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/load_collection_index.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/load_model.html</loc></url>

@@ -114,6 +114,9 @@
   : Convert a raster bird distribution into its flattened, vector
   equivalent
 
+- [`get_clip()`](https://birdflow-science.github.io/BirdFlowR/reference/get_clip.md)
+  : Retrieve the clip polygon used during preprocessing
+
 - [`get_dates()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dates.md)
   : Retrieve dates component of a BirdFlow model
 
@@ -122,6 +125,9 @@
 
 - [`get_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.md)
   : Get the dynamic mask from a BirdFlow object
+
+- [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md)
+  : Get eBird model coverage from a BirdFlow model
 
 - [`get_loss()`](https://birdflow-science.github.io/BirdFlowR/reference/get_loss.md)
   : Get loss values for each step in the model fitting process
@@ -171,6 +177,9 @@
 
 - [`interval_log_likelihood()`](https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.md)
   : Calculate log likelihoods of observed bird movements
+
+- [`is_clipped()`](https://birdflow-science.github.io/BirdFlowR/reference/is_clipped.md)
+  : Test whether a BirdFlow model was clipped during preprocessing
 
 - [`is_location_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
   [`is_distr_valid()`](https://birdflow-science.github.io/BirdFlowR/reference/is_location_valid.md)
