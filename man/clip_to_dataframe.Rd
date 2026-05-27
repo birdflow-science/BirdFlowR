@@ -16,15 +16,23 @@ A data frame with columns \code{id}, \code{part}, \code{x}, \code{y}, \code{hole
 Internal helper that converts a polygon (as \code{SpatVector}, \code{sf}, or anything
 \code{\link[terra:vect]{terra::vect()}} accepts) into a flat data frame suitable for serializing
 inside a \code{BirdFlow} object's metadata. The data frame has columns
-\code{id} (polygon / object index), \code{part} (ring index within polygon), \code{x},
-\code{y} (vertex coordinates), and \code{hole} (\code{TRUE} for hole rings, \code{FALSE} for
-outer rings). The schema mirrors the matrix that \code{\link[terra:vect]{terra::vect()}} accepts
-when \code{type = "polygons"}, which is what \code{\link[=get_clip]{get_clip()}} uses to round-trip
-the polygon back into spatial form.
+\code{id} (polygon / object index), \code{part} (ring group within polygon), \code{x},
+\code{y} (vertex coordinates), and \code{hole} (integer ring index: \code{0} for the
+outer ring of a part and \verb{1..N} for each distinct hole ring within the
+same part). The schema mirrors the matrix that \code{\link[terra:vect]{terra::vect()}} accepts
+when \code{type = "polygons"}, which is what \code{\link[=dataframe_to_clip]{dataframe_to_clip()}} uses to
+round-trip the polygon back into spatial form.
 }
 \details{
 Storing the polygon as plain columns avoids serializing terra/sf objects
 (which hold C++ pointers / environments and don't survive \code{saveRDS()} or
 HDF5 round-trips reliably).
+
+Earlier versions of this code stored \code{hole} as a logical, which collapsed
+multiple holes within one part into a single ring on round-trip; the
+integer index keeps each hole distinct.
+}
+\seealso{
+\code{\link[=dataframe_to_clip]{dataframe_to_clip()}} for the inverse.
 }
 \keyword{internal}

@@ -94,12 +94,45 @@ test_that("sf MULTIPOLYGON round-trips", {
 
 
 test_that("Americas round-trips", {
-
+  skip_on_cran()
   skip_if_not_installed("BirdFlowPipeline")
 
   clip <- BirdFlowPipeline::americas_clip
   df <- clip_to_dataframe(clip)
-  clip2 <- dataframe_to_clip(df)
+  # CRS is not stored in the data frame; pass it back in so the recovered
+  # sfc carries the same projection as the input.
+  clip2 <- dataframe_to_clip(df, crs = sf::st_crs(clip))
   expect_equal(clip, clip2)
+})
+
+
+test_that("polygon with multiple holes round-trips through clip helpers", {
+  # Regression test for the bug exposed by the americas clip: storing the
+  # ring index as a logical collapsed multiple holes within one part into
+  # a single merged ring.
+  outer <- matrix(c(0, 0,
+                    0, 100,
+                    100, 100,
+                    100, 0,
+                    0, 0), ncol = 2, byrow = TRUE)
+  h1 <- matrix(c(10, 10,
+                 10, 20,
+                 20, 20,
+                 20, 10,
+                 10, 10), ncol = 2, byrow = TRUE)
+  h2 <- matrix(c(60, 60,
+                 60, 80,
+                 80, 80,
+                 80, 60,
+                 60, 60), ncol = 2, byrow = TRUE)
+  poly <- sf::st_sfc(sf::st_polygon(list(outer, h1, h2)), crs = "EPSG:3857")
+
+  df <- clip_to_dataframe(poly)
+  # Two distinct holes should keep distinct hole indices (1 and 2), not
+  # both collapse to TRUE / 1.
+  expect_equal(sort(unique(df$hole)), c(0L, 1L, 2L))
+
+  back <- dataframe_to_clip(df, crs = sf::st_crs(poly))
+  expect_true(all(sf::st_equals(poly, back, sparse = FALSE)))
 })
 

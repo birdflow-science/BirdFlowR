@@ -185,7 +185,12 @@ import_birdflow_v3 <- function(hdf5) {
     if (inherits(cl$polygon, "data.frame")) {
       cl$polygon <- clean_hdf5_dataframe(cl$polygon)
       if (!is.null(cl$polygon$hole)) {
-        cl$polygon$hole <- as.logical(cl$polygon$hole)
+        # hole is an integer ring index (0 = outer, 1..N = each distinct
+        # hole). Legacy files from before #235 stored it as logical;
+        # `as.integer()` on a logical maps FALSE -> 0L and TRUE -> 1L,
+        # which is correct for the no-hole and single-hole cases the
+        # earlier code could round-trip.
+        cl$polygon$hole <- as.integer(cl$polygon$hole)
       }
     }
     if (!is.null(cl$percent_lost)) {

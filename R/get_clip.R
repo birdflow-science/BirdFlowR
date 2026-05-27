@@ -5,16 +5,16 @@
 #' [sf][sf::sf] polygon in the model's CRS (`crs(x)`).
 #'
 #' The polygon is stored as a flat data frame (see [clip_to_dataframe()]) so
-#' it can be serialized as part of the model. `get_clip()` rebuilds a
-#' [terra::SpatVector][terra::SpatVector-class] internally and converts it
-#' to `sf` for return; pass it through `terra::vect()` if you'd prefer a
-#' `SpatVector`.
+#' it can be serialized as part of the model. `get_clip()` delegates the
+#' data-frame-to-polygon conversion to [dataframe_to_clip()] and wraps the
+#' result in an `sf` object; pass the result through `terra::vect()` if you'd
+#' prefer a [terra::SpatVector][terra::SpatVector-class].
 #'
 #' @param x A `BirdFlow` model.
 #' @return An `sf` object containing the clip polygon, or `NULL` if the
 #'   model is unclipped or the clip metadata is unknown (older models
 #'   preprocessed before this metadata was captured).
-#' @seealso [is_clipped()], [preprocess_species()].
+#' @seealso [is_clipped()], [preprocess_species()], [dataframe_to_clip()].
 #' @export
 #' @examples
 #'   library(BirdFlowModels)
@@ -37,11 +37,5 @@ get_clip <- function(x) {
     return(NULL)
   }
 
-  m <- cbind(object = df$id,
-             part = df$part,
-             x = df$x,
-             y = df$y,
-             hole = as.integer(df$hole))
-  v <- terra::vect(m, type = "polygons", crs = x$geom$crs)
-  sf::st_as_sf(v)
+  sf::st_sf(geometry = dataframe_to_clip(df, crs = x$geom$crs))
 }

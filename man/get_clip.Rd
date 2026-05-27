@@ -21,15 +21,15 @@ from the metadata stored on the \code{BirdFlow} object. Returns an
 }
 \details{
 The polygon is stored as a flat data frame (see \code{\link[=clip_to_dataframe]{clip_to_dataframe()}}) so
-it can be serialized as part of the model. \code{get_clip()} rebuilds a
-\link[terra:SpatVector-class]{terra::SpatVector} internally and converts it
-to \code{sf} for return; pass it through \code{terra::vect()} if you'd prefer a
-\code{SpatVector}.
+it can be serialized as part of the model. \code{get_clip()} delegates the
+data-frame-to-polygon conversion to \code{\link[=dataframe_to_clip]{dataframe_to_clip()}} and wraps the
+result in an \code{sf} object; pass the result through \code{terra::vect()} if you'd
+prefer a \link[terra:SpatVector-class]{terra::SpatVector}.
 }
 \examples{
   library(BirdFlowModels)
   get_clip(amewoo) # NULL — fixture predates clip metadata
 }
 \seealso{
-\code{\link[=is_clipped]{is_clipped()}}, \code{\link[=preprocess_species]{preprocess_species()}}.
+\code{\link[=is_clipped]{is_clipped()}}, \code{\link[=preprocess_species]{preprocess_species()}}, \code{\link[=dataframe_to_clip]{dataframe_to_clip()}}.
 }

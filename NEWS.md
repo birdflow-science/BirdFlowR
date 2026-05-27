@@ -1,3 +1,26 @@
+# BirdFlowR 0.1.0.9082
+2026-05-22
+
+Fix a round-trip bug in the clip metadata introduced with `0.1.0.9081`
+and split out a helper so the round-trip can be exercised in tests
+without building a full `BirdFlow` object:
+
+* `clip_to_dataframe()` previously stored the polygon's `hole` column
+  as a logical. `terra::geom()` actually returns it as an integer
+  *ring index* (`0` for the outer ring of a part, `1..N` for each
+  distinct hole within that part), and collapsing to logical merged
+  every hole within a part into a single ring on reconstruction. The
+  column is now stored as an integer so multi-hole polygons (e.g. the
+  Americas clip used in the BirdFlow pipeline) round-trip exactly.
+* New internal `dataframe_to_clip()` is the inverse of
+  `clip_to_dataframe()`. `get_clip()` now delegates to it, and tests
+  can exercise the data-frame → polygon path directly.
+* `import_birdflow_v3()` keeps the imported `hole` column as integer
+  rather than coercing it back to logical; legacy files written before
+  this fix continue to load correctly (logical-to-integer is a clean
+  cast for the no-hole and single-hole cases the earlier code could
+  round-trip).
+
 # BirdFlowR 0.1.0.9081
 2026-05-08
 
