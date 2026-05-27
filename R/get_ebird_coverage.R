@@ -2,9 +2,7 @@
 #'
 #' `get_ebird_coverage()` retrieves the per-timestep eBird model coverage
 #' stored in a BirdFlow model. Each cell–timestep combination records whether
-#' that cell fell within eBird's modeled extent at that timestep; eBird 2023
-#' onward uses `NA` for cells with insufficient data (distinct from cells with
-#' zero abundance).
+#' that cell fell within eBird's modeled extent at that timestep.
 #'
 #' Coverage metadata is captured by [preprocess_species()] and is absent from
 #' models preprocessed before `BirdFlowR 0.1.0.9081`. For such models
