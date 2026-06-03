@@ -4,7 +4,7 @@
 
 # Default collection URL (for downloading species) should end in "/"
 .birdflow_config$collection_url <-
-  "https://birdflow-science.s3.amazonaws.com/collection/"
+  "https://birdflow-science.s3.amazonaws.com/2026/"
 
 .birdflow_config$verbose <- TRUE
 .birdflow_config$time_format <- "month_day"
@@ -56,18 +56,23 @@
 #' \item{collection_url}{
 #'   This is the base URL of a collection of model files and its associated
 #'   index.  The default is for the standard BirdFlowR model collection.
+#'   In June 2026 60 new vetted models were released and the default collection
+#'   was changed to
+#'   [https://birdflow-science.s3.amazonaws.com/2026/](https://birdflow-science.s3.amazonaws.com/2026/index.html)
+#'   To access the original 4 models set `collection_url` to
+#'   [https://birdflow-science.s3.amazonaws.com/collection/](https://birdflow-science.s3.amazonaws.com/collection/index.html).
 #' }
 #'}
 #'
 #'
 #' @param ... One of:
-#'   (1) one or more named arguments where the name is a
+#'   1. one or more named arguments where the name is a
 #'   an option and the value its new setting e.g. `verbose = FALSE` ;
-#'   (2) a single unnamed argument stating an option to retrieve e.g.
+#'   2. a single unnamed argument stating an option to retrieve e.g.
 #'   `"verbose"` with an option to retrieve.
-#'   (3) No arguments, indicating that all options and their current settings
-#'   should be returned in a list; or
-#'   (4) a single list argument with named items and their new values.
+#'   3. No arguments, indicating that all options and their current settings
+#'   should be returned in a list; or.
+#'   4. a single list argument with named items and their new values.
 #'
 #' @return If no arguments are used than all options will be returned as a list.
 #'   If there is a single, unnamed argument with a character value indicating an

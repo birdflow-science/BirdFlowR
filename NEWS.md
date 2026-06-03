@@ -1,4 +1,19 @@
 
+# BirdFlowR 0.1.0.9082
+2026-06-03
+
+* New default model collection  
+[https://birdflow-science.s3.amazonaws.com/2026/](https://birdflow-science.s3.amazonaws.com/2026/index.html) 
+contains60 vetted models based on eBird model year 2023. 
+More details on the collection page.
+
+* `load_model()` Now accepts both model name and species code 
+(via the `model` parameter).
+* Updated test and example code that uses the `amewoo` model from the collection 
+to refer to it via species code instead of model name.
+
+
+
 # BirdFlowR 0.1.0.9081
 2026-05-08
 

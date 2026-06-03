@@ -8,13 +8,15 @@ birdflow_options(...)
 }
 \arguments{
 \item{...}{One of:
-(1) one or more named arguments where the name is a
+\enumerate{
+\item one or more named arguments where the name is a
 an option and the value its new setting e.g. \code{verbose = FALSE} ;
-(2) a single unnamed argument stating an option to retrieve e.g.
+\item a single unnamed argument stating an option to retrieve e.g.
 \code{"verbose"} with an option to retrieve.
-(3) No arguments, indicating that all options and their current settings
-should be returned in a list; or
-(4) a single list argument with named items and their new values.}
+\item No arguments, indicating that all options and their current settings
+should be returned in a list; or.
+\item a single list argument with named items and their new values.
+}}
 }
 \value{
 If no arguments are used than all options will be returned as a list.
@@ -58,6 +60,11 @@ directories, which in turn will hold BirdFlow model files and an index.
 \item{collection_url}{
 This is the base URL of a collection of model files and its associated
 index.  The default is for the standard BirdFlowR model collection.
+In June 2026 60 new vetted models were released and the default collection
+was changed to
+\href{https://birdflow-science.s3.amazonaws.com/2026/index.html}{https://birdflow-science.s3.amazonaws.com/2026/}
+To access the original 4 models set \code{collection_url} to
+\href{https://birdflow-science.s3.amazonaws.com/collection/index.html}{https://birdflow-science.s3.amazonaws.com/collection/}.
 }
 }
 }

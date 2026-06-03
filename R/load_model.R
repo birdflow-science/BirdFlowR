@@ -4,7 +4,8 @@
 #' If the model doesn't exist in the local cache or isn't up-to-date the the
 #' cache will be updated prior to loading.
 #'
-#' @param model The model name to load.
+#' @param model The model name to load. A species code can also be used if the
+#' collection does not contain more than one model for each species.
 #' @param update If `TRUE` (the default) then both the index and cached model
 #' file are checked against the server's version to make sure they are
 #' up-to-date and downloaded again if they are not.
@@ -42,11 +43,14 @@ load_model <- function(model, update = TRUE,
   index <- load_collection_index(update = update,
                                  collection_url = collection_url)
 
-  if (!model %in% index$model) {
-    stop('"', model, '" is not in the current collection. ',
+  # Identify row associated with this model
+  r <- which(index$model == model) # model column
+  if (length(r) == 0)
+    r <- which(index$species_code == model)[1] # or fallback to species
+  if (length(r) != 1) {
+      stop('"', model, '" is not in the current collection. ',
          'Run "load_collection_index()" for information on available models.')
   }
-  r <- which(index$model == model)[1] # row associated with model
 
   file_name <- index$file[r]
 

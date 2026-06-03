@@ -38,9 +38,7 @@ columns:
 \description{
 \code{get_ebird_coverage()} retrieves the per-timestep eBird model coverage
 stored in a BirdFlow model. Each cell–timestep combination records whether
-that cell fell within eBird's modeled extent at that timestep; eBird 2023
-onward uses \code{NA} for cells with insufficient data (distinct from cells with
-zero abundance).
+that cell fell within eBird's modeled extent at that timestep.
 }
 \details{
 Coverage metadata is captured by \code{\link[=preprocess_species]{preprocess_species()}} and is absent from
