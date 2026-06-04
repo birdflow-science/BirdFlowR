@@ -4,7 +4,7 @@
       original[!names(original) == "cache"]
     Output
       $collection_url
-      [1] "https://birdflow-science.s3.amazonaws.com/collection/"
+      [1] "https://birdflow-science.s3.amazonaws.com/2026/"
       
       $max_param_per_gpu_gb
       [1] 23224801

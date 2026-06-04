@@ -60,7 +60,7 @@ the index.
 
 ```{r load model, eval = FALSE}
 # Load a specific model
-bf <- load_model("amewoo_prebreeding") # caches locally and loads from cache
+bf <- load_model("amewoo") # caches locally and loads from cache
 ```
 This loads the smaller example model instead for efficiency of package building
 and testing, but do not use this one for science!

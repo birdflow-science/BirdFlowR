@@ -12,7 +12,8 @@ load_model(
 )
 }
 \arguments{
-\item{model}{The model name to load.}
+\item{model}{The model name to load. A species code can also be used if the
+collection does not contain more than one model for each species.}
 
 \item{update}{If \code{TRUE} (the default) then both the index and cached model
 file are checked against the server's version to make sure they are
