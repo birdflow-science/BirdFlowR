@@ -30,8 +30,8 @@ library(sf)
 #### Load model
 
 The BirdFlow Science team has shared a [collection of fitted
-models](https://birdflow-science.s3.amazonaws.com/collection/index.html)
-for use with the BirdFlowR package. The website includes reports on each
+models](https://birdflow-science.s3.amazonaws.com/2026/index.html) for
+use with the BirdFlowR package. The website includes reports on each
 species.
 
 We can also access the collection index through the package.
@@ -42,11 +42,67 @@ We can also access the collection index through the package.
 index <- load_collection_index()
 #> Downloading collection index
 print(index[, c("model", "common_name")])
-#>                model        common_name
-#> 1 amewoo_prebreeding  American Woodcock
-#> 3 buwtea_prebreeding   Blue-winged Teal
-#> 4 lobcur_prebreeding Long-billed Curlew
-#> 5 swahaw_prebreeding    Swainson's Hawk
+#>              model                  common_name
+#> 1   acafly_best_mo           Acadian Flycatcher
+#> 2   amewoo_best_dg            American Woodcock
+#> 3   babwar_best_mo         Bay-breasted Warbler
+#> 4   balori_best_mo             Baltimore Oriole
+#> 5   bkbwar_best_ll         Blackburnian Warbler
+#> 6   brebla_best_dg           Brewer's Blackbird
+#> 7   brespa_best_dg             Brewer's Sparrow
+#> 8   brnthr_best_mo               Brown Thrasher
+#> 9   brthum_best_dg     Broad-tailed Hummingbird
+#> 10  brwhaw_best_mo            Broad-winged Hawk
+#> 11  btbwar_best_dg  Black-throated Blue Warbler
+#> 12  btnwar_best_dg Black-throated Green Warbler
+#> 13  buggna_best_ll        Blue-gray Gnatcatcher
+#> 14  buhvir_best_mo            Blue-headed Vireo
+#> 15  bulori_best_dg             Bullock's Oriole
+#> 16  buwwar_best_dg          Blue-winged Warbler
+#> 17  calhum_best_dg         Calliope Hummingbird
+#> 18  camwar_best_dg             Cape May Warbler
+#> 19  canwar_best_dg               Canada Warbler
+#> 20  casvir_best_mo               Cassin's Vireo
+#> 21  cerwar_best_mo             Cerulean Warbler
+#> 22  chclon_best_dg   Chestnut-collared Longspur
+#> 23  chswar_best_mo       Chestnut-sided Warbler
+#> 24  clcspa_best_mo         Clay-colored Sparrow
+#> 25  dusfly_best_ll             Dusky Flycatcher
+#> 26  easkin_best_mo             Eastern Kingbird
+#> 27  gocspa_best_mo       Golden-crowned Sparrow
+#> 28  gowwar_best_ll        Golden-winged Warbler
+#> 29  graspa_best_mo          Grasshopper Sparrow
+#> 30  grycat_best_ll                 Gray Catbird
+#> 31  hoowar_best_mo               Hooded Warbler
+#> 32  indbun_best_mo               Indigo Bunting
+#> 33  kenwar_best_ll             Kentucky Warbler
+#> 34  lazbun_best_mo               Lazuli Bunting
+#> 35  leafly_best_dg             Least Flycatcher
+#> 36  louwat_best_ll        Louisiana Waterthrush
+#> 37  macwar_best_mo       MacGillivray's Warbler
+#> 38  magwar_best_mo             Magnolia Warbler
+#> 39  norpar_best_mo              Northern Parula
+#> 40  orcori_best_ll               Orchard Oriole
+#> 41  pinwar_best_ll                 Pine Warbler
+#> 42  prawar_best_ll              Prairie Warbler
+#> 43  prowar_best_mo         Prothonotary Warbler
+#> 44  robgro_best_mo       Rose-breasted Grosbeak
+#> 45  rthhum_best_mo    Ruby-throated Hummingbird
+#> 46  rufhum_best_ll           Rufous Hummingbird
+#> 47  sstspa_best_ll            Saltmarsh Sparrow
+#> 48  sumtan_best_mo               Summer Tanager
+#> 49  swaspa_best_ll                Swamp Sparrow
+#> 50  swawar_best_ll           Swainson's Warbler
+#> 51  tenwar_best_mo            Tennessee Warbler
+#> 52  vesspa_best_ll               Vesper Sparrow
+#> 53  virwar_best_dg           Virginia's Warbler
+#> 54  wesmea_best_ll           Western Meadowlark
+#> 55  westan_best_dg              Western Tanager
+#> 56  whtspa_best_mo       White-throated Sparrow
+#> 57  wilfly_best_ll            Willow Flycatcher
+#> 58 winwre3_best_dg                  Winter Wren
+#> 59  woothr_best_dg                  Wood Thrush
+#> 60  yebsap_best_mo     Yellow-bellied Sapsucker
 ```
 
 And we can load a model from the collection based on the `model` column
@@ -56,7 +112,7 @@ from the index.
 ``` r
 
 # Load a specific model
-bf <- load_model("amewoo_prebreeding") # caches locally and loads from cache
+bf <- load_model("amewoo") # caches locally and loads from cache
 ```
 
 This loads the smaller example model instead for efficiency of package

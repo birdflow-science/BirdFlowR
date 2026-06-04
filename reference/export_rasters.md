@@ -138,7 +138,7 @@ band by setting both arguments to `TRUE`.
 
 ``` r
 if (FALSE) { # \dontrun{
-  bf <- load_model("amewoo_prebreeding")
+  bf <- load_model("amewoo")
   dir <- tempdir()
   crs <-"EPSG:4326"
   export_tifs(bf, dir = dir, singleband = TRUE, crs = crs)

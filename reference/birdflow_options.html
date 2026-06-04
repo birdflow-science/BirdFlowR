@@ -11,7 +11,7 @@ more named arguments to set options."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9081</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9082</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,14 +61,14 @@ more named arguments to set options.</p>
 
 
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>One of:
-(1) one or more named arguments where the name is a
-an option and the value its new setting e.g. <code>verbose = FALSE</code> ;
-(2) a single unnamed argument stating an option to retrieve e.g.
-<code>"verbose"</code> with an option to retrieve.
-(3) No arguments, indicating that all options and their current settings
-should be returned in a list; or
-(4) a single list argument with named items and their new values.</p></dd>
+<dd><p>One of:</p><ol><li><p>one or more named arguments where the name is a
+an option and the value its new setting e.g. <code>verbose = FALSE</code> ;</p></li>
+<li><p>a single unnamed argument stating an option to retrieve e.g.
+<code>"verbose"</code> with an option to retrieve.</p></li>
+<li><p>No arguments, indicating that all options and their current settings
+should be returned in a list; or.</p></li>
+<li><p>a single list argument with named items and their new values.</p></li>
+</ol></dd>
 
 </dl></div>
     <div class="section level2">
@@ -112,7 +112,12 @@ directories, which in turn will hold BirdFlow model files and an index.</p></dd>
 
 <dt>collection_url</dt>
 <dd><p>This is the base URL of a collection of model files and its associated
-index.  The default is for the standard BirdFlowR model collection.</p></dd>
+index.  The default is for the standard BirdFlowR model collection.
+In June 2026 60 new vetted models were released and the default collection
+was changed to
+<a href="https://birdflow-science.s3.amazonaws.com/2026/index.html" class="external-link">https://birdflow-science.s3.amazonaws.com/2026/</a>
+To access the original 4 models set <code>collection_url</code> to
+<a href="https://birdflow-science.s3.amazonaws.com/collection/index.html" class="external-link">https://birdflow-science.s3.amazonaws.com/collection/</a>.</p></dd>
 
 
 </dl></div>
@@ -125,7 +130,7 @@ index.  The default is for the standard BirdFlowR model collection.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/.local/share/R/BirdFlowR"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $collection_url</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://birdflow-science.s3.amazonaws.com/collection/"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://birdflow-science.s3.amazonaws.com/2026/"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $max_param_per_gpu_gb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 23224801</span>

@@ -14,12 +14,18 @@ birdflow_options(...)
 
 - ...:
 
-  One of: (1) one or more named arguments where the name is a an option
-  and the value its new setting e.g. `verbose = FALSE` ; (2) a single
-  unnamed argument stating an option to retrieve e.g. `"verbose"` with
-  an option to retrieve. (3) No arguments, indicating that all options
-  and their current settings should be returned in a list; or (4) a
-  single list argument with named items and their new values.
+  One of:
+
+  1.  one or more named arguments where the name is a an option and the
+      value its new setting e.g. `verbose = FALSE` ;
+
+  2.  a single unnamed argument stating an option to retrieve e.g.
+      `"verbose"` with an option to retrieve.
+
+  3.  No arguments, indicating that all options and their current
+      settings should be returned in a list; or.
+
+  4.  a single list argument with named items and their new values.
 
 ## Value
 
@@ -72,7 +78,12 @@ returned.
 - collection_url:
 
   This is the base URL of a collection of model files and its associated
-  index. The default is for the standard BirdFlowR model collection.
+  index. The default is for the standard BirdFlowR model collection. In
+  June 2026 60 new vetted models were released and the default
+  collection was changed to
+  [https://birdflow-science.s3.amazonaws.com/2026/](https://birdflow-science.s3.amazonaws.com/2026/index.html)
+  To access the original 4 models set `collection_url` to
+  [https://birdflow-science.s3.amazonaws.com/collection/](https://birdflow-science.s3.amazonaws.com/collection/index.html).
 
 ## Examples
 
@@ -83,7 +94,7 @@ birdflow_options() # print current settings
 #> [1] "/home/runner/.local/share/R/BirdFlowR"
 #> 
 #> $collection_url
-#> [1] "https://birdflow-science.s3.amazonaws.com/collection/"
+#> [1] "https://birdflow-science.s3.amazonaws.com/2026/"
 #> 
 #> $max_param_per_gpu_gb
 #> [1] 23224801

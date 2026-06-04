@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9081</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9082</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@
 <div class="section level4">
 <h4 id="load-model">Load model<a class="anchor" aria-label="anchor" href="#load-model"></a>
 </h4>
-<p>The BirdFlow Science team has shared a <a href="https://birdflow-science.s3.amazonaws.com/collection/index.html" class="external-link">collection
+<p>The BirdFlow Science team has shared a <a href="https://birdflow-science.s3.amazonaws.com/2026/index.html" class="external-link">collection
 of fitted models</a> for use with the BirdFlowR package. The website
 includes reports on each species.</p>
 <p>We can also access the collection index through the package.</p>
@@ -107,16 +107,72 @@ includes reports on each species.</p>
 <span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_collection_index.html">load_collection_index</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Downloading collection index</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">index</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"common_name"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                model        common_name</span></span>
-<span><span class="co">#&gt; 1 amewoo_prebreeding  American Woodcock</span></span>
-<span><span class="co">#&gt; 3 buwtea_prebreeding   Blue-winged Teal</span></span>
-<span><span class="co">#&gt; 4 lobcur_prebreeding Long-billed Curlew</span></span>
-<span><span class="co">#&gt; 5 swahaw_prebreeding    Swainson's Hawk</span></span></code></pre></div>
+<span><span class="co">#&gt;              model                  common_name</span></span>
+<span><span class="co">#&gt; 1   acafly_best_mo           Acadian Flycatcher</span></span>
+<span><span class="co">#&gt; 2   amewoo_best_dg            American Woodcock</span></span>
+<span><span class="co">#&gt; 3   babwar_best_mo         Bay-breasted Warbler</span></span>
+<span><span class="co">#&gt; 4   balori_best_mo             Baltimore Oriole</span></span>
+<span><span class="co">#&gt; 5   bkbwar_best_ll         Blackburnian Warbler</span></span>
+<span><span class="co">#&gt; 6   brebla_best_dg           Brewer's Blackbird</span></span>
+<span><span class="co">#&gt; 7   brespa_best_dg             Brewer's Sparrow</span></span>
+<span><span class="co">#&gt; 8   brnthr_best_mo               Brown Thrasher</span></span>
+<span><span class="co">#&gt; 9   brthum_best_dg     Broad-tailed Hummingbird</span></span>
+<span><span class="co">#&gt; 10  brwhaw_best_mo            Broad-winged Hawk</span></span>
+<span><span class="co">#&gt; 11  btbwar_best_dg  Black-throated Blue Warbler</span></span>
+<span><span class="co">#&gt; 12  btnwar_best_dg Black-throated Green Warbler</span></span>
+<span><span class="co">#&gt; 13  buggna_best_ll        Blue-gray Gnatcatcher</span></span>
+<span><span class="co">#&gt; 14  buhvir_best_mo            Blue-headed Vireo</span></span>
+<span><span class="co">#&gt; 15  bulori_best_dg             Bullock's Oriole</span></span>
+<span><span class="co">#&gt; 16  buwwar_best_dg          Blue-winged Warbler</span></span>
+<span><span class="co">#&gt; 17  calhum_best_dg         Calliope Hummingbird</span></span>
+<span><span class="co">#&gt; 18  camwar_best_dg             Cape May Warbler</span></span>
+<span><span class="co">#&gt; 19  canwar_best_dg               Canada Warbler</span></span>
+<span><span class="co">#&gt; 20  casvir_best_mo               Cassin's Vireo</span></span>
+<span><span class="co">#&gt; 21  cerwar_best_mo             Cerulean Warbler</span></span>
+<span><span class="co">#&gt; 22  chclon_best_dg   Chestnut-collared Longspur</span></span>
+<span><span class="co">#&gt; 23  chswar_best_mo       Chestnut-sided Warbler</span></span>
+<span><span class="co">#&gt; 24  clcspa_best_mo         Clay-colored Sparrow</span></span>
+<span><span class="co">#&gt; 25  dusfly_best_ll             Dusky Flycatcher</span></span>
+<span><span class="co">#&gt; 26  easkin_best_mo             Eastern Kingbird</span></span>
+<span><span class="co">#&gt; 27  gocspa_best_mo       Golden-crowned Sparrow</span></span>
+<span><span class="co">#&gt; 28  gowwar_best_ll        Golden-winged Warbler</span></span>
+<span><span class="co">#&gt; 29  graspa_best_mo          Grasshopper Sparrow</span></span>
+<span><span class="co">#&gt; 30  grycat_best_ll                 Gray Catbird</span></span>
+<span><span class="co">#&gt; 31  hoowar_best_mo               Hooded Warbler</span></span>
+<span><span class="co">#&gt; 32  indbun_best_mo               Indigo Bunting</span></span>
+<span><span class="co">#&gt; 33  kenwar_best_ll             Kentucky Warbler</span></span>
+<span><span class="co">#&gt; 34  lazbun_best_mo               Lazuli Bunting</span></span>
+<span><span class="co">#&gt; 35  leafly_best_dg             Least Flycatcher</span></span>
+<span><span class="co">#&gt; 36  louwat_best_ll        Louisiana Waterthrush</span></span>
+<span><span class="co">#&gt; 37  macwar_best_mo       MacGillivray's Warbler</span></span>
+<span><span class="co">#&gt; 38  magwar_best_mo             Magnolia Warbler</span></span>
+<span><span class="co">#&gt; 39  norpar_best_mo              Northern Parula</span></span>
+<span><span class="co">#&gt; 40  orcori_best_ll               Orchard Oriole</span></span>
+<span><span class="co">#&gt; 41  pinwar_best_ll                 Pine Warbler</span></span>
+<span><span class="co">#&gt; 42  prawar_best_ll              Prairie Warbler</span></span>
+<span><span class="co">#&gt; 43  prowar_best_mo         Prothonotary Warbler</span></span>
+<span><span class="co">#&gt; 44  robgro_best_mo       Rose-breasted Grosbeak</span></span>
+<span><span class="co">#&gt; 45  rthhum_best_mo    Ruby-throated Hummingbird</span></span>
+<span><span class="co">#&gt; 46  rufhum_best_ll           Rufous Hummingbird</span></span>
+<span><span class="co">#&gt; 47  sstspa_best_ll            Saltmarsh Sparrow</span></span>
+<span><span class="co">#&gt; 48  sumtan_best_mo               Summer Tanager</span></span>
+<span><span class="co">#&gt; 49  swaspa_best_ll                Swamp Sparrow</span></span>
+<span><span class="co">#&gt; 50  swawar_best_ll           Swainson's Warbler</span></span>
+<span><span class="co">#&gt; 51  tenwar_best_mo            Tennessee Warbler</span></span>
+<span><span class="co">#&gt; 52  vesspa_best_ll               Vesper Sparrow</span></span>
+<span><span class="co">#&gt; 53  virwar_best_dg           Virginia's Warbler</span></span>
+<span><span class="co">#&gt; 54  wesmea_best_ll           Western Meadowlark</span></span>
+<span><span class="co">#&gt; 55  westan_best_dg              Western Tanager</span></span>
+<span><span class="co">#&gt; 56  whtspa_best_mo       White-throated Sparrow</span></span>
+<span><span class="co">#&gt; 57  wilfly_best_ll            Willow Flycatcher</span></span>
+<span><span class="co">#&gt; 58 winwre3_best_dg                  Winter Wren</span></span>
+<span><span class="co">#&gt; 59  woothr_best_dg                  Wood Thrush</span></span>
+<span><span class="co">#&gt; 60  yebsap_best_mo     Yellow-bellied Sapsucker</span></span></code></pre></div>
 <p>And we can load a model from the collection based on the
 <code>model</code> column from the index.<br><strong>Note:</strong> in the vignette this block isn’t executed.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load a specific model</span></span>
-<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_model.html">load_model</a></span><span class="op">(</span><span class="st">"amewoo_prebreeding"</span><span class="op">)</span> <span class="co"># caches locally and loads from cache</span></span></code></pre></div>
+<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_model.html">load_model</a></span><span class="op">(</span><span class="st">"amewoo"</span><span class="op">)</span> <span class="co"># caches locally and loads from cache</span></span></code></pre></div>
 <p>This loads the smaller example model instead for efficiency of
 package building and testing, but do not use this one for science!</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

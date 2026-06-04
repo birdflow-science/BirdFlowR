@@ -19,7 +19,8 @@ load_model(
 
 - model:
 
-  The model name to load.
+  The model name to load. A species code can also be used if the
+  collection does not contain more than one model for each species.
 
 - update:
 
