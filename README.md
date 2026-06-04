@@ -35,8 +35,9 @@ remotes::install_github("birdflow-science/BirdFlowModels")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
-See `vignette("Installation")` for troubleshooting and more installation
-options.
+See the [Installation
+vignette](https://birdflow-science.github.io/BirdFlowR/articles/Installation.html)
+for more information and help troubleshooting.
 
 ## Usage
 
