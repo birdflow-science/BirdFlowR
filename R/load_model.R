@@ -46,7 +46,7 @@ load_model <- function(model, update = TRUE,
   # Identify row associated with this model
   r <- which(index$model == model) # model column
   if (length(r) == 0)
-    r <- which(index$species_code == model)[1] # or fallback to species
+    r <- which(index$species_code == model) # or fallback to species
   if (length(r) != 1) {
       stop('"', model, '" is not in the current collection. ',
          'Run "load_collection_index()" for information on available models.')
