@@ -1,5 +1,6 @@
-FROM --platform=linux/amd64 rocker/geospatial:4.3.2
+FROM rocker/geospatial:4.6.0
 RUN install2.r --error --skipinstalled --ncpus -1 \
+    remotes \
     rnaturalearth \
     rnaturalearthdata \
     ebirdst \

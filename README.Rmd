@@ -29,31 +29,29 @@ set.seed(1)
 An R package to predict changes in bird distributions and generate synthetic 
 migration routes based on BirdFlow models.
 
-This package is under development and not yet formally released. Function names
-and arguments may change.
-
 
 ## Installation
 
 Install just the package:
 ```{r install, eval = FALSE}
-if(!require("remotes"))
-  install.packages("remotes") 
+if (!require("remotes"))
+  install.packages("remotes")
 remotes::install_github("birdflow-science/BirdFlowR")
 ```
 Or to install with example data and vignette:
 
 ```{r install everything, eval = FALSE}
 installed <- rownames(installed.packages())
-if(!"remotes" %in% installed)
+if (!"remotes" %in% installed)
   install.packages("remotes")
-if(!"rnaturalearthdata" %in% installed)
+if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
 remotes::install_github("birdflow-science/BirdFlowModels")
-remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
-See `vignette("Installation")` for troubleshooting and more installation 
-options.
+See the 
+[Installation vignette](https://birdflow-science.github.io/BirdFlowR/articles/Installation.html) 
+for more information and help troubleshooting.
 
 ## Usage 
 
@@ -61,7 +59,7 @@ The two primary functions are `predict()` to project distributions and
 `route()` to generate synthetic routes.  
 
 `route_migration()` is a wrapper to `route()` which automates sampling
-locations from the a distribution for the start of the migration and setting 
+locations from a distribution for the start of the migration and setting 
 the start and end dates to route for the migration window. We can use it to 
 create synthetic routes for a species.
 ```{r examples}

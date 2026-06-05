@@ -13,16 +13,13 @@ coverage](https://codecov.io/gh/birdflow-science/BirdFlowR/branch/main/graph/bad
 An R package to predict changes in bird distributions and generate
 synthetic migration routes based on BirdFlow models.
 
-This package is under development and not yet formally released.
-Function names and arguments may change.
-
 ## Installation
 
 Install just the package:
 
 ``` r
-if(!require("remotes"))
-  install.packages("remotes") 
+if (!require("remotes"))
+  install.packages("remotes")
 remotes::install_github("birdflow-science/BirdFlowR")
 ```
 
@@ -30,16 +27,17 @@ Or to install with example data and vignette:
 
 ``` r
 installed <- rownames(installed.packages())
-if(!"remotes" %in% installed)
+if (!"remotes" %in% installed)
   install.packages("remotes")
-if(!"rnaturalearthdata" %in% installed)
+if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
 remotes::install_github("birdflow-science/BirdFlowModels")
-remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
-See `vignette("Installation")` for troubleshooting and more installation
-options.
+See the [Installation
+vignette](https://birdflow-science.github.io/BirdFlowR/articles/Installation.html)
+for more information and help troubleshooting.
 
 ## Usage
 
@@ -47,9 +45,9 @@ The two primary functions are `predict()` to project distributions and
 `route()` to generate synthetic routes.
 
 `route_migration()` is a wrapper to `route()` which automates sampling
-locations from the a distribution for the start of the migration and
-setting the start and end dates to route for the migration window. We
-can use it to create synthetic routes for a species.
+locations from a distribution for the start of the migration and setting
+the start and end dates to route for the migration window. We can use it
+to create synthetic routes for a species.
 
 ``` r
 library(BirdFlowR)
@@ -67,7 +65,7 @@ rts <- route(bf, n = 10, season = "prebreeding")
 plot_routes(rts, bf)
 ```
 
-<img src="man/figures/README-examples-1.png" width="100%" />
+<img src="man/figures/README-examples-1.png" alt="" width="100%" />
 
 Visualize the movement in the BirdFlow model for a timestep.
 
@@ -76,7 +74,7 @@ Visualize the movement in the BirdFlow model for a timestep.
 plot_movement_vectors(bf, start = 12)
 ```
 
-<img src="man/figures/README-movement_vectors-1.png" width="100%" />
+<img src="man/figures/README-movement_vectors-1.png" alt="" width="100%" />
 
 ## Learn more
 
@@ -86,7 +84,7 @@ plot_movement_vectors(bf, start = 12)
 - `vignette("Installation")` for detailed installation instructions.
 - `vignette("Preprocess")` covers downloading and formatting data for
   model fitting with `preprocess_species()`, importing fitted models
-  with `import_birdflow()`, and reducing model size with `sparsify()`.  
+  with `import_birdflow()`, and reducing model size with `sparsify()`.\
 - Read the paper:
   - [BirdFlow: Learning Seasonal Bird Movements from Citizen Science
     Data](https://www.biorxiv.org/content/10.1101/2022.04.12.488057v1)
