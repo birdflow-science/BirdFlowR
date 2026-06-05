@@ -3,7 +3,7 @@
 ## Standard install
 
 This uses R and RStudio installed directly on your system if you have
-both of those installed skip to step 3.
+both of those installed, skip to step 3.
 
 1.  [Install R from CRAN](https://cran.r-project.org/) - follow links
     for your system in the upper right. I’m currently using R version
@@ -24,7 +24,7 @@ both of those installed skip to step 3.
     if (!"rnaturalearthdata" %in% installed)
       install.packages("rnaturalearthdata")
     remotes::install_github("birdflow-science/BirdFlowModels")
-    remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+    remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
     ```
 
     Package dependencies can be a pain. If the above doesn’t work you
@@ -38,12 +38,33 @@ both of those installed skip to step 3.
       install.packages("pak")
 
     pak::pkg_install("rnaturalearthdata", ask = FALSE)
-    pak::pkg_install("birdflow-science/BirdFlowModels", ask = FALSE, )
+    pak::pkg_install("birdflow-science/BirdFlowModels", ask = FALSE)
     pak::pkg_install("birdflow-science/BirdFlowR", ask = FALSE,
                      dependencies = TRUE)
     ```
 
-    If neither of those methods work a last option to try with specific
+    If you are having issues installing the **rhdf5** package
+    distributed through [bioconductor](https://bioconductor.org/) you
+    could try these alternate ways of installing it and then try
+    installing BirdFlowR again.
+
+    ``` r
+
+    devtools::install_bioc("rhdf5")
+    ```
+
+    If that still doesn’t work try using the bioconductor installer to
+    install **rhdf5**.
+
+    ``` r
+
+
+    if (!require("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+    BiocManager::install("rhdf5")
+    ```
+
+    If none of these methods work a last option to try with specific
     troublesome packages is to use RStudio’s “Install Packages” from the
     top of the “Tools” menu.
 
@@ -57,19 +78,12 @@ similar).
 1.  Download and install [Docker
     Desktop](https://www.docker.com/products/docker-desktop/).
 
-2.  If your computer has an Apple Silicon chip (e.g., M1 or M2), in
-    Docker Desktop go to Settings \> General and ensure “Use
-    Virtualization Framework” is checked, then go to Features in
-    Development \> and check “Use Rosetta for x86/amd64 emulation on
-    Apple Silicon”. Apply these settings and restart Docker Desktop as
-    needed.
+2.  Ensure that Docker Desktop is running.
 
-3.  Ensure that Docker Desktop is running.
-
-4.  Clone the [BirdFlowR
+3.  Clone the [BirdFlowR
     package](https://github.com/birdflow-science/BirdFlowR) from GitHub.
 
-5.  Go to the top level BirdFlowR directory, build the image from the
+4.  Go to the top level BirdFlowR directory, build the image from the
     Dockerfile, and tag the image as ‘birdflow’. It will take a long
     time the first time because it will need to download the
     rocker/geospatial: image from Docker Hub, which is the starting
@@ -86,32 +100,32 @@ similar).
     docker build -t birdflow . --no-cache
     ```
 
-6.  Launch a Docker container from the image, and launch an RStudio
+5.  Launch a Docker container from the image, and launch an RStudio
     Server instance from the container. If you’re doing it locally on
     your computer, you can use this version to skip the password.
     Specifying the IP address in this way should make it only accessible
     from the same computer, according to the Rocker page.
 
     ``` bash
-    docker run --platform linux/amd64 --rm -ti -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 birdflow
+    docker run --rm -ti -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 birdflow
     ```
 
     If you’re doing it between computers, make sure to only include the
     ports, and require authentication:
 
     ``` bash
-    docker run --platform linux/amd64 --rm -ti -e PASSWORD=yourpassword -p 8787:8787 birdflow
+    docker run --rm -ti -e PASSWORD=yourpassword -p 8787:8787 birdflow
     ```
 
-7.  Once you see the message saying services are started, point your web
+6.  Once you see the message saying services are started, point your web
     browser to [localhost:8787/](localhost:8787/) to use RStudio from
     the image.
 
-8.  When you’re done, go back to the terminal window that started the
+7.  When you’re done, go back to the terminal window that started the
     docker services, and hit Control-C. This will send a kill signal to
     the container that is supporting the RStudio server process.
 
-9.  The Rocker webpage shows some ways to persist directories and
+8.  The Rocker webpage shows some ways to persist directories and
     settings between the container and host as well, so that you don’t
     lose your RStudio settings and local work each time you launch/close
     a container.
@@ -132,12 +146,10 @@ set_ebirdst_access_key("XXXXX")
 
 where “XXXXX” is the access key.
 
-Then restart R.
-
 ## Test
 
-Run these lines to see see if you’ve installed the two BirdFlow packages
-and their dependencies.
+Run these lines to see if you’ve installed the two BirdFlow packages and
+their dependencies.
 
 ``` r
 

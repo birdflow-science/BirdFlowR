@@ -3,17 +3,14 @@
 An R package to predict changes in bird distributions and generate
 synthetic migration routes based on BirdFlow models.
 
-This package is under development and not yet formally released.
-Function names and arguments may change.
-
 ## Installation
 
 Install just the package:
 
 ``` r
 
-if(!require("remotes"))
-  install.packages("remotes") 
+if (!require("remotes"))
+  install.packages("remotes")
 remotes::install_github("birdflow-science/BirdFlowR")
 ```
 
@@ -22,17 +19,17 @@ Or to install with example data and vignette:
 ``` r
 
 installed <- rownames(installed.packages())
-if(!"remotes" %in% installed)
+if (!"remotes" %in% installed)
   install.packages("remotes")
-if(!"rnaturalearthdata" %in% installed)
+if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
 remotes::install_github("birdflow-science/BirdFlowModels")
-remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
+remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
-See
-[`vignette("Installation")`](https://birdflow-science.github.io/BirdFlowR/articles/Installation.md)
-for troubleshooting and more installation options.
+See the [Installation
+vignette](https://birdflow-science.github.io/BirdFlowR/articles/Installation.html)
+for more information and help troubleshooting.
 
 ## Usage
 
@@ -45,8 +42,8 @@ to generate synthetic routes.
 [`route_migration()`](https://birdflow-science.github.io/BirdFlowR/reference/route_migration.md)
 is a wrapper to
 [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
-which automates sampling locations from the a distribution for the start
-of the migration and setting the start and end dates to route for the
+which automates sampling locations from a distribution for the start of
+the migration and setting the start and end dates to route for the
 migration window. We can use it to create synthetic routes for a
 species.
 

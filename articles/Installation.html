@@ -73,7 +73,7 @@
 <h2 id="standard-install">Standard install<a class="anchor" aria-label="anchor" href="#standard-install"></a>
 </h2>
 <p>This uses R and RStudio installed directly on your system if you have
-both of those installed skip to step 3.</p>
+both of those installed, skip to step 3.</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://cran.r-project.org/" class="external-link">Install R from CRAN</a> -
 follow links for your system in the upper right. I’m currently using R
@@ -92,7 +92,7 @@ in the console.</p>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"rnaturalearthdata"</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rnaturalearthdata"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowModels"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Package dependencies can be a pain. If the above doesn’t work you can
 also try the alternative method below, also executed in the RStudio
 console.</p>
@@ -102,10 +102,23 @@ console.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"rnaturalearthdata"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowModels"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, <span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowModels"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowR"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                 dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>If neither of those methods work a last option to try with specific
+<p>If you are having issues installing the <strong>rhdf5</strong>
+package distributed through <a href="https://bioconductor.org/" class="external-link">bioconductor</a> you could try these
+alternate ways of installing it and then try installing BirdFlowR
+again.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_bioc</span><span class="op">(</span><span class="st">"rhdf5"</span><span class="op">)</span></span></code></pre></div>
+<p>If that still doesn’t work try using the bioconductor installer to
+install <strong>rhdf5</strong>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"rhdf5"</span><span class="op">)</span></span></code></pre></div>
+<p>If none of these methods work a last option to try with specific
 troublesome packages is to use RStudio’s “Install Packages” from the top
 of the “Tools” menu.</p>
 </li>
@@ -120,11 +133,6 @@ be similar).</p>
 <ol style="list-style-type: decimal">
 <li><p>Download and install <a href="https://www.docker.com/products/docker-desktop/" class="external-link">Docker
 Desktop</a>.</p></li>
-<li><p>If your computer has an Apple Silicon chip (e.g., M1 or M2), in
-Docker Desktop go to Settings &gt; General and ensure “Use
-Virtualization Framework” is checked, then go to Features in Development
-&gt; and check “Use Rosetta for x86/amd64 emulation on Apple Silicon”.
-Apply these settings and restart Docker Desktop as needed.</p></li>
 <li><p>Ensure that Docker Desktop is running.</p></li>
 <li><p>Clone the <a href="https://github.com/birdflow-science/BirdFlowR" class="external-link">BirdFlowR
 package</a> from GitHub.</p></li>
@@ -139,8 +147,8 @@ cached by Docker, so all it needs to do to is re-install our custom
 packages. The build step really only needs to happen when you want to
 use a newer version of the BirdFlowR repo. See also the <a href="https://rocker-project.org/images/versioned/rstudio.html" class="external-link">Rocker
 RStudio images</a>.</version></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="bu">cd</span> ~/BirdFlowR</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow . <span class="at">--no-cache</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="bu">cd</span> ~/BirdFlowR</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> birdflow . <span class="at">--no-cache</span></span></code></pre></div>
 </li>
 <li>
 <p>Launch a Docker container from the image, and launch an RStudio
@@ -148,10 +156,10 @@ Server instance from the container. If you’re doing it locally on your
 computer, you can use this version to skip the password. Specifying the
 IP address in this way should make it only accessible from the same
 computer, according to the Rocker page.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--platform</span> linux/amd64 <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> DISABLE_AUTH=true <span class="at">-p</span> 127.0.0.1:8787:8787 birdflow</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> DISABLE_AUTH=true <span class="at">-p</span> 127.0.0.1:8787:8787 birdflow</span></code></pre></div>
 <p>If you’re doing it between computers, make sure to only include the
 ports, and require authentication:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--platform</span> linux/amd64 <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> PASSWORD=yourpassword <span class="at">-p</span> 8787:8787 birdflow</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-ti</span> <span class="at">-e</span> PASSWORD=yourpassword <span class="at">-p</span> 8787:8787 birdflow</span></code></pre></div>
 </li>
 <li><p>Once you see the message saying services are started, point your
 web browser to <a href="localhost:8787/">localhost:8787/</a> to use
@@ -174,18 +182,17 @@ you must request <a href="https://ebird.org/st/request" class="external-link">vi
 form</a>.</p>
 <p>Once you have the code you should run (in the R or RStudio
 console):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ebird.github.io/ebirdst/" class="external-link">ebirdst</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ebird.github.io/ebirdst/reference/set_ebirdst_access_key.html" class="external-link">set_ebirdst_access_key</a></span><span class="op">(</span><span class="st">"XXXXX"</span><span class="op">)</span></span></code></pre></div>
 <p>where “XXXXX” is the access key.</p>
-<p>Then restart R.</p>
 </div>
 <div class="section level2">
 <h2 id="test">Test<a class="anchor" aria-label="anchor" href="#test"></a>
 </h2>
-<p>Run these lines to see see if you’ve installed the two BirdFlow
-packages and their dependencies.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Run these lines to see if you’ve installed the two BirdFlow packages
+and their dependencies.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://birdflow-science.github.io/BirdFlowR/">BirdFlowR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
