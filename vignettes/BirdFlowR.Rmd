@@ -118,19 +118,34 @@ validate_BirdFlow(bf)  # throws error if there are problems
 ```
 ## Spatial aspects
 
-BirdFlow models are based on a raster representation of a time series of species
-distributions and contain all the spatial information necessary to recreate 
-those distributions and to define how the raster is positioned in space.
-BirdFlowR uses the **terra** package to import raster data and provides BirdFlow 
-methods for functions defined in the terra package - so that you can use those 
-functions on BirdFlow objects.
+A BirdFlow model is built on a raster grid with a **static mask** that defines
+which cells are *active* — those with non-zero probability in at least one week
+of the eBird Status and Trends data the model was trained on.
 
-`crs()` returns the coordinate reference system - useful if you need to project other data to match the BirdFlow object.
-`res()`, `xres()`, and `yres()` describe the dimensions of individual cells in the model.
-`ext()` returns a terra extent object.  
-`compare_geom()` tests if the extent, resolution, and CRS of two objects is the
-same. BirdFlowR includes methods to compare BirdFlow models with each other and
-with terra objects.
+A **distribution** is a numeric vector of length `n_active(bf)`, one value per
+active cell, representing a probability mass function: values sum to
+approximately 1 and each gives the proportion of the population in that cell.
+Multiple distributions are stored as a matrix with `n_active(bf)` rows and one
+column per timestep — the common format returned by `get_distr()` and consumed by
+`predict()`.
+Distributions are model-specific: each BirdFlow model has its own extent and
+mask, so a distribution from one model cannot be used with another.
+
+```{r distribution-figure, echo = FALSE, out.width = "100%", fig.cap = "BirdFlow distribution data structure: the raster mask selects active cells, which are stored as a flat vector (one distribution) or matrix (multiple distributions)."}
+knitr::include_graphics("DistributionDataStructures.png")
+```
+
+BirdFlowR uses the **terra** package for raster data and provides BirdFlow
+methods for terra functions, so you can use them directly on BirdFlow objects.
+
+`crs()` returns the coordinate reference system — useful if you need to project
+other data to match the BirdFlow object.
+`res()`, `xres()`, and `yres()` describe the dimensions of individual cells.
+`ext()` returns a terra extent object.
+`compareGeom()` tests whether two objects share the same CRS, extent, and cell
+size; BirdFlowR includes methods to compare BirdFlow models with each other and
+with terra objects. `compareGeom()` does not check for a comparable static 
+mask. 
 
 ```{r spatial aspects terra}
 # Methods for terra functions:
@@ -154,19 +169,12 @@ crs <- sf::st_crs(bf)
 
 ### Spatial index conversions
 
-BirdFlow models represent the species range as a raster, but only cells within
-the modeled range are active.
-The index `i` numbers these active cells from 1 to `n_active(bf)`, skipping
-all masked-out cells.
-This is a fundamental spatial data structure used by BirdFlowR: a distribution is a vector
-of length `n_active(bf)` with one value per active cell.  Importantly, 
-a distribution is tied to a single BirdFlow model as each model will likely have
-a different extent and mask.  
-
-`i_to_xy()` and `xy_to_i()` convert between the `i` index and projected x/y
-coordinates in the model's CRS.
+The index `i` numbers active cells from 1 to `n_active(bf)`, skipping
+masked-out cells (visible in the figure above as the gray shaded cells).
+`i_to_xy()` and `xy_to_i()` convert between `i` and projected x/y coordinates
+in the model's CRS.
 `latlon_to_xy()` and `xy_to_latlon()` convert between WGS84 latitude/longitude
-and the model CRS, which is useful for specifying locations from outside data.
+and the model CRS, useful for bringing in locations from outside data.
 
 ```{r spatial index conversions}
 # Coordinates of the first active cell
@@ -187,8 +195,14 @@ latlon_to_xy(lat = 42.4, lon = -72.5, bf) |> xy_to_i(bf = bf)
 
 ## Specifying Time
 
-BirdFlow models represent time as a sequence of discrete timesteps, typically
-one per week.
+BirdFlow models represent time as a loop of 52 timesteps (weeks), loosely
+anchored to a nominal year. There is an explicit link forward in time from
+timestep 52 to timestep 1.
+
+```{r time-structure-figure, echo = FALSE, out.width = "80%", fig.align = "center", fig.cap = "BirdFlow's 52-timestep year. Dots mark timesteps; lines between them mark transitions. Colors match the seasonal gradient used by plot_routes(). The bold line at the Dec/Jan boundary marks the year wrap-around. Season ranges shown are for American Woodcock."}
+knitr::include_graphics("TimeStructure.png")
+```
+
 Most functions that operate over time — `get_distr()`, `predict()`, `route()`
 — accept time in any of three forms:
 
@@ -240,21 +254,7 @@ lookup_timestep_sequence(bf, start = 50, end = 3)
 lookup_timestep_sequence(bf, start = 1, end = 45, direction = "backward")
 
 ```
-
 ## Retrieve and plot distributions
-
-```{r distribution-figure, echo = FALSE, out.width = "100%", fig.cap = "BirdFlow distribution data structure: the raster mask selects active cells, which are stored as a flat vector (one distribution) or matrix (multiple distributions)."}
-knitr::include_graphics("DistributionDataStructures.png")
-```
-
-A BirdFlow distribution is a numeric vector with one value per active cell —
-length `n_active(bf)`.
-It represents a probability mass function: values sum to approximately 1, and
-each value is the proportion of the population in that cell.
-Multiple distributions are stored as a matrix with `n_active(bf)` rows and one
-column per timestep.
-This compact format is the common currency of BirdFlow: `get_distr()` returns
-it, `predict()` takes it as input and returns it.
 
 We can retrieve distributions in this format with `get_distr()`.
 Use timestep, character dates, date objects, or "all" to specify 
@@ -307,6 +307,7 @@ plot(r)
 coast <- get_coastline(bf)  # lines
 plot(coast, add = TRUE)
 ```
+
 # Plotting Distributions
 `plot_distr()` will make pretty **ggplot2** plots that handle conversion to 
 raster overlaying the coastline, and optionally showing the static mask.
@@ -438,6 +439,10 @@ rts3 <- route(bf, n = n_positions, season = "prebreeding")
 `plot()` will visualize `Routes` and `BirdFlowRoutes` objects 
 with time as a color gradient and stop point dots that indicate how long a 
 bird was at each location.
+
+
+
+
 
 ```{r plot routes}
 plot(rts, bf)
