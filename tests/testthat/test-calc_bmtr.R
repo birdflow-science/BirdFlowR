@@ -39,6 +39,25 @@ test_that("calc_bmtr() works with weights", {
 })
 
 
+test_that("plot_bmtr() subset drops excluded transitions (no empty facets)", {
+  local_quiet()
+  bf <- BirdFlowModels::amewoo
+  bf <- truncate_birdflow(bf, start = 1, end = 5)
+  bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
+
+  f <- calc_bmtr(bf)
+  all_trans <- sort(unique(f$transition))
+  expect_true(length(all_trans) >= 3)
+
+  # Numeric subset: keep first 2 transitions
+  expect_no_error(p <- plot_bmtr(f, bf, subset = 1:2))
+  expect_equal(nlevels(p$data$label), 2L)
+
+  # Character subset: keep same 2 transitions by name
+  expect_no_error(p2 <- plot_bmtr(f, bf, subset = all_trans[1:2]))
+  expect_equal(nlevels(p2$data$label), 2L)
+})
+
 test_that("Test sensativity of bmtr to radius", {
   local_quiet()
   testthat::skip("In depth bmtr radius analysis - always skipped")
