@@ -1,6 +1,6 @@
 ---
 title: "BirdFlowR"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
   # Set to FALSE for efficient maintenance, testing, and deployment of the package, or
   # TRUE to use full model suitable for inference.
-  use_real_model <- FALSE 
+  use_real_model <- FALSE
 
 ```
 
@@ -49,9 +49,9 @@ library(ggplot2)
 
 ### Load model
 
-The BirdFlow Science team has shared a 
+The BirdFlow Science team has shared a
 [collection of fitted models](`r paste0(birdflow_options("collection_url"), "index.html")`) for use with
-the BirdFlowR package; as of mid-2026 the collection includes 60 vetted species. 
+the BirdFlowR package; as of mid-2026 the collection includes 60 vetted species.
 The website includes reports on each species that include a visualization of the
 distribution it was trained on and BirdFlow Migration Traffic Rate (BMTR) derived from the model.
 <!-- TODO: Once URL is confirmed, add: "A separate [Avian Influenza collection](URL) is also available, providing models used for HPAI spread risk analysis." -->
@@ -64,8 +64,8 @@ index <- load_collection_index()
 head(index[, c("model", "species_code", "common_name")])
 ```
 
-And we can load a model from the collection based on the `model` or `species` columns from 
-the index.  
+And we can load a model from the collection based on the `model` or `species` columns from
+the index.
 **Note:** in the vignette this block isn't executed.
 ```{r load model, eval = use_real_model}
 # Load a specific model
@@ -77,53 +77,33 @@ and testing, but do not use this one for science!
 bf <- BirdFlowModels::amewoo # example and test dataset
 ```
 
-## Access model attributes
+## Quick demo
 
-### Basic information
-`dim()`, `nrow()`, and `ncol()` all report on raster dimensions associated with the model.
-`n_active` is the count of active cells — those the BirdFlow model can route birds through — a subset of all cells in the raster.
-`n_transitions()` and `n_distr()` report on temporal dimensions. If the model `is_cyclical()`, they will be equal.
+BirdFlowR generates synthetic migration routes and forecasts distributions
+forward or backward through time. Here's a taste before we cover how it works.
 
-```{r access}
-# Methods for base R functions:
-dim(bf)
-c(nrow(bf), ncol(bf))
-bf # same as print(bf)
+### Routes
 
-# BirdFlowR functions
-n_active(bf)
-n_transitions(bf)
-n_timesteps(bf)
+`route()` generates stochastic migration routes by stepping birds through the
+model transitions. Calling it with a `season` argument uses species-specific
+dates from eBird to set the time span.
 
-# Contents
-has_marginals(bf)
-has_distr(bf)
-has_transitions(bf)
-is_cyclical(bf)
+```{r quick demo routes}
+set.seed(0)
+rts <- route(bf, n = 15, season = "prebreeding")
+plot(rts, bf)
 ```
 
-### Species information
-`species_info()` and `get_metadata()` take a BirdFlow object as their first argument.
-An optional second argument allows specifying a specific item; if omitted, a list is returned with all available information.
+### Forecast
 
-`species(bf)` is a shortcut for `species_info(bf, "common_name")`
+`predict()` propagates a starting distribution forward through time. Here we
+sample a single winter location and project it forward to the breeding season.
 
-Use `?species_info()` to see descriptions of all the available information.
-Dates associated with migration and resident seasons are likely to be useful.
-
-```{r BirdFlow specific info}
-species(bf)
-species(bf, "scientific")
-species_info(bf, "prebreeding_migration_start")
-si <-  species_info(bf) # list with all species information
-```
-
-### Metadata 
-
-```{r metadata}
-md <- get_metadata(bf)  # list with all metadata
-get_metadata(bf, "birdflow_model_date") # date and time model was exported from python
-get_metadata(bf, "ebird_version_year")  # eBird version year - generally a few years before the data is released
+```{r quick demo forecast}
+set.seed(0)
+location <- sample_distr(get_distr(bf, 1))
+f <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(f[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 
@@ -161,17 +141,17 @@ lookup_date(25, bf)
 ### Sequences through time
 
 Functions like `predict()` and `route()` that involve an arc through time have a common set of time input arguments,
-handled behind the scenes by `lookup_timestep_sequence()`. 
+handled behind the scenes by `lookup_timestep_sequence()`.
 
-There are a variety of ways to specify time for these functions:  
+There are a variety of ways to specify time for these functions:
 
-  * `start` and `end` to specify endpoint in any of the ways outlined above: timestep integers, 
+  * `start` and `end` to specify endpoint in any of the ways outlined above: timestep integers,
     character dates e.g. `"2026-01-07"` or formal date objects.
-  * `start` and `n_steps` 
+  * `start` and `n_steps`
   * `season` and `season_buffer` Uses season start and end dates from eBird and returned by `species_info()`
 
 With dates (formal or character) the direction in time is explicit, it will be backwards if the end date is earlier
-than the start.  With all other inputs it is not explicit and defaults to forward in time.  
+than the start.  With all other inputs it is not explicit and defaults to forward in time.
 Use `direction = "backward"` to create a sequence backwards in time with non-date input.
 
 Although it's generally not called directly, we demonstrate the time
@@ -194,7 +174,7 @@ lookup_timestep_sequence(bf, season = "prebreeding", season_buffer = 0)
 # By start + number of steps
 lookup_timestep_sequence(bf, start = 1, n_steps = 9)
 
-# All but the date inputs can also be switched to a backward sequence 
+# All but the date inputs can also be switched to a backward sequence
 lookup_timestep_sequence(bf, season = "prebreeding", direction = "backward")
 
 # Sequence wraps from week 52 to week 1
@@ -208,8 +188,8 @@ lookup_timestep_sequence(bf, start = 1, end = 45, direction = "backward")
 
 ### Raster attributes
 
-BirdFlow models have an inherent raster component and **BirdFlowR** uses the **terra** package 
-for raster data and provides BirdFlow methods for terra functions, 
+BirdFlow models have an inherent raster component and **BirdFlowR** uses the **terra** package
+for raster data and provides BirdFlow methods for terra functions,
 so you can use them directly on BirdFlow objects.
 
 `crs()` returns the coordinate reference system — useful if you need to project
@@ -218,8 +198,8 @@ other data to match the BirdFlow object.
 `ext()` returns a terra extent object.
 `compareGeom()` tests whether two objects share the same CRS, extent, and cell
 size; BirdFlowR includes methods to compare BirdFlow models with each other and
-with terra objects. `compareGeom()` does not check for a comparable static 
-mask. 
+with terra objects. `compareGeom()` does not check for a comparable static
+mask.
 
 ```{r spatial aspects terra}
 # Methods for terra functions:
@@ -243,12 +223,12 @@ crs <- sf::st_crs(bf)
 
 ### Distributions
 
-**Distributions** are the standard format for raster data used by BirdFlow. 
+**Distributions** are the standard format for raster data used by BirdFlow.
 
 Each BirdFlow model has a **static mask** that defines
 which cells are *active* — those with non-zero probability in at least one week
 of the eBird Status and Trends data the model was trained on. Distributions
-are a vector of values corresponding to the active cells in row major order. 
+are a vector of values corresponding to the active cells in row major order.
 
 
 ```{r distribution-figure, echo = FALSE, out.width = "100%", fig.cap = "BirdFlow distribution data structure: the raster mask selects active cells, which are stored as a flat vector (one distribution) or matrix (multiple distributions). Cells in graxy are outside of the mask and not used by BirdFlow models."}
@@ -258,7 +238,7 @@ knitr::include_graphics("DistributionDataStructures.png")
 Qualities of distributions:
 
 * A single **distribution** is a numeric vector of length `n_active(bf)`, one value per
-active cell.  
+active cell.
 * Multiple distributions are stored as a matrix with `n_active(bf)` rows and one
 column per timestep.
 * Usually values sum to 1, and each gives the proportion of the population in the corresponding cell.
@@ -273,7 +253,7 @@ masked-out cells (visible in the figure above as the gray shaded cells).
 `i_to_xy()` and `xy_to_i()` convert between `i` and projected x/y coordinates
 in the model's CRS.
 `latlon_to_xy()` and `xy_to_latlon()` convert between WGS84 latitude/longitude
-and the model CRS, useful for bringing in locations from outside data.  
+and the model CRS, useful for bringing in locations from outside data.
 
 ```{r spatial index conversions}
 # Coordinates of the first active cell
@@ -292,7 +272,7 @@ latlon_to_xy(lat = 42.4, lon = -72.5, bf) |> xy_to_i(bf = bf)
 ```
 
 Not shown above are conversions to row and column indices.  See help for `i_to_rc()` or any of the above
-functions for a complete list of conversions.  
+functions for a complete list of conversions.
 
 ### Retrieve distributions
 
@@ -341,12 +321,12 @@ r <- rast(bf, c(1, 26))  # 1st, and 26th timesteps.
 plot(r)
 ```
 
-### Plot Distributions
+### Plot distributions
 
-`plot_distr()` will make pretty **ggplot2** plots that handles conversion to 
+`plot_distr()` will make pretty **ggplot2** plots that handles conversion to
 raster, overlaying the coastline, and by default shows the static mask.
 ```{r plot_distr}
-get_distr(bf, species_info(bf, "prebreeding_migration_start")) |> 
+get_distr(bf, species_info(bf, "prebreeding_migration_start")) |>
   plot_distr(bf=bf)
 ```
 You can also animate over distributions.
@@ -358,9 +338,10 @@ get_distr(bf, lookup_timestep_sequence(bf, season = "prebreeding")) |>
 ```
 
 
-# Forecast
+## Forecasting
+
 In this section, we will sample a single starting location from the winter
-distribution and project it forward to generate a distribution of 
+distribution and project it forward to generate a distribution of
 predicted breeding grounds for birds that wintered at the starting location.
 
 Set predict parameters.
@@ -369,10 +350,10 @@ Set predict parameters.
     end <-  26     # summer
 ```
 
-## Sample starting distribution
+### Sample starting distribution
 `sample_distr()` will sample from one or more input distributions to select a
-single location per distribution. The result is one or more distributions 
-with ones in the selected location(s) and zero elsewhere.  
+single location per distribution. The result is one or more distributions
+with ones in the selected location(s) and zero elsewhere.
 
 ```{r starting location}
 set.seed(0)
@@ -384,9 +365,9 @@ print(location_xy)
 
 ```
 
-## Project forward from this location to summer
+### Project forward from this location to summer
 `predict()` returns the distribution over time as a matrix with
-one column per timestep. 
+one column per timestep.
 
 The plot shows where birds that winter at a particular location are
 likely to be as the year progresses and ultimately where they might spend their
@@ -399,7 +380,7 @@ plot_distr(f[, c(1, 7, 14, 19)], bf)
 
 ```
 A single density range is used for all four plots, and the concentrated
-density at the start blows out the range.  Two options to fix this are to 
+density at the start blows out the range.  Two options to fix this are to
 let the scale be dynamic or to use a log or square route transformation.
 
 **Dynamic scale**
@@ -407,18 +388,19 @@ let the scale be dynamic or to use a log or square route transformation.
 plot_distr(f[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
-**Square route transformation**
-```{r square route transformation}
+**Square root transformation**
+```{r square root transformation}
 plot_distr(f[, c(1, 7, 14, 19)], bf, transform = "sqrt")
 
 ```
-## Manipulating distributions
+
+### Manipulating distributions
 
 Suppose we are interested in how different the breeding distribution
-of birds from this part of the wintering grounds differs from the 
-overall distribution of the species during the breeding season. 
+of birds from this part of the wintering grounds differs from the
+overall distribution of the species during the breeding season.
 
-Here we subtract the whole species distribution from the projected distribution 
+Here we subtract the whole species distribution from the projected distribution
 and plot the difference with `plot_distr()`.
 
 ```{r probability over time}
@@ -426,15 +408,16 @@ projected <- f[, ncol(f)]  # last projected distribution
 diff <-  projected - get_distr(bf, end)
 pal <- hcl.colors(3, palette = "Fall")
 
-plot_distr(diff, bf, value_label = "Difference") + 
+plot_distr(diff, bf, value_label = "Difference") +
     # The scale_fill_gradient2 line is optional, it adds a divergent color scheme centered on zero.
-    scale_fill_gradient2(high = pal[1],mid = pal[2], low = pal[3], midpoint = 0, na.value = "transparent") +  
+    scale_fill_gradient2(high = pal[1],mid = pal[2], low = pal[3], midpoint = 0, na.value = "transparent") +
     geom_point(aes(x = x, y = y), data = location_xy, inherit.aes = FALSE)
 ```
 
 
-# Generate synthetic routes 
-Here we sample locations from the American Woodcock winter 
+## Generating routes
+
+Here we sample locations from the American Woodcock winter
 distribution and generate routes to their summer grounds.
 
 Set route parameters.
@@ -444,7 +427,7 @@ start <- 1         # starting timestep (winter)
 end <- 26          # ending timestep (summer)
 ```
 
-## Generate starting locations 
+### Generate starting locations
 First, extract the winter distribution, then use `sample_distr()` with
 `n = n_positions` to sample the input distribution repeatedly. The result is a
 matrix in which each column has a single '1' representing the sampled location.
@@ -457,13 +440,13 @@ y <- locations$y
 
 Plot the starting (winter) distribution and sampled locations.
 ```{r plot starting distribution}
-plot_distr(d, bf) + 
+plot_distr(d, bf) +
   geom_point(aes(x = x, y =y), data = locations, inherit.aes = FALSE, color = "green")
 ```
 
-## Generate routes
+### Generate routes
 `route()` will generate synthetic routes for each starting position.
-`route()` returns a `BirdFlowRoutes` object which has a `$data` element 
+`route()` returns a `BirdFlowRoutes` object which has a `$data` element
 with a row for each timestep of each route, but also includes some additional
 spatial, temporal, and species information from the `BirdFlow` object.
 
@@ -488,12 +471,11 @@ during the prebreeding migration.
 rts3 <- route(bf, n = n_positions, season = "prebreeding")
 ```
 
-## Plot routes
+### Plot routes
 
-`plot()` will visualize `Routes` and `BirdFlowRoutes` objects 
-with time as a color gradient and stop point dots that indicate how long a 
+`plot()` will visualize `Routes` and `BirdFlowRoutes` objects
+with time as a color gradient and stop point dots that indicate how long a
 bird was at each location.
-
 
 ```{r plot_routes}
 plot(rts3, bf)
@@ -503,4 +485,54 @@ Routes can also be animated.
 
 ```{r animate_routes, warning= FALSE, message = FALSE}
 animate_routes(rts3, bf)
+```
+
+
+## Model attributes
+
+### Basic information
+`dim()`, `nrow()`, and `ncol()` all report on raster dimensions associated with the model.
+`n_active` is the count of active cells — those the BirdFlow model can route birds through — a subset of all cells in the raster.
+`n_transitions()` and `n_distr()` report on temporal dimensions. If the model `is_cyclical()`, they will be equal.
+
+```{r access}
+# Methods for base R functions:
+dim(bf)
+c(nrow(bf), ncol(bf))
+bf # same as print(bf)
+
+# BirdFlowR functions
+n_active(bf)
+n_transitions(bf)
+n_timesteps(bf)
+
+# Contents
+has_marginals(bf)
+has_distr(bf)
+has_transitions(bf)
+is_cyclical(bf)
+```
+
+### Species information
+`species_info()` and `get_metadata()` take a BirdFlow object as their first argument.
+An optional second argument allows specifying a specific item; if omitted, a list is returned with all available information.
+
+`species(bf)` is a shortcut for `species_info(bf, "common_name")`
+
+Use `?species_info()` to see descriptions of all the available information.
+Dates associated with migration and resident seasons are likely to be useful.
+
+```{r BirdFlow specific info}
+species(bf)
+species(bf, "scientific")
+species_info(bf, "prebreeding_migration_start")
+si <-  species_info(bf) # list with all species information
+```
+
+### Metadata
+
+```{r metadata}
+md <- get_metadata(bf)  # list with all metadata
+get_metadata(bf, "birdflow_model_date") # date and time model was exported from python
+get_metadata(bf, "ebird_version_year")  # eBird version year - generally a few years before the data is released
 ```
