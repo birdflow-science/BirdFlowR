@@ -30,7 +30,8 @@
 #' Passed to [ggplot2::scale_color_gradient()].
 #' @param crop_bbox An optional named numeric vector with elements `xmin`,
 #' `xmax`, `ymin`, `ymax` in the model CRS to zoom the plot to a specific
-#' region. When `NULL` (default) the full model extent is shown.
+#' region.  See also `sf::st_bbox()` which generates a suitable object.
+#' When `NULL` (default) the full model extent is shown.
 #' @return `plot_bmtr` returns a **ggplot2** object.  It can be displayed with
 #' `print()`.
 #' @export
@@ -176,14 +177,8 @@ plot_bmtr <- function(bmtr,
   }
 
   p <- p +
-    ggplot2::theme_void() +
-    ggplot2::theme(
-      strip.background = ggplot2::element_blank(),
-      panel.background = ggplot2::element_rect(fill = "white", color = NA),
-      plot.background = ggplot2::element_rect(fill = "white", color = NA),
-      strip.text = ggplot2::element_text(color = "black", size = 11,
-                                         face = "bold")
-    )
+    ggplot2::theme(axis.title = ggplot2::element_blank(),
+                   strip.background = ggplot2::element_blank())
 
   return(p)
 }
