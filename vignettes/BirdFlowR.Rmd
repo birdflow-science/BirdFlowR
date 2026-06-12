@@ -54,7 +54,9 @@ The BirdFlow Science team has shared a
 the BirdFlowR package; as of mid-2026 the collection includes 60 vetted species.
 The website includes reports on each species that include a visualization of the
 distribution it was trained on and BirdFlow Migration Traffic Rate (BMTR) derived from the model.
-<!-- TODO: Once URL is confirmed, add: "A separate [Avian Influenza collection](URL) is also available, providing models used for HPAI spread risk analysis." -->
+
+A separate [Avian Influenza collection](https://birdflow-science.s3.amazonaws.com/avian_flu/index.html) 
+is also available, providing models used for HPAI spread risk analysis.
 
 We can also access the collection index through the package.
 
@@ -79,8 +81,8 @@ bf <- BirdFlowModels::amewoo # example and test dataset
 
 ## Quick demo
 
-BirdFlowR generates synthetic migration routes and forecasts distributions
-forward or backward through time. Here's a taste before we cover how it works.
+Two of the core functions of BirdFlowR are `route()` to generate synthetic migration routes and `predict()` 
+to project birds forward or backward through time. 
 
 ### Routes
 
@@ -90,7 +92,7 @@ dates from eBird to set the time span.
 
 ```{r quick demo routes}
 set.seed(0)
-rts <- route(bf, n = 15, season = "prebreeding")
+rts <- route(bf, n = 8, season = "prebreeding")
 plot(rts, bf)
 ```
 
@@ -109,10 +111,10 @@ plot_distr(f[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 
 ## Time
 
-BirdFlow models represent time as a loop of 52 timesteps (weeks) with an explicit link from
+BirdFlow models represent time as a loop of 52 timesteps (eBird weeks) with an explicit link from
 timestep 52 to timestep 1.
 
-```{r time-structure-figure, echo = FALSE, out.width = "80%", fig.align = "center", fig.cap = "BirdFlow's 52-timestep circular year Dots mark timesteps / weeks; lines between them mark transitions. Colors match the seasonal gradient used by `plot_routes()`. The bold line at the Dec/Jan boundary marks the year wrap-around. Season ranges shown are for American Woodcock."}
+```{r time-structure-figure, echo = FALSE, out.width = "80%", fig.align = "center", fig.cap = "BirdFlow's 52-timestep circular year. Dots mark timesteps / weeks; lines between them mark transitions. Colors match the seasonal gradient used by `plot_routes()`. The bold line at the Dec/Jan boundary marks the year wrap-around. Season ranges shown are for American Woodcock."}
 knitr::include_graphics("TimeStructure.png")
 ```
 
@@ -140,28 +142,28 @@ lookup_date(25, bf)
 
 ### Sequences through time
 
-Functions like `predict()` and `route()` that involve an arc through time have a common set of time input arguments,
-handled behind the scenes by `lookup_timestep_sequence()`.
+`predict()`, `route()`, and other functions that involve an arc through time have a common set of time
+arguments that are handled by the `lookup_timestep_sequence()` helper.
 
 There are a variety of ways to specify time for these functions:
 
-  * `start` and `end` to specify endpoint in any of the ways outlined above: timestep integers,
+  * `start` and `end` to specify endpoints in any of the ways outlined above: timestep integers,
     character dates e.g. `"2026-01-07"` or formal date objects.
   * `start` and `n_steps`
-  * `season` and `season_buffer` Uses season start and end dates from eBird and returned by `species_info()`
+  * `season` and `season_buffer` — uses season start and end dates from eBird and returned by `species_info()`
 
 With dates (formal or character) the direction in time is explicit, it will be backwards if the end date is earlier
 than the start.  With all other inputs it is not explicit and defaults to forward in time.
 Use `direction = "backward"` to create a sequence backwards in time with non-date input.
 
-Although it's generally not called directly, we demonstrate the time
-input options for `predict()` and `route()` with `lookup_timestep_sequence()`.
+Here we demonstrate the time input options with `lookup_timestep_sequence()`. All of these can also be
+used with `predict()` and `route()`.
 
 ```{r lookup_timestep_sequence}
 # By timestep integers
 lookup_timestep_sequence(bf, start = 1, end = 10)
 
-# By character dates (direction is inferred from order)
+# By character dates or formal date objects (direction is inferred from order)
 lookup_timestep_sequence(bf, start = "2022-01-07", end = "2022-03-11")
 
 # By season name (uses species-specific dates from species_info())
@@ -186,41 +188,6 @@ lookup_timestep_sequence(bf, start = 1, end = 45, direction = "backward")
 
 ## Space
 
-### Raster attributes
-
-BirdFlow models have an inherent raster component and **BirdFlowR** uses the **terra** package
-for raster data and provides BirdFlow methods for terra functions,
-so you can use them directly on BirdFlow objects.
-
-`crs()` returns the coordinate reference system — useful if you need to project
-other data to match the BirdFlow object.
-`res()`, `xres()`, and `yres()` describe the dimensions of individual cells.
-`ext()` returns a terra extent object.
-`compareGeom()` tests whether two objects share the same CRS, extent, and cell
-size; BirdFlowR includes methods to compare BirdFlow models with each other and
-with terra objects. `compareGeom()` does not check for a comparable static
-mask.
-
-```{r spatial aspects terra}
-# Methods for terra functions:
-a <- crs(bf) # well known text (long)
-crs(bf, proj = TRUE)  # proj4 string
-res(bf)
-c(xres(bf), yres(bf)) # same as res(bf)
-ext(bf)
-c(xmin(bf), xmax(bf), ymin(bf), ymax(bf)) # same as ext(bf)
-
-# Compare geometries - do they have the same CRS, extent, and cell size
-compareGeom(bf, rast(bf))
-```
-
-BirdFlow objects also play nicely with the *sf* package.
-
-```{r sf}
-bb <- sf::st_bbox(bf)
-crs <- sf::st_crs(bf)
-```
-
 ### Distributions
 
 **Distributions** are the standard format for raster data used by BirdFlow.
@@ -231,7 +198,7 @@ of the eBird Status and Trends data the model was trained on. Distributions
 are a vector of values corresponding to the active cells in row major order.
 
 
-```{r distribution-figure, echo = FALSE, out.width = "100%", fig.cap = "BirdFlow distribution data structure: the raster mask selects active cells, which are stored as a flat vector (one distribution) or matrix (multiple distributions). Cells in graxy are outside of the mask and not used by BirdFlow models."}
+```{r distribution-figure, echo = FALSE, out.width = "100%", fig.cap = "BirdFlow distribution data structure: the raster mask selects active cells, which are stored as a flat vector (one distribution) or matrix (multiple distributions). Cells in gray are outside of the mask and not used by BirdFlow models."}
 knitr::include_graphics("DistributionDataStructures.png")
 ```
 
@@ -244,7 +211,7 @@ column per timestep.
 * Usually values sum to 1, and each gives the proportion of the population in the corresponding cell.
 * They are model-specific: each BirdFlow model has its own extent and mask,
 so a distribution from one model cannot be used with another.
-* The the distribution cannot represent and the model cannot work with data outside of the static mask.
+* The distribution cannot represent, and the model cannot work with, data outside of the static mask.
 
 ### Spatial index conversions
 
@@ -272,7 +239,7 @@ latlon_to_xy(lat = 42.4, lon = -72.5, bf) |> xy_to_i(bf = bf)
 ```
 
 Not shown above are conversions to row and column indices.  See help for `i_to_rc()` or any of the above
-functions for a complete list of conversions.
+functions for a complete list of spatial conversions.
 
 ### Retrieve distributions
 
@@ -323,7 +290,7 @@ plot(r)
 
 ### Plot distributions
 
-`plot_distr()` will make pretty **ggplot2** plots that handles conversion to
+`plot_distr()` will make pretty **ggplot2** plots that handle conversion to
 raster, overlaying the coastline, and by default shows the static mask.
 ```{r plot_distr}
 get_distr(bf, species_info(bf, "prebreeding_migration_start")) |>
@@ -381,7 +348,7 @@ plot_distr(f[, c(1, 7, 14, 19)], bf)
 ```
 A single density range is used for all four plots, and the concentrated
 density at the start blows out the range.  Two options to fix this are to
-let the scale be dynamic or to use a log or square route transformation.
+let the scale be dynamic or to use a log or square root transformation.
 
 **Dynamic scale**
 ```{r dynamic scale}
@@ -422,18 +389,18 @@ distribution and generate routes to their summer grounds.
 
 Set route parameters.
 ```{r route parameters}
-n_positions <-  15 # number of starting positions
+n_routes <-  15 # number of routes 
 start <- 1         # starting timestep (winter)
 end <- 26          # ending timestep (summer)
 ```
 
 ### Generate starting locations
 First, extract the winter distribution, then use `sample_distr()` with
-`n = n_positions` to sample the input distribution repeatedly. The result is a
+`n = n_routes` to sample the input distribution repeatedly. The result is a
 matrix in which each column has a single '1' representing the sampled location.
 ```{r starting locations}
 d <- get_distr(bf, start)
-locations  <- sample_distr(d, n = n_positions, bf = bf, format = "xy")
+locations  <- sample_distr(d, n = n_routes, bf = bf, format = "xy")
 x <- locations$x
 y <- locations$y
 ```
@@ -459,7 +426,7 @@ If locations are not provided, `route()` will sample starting locations from the
 so the following is equivalent to the preceding two sections.
 
 ```{r route with sample}
-rts2 <- route(bf,  n = n_positions,  start = start, end = end)
+rts2 <- route(bf,  n = n_routes,  start = start, end = end)
 ```
 
 We can also specify the date range with any arguments supported by
@@ -468,7 +435,7 @@ different start and end dates is to use the season argument. Here, we route
 during the prebreeding migration.
 
 ```{r route with season}
-rts3 <- route(bf, n = n_positions, season = "prebreeding")
+rts3 <- route(bf, n = n_routes, season = "prebreeding")
 ```
 
 ### Plot routes
@@ -528,6 +495,43 @@ species(bf, "scientific")
 species_info(bf, "prebreeding_migration_start")
 si <-  species_info(bf) # list with all species information
 ```
+
+
+### Spatial attributes
+
+BirdFlow models have an inherent raster component and **BirdFlowR** uses the **terra** package
+for raster data and provides BirdFlow methods for terra functions,
+so you can use them directly on BirdFlow objects.
+
+`crs()` returns the coordinate reference system — useful if you need to project
+other data to match the BirdFlow object.
+`res()`, `xres()`, and `yres()` describe the dimensions of individual cells.
+`ext()` returns a terra extent object.
+`compareGeom()` tests whether two objects share the same CRS, extent, and cell
+size; BirdFlowR includes methods to compare BirdFlow models with each other and
+with terra objects. `compareGeom()` does not check for a comparable static
+mask.
+
+```{r spatial aspects terra}
+# Methods for terra functions:
+a <- crs(bf) # well known text (long)
+crs(bf, proj = TRUE)  # proj4 string
+res(bf)
+c(xres(bf), yres(bf)) # same as res(bf)
+ext(bf)
+c(xmin(bf), xmax(bf), ymin(bf), ymax(bf)) # same as ext(bf)
+
+# Compare geometries - do they have the same CRS, extent, and cell size
+compareGeom(bf, rast(bf))
+```
+
+BirdFlow objects also play nicely with the *sf* package.
+
+```{r sf}
+bb <- sf::st_bbox(bf)
+crs <- sf::st_crs(bf)
+```
+
 
 ### Metadata
 
