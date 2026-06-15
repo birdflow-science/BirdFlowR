@@ -3,22 +3,25 @@
 ## Overview
 
 The goal here is to estimate movement among polygons over a defined
-period of time using a BirdFlow model. The result is square movement
+period of time using a BirdFlow model. The result is a square movement
 matrix where the rows correspond to starting polygons and the columns to
 ending polygons. Values are the proportion of the total population
-making each movement, which  
-can be scaled to represent numbers of birds. Optionally each value can
-be adjusted by the area of the two associated polygons to get a mean
-movement per square km.
+making each movement, which can be scaled to represent numbers of birds.
+Optionally each value can be adjusted by the area of the two associated
+polygons to get a mean movement per square kilometer.
 
-The initial use case was to create a predictor for a model of avian
-influenza spread. In the example here the polygons are US States but the
-variable (`polys`) and the sole required column name (`id`) are kept
-deliberately generic so the code will make sense with any set of
-polygons.
+The original motivation for this workflow was modeling how migratory
+wild birds might drive the spread of highly pathogenic avian influenza
+(HPAI H5N1) into cattle and poultry operations across the United States.
+Migratory waterfowl and shorebirds carry HPAI between regions as they
+move, and the polygon movement matrix provides a spatially explicit
+predictor of where and when the wild-bird reservoir is likely to seed
+new outbreaks — an input to epidemiological models used to inform
+biosecurity decisions.
 
-This will likely be turned into a function but the vignette should
-remain a useful demonstration of how to work with BirdFlow models.
+In the example here the polygons are US States, but the variable
+(`polys`) and the sole required column name (`id`) are kept deliberately
+generic so the code will work with any set of polygons.
 
 ### The approach:
 
@@ -246,31 +249,16 @@ plot_distr(end_distr, bf, sel) +
 Convert the `end_distr` destination cells into destination polygons
 based on the overlap proportions in `overlap`.
 
-The first “slow” way is perhaps easier to understand. The faster way
-produces the same result with matrix multiplication. Either way `move`
-is a matrix with rows for the starting polygons, columns for the
-destination polygons, and values that are the proportion of the
-population making the transition between the two.
+The result is `move`: a matrix with rows for starting polygons, columns
+for destination polygons, and values that are the proportion of the
+total population making each transition.
 
 ``` r
 
-slow <- FALSE
-if (slow) {
-  # Here we loop through each cell of the movement matrix filling in values
-  # one by one.
-  n <- nrow(polys)
-  move <- matrix(NA, n, n, dimnames = list(from = polys$id, to = polys$id))
-  for (from_i in seq_len(n)) for (to_i in seq_len(n)) {
-    # Rows are source polygons, columns for destination polygons.
-    # Values are the proportion of the total population making the transition
-    # between the corresponding polygons.
-    move[from_i, to_i] <- sum(end_distr[, from_i] * overlap[, to_i])
-  }
-} else {
-  # Use matrix multiplication to do the same thing faster
-  move <- t(end_distr) %*% overlap
-  dimnames(move) <- list(from = polys$id, to = polys$id)
-}
+# Each entry move[from, to] is the proportion of the total population
+# that started in polygon "from" and ended in polygon "to".
+move <- t(end_distr) %*% overlap
+dimnames(move) <- list(from = polys$id, to = polys$id)
 ```
 
 ### Visualize the polygonized end distribution
@@ -382,3 +370,20 @@ ggplot2::ggplot(long) +
 ```
 
 ![](Polygons_files/figure-html/plot%20connections-1.png)
+
+## Connection to the distribution data structure
+
+Throughout this workflow, BirdFlow distributions appear in a familiar
+form: a numeric vector of length `n_active(bf)`, one value per active
+cell. `start_distr` and `end_distr` are simply matrices of such vectors
+— one column per polygon — so every operation that works on a single
+distribution (plotting with
+[`plot_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.md),
+rasterizing with
+[`rasterize_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/rasterize.md),
+passing to
+[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md))
+works column-by-column on the whole matrix. The polygon workflow is
+therefore a direct extension of the core data structure from the
+BirdFlowR overview: the movement matrix `move` is computed entirely
+through standard matrix operations on those same distribution vectors.
