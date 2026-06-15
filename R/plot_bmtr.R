@@ -45,7 +45,7 @@ plot_bmtr <- function(bmtr,
                       coast_color = gray(0.5),
                       gradient_colors = NULL,
                       title = species(bf),
-                      value_label = "BMTR (birds/km)",
+                      value_label = "BMTR",
                       transform = "identity",
                       crop_bbox = NULL) {
 
@@ -94,7 +94,7 @@ plot_bmtr <- function(bmtr,
 
   if (is.null(gradient_colors)) {
     gradient_colors <-
-      c("white", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
+      c("#EDDEA5", "#FCCE25", "#FBA238", "#EE7B51", "#DA596A", "#BF3984",
         "#9D189D", "#7401A8", "#48039F", "#0D0887")
   }
 
