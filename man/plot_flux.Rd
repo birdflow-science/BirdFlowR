@@ -38,6 +38,10 @@ If \code{"log"} is used zeros will be replaced with
 1/2 the smallest non-zero value prior to transforming.
 Legend will still reflect the original values.
 Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradient()}}.}
+    \item{\code{crop_bbox}}{An optional named numeric vector with elements \code{xmin},
+\code{xmax}, \code{ymin}, \code{ymax} in the model CRS to zoom the plot to a specific
+region.  See also \code{sf::st_bbox()} which generates a suitable object.
+When \code{NULL} (default) the full model extent is shown.}
   }}
 }
 \value{

@@ -28,6 +28,10 @@
 #' 1/2 the smallest non-zero value prior to transforming.
 #' Legend will still reflect the original values.
 #' Passed to [ggplot2::scale_color_gradient()].
+#' @param crop_bbox An optional named numeric vector with elements `xmin`,
+#' `xmax`, `ymin`, `ymax` in the model CRS to zoom the plot to a specific
+#' region.  See also `sf::st_bbox()` which generates a suitable object.
+#' When `NULL` (default) the full model extent is shown.
 #' @return `plot_bmtr` returns a **ggplot2** object.  It can be displayed with
 #' `print()`.
 #' @export
@@ -42,7 +46,8 @@ plot_bmtr <- function(bmtr,
                       gradient_colors = NULL,
                       title = species(bf),
                       value_label = "BMTR",
-                      transform = "identity") {
+                      transform = "identity",
+                      crop_bbox = NULL) {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
@@ -52,13 +57,11 @@ plot_bmtr <- function(bmtr,
     names(bmtr)[names(bmtr) == "flux"] <- "bmtr" ### back compatibility
 
   if (dynamic_scale) {
-
     # Scale each transition 0 to 1
     for (t in unique(bmtr$transition)) {
       sv <- bmtr$transition == t
       bmtr$bmtr[sv] <- range_rescale(bmtr$bmtr[sv])
     }
-
   }
 
   if (transform == "log") {
@@ -85,11 +88,9 @@ plot_bmtr <- function(bmtr,
     stopifnot(is.numeric(limits), length(limits) == 2, all(!is.na(limits)),
               limits[1] < limits[2])
     # Truncate to limits
-
     bmtr$bmtr[bmtr$bmtr < limits[1]] <- limits[1]
     bmtr$bmtr[bmtr$bmtr > limits[2]] <- limits[2]
   }
-
 
   if (is.null(gradient_colors)) {
     gradient_colors <-
@@ -98,11 +99,9 @@ plot_bmtr <- function(bmtr,
   }
 
   # Apply subset
-
   if (!is.null(subset)) {
-
-    transitions <- unique(bmtr$transition)
-
+    transitions <- unique(bmtr$transition) |>
+      sort()
     if (is.logical(subset)) {
       if (!length(subset) == length(transitions))
         stop("Logical subset length should match the number of transitions (",
@@ -118,18 +117,18 @@ plot_bmtr <- function(bmtr,
       }
       transitions <- transitions[subset]
     } else if (is.character(subset)) {
-      if (!all(subset %in% names(transitions))) {
+      if (!all(subset %in% transitions)) {
         stop("Character subset should contain only transition names",
-             " in (bmtr$transtion).")
+             " in (bmtr$transition).")
       }
       transitions <- transitions[transitions %in% subset]
     }
-
     bmtr <- bmtr[bmtr$transition %in% transitions, , drop = FALSE]
-
+    bmtr$label <- droplevels(bmtr$label)
   }
   transitions <- unique(bmtr$transition)
 
+  bmtr$bmtr[bmtr$bmtr == 0] <- NA
 
   # Start plot
   p <- bmtr |>
@@ -138,26 +137,21 @@ plot_bmtr <- function(bmtr,
     ggplot2::geom_raster() +
     ggplot2::scale_fill_gradientn(colors = gradient_colors,
                                   name = value_label,
-                                  transform = transform)
-
+                                  transform = transform,
+                                  na.value = "transparent")
 
   # Add facet wrap and title
-  if (length(transitions > 1)) {
-    # Multiple transitions, facet wrap on date and add species title
+  if (length(transitions) > 1) {
     p <- p +
       ggplot2::facet_wrap(ggplot2::vars(.data$label)) +
       ggplot2::ggtitle(title)
   } else {
-    # Single transition add species title AND date subtitle
     p <- p +
       ggplot2::ggtitle(title, subtitle = bmtr$label[1])
   }
 
-
-
   # Add coastline
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {
-
     suppress_specific_warnings({
       coast <- get_coastline(bf)
     }, "No objects within extent. Returning empty sf object.")
@@ -170,12 +164,19 @@ plot_bmtr <- function(bmtr,
                          color = coast_color)
     }
   }
-  # coord_sf is required to adjust coordinates while using geom_sf
-  # Here we are preventing expanding the extent of the plot.
-  # Setting the CRS is only necessary when the coastline isn't plotted because
-  # of NULL coast_color or coast_linewidth
+
+  if (!is.null(crop_bbox)) {
+    p <- p + ggplot2::coord_sf(
+      xlim = c(crop_bbox["xmin"], crop_bbox["xmax"]),
+      ylim = c(crop_bbox["ymin"], crop_bbox["ymax"]),
+      crs = crs(bf),
+      expand = FALSE
+    )
+  } else {
+    p <- p + ggplot2::coord_sf(expand = FALSE, crs = crs(bf))
+  }
+
   p <- p +
-    ggplot2::coord_sf(expand = FALSE, crs = crs(bf)) +
     ggplot2::theme(axis.title = ggplot2::element_blank(),
                    strip.background = ggplot2::element_blank())
 

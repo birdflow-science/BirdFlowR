@@ -15,7 +15,8 @@ plot_bmtr(
   gradient_colors = NULL,
   title = species(bf),
   value_label = "BMTR",
-  transform = "identity"
+  transform = "identity",
+  crop_bbox = NULL
 )
 }
 \arguments{
@@ -57,6 +58,11 @@ If \code{"log"} is used zeros will be replaced with
 1/2 the smallest non-zero value prior to transforming.
 Legend will still reflect the original values.
 Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradient()}}.}
+
+\item{crop_bbox}{An optional named numeric vector with elements \code{xmin},
+\code{xmax}, \code{ymin}, \code{ymax} in the model CRS to zoom the plot to a specific
+region.  See also \code{sf::st_bbox()} which generates a suitable object.
+When \code{NULL} (default) the full model extent is shown.}
 }
 \value{
 \code{plot_bmtr} returns a \strong{ggplot2} object.  It can be displayed with
