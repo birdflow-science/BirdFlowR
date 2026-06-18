@@ -16,7 +16,8 @@ plot_bmtr(
   gradient_colors = NULL,
   title = species(bf),
   value_label = "BMTR",
-  transform = "identity"
+  transform = "identity",
+  crop_bbox = NULL
 )
 ```
 
@@ -80,6 +81,15 @@ plot_bmtr(
   with 1/2 the smallest non-zero value prior to transforming. Legend
   will still reflect the original values. Passed to
   [`ggplot2::scale_color_gradient()`](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
+
+- crop_bbox:
+
+  An optional named numeric vector with elements `xmin`, `xmax`, `ymin`,
+  `ymax` in the model CRS to zoom the plot to a specific region. See
+  also
+  [`sf::st_bbox()`](https://r-spatial.github.io/sf/reference/st_bbox.html)
+  which generates a suitable object. When `NULL` (default) the full
+  model extent is shown.
 
 ## Value
 

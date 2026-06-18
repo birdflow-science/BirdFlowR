@@ -76,6 +76,15 @@ animate_bmtr(bmtr, bf, title = species(bf), ...)
       Passed to
       [`ggplot2::scale_color_gradient()`](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
 
+  `crop_bbox`
+
+  :   An optional named numeric vector with elements `xmin`, `xmax`,
+      `ymin`, `ymax` in the model CRS to zoom the plot to a specific
+      region. See also
+      [`sf::st_bbox()`](https://r-spatial.github.io/sf/reference/st_bbox.html)
+      which generates a suitable object. When `NULL` (default) the full
+      model extent is shown.
+
 ## Value
 
 A [`gganim`](https://gganimate.com/reference/gganimate-package.html)

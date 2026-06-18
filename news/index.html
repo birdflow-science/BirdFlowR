@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9082</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9083</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,21 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9083" id="birdflowr-0109083">BirdFlowR 0.1.0.9083<a class="anchor" aria-label="anchor" href="#birdflowr-0109083"></a></h2>
+<p>2026-06-15</p>
+<ul><li>Updated <code>BirdFlowR</code> vignette: reorganized section order to lead with working examples, expanded time and spatial-index sections, and general prose improvements.</li>
+<li>
+<code><a href="../reference/plot_bmtr.html">plot_bmtr()</a></code>: new <code>crop_bbox</code> parameter to zoom the plot to a bounding box.</li>
+<li>
+<code><a href="../reference/plot_bmtr.html">plot_bmtr()</a></code>: cells with zero BMTR are now rendered transparent rather than the lowest gradient color.</li>
+<li>
+<code><a href="../reference/plot_bmtr.html">plot_bmtr()</a></code>: <code>subset</code> no longer produces empty facets for excluded transitions.</li>
+<li>
+<code><a href="../reference/plot_bmtr.html">plot_bmtr()</a></code>: fixed a bug where character values passed to <code>subset</code> always threw an error due to incorrect validation logic.</li>
+<li>
+<code><a href="../reference/plot_bmtr.html">plot_bmtr()</a></code>: fixed an operator-precedence bug (<code>length(transitions &gt; 1)</code>) that prevented facet labels from appearing when multiple transitions were plotted.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9082" id="birdflowr-0109082">BirdFlowR 0.1.0.9082<a class="anchor" aria-label="anchor" href="#birdflowr-0109082"></a></h2>
 <p>2026-06-03</p>

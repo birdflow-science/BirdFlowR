@@ -1,5 +1,27 @@
 # Changelog
 
+## BirdFlowR 0.1.0.9083
+
+2026-06-15
+
+- Updated `BirdFlowR` vignette: reorganized section order to lead with
+  working examples, expanded time and spatial-index sections, and
+  general prose improvements.
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md):
+  new `crop_bbox` parameter to zoom the plot to a bounding box.
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md):
+  cells with zero BMTR are now rendered transparent rather than the
+  lowest gradient color.
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md):
+  `subset` no longer produces empty facets for excluded transitions.
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md):
+  fixed a bug where character values passed to `subset` always threw an
+  error due to incorrect validation logic.
+- [`plot_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_bmtr.md):
+  fixed an operator-precedence bug (`length(transitions > 1)`) that
+  prevented facet labels from appearing when multiple transitions were
+  plotted.
+
 ## BirdFlowR 0.1.0.9082
 
 2026-06-03

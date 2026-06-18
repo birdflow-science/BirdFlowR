@@ -79,6 +79,15 @@ plot_flux(flux, ...)
       Passed to
       [`ggplot2::scale_color_gradient()`](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
 
+  `crop_bbox`
+
+  :   An optional named numeric vector with elements `xmin`, `xmax`,
+      `ymin`, `ymax` in the model CRS to zoom the plot to a specific
+      region. See also
+      [`sf::st_bbox()`](https://r-spatial.github.io/sf/reference/st_bbox.html)
+      which generates a suitable object. When `NULL` (default) the full
+      model extent is shown.
+
 ## Value
 
 `plot_bmtr` returns a **ggplot2** object. It can be displayed with
