@@ -5,8 +5,11 @@ output:
     toc: true
 vignette: >
   %\VignetteIndexEntry{Calculate movement among polygons}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include = FALSE}
@@ -25,51 +28,55 @@ library(terra)
 
 ## Overview
 
-The goal here is to estimate movement among polygons over a defined period of
-time using a BirdFlow model. The result is a square movement matrix where
-the rows correspond to starting polygons and the columns to ending polygons.
-Values are the proportion of the total population making each movement, which
-can be scaled to represent numbers of birds. Optionally each value can
-be adjusted by the area of the two associated polygons to get a mean movement
-per square kilometer.
+The goal here is to estimate movement among polygons over a defined
+period of time using a BirdFlow model. The result is a square movement
+matrix where the rows correspond to starting polygons and the columns to
+ending polygons. Values are the proportion of the total population
+making each movement, which can be scaled to represent numbers of birds.
+Optionally each value can be adjusted by the area of the two associated
+polygons to get a mean movement per square kilometer.
 
-The original motivation for this workflow was modeling how migratory wild birds
-might drive the spread of highly pathogenic avian influenza (HPAI H5N1) into
-cattle and poultry operations across the United States.
-Migratory waterfowl and shorebirds carry HPAI between regions as they move,
-and the polygon movement matrix provides a spatially explicit predictor of where
-and when the wild-bird reservoir is likely to seed new outbreaks — an input to
-epidemiological models used to inform biosecurity decisions.
+The original motivation for this workflow was modeling how migratory
+wild birds might drive the spread of highly pathogenic avian influenza
+(HPAI H5N1) into cattle and poultry operations across the United States.
+Migratory waterfowl and shorebirds carry HPAI between regions as they
+move, and the polygon movement matrix provides a spatially explicit
+predictor of where and when the wild-bird reservoir is likely to seed
+new outbreaks — an input to epidemiological models used to inform
+biosecurity decisions.
 
-In the example here the polygons are US States, but the variable (`polys`) and
-the sole required column name (`id`) are kept deliberately generic so the code
-will work with any set of polygons.
+In the example here the polygons are US States, but the variable
+(`polys`) and the sole required column name (`id`) are kept deliberately
+generic so the code will work with any set of polygons.
 
 ### The approach:
 
-1. Load model, set start and end times for connectivity window, and set
-total population.
-1. Download and prepare polygons
-1. Calculate the overlap between active cells in the BirdFlow model and
-the polygons.
-1. Generate starting distributions for each polygon that represent the
-portion of the species distribution that is in each polygon at the start
-of the movement.
-1. Run `predict()` using distributions and start and end time. 
-1. Drop time dimension from result preserving just the end distributions.
-1. Convert the ending distribution from model cells to polygons. 
-1. Optionally, multiply by the species' total population (within the Americas) 
-   to convert from proportion of population to estimated number of birds
-1. Optionally, divide by the area of both the starting and ending state to 
- make the estimates per unit area - eliminating the polygon size as a factor 
- in the connectivity. This step is not appropriate for all use cases.
+1.  Load model, set start and end times for connectivity window, and set
+    total population.
+2.  Download and prepare polygons
+3.  Calculate the overlap between active cells in the BirdFlow model and
+    the polygons.
+4.  Generate starting distributions for each polygon that represent the
+    portion of the species distribution that is in each polygon at the
+    start of the movement.
+5.  Run `predict()` using distributions and start and end time.
+6.  Drop time dimension from result preserving just the end
+    distributions.
+7.  Convert the ending distribution from model cells to polygons.
+8.  Optionally, multiply by the species' total population (within the
+    Americas) to convert from proportion of population to estimated
+    number of birds
+9.  Optionally, divide by the area of both the starting and ending state
+    to make the estimates per unit area - eliminating the polygon size
+    as a factor in the connectivity. This step is not appropriate for
+    all use cases.
 
 ## Load model and set parameters
 
-This example uses the American Woodcock dataset from 
-**BirdFlowModels** which is small and runs fast but isn't fully vetted for scientific use. 
+This example uses the American Woodcock dataset from **BirdFlowModels**
+which is small and runs fast but isn't fully vetted for scientific use.
 
-Use `load_model()` for real work. 
+Use `load_model()` for real work.
 
 ```{r load BirdFlow model, set parameters}
 bf <- BirdFlowModels::amewoo  # you will likely use load_model() instead
@@ -77,7 +84,6 @@ start <- BirdFlowR::lookup_timestep("2024-01-15", bf)
 end <- BirdFlowR::lookup_timestep("2024-03-20", bf)
 population <- 3500000
 ```
-
 
 ### Visualize the starting distribution from the model
 
@@ -87,15 +93,14 @@ plot_distr(get_distr(bf, start), bf)
 
 ## Load Polygons
 
-Use `get_states()` to get the state boundaries within  BirdFlow
-object extent from the[Natural Earth](https://www.naturalearthdata.com/) 
-data set. 
+Use `get_states()` to get the state boundaries within BirdFlow object
+extent from the [Natural Earth](https://www.naturalearthdata.com/) data
+set.
 
-If you have a polygon shapefile already you could use 
-`polys <- sf::read_sf(shapefile_path)` 
-and skip this section.
+If you have a polygon shapefile already you could use
+`polys <- sf::read_sf(shapefile_path)` and skip this section.
 
-```{r rnaturalearth, warning = FALSE, eval = FALSE} 
+```{r rnaturalearth, warning = FALSE, eval = FALSE}
 #  Note this code requires the rnaturalearthhighres package so is not
 # run when building the vignette.
 
@@ -116,10 +121,10 @@ polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
 
 ## Prepare polygons for analysis
 
-* Add an `id` field; in this example it is the state names.
-* Transform to match the BirdFlow Coordinate Reference System (CRS).
-* Calculate the area in square kilometers of each polygon (`sq_km`).
-* Add centroid coordinates (`x`, `y`) in the BirdFlow CRS.
+- Add an `id` field; in this example it is the state names.
+- Transform to match the BirdFlow Coordinate Reference System (CRS).
+- Calculate the area in square kilometers of each polygon (`sq_km`).
+- Add centroid coordinates (`x`, `y`) in the BirdFlow CRS.
 
 ```{r prepare polygons}
 
@@ -145,9 +150,9 @@ polys <- cbind(polys, centroids)
 
 ## Calculate overlap between active BirdFlow cells and polygons
 
-Make the `overlap` matrix.  Rows correspond to active cells, and columns 
-to the external polygons. The values are the proportion of the cell that 
-overlaps the polygon. 
+Make the `overlap` matrix. Rows correspond to active cells, and columns
+to the external polygons. The values are the proportion of the cell that
+overlaps the polygon.
 
 ```{r calculate overlap, echo = TRUE}
 
@@ -182,14 +187,15 @@ overlap[row_col_index] <- intersection_polys$prop_of_cell |> as.vector()
 
 ## Build initial distributions
 
-This essentially clips the initial distribution separately to each polygon while 
-assigning values from boundary cells in proportion to their overlap with the
-polygon.
+This essentially clips the initial distribution separately to each
+polygon while assigning values from boundary cells in proportion to
+their overlap with the polygon.
 
-Note, a single BirdFlowR distribution is a vector of length `n_active(bf)` 
-multiple can be stored in a matrix with `n_active(bf)` rows.  The matrix here
-has a column (distribution) for each polygon in `polys`.
- 
+Note, a single BirdFlowR distribution is a vector of length
+`n_active(bf)` multiple can be stored in a matrix with `n_active(bf)`
+rows. The matrix here has a column (distribution) for each polygon in
+`polys`.
+
 ```{r }
 
 start_distr <- matrix(get_distr(bf, start),
@@ -204,14 +210,14 @@ start_distr <- start_distr * overlap
 ```
 
 ```{r select largest, echo = FALSE, eval = TRUE}
-# Doing this ahead of time so I can pull the name in text below.
+# Select polygon that has that largest proportion of the initial distribution. It is used for visualizations.
 sel <- which.max(apply(start_distr, 2, sum))
 ```
 
-### Visualize the distribution for one polygon 
+### Visualize the distribution for one polygon
 
-Visualize the initial distribution 
-for the polygon with the highest initial abundance (`r polys$id[sel]`).
+Visualize the initial distribution for the polygon with the highest
+initial abundance (`r polys$id[sel]`).
 
 ```{r visualize largest distribution, warning = FALSE, message = FALSE}
 sel <- which.max(apply(start_distr, 2, sum))
@@ -225,13 +231,12 @@ plot_distr(start_distr, bf, subset = sel) +
 
 ## Project the distributions forward
 
-Use `BirdFlowR::predict()` to project the distributions forward.
-With multiple input distributions the output will be a three dimensional array. 
-Select the last element of the third dimension to get just the ending 
-distributions in a matrix.
-The values in these distributions represent the proportion of the population 
-that started in the corresponding polygon (columns) that ended in each
-active cell (rows).
+Use `BirdFlowR::predict()` to project the distributions forward. With
+multiple input distributions the output will be a three dimensional
+array. Select the last element of the third dimension to get just the
+ending distributions in a matrix. The values in these distributions
+represent the proportion of the population that started in the
+corresponding polygon (columns) that ended in each active cell (rows).
 
 ```{r predict}
 
@@ -241,17 +246,17 @@ pred <- predict(bf, distr = start_distr, start = start, end = end)
 # Just keep last distribution
 end_distr <- pred[, , dim(pred)[3]]
 
-# Preserve dimension names
+# Restore dimension names
 dimnames(end_distr) <- dimnames(start_distr)
 
 ```
 
-### Visualize the ending distribution 
+### Visualize the ending distribution
 
-This shows the ending distribution for the birds that started in 
+This shows the ending distribution for the birds that started in
 `r polys$id[sel]`.
 
-```{r visualize ending distribution, message = FALSE, warning = FALSE} 
+```{r visualize ending distribution, message = FALSE, warning = FALSE}
 plot_distr(end_distr, bf, sel) +
   ggplot2::geom_sf(data = polys,
                    inherit.aes = FALSE,
@@ -260,15 +265,14 @@ plot_distr(end_distr, bf, sel) +
                    fill = NA)
 ```
 
-
 ## Collapse the ending cells into ending polygons
 
-Convert the `end_distr` destination cells into
-destination polygons based on the overlap proportions in `overlap`.
+Convert the `end_distr` destination cells into destination polygons
+based on the overlap proportions in `overlap`.
 
-The result is `move`: a matrix with rows for starting polygons, columns for
-destination polygons, and values that are the proportion of the total population
-making each transition.
+The result is `move`: a matrix with rows for starting polygons, columns
+for destination polygons, and values that are the proportion of the
+total population making each transition.
 
 ```{r destination states}
 # Each entry move[from, to] is the proportion of the total population
@@ -279,7 +283,7 @@ dimnames(move) <- list(from = polys$id, to = polys$id)
 
 ### Visualize the polygonized end distribution
 
-Plot the proportion of the total population that moved from  
+Plot the proportion of the total population that moved from\
 `r polys$id[sel]` to each each state.
 
 ```{r visualize polygon distr}
@@ -300,9 +304,9 @@ ggplot2::ggplot(data = polys) +
 
 ## Adjust for population (optional)
 
-You can multiply the movement by the total population of the species to 
-estimated the number of individuals making each movement. This is likely 
-necessary to aggregate or compare output across species. 
+You can multiply the movement by the total population of the species to
+estimated the number of individuals making each movement. This is likely
+necessary to aggregate or compare output across species.
 
 ```{r adjust for population}
 # Convert to absolute numbers of Birds expected to move between
@@ -312,21 +316,22 @@ move_count  <- move * population
 
 ## Adjust for area (optional)
 
-Adjusting for area might be appropriate depending on the application.
-If the goal is to capture the total magnitude of movement between each source
-and destination polygon than do not adjust for area. 
+Adjusting for area might be appropriate depending on the application. If
+the goal is to capture the total magnitude of movement between each
+source and destination polygon than do not adjust for area.
 
-However, in our initial use case our points were in the specified states but
-did not represent the entire state so failing to adjust for state area would
-introduce a bias - essentially inflating movement for points that fell in bigger
-states. Similarly if you want an average per unit area movement
-between states that isn't biased by state area you would adjust for area.
+However, in our initial use case our points were in the specified states
+but did not represent the entire state so failing to adjust for state
+area would introduce a bias - essentially inflating movement for points
+that fell in bigger states. Similarly if you want an average per unit
+area movement between states that isn't biased by state area you would
+adjust for area.
 
-The adjustment is done by dividing the number of individuals moving between the
-two polygons by the area of each polygon in sq km to produce the expecting number 
-to move between them per sq km at each end. Clearly, though this does 
-not capture the fine scale variability within them some of which is captured in 
-the original BirdFlow cells. 
+The adjustment is done by dividing the number of individuals moving
+between the two polygons by the area of each polygon in sq km to produce
+the expecting number to move between them per sq km at each end.
+Clearly, though this does not capture the fine scale variability within
+them some of which is captured in the original BirdFlow cells.
 
 ```{r adjust for population and area}
 
@@ -345,8 +350,8 @@ plot_count_threshold <- 1000 # only plot lines for big movements
 ```
 
 Plot non-zero estimated counts of birds moving between polygons and
-indicate magnitude with line thickness. Lines are only shown for movements of 
-at least `r plot_count_threshold` individuals.
+indicate magnitude with line thickness. Lines are only shown for
+movements of at least `r plot_count_threshold` individuals.
 
 ```{r plot connections}
 n <- nrow(polys)
@@ -381,12 +386,13 @@ ggplot2::ggplot(long) +
 
 ## Connection to the distribution data structure
 
-Throughout this workflow, BirdFlow distributions appear in a familiar form: a
-numeric vector of length `n_active(bf)`, one value per active cell.
-`start_distr` and `end_distr` are simply matrices of such vectors — one column
-per polygon — so every operation that works on a single distribution (plotting
-with `plot_distr()`, rasterizing with `rasterize_distr()`, passing to
-`predict()`) works column-by-column on the whole matrix.
-The polygon workflow is therefore a direct extension of the core data structure
-from the BirdFlowR overview: the movement matrix `move` is computed entirely
-through standard matrix operations on those same distribution vectors.
+Throughout this workflow, BirdFlow distributions appear in a familiar
+form: a numeric vector of length `n_active(bf)`, one value per active
+cell. `start_distr` and `end_distr` are simply matrices of such vectors
+— one column per polygon — so every operation that works on a single
+distribution (plotting with `plot_distr()`, rasterizing with
+`rasterize_distr()`, passing to `predict()`) works column-by-column on
+the whole matrix. The polygon workflow is therefore a direct extension
+of the core data structure from the BirdFlowR overview: the movement
+matrix `move` is computed entirely through standard matrix operations on
+those same distribution vectors.
