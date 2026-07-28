@@ -9,7 +9,7 @@ a set of points during each transition in a BirdFlow model."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9083</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,8 @@ a set of points during each transition in a BirdFlow model.</p>
 <span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">5e+05</span>,</span>
 <span>  check_radius <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  weighted <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"binary"</span>, <span class="st">"continuous"</span>, <span class="st">"continuous-spherical"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,10 +79,14 @@ columns containing point coordinates in <a href="https://rspatial.github.io/terr
 
 
 <dt id="arg-radius">radius<a class="anchor" aria-label="anchor" href="#arg-radius"></a></dt>
-<dd><p>The radius in meters around the points used to assess whether
-a movement line passes by (or through) the point. If a point is farther than
-<code>radius</code> from a great circle line between two cells centers then it is not
-between them.</p></dd>
+<dd><p>The radius in meters around the points used to assess the
+detection rate for a movement at the point.
+With <code>method = "binary"</code>, if a point is within <code>radius</code> of the great
+circle line between two cell centers then the movement is detected at
+that point. For the two continuous detection methods there is a
+probability distribution for the location of the bird as it passes by the
+point, and the radius defines the band over which that probability is
+integrated, giving the detection rate.</p></dd>
 
 
 <dt id="arg-n-directions">n_directions<a class="anchor" aria-label="anchor" href="#arg-n-directions"></a></dt>
@@ -126,14 +131,38 @@ that range the algorithm is likely to yield distorted results.
 <code>0.5 * mean(res(bf))</code> is the default, and recommended radius.</p></dd>
 
 
-<dt id="arg-weighted">weighted<a class="anchor" aria-label="anchor" href="#arg-weighted"></a></dt>
-<dd><p>If <code>FALSE</code> use the original and quicker version of bmtr
-that sums all the marginal probability for transitions that pass within a
-fixed distance of the point.  If <code>TRUE</code> assign a weight to the point and
-transition combo that then is multiplied by the marginal probability before
-summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behavior when set to <code>TRUE</code> may
-change.</p></dd>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dd><p>The detection model used to determine how much of a
+transition's movement counts towards a point's BMTR:</p><dl><dt><code>"binary"</code></dt>
+<dd><p>(default) Fast and deterministic. A movement line either
+does or does not pass within <code>radius</code> of the point, per <code><a href="is_between.html">is_between()</a></code>.</p></dd>
+
+<dt><code>"continuous"</code></dt>
+<dd><p>Assigns a continuous weight (0 to 1) based on the
+probability that a bird's actual path, modeled as spreading away from the
+straight line between two cells, passes within <code>radius</code> of the point. Uses
+planar (Euclidean) geometry in the model's native CRS, and is the
+recommended detection model when continuous weighting is desired.</p></dd>
+
+<dt><code>"continuous-spherical"</code></dt>
+<dd><p>The same continuous weighting as
+<code>"continuous"</code>, but computed with great-circle (spherical) geometry
+instead. Much slower, and not recommended for routine use; kept to allow
+assessing the impact of switching from spherical to Euclidean geometry.</p></dd>
+
+
+</dl></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>For <code>method = "continuous"</code> or <code>"continuous-spherical"</code>,
+additional arguments forwarded to <code><a href="calc_dist_weights.html">calc_dist_weights()</a></code> to control the
+spread kernel used to model uncertainty in a bird's path: <code>kernel</code>,
+<code>gamma</code>, <code>kl</code>, and <code>s1</code>. See <code><a href="calc_dist_weights.html">calc_dist_weights()</a></code> for the full list of
+supported kernels and their hyperparameters, and
+<code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code> to explore how they shape the spread
+before running this (potentially expensive) function. Not applicable,
+and an error, for <code>method = "binary"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -160,10 +189,14 @@ of a line oriented perpendicular to the movement at each point:
 
 
 
-<p><code>calc_bmtr()</code> makes the incorrect simplifying assumption
-that birds follow the shortest (great circle) path
-between the center of the the source and destination raster cells.  Caution
-should be used when interpreting the results especially around
+<p><code>calc_bmtr()</code> makes an incorrect simplifying assumption about the path
+birds take: either that they follow the shortest path between the centers
+of the source and destination raster cells (<code>method = "binary"</code>), or that
+they are distributed symmetrically in a Gaussian distribution around that
+path (the two continuous methods). That path is a great circle in all
+cases except <code>method = "continuous"</code>, which uses a straight line in the
+model's projected CRS.
+Caution should be used when interpreting the results especially around
 major geographic features such as coasts, large lakes, mountain ranges, and
 ecological system boundaries that might result in non-linear migration paths.</p>
 <p><code>calc_bmtr()</code> assumes that a line passes by a point if any part of the line
@@ -181,18 +214,41 @@ is sufficient for this not to be a problem, as we are capturing and
 standardizing the units based on the entire cell area that that point
 represents.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code> to explore the spread kernel
+hyperparameters accepted via <code>...</code>.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="va">bmtr</span> <span class="op">&lt;-</span> <span class="fu">calc_bmtr</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Binary detection along shortest path</span></span></span>
+<span class="r-in"><span><span class="va">bmtr</span> <span class="op">&lt;-</span> <span class="fu">calc_bmtr</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_bmtr.html">plot_bmtr</a></span><span class="op">(</span><span class="va">bmtr</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="animate_bmtr.html">animate_bmtr</a></span><span class="op">(</span><span class="va">bmtr</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Continuous detection with a wider spread kernel</span></span></span>
+<span class="r-in"><span><span class="co"># (gamma defaults to 3e10)</span></span></span>
+<span class="r-in"><span><span class="va">bmtr2</span> <span class="op">&lt;-</span> <span class="fu">calc_bmtr</span><span class="op">(</span><span class="va">bf</span>, method <span class="op">=</span> <span class="st">"continuous"</span>, gamma <span class="op">=</span> <span class="fl">6e10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="animate_bmtr.html">animate_bmtr</a></span><span class="op">(</span><span class="va">bmtr2</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Visualize spread for the continuous detection with wider spread</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualize_distance_weights.html">visualize_distance_weights</a></span><span class="op">(</span>line_lengths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fu">xres</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                           gamma <span class="op">=</span> <span class="fl">6e10</span>, res_m <span class="op">=</span> <span class="fu">xres</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Visualize spread for the continuous detection with default values</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="visualize_distance_weights.html">visualize_distance_weights</a></span><span class="op">(</span>line_lengths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fu">xres</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                           res_m <span class="op">=</span> <span class="fu">xres</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -205,7 +261,7 @@ represents.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

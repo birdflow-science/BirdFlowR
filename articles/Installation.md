@@ -7,7 +7,7 @@ both of those installed, skip to step 3.
 
 1.  [Install R from CRAN](https://cran.r-project.org/) - follow links
     for your system in the upper right. I’m currently using R version
-    4.6.0 (2026-04-24) but I think any 4.2.x and above should work.
+    4.6.1 (2026-06-24) but I think any 4.2.x and above should work.
 
 2.  [Install RStudio IDE](https://posit.co/download/rstudio-desktop/)
     This isn’t strictly necessary, but RStudio is a significant upgrade

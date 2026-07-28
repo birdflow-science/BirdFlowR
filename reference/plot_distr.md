@@ -54,7 +54,7 @@ plot_distr(
   For `show_dynamic_mask = TRUE` to work the column names in `distr`
   should all be in `colnames(get_distr(bf))`. This is true for
   distributions returned by
-  [[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+  [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
   and
   [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
 
@@ -187,7 +187,7 @@ distribution use `d <- matrix(d, ncol = 1); colnames(d) <- "new label"`
 
 - [`as_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/as_distr.md),
   [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md),
-  [[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow)
+  [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow)
   for functions that produce distributions.
 
 ## Examples

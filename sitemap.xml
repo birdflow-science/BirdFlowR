@@ -36,10 +36,13 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_abundance_stats.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights_sd.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_euclidean_detection_rate.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_flux.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_movement_vectors.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_single_interval_metrics.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_spherical_detection_rate.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calc_year_offset.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/calculate_interval_sampling_strategy.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/clip_to_dataframe.html</loc></url>
@@ -119,6 +122,7 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/print_type_breakdown.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/process_rasters.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/project_aligned.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/project_points_simple.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/rasterize_bmtr.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/read_geom.html</loc></url>
@@ -143,6 +147,6 @@
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/ts_info.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/validate_BirdFlow.html</loc></url>
 <url><loc>https://birdflow-science.github.io/BirdFlowR/reference/validate_geom.html</loc></url>
-<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/weight_between.html</loc></url>
+<url><loc>https://birdflow-science.github.io/BirdFlowR/reference/visualize_distance_weights.html</loc></url>
 </urlset>
 

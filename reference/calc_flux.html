@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9083</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,10 +65,14 @@ or fall between two active cells. Otherwise a data frame with <code>x</code> and
 columns containing point coordinates in <a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs(bf)</a>.</p></dd>
 
     <dt><code>radius</code></dt>
-<dd><p>The radius in meters around the points used to assess whether
-a movement line passes by (or through) the point. If a point is farther than
-<code>radius</code> from a great circle line between two cells centers then it is not
-between them.</p></dd>
+<dd><p>The radius in meters around the points used to assess the
+detection rate for a movement at the point.
+With <code>method = "binary"</code>, if a point is within <code>radius</code> of the great
+circle line between two cell centers then the movement is detected at
+that point. For the two continuous detection methods there is a
+probability distribution for the location of the bird as it passes by the
+point, and the radius defines the band over which that probability is
+integrated, giving the detection rate.</p></dd>
 
     <dt><code>n_directions</code></dt>
 <dd><p>The number of directional bins to use for recording
@@ -96,14 +100,27 @@ transition.</p></dd>
 
 </dl></dd>
 
-    <dt><code>weighted</code></dt>
-<dd><p>If <code>FALSE</code> use the original and quicker version of bmtr
-that sums all the marginal probability for transitions that pass within a
-fixed distance of the point.  If <code>TRUE</code> assign a weight to the point and
-transition combo that then is multiplied by the marginal probability before
-summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behavior when set to <code>TRUE</code> may
-change.</p></dd>
+    <dt><code>method</code></dt>
+<dd><p>The detection model used to determine how much of a
+transition's movement counts towards a point's BMTR:</p><dl><dt><code>"binary"</code></dt>
+<dd><p>(default) Fast and deterministic. A movement line either
+does or does not pass within <code>radius</code> of the point, per <code><a href="is_between.html">is_between()</a></code>.</p></dd>
+
+<dt><code>"continuous"</code></dt>
+<dd><p>Assigns a continuous weight (0 to 1) based on the
+probability that a bird's actual path, modeled as spreading away from the
+straight line between two cells, passes within <code>radius</code> of the point. Uses
+planar (Euclidean) geometry in the model's native CRS, and is the
+recommended detection model when continuous weighting is desired.</p></dd>
+
+<dt><code>"continuous-spherical"</code></dt>
+<dd><p>The same continuous weighting as
+<code>"continuous"</code>, but computed with great-circle (spherical) geometry
+instead. Much slower, and not recommended for routine use; kept to allow
+assessing the impact of switching from spherical to Euclidean geometry.</p></dd>
+
+
+</dl></dd>
 
     <dt><code>batch_size</code></dt>
 <dd><p>controls the number of movement lines that are processed
@@ -135,7 +152,7 @@ that range the algorithm is likely to yield distorted results.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

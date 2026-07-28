@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9083</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,34 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9084" id="birdflowr-0109084">BirdFlowR 0.1.0.9084<a class="anchor" aria-label="anchor" href="#birdflowr-0109084"></a></h2>
+<p>2026-07-27</p>
+<div class="section level3">
+<h3 id="continuous-bmtr-0-1-0-9084">Continuous BMTR<a class="anchor" aria-label="anchor" href="#continuous-bmtr-0-1-0-9084"></a></h3>
+<p>The focus of this update is calculating Bird Flow Migration Traffic (BMTR) with a detection rate that varies continuously, as opposed to the default method which has a binary detection rate.</p>
+<p>Previously <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code> did have both methods but the continuous method was prohibitively computationally expensive. This update makes it usable with non-trivial models.</p>
+<p><strong>Breaking change</strong> This update changes the arguments used to call the continuous version of the function dropping <code>weighted</code> and <code>euclidean</code> arguments. I believe no users are affected by this change, but I apologize if you were.</p>
+</div>
+<div class="section level3">
+<h3 id="specific-changes-0-1-0-9084">Specific changes<a class="anchor" aria-label="anchor" href="#specific-changes-0-1-0-9084"></a></h3>
+<ul><li>
+<code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>: replaced the <code>weighted</code>/<code>euclidean</code> arguments with a single <code>method</code> argument (<code>"binary"</code>, <code>"continuous"</code>, or <code>"continuous-spherical"</code>) that selects the detection model used to assess whether a transition passes by a point. <code>"continuous"</code> uses fast planar (Euclidean) geometry and is the recommended weighted option; <code>"continuous-spherical"</code> is the slower great-circle version, kept to assess the impact of switching geometries.</li>
+<li>
+<code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>: new <code>...</code> argument, forwarded to <code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code> for the two continuous methods, to tune the spread kernel (<code>kernel</code>, <code>gamma</code>, <code>kl</code>, <code>s1</code>) used to model uncertainty in a bird’s path.</li>
+<li>
+<code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code>: renamed the <code>method</code> argument to <code>kernel</code> to avoid colliding with <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>’s new <code>method</code> argument.</li>
+<li>Fixed a bug where <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>’s weighted detection methods ignored a user-supplied <code>points</code> argument due to a positional argument-binding bug.</li>
+<li>Fixed a bug where <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>’s weighted detection methods ignored a user-supplied <code>radius</code> argument, always using <code>mean(res(bf))</code> instead.</li>
+<li>Replaced <code>weight_between()</code> and the internal <code>calc_detection_rate()</code> dispatcher with <code><a href="../reference/calc_spherical_detection_rate.html">calc_spherical_detection_rate()</a></code> and <code><a href="../reference/calc_euclidean_detection_rate.html">calc_euclidean_detection_rate()</a></code>.</li>
+<li>
+<code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code>: <code>kernel</code> now supports 3 additional spread kernels (<code>"m1"</code>, <code>"m5"</code>, <code>"sq"</code>) alongside the existing <code>"m3"</code> and <code>"bb"</code>.</li>
+<li>New <code><a href="../reference/visualize_distance_weights.html">visualize_distance_weights()</a></code>: plots the shape of <code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code>’s spread kernel, as an SD envelope or a weight raster, to help choose <code>kernel</code> and its hyperparameters before running <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>.</li>
+<li>Fixed a units bug in <code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code>’s <code>"m1"</code>, <code>"m3"</code>, <code>"m5"</code>, and <code>"sq"</code> kernels: <code>dist_along_line</code>/<code>line_lengths</code>/<code>res_m</code> were converted to km while <code>gamma</code>/<code>kl</code> were left in meters, making the kernel’s contribution to the spread negligible next to the fixed nugget at any realistic line length. Everything is now kept in meters throughout, matching <code>gamma</code>/<code>kl</code>. This changes the numeric output of <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>’s <code>"continuous"</code>/ <code>"continuous-spherical"</code> methods and of <code><a href="../reference/calc_euclidean_detection_rate.html">calc_euclidean_detection_rate()</a></code>/ <code><a href="../reference/calc_spherical_detection_rate.html">calc_spherical_detection_rate()</a></code> for all kernels, including <code>"bb"</code> (whose <code>t</code>/<code>len</code> inputs are now meters rather than km, so its <code>s1</code> hyperparameter means something different than before).</li>
+<li>
+<code><a href="../reference/calc_dist_weights.html">calc_dist_weights()</a></code>/<code><a href="../reference/visualize_distance_weights.html">visualize_distance_weights()</a></code>: <code>gamma</code>/<code>kl</code>/<code>s1</code> now default to <code>3e10</code>/<code>9e5</code>/<code>200</code> instead of the old fixed literals (<code>40000</code>/<code>2000</code>/<code>10</code>) tuned for a ~1-2 km demo scale. The three hyperparameters have different units (<code>gamma</code> is a variance, <code>kl</code> a length, <code>s1</code> a sqrt-length). The new values were chosen by eye against <code><a href="../reference/visualize_distance_weights.html">visualize_distance_weights()</a></code>’s envelope plots. See <code>data-raw/kernel_parameter_tuning.Rmd</code>. This changes the default numeric output of <code><a href="../reference/calc_bmtr.html">calc_bmtr()</a></code>’s <code>"continuous"</code>/ <code>"continuous-spherical"</code> and of <code><a href="../reference/calc_euclidean_detection_rate.html">calc_euclidean_detection_rate()</a></code>/<code><a href="../reference/calc_spherical_detection_rate.html">calc_spherical_detection_rate()</a></code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9083" id="birdflowr-0109083">BirdFlowR 0.1.0.9083<a class="anchor" aria-label="anchor" href="#birdflowr-0109083"></a></h2>
 <p>2026-06-15</p>
@@ -89,7 +117,7 @@
 <h2 class="pkg-version" data-toc-text="0.1.0.9080" id="birdflowr-0109080">BirdFlowR 0.1.0.9080<a class="anchor" aria-label="anchor" href="#birdflowr-0109080"></a></h2>
 <p>2026-05-08</p>
 <p>Round-up of small fixes (closes <a href="https://github.com/birdflow-science/BirdFlowR/issues/196" class="external-link">#196</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/115" class="external-link">#115</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/197" class="external-link">#197</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/219" class="external-link">#219</a>, <a href="https://github.com/birdflow-science/BirdFlowR/issues/222" class="external-link">#222</a>):</p>
-<ul><li>Fix typo <code>"weigts"</code> in the BMTR progress message printed by <code><a href="../reference/weight_between.html">weight_between()</a></code> (and via <code>calc_bmtr(weighted = TRUE)</code> / <code><a href="../reference/calc_flux.html">calc_flux()</a></code>).</li>
+<ul><li>Fix typo <code>"weigts"</code> in the BMTR progress message printed by <code>weight_between()</code> (and via <code>calc_bmtr(weighted = TRUE)</code> / <code><a href="../reference/calc_flux.html">calc_flux()</a></code>).</li>
 <li>
 <code><a href="../reference/sparsify.html">sparsify()</a></code> now honors the documented <code>p = 0.99</code> default rather than erroring when <code>p</code> is missing. Two adjacent typos in nearby error messages also fixed.</li>
 <li>
@@ -249,8 +277,8 @@ Related to this <code><a href="https://ebird.github.io/ebirdst/reference/ebirdst
 <div class="section level3">
 <h3 id="probabilistic-flux-0-1-0-9067">Probabilistic flux<a class="anchor" aria-label="anchor" href="#probabilistic-flux-0-1-0-9067"></a></h3>
 <p><strong>Note</strong> this version adds the machinery for calculating probabilistic flux but the parameterization is not yet right and it will likely need some optimization to run on non-trivial models.</p>
-<ul><li>Add <code><a href="../reference/weight_between.html">weight_between()</a></code> which returns betweenness weights in a manner similar to <code><a href="../reference/is_between.html">is_between()</a></code>.</li>
-<li>Add <code>calc_distance_weights()</code>,<code>calc_martern_variance()</code> and some related helper functions that support <code><a href="../reference/weight_between.html">weight_between()</a></code>
+<ul><li>Add <code>weight_between()</code> which returns betweenness weights in a manner similar to <code><a href="../reference/is_between.html">is_between()</a></code>.</li>
+<li>Add <code>calc_distance_weights()</code>,<code>calc_martern_variance()</code> and some related helper functions that support <code>weight_between()</code>
 </li>
 <li>Update <code><a href="../reference/calc_flux.html">calc_flux()</a></code> with argument <code>weighted</code> which switches between the old binary betweenness with linear paths and the new probabilistic flux with weighted betweenness in which the probability spreads in the middle of the transition path and spreads more for longer paths.<br></li>
 <li>Add <code>data-raw/martern_parameters.R</code> which helps visualize how parameters and functional forms affect weights.</li>
@@ -1285,7 +1313,7 @@ This removes the documentation from the package manual and index, but it’s sti
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

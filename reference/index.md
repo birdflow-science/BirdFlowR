@@ -299,3 +299,9 @@
 
 - [`validate_geom()`](https://birdflow-science.github.io/BirdFlowR/reference/validate_geom.md)
   : Validate geom component of a BirdFlow or related object
+
+- [`visualize_distance_weights()`](https://birdflow-science.github.io/BirdFlowR/reference/visualize_distance_weights.md)
+  :
+
+  Visualize the spread kernel used by
+  [`calc_dist_weights()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_dist_weights.md)

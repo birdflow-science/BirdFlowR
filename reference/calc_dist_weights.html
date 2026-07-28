@@ -11,7 +11,7 @@ the weight that should be used for that transition."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9083</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,10 @@ the weight that should be used for that transition.</p>
 <span>  <span class="va">line_lengths</span>,</span>
 <span>  <span class="va">radius_m</span>,</span>
 <span>  <span class="va">res_m</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"m3"</span></span>
+<span>  kernel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m3"</span>, <span class="st">"bb"</span>, <span class="st">"m1"</span>, <span class="st">"m5"</span>, <span class="st">"sq"</span><span class="op">)</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fl">3e+10</span>,</span>
+<span>  kl <span class="op">=</span> <span class="fl">9e+05</span>,</span>
+<span>  s1 <span class="op">=</span> <span class="fl">200</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,10 +95,46 @@ determine the nugget added to the variance to represent the uncertainty in
 the starting and ending location of the transition.</p></dd>
 
 
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>The method used for calculating the standard deviation
-in the probability distribution.  Currently <code>"m3"</code>, Martern 3/2; and
-<code>"bb"</code>, Brownian bridge are supported.</p></dd>
+<dt id="arg-kernel">kernel<a class="anchor" aria-label="anchor" href="#arg-kernel"></a></dt>
+<dd><p>The kernel used for calculating the standard deviation
+in the probability distribution:</p><dl><dt><code>"m3"</code></dt>
+<dd><p>(default) Matern 3/2. Driven by <code>gamma</code> and <code>kl</code>.</p></dd>
+
+<dt><code>"m1"</code></dt>
+<dd><p>Matern 1/2. Driven by <code>gamma</code> and <code>kl</code>.</p></dd>
+
+<dt><code>"m5"</code></dt>
+<dd><p>Matern 5/2. Driven by <code>gamma</code> and <code>kl</code>.</p></dd>
+
+<dt><code>"sq"</code></dt>
+<dd><p>Squared-exponential (Gaussian). Driven by <code>gamma</code> and <code>kl</code>.</p></dd>
+
+<dt><code>"bb"</code></dt>
+<dd><p>Brownian bridge. Driven by <code>s1</code>.</p></dd>
+
+
+</dl><p>See <code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code> to explore how these kernels and their
+hyperparameters shape the spread.</p></dd>
+
+
+<dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
+<dd><p>Spread magnitude hyperparameter (m^2, a variance) for the
+Matern-family and squared-exponential kernels (<code>"m1"</code>, <code>"m3"</code>, <code>"m5"</code>,
+<code>"sq"</code>). Ignored for <code>kernel = "bb"</code>. The default was tuned by eye with
+<code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code>.</p></dd>
+
+
+<dt id="arg-kl">kl<a class="anchor" aria-label="anchor" href="#arg-kl"></a></dt>
+<dd><p>Lengthscale hyperparameter (m) for the Matern-family and
+squared-exponential kernels (<code>"m1"</code>, <code>"m3"</code>, <code>"m5"</code>, <code>"sq"</code>). Ignored for
+<code>kernel = "bb"</code>. The default was tuned by eye using
+<code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code>.</p></dd>
+
+
+<dt id="arg-s-">s1<a class="anchor" aria-label="anchor" href="#arg-s-"></a></dt>
+<dd><p>Spread magnitude hyperparameter (units of sqrt(m), not m) for
+the <code>"bb"</code> kernel. Ignored for all other kernels. The default was tuned by
+eye against <code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -108,6 +147,10 @@ in the probability distribution.  Currently <code>"m3"</code>, Martern 3/2; and
 will be vectorized over the corresponding elements.</p>
 <p>This is a preliminary version of the function and will likely change.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="visualize_distance_weights.html">visualize_distance_weights()</a></code></p></div>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -118,7 +161,7 @@ will be vectorized over the corresponding elements.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

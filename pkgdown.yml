@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   BirdFlowOverview: BirdFlowOverview.html
@@ -8,7 +8,7 @@ articles:
   Polygons: Polygons.html
   Preprocess: Preprocess.html
   route_between: route_between.html
-last_built: 2026-06-18T14:27Z
+last_built: 2026-07-28T21:33Z
 urls:
   reference: https://birdflow-science.github.io/BirdFlowR/reference
   article: https://birdflow-science.github.io/BirdFlowR/articles

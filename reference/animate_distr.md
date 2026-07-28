@@ -53,7 +53,7 @@ animate_distr(distr, bf, title = species(bf), ...)
       with NA. For `show_dynamic_mask = TRUE` to work the column names
       in `distr` should all be in `colnames(get_distr(bf))`. This is
       true for distributions returned by
-      [[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+      [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
       and
       [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
 

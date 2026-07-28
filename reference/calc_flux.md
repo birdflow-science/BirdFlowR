@@ -31,10 +31,14 @@ calc_flux(...)
 
   `radius`
 
-  :   The radius in meters around the points used to assess whether a
-      movement line passes by (or through) the point. If a point is
-      farther than `radius` from a great circle line between two cells
-      centers then it is not between them.
+  :   The radius in meters around the points used to assess the
+      detection rate for a movement at the point. With
+      `method = "binary"`, if a point is within `radius` of the great
+      circle line between two cell centers then the movement is detected
+      at that point. For the two continuous detection methods there is a
+      probability distribution for the location of the bird as it passes
+      by the point, and the radius defines the band over which that
+      probability is integrated, giving the detection rate.
 
   `n_directions`
 
@@ -72,15 +76,32 @@ calc_flux(...)
           [`terra::SpatRaster`](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
           with layers for each transition.
 
-  `weighted`
+  `method`
 
-  :   If `FALSE` use the original and quicker version of bmtr that sums
-      all the marginal probability for transitions that pass within a
-      fixed distance of the point. If `TRUE` assign a weight to the
-      point and transition combo that then is multiplied by the marginal
-      probability before summing. This argument is experimental but the
-      default value is identical to the old version. The argument name
-      and behavior when set to `TRUE` may change.
+  :   The detection model used to determine how much of a transition's
+      movement counts towards a point's BMTR:
+
+      `"binary"`
+
+      :   (default) Fast and deterministic. A movement line either does
+          or does not pass within `radius` of the point, per
+          [`is_between()`](https://birdflow-science.github.io/BirdFlowR/reference/is_between.md).
+
+      `"continuous"`
+
+      :   Assigns a continuous weight (0 to 1) based on the probability
+          that a bird's actual path, modeled as spreading away from the
+          straight line between two cells, passes within `radius` of the
+          point. Uses planar (Euclidean) geometry in the model's native
+          CRS, and is the recommended detection model when continuous
+          weighting is desired.
+
+      `"continuous-spherical"`
+
+      :   The same continuous weighting as `"continuous"`, but computed
+          with great-circle (spherical) geometry instead. Much slower,
+          and not recommended for routine use; kept to allow assessing
+          the impact of switching from spherical to Euclidean geometry.
 
   `batch_size`
 
