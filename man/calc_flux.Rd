@@ -15,10 +15,14 @@ calc_flux(...)
 \code{NULL} they will default to the BirdFlow model cells that are either active
 or fall between two active cells. Otherwise a data frame with \code{x} and  \code{y}
 columns containing point coordinates in \link[terra:crs]{crs(bf)}.}
-    \item{\code{radius}}{The radius in meters around the points used to assess whether
-a movement line passes by (or through) the point. If a point is farther than
-\code{radius} from a great circle line between two cells centers then it is not
-between them.}
+    \item{\code{radius}}{The radius in meters around the points used to assess the
+detection rate for a movement at the point.
+With \code{method = "binary"}, if a point is within \code{radius} of the great
+circle line between two cell centers then the movement is detected at
+that point. For the two continuous detection methods there is a
+probability distribution for the location of the bird as it passes by the
+point, and the radius defines the band over which that probability is
+integrated, giving the detection rate.}
     \item{\code{n_directions}}{The number of directional bins to use for recording
 movement direction. Must be either \code{1} indicating no direction information
 or an even number. This is a placeholder, currently only \code{1} is supported.}

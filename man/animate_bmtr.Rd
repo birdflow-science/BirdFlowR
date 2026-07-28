@@ -57,15 +57,30 @@ Animate migration traffic rates produced by \code{\link[=calc_bmtr]{calc_bmtr()}
 
 \dontrun{
 bf <- BirdFlowModels::amewoo
-bmtr <- calc_bmtr(bf)
 
+# Binary detection along shortest path
+bmtr <- calc_bmtr(bf)
 plot_bmtr(bmtr, bf)
 
 animate_bmtr(bmtr, bf)
 
 # Continuous detection with a wider spread kernel
-bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 60000)
+# (gamma defaults to 3e10)
+bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 6e10)
+animate_bmtr(bmtr2, bf)
+
+# Visualize spread for the continuous detection with wider spread
+visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+                           gamma = 6e10, res_m = xres(bf))
+
+# Visualize spread for the continuous detection with default values
+visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+                           res_m = xres(bf))
+
 }
+
+
+
 
 }
 \seealso{

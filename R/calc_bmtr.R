@@ -18,10 +18,14 @@
 #'
 #' @section Limitations:
 #'
-#' `calc_bmtr()` makes the incorrect simplifying assumption
-#'  that birds follow the shortest (great circle) path
-#' between the center of the the source and destination raster cells.  Caution
-#' should be used when interpreting the results especially around
+#' `calc_bmtr()` makes an incorrect simplifying assumption about the path
+#' birds take: either that they follow the shortest path between the centers
+#' of the source and destination raster cells (`method = "binary"`), or that
+#' they are distributed symmetrically in a Gaussian distribution around that
+#' path (the two continuous methods). That path is a great circle in all
+#' cases except `method = "continuous"`, which uses a straight line in the
+#' model's projected CRS.
+#' Caution should be used when interpreting the results especially around
 #' major geographic features such as coasts, large lakes, mountain ranges, and
 #' ecological system boundaries that might result in non-linear migration paths.
 #'
@@ -41,16 +45,19 @@
 #' standardizing the units based on the entire cell area that that point
 #' represents.
 #'
-#'
 #' @param bf A BirdFlow model
 #' @param points A set of points to calculate movement through. If `points` is
 #' `NULL` they will default to the BirdFlow model cells that are either active
 #' or fall between two active cells. Otherwise a data frame with `x` and  `y`
 #' columns containing point coordinates in [crs(bf)][terra::crs()].
-#' @param radius The radius in meters around the points used to assess whether
-#' a movement line passes by (or through) the point. If a point is farther than
-#' `radius` from a great circle line between two cells centers then it is not
-#' between them.
+#' @param radius The radius in meters around the points used to assess the
+#' detection rate for a movement at the point.
+#' With `method = "binary"`, if a point is within `radius` of the great
+#' circle line between two cell centers then the movement is detected at
+#' that point. For the two continuous detection methods there is a
+#' probability distribution for the location of the bird as it passes by the
+#' point, and the radius defines the band over which that probability is
+#' integrated, giving the detection rate.
 #' @param n_directions The number of directional bins to use for recording
 #' movement direction. Must be either `1` indicating no direction information
 #' or an even number. This is a placeholder, currently only `1` is supported.
@@ -104,15 +111,30 @@
 #'
 #' \dontrun{
 #' bf <- BirdFlowModels::amewoo
-#' bmtr <- calc_bmtr(bf)
 #'
+#' # Binary detection along shortest path
+#' bmtr <- calc_bmtr(bf)
 #' plot_bmtr(bmtr, bf)
 #'
 #' animate_bmtr(bmtr, bf)
 #'
 #' # Continuous detection with a wider spread kernel
-#' bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 60000)
+#' # (gamma defaults to 3e10)
+#' bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 6e10)
+#' animate_bmtr(bmtr2, bf)
+#'
+#' # Visualize spread for the continuous detection with wider spread
+#' visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+#'                            gamma = 6e10, res_m = xres(bf))
+#'
+#' # Visualize spread for the continuous detection with default values
+#' visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+#'                            res_m = xres(bf))
+#'
 #' }
+#'
+#'
+#'
 #'
 calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
                       format = NULL, batch_size = 5e5, check_radius = TRUE,
