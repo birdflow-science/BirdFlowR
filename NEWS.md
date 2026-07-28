@@ -22,9 +22,7 @@
   dispatcher with `calc_spherical_detection_rate()` and
   `calc_euclidean_detection_rate()`.
 * `calc_dist_weights()`: `kernel` now supports 3 additional spread kernels
-  (`"m1"`, `"m5"`, `"sq"`) alongside the existing `"m3"` and `"bb"`. Fixed a
-  bug where these new kernels errored (`get(kernel)` looked up the wrong
-  object name).
+  (`"m1"`, `"m5"`, `"sq"`) alongside the existing `"m3"` and `"bb"`.
 * New `visualize_distance_weights()`: plots the shape of `calc_dist_weights()`'s
   spread kernel, as an SD envelope or a weight raster, to help choose
   `kernel` and its hyperparameters before running `calc_bmtr()`.
@@ -44,12 +42,11 @@
   hyperparameters have different units (`gamma` is a variance, `kl` a
   length, `s1` a sqrt-length), so they don't share a single rescaling
   factor; the new values were chosen by eye against
-  `visualize_distance_weights()`'s envelope plots for a ~100-150 km
-  resolution model. See `data-raw/kernel_parameter_tuning.Rmd`. This changes the
-  default numeric output of `calc_bmtr()`'s `"continuous"`/
+  `visualize_distance_weights()`'s envelope plots. 
+  See `data-raw/kernel_parameter_tuning.Rmd`. 
+  This changes the default numeric output of `calc_bmtr()`'s `"continuous"`/
   `"continuous-spherical"` methods and of
-  `calc_euclidean_detection_rate()`/`calc_spherical_detection_rate()` for
-  real (100-150 km cell) models.
+  `calc_euclidean_detection_rate()`/`calc_spherical_detection_rate()`.
 
 # BirdFlowR 0.1.0.9083
 2026-06-15
