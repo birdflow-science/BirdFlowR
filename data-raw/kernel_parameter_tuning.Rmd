@@ -31,16 +31,20 @@ kl    = 9e5    # "m3", "m1", "m5", "sq" kernels
 s1    = 200    # "bb" kernel
 ```
 
+Note `gamma` and `kl` where only tuned for the default `m3` kernel. 
+Likely anytime another of the kernels are used they will need to 
+be specified as well.
+
 These are the values set in `R/calc_distance_weights.R` and
 `R/visualize_distance_weights.R`. They were chosen by eye against the
 envelope plots below, nudging each until the tapering shape looked right.
+
 
 **These hyperparameters are not resolution dependent.** They describe our
 uncertainty about a biological process — how far a bird's actual path is
 likely to stray from the straight line between two cells — and that
 uncertainty is a property of the bird, not of the grid we happen to model it
-on. So they are fixed literals, deliberately, rather than a formula derived
-from `res_m`.
+on. So they are fixed and don't depend on `res_m`.
 
 Model resolution enters the kernel in exactly one place, separately from
 these three: the nugget (`res_m / 4`), which represents uncertainty about
@@ -49,8 +53,8 @@ where within a cell the transition actually started and ended. That part
 
 `res_m = 100000` is used throughout this document only as a reference scale
 for reading the plots — a familiar size to think about distances against,
-since real BirdFlow models use 100-150 km cells. It is not a scale the
-hyperparameters were fit to.
+since BirdFlow models typically use 100 or 150 km cells.
+
 
 ## Checking the shape at a reference scale
 
@@ -96,11 +100,11 @@ the endpoints and widest in between.
 ## Envelope plots
 
 The envelope plots show the region within 1.96 standard deviations of the
-line — 95 percent of the kernel's density. These are the plots the defaults
+line — 95% of the kernel's density. These are the plots the defaults
 were actually tuned against.
 
 ```{r, fig.height=6, fig.width=10}
-n_cells <- c(1, 2, 5, 10, 15, 50)
+n_cells <- c(1, 2, 5, 10, 15, 30)
 line_lengths <- n_cells * res_m
 
 visualize_distance_weights(res_m = res_m, line_lengths = line_lengths,

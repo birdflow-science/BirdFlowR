@@ -1,5 +1,9 @@
 # nolint start
 
+# This document has been superceded by data-raw/kernel_parameter_tuning.Rmd please use that one for understanding
+# current parameter values.   This one may not run properly or the interpretation of units (km vs m) may
+# have changed for some of the parameters.
+
 # Note kl was originally l but that lead to warnings about partial argument
 # matching ambiguity so I changed it to kl  for kernel length hyper parameter
 
