@@ -2,6 +2,22 @@
 # BirdFlowR 0.1.0.9084
 2026-07-27
 
+## Continuous BMTR
+
+The focus of this update is calculating Bird Flow Migration Traffic (BMTR)
+with a detection rate that varies continuously, as opposed to the default
+method which has a binary detection rate. 
+
+Previously `calc_bmtr()` did have both methods but the continuous method 
+was prohibitively computationally expensive. This update makes it usable 
+with non-trivial models. 
+
+**Breaking change** This update changes the arguments used to call the 
+continuous version of the function dropping `weighted` and `euclidean`
+arguments.  I believe no users are affected by this change, but 
+I apologize if you were.
+
+## Specific changes
 * `calc_bmtr()`: replaced the `weighted`/`euclidean` arguments with a single
   `method` argument (`"binary"`, `"continuous"`, or `"continuous-spherical"`)
   that selects the detection model used to assess whether a transition
@@ -40,12 +56,11 @@
   now default to `3e10`/`9e5`/`200` instead of the old fixed literals
   (`40000`/`2000`/`10`) tuned for a ~1-2 km demo scale. The three
   hyperparameters have different units (`gamma` is a variance, `kl` a
-  length, `s1` a sqrt-length), so they don't share a single rescaling
-  factor; the new values were chosen by eye against
+  length, `s1` a sqrt-length). The new values were chosen by eye against
   `visualize_distance_weights()`'s envelope plots. 
   See `data-raw/kernel_parameter_tuning.Rmd`. 
   This changes the default numeric output of `calc_bmtr()`'s `"continuous"`/
-  `"continuous-spherical"` methods and of
+  `"continuous-spherical"` and of
   `calc_euclidean_detection_rate()`/`calc_spherical_detection_rate()`.
 
 # BirdFlowR 0.1.0.9083
