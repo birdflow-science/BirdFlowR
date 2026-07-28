@@ -46,20 +46,17 @@ hyperparameters shape the spread.}
 
 \item{gamma}{Spread magnitude hyperparameter (m^2, a variance) for the
 Matern-family and squared-exponential kernels (\code{"m1"}, \code{"m3"}, \code{"m5"},
-\code{"sq"}). Ignored for \code{kernel = "bb"}. The default was tuned by eye against
-\code{visualize_distance_weights()} for a ~100-150 km resolution model; see
-\code{dev/kernel_parameter_tuning.Rmd}.}
+\code{"sq"}). Ignored for \code{kernel = "bb"}. The default was tuned by eye with
+\code{visualize_distance_weights()}.}
 
 \item{kl}{Lengthscale hyperparameter (m) for the Matern-family and
 squared-exponential kernels (\code{"m1"}, \code{"m3"}, \code{"m5"}, \code{"sq"}). Ignored for
-\code{kernel = "bb"}. The default was tuned by eye against
-\code{visualize_distance_weights()} for a ~100-150 km resolution model; see
-\code{dev/kernel_parameter_tuning.Rmd}.}
+\code{kernel = "bb"}. The default was tuned by eye using
+\code{visualize_distance_weights()}.}
 
 \item{s1}{Spread magnitude hyperparameter (units of sqrt(m), not m) for
 the \code{"bb"} kernel. Ignored for all other kernels. The default was tuned by
-eye against \code{visualize_distance_weights()} for a ~100-150 km resolution
-model; see \code{dev/kernel_parameter_tuning.Rmd}.}
+eye against \code{visualize_distance_weights()}.}
 }
 \value{
 A vector of weights of the same length as the first three arguments.

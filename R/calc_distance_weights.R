@@ -37,18 +37,15 @@
 #' hyperparameters shape the spread.
 #' @param gamma Spread magnitude hyperparameter (m^2, a variance) for the
 #' Matern-family and squared-exponential kernels (`"m1"`, `"m3"`, `"m5"`,
-#' `"sq"`). Ignored for `kernel = "bb"`. The default was tuned by eye against
-#' `visualize_distance_weights()` for a ~100-150 km resolution model; see
-#' `dev/kernel_parameter_tuning.Rmd`.
+#' `"sq"`). Ignored for `kernel = "bb"`. The default was tuned by eye with
+#' `visualize_distance_weights()`.
 #' @param kl Lengthscale hyperparameter (m) for the Matern-family and
 #' squared-exponential kernels (`"m1"`, `"m3"`, `"m5"`, `"sq"`). Ignored for
-#' `kernel = "bb"`. The default was tuned by eye against
-#' `visualize_distance_weights()` for a ~100-150 km resolution model; see
-#' `dev/kernel_parameter_tuning.Rmd`.
+#' `kernel = "bb"`. The default was tuned by eye using
+#' `visualize_distance_weights()`.
 #' @param s1 Spread magnitude hyperparameter (units of sqrt(m), not m) for
 #' the `"bb"` kernel. Ignored for all other kernels. The default was tuned by
-#' eye against `visualize_distance_weights()` for a ~100-150 km resolution
-#' model; see `dev/kernel_parameter_tuning.Rmd`.
+#' eye against `visualize_distance_weights()`.
 #'
 #' @return A vector of weights of the same length as the first three arguments.
 #' @seealso [visualize_distance_weights()]

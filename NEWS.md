@@ -45,7 +45,7 @@
   length, `s1` a sqrt-length), so they don't share a single rescaling
   factor; the new values were chosen by eye against
   `visualize_distance_weights()`'s envelope plots for a ~100-150 km
-  resolution model. See `dev/kernel_parameter_tuning.Rmd`. This changes the
+  resolution model. See `data-raw/kernel_parameter_tuning.Rmd`. This changes the
   default numeric output of `calc_bmtr()`'s `"continuous"`/
   `"continuous-spherical"` methods and of
   `calc_euclidean_detection_rate()`/`calc_spherical_detection_rate()` for
