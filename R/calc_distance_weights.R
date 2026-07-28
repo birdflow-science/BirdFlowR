@@ -24,62 +24,92 @@
 #' determine the nugget added to the variance to represent the uncertainty in
 #' the starting and ending location of the transition.
 #'
-#' @param method  The method used for calculating the standard deviation
-#' in the probability distribution.  Currently `"m3"`, Martern 3/2; and
-#' `"bb"`, Brownian bridge are supported.
+#' @param kernel The kernel used for calculating the standard deviation
+#' in the probability distribution:
+#' \describe{
+#' \item{`"m3"`}{(default) Matern 3/2. Driven by `gamma` and `kl`.}
+#' \item{`"m1"`}{Matern 1/2. Driven by `gamma` and `kl`.}
+#' \item{`"m5"`}{Matern 5/2. Driven by `gamma` and `kl`.}
+#' \item{`"sq"`}{Squared-exponential (Gaussian). Driven by `gamma` and `kl`.}
+#' \item{`"bb"`}{Brownian bridge. Driven by `s1`.}
+#' }
+#' See [visualize_distance_weights()] to explore how these kernels and their
+#' hyperparameters shape the spread.
+#' @param gamma Spread magnitude hyperparameter (m^2, a variance) for the
+#' Matern-family and squared-exponential kernels (`"m1"`, `"m3"`, `"m5"`,
+#' `"sq"`). Ignored for `kernel = "bb"`. The default was tuned by eye with
+#' `visualize_distance_weights()`.
+#' @param kl Lengthscale hyperparameter (m) for the Matern-family and
+#' squared-exponential kernels (`"m1"`, `"m3"`, `"m5"`, `"sq"`). Ignored for
+#' `kernel = "bb"`. The default was tuned by eye using
+#' `visualize_distance_weights()`.
+#' @param s1 Spread magnitude hyperparameter (units of sqrt(m), not m) for
+#' the `"bb"` kernel. Ignored for all other kernels. The default was tuned by
+#' eye against `visualize_distance_weights()`.
 #'
 #' @return A vector of weights of the same length as the first three arguments.
+#' @seealso [visualize_distance_weights()]
 #' @keywords internal
 calc_dist_weights <- function(dist_to_line, dist_along_line, line_lengths,
-                              radius_m, res_m, method = "m3") {
+                              radius_m, res_m,
+                              kernel = c("m3", "bb", "m1", "m5", "sq"),
+                              gamma = 3e10, kl = 9e5, s1 = 200) {
 
+  kernel <- match.arg(kernel)
 
-
-  # Spatial information
-  len <- line_lengths / 1000  # length of great circle in km
-  t <- dist_along_line / 1000 # Distance from start of great circle to where
-  # the point projects onto the great circle in km
-  d <- dist_to_line / 1000 # Distance from reference point to the great circle
-
-  res_km <- res_m / 1000
-
-  r <- radius_m / 1000  # Radius of transact in KM.
-
-  # s2 is the standard deviation of the nugget
-  s2 <- res_km / 4 # This initial setting of 1/4 the cell width converted
-  # to KM means the cell boundary (orthagonally) is at 2
-  #  standard deviations from the cell center, the corners
-  # will be at 2.8 SD.
-
-  valid_methods <- c("bb", # Brownian Bridge
-                     "m3") # Martern 3/2
-
-  if (!method %in% valid_methods)
-    stop("Method shold be one of ", paste(valid_methods, collapse = ", "))
-
-  if (method == "bb") {
-
-    # Hyperparameters
-    s1 <-  10 # Tune this visually looking at a few resulting distributions?
-
-
-    # Standard deviation
-    sd <-  sqrt(s1^2 * t * (len - t) / len + s2^2)  # SD in KM for this point.
-
-  }
-
-  if (method == "m3") {
-    sd <- sqrt(calc_martern_variance(t, len, k_m3, gamma = 40000, kl = 2000) +
-                 s2^2)
-  }
-
+  sd <- calc_dist_weights_sd(dist_along_line, line_lengths, res_m,
+                             kernel = kernel, gamma = gamma, kl = kl, s1 = s1)
 
   # Calculate weight
   weight <- rep(0, length(sd))
-  in_range <- (d - r) < 1.96 * sd
-  low_cum_prob <- stats::pnorm(d[in_range] - r, sd = sd[in_range])
-  high_cum_prob <- stats::pnorm(d[in_range] + r, sd = sd[in_range])
+  in_range <- (dist_to_line - radius_m) < 1.96 * sd
+  low_cum_prob <- stats::pnorm(dist_to_line[in_range] - radius_m,
+                               sd = sd[in_range])
+  high_cum_prob <- stats::pnorm(dist_to_line[in_range] + radius_m,
+                                sd = sd[in_range])
   weight[in_range] <- high_cum_prob - low_cum_prob
 
   return(weight)
+}
+
+#' Standard deviation of the spread kernel used by [calc_dist_weights()]
+#'
+#' Computes the standard deviation (in m) of the probability distribution
+#' representing uncertainty in a bird's location at a given point along a
+#' transition line, for one of the kernels supported by
+#' [calc_dist_weights()]. Factored out of [calc_dist_weights()] so
+#' [visualize_distance_weights()] can plot the same spread it uses without
+#' duplicating the kernel-selection logic.
+#'
+#' @param dist_along_line How far along the line the point of interest is (m)
+#' @param line_lengths How long the line is (m)
+#' @param res_m The resolution of the associated bird flow model, used to
+#' determine the nugget added to the variance to represent the uncertainty in
+#' the starting and ending location of the transition.
+#' @inheritParams calc_dist_weights
+#' @return A vector of standard deviations (m), the same length as
+#' `dist_along_line`.
+#' @keywords internal
+calc_dist_weights_sd <- function(dist_along_line, line_lengths, res_m,
+                                 kernel, gamma, kl, s1) {
+
+  len <- line_lengths  # length of great circle (m)
+  t <- dist_along_line # Distance from start of great circle to where the
+  # point projects onto the great circle (m)
+
+  # s2 is the standard deviation of the nugget
+  s2 <- res_m / 4 # This initial setting of 1/4 the cell width means the
+  # cell boundary (orthagonally) is at 2 standard deviations from the cell
+  # center, the corners will be at 2.8 SD.
+
+  if (kernel == "bb") {
+    # Standard deviation
+    sd <- sqrt(s1^2 * t * (len - t) / len + s2^2)  # SD (m) for this point.
+  } else {
+    k_fun <- get(paste0("k_", kernel))
+    sd <- sqrt(calc_martern_variance(t, len, k_fun, gamma = gamma, kl = kl) +
+                 s2^2)
+  }
+
+  sd
 }

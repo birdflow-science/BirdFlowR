@@ -18,10 +18,14 @@
 #'
 #' @section Limitations:
 #'
-#' `calc_bmtr()` makes the incorrect simplifying assumption
-#'  that birds follow the shortest (great circle) path
-#' between the center of the the source and destination raster cells.  Caution
-#' should be used when interpreting the results especially around
+#' `calc_bmtr()` makes an incorrect simplifying assumption about the path
+#' birds take: either that they follow the shortest path between the centers
+#' of the source and destination raster cells (`method = "binary"`), or that
+#' they are distributed symmetrically in a Gaussian distribution around that
+#' path (the two continuous methods). That path is a great circle in all
+#' cases except `method = "continuous"`, which uses a straight line in the
+#' model's projected CRS.
+#' Caution should be used when interpreting the results especially around
 #' major geographic features such as coasts, large lakes, mountain ranges, and
 #' ecological system boundaries that might result in non-linear migration paths.
 #'
@@ -41,16 +45,19 @@
 #' standardizing the units based on the entire cell area that that point
 #' represents.
 #'
-#'
 #' @param bf A BirdFlow model
 #' @param points A set of points to calculate movement through. If `points` is
 #' `NULL` they will default to the BirdFlow model cells that are either active
 #' or fall between two active cells. Otherwise a data frame with `x` and  `y`
 #' columns containing point coordinates in [crs(bf)][terra::crs()].
-#' @param radius The radius in meters around the points used to assess whether
-#' a movement line passes by (or through) the point. If a point is farther than
-#' `radius` from a great circle line between two cells centers then it is not
-#' between them.
+#' @param radius The radius in meters around the points used to assess the
+#' detection rate for a movement at the point.
+#' With `method = "binary"`, if a point is within `radius` of the great
+#' circle line between two cell centers then the movement is detected at
+#' that point. For the two continuous detection methods there is a
+#' probability distribution for the location of the bird as it passes by the
+#' point, and the radius defines the band over which that probability is
+#' integrated, giving the detection rate.
 #' @param n_directions The number of directional bins to use for recording
 #' movement direction. Must be either `1` indicating no direction information
 #' or an even number. This is a placeholder, currently only `1` is supported.
@@ -71,32 +78,71 @@
 #' transition.}
 #'}
 #' @inheritParams is_between
-#' @param weighted If `FALSE` use the original and quicker version of bmtr
-#' that sums all the marginal probability for transitions that pass within a
-#' fixed distance of the point.  If `TRUE` assign a weight to the point and
-#' transition combo that then is multiplied by the marginal probability before
-#' summing.  This argument is experimental but the default value is identical
-#' to the old version. The argument name and behavior when set to `TRUE` may
-#' change.
+#' @param method The detection model used to determine how much of a
+#' transition's movement counts towards a point's BMTR:
+#' \describe{
+#' \item{`"binary"`}{(default) Fast and deterministic. A movement line either
+#' does or does not pass within `radius` of the point, per [is_between()].}
+#' \item{`"continuous"`}{Assigns a continuous weight (0 to 1) based on the
+#' probability that a bird's actual path, modeled as spreading away from the
+#' straight line between two cells, passes within `radius` of the point. Uses
+#' planar (Euclidean) geometry in the model's native CRS, and is the
+#' recommended detection model when continuous weighting is desired.}
+#' \item{`"continuous-spherical"`}{The same continuous weighting as
+#' `"continuous"`, but computed with great-circle (spherical) geometry
+#' instead. Much slower, and not recommended for routine use; kept to allow
+#' assessing the impact of switching from spherical to Euclidean geometry.}
+#' }
+#' @param ... For `method = "continuous"` or `"continuous-spherical"`,
+#' additional arguments forwarded to [calc_dist_weights()] to control the
+#' spread kernel used to model uncertainty in a bird's path: `kernel`,
+#' `gamma`, `kl`, and `s1`. See [calc_dist_weights()] for the full list of
+#' supported kernels and their hyperparameters, and
+#' [visualize_distance_weights()] to explore how they shape the spread
+#' before running this (potentially expensive) function. Not applicable,
+#' and an error, for `method = "binary"`.
 #'
 #' @return See `format` argument.
+#' @seealso [visualize_distance_weights()] to explore the spread kernel
+#' hyperparameters accepted via `...`.
 #' @export
 #'
 #' @examples
 #'
 #' \dontrun{
 #' bf <- BirdFlowModels::amewoo
-#' bmtr <- calc_bmtr(bf)
 #'
+#' # Binary detection along shortest path
+#' bmtr <- calc_bmtr(bf)
 #' plot_bmtr(bmtr, bf)
 #'
 #' animate_bmtr(bmtr, bf)
+#'
+#' # Continuous detection with a wider spread kernel
+#' # (gamma defaults to 3e10)
+#' bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 6e10)
+#' animate_bmtr(bmtr2, bf)
+#'
+#' # Visualize spread for the continuous detection with wider spread
+#' visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+#'                            gamma = 6e10, res_m = xres(bf))
+#'
+#' # Visualize spread for the continuous detection with default values
+#' visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+#'                            res_m = xres(bf))
+#'
 #' }
+#'
+#'
+#'
 #'
 calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
                       format = NULL, batch_size = 5e5, check_radius = TRUE,
-                      weighted = FALSE) {
+                      method = c("binary", "continuous",
+                                "continuous-spherical"),
+                      ...) {
 
+  method <- match.arg(method)
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
     stop("The SparseArray package is required to use calc_bmtr(). ",
@@ -117,15 +163,23 @@ calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   format <- tolower(format)
   stopifnot(format %in% c("points", "spatraster", "dataframe"))
 
-  # The only difference between is_between() and weight_between() return formats
-  # is in the "between" component.  In the first it's logical (TRUE is between)
-  # in the second it is a weight between 0 and 1 (non zero indicates some
-  # level of betweeness".
-  if (weighted) {
-    result <- weight_between(bf, points, radius, n_directions)
-  } else {
-    result <- is_between(bf, points, radius, n_directions)
-  }
+  # The only difference between is_between() and the continuous detection
+  # functions' return formats is in the "between" component.  In the first
+  # it's logical (TRUE is between) in the second it is a weight between 0
+  # and 1 (non zero indicates some level of betweenness).
+  result <- switch(
+    method,
+    binary = is_between(bf, points = points, radius = radius,
+                        n_directions = n_directions,
+                        batch_size = batch_size, check_radius = check_radius,
+                        ...),
+    continuous = calc_euclidean_detection_rate(
+      bf, points = points, radius = radius, n_directions = n_directions,
+      batch_size = batch_size, check_radius = check_radius, ...),
+    "continuous-spherical" = calc_spherical_detection_rate(
+      bf, points = points, radius = radius, n_directions = n_directions,
+      batch_size = batch_size, check_radius = check_radius, ...)
+  )
 
   between <- result$between
   points <- result$points

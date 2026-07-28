@@ -5,7 +5,7 @@ test_that("rasterize_bmtr() returns a valid, plottable raster with the same exte
   bf <- BirdFlowModels::amewoo
 
   # Unweighted BMTR object
-  bmtr_uw <- calc_bmtr(bf, weighted = FALSE)
+  bmtr_uw <- calc_bmtr(bf, method = "binary")
 
   raster_uw <- rasterize_bmtr(bmtr_uw, bf)
 
@@ -25,7 +25,7 @@ test_that("rasterization works for weighted BMTR calculation", {
   bf <- BirdFlowModels::amewoo
 
   # Weighted, non-Euclidean BMTR object
-  bmtr_sph <- calc_bmtr(bf, weighted = TRUE)
+  bmtr_sph <- calc_bmtr(bf, method = "continuous-spherical")
 
   expect_no_error(raster_sph <- rasterize_bmtr(bmtr_sph, bf))
   expect_no_error(terra::plot(raster_sph))

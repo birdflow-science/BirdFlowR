@@ -12,7 +12,8 @@ calc_bmtr(
   format = NULL,
   batch_size = 5e+05,
   check_radius = TRUE,
-  weighted = FALSE
+  method = c("binary", "continuous", "continuous-spherical"),
+  ...
 )
 }
 \arguments{
@@ -23,10 +24,14 @@ calc_bmtr(
 or fall between two active cells. Otherwise a data frame with \code{x} and  \code{y}
 columns containing point coordinates in \link[terra:crs]{crs(bf)}.}
 
-\item{radius}{The radius in meters around the points used to assess whether
-a movement line passes by (or through) the point. If a point is farther than
-\code{radius} from a great circle line between two cells centers then it is not
-between them.}
+\item{radius}{The radius in meters around the points used to assess the
+detection rate for a movement at the point.
+With \code{method = "binary"}, if a point is within \code{radius} of the great
+circle line between two cell centers then the movement is detected at
+that point. For the two continuous detection methods there is a
+probability distribution for the location of the bird as it passes by the
+point, and the radius defines the band over which that probability is
+integrated, giving the detection rate.}
 
 \item{n_directions}{The number of directional bins to use for recording
 movement direction. Must be either \code{1} indicating no direction information
@@ -61,13 +66,30 @@ is not between the resolution and 1/4 the resolution of \code{bf}. Outside of
 that range the algorithm is likely to yield distorted results.
 \code{0.5 * mean(res(bf))} is the default, and recommended radius.}
 
-\item{weighted}{If \code{FALSE} use the original and quicker version of bmtr
-that sums all the marginal probability for transitions that pass within a
-fixed distance of the point.  If \code{TRUE} assign a weight to the point and
-transition combo that then is multiplied by the marginal probability before
-summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behavior when set to \code{TRUE} may
-change.}
+\item{method}{The detection model used to determine how much of a
+transition's movement counts towards a point's BMTR:
+\describe{
+\item{\code{"binary"}}{(default) Fast and deterministic. A movement line either
+does or does not pass within \code{radius} of the point, per \code{\link[=is_between]{is_between()}}.}
+\item{\code{"continuous"}}{Assigns a continuous weight (0 to 1) based on the
+probability that a bird's actual path, modeled as spreading away from the
+straight line between two cells, passes within \code{radius} of the point. Uses
+planar (Euclidean) geometry in the model's native CRS, and is the
+recommended detection model when continuous weighting is desired.}
+\item{\code{"continuous-spherical"}}{The same continuous weighting as
+\code{"continuous"}, but computed with great-circle (spherical) geometry
+instead. Much slower, and not recommended for routine use; kept to allow
+assessing the impact of switching from spherical to Euclidean geometry.}
+}}
+
+\item{...}{For \code{method = "continuous"} or \code{"continuous-spherical"},
+additional arguments forwarded to \code{\link[=calc_dist_weights]{calc_dist_weights()}} to control the
+spread kernel used to model uncertainty in a bird's path: \code{kernel},
+\code{gamma}, \code{kl}, and \code{s1}. See \code{\link[=calc_dist_weights]{calc_dist_weights()}} for the full list of
+supported kernels and their hyperparameters, and
+\code{\link[=visualize_distance_weights]{visualize_distance_weights()}} to explore how they shape the spread
+before running this (potentially expensive) function. Not applicable,
+and an error, for \code{method = "binary"}.}
 }
 \value{
 See \code{format} argument.
@@ -94,10 +116,14 @@ Multiplying the result by the total population would yield:
 \section{Limitations}{
 
 
-\code{calc_bmtr()} makes the incorrect simplifying assumption
-that birds follow the shortest (great circle) path
-between the center of the the source and destination raster cells.  Caution
-should be used when interpreting the results especially around
+\code{calc_bmtr()} makes an incorrect simplifying assumption about the path
+birds take: either that they follow the shortest path between the centers
+of the source and destination raster cells (\code{method = "binary"}), or that
+they are distributed symmetrically in a Gaussian distribution around that
+path (the two continuous methods). That path is a great circle in all
+cases except \code{method = "continuous"}, which uses a straight line in the
+model's projected CRS.
+Caution should be used when interpreting the results especially around
 major geographic features such as coasts, large lakes, mountain ranges, and
 ecological system boundaries that might result in non-linear migration paths.
 
@@ -122,11 +148,33 @@ represents.
 
 \dontrun{
 bf <- BirdFlowModels::amewoo
-bmtr <- calc_bmtr(bf)
 
+# Binary detection along shortest path
+bmtr <- calc_bmtr(bf)
 plot_bmtr(bmtr, bf)
 
 animate_bmtr(bmtr, bf)
+
+# Continuous detection with a wider spread kernel
+# (gamma defaults to 3e10)
+bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 6e10)
+animate_bmtr(bmtr2, bf)
+
+# Visualize spread for the continuous detection with wider spread
+visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+                           gamma = 6e10, res_m = xres(bf))
+
+# Visualize spread for the continuous detection with default values
+visualize_distance_weights(line_lengths = c(2, 5, 10) * xres(bf),
+                           res_m = xres(bf))
+
 }
 
+
+
+
+}
+\seealso{
+\code{\link[=visualize_distance_weights]{visualize_distance_weights()}} to explore the spread kernel
+hyperparameters accepted via \code{...}.
 }

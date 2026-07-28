@@ -1,5 +1,9 @@
 # nolint start
 
+# This document has been superceded by data-raw/kernel_parameter_tuning.Rmd please use that one for understanding
+# current parameter values.   This one may not run properly or the interpretation of units (km vs m) may
+# have changed for some of the parameters.
+
 # Note kl was originally l but that lead to warnings about partial argument
 # matching ambiguity so I changed it to kl  for kernel length hyper parameter
 
@@ -10,7 +14,7 @@ plot_95 <- function(T, k, gamma, kl, add = TRUE) {
   # kl  <- 1/2 * T
   #  gamma <- 4 * T
   xs <- seq(0, T, length.out = 50)
-  ys <- sqrt(calc_variance(xs, T, k = k, gamma = gamma, kl = kl)) * 1.96
+  ys <- sqrt(calc_martern_variance(xs, T, k = k, gamma = gamma, kl = kl)) * 1.96
   #  xs <- xs + 0.5 * T
 
   if (!add) {

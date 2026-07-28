@@ -1,9 +1,6 @@
 test_that("calc_bmtr() works without directionality", {
   local_quiet()
-  # Sparsify and truncate to speed things up
-  bf <- BirdFlowModels::amewoo
-  bf <- truncate_birdflow(bf, start = 1, end = 5)
-  bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
+  bf <- small_test_bf()
 
   expect_no_error(f <- calc_bmtr(bf))
 
@@ -18,32 +15,126 @@ test_that("calc_bmtr() works without directionality", {
 
 })
 
-test_that("calc_bmtr() works with weights", {
+test_that("calc_bmtr() works with method = 'binary'", {
   local_quiet()
-  # Sparsify and truncate to speed things up
-  bf <- BirdFlowModels::amewoo
-  bf <- truncate_birdflow(bf, start = 1, end = 5)
-  bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
+  bf <- small_test_bf()
 
-  expect_no_error(f <- calc_bmtr(bf, weighted = TRUE))
+  expect_no_error(f <- calc_bmtr(bf, method = "binary"))
 
-  # Snapshot of first 6 non-zero movements
   top <- head(f[!f$bmtr == 0, ], 6)
   top$bmtr <- signif(top$bmtr, 4)
-  # --- expect_snapshot(top)  --- wait for final parameters to save snapshot
+  expect_snapshot(top)
 
-  # Visualizations
   expect_no_error(plot_bmtr(f, bf))
   expect_no_error(animate_bmtr(f, bf))
+})
 
+test_that("calc_bmtr() works with method = 'continuous'", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  expect_no_error(f <- calc_bmtr(bf, method = "continuous"))
+
+  top <- head(f[!f$bmtr == 0, ], 6)
+  top$bmtr <- signif(top$bmtr, 4)
+  expect_snapshot(top)
+
+  expect_no_error(plot_bmtr(f, bf))
+  expect_no_error(animate_bmtr(f, bf))
+})
+
+test_that("calc_bmtr() works with method = 'continuous-spherical'", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  expect_no_error(f <- calc_bmtr(bf, method = "continuous-spherical"))
+
+  top <- head(f[!f$bmtr == 0, ], 6)
+  top$bmtr <- signif(top$bmtr, 4)
+  expect_snapshot(top)
+
+  expect_no_error(plot_bmtr(f, bf))
+  expect_no_error(animate_bmtr(f, bf))
+})
+
+test_that("calc_bmtr() errors on an invalid method", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  expect_error(calc_bmtr(bf, method = "bogus"))
+})
+
+test_that("calc_bmtr() respects a user-supplied points argument (Bug A)", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  pts <- i_to_xy(seq_len(min(5, n_active(bf))), bf)[, c("x", "y")]
+
+  for (method in c("continuous", "continuous-spherical")) {
+    f <- calc_bmtr(bf, points = pts, method = method, format = "points")
+    expect_equal(nrow(f$point), nrow(pts))
+    expect_equal(sort(f$point$x), sort(pts$x))
+    expect_equal(sort(f$point$y), sort(pts$y))
+  }
+})
+
+test_that("calc_bmtr() respects a user-supplied radius (Bug B)", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  r1 <- mean(res(bf)) * 0.3
+  r2 <- mean(res(bf)) * 0.9
+
+  for (method in c("continuous", "continuous-spherical")) {
+    f1 <- calc_bmtr(bf, method = method, radius = r1)
+    f2 <- calc_bmtr(bf, method = method, radius = r2)
+    expect_false(isTRUE(all.equal(f1$bmtr, f2$bmtr)))
+  }
+})
+
+test_that("calc_bmtr() enforces check_radius bounds for continuous methods", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  bad_radius <- mean(res(bf)) * 2
+
+  for (method in c("continuous", "continuous-spherical")) {
+    expect_error(calc_bmtr(bf, method = method, radius = bad_radius))
+    expect_no_error(calc_bmtr(bf, method = method, radius = bad_radius,
+                              check_radius = FALSE))
+  }
+})
+
+test_that("'continuous' and 'continuous-spherical' agree closely", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  euc <- calc_bmtr(bf, method = "continuous")
+  sph <- calc_bmtr(bf, method = "continuous-spherical")
+
+  euc$id <- paste(euc$x, euc$y, euc$transition)
+  sph$id <- paste(sph$x, sph$y, sph$transition)
+  m <- merge(euc, sph, by = "id", suffixes = c("_euc", "_sph"))
+
+  expect_true(nrow(m) > 0)
+  expect_equal(m$bmtr_euc, m$bmtr_sph, tolerance = 0.05)
+})
+
+test_that("calc_bmtr() forwards ... to the spread kernel", {
+  local_quiet()
+  bf <- small_test_bf()
+
+  default <- calc_bmtr(bf, method = "continuous")
+  wider <- calc_bmtr(bf, method = "continuous", gamma = 100000)
+  expect_false(isTRUE(all.equal(default$bmtr, wider$bmtr)))
+
+  expect_error(calc_bmtr(bf, method = "binary", gamma = 100000))
 })
 
 
 test_that("plot_bmtr() subset drops excluded transitions (no empty facets)", {
   local_quiet()
-  bf <- BirdFlowModels::amewoo
-  bf <- truncate_birdflow(bf, start = 1, end = 5)
-  bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
+  bf <- small_test_bf()
 
   f <- calc_bmtr(bf)
   all_trans <- sort(unique(f$transition))
@@ -177,7 +268,7 @@ test_that("Test sensativity of bmtr to radius", {
   #   and the relationship between radius and abundance that intersects the
   #   circle approaches the square of the radius.
   # 3. (2) begins to break down as the diameter approaches the extent width,
-  #   at that point you've already captured most of the movent at every point
+  #   at that point you've already captured most of the movement at every point
   #   and a larger radius just means you divide that total by a bigger number.
   #
   #  Two conclusions:

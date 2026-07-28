@@ -15,10 +15,14 @@ calc_flux(...)
 \code{NULL} they will default to the BirdFlow model cells that are either active
 or fall between two active cells. Otherwise a data frame with \code{x} and  \code{y}
 columns containing point coordinates in \link[terra:crs]{crs(bf)}.}
-    \item{\code{radius}}{The radius in meters around the points used to assess whether
-a movement line passes by (or through) the point. If a point is farther than
-\code{radius} from a great circle line between two cells centers then it is not
-between them.}
+    \item{\code{radius}}{The radius in meters around the points used to assess the
+detection rate for a movement at the point.
+With \code{method = "binary"}, if a point is within \code{radius} of the great
+circle line between two cell centers then the movement is detected at
+that point. For the two continuous detection methods there is a
+probability distribution for the location of the bird as it passes by the
+point, and the radius defines the band over which that probability is
+integrated, giving the detection rate.}
     \item{\code{n_directions}}{The number of directional bins to use for recording
 movement direction. Must be either \code{1} indicating no direction information
 or an even number. This is a placeholder, currently only \code{1} is supported.}
@@ -40,13 +44,21 @@ between timesteps.
 \item{\code{"SpatRaster"}}{Returns a \code{terra::SpatRaster} with layers for each
 transition.}
 }}
-    \item{\code{weighted}}{If \code{FALSE} use the original and quicker version of bmtr
-that sums all the marginal probability for transitions that pass within a
-fixed distance of the point.  If \code{TRUE} assign a weight to the point and
-transition combo that then is multiplied by the marginal probability before
-summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behavior when set to \code{TRUE} may
-change.}
+    \item{\code{method}}{The detection model used to determine how much of a
+transition's movement counts towards a point's BMTR:
+\describe{
+\item{\code{"binary"}}{(default) Fast and deterministic. A movement line either
+does or does not pass within \code{radius} of the point, per \code{\link[=is_between]{is_between()}}.}
+\item{\code{"continuous"}}{Assigns a continuous weight (0 to 1) based on the
+probability that a bird's actual path, modeled as spreading away from the
+straight line between two cells, passes within \code{radius} of the point. Uses
+planar (Euclidean) geometry in the model's native CRS, and is the
+recommended detection model when continuous weighting is desired.}
+\item{\code{"continuous-spherical"}}{The same continuous weighting as
+\code{"continuous"}, but computed with great-circle (spherical) geometry
+instead. Much slower, and not recommended for routine use; kept to allow
+assessing the impact of switching from spherical to Euclidean geometry.}
+}}
     \item{\code{batch_size}}{controls the number of movement lines that are processed
 at a time. A smaller
 \code{batch_size} will conserve memory at a slight performance cost.  The number

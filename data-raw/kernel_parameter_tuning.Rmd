@@ -1,0 +1,215 @@
+---
+title: "BMTR spread kernel: choosing gamma/kl/s1"
+date: "2026-07-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 5)
+devtools::load_all("..", quiet = TRUE)
+library(ggplot2)
+```
+
+## What this is
+
+A record of how the spread kernel hyperparameter defaults (`gamma`, `kl`,
+`s1`) used by `calc_dist_weights()` were chosen, and the visualizations they
+were chosen against. It is the counterpart to
+`data-raw/martern_parameters.R`, which served the same purpose for the
+earlier defaults.
+
+This is a development record, not package documentation — `data-raw/` is
+`.Rbuildignore`d, so nothing here ships with the package or is built by
+`R CMD check`. It calls package internals directly via `devtools::load_all()`.
+
+## The defaults
+
+```r
+gamma = 3e10   # "m3", "m1", "m5", "sq" kernels
+kl    = 9e5    # "m3", "m1", "m5", "sq" kernels
+s1    = 200    # "bb" kernel
+```
+
+Note `gamma` and `kl` where only tuned for the default `m3` kernel. 
+Likely anytime another of the kernels are used they will need to 
+be specified as well.
+
+These are the values set in `R/calc_distance_weights.R` and
+`R/visualize_distance_weights.R`. They were chosen by eye against the
+envelope plots below, nudging each until the tapering shape looked right.
+
+
+**These hyperparameters are not resolution dependent.** They describe our
+uncertainty about a biological process — how far a bird's actual path is
+likely to stray from the straight line between two cells — and that
+uncertainty is a property of the bird, not of the grid we happen to model it
+on. So they are fixed and don't depend on `res_m`.
+
+Model resolution enters the kernel in exactly one place, separately from
+these three: the nugget (`res_m / 4`), which represents uncertainty about
+where within a cell the transition actually started and ended. That part
+*is* resolution dependent, and it scales itself.
+
+`res_m = 100000` is used throughout this document only as a reference scale
+for reading the plots — a familiar size to think about distances against,
+since BirdFlow models typically use 100 or 150 km cells.
+
+
+## Checking the shape at a reference scale
+
+```{r}
+res_m <- 100000  # reference scale only: typical BirdFlow cell size
+cells <- c(1, 2, 5, 10, 15, 30)
+lens <- cells * res_m
+
+gamma <- 3e10
+kl <- 9e5
+s1 <- 200
+nugget <- res_m / 4
+
+sd_table <- do.call(rbind, lapply(lens, function(len) {
+  data.frame(
+    cells = len / res_m,
+    len_km = len / 1000,
+    m3_sd_end = calc_dist_weights_sd(0, len, res_m, kernel = "m3",
+                                     gamma = gamma, kl = kl, s1 = NA),
+    m3_sd_mid = calc_dist_weights_sd(len / 2, len, res_m, kernel = "m3",
+                                     gamma = gamma, kl = kl, s1 = NA),
+    bb_sd_mid = calc_dist_weights_sd(len / 2, len, res_m, kernel = "bb",
+                                     gamma = NA, kl = NA, s1 = s1)
+  )
+}))
+sd_table
+```
+
+`m3_sd_end` sits exactly at the nugget (`res_m / 4`) for every length — the
+bridge conditioning pins the variance to the nugget at the endpoints, so
+this is the one column that would move if the model resolution changed. The
+`m3_sd_mid` column grows with line length and asymptotes once the line is
+long relative to `kl` — toward `sqrt(gamma + nugget^2)` =
+`r round(sqrt(gamma + nugget^2) / 1000)` km — but at these `gamma`/`kl`
+values that approach is gradual: it's still climbing at a 1500 km line
+(~120 km) and doesn't flatten out until well beyond the range shown here.
+`bb_sd_mid` keeps growing with `sqrt(length)` (no plateau; that's inherent
+to a Brownian bridge with no lengthscale), reaching ~125 km by 1500 km.
+Both are biologically plausible: a bird's path straying on the order of
+100 km from the straight line over a multi-week migration leg, tapering to
+the endpoints and widest in between.
+
+## Envelope plots
+
+The envelope plots show the region within 1.96 standard deviations of the
+line — 95% of the kernel's density. These are the plots the defaults
+were actually tuned against.
+
+```{r, fig.height=6, fig.width=10}
+n_cells <- c(1, 2, 5, 10, 15, 30)
+line_lengths <- n_cells * res_m
+
+visualize_distance_weights(res_m = res_m, line_lengths = line_lengths,
+                           type = "envelope", kernel = "m3",
+                           gamma = gamma, kl = kl)
+```
+
+```{r, fig.height=4, fig.width=10}
+visualize_distance_weights(res_m = res_m, line_lengths = line_lengths,
+                           type = "envelope", kernel = "bb", s1 = s1)
+```
+
+Both taper from zero at the endpoints and widen toward the middle.
+
+## Weight rasters
+
+The envelope traces the kernel's spread but says nothing about the weight
+`calc_dist_weights()` actually returns, which also depends on the detection
+radius: the weight is the probability mass falling within `radius_m` of the
+point, so it peaks on the line and falls off with the density. The raster
+plots below show that weight directly, with `radius_m` at its default of
+`res_m / 2`. Fewer and shorter line lengths than above, since each facet is
+a 100x100 grid of `calc_dist_weights()` calls.
+
+```{r, fig.height=4, fig.width=10}
+raster_lengths <- c(2, 5, 10) * res_m
+
+visualize_distance_weights(res_m = res_m, line_lengths = raster_lengths,
+                           radius_m = res_m / 2, type = "raster",
+                           kernel = "m3", gamma = gamma, kl = kl)
+```
+
+```{r, fig.height=4, fig.width=10}
+visualize_distance_weights(res_m = res_m, line_lengths = raster_lengths,
+                           radius_m = res_m / 2, type = "raster",
+                           kernel = "bb", s1 = s1)
+```
+
+Weight is highest near the start and end of each line, where the spread is
+pinched to the nugget and so nearly all the density falls inside `radius_m`,
+and lowest mid-line where the same density is spread over a much wider band.
+That is the intended behavior: a transition is most informative about
+locations near its endpoints.
+
+## Sweeping `gamma` at a fixed `kl`
+
+A closer look at how sensitive the `"m3"` envelope is to `gamma`, holding
+`kl` at the chosen default (`9e5`): three line lengths as column facets,
+`gamma` from `1e10` to `5e10` in `1e10` steps as row facets.
+
+```{r, fig.height=9, fig.width=8}
+n_cells_sweep <- c(2, 5, 15)
+line_lengths_sweep <- n_cells_sweep * res_m
+gamma_values <- seq(1e10, 5e10, by = 1e10)
+kl_fixed <- 9e5
+
+length_levels <- paste(line_lengths_sweep / 1000, "km")
+gamma_levels <- paste0("gamma = ", format(gamma_values, scientific = TRUE))
+
+sweep <- do.call(rbind, lapply(gamma_values, function(g) {
+  do.call(rbind, lapply(line_lengths_sweep, function(len) {
+    dist_along <- seq(0, len, length.out = 100)
+    sd_m <- calc_dist_weights_sd(dist_along, rep(len, 100), res_m,
+                                 kernel = "m3", gamma = g, kl = kl_fixed,
+                                 s1 = NA)
+    data.frame(
+      dist_along_km = dist_along / 1000,
+      ymin = -1.96 * sd_m / 1000,
+      ymax = 1.96 * sd_m / 1000,
+      length_label = factor(paste(len / 1000, "km"), levels = length_levels),
+      gamma_label = factor(paste0("gamma = ", format(g, scientific = TRUE)),
+                           levels = gamma_levels)
+    )
+  }))
+}))
+
+ggplot(sweep, aes(x = dist_along_km, ymin = ymin, ymax = ymax)) +
+  geom_ribbon(fill = "steelblue", alpha = 0.6) +
+  facet_grid(gamma_label ~ length_label) +
+  coord_fixed() +
+  labs(x = "Distance along line (km)",
+       y = "Perpendicular distance from line (km)",
+       title = "\"m3\" kernel envelope: gamma sweep at kl = 9e5",
+       subtitle = paste0("res_m = ", res_m)) +
+  scale_y_continuous(breaks = scales::breaks_width(res_m / 1000 * 2)) +
+  scale_x_continuous(breaks = scales::breaks_width(res_m / 1000 * 2))
+```
+
+Across this range, `gamma` mainly sets how wide the envelope gets once the
+line is long enough for the kernel to fully decorrelate (the 1500 km
+column), while the 200 and 500 km columns are still partway through the
+taper and change more subtly. `kl = 9e5` is what produces that gradual
+widen-then-plateau shape across all three lengths, rather than saturating
+immediately (small `kl`) or barely moving at all (`kl` much larger than the
+longest line).
+
+## Takeaway
+
+- Final defaults, chosen by eye against the envelope plots above:
+  `gamma = 3e10`, `kl = 9e5` for the `"m3"`/`"m1"`/`"m5"`/`"sq"` kernels,
+  and `s1 = 200` for `"bb"`.
+- Applied as fixed literal defaults in `R/calc_distance_weights.R` and
+  `R/visualize_distance_weights.R`. Fixed rather than `res_m`-derived
+  because they describe biological movement uncertainty, which is
+  independent of the model grid; only the nugget (`res_m / 4`) is
+  resolution dependent.
+- Both kernels give spread on the order of a grid cell, tapering to the
+  nugget at the endpoints, with weight concentrated near those endpoints.

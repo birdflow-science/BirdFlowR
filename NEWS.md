@@ -1,4 +1,68 @@
 
+# BirdFlowR 0.1.0.9084
+2026-07-27
+
+## Continuous BMTR
+
+The focus of this update is calculating Bird Flow Migration Traffic (BMTR)
+with a detection rate that varies continuously, as opposed to the default
+method which has a binary detection rate. 
+
+Previously `calc_bmtr()` did have both methods but the continuous method 
+was prohibitively computationally expensive. This update makes it usable 
+with non-trivial models. 
+
+**Breaking change** This update changes the arguments used to call the 
+continuous version of the function dropping `weighted` and `euclidean`
+arguments.  I believe no users are affected by this change, but 
+I apologize if you were.
+
+## Specific changes
+* `calc_bmtr()`: replaced the `weighted`/`euclidean` arguments with a single
+  `method` argument (`"binary"`, `"continuous"`, or `"continuous-spherical"`)
+  that selects the detection model used to assess whether a transition
+  passes by a point. `"continuous"` uses fast planar (Euclidean) geometry
+  and is the recommended weighted option; `"continuous-spherical"` is the
+  slower great-circle version, kept to assess the impact of switching
+  geometries.
+* `calc_bmtr()`: new `...` argument, forwarded to `calc_dist_weights()` for
+  the two continuous methods, to tune the spread kernel (`kernel`, `gamma`,
+  `kl`, `s1`) used to model uncertainty in a bird's path.
+* `calc_dist_weights()`: renamed the `method` argument to `kernel` to avoid
+  colliding with `calc_bmtr()`'s new `method` argument.
+* Fixed a bug where `calc_bmtr()`'s weighted detection methods ignored a
+  user-supplied `points` argument due to a positional argument-binding bug.
+* Fixed a bug where `calc_bmtr()`'s weighted detection methods ignored a
+  user-supplied `radius` argument, always using `mean(res(bf))` instead.
+* Replaced `weight_between()` and the internal `calc_detection_rate()`
+  dispatcher with `calc_spherical_detection_rate()` and
+  `calc_euclidean_detection_rate()`.
+* `calc_dist_weights()`: `kernel` now supports 3 additional spread kernels
+  (`"m1"`, `"m5"`, `"sq"`) alongside the existing `"m3"` and `"bb"`.
+* New `visualize_distance_weights()`: plots the shape of `calc_dist_weights()`'s
+  spread kernel, as an SD envelope or a weight raster, to help choose
+  `kernel` and its hyperparameters before running `calc_bmtr()`.
+* Fixed a units bug in `calc_dist_weights()`'s `"m1"`, `"m3"`, `"m5"`, and
+  `"sq"` kernels: `dist_along_line`/`line_lengths`/`res_m` were converted to
+  km while `gamma`/`kl` were left in meters, making the kernel's contribution
+  to the spread negligible next to the fixed nugget at any realistic line
+  length. Everything is now kept in meters throughout, matching `gamma`/`kl`.
+  This changes the numeric output of `calc_bmtr()`'s `"continuous"`/
+  `"continuous-spherical"` methods and of `calc_euclidean_detection_rate()`/
+  `calc_spherical_detection_rate()` for all kernels, including `"bb"` (whose
+  `t`/`len` inputs are now meters rather than km, so its `s1` hyperparameter
+  means something different than before).
+* `calc_dist_weights()`/`visualize_distance_weights()`: `gamma`/`kl`/`s1`
+  now default to `3e10`/`9e5`/`200` instead of the old fixed literals
+  (`40000`/`2000`/`10`) tuned for a ~1-2 km demo scale. The three
+  hyperparameters have different units (`gamma` is a variance, `kl` a
+  length, `s1` a sqrt-length). The new values were chosen by eye against
+  `visualize_distance_weights()`'s envelope plots. 
+  See `data-raw/kernel_parameter_tuning.Rmd`. 
+  This changes the default numeric output of `calc_bmtr()`'s `"continuous"`/
+  `"continuous-spherical"` and of
+  `calc_euclidean_detection_rate()`/`calc_spherical_detection_rate()`.
+
 # BirdFlowR 0.1.0.9083
 2026-06-15
 
