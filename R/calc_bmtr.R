@@ -71,15 +71,33 @@
 #' transition.}
 #'}
 #' @inheritParams is_between
-#' @param weighted If `FALSE` use the original and quicker version of bmtr
-#' that sums all the marginal probability for transitions that pass within a
-#' fixed distance of the point.  If `TRUE` assign a weight to the point and
-#' transition combo that then is multiplied by the marginal probability before
-#' summing.  This argument is experimental but the default value is identical
-#' to the old version. The argument name and behavior when set to `TRUE` may
-#' change.
+#' @param method The detection model used to determine how much of a
+#' transition's movement counts towards a point's BMTR:
+#' \describe{
+#' \item{`"binary"`}{(default) Fast and deterministic. A movement line either
+#' does or does not pass within `radius` of the point, per [is_between()].}
+#' \item{`"continuous"`}{Assigns a continuous weight (0 to 1) based on the
+#' probability that a bird's actual path, modeled as spreading away from the
+#' straight line between two cells, passes within `radius` of the point. Uses
+#' planar (Euclidean) geometry in the model's native CRS, and is the
+#' recommended detection model when continuous weighting is desired.}
+#' \item{`"continuous-spherical"`}{The same continuous weighting as
+#' `"continuous"`, but computed with great-circle (spherical) geometry
+#' instead. Much slower, and not recommended for routine use; kept to allow
+#' assessing the impact of switching from spherical to Euclidean geometry.}
+#' }
+#' @param ... For `method = "continuous"` or `"continuous-spherical"`,
+#' additional arguments forwarded to [calc_dist_weights()] to control the
+#' spread kernel used to model uncertainty in a bird's path: `kernel`,
+#' `gamma`, `kl`, and `s1`. See [calc_dist_weights()] for the full list of
+#' supported kernels and their hyperparameters, and
+#' [visualize_distance_weights()] to explore how they shape the spread
+#' before running this (potentially expensive) function. Not applicable,
+#' and an error, for `method = "binary"`.
 #'
 #' @return See `format` argument.
+#' @seealso [visualize_distance_weights()] to explore the spread kernel
+#' hyperparameters accepted via `...`.
 #' @export
 #'
 #' @examples
@@ -91,12 +109,18 @@
 #' plot_bmtr(bmtr, bf)
 #'
 #' animate_bmtr(bmtr, bf)
+#'
+#' # Continuous detection with a wider spread kernel
+#' bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 60000)
 #' }
 #'
 calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
                       format = NULL, batch_size = 5e5, check_radius = TRUE,
-                      weighted = FALSE, euclidean = FALSE) {
+                      method = c("binary", "continuous",
+                                "continuous-spherical"),
+                      ...) {
 
+  method <- match.arg(method)
 
   if (!requireNamespace("SparseArray", quietly = TRUE)) {
     stop("The SparseArray package is required to use calc_bmtr(). ",
@@ -117,16 +141,23 @@ calc_bmtr <- function(bf, points = NULL, radius = NULL, n_directions = 1,
   format <- tolower(format)
   stopifnot(format %in% c("points", "spatraster", "dataframe"))
 
-  # The only difference between is_between() and calc_detection_rate() return formats
-  # is in the "between" component.  In the first it's logical (TRUE is between)
-  # in the second it is a weight between 0 and 1 (non zero indicates some
-  # level of betweeness".
-  if (!weighted) {
-    stop("ERROR - WEIGHTED IS FALSE in calc_bmtr")
-    result <- is_between(bf, points, radius, n_directions)
-  } else {
-    result <- calc_detection_rate(bf, points, radius, n_directions, euclidean = euclidean)
-  }
+  # The only difference between is_between() and the continuous detection
+  # functions' return formats is in the "between" component.  In the first
+  # it's logical (TRUE is between) in the second it is a weight between 0
+  # and 1 (non zero indicates some level of betweenness).
+  result <- switch(
+    method,
+    binary = is_between(bf, points = points, radius = radius,
+                        n_directions = n_directions,
+                        batch_size = batch_size, check_radius = check_radius,
+                        ...),
+    continuous = calc_euclidean_detection_rate(
+      bf, points = points, radius = radius, n_directions = n_directions,
+      batch_size = batch_size, check_radius = check_radius, ...),
+    "continuous-spherical" = calc_spherical_detection_rate(
+      bf, points = points, radius = radius, n_directions = n_directions,
+      batch_size = batch_size, check_radius = check_radius, ...)
+  )
 
   between <- result$between
   points <- result$points

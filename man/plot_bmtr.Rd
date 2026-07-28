@@ -80,6 +80,9 @@ bmtr <- calc_bmtr(bf)
 plot_bmtr(bmtr, bf)
 
 animate_bmtr(bmtr, bf)
+
+# Continuous detection with a wider spread kernel
+bmtr2 <- calc_bmtr(bf, method = "continuous", gamma = 60000)
 }
 
 }

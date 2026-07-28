@@ -10,7 +10,7 @@ plot_95 <- function(T, k, gamma, kl, add = TRUE) {
   # kl  <- 1/2 * T
   #  gamma <- 4 * T
   xs <- seq(0, T, length.out = 50)
-  ys <- sqrt(calc_variance(xs, T, k = k, gamma = gamma, kl = kl)) * 1.96
+  ys <- sqrt(calc_martern_variance(xs, T, k = k, gamma = gamma, kl = kl)) * 1.96
   #  xs <- xs + 0.5 * T
 
   if (!add) {

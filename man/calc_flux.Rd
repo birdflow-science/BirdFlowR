@@ -40,13 +40,21 @@ between timesteps.
 \item{\code{"SpatRaster"}}{Returns a \code{terra::SpatRaster} with layers for each
 transition.}
 }}
-    \item{\code{weighted}}{If \code{FALSE} use the original and quicker version of bmtr
-that sums all the marginal probability for transitions that pass within a
-fixed distance of the point.  If \code{TRUE} assign a weight to the point and
-transition combo that then is multiplied by the marginal probability before
-summing.  This argument is experimental but the default value is identical
-to the old version. The argument name and behavior when set to \code{TRUE} may
-change.}
+    \item{\code{method}}{The detection model used to determine how much of a
+transition's movement counts towards a point's BMTR:
+\describe{
+\item{\code{"binary"}}{(default) Fast and deterministic. A movement line either
+does or does not pass within \code{radius} of the point, per \code{\link[=is_between]{is_between()}}.}
+\item{\code{"continuous"}}{Assigns a continuous weight (0 to 1) based on the
+probability that a bird's actual path, modeled as spreading away from the
+straight line between two cells, passes within \code{radius} of the point. Uses
+planar (Euclidean) geometry in the model's native CRS, and is the
+recommended detection model when continuous weighting is desired.}
+\item{\code{"continuous-spherical"}}{The same continuous weighting as
+\code{"continuous"}, but computed with great-circle (spherical) geometry
+instead. Much slower, and not recommended for routine use; kept to allow
+assessing the impact of switching from spherical to Euclidean geometry.}
+}}
     \item{\code{batch_size}}{controls the number of movement lines that are processed
 at a time. A smaller
 \code{batch_size} will conserve memory at a slight performance cost.  The number

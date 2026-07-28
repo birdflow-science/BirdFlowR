@@ -26,13 +26,17 @@ if (FALSE) {
 #' (in spherical coordinates) around the active cells in `bf` and thus is
 #' almost always more than just the active cells.
 #'
-#' `weight_between()` and `is_between()` should only differ slightly in
-#' their results when calculated on the same model.
+#' `calc_spherical_detection_rate()` and `is_between()` should only differ
+#' slightly in their results when calculated on the same model.
 #'
 #' 1, The number of included reference points may differ.
 #' 2. The betweenness array will be real weights from 0 to 1 with
-#' `weight_between()` and logical with `is_between()`
+#' `calc_spherical_detection_rate()` and logical with `is_between()`
 #'
+#' This is the great-circle (spherical) counterpart to
+#' [calc_euclidean_detection_rate()]. It's much slower and not recommended
+#' for production use, but is kept to allow assessing the impact of switching
+#' from spherical to Euclidean geometry.
 #'
 #' @param bf A BirdFlow model
 #' @param points The points to evaluate betweenness on. If NULL the cell
@@ -54,6 +58,13 @@ if (FALSE) {
 #' at a time. A smaller
 #' `batch_size` will conserve memory at a slight performance cost.  The number
 #' of batches will be less than or equal to `n_active(bf)^2 / batch_size`.
+#' @param check_radius If  `TRUE` an error will be thrown if the radius
+#' is not between the resolution and 1/4 the resolution of `bf`. Outside of
+#' that range the algorithm is likely to yield distorted results.
+#' `0.5 * mean(res(bf))` is the default, and recommended radius.
+#' @param ... Additional arguments forwarded to [calc_dist_weights()],
+#' allowing the spread kernel (`kernel`) and its hyperparameters
+#' (`gamma`, `kl`, `s1`) to be tuned.
 #' @return A list with:
 #' \item{between}{An array with dimensions representing the
 #' "from" location, the "to" location, and the `points`. Cells are weights and
@@ -67,11 +78,14 @@ if (FALSE) {
 #'  `i` will be `NA` for points that are not within the mask but
 #'  fall between active cells.}
 #'  \item{radius}{The radius of the circle in meters.}
-#' @seealso [is_between()] and [calc_bmtr()]
+#' @seealso [is_between()], [calc_euclidean_detection_rate()], and
+#' [calc_bmtr()]
 #' @keywords internal
-weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
-                           n_directions = 1, skip_unconnected = TRUE,
-                           batch_size = 1e5, ...) {
+calc_spherical_detection_rate <- function(bf, points = NULL, radius = NULL,
+                                          n_directions = 1,
+                                          skip_unconnected = TRUE,
+                                          batch_size = 1e5,
+                                          check_radius = TRUE, ...) {
 
   bf_msg("Generating between weights.\n")
 
@@ -94,11 +108,21 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
   # 3 points  (if NULL use cell centers)
   # 4 (pending) n_direction, directional bins.
 
-  # Radius is just used for buffering the convex hull
-  # I'm not sure what the buffer should be so am just setting
-  # it to the cell dimension.  I may have to loop back later and figure
-  # something else out.
-  radius <- mean(res(bf))
+  if (is.null(radius)) {
+    radius <- mean(res(bf)) / 2
+  } else if (check_radius) {
+    # Analysis of the effect of changing radius is in test-calc_bmtr.R
+    radius_cells <- radius / mean(res(bf)) # radius converted to cells
+    if (radius_cells <= 0.25 || radius_cells >= 1) {
+      stop("radius should be less than the resolution and more than 1/4 the ",
+           "resolution or BMTR is likely to be biased. ",
+           "Set check_radius to FALSE to ignore this advice.")
+    }
+  }
+
+  # Hull buffer is only used for selecting default points, not for the
+  # detection radius used in the weighting below.
+  hull_buffer <- mean(res(bf))
 
   if (is.null(points)) {
     bf_msg("  Creating points\n")
@@ -121,7 +145,7 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
     # Make a buffered convex hull around the active cells in lat lon
     hull <- sf::st_union(active_sph) |>
       sf::st_convex_hull() |>
-      sf::st_buffer(hull, dist = units::set_units(radius, "m"))
+      sf::st_buffer(dist = units::set_units(hull_buffer, "m"))
 
     # Selection vector for points that are active or between active cells
     sv <- points_sph |>
@@ -271,14 +295,13 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
     valid_line_lengths <- rep(line_lengths, each = n_points)[not_end]
     valid_line_index <- rep(seq_len(n_lines), each = n_points)[not_end]
     valid_point_index <- rep(seq_len(n_points), times = n_lines)[not_end]
-    # Placeholder weight fun
 
     weights <- calc_dist_weights(valid_dist_to_line,
                                  valid_dist_along_line,
                                  valid_line_lengths,
                                  res_m = mean(res(bf)),
                                  radius_m = radius,
-                                 method = "m3")
+                                 ...)
 
 
     # Add is a matrix defining the new cells with weight to
@@ -322,11 +345,6 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
     # extract weights associated with all points relative to this line
     points_sph$weight <- between[pairs$from[i], pairs$to[i], ]
 
-    # PLot touched points  in green
-    #plot(points_sph[ points_sph$weight > 0, ], cex = 2,
-    #     col = "green", add = TRUE)
-
-
     # Plot touched points colored by weight
     pal <- ebirdst::ebirdst_palettes(n = 256, "weekly")
     col_index <- points_sph$weight / max(points_sph$weight) * 255 + 1
@@ -337,7 +355,7 @@ weight_between <- function(bf, weight_fun = NULL, points = NULL, radius = NULL,
     plot(points_sph, col = cols, add = TRUE, pch = 19)
 
     n_legend <- 10
-    legend_index <- seq(from = 1, to = 256, length.out = nlegend) |> round()
+    legend_index <- seq(from = 1, to = 256, length.out = n_legend) |> round()
     legend_colors <- pal[legend_index]
     legend_values <- (legend_index - 1) / 255 * max(points_sph$weight)
     legend_values <- signif(legend_values, 2)
