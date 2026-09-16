@@ -59,7 +59,7 @@ We can also access the collection index through the package.
 ```{r load index}
 # Load and print index
 index <- load_collection_index()
-index[, c("model", "species_code", "common_name")]
+head(index[, c("model", "species_code", "common_name")])
 ```
 
 And we can load a model from the collection based on the `model` or `species` columns from the index. **Note:** in the vignette this block isn't executed.
@@ -95,9 +95,10 @@ plot(rts, bf)
 
 ```{r quick demo forecast}
 set.seed(0)
-location <- sample_distr(get_distr(bf, 1))
-f <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
-plot_distr(f[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
+initial_distribution <- get_distr(bf, 1)
+location <- sample_distr(initial_distribution)
+forcast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forcast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 ## Time

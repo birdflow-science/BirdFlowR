@@ -63,6 +63,8 @@ res_m <- 100000  # reference scale only: typical BirdFlow cell size
 cells <- c(1, 2, 5, 10, 15, 30)
 lens <- cells * res_m
 
+
+
 gamma <- 3e10
 kl <- 9e5
 s1 <- 200
@@ -104,12 +106,30 @@ line — 95% of the kernel's density. These are the plots the defaults
 were actually tuned against.
 
 ```{r, fig.height=6, fig.width=10}
-n_cells <- c(1, 2, 5, 10, 15, 30)
+n_cells <- c(2, 5, 10, 50) #30, 50)
 line_lengths <- n_cells * res_m
+
+# Defaults:
+gamma <- 3e10
+kl <- 9e5
+
+radius <- 800
+ylims <- c(-radius, radius)
 
 visualize_distance_weights(res_m = res_m, line_lengths = line_lengths,
                            type = "envelope", kernel = "m3",
-                           gamma = gamma, kl = kl)
+                           gamma = gamma, kl = kl) + ylim(ylims)
+
+
+# Current:
+gamma <- 9e10
+kl <- 1e6
+
+visualize_distance_weights(res_m = res_m, line_lengths = line_lengths,
+                           type = "envelope", kernel = "m3",
+                           gamma = gamma, kl = kl) + ylim(ylims)
+
+
 ```
 
 ```{r, fig.height=4, fig.width=10}
