@@ -1,4 +1,5 @@
 test_that("route() works with a single distribution", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   start <- 5
@@ -24,6 +25,7 @@ test_that("route() works with a single distribution", {
 
 
 test_that("route() works over year boundary", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
   if (!has_dynamic_mask(bf))
     bf <- add_dynamic_mask(bf)
@@ -53,12 +55,14 @@ test_that("route() works over year boundary", {
 })
 
 test_that("route() works while sampling the starting locations", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(route(bf, n = 10, season = "prebreeding"))
 })
 
 
 test_that("route() works with full (not sparse) marginals", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   for (marg in (c("M_01-02", "M_02-03", "M_03-04", "M_04-05"))) {
     bf$marginals[[marg]] <- as.matrix(bf$marginals[[marg]]) # store as standard
@@ -83,6 +87,7 @@ test_that("route() works with full (not sparse) marginals", {
 
 
 test_that("route() works with backwards routes", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   rts <- route(bf, n = 1, start = 4, end = 50, direction = "backward")
   years <- rts$data$date |>
@@ -101,6 +106,7 @@ test_that("route() works with backwards routes", {
 
 
 test_that("route() rejects starting coordinates that are masked out at start", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   if (!has_dynamic_mask(bf))
     bf <- add_dynamic_mask(bf)

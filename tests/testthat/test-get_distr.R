@@ -1,4 +1,5 @@
 test_that("get_distr() works", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
   d <- column_sums <- get_distr(bf, 1:4)
   expect_equal(d, bf$distr[, 1:4], ignore_attr = TRUE)
@@ -14,6 +15,7 @@ test_that("get_distr() works", {
 
 
 test_that("get_distr() type argument", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
 
   # Default and "normalized" are identical
@@ -35,6 +37,7 @@ test_that("get_distr() type argument", {
 
 
 test_that("get_distr() emits a deprecation warning for from_marginals", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
   expect_warning(get_distr(bf, 1, from_marginals = FALSE),
                  "`from_marginals` is deprecated")

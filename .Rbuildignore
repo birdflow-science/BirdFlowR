@@ -19,3 +19,7 @@
 ^CLAUDE\.md$
 ^\.claude$
 ^\.positai$
+\.DS_Store$
+\.Rhistory$
+^vignettes/.*\.html$
+^vignettes/.*\.R$

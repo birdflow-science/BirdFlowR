@@ -37,7 +37,9 @@ routes <- Routes(route_df, species = list(common_name = "American Woodcock"))
 print(routes)
 
 # BirdFlowRoutes
+\donttest{
 bf <- BirdFlowModels::amewoo
 bf_routes <- as_BirdFlowRoutes(routes, bf)
+}
 
 }

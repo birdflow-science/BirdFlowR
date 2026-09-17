@@ -41,7 +41,9 @@ when using this function internally to resolve arguments to other
 functions like \code{\link[=route]{route()}}, \code{\link[=predict]{predict()}}, and \code{\link[=get_distr]{get_distr()}}.
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::amewoo
 lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
+}
 
 }

@@ -92,12 +92,14 @@ there are a lot of choices to be made and this function leaves those
 decisions to the user.
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::rewbla
 observations <- BirdFlowModels::rewbla_observations
 intervals <- BirdFlowModels::rewbla_intervals
 intervals <- intervals[1:20, ] # toy example
 intervals <- interval_log_likelihood(intervals, observations, bf)
 head(intervals, 3)
+}
 }
 \seealso{
 \code{\link[=calc_interval_metrics]{calc_interval_metrics()}}

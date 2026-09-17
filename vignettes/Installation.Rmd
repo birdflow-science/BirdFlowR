@@ -10,12 +10,14 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+has_models <- requireNamespace("BirdFlowModels", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   out.width = "65%",
   fig.width = 6,
-  fig.height = 5
+  fig.height = 5,
+  eval = has_models
 )
 ```
 

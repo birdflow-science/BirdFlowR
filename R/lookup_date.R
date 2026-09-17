@@ -18,8 +18,10 @@
 #'
 #'
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' lookup_date(1:5, bf)
+#' }
 lookup_date <- function(x, bf, timestep = NULL) {
 
   if (all(is.na(x)))
@@ -27,7 +29,7 @@ lookup_date <- function(x, bf, timestep = NULL) {
 
   if (!is.null(timestep)) {
     x <- timestep
-    warning("timestep argument to lookup_dates() is deprecated.",
+    warning("timestep argument to lookup_date() is deprecated.",
             "Please use x instead")
   }
 

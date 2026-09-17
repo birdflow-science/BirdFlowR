@@ -28,7 +28,7 @@ st_as_sf.BirdFlowRoutes <- function(x, type = "line", crs = NULL, ...) {
     a <- attributes(x)
     if ("geom" %in% names(a)) {
       crs <- a$geom$crs
-      cat("Set crs based on geom attribute.\n")
+      bf_msg("Set crs based on geom attribute.\n")
     } else if ("crs" %in%  names(a)) {
       crs <- a$crs
     }

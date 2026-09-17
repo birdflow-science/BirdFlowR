@@ -125,8 +125,10 @@ calculate_interval_sampling_strategy <- function(
 
         if (rest_samplable_route_counts[sampled_index, "to_sample"] <= 1) {
           # Should leave at least one sample for that route
-          print(sampled_index)
-          print(rest_samplable_route_counts[sampled_index, "to_sample"])
+          bf_msg("Skipping reduction for sampled_index ", sampled_index,
+                 " (to_sample = ",
+                 rest_samplable_route_counts[sampled_index, "to_sample"],
+                 ")\n")
           next
         }
         rest_samplable_route_counts[sampled_index, "to_sample"] <-

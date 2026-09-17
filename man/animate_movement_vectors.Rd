@@ -57,8 +57,10 @@ example code.
 }
 \examples{
 
+\donttest{
 bf <- BirdFlowModels::amewoo
 a <- animate_movement_vectors(bf)
+}
 
 \dontrun{
 

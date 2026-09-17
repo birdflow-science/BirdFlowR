@@ -4,6 +4,7 @@
 #------------------------------------------------------------------------------#
 
 test_that("expand_distr and flatten_raster are reversable - 1 distr", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 1)
   r <- expand_distr(d, bf)
@@ -12,6 +13,7 @@ test_that("expand_distr and flatten_raster are reversable - 1 distr", {
 })
 
 test_that("expand_distr and flatten_raster are reversable - multiple distr", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 3:4)
   r <- expand_distr(d, bf)
@@ -21,6 +23,7 @@ test_that("expand_distr and flatten_raster are reversable - multiple distr", {
 
 
 test_that("flatten_raster is consistent with i_to_rc() subset", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- runif(n = n_active(bf))
   m <- matrix(NA, nrow = nrow(bf), ncol = ncol(bf))
@@ -35,6 +38,7 @@ test_that("flatten_raster is consistent with i_to_rc() subset", {
 #------------------------------------------------------------------------------#
 
 test_that("rasterize_distr and flatten_raster are reversable - SpatRasters", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Single distribution
   bf <- BirdFlowModels::amewoo

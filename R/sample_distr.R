@@ -31,6 +31,7 @@
 #'
 #' @examples
 #'
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' d <- get_distr(bf, 5)
 #'
@@ -43,6 +44,7 @@
 #'
 #' # Sample 10 times from a single distribution and return x and y coordinates.
 #' xy <- sample_distr(d,  10, format = "xy", bf = bf)
+#' }
 #'
 sample_distr <- function(distr, n = 1, bf, format = "distr") {
 

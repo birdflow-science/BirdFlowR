@@ -1,4 +1,5 @@
 test_that("as_distr() works with data frames", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
   df <- i_to_xy(1:5, bf)
@@ -36,6 +37,7 @@ test_that("as_distr() works with data frames", {
 
 
 test_that("as_distr works with raster objects", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 
@@ -71,6 +73,7 @@ test_that("as_distr works with raster objects", {
 
 
 test_that("as_distr() works with sf points", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
   df <- i_to_xy(1:5, bf)

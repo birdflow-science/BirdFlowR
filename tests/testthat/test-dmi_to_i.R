@@ -1,5 +1,6 @@
 
 test_that("dmi_to_i() is accurate", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
   dmi <- 10
@@ -19,6 +20,7 @@ test_that("dmi_to_i() is accurate", {
 })
 
 test_that("dmi_to_i() and i_to_dmi() are reversable", {
+  skip_if_not_installed("BirdFlowModels")
 
   library(BirdFlowR)
   bf <- BirdFlowModels::amewoo

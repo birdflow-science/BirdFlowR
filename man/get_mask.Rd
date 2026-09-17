@@ -36,8 +36,10 @@ model (at any timestep).  These are also the cells (in row major order)
 that correspond with distribution values, and location indices.
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::amewoo
 m <- get_mask(bf)
+}
 
 \dontrun{
 library(terra)

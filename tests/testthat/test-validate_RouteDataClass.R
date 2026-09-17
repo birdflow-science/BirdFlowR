@@ -1,4 +1,5 @@
 test_that("Validations of Routes, BirdFlowRoutes, and BirdFlowIntervals work", {
+    skip_if_not_installed("BirdFlowModels")
     set.seed(42)
 
     fake_routes <- make_fake_routes()

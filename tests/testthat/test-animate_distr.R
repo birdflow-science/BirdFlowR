@@ -1,4 +1,5 @@
 test_that("animate_distr() works with default args", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   expect_no_error(a1 <- animate_distr(get_distr(bf, c(1, 10, 20)), bf))
@@ -9,6 +10,7 @@ test_that("animate_distr() works with default args", {
 })
 
 test_that("animate_distr() works with dynamic masking", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   expect_no_error(a2 <- animate_distr(get_distr(bf, c(1, 10, 20)), bf,

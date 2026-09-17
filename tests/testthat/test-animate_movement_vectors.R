@@ -1,5 +1,6 @@
 
 test_that("animate_movement_vectors runs cleanly", {
+  skip_if_not_installed("BirdFlowModels")
   skip_on_cran()
 
   local_quiet()

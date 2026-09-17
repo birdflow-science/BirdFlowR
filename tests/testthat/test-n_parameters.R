@@ -1,4 +1,5 @@
 test_that("n_parameters() works", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(np <- n_parameters(bf))
 

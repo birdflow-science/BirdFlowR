@@ -1,4 +1,5 @@
 test_that("Reading and writing routes and intervals works", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
@@ -42,6 +43,7 @@ test_that("Reading and writing routes and intervals works", {
 
 
 test_that("Reading and writing routes and intervals works with NA", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
@@ -83,6 +85,7 @@ test_that("Reading and writing routes and intervals works with NA", {
 
 
 test_that("Reading and writing routes and intervals works with NULL", {
+  skip_if_not_installed("BirdFlowModels")
 
     skip("Always skipped. Writing NULL values is not supported.")
 

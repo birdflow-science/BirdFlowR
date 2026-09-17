@@ -35,6 +35,7 @@ test_that("get_coastline returns expected objects", {
 })
 
 test_that("get_countries returns expected objects", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   bf <- BirdFlowModels::amewoo
   expect_s3_class(countries <- get_countries(bf, scale = "small"),
@@ -45,6 +46,7 @@ test_that("get_countries returns expected objects", {
 })
 
 test_that("get_states returns expected objects", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   # States requires rnaturalearthhires which is a large download
   # Use  devtools::install_github("ropensci/rnaturalearthhires")
@@ -68,6 +70,7 @@ test_that("get_states returns expected objects", {
 })
 
 test_that("get_naturalearth downloads and returns expected objects", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   # This downloads data and writes it to disk so skip everywhere but local
   # machine

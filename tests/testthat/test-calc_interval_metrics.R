@@ -1,4 +1,5 @@
 test_that("Interval validation works", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   # Setup

@@ -1,4 +1,5 @@
 test_that("get_dates() works", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
   d <- get_dates(bf)
   expect_equal(names(d), c("timestep", "date", "label", "julian", "week"))

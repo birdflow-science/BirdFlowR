@@ -32,8 +32,10 @@
 #'   with one additional item `route_type = "synthetic"`.}
 #' }
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' rts <- route(bf, 10, season = "prebreeding")
+#' }
 #'
 #' \dontrun{
 #' plot_routes(rts)

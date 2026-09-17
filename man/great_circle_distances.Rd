@@ -23,6 +23,7 @@ state space vector.
 \examples{
 # Calculate great circle distance matrix
 library(terra)
+\donttest{
 bf <- BirdFlowModels::rewbla
 gs <- great_circle_distances(bf)
 
@@ -54,5 +55,6 @@ mtext(paste0(
   "lines connect cells to the cell which have greatest",
   " proportional error in distance"
 ), line = 0, cex = 0.7)
+}
 }
 \keyword{internal}

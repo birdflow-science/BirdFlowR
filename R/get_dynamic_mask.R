@@ -22,10 +22,12 @@
 #'
 #' @examples
 #' library(terra) # For plotting of spatRaster
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo |> add_dynamic_mask()
 #' dm <- get_dynamic_mask(bf, c(1,  10, 21, 31, 42, 52))
 #' r <- rasterize_distr(dm, bf)
 #' plot(r, legend = FALSE, mar = c(1.3, 1.3, 1.3, .3)  )
+#' }
 #'
 get_dynamic_mask <- function(x, which = "all") {
 

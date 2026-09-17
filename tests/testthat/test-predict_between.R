@@ -1,4 +1,5 @@
 test_that("predict_between() returns matrix with correct dimensions", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
@@ -18,6 +19,7 @@ test_that("predict_between() returns matrix with correct dimensions", {
 
 
 test_that("predict_between() distributions sum to 1", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
@@ -32,6 +34,7 @@ test_that("predict_between() distributions sum to 1", {
 
 
 test_that("predict_between() pins distributions to hard observations", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
@@ -48,6 +51,7 @@ test_that("predict_between() pins distributions to hard observations", {
 
 
 test_that("predict_between() returns log_z attribute", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
@@ -62,6 +66,7 @@ test_that("predict_between() returns log_z attribute", {
 
 
 test_that("predict_between() works with soft potentials", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ts <- lookup_timestep(c("2023-02-15", "2023-05-01"), bf)
@@ -76,6 +81,7 @@ test_that("predict_between() works with soft potentials", {
 
 
 test_that("predict_between() errors on bad input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 
@@ -94,6 +100,7 @@ test_that("predict_between() errors on bad input", {
 
 
 test_that("predict_between() end marginal matches predict() masked by end potential", {
+  skip_if_not_installed("BirdFlowModels")
   # With binary masks at both start and end, the marginal at the end timestep
   # from predict_between() should equal predict() forward from the start mask,
   # then masked by the end mask and renormalized. These are exact (no Monte
@@ -131,6 +138,7 @@ test_that("predict_between() end marginal matches predict() masked by end potent
 
 
 test_that("predict_between() marginal matches forward filter with unconstrained end", {
+  skip_if_not_installed("BirdFlowModels")
   # With a constrained start and unconstrained end (uniform potential), the
   # marginals from predict_between() should match predict() run forward from
   # the same start distribution.

@@ -1,5 +1,6 @@
 
 test_that("Reset index in converting Routes to BirdFlowRoutes works", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
   fake_routes <- make_fake_routes_one_point_per_route()
   bf <- BirdFlowModels::amewoo
@@ -13,6 +14,7 @@ test_that("Reset index in converting Routes to BirdFlowRoutes works", {
 })
 
 test_that("Reset index in BirdFlowRoutes works", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 
@@ -65,6 +67,7 @@ test_that("Reset index in BirdFlowRoutes works", {
 })
 
 test_that("Extra columns are retained and don't cause problems", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   fake_routes <- make_fake_routes()

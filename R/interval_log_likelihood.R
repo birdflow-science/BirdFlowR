@@ -83,12 +83,14 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::rewbla
 #' observations <- BirdFlowModels::rewbla_observations
 #' intervals <- BirdFlowModels::rewbla_intervals
 #' intervals <- intervals[1:20, ] # toy example
 #' intervals <- interval_log_likelihood(intervals, observations, bf)
 #' head(intervals, 3)
+#' }
 interval_log_likelihood <- function(intervals, observations, bf,
                                     one_at_a_time = FALSE) {
   warning("interval_log_likelihood() is deprecated. ",

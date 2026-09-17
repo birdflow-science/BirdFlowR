@@ -1,4 +1,5 @@
 test_that("Timestep padding works", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 

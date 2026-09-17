@@ -1,4 +1,5 @@
 test_that("sample_distr() works with single distribution", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 1)
 
@@ -37,6 +38,7 @@ test_that("sample_distr() works with single distribution", {
 
 
 test_that("sample_distr() works with multiple distributions", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 1:4)
 
@@ -76,6 +78,7 @@ test_that("sample_distr() works with multiple distributions", {
 
 
 test_that("sample_distr() works with 3D input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, c(1, 1))
   d <- predict(bf, distr = d, start = 1, end = 3)

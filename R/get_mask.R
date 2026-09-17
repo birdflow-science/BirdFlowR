@@ -23,8 +23,10 @@
 #'   cells.
 #' @export
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' m <- get_mask(bf)
+#' }
 #'
 #'\dontrun{
 #' library(terra)

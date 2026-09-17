@@ -6,6 +6,7 @@ make_clipped_bf <- function(clip_sf) {
   # Build a minimal BirdFlow with the clip metadata and CRS we need to
   # exercise get_clip(). Reuses the bundled amewoo fixture so we get a
   # valid `geom$crs` and other slots without doing real preprocessing.
+  testthat::skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   bf$geom$crs <- sf::st_crs(clip_sf)$wkt
   bf$metadata$clip <- list(

@@ -1,4 +1,5 @@
 test_that("route_between() returns BirdFlowRoutes with correct dimensions", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   set.seed(1)
 
@@ -20,6 +21,7 @@ test_that("route_between() returns BirdFlowRoutes with correct dimensions", {
 
 
 test_that("route_between() pins routes to hard observations", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   set.seed(2)
 
@@ -45,6 +47,7 @@ test_that("route_between() pins routes to hard observations", {
 
 
 test_that("route_between() works with soft potentials via column names", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   set.seed(3)
 
@@ -61,6 +64,7 @@ test_that("route_between() works with soft potentials via column names", {
 
 
 test_that("route_between() works with soft potentials via date argument", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   set.seed(4)
 
@@ -76,6 +80,7 @@ test_that("route_between() works with soft potentials via date argument", {
 
 
 test_that("route_between() errors on bad input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 
@@ -120,6 +125,7 @@ test_that("route_between() errors on bad input", {
 
 
 test_that("route_between() marginal matches predict() with binary-mask start potential", {
+  skip_if_not_installed("BirdFlowModels")
   # Statistical correctness test:
   # A binary mask over the start distribution defines a constrained initial
   # distribution. route_between() should sample routes whose final positions

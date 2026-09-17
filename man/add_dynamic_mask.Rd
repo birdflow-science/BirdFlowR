@@ -26,6 +26,8 @@ for \code{bf} holding TRUE for cells where the corresponding location (row) and
 time (column) is included in the model.
 }
 \examples{
+\donttest{
 bf <- add_dynamic_mask(BirdFlowModels::amewoo)
+}
 
 }

@@ -150,6 +150,7 @@ test_that("plot_bmtr() subset drops excluded transitions (no empty facets)", {
 })
 
 test_that("Test sensativity of bmtr to radius", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   testthat::skip("In depth bmtr radius analysis - always skipped")
 

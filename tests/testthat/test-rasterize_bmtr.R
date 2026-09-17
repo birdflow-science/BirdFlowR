@@ -1,4 +1,5 @@
 test_that("rasterize_bmtr() returns a valid, plottable raster with the same extent and number of timesteps as the original model", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
 
   # Amewoo BirdFlow model
@@ -17,6 +18,7 @@ test_that("rasterize_bmtr() returns a valid, plottable raster with the same exte
 })
 
 test_that("rasterization works for weighted BMTR calculation", {
+  skip_if_not_installed("BirdFlowModels")
   testthat::skip("Slow test. Always skipped")
 
   local_quiet()

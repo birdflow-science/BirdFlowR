@@ -76,6 +76,7 @@ route_type = c("tracking", "tracking", "tracking", "tracking",
                "tracking", "motus", "motus", "motus", "motus")
 )
 
+\donttest{
 bf <- BirdFlowModels::amewoo
 species1 <- bf$species
 source1 <- "Testing"
@@ -103,4 +104,5 @@ my_intervals <- as_BirdFlowIntervals(my_bfroutes,
 eval_res <- calc_interval_metrics(my_intervals, bf)
 single_value_outputs <- eval_res[[1]]
 transition_level_outputs <- eval_res[[2]]
+}
 }

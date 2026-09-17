@@ -1,4 +1,5 @@
 test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
@@ -17,6 +18,7 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
 
 
 test_that("Test Interval sampling strategy", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
   # Setup
@@ -77,6 +79,7 @@ test_that("Test Interval sampling strategy", {
 
 
 test_that("If no intervals can be sampled, return NULL", {
+  skip_if_not_installed("BirdFlowModels")
   set.seed(42)
   fake_routes <- make_fake_routes_one_point_per_route()
   bf <- BirdFlowModels::amewoo

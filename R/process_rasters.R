@@ -64,7 +64,7 @@ process_rasters <- function(res,
           download_species,
           pattern = download_patterns[[load_res]])
       } else {
-        cat(download_species, "\n", download_patterns[[load_res]], "\n")
+        bf_msg(download_species, "\n", download_patterns[[load_res]], "\n")
         ebirdst::ebirdst_download_status(
           download_species,
           pattern = download_patterns[[load_res]])

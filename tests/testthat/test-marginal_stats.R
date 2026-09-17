@@ -1,4 +1,5 @@
 test_that("marginal_stats and related functions work", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(ms <- marginal_stats(bf))
   expect_no_error(s <- sum_marginals(bf))

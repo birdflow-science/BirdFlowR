@@ -1,4 +1,5 @@
 test_that("snap_to_birdflow works", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   d <- make_fake_move_data(bf)
@@ -52,6 +53,7 @@ test_that("snap_to_birdflow works", {
 })
 
 test_that("snap_to_birdflow() works with preprocessed models", {
+  skip_if_not_installed("BirdFlowModels")
 
   local_quiet()  # to suppress preprocess chatter
 
@@ -78,6 +80,7 @@ test_that("snap_to_birdflow() works with preprocessed models", {
 })
 
 test_that("snap_to_birdflow() works with non standard column names", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
   d <- make_fake_move_data(bf) |>
@@ -94,6 +97,7 @@ test_that("snap_to_birdflow() works with non standard column names", {
 })
 
 test_that("snap_to_birdflow()  behaves with odd input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- make_fake_move_data(bf)
 

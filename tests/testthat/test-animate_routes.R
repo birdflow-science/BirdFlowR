@@ -1,4 +1,5 @@
 test_that("animate_routes() runs", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 

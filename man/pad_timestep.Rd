@@ -24,7 +24,9 @@ be able to switch to three digit timesteps easily if, for example,
 someday we decide to have daily timesteps.
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::amewoo
 pad_timestep(1:5, bf)
+}
 }
 \keyword{internal}

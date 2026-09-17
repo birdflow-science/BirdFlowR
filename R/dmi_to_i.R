@@ -26,6 +26,7 @@
 #' vice versa.
 #' @export
 #' @examples
+#' \donttest{
 #'  bf <- BirdFlowModels::amewoo
 #'  dmi <- c(11:20)
 #'  timesteps <- c(1, 1, 1, 1, 3, 3, 5,7:9 )
@@ -34,6 +35,7 @@
 #'  dmi2 <- i_to_dmi(i, timesteps, bf)
 #'
 #'  isTRUE(all.equal(dmi, dmi2))
+#' }
 dmi_to_i <- function(dmi, timestep, bf) {
 
   # Expand timestep out to have one element for each input dmi

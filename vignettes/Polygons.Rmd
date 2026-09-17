@@ -13,14 +13,24 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
+has_models <- requireNamespace("BirdFlowModels", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   echo = TRUE,
   comment = "#>",
   out.width = "65%",
   fig.width = 6,
-  fig.height = 5
+  fig.height = 5,
+  eval = has_models
 )
+
+# Placeholders so inline `r` expressions below don't error when the
+# chunks that normally set these are skipped (BirdFlowModels missing).
+if (!has_models) {
+  polys <- data.frame(id = NA_character_)
+  sel <- 1
+  plot_count_threshold <- NA_integer_
+}
 
 library(BirdFlowR)
 library(terra)
@@ -112,7 +122,7 @@ polys <- dplyr::select(polys, NAME = gn_name)
 
 ```
 
-```{r echo = FALSE, eval = TRUE}
+```{r echo = FALSE, eval = has_models}
 # This loads very low resolution state boundaries
 # in a way that does not add dependencies or slow downloads
 polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
@@ -209,7 +219,7 @@ start_distr <- start_distr * overlap
 
 ```
 
-```{r select largest, echo = FALSE, eval = TRUE}
+```{r select largest, echo = FALSE, eval = has_models}
 # Select polygon that has that largest proportion of the initial distribution. It is used for visualizations.
 sel <- which.max(apply(start_distr, 2, sum))
 ```

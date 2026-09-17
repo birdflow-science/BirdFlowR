@@ -40,6 +40,7 @@ interval_df <- data.frame(
     timestep2 = as.integer(c(2, 3, 4)),
     route_type = c("tracking", "tracking", "banding")
 )
+\donttest{
 bf <- BirdFlowModels::amewoo
 birdflow_intervals <- BirdFlowIntervals(interval_df,
     species = bf$species,
@@ -47,5 +48,6 @@ birdflow_intervals <- BirdFlowIntervals(interval_df,
 )
 
 print(birdflow_intervals)
+}
 
 }
