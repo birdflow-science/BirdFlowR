@@ -91,7 +91,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://birdflow-science.github.io/BirdFlowR/">BirdFlowR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.9.34</span></span>
+<span><span class="co">#&gt; terra 1.9.50</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
@@ -102,9 +102,9 @@
 <p>The BirdFlow Science team has shared a <a href="https://birdflow-science.s3.amazonaws.com/2026/index.html" class="external-link">collection
 of fitted models</a> for use with the BirdFlowR package; as of mid-2026
 the collection includes 60 vetted species. The website includes reports
-on each species that include a visualization of the distribution it was
-trained on and BirdFlow Migration Traffic Rate (BMTR) derived from the
-model.</p>
+on each species that include a visualizations of the distribution it was
+trained on and the BirdFlow Migration Traffic Rate (BMTR), as well as
+information on the model quality.</p>
 <p>A separate <a href="https://birdflow-science.s3.amazonaws.com/avian_flu/index.html" class="external-link">Avian
 Influenza collection</a> is also available, providing models used for
 HPAI spread risk analysis.</p>
@@ -160,9 +160,10 @@ through time. Here we sample a single winter location and project it
 forward to the breeding season.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict.BirdFlow.html">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">26</span>, direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_distr.html">plot_distr</a></span><span class="op">(</span><span class="va">f</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span>, dynamic_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">initial_distribution</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">initial_distribution</span><span class="op">)</span></span>
+<span><span class="va">forcast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict.BirdFlow.html">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">26</span>, direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_distr.html">plot_distr</a></span><span class="op">(</span><span class="va">forcast</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span>, dynamic_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/quick%20demo%20forecast-1.png" class="r-plt" alt="" width="65%"></p>
 </div>
 </div>

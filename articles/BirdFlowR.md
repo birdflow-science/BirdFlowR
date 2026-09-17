@@ -22,7 +22,7 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 library(BirdFlowModels)
 library(BirdFlowR)
 library(terra)
-#> terra 1.9.34
+#> terra 1.9.50
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(ggplot2)
@@ -34,8 +34,9 @@ The BirdFlow Science team has shared a [collection of fitted
 models](https://birdflow-science.s3.amazonaws.com/2026/index.html) for
 use with the BirdFlowR package; as of mid-2026 the collection includes
 60 vetted species. The website includes reports on each species that
-include a visualization of the distribution it was trained on and
-BirdFlow Migration Traffic Rate (BMTR) derived from the model.
+include a visualizations of the distribution it was trained on and the
+BirdFlow Migration Traffic Rate (BMTR), as well as information on the
+model quality.
 
 A separate [Avian Influenza
 collection](https://birdflow-science.s3.amazonaws.com/avian_flu/index.html)
@@ -109,9 +110,10 @@ a single winter location and project it forward to the breeding season.
 ``` r
 
 set.seed(0)
-location <- sample_distr(get_distr(bf, 1))
-f <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
-plot_distr(f[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
+initial_distribution <- get_distr(bf, 1)
+location <- sample_distr(initial_distribution)
+forcast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forcast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 ![](BirdFlowR_files/figure-html/quick%20demo%20forecast-1.png)

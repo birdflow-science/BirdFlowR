@@ -142,7 +142,7 @@ fully vetted for scientific use.</p>
 <h2 id="load-polygons">Load Polygons<a class="anchor" aria-label="anchor" href="#load-polygons"></a>
 </h2>
 <p>Use <code><a href="../reference/get_naturalearth.html">get_states()</a></code> to get the state boundaries within
-BirdFlow object extent from the<a href="https://www.naturalearthdata.com/" class="external-link">Natural Earth</a> data set.</p>
+BirdFlow object extent from the <a href="https://www.naturalearthdata.com/" class="external-link">Natural Earth</a> data set.</p>
 <p>If you have a polygon shapefile already you could use
 <code>polys &lt;- sf::read_sf(shapefile_path)</code> and skip this
 section.</p>
@@ -278,7 +278,7 @@ the corresponding polygon (columns) that ended in each active cell
 <span><span class="co"># Just keep last distribution</span></span>
 <span><span class="va">end_distr</span> <span class="op">&lt;-</span> <span class="va">pred</span><span class="op">[</span>, , <span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># Preserve dimension names</span></span>
+<span><span class="co"># Restore dimension names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">end_distr</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">start_distr</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="visualize-the-ending-distribution">Visualize the ending distribution<a class="anchor" aria-label="anchor" href="#visualize-the-ending-distribution"></a>

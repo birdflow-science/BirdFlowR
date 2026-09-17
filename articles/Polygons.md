@@ -77,8 +77,8 @@ plot_distr(get_distr(bf, start), bf)
 
 Use
 [`get_states()`](https://birdflow-science.github.io/BirdFlowR/reference/get_naturalearth.md)
-to get the state boundaries within BirdFlow object extent from
-the[Natural Earth](https://www.naturalearthdata.com/) data set.
+to get the state boundaries within BirdFlow object extent from the
+[Natural Earth](https://www.naturalearthdata.com/) data set.
 
 If you have a polygon shapefile already you could use
 `polys <- sf::read_sf(shapefile_path)` and skip this section.
@@ -223,7 +223,7 @@ pred <- predict(bf, distr = start_distr, start = start, end = end)
 # Just keep last distribution
 end_distr <- pred[, , dim(pred)[3]]
 
-# Preserve dimension names
+# Restore dimension names
 dimnames(end_distr) <- dimnames(start_distr)
 ```
 
