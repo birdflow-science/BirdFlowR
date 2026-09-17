@@ -1,4 +1,12 @@
 
+# BirdFlowR 0.1.0.9085
+2026-09-16
+
+* `interval_log_likelihood()` now issues a formal deprecation warning at
+  runtime (it was already documented as deprecated but previously silent).
+  Use `calc_interval_metrics()` with a `BirdFlowIntervals` object instead.
+  The function is kept for now.
+
 # BirdFlowR 0.1.0.9084
 2026-07-27
 

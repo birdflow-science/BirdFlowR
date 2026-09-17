@@ -4,9 +4,11 @@ test_that(paste0("interval_log_likelihood produces identical results with ",
   observations <- BirdFlowModels::rewbla_observations
   intervals <- intervals[1:60, ]
   bf <- BirdFlowModels::rewbla
-  a <- interval_log_likelihood(intervals, observations, bf)
-  b <- interval_log_likelihood(intervals, observations, bf,
-                               one_at_a_time = TRUE)
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(
+    b <- interval_log_likelihood(intervals, observations, bf,
+                                 one_at_a_time = TRUE)
+  )
   expect_equal(a, b)
 
   ll <- a[1:4, c("log_likelihood", "null_ll", "lag")]
@@ -39,7 +41,7 @@ test_that("interval_log_likelihood returns expected values", {
                           to = 2:nrow(observations))
 
   # Calculate log likelihood for observation table
-  ll <- interval_log_likelihood(intervals, observations, bf)
+  expect_warning(ll <- interval_log_likelihood(intervals, observations, bf))
 
   # Pull single step log likelihood directly from the transition matrices
   expected_ll <- rep(NA_real_, nsteps)
@@ -124,7 +126,7 @@ test_that(
   observations$lon[obs_row] <- pt$lon
   observations$lat[obs_row] <- pt$lat
 
-  expect_no_error(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
 
   expect_equal(a$exclude, c(FALSE, TRUE, TRUE, TRUE))
   expect_equal(a$not_active, c(FALSE, FALSE, TRUE, TRUE))
@@ -144,9 +146,12 @@ test_that("interval_log_likelihood() throws warning if overwriting columns", {
   intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
   observations <- BirdFlowModels::rewbla_observations
 
-  a <- interval_log_likelihood(intervals, observations, bf)
-  expect_warning(b <- interval_log_likelihood(a, observations, bf),
-                 "These columns will be replaced in the output:")
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(
+    expect_warning(b <- interval_log_likelihood(a, observations, bf),
+                   "These columns will be replaced in the output:"),
+    "interval_log_likelihood\\(\\) is deprecated"
+  )
 
   expect_equal(a, b)
 
@@ -160,12 +165,12 @@ test_that("Interval log likelihood handles empty input gracefully", {
   intervals_empty <- intervals[rep(FALSE, nrow(intervals)), , drop = FALSE]
   observations <- BirdFlowModels::rewbla_observations
 
-  expect_no_error(
+  expect_warning(
     ll <- interval_log_likelihood(intervals_empty, observations, bf)
   )
   expect_equal(nrow(ll), 0)
 
-  ll2 <- interval_log_likelihood(intervals, observations, bf)
+  expect_warning(ll2 <- interval_log_likelihood(intervals, observations, bf))
 
   # Check that column names and classes are identical with or without data
   expect_equal(colnames(ll), colnames(ll2))
