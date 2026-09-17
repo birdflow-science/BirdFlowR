@@ -102,7 +102,3 @@ predict.BirdFlow <- function(object, distr, ...) {
     return(reformat_distr_labels(pred, object))
   }
 }
-
-forecast <- function(x, ...) {
-  stop("forecast() is deprecated. Please use predict() instead.")
-}

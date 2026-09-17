@@ -1,5 +1,6 @@
 
 test_that("distribution_performance works", {
+  skip_if_not_installed("BirdFlowModels")
 
 
   bf <- BirdFlowModels::amewoo
@@ -27,6 +28,7 @@ test_that("distribution_performance works", {
 })
 
 test_that("distribution_performance reproduces end_traverse_cor metric", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Modified version of evaluate_performance used by @slager
   evaluate_performance_route <- function(x, season = "all") {
@@ -64,12 +66,14 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
 })
 
 test_that("distribution_performance works accross year boundary", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::rewbla
   expect_no_error(a <- distribution_performance(bf, start = 51, end = 2))
 })
 
 
 test_that("distribution_performance works with individual metrics", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   all <- distribution_performance(bf, metrics = "md_traverse_cor",
                                    start = 1, end = 2)

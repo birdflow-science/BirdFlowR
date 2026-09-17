@@ -150,8 +150,10 @@ please include the output from \code{crs(x)} and \code{ext(x)}.
  devtools::install_github("ropensci/rnaturalearthhires") }
 }
 \examples{
+\donttest{
  bf <- BirdFlowModels::amewoo
  coast <- get_coastline(bf)
+}
 
  \dontrun{
  library(terra)

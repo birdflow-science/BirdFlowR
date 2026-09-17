@@ -68,9 +68,11 @@ route_df <- data.frame(
   )
 )
 routes_obj <- Routes(route_df, species = "amewoo")
+\donttest{
 bf <- BirdFlowModels::amewoo
 birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf = bf)
 birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
+}
 }
 \seealso{
 \itemize{

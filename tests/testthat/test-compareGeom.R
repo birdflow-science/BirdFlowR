@@ -1,4 +1,5 @@
 test_that("compareGeom() works", {
+  skip_if_not_installed("BirdFlowModels")
   bf1 <- BirdFlowModels::amewoo
   bf2 <- BirdFlowModels::rewbla
 

@@ -30,8 +30,10 @@ A Date object
 Retrieve date associated with timesteps, transitions, or marginals
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::amewoo
 lookup_date(1:5, bf)
+}
 }
 \seealso{
 \code{\link[=get_dates]{get_dates()}}, \code{\link[=lookup_timestep]{lookup_timestep()}}, \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence()}}

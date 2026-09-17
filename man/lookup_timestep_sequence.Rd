@@ -78,6 +78,7 @@ default is to return all timesteps in the model, equivalent to
 }
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::rewbla
 
 # 1. Dates - order of dates determines direction
@@ -100,5 +101,6 @@ lookup_timestep_sequence(bf, start = 10, n_steps = 5)
 # 5.  No time arguments, equivalent to season = "all"
 lookup_timestep_sequence(bf)
 lookup_timestep_sequence(bf, season = "all", direction = "backward")
+}
 
 }

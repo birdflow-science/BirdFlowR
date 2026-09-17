@@ -1,5 +1,6 @@
 test_that(paste0("rasterize_distr, flatten_raster, and get_distr are ",
                  "consistent - multiple distributions"), {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   sr <- rasterize_distr(get_distr(bf, 1:2), bf)
   a <- terra::as.array(sr)
@@ -14,6 +15,7 @@ test_that(paste0("rasterize_distr, flatten_raster, and get_distr are ",
 
 test_that(paste0("rasterize_distr, flatten_raster, and get_distr are ",
                  "consistent - 1 distribution"), {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   sr <- rasterize_distr(get_distr(bf, 1), bf)
   a <- terra::as.matrix(sr, wide = TRUE)
@@ -26,6 +28,7 @@ test_that(paste0("rasterize_distr, flatten_raster, and get_distr are ",
 })
 
 test_that("rasterize_distr() with data.frame output", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ## Single distribution
@@ -50,6 +53,7 @@ test_that("rasterize_distr() with data.frame output", {
 })
 
 test_that("rasterize_distr() works with with numeric output", {
+  skip_if_not_installed("BirdFlowModels")
 
   # 1 distribution
   bf <- BirdFlowModels::amewoo
@@ -69,6 +73,7 @@ test_that("rasterize_distr() works with with numeric output", {
 })
 
 test_that("rasterize_distr() to numeric is equal to expand_distr()", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(r <- rasterize_distr(get_distr(bf, 1),
                                        bf = bf,
@@ -82,6 +87,7 @@ test_that("rasterize_distr() to numeric is equal to expand_distr()", {
 })
 
 test_that("rasterize_distr() to dataframe works", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   d <- get_distr(bf, 1)
   expect_no_error(df <- rasterize_distr(d, bf = bf, format =  "dataframe"))

@@ -1,4 +1,5 @@
 test_that("truncation works accross year boundary", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Truncation across year boundary
   bf <- BirdFlowModels::amewoo # need circular
@@ -12,6 +13,7 @@ test_that("truncation works accross year boundary", {
 
 
 test_that("truncation works", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
   dates1 <- get_dates(bf)

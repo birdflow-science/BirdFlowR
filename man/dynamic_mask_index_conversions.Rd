@@ -40,6 +40,7 @@ associated with each \code{dmi} or \code{i} value
 as the mapping between the two is different for each timestep.
 }
 \examples{
+\donttest{
  bf <- BirdFlowModels::amewoo
  dmi <- c(11:20)
  timesteps <- c(1, 1, 1, 1, 3, 3, 5,7:9 )
@@ -48,4 +49,5 @@ as the mapping between the two is different for each timestep.
  dmi2 <- i_to_dmi(i, timesteps, bf)
 
  isTRUE(all.equal(dmi, dmi2))
+}
 }

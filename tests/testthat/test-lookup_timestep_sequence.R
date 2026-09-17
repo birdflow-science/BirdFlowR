@@ -1,4 +1,5 @@
 test_that("lookup_timestep_sequence() throws useful error if start = season", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_error(lookup_timestep_sequence(bf, start = "prebreeding"),
                "It looks like you are supplying a season name to start.")
@@ -15,6 +16,7 @@ test_that("lookup_timestep_sequence() throws useful error if start = season", {
 })
 
 test_that("lookup_timestep_sequence() works with timestep input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   # Not over boundary
@@ -52,6 +54,7 @@ test_that("lookup_timestep_sequence() works with timestep input", {
 
 
 test_that("lookup_timestep_sequence() works with date input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ###  Not over boundary
@@ -149,6 +152,7 @@ test_that("lookup_timestep_sequence() works with date input", {
 })
 
 test_that("lookup_timestep_sequence() works with POSIX date input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ###  Not over boundary
@@ -245,6 +249,7 @@ test_that("lookup_timestep_sequence() works with POSIX date input", {
 
 
 test_that("lookup_timestep_sequence() works with character date input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ###  Not over boundary
@@ -341,6 +346,7 @@ test_that("lookup_timestep_sequence() works with character date input", {
 
 
 test_that("lookup_timestep_sequence() works with 'all'", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 
@@ -369,6 +375,7 @@ test_that("lookup_timestep_sequence() works with 'all'", {
 
 
 test_that("lookup_timestep_sequence() works with season input", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 
@@ -491,6 +498,7 @@ test_that("lookup_timestep_sequence() works with season input", {
 
 
 test_that("lookup_timestep() works with start and n input", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   # Forward over year boundary
@@ -526,6 +534,7 @@ test_that("lookup_timestep() works with start and n input", {
 })
 
 test_that("lookup_timestep() throws expected errors with non-cyclical models", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   bf <- truncate_birdflow(bf, start = 11, end = 21)
 
@@ -554,6 +563,7 @@ test_that("lookup_timestep() throws expected errors with non-cyclical models", {
 })
 
 test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
+  skip_if_not_installed("BirdFlowModels")
 
     #   https://github.com/birdflow-science/BirdFlowR/issues/168
 
@@ -577,6 +587,7 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
 })
 
 test_that("lookup_season_timesteps() works with single timestep season", {
+  skip_if_not_installed("BirdFlowModels")
   # See https://github.com/birdflow-science/BirdFlowR/issues/191
   # The Northerth Saw-whet Owl  "nswowl
 

@@ -45,6 +45,7 @@
 #' @export
 #' @examples
 #'
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' timestep  <- 3
 #'
@@ -57,6 +58,7 @@
 #' # Sample a few invalid locations
 #' i <- sample(which(distr == 0), 2)
 #' is_location_valid(bf, i, timestep = timestep)
+#' }
 #'
 is_location_valid <- function(bf, i, x, y, timestep, date) {
 

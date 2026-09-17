@@ -10,12 +10,14 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+has_models <- requireNamespace("BirdFlowModels", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   out.width = "65%",
   fig.width = 6,
-  fig.height = 5
+  fig.height = 5,
+  eval = has_models
 )
   # Set to FALSE for efficient maintenance, testing, and deployment of the package, or
   # TRUE to use full model suitable for inference.
@@ -64,14 +66,14 @@ head(index[, c("model", "species_code", "common_name")])
 
 And we can load a model from the collection based on the `model` or `species` columns from the index. **Note:** in the vignette this block isn't executed.
 
-```{r load model, eval = use_real_model}
+```{r load model, eval = use_real_model && has_models}
 # Load a specific model
 bf <- load_model("amewoo") # caches locally and loads from cache
 ```
 
 This loads the smaller example model instead for efficiency of package building and testing, but do not use this one for science!
 
-```{r load example model, eval = !use_real_model}
+```{r load example model, eval = !use_real_model && has_models}
 bf <- BirdFlowModels::amewoo # example and test dataset
 ```
 

@@ -1,4 +1,5 @@
 test_that("Add dynamic mask works", {
+  skip_if_not_installed("BirdFlowModels")
 
           bf <- BirdFlowModels::amewoo
           expect_no_error(bf <- add_dynamic_mask(bf))

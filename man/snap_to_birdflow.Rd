@@ -128,7 +128,9 @@ A location id will only be assigned if the location is a valid location for
 the model on the associated date.
 }
 \examples{
+\donttest{
 bf <- BirdFlowModels::rewbla |> add_dynamic_mask()
 obs <- BirdFlowModels::rewbla_observations
 a <- snap_to_birdflow(obs, bf, id_cols = "bird_id")
+}
 }

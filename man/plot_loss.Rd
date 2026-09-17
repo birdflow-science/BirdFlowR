@@ -32,6 +32,8 @@ shorter.
 }
 }
 \examples{
+\donttest{
  bf <- BirdFlowModels::amewoo
  plot_loss(bf)
+}
 }

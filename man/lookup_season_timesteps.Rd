@@ -40,7 +40,9 @@ alias listed below.\tabular{ll}{
 }
 
 \examples{
+\donttest{
 bf <- BirdFlowModels::rewbla
 lookup_season_timesteps(bf, "breeding", season_buffer = 0)
+}
 
 }

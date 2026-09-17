@@ -56,10 +56,12 @@ route_data <- data.frame(
   route_type = c("tracking", "tracking", "tracking", "tracking",
   "tracking", "motus", "motus", "motus", "motus")
 )
+\donttest{
 bf <- BirdFlowModels::amewoo
 routes <- Routes(route_data, species = species(bf), source = "Pkg. example")
 
 bf_routes <- as_BirdFlowRoutes(routes, bf)
+}
 
 }
 \seealso{

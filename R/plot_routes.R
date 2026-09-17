@@ -44,6 +44,7 @@
 #' @export
 #' @importFrom rlang .data
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' n <- 10
 #' rts <- route(bf, n, season = "prebreeding")
@@ -65,6 +66,7 @@
 #'   geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
 #'   coord_sf(expand = FALSE)
 #' p
+#' }
 #' \dontrun{
 #' # Use alternate color palettes
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE)

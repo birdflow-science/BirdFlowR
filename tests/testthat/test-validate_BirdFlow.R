@@ -1,8 +1,10 @@
 test_that("BirdFlowModels::amewoo validates", {
+  skip_if_not_installed("BirdFlowModels")
   expect_no_error(validate_BirdFlow(BirdFlowModels::amewoo))
 })
 
 test_that("validate_BirdFlow works with allow_incompletes = TRUE", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   bf$marginals <- NULL
   bf$metadata$has_marginals <- FALSE
@@ -13,6 +15,7 @@ test_that("validate_BirdFlow works with allow_incompletes = TRUE", {
 
 
 test_that("validate_BirdFlow throws expected errors", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   # Wrong class

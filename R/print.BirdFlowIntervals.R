@@ -32,6 +32,7 @@
 #'     timestep2 = as.integer(c(2, 3, 4)),
 #'     route_type = c("tracking", "tracking", "banding")
 #' )
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' birdflow_intervals <- BirdFlowIntervals(interval_df,
 #'     species = bf$species,
@@ -39,6 +40,7 @@
 #' )
 #'
 #' print(birdflow_intervals)
+#' }
 #'
 print.BirdFlowIntervals <- function(x, ...) {
     stopifnot(inherits(x, "BirdFlowIntervals"))

@@ -19,7 +19,9 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' bf <- add_dynamic_mask(BirdFlowModels::amewoo)
+#' }
 #'
 add_dynamic_mask <- function(bf, dummy_mask = FALSE) {
   if (has_dynamic_mask(bf))

@@ -219,6 +219,7 @@ calc_single_interval_metrics <- function(
 #'                "tracking", "motus", "motus", "motus", "motus")
 #' )
 #'
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' species1 <- bf$species
 #' source1 <- "Testing"
@@ -246,6 +247,7 @@ calc_single_interval_metrics <- function(
 #' eval_res <- calc_interval_metrics(my_intervals, bf)
 #' single_value_outputs <- eval_res[[1]]
 #' transition_level_outputs <- eval_res[[2]]
+#' }
 calc_interval_metrics <- function(birdflow_intervals, bf) {
   # weekly distributions directly from S&T
   st_dists <- get_distr(bf, which = "all")

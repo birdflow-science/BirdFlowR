@@ -67,6 +67,7 @@ locations that have non-zero values.
 }
 \examples{
 
+\donttest{
 bf <- BirdFlowModels::amewoo
 timestep  <- 3
 
@@ -79,5 +80,6 @@ is_location_valid(bf, i, timestep = timestep)
 # Sample a few invalid locations
 i <- sample(which(distr == 0), 2)
 is_location_valid(bf, i, timestep = timestep)
+}
 
 }

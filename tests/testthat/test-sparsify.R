@@ -1,4 +1,5 @@
 test_that("sparsification works", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Temporarily suppress BirdFlowR chatter
   o_verbose <- birdflow_options("verbose")
@@ -60,6 +61,7 @@ test_that("sparsification works", {
 })
 
 test_that("sparsify() uses default p = 0.99 when p is not supplied", {
+  skip_if_not_installed("BirdFlowModels")
   o_verbose <- birdflow_options("verbose")
   birdflow_options(verbose = FALSE)
   on.exit(birdflow_options(verbose = o_verbose))
@@ -80,6 +82,7 @@ test_that("sparsify() uses default p = 0.99 when p is not supplied", {
 })
 
 test_that("sparsify() rejects out-of-range p", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_error(sparsify(bf, method = "marginal", p = 0),
                "p should be a single numeric")

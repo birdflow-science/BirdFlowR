@@ -1,4 +1,5 @@
 test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Helper - snaps x, y, and date to bf
   snap <- function(df, bf) {

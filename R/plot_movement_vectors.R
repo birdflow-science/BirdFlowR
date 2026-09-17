@@ -29,8 +29,10 @@
 #' @export
 #' @importFrom grDevices rgb
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' plot_movement_vectors(bf, start = 7)
+#' }
 #'
 #'
 plot_movement_vectors <- function(bf,  start = 1, direction = "forward", mv) {

@@ -15,8 +15,10 @@
 #' @export
 #' @keywords internal
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' pad_timestep(1:5, bf)
+#' }
 pad_timestep  <- function(x, bf) {
   padding <- get_timestep_padding(bf)
   stringr::str_pad(x, width = padding, pad = "0")

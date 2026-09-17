@@ -81,12 +81,14 @@
 #' @export
 #'
 #' @examples
-#' bf <- BirdFlowModels::amewoo
 #' birdflow_options() # print current settings
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
 #' original_format <- birdflow_options("time_format")
 #' birdflow_options(time_format = "date")
 #' head(get_distr(bf, 1:3))
 #' birdflow_options(time_format = original_format)
+#' }
 #'
 birdflow_options <- function(...) {
   args <- list(...)
@@ -139,7 +141,7 @@ birdflow_options <- function(...) {
 
   if ("verbose" %in% names(args)) {
     v <- args[["verbose"]]
-    if (!is.logical(v) && length(v) == 1 %% v %in% c(TRUE, FALSE)) {
+    if (!(is.logical(v) && length(v) == 1 && v %in% c(TRUE, FALSE))) {
       stop("verbose must be TRUE or FALSE.")
     }
     .birdflow_config$verbose <- v

@@ -61,6 +61,7 @@
 #' movement data from real birds.
 #'
 #' @examples
+#' \donttest{
 #'  bf <- BirdFlowModels::amewoo
 #'
 #' \dontrun{
@@ -69,6 +70,7 @@
 #' }
 #' # Just for prebreeding_migration
 #' distribution_performance(bf, season = "prebreeding_migration")
+#' }
 #'
 #' @export
 distribution_performance <- function(x, metrics = NULL, ...) {

@@ -28,8 +28,10 @@
 #' print(routes)
 #'
 #' # BirdFlowRoutes
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' bf_routes <- as_BirdFlowRoutes(routes, bf)
+#' }
 #'
 print.Routes <- function(x, ...) {
   stopifnot(inherits(x, "Routes")) # TRUE for BirdFlowRoutes

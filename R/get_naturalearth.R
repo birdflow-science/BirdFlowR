@@ -92,8 +92,10 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #'  bf <- BirdFlowModels::amewoo
 #'  coast <- get_coastline(bf)
+#' }
 #'
 #'  \dontrun{
 #'  library(terra)

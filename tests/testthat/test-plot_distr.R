@@ -1,4 +1,5 @@
 test_that("plot_distr() works with default parameters", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ## Default parameters
@@ -13,6 +14,7 @@ test_that("plot_distr() works with default parameters", {
 })
 
 test_that("plot_distr() works with dynamic mask", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ## With dynamic mask
@@ -30,6 +32,7 @@ test_that("plot_distr() works with dynamic mask", {
 })
 
 test_that("plot_distr() works with llimits and dynamic scaling", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
 
   ### Using a prediction spread so range of data varies across distributions
@@ -56,6 +59,7 @@ test_that("plot_distr() works with llimits and dynamic scaling", {
 
 test_that(
   "plot_distr() works with custom colors and custom value label and subset", {
+  skip_if_not_installed("BirdFlowModels")
   # This test is somewhat of a catch all for remaining minor options
   bf <- BirdFlowModels::amewoo
 

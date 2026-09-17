@@ -20,6 +20,7 @@ test_that("import_birdflow() works with preprocessed species", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with sparse models", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   skip_on_cran()
 
@@ -52,6 +53,7 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
+  skip_if_not_installed("BirdFlowModels")
 
   #   https://github.com/birdflow-science/BirdFlowR/issues/168
   dir <- local_test_dir("na_metadata")
@@ -171,6 +173,7 @@ test_that("preprocess -> fit -> import preserves ebird_coverage", {
 
 
 test_that("import_birdflow() does not leak rhdf5 handles across calls", {
+  skip_if_not_installed("BirdFlowModels")
   local_quiet()
   skip_on_cran()
 

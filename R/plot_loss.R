@@ -13,8 +13,10 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' get_loss(bf)
+#' }
 #' @seealso [plot_loss()]
 get_loss <- function(bf) {
   if (!"loss_values" %in% names(bf$metadata))
@@ -48,8 +50,10 @@ get_loss <- function(bf) {
 #' @return a **ggplot2** plot object.
 #' @export
 #' @examples
+#' \donttest{
 #'  bf <- BirdFlowModels::amewoo
 #'  plot_loss(bf)
+#' }
 plot_loss <- function(bf, transform = "log10") {
 
   if (!all(c("loss_values", "hyperparameters") %in% names(bf$metadata)))

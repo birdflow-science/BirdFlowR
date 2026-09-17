@@ -1,4 +1,5 @@
 test_that("combine_transitions is consistent with predict", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::amewoo
 

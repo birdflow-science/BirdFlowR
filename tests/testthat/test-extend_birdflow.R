@@ -1,4 +1,5 @@
 test_that("extend_birdflow() works with BirdFlow object in memory", {
+  skip_if_not_installed("BirdFlowModels")
   bf1 <- BirdFlowModels::amewoo
   # Define expanded extent for example
   cell_buffer <- 3
@@ -13,6 +14,7 @@ test_that("extend_birdflow() works with BirdFlow object in memory", {
 })
 
 test_that("extend_birdflow() works with hdf5", {
+  skip_if_not_installed("BirdFlowModels")
 
   skip_on_cran()
   skip_on_ci()
@@ -65,6 +67,7 @@ test_that("extend_birdflow() works with hdf5", {
 })
 
 test_that("extend_birdflow() works with .rds", {
+  skip_if_not_installed("BirdFlowModels")
 
   skip_on_cran()
   skip_on_ci()

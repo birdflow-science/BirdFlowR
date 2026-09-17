@@ -29,8 +29,10 @@
 #' @return A vector of timesteps corresponding to elements in `x`.
 #' @export
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
+#' }
 #'
 lookup_timestep <- function(x, bf, allow_failure = FALSE) {
   stopifnot(inherits(bf, "BirdFlow"))

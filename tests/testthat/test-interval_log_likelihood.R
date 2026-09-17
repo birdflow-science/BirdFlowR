@@ -1,5 +1,6 @@
 test_that(paste0("interval_log_likelihood produces identical results with ",
                  "one_at_a_time = TRUE"), {
+  skip_if_not_installed("BirdFlowModels")
   intervals <- BirdFlowModels::rewbla_intervals
   observations <- BirdFlowModels::rewbla_observations
   intervals <- intervals[1:60, ]
@@ -18,6 +19,7 @@ test_that(paste0("interval_log_likelihood produces identical results with ",
 
 
 test_that("interval_log_likelihood returns expected values", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf  <- BirdFlowModels::rewbla
   nsteps <- 3
@@ -61,6 +63,7 @@ test_that("interval_log_likelihood returns expected values", {
 
 test_that(
   "interval_log_likelihood() sets right flags for problematic locations", {
+  skip_if_not_installed("BirdFlowModels")
 
   bf <- BirdFlowModels::rewbla
   intervals <- BirdFlowModels::rewbla_intervals[1:4, ]
@@ -137,6 +140,7 @@ test_that(
 
 
 test_that("interval_log_likelihood() throws warning if overwriting columns", {
+  skip_if_not_installed("BirdFlowModels")
 
   # Also test that it works fine with verbose = FALSE
   # Temporarily suppress BirdFlowR chatter
@@ -159,6 +163,7 @@ test_that("interval_log_likelihood() throws warning if overwriting columns", {
 
 
 test_that("Interval log likelihood handles empty input gracefully", {
+  skip_if_not_installed("BirdFlowModels")
   #  Checks issue 95  https://github.com/birdflow-science/BirdFlowR/issues/95
   bf <- BirdFlowModels::rewbla
   intervals <- BirdFlowModels::rewbla_intervals[1:10, ]

@@ -1,4 +1,5 @@
 test_that("get_transition() is consistent for forward transitions", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(f1 <- get_transition(bf, "T_01-02"))
   h <- hist(as.numeric(f1), plot = FALSE,
@@ -12,6 +13,7 @@ test_that("get_transition() is consistent for forward transitions", {
 })
 
 test_that("get_transition() is consistent for backwards transitions", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_no_error(b1 <- get_transition(bf, "T_02-01"))
   h <- hist(as.numeric(b1), plot = FALSE,
@@ -26,6 +28,7 @@ test_that("get_transition() is consistent for backwards transitions", {
 
 
 test_that("get_transition() produces error with missing transition", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_error(t <- get_transition(bf, "T_52-53"),
                "There is no marginal for transition T_52-53")
@@ -40,6 +43,7 @@ test_that("get_transition() throws error when there are no transitions", {
 })
 
 test_that("forward and backwards transitions are consistent", {
+  skip_if_not_installed("BirdFlowModels")
   # Here we project the first timestep's distribution (d1a) forward one step
   # to generate a timestep 2 distribution (d2); and then project that back one
   # step to generate a new timestep 1 distribution (d1b).  We expect
@@ -52,6 +56,7 @@ test_that("forward and backwards transitions are consistent", {
 })
 
 test_that("transition_from_marginal throws errors with bogus direction", {
+  skip_if_not_installed("BirdFlowModels")
   bf <- BirdFlowModels::amewoo
   expect_error(transition_from_marginal(bf$marginals[["M_01-02"]],
                                         direction = "Bleh"),
@@ -59,6 +64,7 @@ test_that("transition_from_marginal throws errors with bogus direction", {
 })
 
 test_that("get_transition is consistent with sparse and standard marginals", {
+    skip_if_not_installed("BirdFlowModels")
     # As of 0.0.0.9044 we use different calculations on sparse vs standard marg.
     sparse_bf <- BirdFlowModels::amewoo
     full_bf <- sparse_bf

@@ -36,8 +36,10 @@
 #' @seealso [plot_movement_vectors()] and [animate_movement_vectors()] call
 #' this function and visualize the results.
 #' @examples
+#' \donttest{
 #' bf <- BirdFlowModels::amewoo
 #' mv <- calc_movement_vectors(bf, 7)
+#' }
 #'
 calc_movement_vectors <- function(bf, start, direction = "forward") {
 

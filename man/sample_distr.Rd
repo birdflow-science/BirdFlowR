@@ -41,6 +41,7 @@ Probabilistically sample one or more locations from a set of distributions.
 }
 \examples{
 
+\donttest{
 bf <- BirdFlowModels::amewoo
 d <- get_distr(bf, 5)
 
@@ -53,5 +54,6 @@ sum(one_hot)
 
 # Sample 10 times from a single distribution and return x and y coordinates.
 xy <- sample_distr(d,  10, format = "xy", bf = bf)
+}
 
 }
