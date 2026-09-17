@@ -1,15 +1,16 @@
 #' Calculate log likelihoods of observed bird movements
 #'
+#' DEPRECATED FUNCTION. `interval_log_likelihood()` predates the
+#' `BirdFlowIntervals` class and so is now deprecated. If you are thinking
+#' of using this function in new code please consider [Routes()],
+#' [as_BirdFlowRoutes()], [as_BirdFlowIntervals()], and
+#' [calc_interval_metrics()] to make `BirdFlowIntervals` and then calculate
+#' a full suite of metrics including log likelihood.
+#'
 #' `interval_log_likelihood()` calculates the log likelihoods of inferred bird
 #' movement based on two observation points (in time and space).
 #' The second point must have a different timestep (week) than the first,
 #' but the location can remain the same.
-#' Note `interval_log_likelihood()` predates the `BirdFlowIntervals`
-#' class and so is now deprecated.
-#' If you are thinking of using this function in new code please consider
-#' [Routes()], [as_BirdFlowRoutes()], [as_BirdFlowIntervals()], and
-#' [calc_interval_metrics()] to make `BirdFlowIntervals` and then calculate
-#' a full suite of metrics including log likelihood.
 #'
 #' @details
 #' The core of this function is calling `predict()` on a distribution that has
@@ -78,6 +79,7 @@
 #'
 #'  The returned table rows will have a 1:1 correspondence with the input
 #'  `intervals` table.
+#' @keywords internal
 #' @export
 #'
 #' @examples
@@ -89,6 +91,10 @@
 #' head(intervals, 3)
 interval_log_likelihood <- function(intervals, observations, bf,
                                     one_at_a_time = FALSE) {
+  warning("interval_log_likelihood() is deprecated. ",
+          "Please use calc_interval_metrics() with a BirdFlowIntervals ",
+          "object instead.")
+
   verbose <- birdflow_options("verbose")
 
   stopifnot(
