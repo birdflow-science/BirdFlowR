@@ -4,12 +4,6 @@
 
 ## Documentation review (CRAN prep)
 
-* Wrapped three unguarded `library(BirdFlowModels)` examples
-  (`get_clip()`, `get_metadata()`, `is_clipped()`) in `\donttest{}` -
-  these were a real `R CMD check` blocker missed by an earlier pass.
-* Fixed a broken example in `print.BirdFlowIntervals()` that referenced
-  an internal constant not visible once the package is attached via
-  `library()`; this made `--run-donttest` checks error.
 * Fixed numerous mechanical documentation bugs across `R/` and one
   vignette: stale cross-references to pre-rename function names, broken
   `[text](target)` markdown links missing `()`, malformed `@section`
@@ -32,6 +26,9 @@
 2026-09-29
 
 ## Routes / BirdFlowRoutes / BirdFlowIntervals API simplification
+
+** This is an API change. Most existing code should run with 
+  warnings about deprecated functions but some code may break. **
 
 * Renamed the public constructors to a consistent `as_*()` naming
   convention: `Routes()` -> `as_routes()`, `as_BirdFlowRoutes()` ->
