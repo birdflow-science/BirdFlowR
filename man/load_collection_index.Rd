@@ -40,3 +40,10 @@ current collection will be in a subdirectory.  Both of the above options
 can be changed for the duration of the session with \code{\link[=birdflow_options]{birdflow_options()}},
 but the defaults should be suitable for most users.
 }
+\examples{
+\dontrun{
+index <- load_collection_index()
+head(index)
+}
+
+}

@@ -70,6 +70,23 @@ in the HDF5 file hierarchy.
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+rts <- route(bf, n = 3)
+
+route_path <- tempfile(fileext = ".hdf5")
+write_routes(rts, route_path)
+rts2 <- read_routes(route_path)
+identical(class(rts), class(rts2))
+
+ivl <- as_birdflow_intervals(rts)
+interval_path <- tempfile(fileext = ".hdf5")
+write_intervals(ivl, interval_path)
+ivl2 <- read_intervals(interval_path)
+identical(class(ivl), class(ivl2))
+}
+}
 \seealso{
 \itemize{
 \item \link[rhdf5:h5_createFile]{rhdf5::h5createFile}, \link[rhdf5:h5_write]{rhdf5::h5write}, \link[rhdf5:h5_read]{rhdf5::h5read}

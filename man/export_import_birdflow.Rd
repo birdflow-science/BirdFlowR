@@ -93,6 +93,15 @@ into R with model fits the hyperparameters are saved to
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+hdf5_path <- tempfile(fileext = ".hdf5")
+export_birdflow(bf, hdf5_path)
+bf2 <- import_birdflow(hdf5_path)
+identical(class(bf), class(bf2))
+}
+}
 \seealso{
 \itemize{
 \item \code{\link[=sparsify]{sparsify()}} to reduce the object size after importing.

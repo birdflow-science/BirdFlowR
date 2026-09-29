@@ -50,6 +50,22 @@
 #' alters the object if it has not previously been imported into R.
 #'
 #' @keywords internal
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' rts <- route(bf, n = 3)
+#'
+#' route_path <- tempfile(fileext = ".hdf5")
+#' write_routes(rts, route_path)
+#' rts2 <- read_routes(route_path)
+#' identical(class(rts), class(rts2))
+#'
+#' ivl <- as_birdflow_intervals(rts)
+#' interval_path <- tempfile(fileext = ".hdf5")
+#' write_intervals(ivl, interval_path)
+#' ivl2 <- read_intervals(interval_path)
+#' identical(class(ivl), class(ivl2))
+#' }
 NULL
 
 

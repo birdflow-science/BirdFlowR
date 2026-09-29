@@ -67,6 +67,14 @@
 #' @importFrom rhdf5 h5closeAll
 #' @rdname export_import_birdflow
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' hdf5_path <- tempfile(fileext = ".hdf5")
+#' export_birdflow(bf, hdf5_path)
+#' bf2 <- import_birdflow(hdf5_path)
+#' identical(class(bf), class(bf2))
+#' }
 import_birdflow <- function(hdf5, ..., version) {
 
   # rhdf5 keeps an internal table of open file IDs; the h5read() calls
