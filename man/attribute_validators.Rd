@@ -7,19 +7,15 @@
 \alias{validate_Routes_lon}
 \alias{validate_Routes_lat}
 \alias{validate_Routes_route_type}
-\alias{validate_BirdFlowRoutes_route_type}
 \alias{validate_BirdFlowRoutes_x}
 \alias{validate_BirdFlowRoutes_y}
 \alias{validate_BirdFlowRoutes_i}
 \alias{validate_BirdFlowRoutes_timestep}
 \alias{validate_BirdFlowRoutes_date}
-\alias{validate_BirdFlowRoutes_stay_id}
-\alias{validate_BirdFlowRoutes_stay_len}
 \alias{validate_BirdFlowRoutes_species}
 \alias{validate_BirdFlowRoutes_metadata}
 \alias{validate_BirdFlowRoutes_dates}
 \alias{validate_BirdFlowIntervals_interval_id}
-\alias{validate_BirdFlowIntervals_metadata}
 \title{Attribute Validators}
 \usage{
 validate_Routes_route_id(route_id)
@@ -32,8 +28,6 @@ validate_Routes_lat(lat_vector)
 
 validate_Routes_route_type(route_type_vector)
 
-validate_BirdFlowRoutes_route_type(route_type_vector)
-
 validate_BirdFlowRoutes_x(x_vector)
 
 validate_BirdFlowRoutes_y(y_vector)
@@ -44,10 +38,6 @@ validate_BirdFlowRoutes_timestep(timestep_vector)
 
 validate_BirdFlowRoutes_date(route_id_vector, date_vector)
 
-validate_BirdFlowRoutes_stay_id(stay_id_vector)
-
-validate_BirdFlowRoutes_stay_len(stay_len_vector)
-
 validate_BirdFlowRoutes_species(species)
 
 validate_BirdFlowRoutes_metadata(metadata)
@@ -55,8 +45,6 @@ validate_BirdFlowRoutes_metadata(metadata)
 validate_BirdFlowRoutes_dates(dates)
 
 validate_BirdFlowIntervals_interval_id(interval_id)
-
-validate_BirdFlowIntervals_metadata(metadata)
 }
 \arguments{
 \item{route_id}{A vector of route IDs (character or numeric). Must not
@@ -81,12 +69,6 @@ missing values.}
 
 \item{timestep_vector}{An integer vector for timesteps, paired with
 \code{route_id_vector}.}
-
-\item{stay_id_vector}{A numeric or character vector for stay IDs. Must not
-contain missing values.}
-
-\item{stay_len_vector}{An integer vector for stay lengths. Must not contain
-missing values.}
 
 \item{species}{A list with species information. Must include \code{species_code},
 \code{scientific_name}, and \code{common_name}.}
@@ -124,7 +106,6 @@ valid ranges.
 \item \code{x} and \code{y}: Ensure numeric spatial coordinates.
 \item \code{i}: Ensures valid spatial indices as integers.
 \item \code{timestep}: Ensures unique timesteps per \code{route_id}.
-\item \code{stay_id} and \code{stay_len}: Ensure valid stay identifiers and lengths.
 }
 \item \strong{Additional Attributes}:
 \itemize{
@@ -150,7 +131,6 @@ user-facing functionality.
 \item \code{validate_BirdFlowRoutes_x()}, \code{validate_BirdFlowRoutes_y()}
 \item \code{validate_BirdFlowRoutes_i()}, \code{validate_BirdFlowRoutes_timestep()},
 \item \code{validate_BirdFlowRoutes_date()},
-\item \code{validate_BirdFlowRoutes_stay_id()}, \code{validate_BirdFlowRoutes_stay_len()}
 \item \code{validate_BirdFlowRoutes_species()}
 }
 \item \code{BirdFlowIntervals} Validators:

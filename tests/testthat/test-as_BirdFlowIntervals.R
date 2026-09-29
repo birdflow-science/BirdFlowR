@@ -1,4 +1,4 @@
-test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
+test_that("as_routes() -> as_birdflow_routes() -> as_birdflow_intervals() works", {
   skip_if_not_installed("BirdFlowModels")
   set.seed(42)
 
@@ -7,12 +7,12 @@ test_that("Routes() -> as_BirdFlowRoutes() -> as_BirdFlowIntervals() works", {
   species1 <- bf$species
   source1 <- "BirdFlow"
 
-  expect_no_error(my_routes <- Routes(fake_routes,
+  expect_no_error(my_routes <- as_routes(fake_routes,
     species = species1,
     source = source1
   ))
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf))
-  expect_no_error(my_intervals <- as_BirdFlowIntervals(my_bfroutes))
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes, bf = bf))
+  expect_no_error(my_intervals <- as_birdflow_intervals(my_bfroutes))
 })
 
 
@@ -27,11 +27,11 @@ test_that("Test Interval sampling strategy", {
   species1 <- bf$species
   source1 <- "Testing"
 
-  expect_no_error(my_routes <- Routes(fake_routes,
+  expect_no_error(my_routes <- as_routes(fake_routes,
     species = species1,
     source = source1
   ))
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf))
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes, bf = bf))
 
 
   # Constraints
@@ -41,7 +41,7 @@ test_that("Test Interval sampling strategy", {
   max_km <- 8000
 
   expect_no_error(
-    my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
+    my_intervals <- BirdFlowR::as_birdflow_intervals(my_bfroutes,
       max_n = 1000,
       min_day_interval = min_day,
       max_day_interval = max_day,
@@ -60,7 +60,7 @@ test_that("Test Interval sampling strategy", {
 
   # Number of routes (1)
   expect_no_error(
-    my_intervals <- as_BirdFlowIntervals(my_bfroutes,
+    my_intervals <- as_birdflow_intervals(my_bfroutes,
       max_n = 1,
       min_day_interval = min_day,
       max_day_interval = max_day,
@@ -86,12 +86,12 @@ test_that("If no intervals can be sampled, return NULL", {
   species1 <- bf$species
   source1 <- "BirdFlow"
 
-  expect_no_error(my_routes <- Routes(fake_routes,
+  expect_no_error(my_routes <- as_routes(fake_routes,
     species = species1,
     source = source1
   ))
   expect_no_error(my_bfroutes <-
-    as_BirdFlowRoutes(my_routes, bf = bf, valid_only = TRUE))
-  expect_no_error(my_intervals <- as_BirdFlowIntervals(my_bfroutes))
+    as_birdflow_routes(my_routes, bf = bf, valid_only = TRUE))
+  expect_no_error(my_intervals <- as_birdflow_intervals(my_bfroutes))
   expect_null(my_intervals)
 })

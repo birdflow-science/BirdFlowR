@@ -9,7 +9,7 @@
 #'
 #'
 #' @param routes,x An object of class `Routes` or  `BirdFlowRoutes`.  Likely the
-#' the output of  [route()], [as_BirdFlowRoutes], or [Routes()].
+#' the output of  [route()], [as_birdflow_routes()], or [as_routes()].
 #' @param bf A BirdFlow object. Only used if `x` is a `Routes` object, in
 #' which case it provides the CRS and
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route

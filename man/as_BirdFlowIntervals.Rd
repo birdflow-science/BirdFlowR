@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_BirdFlowIntervals.R
 \name{as_BirdFlowIntervals}
 \alias{as_BirdFlowIntervals}
-\title{Convert \code{BirdFlowRoutes} to \code{BirdFlowIntervals}}
+\title{Deprecated function to convert BirdFlowRoutes to BirdFlowIntervals}
 \usage{
 as_BirdFlowIntervals(
   birdflow_routes,
@@ -17,66 +17,27 @@ as_BirdFlowIntervals(
 \item{birdflow_routes}{A \code{BirdFlowRoutes} object.}
 
 \item{max_n}{The maximum number of intervals to sample.
-Defaults to 1000.}
+Defaults to 1000. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{min_day_interval}{The minimum days required in an interval.
-Defaults to 7.}
+Defaults to 7. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{max_day_interval}{The maximum days required in an interval.
-Defaults to 180.}
+Defaults to 180. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{min_km_interval}{The minimum distance required for an interval.
-Defaults to 200.}
+Defaults to 200. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{max_km_interval}{The maximum distance required for an interval.
-Defaults to 2000.}
+Defaults to 2000. Only used by the \code{BirdFlowRoutes} method.}
 }
 \value{
 A \code{BirdFlowIntervals} object.
 }
 \description{
-Converts a \code{BirdFlowRoutes} object into a \code{BirdFlowIntervals}
-object, sampling interval pairs between time points. \code{BirdFlowIntervals}
-define specific movements between states in a  \code{BirdFlow} model.  The two
-points in each interval will always differ in time (week  / timestep).
-They can occupy the same location (raster cell) in the model or
-represent a movement between two locations.
-
-\code{BirdFlowIntervals} are primarily used to evaluate model performance with
-\code{calculate_interval_metrics()}.
-}
-\examples{
-route_df <- data.frame(
-  route_id = c("001", "001", "001", "001", "001", "003",
-  "003", "003", "004"),
-  date = as.Date(c(
-    "2025-01-01", "2025-01-08", "2025-01-15",
-    "2025-01-21", "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01",
-    "2025-05-01"
-  )),
-  lon = c(
-    -75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298,
-    -89.6298, -85.6298, -95.3698
-  ),
-  lat = c(
-    39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781,
-    40.8781, 29.7604
-  ),
-  route_type = c(
-    "tracking", "tracking", "tracking", "tracking", "tracking",
-    "motus", "motus", "motus", "motus"
-  )
-)
-routes_obj <- Routes(route_df, species = "amewoo")
-\donttest{
-bf <- BirdFlowModels::amewoo
-birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf = bf)
-birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
-}
+This function is deprecated. Please use \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}} instead.
 }
 \seealso{
-\itemize{
-\item \code{\link[=Routes]{Routes()}} for converting observational data into a formal \code{Routes} object
-\item \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} for converting \code{Routes} to \code{BirdFlowRoutes}.
+\code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}} should be used instead of this function.
 }
-}
+\keyword{internal}

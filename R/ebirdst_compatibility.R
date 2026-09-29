@@ -28,7 +28,7 @@ ebirdst_pkg_ver <- function() {
 #' whether all package functions are supported fully.  `preprocess_species`
 #' checks that function which has stricter requirements than most functions.
 #' `lookup_species_metadata` checks that function which is called by
-#' `Routes()`.
+#' `as_routes()`.
 #' @param throw_error if `TRUE` an error will be thrown if \pkg{ebirdst} is not
 #' supported by `use`.
 #' @return `ebirdst_ver_supported`: `TRUE` if the specified `use` is supported,

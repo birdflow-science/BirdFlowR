@@ -2,16 +2,14 @@
 % Please edit documentation in R/Routes-internal.R
 \name{Routes-internal}
 \alias{Routes-internal}
-\alias{new_Routes}
-\alias{BirdFlowRoutes}
-\alias{new_BirdFlowRoutes}
-\alias{BirdFlowIntervals}
-\alias{new_BirdFlowIntervals}
+\alias{new_routes}
+\alias{new_birdflow_routes}
+\alias{new_birdflow_intervals}
 \title{Internal (private) routes and intervals class creation functions}
 \usage{
-new_Routes(data, species, source)
+new_routes(data, species, source)
 
-BirdFlowRoutes(
+new_birdflow_routes(
   data,
   species,
   metadata,
@@ -23,20 +21,7 @@ BirdFlowRoutes(
   stay_calculate_col = "date"
 )
 
-new_BirdFlowRoutes(
-  data,
-  species,
-  metadata,
-  geom,
-  dates,
-  source,
-  stay_calculate_col = "date",
-  sort_id_and_dates = FALSE
-)
-
-BirdFlowIntervals(data, species, metadata, geom, dates, source = NULL)
-
-new_BirdFlowIntervals(data, species, metadata, geom, dates, source)
+new_birdflow_intervals(data, species, metadata, geom, dates, source = NULL)
 }
 \arguments{
 \item{data}{A data frame containing route/interval data for \code{Routes},
@@ -81,132 +66,23 @@ for use within BirdFlow models.
 }
 \details{
 \itemize{
-\item \strong{\code{Routes()}}: Creates a \code{Routes} object from a data frame.
-\item \strong{\code{BirdFlowRoutes()}}: Creates a \code{BirdFlowRoutes} object,
+\item \strong{\code{new_routes()}}: Creates a \code{Routes} object from a data frame.
+\item \strong{\code{new_birdflow_routes()}}: Creates a \code{BirdFlowRoutes} object,
 extending \code{Routes} with additional BirdFlow-specific spatial and
 temporal information.
-\item \strong{\code{BirdFlowIntervals()}}: Creates a \code{BirdFlowIntervals} object,
+\item \strong{\code{new_birdflow_intervals()}}: Creates a \code{BirdFlowIntervals} object,
 representing intervals between timesteps in BirdFlow data.
 }
 
 All objects are internally validated during creation, ensuring required
-columns, valid data types, and proper formats. Non-exported \verb{new_*}
-functions handle the final assembly of the object after validation.
-}
-\examples{
-
-# Examples here use private functions so can't be run except after
-# devtools::load_all() during package development.
-\dontrun{
-
-# Create a Routes object
-route_df <- data.frame(
-  route_id = c("001", "001", "001", "001", "001",
-  "003", "003", "003", "004"),
-  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21",
-  "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
-  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298,
-  -89.6298, -85.6298, -95.3698),
-  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781,
-  42.8781, 40.8781, 29.7604),
-  route_type = c("tracking", "tracking", "tracking", "tracking",
-  "tracking", "motus", "motus", "motus", "motus")
-)
-species <- list(
-  species_code = "amewoo",
-  scientific_name = "Scolopax minor",
-  common_name = "American Woodcock"
-)
-sources <- "Unknown sources"
-routes_obj <- Routes(route_df, species = species, source = sources)
-
-# Create a BirdFlowRoutes object
-## 1. convert from `Routes`
-bf <- BirdFlowModels::amewoo
-birdflow_route_df <- routes_obj |> as_BirdFlowRoutes(bf = bf)
-# the species, metadata, and sources will be inherited from the bf object.
-
-## 2. Directly from dataframe
-birdflow_route_df <- data.frame(
-  route_id = c("001", "001", "001", "001", "001", "003", "003",
-  "003", "004"),
-  date = as.Date(c(
-    "2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21", "2025-02-10",
-    "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01"
-  )),
-  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298,
-  -89.6298, -85.6298, -95.3698),
-  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781, 42.8781,
-  40.8781, 29.7604),
-  x = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
-  y = c(1000, 2000, 1000, 2000, 1000, 2000, 1000, 2000, 1000),
-  i = as.integer(c(1, 2, 1, 2, 1, 2, 1, 2, 1)),
-  timestep = as.integer(c(1, 2, 3, 4, 5, 1, 2, 3, 1)),
-  route_type = c(
-    "tracking", "tracking", "tracking", "tracking",
-    "tracking", "motus", "motus", "motus", "motus"
-  )
-)
-geom <- list(
-  nrow = 100, ncol = 200, res = 1, ext = NULL, crs = NULL,
-  mask = NULL, dynamic_mask = NULL
-)
-dates <- data.frame(
-  timestep = 1:2,
-  date = as.Date(c("2022-01-04", "2022-01-11")),
-  label = c("January 4", "January 11"),
-  julian = c(4, 11),
-  week = c(1, 2)
-)
-birdflowroutes_object <- BirdFlowRoutes(
-  birdflow_route_df,
-  species = species,
-  metadata = metadata,
-  geom = geom,
-  dates = dates,
-  source = "example_source"
-)
-# Create a BirdFlowIntervals object
-## 1. convert from `BirdFlowRoutes`
-birdflow_intervals_obj <- birdflowroutes_object |> as_BirdFlowIntervals()
-
-## 2. Directly from dataframe
-birdflow_intervals <- data.frame(
-  interval_id = 1:3,
-  route_id = c("route1", "route1", "route2"),
-  lon1 = c(-90, -89, -88),
-  lon2 = c(-89, -88, -87),
-  lat1 = c(40, 41, 42),
-  lat2 = c(41, 42, 43),
-  x1 = c(1000, 1100, 1200),
-  x2 = c(1100, 1200, 1300),
-  y1 = c(500, 600, 700),
-  y2 = c(600, 700, 800),
-  i1 = as.integer(c(1, 2, 3)),
-  i2 = as.integer(c(2, 3, 4)),
-  date1 = as.Date(c("2024-01-01", "2024-01-02", "2024-01-03")),
-  date2 = as.Date(c("2024-01-02", "2024-01-03", "2024-01-04")),
-  timestep1 = as.integer(c(1, 2, 3)),
-  timestep2 = as.integer(c(2, 3, 4)),
-  route_type = c("tracking", "tracking", "banding")
-)
-birdflow_intervals_obj <- BirdFlowIntervals(
-  birdflow_intervals,
-  species = species,
-  metadata = metadata,
-  geom = geom,
-  dates = dates,
-  source = "example_source"
-)
-}
-
+columns, valid data types, and proper formats.
 }
 \seealso{
 \itemize{
-\item \code{\link[=Routes]{Routes()}} Create a \code{Routes} object
-\item \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} Convert \code{Routes} to \code{BirdFlowRoutes}
-\item \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}} Extract movement between pairs of locations
-from \link{BirdFlowRoutes} for use with model evaluation.
+\item \code{\link[=as_routes]{as_routes()}} Create a \code{Routes} object
+\item \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} Convert \code{Routes} to \code{BirdFlowRoutes}
+\item \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}} Extract movement between pairs of locations
+from \code{BirdFlowRoutes} for use with model evaluation.
 \item \href{?object_validators}{Object Validators} Private functions for validating
 routes and intervals.
 }
