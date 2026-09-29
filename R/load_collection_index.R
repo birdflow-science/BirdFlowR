@@ -16,6 +16,12 @@
 #' @inheritParams load_model
 #' @return  A data frame with a row for every model in the collection.
 #'
+#' @examples
+#' \dontrun{
+#' index <- load_collection_index()
+#' head(index)
+#' }
+#'
 #' @export
 load_collection_index <-
   function(update = TRUE,
