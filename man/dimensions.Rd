@@ -121,6 +121,28 @@ masked this is equivalent to \code{n_active(x)^2 * n_transitons(x) + n_active(x)
 \description{
 Functions to return BirdFlow model dimensions and other basic information
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+nrow(bf)
+ncol(bf)
+dim(bf)
+n_timesteps(bf)
+n_distr(bf)
+n_transitions(bf)
+n_active(bf)
+is_cyclical(bf)
+crs(bf)
+ext(bf)
+res(bf)
+xres(bf)
+yres(bf)
+xmin(bf)
+xmax(bf)
+ymin(bf)
+ymax(bf)
+}
+}
 \seealso{
 \pkg{terra} defines the S4 generics for \link[terra:crs]{crs()},
 \link[terra:ext]{ext()}, \link[terra:dimensions]{res()}, \link[terra:dimensions]{xres()}, and

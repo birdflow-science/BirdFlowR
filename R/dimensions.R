@@ -20,6 +20,27 @@
 #'
 #' [get_distr()] returns distributions from a `BirdFlow` object.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' nrow(bf)
+#' ncol(bf)
+#' dim(bf)
+#' n_timesteps(bf)
+#' n_distr(bf)
+#' n_transitions(bf)
+#' n_active(bf)
+#' is_cyclical(bf)
+#' crs(bf)
+#' ext(bf)
+#' res(bf)
+#' xres(bf)
+#' yres(bf)
+#' xmin(bf)
+#' xmax(bf)
+#' ymin(bf)
+#' ymax(bf)
+#' }
 nrow.BirdFlow <- function(x) {
   x$geom$nrow
 }

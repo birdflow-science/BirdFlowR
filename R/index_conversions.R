@@ -78,6 +78,34 @@
 #'  cells included by the static mask and dynamic mask indices (`dmi`)
 #'  along the cells included in the dynamic mask for a given timestep.
 #'
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' i <- 1 # first active cell
+#'
+#' # From state vector index (i) to row, column, x, y, and back
+#' rc <- i_to_rc(i, bf)
+#' rc
+#' i_to_row(i, bf)
+#' i_to_col(i, bf)
+#' xy <- i_to_xy(i, bf)
+#' xy
+#' i_to_x(i, bf)
+#' i_to_y(i, bf)
+#' rc_to_i(rc$row, rc$col, bf)
+#' xy_to_i(xy$x, xy$y, bf)
+#'
+#' # Row/column to x/y coordinates and back
+#' x <- col_to_x(rc$col, bf)
+#' y <- row_to_y(rc$row, bf)
+#' x_to_col(x, bf)
+#' y_to_row(y, bf)
+#'
+#' # Latitude/longitude (WGS84) to and from the model's CRS
+#' latlon <- xy_to_latlon(xy$x, xy$y, bf)
+#' latlon
+#' latlon_to_xy(latlon$lat, latlon$lon, bf)
+#' }
 NULL # required object for above roxygen2 page documentation
 # shared by functions below
 
