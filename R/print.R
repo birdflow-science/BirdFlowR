@@ -1,13 +1,19 @@
 #' Print BirdFlow models
 #'
-#' This is a print method for BirdFlow objects.
-#
+#' @description Print a summary of a `BirdFlow` object: species, raster
+#' dimensions, resolution, number of active cells, and in-memory object
+#' size.
 #' @param x A BirdFlow object.
 #' @param ... arguments passed from other methods
 #'
 #' @return `x` returned invisibly and unchanged.
 #' @method print BirdFlow
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' print(bf)
+#' }
 print.BirdFlow <- function(x, ...) {
   if (!is.na(x$species$common_name)) {
     cat(x$species$common_name, " ", sep = "")

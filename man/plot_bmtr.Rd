@@ -69,7 +69,10 @@ When \code{NULL} (default) the full model extent is shown.}
 \code{print()}.
 }
 \description{
-Plot BirdFlow Migration Traffic Rate (BMTR)
+Plot BMTR as a raster map, with one facet per transition (or a single
+map, with the transition in the subtitle, if \code{bmtr} covers only one
+transition). Colors represent BMTR intensity; see \code{\link[=calc_bmtr]{calc_bmtr()}} for how
+BMTR itself is calculated.
 }
 \examples{
 
