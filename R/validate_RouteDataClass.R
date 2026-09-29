@@ -33,8 +33,8 @@
 #' If validation fails, an error message is raised detailing the issue.
 #'
 #' @seealso
-#' - [Attribute Validators](?attribute_validators)
-#' - [Column Targeting Functions](?target_columns)
+#' - [Attribute Validators](attribute_validators)
+#' - [Column Targeting Functions](target_columns)
 NULL
 
 
@@ -230,8 +230,8 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
 #' @return A character vector containing the expected column names.
 #'
 #' @seealso
-#' - [Object Validators](?object_validators)
-#' - [Attribute Validators](?attribute_validators)
+#' - [Object Validators](object_validators)
+#' - [Attribute Validators](attribute_validators)
 NULL
 
 #' @rdname target_columns
@@ -357,8 +357,8 @@ get_target_columns_BirdFlowIntervals <- function(type = "input") {
 #' @return Each function returns `TRUE` if validation succeeds. If validation
 #' fails, an error is raised with details about the issue.
 #' @seealso
-#' - [Object Validators](?object_validators)
-#' - [Column Targeting Functions](?target_columns)
+#' - [Object Validators](object_validators)
+#' - [Column Targeting Functions](target_columns)
 #' @keywords internal
 NULL
 

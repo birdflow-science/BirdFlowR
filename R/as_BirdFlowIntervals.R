@@ -16,7 +16,7 @@
 #' any sampling.
 #'
 #' `BirdFlowIntervals` are primarily used to evaluate model performance with
-#'  `calculate_interval_metrics()`.
+#'  `calc_interval_metrics()`.
 #'
 #' @param x Either a `BirdFlowRoutes` object or a data frame with interval
 #' data (see [Routes-internal] for the required columns).

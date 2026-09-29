@@ -69,7 +69,7 @@ It's a good idea to sparsify immediately after importing to reduce memory usage 
 
 The state method eliminates all transitions into and out of model states (locations in space and time) for which the ebirdst distribution is zero.  Those states are thus removed from the model. 
 
-You can read more about sparsification methods in the help for `sparasify()`.  
+You can read more about sparsification methods in the help for `sparsify()`.
 ```{r sparsify, eval = FALSE}
 bf <- sparsify(bf, method = "state")
 ```

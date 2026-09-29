@@ -2,7 +2,7 @@
 #' @title Convert a BirdFlow distribution into a raster
 #' @description `rast()` converts a BirdFlow object directly
 #' to a [SpatRaster][terra::SpatRaster].
-#' `rasterize_distr()` converts a [distribution](as_distr) into a
+#' `rasterize_distr()` converts a [distribution](as_distr()) into a
 #' [SpatRaster][terra::SpatRaster], numeric matrix or array, or a raster data
 #'  frame.
 #'

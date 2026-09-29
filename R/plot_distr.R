@@ -52,7 +52,7 @@
 #'   dynamic mask. This is achieved by overwriting cells that are dynamically
 #'   masked with NA. For `show_dynamic_mask = TRUE` to work the column names in
 #'   `distr` should all be in `colnames(get_distr(bf))`.  This is
-#'   true for distributions returned by [`predict()`](predict.BirdFlowR)
+#'   true for distributions returned by [`predict()`](predict.BirdFlow())
 #'   and [get_distr()].
 #' @param limits The range of density values to map `gradient_colors` to. The
 #'   default is the range of the values in `distr` after applying `subset`. If
@@ -60,7 +60,7 @@
 #'   species you might want to set to `c(0, max)` where `max` is the maximum
 #'   observed value across all models. Alternatively if the range is highly
 #'   variable among the columns in ``distr`` as when density spreads out from a
-#'   single point in the results of [`predict(bf)`](predict.BirdFlowR) you may
+#'   single point in the results of [`predict(bf)`](predict.BirdFlow()) you may
 #'   want to set this smaller than the full range in which case the values will
 #'   be truncated to the limits (see examples).
 #' @param dynamic_scale Set to `TRUE` to have the range of the data in each

@@ -59,7 +59,7 @@ For convenience the following short versions are also accepted:\tabular{ll}{
    \code{species} \tab (\code{common_name}) \cr
 }
 }
-\section{{Dropped items}}{
+\section{Dropped items}{
 
 The 8 variables below are in \link[ebirdst:ebirdst_runs]{ebirdst::ebirdst_runs} but are dropped
 from the BirdFlow model and thus can not be retrieved by

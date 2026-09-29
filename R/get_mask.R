@@ -11,7 +11,7 @@
 #'   `'numeric'` for a matrix or array, or`'dataframe'` for raster data
 #'   suitable for plotting with [ggplot2::geom_raster()]
 #' @return
-#' The return type of `get_mask()`depends on the `format` argument:
+#' The return type of `get_mask()` depends on the `format` argument:
 #' * `"SpatRaster"` (the default) returns a [terra::SpatRaster] object.
 #' * `"numeric"` returns the mask as a matrix.
 #' * `"dataframe"` will return a data frame suitable for plotting with

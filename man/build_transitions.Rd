@@ -21,7 +21,7 @@ BirdFlow object with transition matrices
 \description{
 Given a BirdFlow object with marginals and without transitions
 \code{build_transitions()} return a BirdFlow object with both marginals
-and transitions, \code{drop_tansitions()} will reverse the process.
+and transitions, \code{drop_transitions()} will reverse the process.
 }
 \examples{
 \dontrun{

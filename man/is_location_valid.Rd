@@ -16,7 +16,7 @@ is_distr_valid(bf, distr, timestep, date, return_mask = FALSE)
 
 \item{x}{X coordinates in the \code{bf}'s CRS (\link[terra:crs]{crs(bf)}).}
 
-\item{y}{T coordinate.}
+\item{y}{Y coordinate.}
 
 \item{timestep}{The timestep.}
 

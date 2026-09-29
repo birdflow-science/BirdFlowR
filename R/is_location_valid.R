@@ -34,7 +34,7 @@
 #' @param distr One or more distributions in vector or matrix form representing
 #'   a probability for each active cell in the model.
 #' @param x X coordinates in the `bf`'s CRS ([crs(bf)][terra::crs()]).
-#' @param y T coordinate.
+#' @param y Y coordinate.
 #' @param timestep The timestep.
 #' @param date Date in any format accepted by [lookup_timestep()].
 #' @param return_mask If TRUE return a mask with the same dimensions as `distr`

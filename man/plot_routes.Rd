@@ -29,7 +29,8 @@ plot_routes(
 the output of  \code{\link[=route]{route()}}, \code{\link[=as_birdflow_routes]{as_birdflow_routes()}}, or \code{\link[=as_routes]{as_routes()}}.}
 
 \item{bf}{A BirdFlow object. Only used if \code{x} is a \code{Routes} object, in
-which case it provides the CRS and}
+which case it provides the CRS and, optionally, the static mask shown
+via \code{show_mask}.}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}

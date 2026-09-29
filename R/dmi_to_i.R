@@ -4,7 +4,7 @@
 #' @description
 #' `dmi_to_i()` and `i_to_dmi()` are for internal and advanced use;
 #' they are not likely to be helpful to most users.
-#' See [index conversions](i_to_x) for, likely, more useful conversions.
+#' See [index conversions](i_to_x()) for, likely, more useful conversions.
 #' These two functions convert between indices along the cells that are
 #' included in the dynamic mask (`dmi`) and standard location
 #' indices (`i`) along the cells that are included by the static mask.

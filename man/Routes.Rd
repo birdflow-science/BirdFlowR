@@ -34,7 +34,7 @@ codes and names. Scalar input is preferred unless the species does not
 conform to eBird's taxonomy.}
 
 \item{source}{Optional text describing the source of the data.
-\code{source()} must be of class \code{character} can have one or more elements.}
+\code{source} must be of class \code{character} can have one or more elements.}
 }
 \value{
 An object of class \code{Routes} which has the following components

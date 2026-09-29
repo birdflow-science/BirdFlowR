@@ -35,7 +35,7 @@ The collection will default to the main BirdFlow model collection and most
 users will not need to set it.
 
 The local cache directory (for all collections) defaults to
-\href{birdflow_otions()}{birdflow_options("cache")} the cache directory for the
+\href{birdflow_options()}{birdflow_options("cache")} the cache directory for the
 current collection will be in a subdirectory.  Both of the above options
 can be changed for the duration of the session with \code{\link[=birdflow_options]{birdflow_options()}},
 but the defaults should be suitable for most users.

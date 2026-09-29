@@ -111,7 +111,7 @@ Write a template BirdFlow object to an hdf5 file based on distribution data
 downloaded with \pkg{ebirdst}. The object is complete except for marginals
 and transitions.  Use \code{...} to truncate the model to part of the year.
 }
-\section{{Maximum number of parameters}}{
+\section{Maximum number of parameters}{
 
 
 The maximum number of parameters that can be fit is machine dependent.

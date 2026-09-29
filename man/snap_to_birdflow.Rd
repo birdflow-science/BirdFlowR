@@ -89,7 +89,7 @@ If aggregate is NULL every value will be 1. }
 \item{message}{NA or the error message. The possible messages are:
 \itemize{
 \item "err_date" - The date could not be parsed with \code{\link[lubridate:as_date]{lubridate::as_date()}}
-\item "err_truncated" - \code{bf} is \href{truncate_birdflow}{truncated} and the date
+\item "err_truncated" - \code{bf} is \href{truncate_birdflow()}{truncated} and the date
 falls outside of portion of the year the model covers.
 \item \code{"err_coords"} - The coordinates could not be transformed into \code{crs(bf)}
 and thus likely are corrupt in some way.
@@ -99,7 +99,7 @@ as defined by the static mask.
 the associated date.
 \item \code{"err_sparse"} - the location falls within the dynamic mask but that
 location and date combination has been eliminated by
-\href{sparsify}{sparsification}.
+\href{sparsify()}{sparsification}.
 }
 
 The function will always return the error message that appears first on

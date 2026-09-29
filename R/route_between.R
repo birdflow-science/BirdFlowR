@@ -25,7 +25,7 @@
 #'   column names or the `date` argument (exactly one required). Cannot be used
 #'   together with `x_coord`/`y_coord`.
 #' @inheritDotParams lookup_timestep_sequence -x
-#' @return A [BirdFlowRoutes] object. Same format as [route()].
+#' @return A `BirdFlowRoutes` object. Same format as [route()].
 #' @seealso [route()] generates routes that rely only on the location at
 #' the start of the route. [predict_between()] has the same inputs as
 #' `route_between()` but returns distributions at the intermediate times

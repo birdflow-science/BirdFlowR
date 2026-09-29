@@ -1,8 +1,6 @@
 #' @name Read and write routes and intervals
 #' @rdname hdf5_serialization
 #' @aliases write_r_object_h5 read_r_object_h5
-#' @aliases read_Routes write_Routes
-#' @aliases read_BirdFlowRoutes write_BirdFlowRoutes
 #' @aliases read_intervals write_intervals
 #'
 #' @title Read and write routes and intervals
@@ -32,14 +30,14 @@
 #'
 #' @param obj
 #'   For `write_routes()` a `Routes`, or `BirdFlowRoutes` object.
-#'   For `write_intevals()` a `BirdFlowIntervals` object.
+#'   For `write_intervals()` a `BirdFlowIntervals` object.
 #' @param path
 #'   Path to write or read from, should end in `.hdf5`
 #' @importFrom rhdf5 h5createFile h5createGroup h5write h5writeAttribute
 #' H5Fopen H5Fclose H5Lexists h5ls h5read h5readAttributes h5closeAll H5Fis_hdf5
 #' @importFrom stats setNames
 #' @return
-#' - `write_routes()` ans `write_invervals()` invisibly return their
+#' - `write_routes()` and `write_intervals()` invisibly return their
 #'   input object (after writing to disk).
 #' - `read_routes()` returns the written object - either `Routes` or
 #'    `BirdFlowRoutes`.

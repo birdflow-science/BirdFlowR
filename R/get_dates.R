@@ -61,7 +61,7 @@
 #' center}
 #' \item{week}{The \pkg{ebirdst} week number associated with the date. For full
 #' year models this is identical to `timestep` but after
-#' [truncation](truncate_birdflow) they will differ.}
+#' [truncation](truncate_birdflow()) they will differ.}
 #'
 #' Prior to \pkg{BirdFlowR} v. 0.1.0.9040 it returned columns:
 #' \item{interval}{The interval or timestep associated with each date.

@@ -22,7 +22,7 @@ object containing values to be treated as a distribution.}
 
 \item{bf}{A reference BirdFlow object.}
 
-\item{...}{Arguments used by other methods:}
+\item{...}{Arguments used by other methods.}
 
 \item{crs}{The coordinate reference system that the x and y coordinates are
 in.  If NULL the function will assume coordinates are in the same CRS as

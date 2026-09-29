@@ -31,7 +31,7 @@ vice versa.
 \description{
 \code{dmi_to_i()} and \code{i_to_dmi()} are for internal and advanced use;
 they are not likely to be helpful to most users.
-See \href{i_to_x}{index conversions} for, likely, more useful conversions.
+See \href{i_to_x()}{index conversions} for, likely, more useful conversions.
 These two functions convert between indices along the cells that are
 included in the dynamic mask (\code{dmi}) and standard location
 indices (\code{i}) along the cells that are included by the static mask.

@@ -27,8 +27,8 @@
 #' indicating point locations, a *sf* object containing points, or a raster
 #' object containing values to be treated as a distribution.
 #' @param bf A reference BirdFlow object.
-#' @param ... Arguments used by other methods:
-#'
+#' @param ... Arguments used by other methods.
+
 #' @return An object containing distribution data to be projected with x.
 #' Either a vector with [n_active(bf)](n_active()) values or a matrix with
 #' that many rows and a column for each distribution.

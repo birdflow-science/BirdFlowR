@@ -9,7 +9,7 @@
 #' users will not need to set it.
 #'
 #' The local cache directory (for all collections) defaults to
-#' [birdflow_options("cache")](birdflow_otions()) the cache directory for the
+#' [birdflow_options("cache")](birdflow_options()) the cache directory for the
 #' current collection will be in a subdirectory.  Both of the above options
 #' can be changed for the duration of the session with [birdflow_options()],
 #' but the defaults should be suitable for most users.

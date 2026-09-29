@@ -43,7 +43,7 @@
 #'|    `scientific`  | (`scientific_name`) |
 #'|    `species` | (`common_name`) |
 #'
-#' @section{Dropped items}:
+#' @section Dropped items:
 #' The 8 variables below are in [ebirdst::ebirdst_runs] but are dropped
 #' from the BirdFlow model and thus can not be retrieved by
 #' `species_info()`.

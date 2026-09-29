@@ -76,7 +76,7 @@
 #'  \item{error}{TRUE if there was an error.}
 #'  \item{message}{NA or the error message. The possible messages are:
 #'  * "err_date" - The date could not be parsed with [lubridate::as_date()]
-#'  * "err_truncated" - `bf` is [truncated](truncate_birdflow) and the date
+#'  * "err_truncated" - `bf` is [truncated](truncate_birdflow()) and the date
 #'  falls outside of portion of the year the model covers.
 #'  * `"err_coords"` - The coordinates could not be transformed into `crs(bf)`
 #'    and thus likely are corrupt in some way.
@@ -86,7 +86,7 @@
 #'  the associated date.
 #'  * `"err_sparse"` - the location falls within the dynamic mask but that
 #'  location and date combination has been eliminated by
-#'  [sparsification](sparsify).
+#'  [sparsification](sparsify()).
 #'
 #'  The function will always return the error message that appears first on
 #'  this list, even though in some cases multiple errors can be triggered.
