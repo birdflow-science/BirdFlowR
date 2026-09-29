@@ -23,6 +23,19 @@ has_dynamic_mask(x)
 Logical indicating the BirdFlow model has the relevant element
 }
 \description{
-These functions return information about the contents of a
-BirdFlow object.
+These functions report whether a BirdFlow object has
+certain optional components:
+\itemize{
+\item \code{has_marginals()} indicates whether \code{x} has marginals, the canonical,
+smaller representation of the model's dynamics.
+\item \code{has_transitions()} indicates whether \code{x} has precomputed transitions,
+derived from the marginals, which is what \code{\link[=predict]{predict()}} and \code{\link[=route]{route()}}
+actually multiply against distributions.
+\item \code{has_distr()} indicates whether \code{x} has stored eBird Status & Trends
+distributions, separate from the marginals/transitions, from the data
+the model was trained on.
+\item \code{has_dynamic_mask()} indicates whether \code{x} has a dynamic
+(per-timestep) mask, in addition to the static mask every BirdFlow
+object has.
+}
 }

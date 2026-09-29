@@ -15,5 +15,13 @@
 \code{x} returned invisibly and unchanged.
 }
 \description{
-This is a print method for BirdFlow objects.
+Print a summary of a \code{BirdFlow} object: species, raster
+dimensions, resolution, number of active cells, and in-memory object
+size.
+}
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+print(bf)
+}
 }
