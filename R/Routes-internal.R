@@ -261,6 +261,13 @@ reset_index <- function(routes) {
 #'
 #' @return A sorted data frame.
 #' @export
+#'
+#' @examples
+#' routes <- data.frame(list(
+#'   route_id = c(2, 2, 1, 1),
+#'   date = as.Date(c("2024-01-05", "2024-01-01", "2024-01-06", "2024-01-02"))
+#' ))
+#' sort_by_id_and_dates(routes)
 sort_by_id_and_dates <- function(routes) {
   stopifnot(inherits(routes, "data.frame"))
   sorted_routes <- routes |>

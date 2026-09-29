@@ -49,6 +49,20 @@ the \code{species} argument potentially having all the items returned by
 \code{as_routes()} converts data frames containing bird movement
 data into a formal \code{Routes} object with the same data.
 }
+\examples{
+\donttest{
+df <- data.frame(
+  route_id = c(1, 1, 2, 2),
+  date = as.Date(c("2021-01-04", "2021-01-11",
+                    "2021-01-04", "2021-01-11")),
+  lon = c(-87.6, -87.2, -85.0, -84.6),
+  lat = c(35.8, 36.0, 33.5, 33.8),
+  route_type = "tracking"
+)
+rts <- as_routes(df, species = "amewoo")
+rts
+}
+}
 \seealso{
 \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} for converting \code{Routes} to
 \code{BirdFlowRoutes}.

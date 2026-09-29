@@ -31,3 +31,16 @@ component, with the rest of the object (\code{species}, \code{metadata}, \code{g
 re-validated and have \code{stay_id}/\code{stay_len} recomputed on the subsetted
 data, since those depend on the full sequence of points in a route.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+bfr <- route(bf, n = 3)
+bfr[1:5] # BirdFlowRoutes
+
+ivl <- as_birdflow_intervals(bfr)
+ivl[1] # BirdFlowIntervals
+
+rts <- as_routes(bfr$data, species = bfr$species)
+rts[1:5] # Routes
+}
+}
