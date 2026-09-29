@@ -45,3 +45,9 @@ Currently metadata and species information is not checked for completeness.
 Currently dead end transitions are permitted.  See \code{\link[=find_dead_ends]{find_dead_ends()}} for
 checking for those.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+validate_BirdFlow(bf)
+}
+}

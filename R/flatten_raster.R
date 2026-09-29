@@ -49,7 +49,14 @@ if (FALSE) {
 #'  - [index_conversions] for ways to convert among indexes of the data in
 #' raster row and column, index along the flattened vector, and Cartesian space.
 #'
-
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' d <- get_distr(bf, 1)
+#' m <- rasterize_distr(d, bf, format = "numeric")
+#' f <- flatten_raster(m, bf)
+#' all.equal(as.numeric(d), as.numeric(f))
+#' }
 flatten_raster <- function(x, bf) {
 
 

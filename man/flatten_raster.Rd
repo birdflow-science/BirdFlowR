@@ -26,6 +26,15 @@ the top left and proceeding left to right along each row.  The collapsed form
 is used for projecting the flow model while the expanded form is used to
 export, import, and visualize the data.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+d <- get_distr(bf, 1)
+m <- rasterize_distr(d, bf, format = "numeric")
+f <- flatten_raster(m, bf)
+all.equal(as.numeric(d), as.numeric(f))
+}
+}
 \seealso{
 \itemize{
 \item \code{\link[=expand_distr]{expand_distr()}} does the opposite of \code{flatten_raster()}.

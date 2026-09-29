@@ -53,3 +53,11 @@ It's possible to truncate a model over the year boundary but routes generated
 from such a model will not plot correctly so it's not recommended;
 see \href{https://github.com/birdflow-science/BirdFlowR/issues/120}{issue #120}.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+n_timesteps(bf)
+bf2 <- truncate_birdflow(bf, start = 5, end = 10)
+n_timesteps(bf2)
+}
+}

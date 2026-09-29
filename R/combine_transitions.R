@@ -11,6 +11,12 @@
 #' described by `...`
 #'
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' m <- combine_transitions(bf, start = 1, end = 3)
+#' dim(m)
+#' }
 combine_transitions <- function(bf, ...) {
   # Lookup transition names
   transitions <- lookup_transitions(x = bf, ...)

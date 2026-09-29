@@ -24,6 +24,13 @@
 #' @return A BirdFlow model that only contains information about transitions
 #' for a subset of the year as specified by `...`.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' n_timesteps(bf)
+#' bf2 <- truncate_birdflow(bf, start = 5, end = 10)
+#' n_timesteps(bf2)
+#' }
 truncate_birdflow <- function(bf, ...) {
 
   # Add timestep_padding metadata if it doesn't exist

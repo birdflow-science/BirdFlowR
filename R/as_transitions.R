@@ -6,6 +6,11 @@
 #'   is needed around the timesteps.
 #' @return A directional sequence of transitions that connect `timesteps`.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' as_transitions(1:3, bf)
+#' }
 as_transitions <- function(timesteps, bf) {
   return(paste0("T_", pad_timestep(timesteps[-length(timesteps)], bf),
                 "-",
