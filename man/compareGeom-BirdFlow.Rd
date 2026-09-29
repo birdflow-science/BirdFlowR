@@ -25,6 +25,12 @@
     \item{\code{}}{}
   }}
 }
+\value{
+As with \code{\link[terra:compareGeom]{terra::compareGeom()}}: a logical scalar, \code{TRUE} if the
+geometries match. If they don't match, and \code{stopOnError} (passed via
+\code{...}) is \code{TRUE} (the default), execution stops with an error instead
+of returning \code{FALSE}.
+}
 \description{
 These are methods for \code{\link[terra:compareGeom]{terra::compareGeom()}} that work when one or both
 of arguments are BirdFlow objects.
