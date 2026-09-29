@@ -76,8 +76,8 @@ object suitable for use with this function.
 without making a formal  \code{Routes } object. This function also provides more
 details when errors arise - usually due to the data not overlapping the
 modeled states as defined by the mask and dynamic mask within \code{bf}.
-\item \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}} for making intervals from the \code{BirdFlowModels}
-\code{BirdFlowIntervals} define movements between pair of locations. Typically
-they are used to evaluate model performance.
+\item \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}} for making intervals from \code{BirdFlowRoutes}
+objects. \code{BirdFlowIntervals} define movements between pairs of
+locations. Typically they are used to evaluate model performance.
 }
 }

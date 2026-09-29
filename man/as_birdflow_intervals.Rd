@@ -76,7 +76,7 @@ any sampling.
 }
 
 \code{BirdFlowIntervals} are primarily used to evaluate model performance with
-\code{calculate_interval_metrics()}.
+\code{calc_interval_metrics()}.
 }
 \examples{
 route_df <- data.frame(

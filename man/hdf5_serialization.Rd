@@ -4,10 +4,6 @@
 \alias{Read and write routes and intervals}
 \alias{write_r_object_h5}
 \alias{read_r_object_h5}
-\alias{read_Routes}
-\alias{write_Routes}
-\alias{read_BirdFlowRoutes}
-\alias{write_BirdFlowRoutes}
 \alias{read_intervals}
 \alias{write_intervals}
 \alias{write_routes}
@@ -33,13 +29,13 @@ write_intervals(obj, path)
 }
 \arguments{
 \item{obj}{For \code{write_routes()} a \code{Routes}, or \code{BirdFlowRoutes} object.
-For \code{write_intevals()} a \code{BirdFlowIntervals} object.}
+For \code{write_intervals()} a \code{BirdFlowIntervals} object.}
 
 \item{path}{Path to write or read from, should end in \code{.hdf5}}
 }
 \value{
 \itemize{
-\item \code{write_routes()} ans \code{write_invervals()} invisibly return their
+\item \code{write_routes()} and \code{write_intervals()} invisibly return their
 input object (after writing to disk).
 \item \code{read_routes()} returns the written object - either \code{Routes} or
 \code{BirdFlowRoutes}.

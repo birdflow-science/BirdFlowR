@@ -17,7 +17,9 @@ transformation. Reasonable values for this function include
 a \strong{ggplot2} plot object.
 }
 \description{
-Model fitting  - in \url{BirdFlowPy} - attempts to minimize the total weighted
+Model fitting  - in
+\href{https://github.com/birdflow-science/BirdFlowPy}{BirdFlowPy} - attempts
+to minimize the total weighted
 loss.  This plot shows four lines:
 \itemize{
 \item \strong{Total loss} is the weighted sum of the three loss components. The

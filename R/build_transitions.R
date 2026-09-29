@@ -9,7 +9,7 @@ if (FALSE) {
 #'
 #' Given a BirdFlow object with marginals and without transitions
 #' `build_transitions()` return a BirdFlow object with both marginals
-#' and transitions, `drop_tansitions()` will reverse the process.
+#' and transitions, `drop_transitions()` will reverse the process.
 #'
 #' @rdname build_transitions
 #' @param x BirdFlow object

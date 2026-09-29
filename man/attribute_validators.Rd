@@ -147,8 +147,8 @@ user-facing functionality.
 }
 \seealso{
 \itemize{
-\item \href{?object_validators}{Object Validators}
-\item \href{?target_columns}{Column Targeting Functions}
+\item \href{object_validators}{Object Validators}
+\item \href{target_columns}{Column Targeting Functions}
 }
 }
 \keyword{internal}

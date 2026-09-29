@@ -33,9 +33,9 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' without making a formal  `Routes ` object. This function also provides more
 #' details when errors arise - usually due to the data not overlapping the
 #' modeled states as defined by the mask and dynamic mask within `bf`.
-#' * [as_birdflow_intervals()] for making intervals from the `BirdFlowModels`
-#'  `BirdFlowIntervals` define movements between pair of locations. Typically
-#'  they are used to evaluate model performance.
+#' * [as_birdflow_intervals()] for making intervals from `BirdFlowRoutes`
+#'  objects. `BirdFlowIntervals` define movements between pairs of
+#'  locations. Typically they are used to evaluate model performance.
 #' @return A `BirdFlowRoutes` object.
 #' @export
 #'

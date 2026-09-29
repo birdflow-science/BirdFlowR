@@ -57,7 +57,7 @@ transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-A \link{BirdFlowRoutes} object. Same format as \code{\link[=route]{route()}}.
+A \code{BirdFlowRoutes} object. Same format as \code{\link[=route]{route()}}.
 }
 \description{
 \code{route_between()} generates synthetic migration routes conditioned on

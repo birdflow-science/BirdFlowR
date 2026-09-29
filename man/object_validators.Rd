@@ -75,7 +75,7 @@ or \code{BirdFlowRoutes} classes, depending on \code{class}.
 }
 \seealso{
 \itemize{
-\item \href{?attribute_validators}{Attribute Validators}
-\item \href{?target_columns}{Column Targeting Functions}
+\item \href{attribute_validators}{Attribute Validators}
+\item \href{target_columns}{Column Targeting Functions}
 }
 }

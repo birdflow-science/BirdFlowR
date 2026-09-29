@@ -30,7 +30,9 @@ get_loss <- function(bf) {
 
 #' Plot changes in component and total loss during model fitting
 #'
-#' Model fitting  - in [BirdFlowPy]() - attempts to minimize the total weighted
+#' Model fitting  - in
+#' [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy) - attempts
+#' to minimize the total weighted
 #' loss.  This plot shows four lines:
 #' *  **Total loss** is the weighted sum of the three loss components. The
 #' weighting may cause it to be lower than some of the components.

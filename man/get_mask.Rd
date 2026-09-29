@@ -14,7 +14,7 @@ get_mask(bf, format = "SpatRaster")
 suitable for plotting with \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}}
 }
 \value{
-The return type of \code{get_mask()}depends on the \code{format} argument:
+The return type of \code{get_mask()} depends on the \code{format} argument:
 \itemize{
 \item \code{"SpatRaster"} (the default) returns a \link[terra:SpatRaster-class]{terra::SpatRaster} object.
 \item \code{"numeric"} returns the mask as a matrix.

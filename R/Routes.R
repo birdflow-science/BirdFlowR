@@ -31,7 +31,7 @@
 #' codes and names. Scalar input is preferred unless the species does not
 #' conform to eBird's taxonomy.
 #' @param source Optional text describing the source of the data.
-#' `source()` must be of class `character` can have one or more elements.
+#' `source` must be of class `character` can have one or more elements.
 #' @returns An object of class `Routes` which has the following components
 #' \item{data}{A data frame with the input `data`}
 #' \item{species}{A list with, at a minimum items

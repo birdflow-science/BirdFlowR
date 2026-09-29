@@ -26,6 +26,8 @@ The \code{x} and \code{y} coordinates are mapped to raster columns and rows.
 }
 \examples{
 \dontrun{
+bf <- BirdFlowModels::amewoo
+bmtr <- calc_bmtr(bf)
 raster <- rasterize_bmtr(bmtr, bf)
 plot(raster)
 }

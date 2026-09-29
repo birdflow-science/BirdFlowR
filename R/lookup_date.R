@@ -10,7 +10,7 @@
 #'  E.g. "T_01-02".
 #' @param bf A BirdFlow object
 #' @param timestep Deprecated alternative to `x`.  Previous versions of
-#' `lookup_dates()` only supported timestep input and used `timestep` as
+#' `lookup_date()` only supported timestep input and used `timestep` as
 #' the first argument.
 #' @return A Date object
 #' @seealso [get_dates()], [lookup_timestep()], [lookup_timestep_sequence()]

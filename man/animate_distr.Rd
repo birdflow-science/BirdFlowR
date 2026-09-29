@@ -27,7 +27,7 @@ cells are active in the model at any timestep will be shown.}
 dynamic mask. This is achieved by overwriting cells that are dynamically
 masked with NA. For \code{show_dynamic_mask = TRUE} to work the column names in
 \code{distr} should all be in \code{colnames(get_distr(bf))}.  This is
-true for distributions returned by \href{predict.BirdFlowR}{\code{predict()}}
+true for distributions returned by \href{predict.BirdFlow()}{\code{predict()}}
 and \code{\link[=get_distr]{get_distr()}}.}
     \item{\code{limits}}{The range of density values to map \code{gradient_colors} to. The
 default is the range of the values in \code{distr} after applying \code{subset}. If
@@ -35,7 +35,7 @@ you want to standardize the range across multiple models of a single
 species you might want to set to \code{c(0, max)} where \code{max} is the maximum
 observed value across all models. Alternatively if the range is highly
 variable among the columns in \code{distr} as when density spreads out from a
-single point in the results of \href{predict.BirdFlowR}{\code{predict(bf)}} you may
+single point in the results of \href{predict.BirdFlow()}{\code{predict(bf)}} you may
 want to set this smaller than the full range in which case the values will
 be truncated to the limits (see examples).}
     \item{\code{dynamic_scale}}{Set to \code{TRUE} to have the range of the data in each
