@@ -73,6 +73,18 @@ or \code{BirdFlowRoutes} classes, depending on \code{class}.
 }
 }
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+bfr <- route(bf, n = 3)
+rts <- as_routes(bfr$data, species = bfr$species)
+validate_routes(rts)
+validate_birdflow_routes(bfr)
+
+ivl <- as_birdflow_intervals(bfr)
+validate_birdflow_intervals(ivl)
+}
+}
 \seealso{
 \itemize{
 \item \href{attribute_validators}{Attribute Validators}
