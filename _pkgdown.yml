@@ -11,3 +11,188 @@ home:
     href: https://birdflow-science.github.io
   - text: BirdFlow (python)
     href: https://github.com/Miguel-Fuentes/birdflow
+
+reference:
+- title: Core functions
+  desc: >
+    The primary entry points for loading a fitted model, projecting distributions,
+    and simulating routes.
+  contents:
+  - load_collection_index
+  - load_model
+  - predict
+  - predict_between
+  - route
+  - route_between
+  - calc_bmtr
+  - rasterize_bmtr
+  - calc_movement_vectors
+
+- title: Working with distributions
+  desc: >
+    Retrieve, create, sample, and convert the species distributions
+    that a BirdFlow model represents.
+  contents:
+  - get_distr
+  - as_distr
+  - sample_distr
+  - rasterize_distr
+  - flatten_raster
+
+- title: Retrieving information
+  desc: >
+    Accessors for a model's dates, geometry, and metadata.
+
+- subtitle: Temporal
+  contents:
+  - get_dates
+  - lookup_date
+  - lookup_timestep
+  - lookup_timestep_sequence
+  - lookup_season_timesteps
+  - n_timesteps
+  - n_transitions
+  - n_distr
+  - is_cyclical
+
+- subtitle: Spatial
+  contents:
+  - get_mask
+  - get_dynamic_mask
+  - get_clip
+  - is_clipped
+  - is_location_valid
+  - get_naturalearth
+  - get_coastline
+  - get_countries
+  - get_states
+  - compareGeom
+  - st_bbox.BirdFlow
+  - st_crs.BirdFlow
+  - nrow
+  - ncol
+  - dim
+  - ext
+  - n_active
+
+- subtitle: Metadata
+  contents:
+  - get_metadata
+  - species_info
+  - species
+  - has_distr
+  - has_marginals
+  - has_transitions
+  - has_dynamic_mask
+  - n_parameters
+  - print.BirdFlow
+
+- subtitle: Other
+  contents:
+  - get_marginal
+  - get_transition
+  - get_loss
+  - get_ebird_coverage
+
+- title: Routes and interval data
+  desc: >
+    Constructors, I/O, and validators for tracked and synthetic route data
+    (`Routes` / `BirdFlowRoutes` / `BirdFlowIntervals`).
+  contents:
+  - as_routes
+  - as_birdflow_routes
+  - as_birdflow_intervals
+  - snap_to_birdflow
+  - subset_routes
+  - sort_by_id_and_dates
+  - add_stay_id
+  - add_stay_id_with_varied_intervals
+  - read_routes
+  - write_routes
+  - read_intervals
+  - write_intervals
+  - print.Routes
+  - print.BirdFlowIntervals
+  - st_as_sf.BirdFlowRoutes
+  - validate_routes
+  - validate_birdflow_routes
+  - validate_birdflow_intervals
+
+- title: Evaluating models against tracking data
+  contents:
+  - distribution_performance
+  - calc_interval_metrics
+  - great_circle_distances
+  - visualize_distance_weights
+
+- title: Coordinates and indice conversions
+  desc: >
+    Convert among the location index, row/column, model (x, y), and
+    (lat, lon) representations of a cell.
+  contents:
+  - latlon_to_xy
+  - xy_to_latlon
+  - xy_to_i
+  - i_to_xy
+  - i_to_rc
+  - rc_to_i
+  - i_to_row
+  - i_to_col
+  - i_to_x
+  - i_to_y
+  - x_to_col
+  - y_to_row
+  - col_to_x
+  - row_to_y
+  - dmi_to_i
+  - i_to_dmi
+
+- title: Visualization
+  desc: >
+    Static plots and animations of distributions, bmtr, movement vectors,
+    routes, and model loss.
+  contents:
+  - plot_distr
+  - animate_distr
+  - plot_bmtr
+  - animate_bmtr
+  - plot_movement_vectors
+  - animate_movement_vectors
+  - plot_routes
+  - animate_routes
+  - plot_loss
+
+- title: Utilities
+  desc: >
+    Building, importing/exporting, and manipulating BirdFlow model objects.
+  contents:
+  - preprocess_species
+  - import_birdflow
+  - export_birdflow
+  - export_rasters
+  - make_mask
+  - add_dynamic_mask
+  - birdflow_options
+  - sparsify
+  - build_transitions
+  - drop_transitions
+  - combine_transitions
+  - as_transitions
+  - shrink_birdflow
+  - truncate_birdflow
+  - extend_birdflow
+  - validate_BirdFlow
+  - pad_timestep
+
+- title: Deprecated
+  contents:
+  - route_migration
+  - evaluate_performance
+  - calc_flux
+  - plot_flux
+  - animate_flux
+  - interval_log_likelihood
+  - Routes
+  - BirdFlowIntervals
+  - as_BirdFlowRoutes
+  - as_BirdFlowIntervals

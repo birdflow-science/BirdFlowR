@@ -21,6 +21,16 @@
   wrapper functions were intentionally left without fresh examples.
 * `R CMD check --as-cran` now passes with 0 errors, 0 warnings, and
   0 notes.
+* Added a hand-curated `reference:` index to `_pkgdown.yml`, replacing
+  the default alphabetical listing, with sections for core functions,
+  working with distributions, retrieving information (temporal /
+  spatial / metadata / other), routes and interval data, evaluating
+  models against tracking data, coordinate conversions, visualization,
+  utilities, and deprecated functions. Added `@keywords internal` to
+  four previously-undertagged unexported helpers
+  (`read_geom()`, `validate_geom()`,
+  `great_circle_distance_lonlat_input()`, and the `target_columns`
+  family) so `pkgdown::check_pkgdown()` passes clean.
 
 # BirdFlowR 0.1.0.9086
 2026-09-29

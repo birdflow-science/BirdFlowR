@@ -243,6 +243,7 @@ validate_BirdFlowIntervals <- function(birdflow_intervals) {
 #' @seealso
 #' - [Object Validators](object_validators)
 #' - [Attribute Validators](attribute_validators)
+#' @keywords internal
 NULL
 
 #' @rdname target_columns
