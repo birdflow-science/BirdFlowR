@@ -90,3 +90,9 @@ use\code{get_dates()} which will always return the same (newer) column names.
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+get_dates(bf)
+}
+}

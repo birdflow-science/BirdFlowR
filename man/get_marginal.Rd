@@ -26,6 +26,13 @@ equals the number of cells within the dynamic mask for the prior timestep
 and the columns count is equal to the included cells for the following
 timestep.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+get_marginal(bf, from = 1)
+get_marginal(bf, marginal = "M_01-02")
+}
+}
 \seealso{
 \code{\link[=lookup_transitions]{lookup_transitions()}} will generate a list of the transitions
 needed to predict or route between two points in time.  \code{\link[=get_transition]{get_transition()}}
