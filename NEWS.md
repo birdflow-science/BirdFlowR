@@ -1,4 +1,33 @@
 
+# BirdFlowR 0.1.0.9087
+2026-09-29
+
+## Documentation review (CRAN prep)
+
+* Wrapped three unguarded `library(BirdFlowModels)` examples
+  (`get_clip()`, `get_metadata()`, `is_clipped()`) in `\donttest{}` -
+  these were a real `R CMD check` blocker missed by an earlier pass.
+* Fixed a broken example in `print.BirdFlowIntervals()` that referenced
+  an internal constant not visible once the package is attached via
+  `library()`; this made `--run-donttest` checks error.
+* Fixed numerous mechanical documentation bugs across `R/` and one
+  vignette: stale cross-references to pre-rename function names, broken
+  `[text](target)` markdown links missing `()`, malformed `@section`
+  braces, and assorted prose/typo fixes.
+* Added `@return` documentation for the `compareGeom` `BirdFlow` methods.
+* Documented the previously-undocumented `sf` methods
+  (`st_crs.BirdFlow`, `st_bbox.BirdFlow`, `st_as_sf.BirdFlowRoutes`) and
+  fixed a CRS lookup bug found while writing their examples.
+* Fleshed out thin title/description text for `plot_bmtr()`, the `has_*`
+  family, and `print.BirdFlow()`.
+* Added missing `@examples` to roughly 70 exported symbols across 20+
+  files (index/geometry accessors, object-introspection accessors,
+  HDF5/model I/O, the `Routes`/`BirdFlowRoutes`/`BirdFlowIntervals`
+  family, and the remaining individual exported functions). Deprecated
+  wrapper functions were intentionally left without fresh examples.
+* `R CMD check --as-cran` now passes with 0 errors, 0 warnings, and
+  0 notes.
+
 # BirdFlowR 0.1.0.9086
 2026-09-29
 
