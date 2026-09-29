@@ -2,38 +2,39 @@
 % Please edit documentation in R/validate_RouteDataClass.R
 \name{object_validators}
 \alias{object_validators}
-\alias{validate_Routes_route_df}
-\alias{validate_BirdFlowRoutes_birdflow_route_df}
-\alias{validate_BirdFlowIntervals_birdflow_intervals}
+\alias{validate_route_df}
+\alias{validate_interval_df}
+\alias{validate_routes}
 \alias{validate_Routes}
+\alias{validate_birdflow_routes}
 \alias{validate_BirdFlowRoutes}
+\alias{validate_birdflow_intervals}
 \alias{validate_BirdFlowIntervals}
 \title{Object Validators}
 \usage{
-validate_Routes_route_df(route_df)
+validate_route_df(df, class = "Routes")
 
-validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
+validate_interval_df(df)
 
-validate_BirdFlowIntervals_birdflow_intervals(birdflow_interval_df)
+validate_routes(routes)
 
 validate_Routes(routes)
 
+validate_birdflow_routes(birdflow_routes)
+
 validate_BirdFlowRoutes(birdflow_routes)
+
+validate_birdflow_intervals(birdflow_intervals)
 
 validate_BirdFlowIntervals(birdflow_intervals)
 }
 \arguments{
-\item{route_df}{A data frame containing data for the \code{Routes} class.
-It must include columns like \code{route_id}, \code{date}, \code{lon}, \code{lat},
-and \code{route_type}.}
+\item{df}{A data frame containing data for the \code{Routes} or \code{BirdFlowRoutes}
+class (\code{validate_route_df()}) or the \code{BirdFlowIntervals} class
+(\code{validate_interval_df()}).}
 
-\item{birdflow_route_df}{A data frame containing data for the
-\code{BirdFlowRoutes} class. It must include additional columns such as
-\code{x}, \code{y}, \code{i}, and \code{timestep}.}
-
-\item{birdflow_interval_df}{A data frame containing data for the
-\code{BirdFlowIntervals} class. It must include columns such as \code{lon1}, \code{lon2},
-\code{y1}, \code{y2}, \code{i1}, \code{i2}, \code{timestep1}, \code{timestep2}.}
+\item{class}{Either \code{"Routes"} or \code{"BirdFlowRoutes"}; selects which set of
+columns and checks \code{validate_route_df()} applies.}
 
 \item{routes}{A \code{Routes} object.}
 
@@ -65,12 +66,10 @@ for routes, are satisfied.
 }
 \subsection{Functions Included:}{
 \itemize{
-\item \code{validate_Routes_route_df()}: Validates the input data frame for the
-\code{Routes} class.
-\item \code{validate_BirdFlowRoutes_birdflow_route_df()}: Validates the input data
-frame for the \code{BirdFlowRoutes} class.
-\item \code{validate_BirdFlowIntervals_birdflow_intervals()}: Validates the input
-data frame for the \code{BirdFlowIntervals} class.
+\item \code{validate_route_df()}: Validates the input data frame for the \code{Routes}
+or \code{BirdFlowRoutes} classes, depending on \code{class}.
+\item \code{validate_interval_df()}: Validates the input data frame for the
+\code{BirdFlowIntervals} class.
 }
 }
 }

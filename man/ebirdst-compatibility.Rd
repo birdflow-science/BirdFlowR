@@ -24,7 +24,7 @@ ebirdst_example_species()
 whether all package functions are supported fully.  \code{preprocess_species}
 checks that function which has stricter requirements than most functions.
 \code{lookup_species_metadata} checks that function which is called by
-\code{Routes()}.}
+\code{as_routes()}.}
 
 \item{throw_error}{if \code{TRUE} an error will be thrown if \pkg{ebirdst} is not
 supported by \code{use}.}

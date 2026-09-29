@@ -8,11 +8,11 @@ test_that("Interval validation works", {
   species1 <- bf$species
   source1 <- "Testing"
 
-  my_routes <- Routes(fake_routes,
+  my_routes <- as_routes(fake_routes,
     species = species1,
     source = source1
   )
-  my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf)
+  my_bfroutes <- as_birdflow_routes(my_routes, bf = bf)
 
   # Constraints
   min_day <- 7
@@ -20,7 +20,7 @@ test_that("Interval validation works", {
   min_km <- 200
   max_km <- 8000
 
-  my_intervals <- BirdFlowR::as_BirdFlowIntervals(my_bfroutes,
+  my_intervals <- BirdFlowR::as_birdflow_intervals(my_bfroutes,
     max_n = 1000,
     min_day_interval = min_day,
     max_day_interval = max_day,

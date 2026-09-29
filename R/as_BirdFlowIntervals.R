@@ -1,33 +1,51 @@
-## as_BirdFlowIntervals --------------------------------------------------------
+## as_birdflow_intervals ---------------------------------------------------
 
-#' Convert `BirdFlowRoutes` to `BirdFlowIntervals`
+#' Make or convert to a `BirdFlowIntervals` object
 #'
-#' @description Converts a `BirdFlowRoutes` object into a `BirdFlowIntervals`
-#' object, sampling interval pairs between time points. `BirdFlowIntervals`
-#' define specific movements between states in a  `BirdFlow` model.  The two
-#' points in each interval will always differ in time (week  / timestep).
-#' They can occupy the same location (raster cell) in the model or
-#' represent a movement between two locations.
+#' @description `as_birdflow_intervals()` is a generic function with two
+#' methods:
+#' * The `BirdFlowRoutes` method converts a `BirdFlowRoutes` object into a
+#' `BirdFlowIntervals` object, sampling interval pairs between time points.
+#' `BirdFlowIntervals` define specific movements between states in a
+#' `BirdFlow` model. The two points in each interval will always differ in
+#' time (week / timestep). They can occupy the same location (raster cell)
+#' in the model or represent a movement between two locations.
+#' * The `data.frame` method builds a `BirdFlowIntervals` object directly
+#' from an already-assembled interval data frame plus the associated
+#' `species`, `metadata`, `geom`, `dates`, and `source` components, without
+#' any sampling.
 #'
 #' `BirdFlowIntervals` are primarily used to evaluate model performance with
 #'  `calculate_interval_metrics()`.
 #'
-#'
-#' @param birdflow_routes A `BirdFlowRoutes` object.
+#' @param x Either a `BirdFlowRoutes` object or a data frame with interval
+#' data (see [Routes-internal] for the required columns).
 #' @param max_n The maximum number of intervals to sample.
-#' Defaults to 1000.
+#' Defaults to 1000. Only used by the `BirdFlowRoutes` method.
 #' @param min_day_interval The minimum days required in an interval.
-#' Defaults to 7.
+#' Defaults to 7. Only used by the `BirdFlowRoutes` method.
 #' @param max_day_interval The maximum days required in an interval.
-#' Defaults to 180.
+#' Defaults to 180. Only used by the `BirdFlowRoutes` method.
 #' @param min_km_interval The minimum distance required for an interval.
-#' Defaults to 200.
+#' Defaults to 200. Only used by the `BirdFlowRoutes` method.
 #' @param max_km_interval The maximum distance required for an interval.
-#' Defaults to 2000.
+#' Defaults to 2000. Only used by the `BirdFlowRoutes` method.
+#' @param species A list with species information. Only used by the
+#' `data.frame` method.
+#' @param metadata A list with additional metadata. Only used by the
+#' `data.frame` method.
+#' @param geom A list describing spatial geometry. Only used by the
+#' `data.frame` method.
+#' @param dates A data frame with date-related information. Only used by the
+#' `data.frame` method.
+#' @param source A character string indicating the source of the data. Only
+#' used by the `data.frame` method.
+#' @param ... Passed to methods.
 #' @return A `BirdFlowIntervals` object.
 #' @seealso
-#' * [Routes()] for converting observational data into a formal `Routes` object
-#' * [as_BirdFlowRoutes()] for converting `Routes` to `BirdFlowRoutes`.
+#' * [as_routes()] for converting observational data into a formal `Routes`
+#' object
+#' * [as_birdflow_routes()] for converting `Routes` to `BirdFlowRoutes`.
 #'
 #'
 #' @export
@@ -54,16 +72,25 @@
 #'     "motus", "motus", "motus", "motus"
 #'   )
 #' )
-#' routes_obj <- Routes(route_df, species = "amewoo")
+#' routes_obj <- as_routes(route_df, species = "amewoo")
 #' \donttest{
 #' bf <- BirdFlowModels::amewoo
-#' birdflow_routes <- routes_obj |> as_BirdFlowRoutes(bf = bf)
-#' birdflow_intervals <- as_BirdFlowIntervals(birdflow_routes, max_n = 1000)
+#' birdflow_routes <- routes_obj |> as_birdflow_routes(bf = bf)
+#' birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
 #' }
-as_BirdFlowIntervals <- function(birdflow_routes, max_n = 1000,
-                                 min_day_interval = 7, max_day_interval = 180,
-                                 min_km_interval = 200,
-                                 max_km_interval = 8000) {
+as_birdflow_intervals <- function(x, ...) {
+  UseMethod("as_birdflow_intervals")
+}
+
+#' @rdname as_birdflow_intervals
+#' @export
+as_birdflow_intervals.BirdFlowRoutes <- function(x, max_n = 1000,
+                                                 min_day_interval = 7,
+                                                 max_day_interval = 180,
+                                                 min_km_interval = 200,
+                                                 max_km_interval = 8000,
+                                                 ...) {
+  birdflow_routes <- x
   stopifnot(inherits(birdflow_routes, "BirdFlowRoutes"))
   stopifnot(is.numeric(max_n))
 
@@ -147,7 +174,7 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n = 1000,
       , c(target_columns, setdiff(names(intervals), target_columns))
     ]
 
-    obs <- BirdFlowIntervals(
+    obs <- new_birdflow_intervals(
       data = intervals,
       species = birdflow_routes$species,
       metadata = birdflow_routes$metadata,
@@ -157,4 +184,59 @@ as_BirdFlowIntervals <- function(birdflow_routes, max_n = 1000,
     )
     return(obs)
   }
+}
+
+#' @rdname as_birdflow_intervals
+#' @export
+as_birdflow_intervals.data.frame <- function(x, species, metadata, geom,
+                                             dates, source = NULL, ...) {
+  new_birdflow_intervals(
+    data = x,
+    species = species,
+    metadata = metadata,
+    geom = geom,
+    dates = dates,
+    source = source
+  )
+}
+
+#' Deprecated function to convert BirdFlowRoutes to BirdFlowIntervals
+#'
+#' This function is deprecated. Please use [as_birdflow_intervals()] instead.
+#'
+#' @param birdflow_routes A `BirdFlowRoutes` object.
+#' @inheritParams as_birdflow_intervals.BirdFlowRoutes
+#' @inherit as_birdflow_intervals return
+#' @seealso [as_birdflow_intervals()] should be used instead of this function.
+#' @export
+#' @keywords internal
+as_BirdFlowIntervals <- function(birdflow_routes, max_n = 1000,
+                                 min_day_interval = 7, max_day_interval = 180,
+                                 min_km_interval = 200,
+                                 max_km_interval = 8000) {
+  warning("as_BirdFlowIntervals() is deprecated. ",
+          "Please use as_birdflow_intervals() instead.")
+  as_birdflow_intervals(birdflow_routes, max_n = max_n,
+                        min_day_interval = min_day_interval,
+                        max_day_interval = max_day_interval,
+                        min_km_interval = min_km_interval,
+                        max_km_interval = max_km_interval)
+}
+
+#' Deprecated function to make a BirdFlowIntervals object from a data frame
+#'
+#' This function is deprecated. Please use [as_birdflow_intervals()] instead
+#' (its `data.frame` method).
+#'
+#' @inheritParams as_birdflow_intervals.data.frame
+#' @inherit as_birdflow_intervals return
+#' @seealso [as_birdflow_intervals()] should be used instead of this function.
+#' @export
+#' @keywords internal
+BirdFlowIntervals <- function(data, species, metadata, geom, dates,
+                              source = NULL) {
+  warning("BirdFlowIntervals() is deprecated. ",
+          "Please use as_birdflow_intervals() instead.")
+  as_birdflow_intervals(data, species = species, metadata = metadata,
+                        geom = geom, dates = dates, source = source)
 }

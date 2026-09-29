@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_BirdFlowRoutes.R
 \name{as_BirdFlowRoutes}
 \alias{as_BirdFlowRoutes}
-\title{Convert Routes to BirdFlowRoutes}
+\title{Deprecated function to convert Routes to BirdFlowRoutes}
 \usage{
 as_BirdFlowRoutes(
   routes,
@@ -36,47 +36,9 @@ Defaults to \code{FALSE}.}
 A \code{BirdFlowRoutes} object.
 }
 \description{
-Convert \code{Routes} objects to \code{BirdFlowRoutes},
-adding BirdFlow-specific spatiotemporal coordinates.
-This may require aggregating multiple observations within the same timestep
-(week) which is controlled with the \code{aggregate} argument.
-Note the coordinates and dates in the result will be snapped to the
-cell and timestep (week) centers of the BirdFlow model (\code{bf}).
-}
-\examples{
-route_data <- data.frame(
-  route_id = c("001", "001", "001", "001", "001",
-  "003", "003", "003", "004"),
-  date = as.Date(c("2025-01-01", "2025-01-08", "2025-01-15", "2025-01-21",
-  "2025-02-10", "2025-03-01", "2025-05-01", "2025-06-01", "2025-05-01")),
-  lon = c(-75.0060, -75.0060, -74.0060, -87.6298, -87.6298, -87.6298,
-  -89.6298, -85.6298, -95.3698),
-  lat = c(39.7128, 39.7128, 40.7128, 41.8781, 41.8781, 41.8781,
-  42.8781, 40.8781, 29.7604),
-  route_type = c("tracking", "tracking", "tracking", "tracking",
-  "tracking", "motus", "motus", "motus", "motus")
-)
-\donttest{
-bf <- BirdFlowModels::amewoo
-routes <- Routes(route_data, species = species(bf), source = "Pkg. example")
-
-bf_routes <- as_BirdFlowRoutes(routes, bf)
-}
-
+This function is deprecated. Please use \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} instead.
 }
 \seealso{
-\itemize{
-\item \code{\link[=route]{route()}} for creating synthetic routes from a \code{BirdFlow} model.
-\item \code{\link[=Routes]{Routes()}} for converting observational data into a formal \code{Routes} object
-suitable for use with this function.
-\item \code{\link[=plot_routes]{plot_routes()}} for plotting arguments used when calling \code{plot()} on
-\code{Routes} and \code{BirdFlowRoutes} objects.
-\item \code{\link[=snap_to_birdflow]{snap_to_birdflow()}} to align observational data with a BirdFlow model
-without making a formal  \code{Routes } object. This function also provides more
-details when errors arise - usually due to the data not overlapping the
-modeled states as defined by the mask and dynamic mask within \code{bf}.
-\item \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}} for making intervals from the \code{BirdFlowModels}
-\code{BirdFlowIntervals} define movements between pair of locations. Typically
-they are used to evaluate model performance.
+\code{\link[=as_birdflow_routes]{as_birdflow_routes()}} should be used instead of this function.
 }
-}
+\keyword{internal}

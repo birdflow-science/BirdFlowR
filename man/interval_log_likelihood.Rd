@@ -66,8 +66,8 @@ The returned table rows will have a 1:1 correspondence with the input
 \description{
 DEPRECATED FUNCTION. \code{interval_log_likelihood()} predates the
 \code{BirdFlowIntervals} class and so is now deprecated. If you are thinking
-of using this function in new code please consider \code{\link[=Routes]{Routes()}},
-\code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}}, \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}, and
+of using this function in new code please consider \code{\link[=as_routes]{as_routes()}},
+\code{\link[=as_birdflow_routes]{as_birdflow_routes()}}, \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}}, and
 \code{\link[=calc_interval_metrics]{calc_interval_metrics()}} to make \code{BirdFlowIntervals} and then calculate
 a full suite of metrics including log likelihood.
 }

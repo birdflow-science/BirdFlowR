@@ -1,5 +1,5 @@
 # Required metadata items for BirdFlowRoutes used in route() and
-# as_BirdFlowRoutes
+# as_birdflow_routes
 BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 
 
@@ -25,15 +25,15 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' Defaults to `FALSE`.
 #' @seealso
 #' * [route()] for creating synthetic routes from a `BirdFlow` model.
-#' * [Routes()] for converting observational data into a formal `Routes` object
-#' suitable for use with this function.
+#' * [as_routes()] for converting observational data into a formal `Routes`
+#' object suitable for use with this function.
 #' * [plot_routes()] for plotting arguments used when calling `plot()` on
 #' `Routes` and `BirdFlowRoutes` objects.
 #' * [snap_to_birdflow()] to align observational data with a BirdFlow model
 #' without making a formal  `Routes ` object. This function also provides more
 #' details when errors arise - usually due to the data not overlapping the
 #' modeled states as defined by the mask and dynamic mask within `bf`.
-#' * [as_BirdFlowIntervals()] for making intervals from the `BirdFlowModels`
+#' * [as_birdflow_intervals()] for making intervals from the `BirdFlowModels`
 #'  `BirdFlowIntervals` define movements between pair of locations. Typically
 #'  they are used to evaluate model performance.
 #' @return A `BirdFlowRoutes` object.
@@ -54,14 +54,15 @@ BirdFlowRoutes_metadata_items <- c("n_active", "ebird_version_year")
 #' )
 #' \donttest{
 #' bf <- BirdFlowModels::amewoo
-#' routes <- Routes(route_data, species = species(bf), source = "Pkg. example")
+#' routes <- as_routes(route_data, species = species(bf),
+#'                     source = "Pkg. example")
 #'
-#' bf_routes <- as_BirdFlowRoutes(routes, bf)
+#' bf_routes <- as_birdflow_routes(routes, bf)
 #' }
 #'
-as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
-                              valid_only = TRUE, sort_id_and_dates = TRUE,
-                              reset_index = FALSE) {
+as_birdflow_routes <- function(routes, bf, aggregate = "random",
+                               valid_only = TRUE, sort_id_and_dates = TRUE,
+                               reset_index = FALSE) {
   # Check input
   stopifnot(inherits(routes, "Routes"))
   stopifnot(inherits(bf, "BirdFlow"))
@@ -147,7 +148,7 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
   metadata <- bf$metadata[BirdFlowRoutes_metadata_items]
 
   # Transform to BirdFlowRoutes
-  routes <- BirdFlowRoutes(
+  routes <- new_birdflow_routes(
     data = routes$data,
     species = species,
     metadata = metadata,
@@ -158,4 +159,24 @@ as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
     reset_index = reset_index
   )
   return(routes)
+}
+
+#' Deprecated function to convert Routes to BirdFlowRoutes
+#'
+#' This function is deprecated. Please use [as_birdflow_routes()] instead.
+#'
+#' @inheritParams as_birdflow_routes
+#' @inherit as_birdflow_routes return
+#' @seealso [as_birdflow_routes()] should be used instead of this function.
+#' @export
+#' @keywords internal
+as_BirdFlowRoutes <- function(routes, bf, aggregate = "random",
+                              valid_only = TRUE, sort_id_and_dates = TRUE,
+                              reset_index = FALSE) {
+  warning("as_BirdFlowRoutes() is deprecated. ",
+          "Please use as_birdflow_routes() instead.")
+  as_birdflow_routes(routes, bf, aggregate = aggregate,
+                      valid_only = valid_only,
+                      sort_id_and_dates = sort_id_and_dates,
+                      reset_index = reset_index)
 }

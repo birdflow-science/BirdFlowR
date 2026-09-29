@@ -1,4 +1,4 @@
-# Routes() -> as_BirdFlowRoutes() with different aggregations works
+# as_routes() -> as_birdflow_routes() with different aggregations works
 
     Code
       my_bfroutes$data[1:10, c("route_id", "i", "timestep")]

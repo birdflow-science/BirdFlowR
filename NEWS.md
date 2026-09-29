@@ -1,4 +1,30 @@
 
+# BirdFlowR 0.1.0.9086
+2026-09-29
+
+## Routes / BirdFlowRoutes / BirdFlowIntervals API simplification
+
+* Renamed the public constructors to a consistent `as_*()` naming
+  convention: `Routes()` -> `as_routes()`, `as_BirdFlowRoutes()` ->
+  `as_birdflow_routes()`, and `BirdFlowIntervals()` / `as_BirdFlowIntervals()`
+  -> `as_birdflow_intervals()` (now an S3 generic with `BirdFlowRoutes` and
+  `data.frame` methods). The old names are kept as deprecated wrappers that
+  issue a runtime warning and forward to the new functions.
+* Renamed the public validators to match: `validate_Routes()` ->
+  `validate_routes()`, `validate_BirdFlowRoutes()` ->
+  `validate_birdflow_routes()`, `validate_BirdFlowIntervals()` ->
+  `validate_birdflow_intervals()`. Old names are deprecated wrappers.
+* Added `[` row-subsetting methods for `Routes`, `BirdFlowRoutes`, and
+  `BirdFlowIntervals` objects.
+* The `new_*()` constructors (`new_routes()`, `new_birdflow_routes()`,
+  `new_birdflow_intervals()`) are now internal-only.
+* Fixed a bug in `validate_BirdFlowRoutes_species()`'s handling of `NA`
+  species fields, and a bug where `geom` validation wasn't passed the
+  correct `n_active` for `BirdFlowRoutes` and `BirdFlowIntervals` objects.
+* Removed dead validator code (`validate_BirdFlowRoutes_stay_id()`,
+  `validate_BirdFlowRoutes_stay_len()`, and other near-duplicate or
+  no-op field validators).
+
 # BirdFlowR 0.1.0.9085
 2026-09-16
 

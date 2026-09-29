@@ -2,8 +2,8 @@
 #'
 #' DEPRECATED FUNCTION. `interval_log_likelihood()` predates the
 #' `BirdFlowIntervals` class and so is now deprecated. If you are thinking
-#' of using this function in new code please consider [Routes()],
-#' [as_BirdFlowRoutes()], [as_BirdFlowIntervals()], and
+#' of using this function in new code please consider [as_routes()],
+#' [as_birdflow_routes()], [as_birdflow_intervals()], and
 #' [calc_interval_metrics()] to make `BirdFlowIntervals` and then calculate
 #' a full suite of metrics including log likelihood.
 #'

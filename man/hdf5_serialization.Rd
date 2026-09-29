@@ -57,12 +57,12 @@ be written and read from R and Python among other languages so make a
 good cross-language format for routes and intervals.
 
 \code{read_routes()} and \code{write_routes()} work on both \code{Routes} and
-\code{BirdFlowRoutes}.  See \code{\link[=Routes]{Routes()}} and \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} to create
+\code{BirdFlowRoutes}.  See \code{\link[=as_routes]{as_routes()}} and \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} to create
 objects of these classes.
 
 \code{read_intervals()} and \code{write_intervals()} work on \code{BirdFlowIntervals}
 which are a collection of movements each with a single start and end
-derived from \code{BirdFlowRoutes()}. See \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}.
+derived from \code{BirdFlowRoutes}. See \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}}.
 }
 \section{Internal functions}{
 

@@ -31,7 +31,8 @@ See \code{\link[=species_info]{species_info()}} for a description of the items.
 \description{
 \code{lookup_species_metadata()} uses \pkg{ebirdst} to generate
 a list  identical to the \code{species} component of a BirdFlow model.
-It is an internal function used by \code{\link[=preprocess_species]{preprocess_species()}} and \code{\link[=Routes]{Routes()}}.
+It is an internal function used by \code{\link[=preprocess_species]{preprocess_species()}} and
+\code{\link[=as_routes]{as_routes()}}.
 See \code{\link[=species_info]{species_info()}} for a description of the list items.
 }
 \seealso{

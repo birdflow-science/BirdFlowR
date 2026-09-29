@@ -12,7 +12,7 @@
 #'  from within `animate_routes()` so cannot be suppressed by code in
 #'  \pkg{BirdFlowR}.
 #' @param routes An object of class `Routes` or  `BirdFlowRoutes`.  Likely the
-#' the output of  [route()], [as_BirdFlowRoutes], or [Routes()].
+#' the output of  [route()], [as_birdflow_routes()], or [as_routes()].
 #' @param bf A BirdFlow object
 #' @inheritParams plot_routes
 #' @inheritDotParams plot_routes -routes -bf

@@ -1,6 +1,6 @@
 #' Calculate Interval Sampling Strategy
 #'
-#' @description Internal function used by `as_BirdFlowRoutes()` to determine
+#' @description Internal function used by `as_birdflow_intervals()` to determine
 #' how many intervals to sample from each route based on
 #' the total number of intervals requested.
 #' Ensures an even distribution across routes when possible.

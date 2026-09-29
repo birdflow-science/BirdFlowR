@@ -1,4 +1,4 @@
-test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
+test_that("as_routes() -> as_birdflow_routes() with different aggregations works", {
   skip_if_not_installed("BirdFlowModels")
 
   # Helper - snaps x, y, and date to bf
@@ -30,7 +30,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
   species1 <- bf$species
   source1 <- "eBird"
   expect_no_error(
-    my_routes <- Routes(fake_tracks, species = species1, source = source1)
+    my_routes <- as_routes(fake_tracks, species = species1, source = source1)
   )
 
   expect_equal(nrow(fake_tracks), nrow(my_routes$data))
@@ -50,7 +50,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
   cols <- c("route_id", "x", "y", "date")
 
   # Mean
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes,
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes,
     bf = bf,
     aggregate = "mean"
   ))
@@ -70,7 +70,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
 
 
   # Median
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes,
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes,
     bf = bf,
     aggregate = "median"
   ))
@@ -90,7 +90,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
 
 
   # Midweek
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes,
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes,
     bf = bf,
     aggregate = "midweek"
   ))
@@ -100,7 +100,7 @@ test_that("Routes() -> as_BirdFlowRoutes() with different aggregations works", {
   expect_equal(result_dates, expected_dates)
 
   set.seed(1)
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes,
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes,
     bf = bf,
     aggregate = "random"
   ))

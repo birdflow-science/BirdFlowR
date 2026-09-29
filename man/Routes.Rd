@@ -2,8 +2,7 @@
 % Please edit documentation in R/Routes.R
 \name{Routes}
 \alias{Routes}
-\title{\code{Routes()} is used to convert data frames containing bird movement
-data into a formal \code{Routes} object with the same data.}
+\title{Deprecated function to convert a data frame into a \code{Routes} object}
 \usage{
 Routes(data, species = NULL, source = NULL)
 }
@@ -47,6 +46,9 @@ the \code{species} argument potentially having all the items returned by
 \item{source}{Same as the input \code{source}}
 }
 \description{
-\code{Routes()} is used to convert data frames containing bird movement
-data into a formal \code{Routes} object with the same data.
+This function is deprecated. Please use \code{\link[=as_routes]{as_routes()}} instead.
 }
+\seealso{
+\code{\link[=as_routes]{as_routes()}} should be used instead of this function.
+}
+\keyword{internal}
