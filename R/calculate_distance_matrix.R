@@ -79,6 +79,7 @@ great_circle_distances <- function(bf) {
 #' @param lat2 latitude of point 2
 #' @param lon2 longitude of point 2
 #' @return the great circle distance
+#' @keywords internal
 great_circle_distance_lonlat_input <- function(lat1, lon1, lat2, lon2) {
   rad <- pi / 180 # Conversion factor for degrees to radians
   lat1 <- lat1 * rad

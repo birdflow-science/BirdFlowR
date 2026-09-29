@@ -414,6 +414,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
 #' `validate_BirdFlow`
 #'
 #' @returns a problem data frame
+#' @keywords internal
 validate_geom <- function(geom, n_active, throw_error = TRUE) {
 
   # Setup for tracking problems

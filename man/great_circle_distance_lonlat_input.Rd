@@ -21,3 +21,4 @@ the great circle distance
 \description{
 Calculate the great circle distance
 }
+\keyword{internal}

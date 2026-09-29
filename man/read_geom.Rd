@@ -16,3 +16,4 @@ The geom component of a birdflow model
 This internal function is called by \code{\link[=import_birdflow]{import_birdflow()}} and
 \code{\link[=extend_birdflow]{extend_birdflow()}} to read and format the geom component of the model
 }
+\keyword{internal}
