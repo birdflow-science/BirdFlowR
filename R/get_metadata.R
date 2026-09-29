@@ -44,10 +44,11 @@
 #'  [Dimensions][nrow()] documents getting various attributes of a BirdFlow
 #'  model, some of which overlap `get_metadata()`.
 #' @examples
-#'library(BirdFlowModels)
-#'get_metadata(amewoo)
-#'get_metadata(amewoo, "is_sparse")
-#'
+#' \donttest{
+#' library(BirdFlowModels)
+#' get_metadata(amewoo)
+#' get_metadata(amewoo, "is_sparse")
+#' }
 get_metadata <- function(x, what) {
 
   # Force all to lower case (early models one erroneous capital in

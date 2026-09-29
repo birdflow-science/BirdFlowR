@@ -24,8 +24,10 @@ is no way to recover this information from older HDF5 / RDS files. Use
 \code{\link[=get_clip]{get_clip()}} to retrieve the polygon itself.
 }
 \examples{
-  library(BirdFlowModels)
-  is_clipped(amewoo) # NA — fixture predates clip metadata
+\donttest{
+library(BirdFlowModels)
+is_clipped(amewoo) # NA — fixture predates clip metadata
+}
 }
 \seealso{
 \code{\link[=get_clip]{get_clip()}}, \code{\link[=preprocess_species]{preprocess_species()}}.

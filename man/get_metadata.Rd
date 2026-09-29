@@ -39,10 +39,11 @@ been sparsified,  etc.
 }
 }
 \examples{
+\donttest{
 library(BirdFlowModels)
 get_metadata(amewoo)
 get_metadata(amewoo, "is_sparse")
-
+}
 }
 \seealso{
 \code{\link[=has_transitions]{has_transitions()}}, \code{\link[=has_marginals]{has_marginals()}}, \code{\link[=has_distr]{has_distr()}}, \code{\link[=n_active]{n_active()}},

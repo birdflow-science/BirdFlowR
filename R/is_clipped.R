@@ -14,8 +14,10 @@
 #' @seealso [get_clip()], [preprocess_species()].
 #' @export
 #' @examples
-#'   library(BirdFlowModels)
-#'   is_clipped(amewoo) # NA — fixture predates clip metadata
+#' \donttest{
+#' library(BirdFlowModels)
+#' is_clipped(amewoo) # NA — fixture predates clip metadata
+#' }
 is_clipped <- function(x) {
   stopifnot(inherits(x, "BirdFlow"))
   cl <- x$metadata$clip

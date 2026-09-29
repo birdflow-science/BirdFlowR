@@ -27,8 +27,10 @@ result in an \code{sf} object; pass the result through \code{terra::vect()} if y
 prefer a \link[terra:SpatVector-class]{terra::SpatVector}.
 }
 \examples{
-  library(BirdFlowModels)
-  get_clip(amewoo) # NULL — fixture predates clip metadata
+\donttest{
+library(BirdFlowModels)
+get_clip(amewoo) # NULL — fixture predates clip metadata
+}
 }
 \seealso{
 \code{\link[=is_clipped]{is_clipped()}}, \code{\link[=preprocess_species]{preprocess_species()}}, \code{\link[=dataframe_to_clip]{dataframe_to_clip()}}.
