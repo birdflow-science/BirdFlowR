@@ -32,6 +32,11 @@
 #'   passed to this function. The internal function [transition_from_marginal()]
 #'   does the calculations.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' get_transition(bf, "T_01-02")
+#' }
 get_transition <- function(x, transition) {
 
   if (x$metadata$has_transitions) {

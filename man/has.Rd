@@ -39,3 +39,12 @@ the model was trained on.
 object has.
 }
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+has_marginals(bf)
+has_transitions(bf)
+has_distr(bf)
+has_dynamic_mask(bf)
+}
+}

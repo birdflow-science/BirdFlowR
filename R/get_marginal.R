@@ -20,6 +20,12 @@
 #'   marginal.
 #'
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' get_marginal(bf, from = 1)
+#' get_marginal(bf, marginal = "M_01-02")
+#' }
 get_marginal <- function(x, marginal = NULL, from = NULL) {
   if (!has_marginals(x))
     stop("x does not have marginals.")

@@ -20,6 +20,14 @@
 #'
 #' @return Logical indicating the BirdFlow model has the relevant element
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' has_marginals(bf)
+#' has_transitions(bf)
+#' has_distr(bf)
+#' has_dynamic_mask(bf)
+#' }
 has_marginals <- function(x) {
   x$metadata$has_marginals
 }

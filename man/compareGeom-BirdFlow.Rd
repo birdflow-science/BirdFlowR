@@ -35,3 +35,12 @@ of returning \code{FALSE}.
 These are methods for \code{\link[terra:compareGeom]{terra::compareGeom()}} that work when one or both
 of arguments are BirdFlow objects.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+r <- rast(bf, which = 1)
+terra::compareGeom(bf, bf)
+terra::compareGeom(r, bf)
+terra::compareGeom(bf, r)
+}
+}

@@ -38,6 +38,12 @@ generate the forward transition matrix we divide each row of the marginal
 by its sum and then transpose. Backwards transitions matrices are generated
 by dividing each column by its sum, without transposing.
 }
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+get_transition(bf, "T_01-02")
+}
+}
 \seealso{
 \code{\link[=lookup_transitions]{lookup_transitions()}} will generate a list of the transitions
 needed to predict or route between two points in time that can then be

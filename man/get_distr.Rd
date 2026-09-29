@@ -61,6 +61,14 @@ after any trimming.}
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowModels::amewoo
+get_distr(bf, which = 1) # first timestep, as a vector
+get_distr(bf, which = c(1, 2)) # first two timesteps, as a matrix
+get_distr(bf, which = 1, type = "marginal") # calculated from marginals
+}
+}
 \seealso{
 Distributions can be passed to \link[=predict.BirdFlow]{predict()} or
 converted to rasters with \code{\link[=expand_distr]{expand_distr()}} or converted to

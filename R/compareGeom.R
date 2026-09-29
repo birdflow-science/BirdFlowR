@@ -26,6 +26,14 @@ methods::setOldClass("BirdFlow")
 #' @importMethodsFrom terra compareGeom
 #' @export
 #' @rdname compareGeom-BirdFlow
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' r <- rast(bf, which = 1)
+#' terra::compareGeom(bf, bf)
+#' terra::compareGeom(r, bf)
+#' terra::compareGeom(bf, r)
+#' }
 setMethod("compareGeom", signature(x = "BirdFlow", y = "BirdFlow"),
           function(x, y, ...) {
             x <- rast(x)

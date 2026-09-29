@@ -34,6 +34,23 @@
 #' that many rows and a column for each distribution.
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' xy <- i_to_xy(c(1, 2), bf)
+#'
+#' # data.frame method: one "one hot" distribution per point
+#' pts <- data.frame(x = xy$x, y = xy$y)
+#' as_distr(pts, bf)
+#'
+#' # sf method
+#' sf_pts <- sf::st_as_sf(pts, coords = c("x", "y"), crs = crs(bf))
+#' as_distr(sf_pts, bf)
+#'
+#' # SpatRaster method
+#' r <- rast(bf, which = 1)
+#' as_distr(r, bf)
+#' }
 as_distr <- function(x, bf, ...) {
   UseMethod("as_distr", x)
 }

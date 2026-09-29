@@ -73,6 +73,11 @@
 #' as a proportion of the total year that has elapsed.}
 #' \item{doy}{The day of year associated with the midpoint of each interval.}
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' get_dates(bf)
+#' }
 get_dates <- function(bf) {
 
   # Return models fit with ebirdst 3.2022.0 and newer as is

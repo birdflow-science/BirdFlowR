@@ -47,6 +47,13 @@
 #'   with a column for each distribution.
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' get_distr(bf, which = 1) # first timestep, as a vector
+#' get_distr(bf, which = c(1, 2)) # first two timesteps, as a matrix
+#' get_distr(bf, which = 1, type = "marginal") # calculated from marginals
+#' }
 get_distr <- function(x, which = "all",
                       type = c("normalized", "marginal", "raw"),
                       from_marginals) {
