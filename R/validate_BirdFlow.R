@@ -35,6 +35,11 @@
 #' Otherwise, if there are no problems a similar data.frame with no rows is
 #' returned invisibly.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' validate_BirdFlow(bf)
+#' }
 validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   # problem types:
   #   error: BirdFlow object is malformed

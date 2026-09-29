@@ -22,6 +22,13 @@
 #'   (`start`, `end`, `direction`, and `season_buffer`)
 #' * [route()] and [route_migration()] are similar to `predict()` but
 #'    generate routes instead of distributions.
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowModels::amewoo
+#' distr <- get_distr(bf, 1)
+#' pred <- predict(bf, distr, start = 1, end = 3)
+#' dim(pred)
+#' }
 predict.BirdFlow <- function(object, distr, ...) {
 
 
