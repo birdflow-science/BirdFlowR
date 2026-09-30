@@ -78,9 +78,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   stopifnot(inherits(x, "BirdFlow"))
 
 
-  ### Transition code
-  if (!has_dynamic_mask(x))
-    x <- add_dynamic_mask(x)
+  ### Back compatibility to support old models
+  x <- upgrade_birdflow(x)
 
   all_metrics <- c("min_step_cor",
                    "mean_step_cor",

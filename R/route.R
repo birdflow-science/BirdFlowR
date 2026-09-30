@@ -50,8 +50,8 @@
 route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
                   from_marginals = FALSE, ...) {
 
-  ### BACK COMPATABILITY CODE
-  bf <- add_dynamic_mask(bf)  # To ease transition pain
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   dyn_mask <- bf$geom$dynamic_mask
 

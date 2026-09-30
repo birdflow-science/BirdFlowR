@@ -48,8 +48,8 @@ route_between <- function(bf, n,
                           potentials = NULL,
                           ...) {
 
-  ### BACK COMPATIBILITY CODE
-  bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   # --- Input validation ---
   using_hard_obs <- !is.null(x_coord) || !is.null(y_coord)

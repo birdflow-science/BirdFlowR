@@ -32,8 +32,8 @@
 predict.BirdFlow <- function(object, distr, ...) {
 
 
-  ### BACK COMPATABILITY CODE
-  object <- add_dynamic_mask(object)  # To ease transition pain
+  ### Back compatibility to support old models
+  object <- upgrade_birdflow(object)
 
   dyn_mask <- object$geom$dynamic_mask
 
