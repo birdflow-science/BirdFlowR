@@ -1,4 +1,18 @@
 
+# BirdFlowR 0.1.0.9089
+2026-09-30
+
+## Verify and update snapshots for ebirdst 3.2023.x
+
+* `preprocess_species()`'s snapshot tests were being skipped for
+  installed **ebirdst** versions 3.2023.0 and later, pending
+  verification against the 2023 eBird Status and Trends data release.
+  Verified: the model construction logic itself is unaffected, only the
+  eBird-derived distribution values and raster extent legitimately
+  changed with the new data. Updated the recorded snapshots to match,
+  and moved `helper-skip_if_wrong_ebirdst_for_snapshot.R`'s skip window
+  from `< "3.2022.0"` to `< "3.2023.0"` accordingly.
+
 # BirdFlowR 0.1.0.9088
 2026-09-29
 
