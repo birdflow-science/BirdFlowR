@@ -1,4 +1,23 @@
 
+# BirdFlowR 0.1.0.9088
+2026-09-29
+
+## Consolidate back compatibility shims into `upgrade_birdflow()`
+
+* Added `upgrade_birdflow()`, which consolidates the back compatibility
+  fixes previously scattered across `predict()`, `route()`,
+  `route_between()`, `predict_between()`, `truncate_birdflow()`, and
+  others into one function: fixing the old `birdFlowr_version` metadata
+  name typo, backfilling `metadata$timestep_padding` and `dates$week`
+  when missing, backfilling metadata fields added in later package
+  versions with `new_BirdFlow()`'s schema defaults, and adding a dynamic
+  mask via `add_dynamic_mask()` if one is missing. Running it on an
+  already current object is a no-op.
+* `predict()`, `route()`, `route_between()`, `predict_between()`,
+  `calc_movement_vectors()`, `distribution_performance()`,
+  `plot_distr()`, and `truncate_birdflow()` now call
+  `upgrade_birdflow()` instead of duplicating this logic.
+
 # BirdFlowR 0.1.0.9087
 2026-09-29
 

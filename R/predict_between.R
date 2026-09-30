@@ -34,8 +34,8 @@ predict_between <- function(bf,
                             potentials = NULL,
                             ...) {
 
-  ### BACK COMPATIBILITY CODE
-  bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   dyn_mask <- bf$geom$dynamic_mask
 

@@ -27,24 +27,17 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
   bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 10, end = 15)
   sbf <- sparsify(bf, method = "conditional", p = 0.99)
 
-  ### Back compatability, Needed for BirdFlowModels 0.0.2.9002
-  names(sbf$metadata)[names(sbf$metadata) == "birdFlowr_version"] <-
-    "birdflowr_version"
-
-
   file <- withr::local_tempfile(fileext = ".hdf5")
   expect_no_error(export_birdflow(sbf, file = file))
 
   expect_no_error(sbf2 <- import_birdflow(file))
 
-  ### back compatibility these will have to be deleted when we update the
-  ### BirdFlowModels::amewoo model, Needed for BirdFlowModels 0.0.2.9002
-  sbf2$metadata$ebirdst_version <- NULL
-  sbf2$metadata$birdflowr_preprocess_version <- NULL
-  for (m in c("trim_quantile", "clip", "ebird_coverage",
-              "abundance")) {
-    sbf2$metadata[[m]] <- NULL
-  }
+  # Metadata field order isn't semantically meaningful, and
+  # upgrade_birdflow() (called internally by truncate_birdflow()) appends
+  # backfilled fields in a different order than import_birdflow()
+  # reconstructs them, so sort both before comparing.
+  sbf$metadata <- sbf$metadata[sort(names(sbf$metadata))]
+  sbf2$metadata <- sbf2$metadata[sort(names(sbf2$metadata))]
 
 
   expect_equal(sbf, sbf2)

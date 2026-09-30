@@ -167,7 +167,8 @@ plot_distr <- function(distr,
   }
 
   if (show_dynamic_mask) {
-    bf <- add_dynamic_mask(bf)
+    ### Back compatibility to support old models
+    bf <- upgrade_birdflow(bf)
     dm <- get_dynamic_mask(bf)
 
     multiple <- is.matrix(distr) || is.array(distr)

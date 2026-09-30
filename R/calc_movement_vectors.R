@@ -46,9 +46,8 @@ calc_movement_vectors <- function(bf, start, direction = "forward") {
   direction <- tolower(direction)
   stopifnot(direction %in% c("forward", "backward"))
 
-  ### Back compatibility code - delete after BirdFlowModels is updated
-  if (!has_dynamic_mask(bf))
-    bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   start <- lookup_timestep(start, bf)
   if (direction == "forward") {
