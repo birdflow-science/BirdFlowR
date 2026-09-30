@@ -1,4 +1,18 @@
 
+# BirdFlowR 0.1.0.9090
+2026-09-30
+
+## Fix always-skipped `lookup_species_metadata()` snapshot test
+
+* `test-lookup_species_metadata.R` gated its snapshot test with
+  `skip_if_not(ebirdst_pkg_ver()[1, 2], ...)`. Indexing a
+  `package_version` object like that returns another `package_version`,
+  not a plain logical, so `isTRUE()` on it is always `FALSE` and the
+  test unconditionally skipped regardless of the installed **ebirdst**
+  version. Switched to the same `skip_if_wrong_ebirdst_for_snapshot()`
+  helper used by `preprocess_species()`'s snapshot tests, and updated
+  the now-exercised snapshot to match ebirdst 3.2023.x season dates.
+
 # BirdFlowR 0.1.0.9089
 2026-09-30
 

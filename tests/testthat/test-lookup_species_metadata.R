@@ -9,7 +9,7 @@ test_that("lookup_species_metadata() has consistent output", {
                names(new_BirdFlow()$species))
 
 
-  skip_if_not(ebirdst_pkg_ver()[1, 2], message = "Wrong ebirdst for snapshot")
+  skip_if_wrong_ebirdst_for_snapshot()
 
   expect_snapshot(lookup_species_metadata("amewoo"))
 
