@@ -1,4 +1,16 @@
 
+# BirdFlowR 0.1.0.9091
+2026-10-22
+
+## Switch example-data dependency from BirdFlowModels to BirdFlowExamples
+
+* The companion demo-data package was renamed from **BirdFlowModels**
+  to **BirdFlowExamples**, and its `amewoo`/`rewbla` example models
+  were refit under the current pipeline. `Suggests:`/`Remotes:` and
+  all `BirdFlowModels::` references throughout the package now point
+  to `BirdFlowExamples (>= 0.0.1.9001)`; the data object names
+  (`amewoo`, `rewbla`, etc.) are unchanged.
+
 # BirdFlowR 0.1.0.9090
 2026-09-30
 
