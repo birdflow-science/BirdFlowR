@@ -37,7 +37,7 @@
 #' - [Column Targeting Functions](target_columns)
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' bfr <- route(bf, n = 3)
 #' rts <- as_routes(bfr$data, species = bfr$species)
 #' validate_routes(rts)

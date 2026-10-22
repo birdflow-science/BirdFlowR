@@ -32,7 +32,7 @@
 #' @examples
 #'
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' d <- get_distr(bf, 5)
 #'
 #' # default format "distr" returns an object similar to the input

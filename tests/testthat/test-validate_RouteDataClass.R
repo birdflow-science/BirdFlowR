@@ -1,9 +1,9 @@
 test_that("Validations of Routes, BirdFlowRoutes, and BirdFlowIntervals work", {
-    skip_if_not_installed("BirdFlowModels")
+    skip_if_not_installed("BirdFlowExamples")
     set.seed(42)
 
     fake_routes <- make_fake_routes()
-    bf <- BirdFlowModels::amewoo
+    bf <- BirdFlowExamples::amewoo
     species <- list(
         species_code = "amewoo",
         scientific_name = "Scolopax minor",

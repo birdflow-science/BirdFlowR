@@ -22,7 +22,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' get_marginal(bf, from = 1)
 #' get_marginal(bf, marginal = "M_01-02")
 #' }

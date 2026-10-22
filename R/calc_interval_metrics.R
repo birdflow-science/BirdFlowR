@@ -220,7 +220,7 @@ calc_single_interval_metrics <- function(
 #' )
 #'
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' species1 <- bf$species
 #' source1 <- "Testing"
 #'

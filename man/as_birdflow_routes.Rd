@@ -57,7 +57,7 @@ route_data <- data.frame(
   "tracking", "motus", "motus", "motus", "motus")
 )
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 routes <- as_routes(route_data, species = species(bf),
                     source = "Pkg. example")
 

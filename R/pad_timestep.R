@@ -16,7 +16,7 @@
 #' @keywords internal
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' pad_timestep(1:5, bf)
 #' }
 pad_timestep  <- function(x, bf) {

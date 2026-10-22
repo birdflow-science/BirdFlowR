@@ -39,7 +39,7 @@ print(routes)
 
 # BirdFlowRoutes
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 bf_routes <- as_birdflow_routes(routes, bf)
 }
 

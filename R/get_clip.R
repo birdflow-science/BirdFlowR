@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(BirdFlowModels)
+#' library(BirdFlowExamples)
 #' get_clip(amewoo) # NULL — fixture predates clip metadata
 #' }
 get_clip <- function(x) {

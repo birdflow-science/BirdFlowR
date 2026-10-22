@@ -16,7 +16,7 @@
 #' # Calculate great circle distance matrix
 #' library(terra)
 #' \donttest{
-#' bf <- BirdFlowModels::rewbla
+#' bf <- BirdFlowExamples::rewbla
 #' gs <- great_circle_distances(bf)
 #'
 #' # The above is all you need to use the function.

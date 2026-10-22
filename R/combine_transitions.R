@@ -13,7 +13,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' m <- combine_transitions(bf, start = 1, end = 3)
 #' dim(m)
 #' }

@@ -22,7 +22,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' nrow(bf)
 #' ncol(bf)
 #' dim(bf)

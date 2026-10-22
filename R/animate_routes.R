@@ -24,7 +24,7 @@
 #'
 #'
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' rts <- route(bf, 10,  season = "prebreeding")
 #' anim <- animate_routes(rts, bf)
 #' }

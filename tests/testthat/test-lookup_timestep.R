@@ -1,6 +1,6 @@
 test_that("lookup_timestep works with NAs", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   nice_error <- "^Date lookup failed"
   # Single (logical) NA, which may be input by user
   expect_error(lookup_timestep(NA, bf), nice_error)
@@ -32,9 +32,9 @@ test_that("lookup_timestep works with NAs", {
 
 
 test_that("lookup_timestep works with character dates", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   # Single
   expect_equal(lookup_timestep("2023-01-01", bf), 1)
   # Multiple
@@ -50,8 +50,8 @@ test_that("lookup_timestep works with character dates", {
 
 
 test_that("lookup_timestep works with timesteps", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   # Single
   expect_equal(lookup_timestep(1, bf), 1)
   # Multiple
@@ -75,8 +75,8 @@ test_that("lookup_timestep works with timesteps", {
 
 
 test_that("lookup_timestep works with dates", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # "Date" class
   # Single

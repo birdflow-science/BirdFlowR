@@ -25,7 +25,7 @@ and transitions, \code{drop_transitions()} will reverse the process.
 }
 \examples{
 \dontrun{
-bf1 <- BirdFlowModels::amewoo
+bf1 <- BirdFlowExamples::amewoo
 bf2 <- build_transitions(bf)
 bf2
 

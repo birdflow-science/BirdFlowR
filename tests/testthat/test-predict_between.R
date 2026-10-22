@@ -1,6 +1,6 @@
 test_that("predict_between() returns matrix with correct dimensions", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
   start_ts <- lookup_timestep("2023-02-15", bf)
@@ -19,8 +19,8 @@ test_that("predict_between() returns matrix with correct dimensions", {
 
 
 test_that("predict_between() distributions sum to 1", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
   d <- predict_between(bf,
@@ -34,8 +34,8 @@ test_that("predict_between() distributions sum to 1", {
 
 
 test_that("predict_between() pins distributions to hard observations", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
   i_start <- xy_to_i(xy$x[1], xy$y[1], bf)
@@ -51,8 +51,8 @@ test_that("predict_between() pins distributions to hard observations", {
 
 
 test_that("predict_between() returns log_z attribute", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
   d <- predict_between(bf,
@@ -66,8 +66,8 @@ test_that("predict_between() returns log_z attribute", {
 
 
 test_that("predict_between() works with soft potentials", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   ts <- lookup_timestep(c("2023-02-15", "2023-05-01"), bf)
   obs_matrix <- matrix(runif(n_active(bf) * 2), nrow = n_active(bf))
@@ -81,8 +81,8 @@ test_that("predict_between() works with soft potentials", {
 
 
 test_that("predict_between() errors on bad input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 
   expect_error(
@@ -100,13 +100,13 @@ test_that("predict_between() errors on bad input", {
 
 
 test_that("predict_between() end marginal matches predict() masked by end potential", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   # With binary masks at both start and end, the marginal at the end timestep
   # from predict_between() should equal predict() forward from the start mask,
   # then masked by the end mask and renormalized. These are exact (no Monte
   # Carlo noise), so we use a tight numerical tolerance.
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   start_ts <- 9
   end_ts   <- 20
 
@@ -138,12 +138,12 @@ test_that("predict_between() end marginal matches predict() masked by end potent
 
 
 test_that("predict_between() marginal matches forward filter with unconstrained end", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   # With a constrained start and unconstrained end (uniform potential), the
   # marginals from predict_between() should match predict() run forward from
   # the same start distribution.
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   start_ts <- 9
   end_ts   <- 20
 

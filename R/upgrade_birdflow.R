@@ -23,7 +23,7 @@
 #' @seealso [add_dynamic_mask()], [validate_BirdFlow()]
 #' @examples
 #' \donttest{
-#' bf <- upgrade_birdflow(BirdFlowModels::amewoo)
+#' bf <- upgrade_birdflow(BirdFlowExamples::amewoo)
 #' }
 upgrade_birdflow <- function(bf) {
 

@@ -1,7 +1,7 @@
 test_that("animate_routes() runs", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   start <- lookup_timestep(species_info(bf, "prebreeding_migration_start"), bf)
   end <- start + 3

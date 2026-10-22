@@ -150,7 +150,7 @@ test_that("plot_bmtr() subset drops excluded transitions (no empty facets)", {
 })
 
 test_that("Test sensativity of bmtr to radius", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   testthat::skip("In depth bmtr radius analysis - always skipped")
 
@@ -161,7 +161,7 @@ test_that("Test sensativity of bmtr to radius", {
   # Conclusions are at bottom.
 
   # Sparsify and truncate to speed things up
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 5)
   bf <- sparsify(bf, "conditional", .9, p_protected = 0.05)
 

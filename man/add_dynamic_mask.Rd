@@ -27,7 +27,7 @@ time (column) is included in the model.
 }
 \examples{
 \donttest{
-bf <- add_dynamic_mask(BirdFlowModels::amewoo)
+bf <- add_dynamic_mask(BirdFlowExamples::amewoo)
 }
 
 }

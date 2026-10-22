@@ -93,7 +93,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#'  bf <- BirdFlowModels::amewoo
+#'  bf <- BirdFlowExamples::amewoo
 #'  coast <- get_coastline(bf)
 #' }
 #'

@@ -42,7 +42,7 @@ functions like \code{\link[=route]{route()}}, \code{\link[=predict]{predict()}},
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
 }
 

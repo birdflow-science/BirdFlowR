@@ -25,7 +25,7 @@ someday we decide to have daily timesteps.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 pad_timestep(1:5, bf)
 }
 }

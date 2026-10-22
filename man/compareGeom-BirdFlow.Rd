@@ -37,7 +37,7 @@ of arguments are BirdFlow objects.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 r <- rast(bf, which = 1)
 terra::compareGeom(bf, bf)
 terra::compareGeom(r, bf)

@@ -1,10 +1,10 @@
 test_that(paste0("interval_log_likelihood produces identical results with ",
                  "one_at_a_time = TRUE"), {
-  skip_if_not_installed("BirdFlowModels")
-  intervals <- BirdFlowModels::rewbla_intervals
-  observations <- BirdFlowModels::rewbla_observations
+  skip_if_not_installed("BirdFlowExamples")
+  intervals <- BirdFlowExamples::rewbla_intervals
+  observations <- BirdFlowExamples::rewbla_observations
   intervals <- intervals[1:60, ]
-  bf <- BirdFlowModels::rewbla
+  bf <- BirdFlowExamples::rewbla
   expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
   expect_warning(
     b <- interval_log_likelihood(intervals, observations, bf,
@@ -19,9 +19,9 @@ test_that(paste0("interval_log_likelihood produces identical results with ",
 
 
 test_that("interval_log_likelihood returns expected values", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf  <- BirdFlowModels::rewbla
+  bf  <- BirdFlowExamples::rewbla
   nsteps <- 3
 
   # Use route() to make a fake observation table
@@ -63,11 +63,11 @@ test_that("interval_log_likelihood returns expected values", {
 
 test_that(
   "interval_log_likelihood() sets right flags for problematic locations", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:4, ]
-  observations <- BirdFlowModels::rewbla_observations
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:4, ]
+  observations <- BirdFlowExamples::rewbla_observations
 
   # I'm going to alter locations in observations such that the first four
   # intervals correspond with (a first observation) that is:
@@ -140,15 +140,15 @@ test_that(
 
 
 test_that("interval_log_likelihood() throws warning if overwriting columns", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   # Also test that it works fine with verbose = FALSE
   # Temporarily suppress BirdFlowR chatter
   local_quiet()
 
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
-  observations <- BirdFlowModels::rewbla_observations
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:10, ]
+  observations <- BirdFlowExamples::rewbla_observations
 
   expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
   expect_warning(
@@ -163,12 +163,12 @@ test_that("interval_log_likelihood() throws warning if overwriting columns", {
 
 
 test_that("Interval log likelihood handles empty input gracefully", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   #  Checks issue 95  https://github.com/birdflow-science/BirdFlowR/issues/95
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:10, ]
   intervals_empty <- intervals[rep(FALSE, nrow(intervals)), , drop = FALSE]
-  observations <- BirdFlowModels::rewbla_observations
+  observations <- BirdFlowExamples::rewbla_observations
 
   expect_warning(
     ll <- interval_log_likelihood(intervals_empty, observations, bf)

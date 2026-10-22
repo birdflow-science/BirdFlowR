@@ -27,7 +27,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#'  bf <- BirdFlowModels::amewoo
+#'  bf <- BirdFlowExamples::amewoo
 #'  dmi <- c(11:20)
 #'  timesteps <- c(1, 1, 1, 1, 3, 3, 5,7:9 )
 #'

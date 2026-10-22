@@ -58,7 +58,7 @@ example code.
 \examples{
 
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 a <- animate_movement_vectors(bf)
 }
 

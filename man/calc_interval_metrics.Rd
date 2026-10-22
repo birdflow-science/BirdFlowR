@@ -77,7 +77,7 @@ route_type = c("tracking", "tracking", "tracking", "tracking",
 )
 
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 species1 <- bf$species
 source1 <- "Testing"
 

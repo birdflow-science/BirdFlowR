@@ -75,7 +75,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' get_dates(bf)
 #' }
 get_dates <- function(bf) {

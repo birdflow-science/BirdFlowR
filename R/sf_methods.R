@@ -16,7 +16,7 @@
 #' @method st_crs BirdFlow
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' sf::st_crs(bf)
 #' }
 st_crs.BirdFlow <- function(x, ...) {
@@ -39,7 +39,7 @@ st_crs.BirdFlow <- function(x, ...) {
 #' @method st_bbox BirdFlow
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' sf::st_bbox(bf)
 #' }
 st_bbox.BirdFlow <- function(obj, ...) {
@@ -70,7 +70,7 @@ st_bbox.BirdFlow <- function(obj, ...) {
 #' @method st_as_sf BirdFlowRoutes
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' rts <- route(bf, n = 3)
 #' sf::st_as_sf(rts, type = "line")
 #' sf::st_as_sf(rts, type = "point")

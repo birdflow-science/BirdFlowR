@@ -1,9 +1,9 @@
 test_that("Reading and writing routes and intervals works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
   source1 <- "BirdFlow"
 
@@ -43,11 +43,11 @@ test_that("Reading and writing routes and intervals works", {
 
 
 test_that("Reading and writing routes and intervals works with NA", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
   source1 <- "BirdFlow"
 
@@ -85,7 +85,7 @@ test_that("Reading and writing routes and intervals works with NA", {
 
 
 test_that("Reading and writing routes and intervals works with NULL", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
     skip("Always skipped. Writing NULL values is not supported.")
 
@@ -99,7 +99,7 @@ test_that("Reading and writing routes and intervals works with NULL", {
 
 
     fake_routes <- make_fake_routes()
-    bf <- BirdFlowModels::amewoo
+    bf <- BirdFlowExamples::amewoo
     species1 <- bf$species
     source1 <- "BirdFlow"
 

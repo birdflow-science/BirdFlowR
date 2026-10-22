@@ -21,7 +21,7 @@ reference system stored in the model's geometry (\code{x$geom$crs}).
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 sf::st_crs(bf)
 }
 }

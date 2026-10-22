@@ -33,9 +33,9 @@ You'll also have to setup a destination folder for the purpose of the vignette I
 ```{r tempdir }
 dir <- tempdir()
 ```
-You could optionally set to a directory of your choice that is somewhere more permanent and accessible.  The code below should add a BirdFlowModels directory to your home directory, to use for model output. This block is not run when building the vignette.
+You could optionally set to a directory of your choice that is somewhere more permanent and accessible.  The code below should add a BirdFlowExamples directory to your home directory, to use for model output. This block is not run when building the vignette.
 ```{r dir, eval = FALSE}
-dir <- "~/BirdFlowModels"
+dir <- "~/BirdFlowExamples"
 dir.create(dir, showWarnings = FALSE)
 ```
 

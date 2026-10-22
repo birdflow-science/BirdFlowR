@@ -96,7 +96,7 @@
 #' @importFrom grDevices gray grey
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' p <- plot_distr(get_distr(bf, c(1,11, 21)), bf, show_dynamic_mask = TRUE)
 #' }
 #' @seealso

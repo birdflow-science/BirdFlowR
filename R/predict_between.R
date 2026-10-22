@@ -18,7 +18,7 @@
 #'   as `predict_between()`.
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 #' distr <- predict_between(bf,
 #'                          x_coord = xy$x, y_coord = xy$y,

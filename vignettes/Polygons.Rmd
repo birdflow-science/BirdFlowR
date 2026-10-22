@@ -13,7 +13,7 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-has_models <- requireNamespace("BirdFlowModels", quietly = TRUE)
+has_models <- requireNamespace("BirdFlowExamples", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   echo = TRUE,
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 )
 
 # Placeholders so inline `r` expressions below don't error when the
-# chunks that normally set these are skipped (BirdFlowModels missing).
+# chunks that normally set these are skipped (BirdFlowExamples missing).
 if (!has_models) {
   polys <- data.frame(id = NA_character_)
   sel <- 1
@@ -83,13 +83,13 @@ generic so the code will work with any set of polygons.
 
 ## Load model and set parameters
 
-This example uses the American Woodcock dataset from **BirdFlowModels**
+This example uses the American Woodcock dataset from **BirdFlowExamples**
 which is small and runs fast but isn't fully vetted for scientific use.
 
 Use `load_model()` for real work.
 
 ```{r load BirdFlow model, set parameters}
-bf <- BirdFlowModels::amewoo  # you will likely use load_model() instead
+bf <- BirdFlowExamples::amewoo  # you will likely use load_model() instead
 start <- BirdFlowR::lookup_timestep("2024-01-15", bf)
 end <- BirdFlowR::lookup_timestep("2024-03-20", bf)
 population <- 3500000
@@ -125,7 +125,7 @@ polys <- dplyr::select(polys, NAME = gn_name)
 ```{r echo = FALSE, eval = has_models}
 # This loads very low resolution state boundaries
 # in a way that does not add dependencies or slow downloads
-polys <- BirdFlowModels::states |> dplyr::rename(NAME = name)
+polys <- BirdFlowExamples::states |> dplyr::rename(NAME = name)
 
 ```
 

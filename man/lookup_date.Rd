@@ -31,7 +31,7 @@ Retrieve date associated with timesteps, transitions, or marginals
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 lookup_date(1:5, bf)
 }
 }

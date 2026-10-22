@@ -30,7 +30,7 @@ point geometries (one point per route location, \code{type = "point"}).
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, n = 3)
 sf::st_as_sf(rts, type = "line")
 sf::st_as_sf(rts, type = "point")

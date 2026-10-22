@@ -1,7 +1,7 @@
 test_that("compareGeom() works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf1 <- BirdFlowModels::amewoo
-  bf2 <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf1 <- BirdFlowExamples::amewoo
+  bf2 <- BirdFlowExamples::rewbla
 
   # Two BirdFlow objects
   expect_error(compareGeom(bf1, bf2), regexp = "extents do not match")

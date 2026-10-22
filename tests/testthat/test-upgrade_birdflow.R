@@ -1,5 +1,5 @@
 # Durable tests: synthetic legacy-shaped objects built by stripping/mutating
-# fields on a current, valid model. These don't depend on BirdFlowModels'
+# fields on a current, valid model. These don't depend on BirdFlowExamples'
 # current shape and so survive the planned amewoo/rewbla refit (see
 # dev/cran_prep.md Task 3).
 #
@@ -13,8 +13,8 @@
 # have never been trimmed.
 
 test_that("upgrade_birdflow() fixes the birdFlowr_version metadata typo", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   names(bf$metadata)[names(bf$metadata) == "birdflowr_version"] <-
     "birdFlowr_version"
   value <- bf$metadata$birdFlowr_version
@@ -25,8 +25,8 @@ test_that("upgrade_birdflow() fixes the birdFlowr_version metadata typo", {
 })
 
 test_that("upgrade_birdflow() backfills missing metadata fields", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf$metadata$clip <- NULL
   bf$metadata$trim_quantile <- NULL
   bf$metadata$ebird_coverage <- NULL
@@ -50,8 +50,8 @@ test_that("upgrade_birdflow() backfills missing metadata fields", {
 })
 
 test_that("upgrade_birdflow() backfills timestep_padding", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf$metadata$timestep_padding <- NULL
 
   ubf <- upgrade_birdflow(bf)
@@ -59,8 +59,8 @@ test_that("upgrade_birdflow() backfills timestep_padding", {
 })
 
 test_that("upgrade_birdflow() backfills dates$week", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf$dates$week <- NULL
   expect_equal(nrow(bf$dates), 52)
 
@@ -69,8 +69,8 @@ test_that("upgrade_birdflow() backfills dates$week", {
 })
 
 test_that("upgrade_birdflow() is idempotent", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   scenarios <- list(
     typo = local({
@@ -105,8 +105,8 @@ test_that("upgrade_birdflow() is idempotent", {
 })
 
 test_that("upgrade_birdflow() is a no-op on an already-upgraded object", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- upgrade_birdflow(BirdFlowModels::amewoo)
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- upgrade_birdflow(BirdFlowExamples::amewoo)
   expect_identical(upgrade_birdflow(bf), bf)
 })
 
@@ -139,13 +139,13 @@ test_that("upgrade_birdflow() only backfills what's actually missing on ambduc",
 # these assertions will likely collapse into no-ops, same as the ambduc test
 # above, and can be simplified or removed then.
 test_that("upgrade_birdflow() upgrades today's real amewoo/rewbla", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   ubf <- upgrade_birdflow(bf)
   expect_no_error(validate_BirdFlow(ubf))
 
-  bf <- BirdFlowModels::rewbla
+  bf <- BirdFlowExamples::rewbla
   expect_false(has_dynamic_mask(bf))
   ubf <- upgrade_birdflow(bf)
   expect_true(has_dynamic_mask(ubf))

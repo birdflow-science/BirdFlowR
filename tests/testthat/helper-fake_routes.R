@@ -42,8 +42,8 @@ make_fake_tracking_data <- function(bf, n,
                                     bandwidth = 100,
                                     sd = 3000,
                                     ...) {
-  testthat::skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  testthat::skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   n_rts <- n
   rts <- route(bf = bf, n = n_rts, ...)
   d <- rts$data

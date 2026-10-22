@@ -35,9 +35,9 @@ test_that("get_coastline returns expected objects", {
 })
 
 test_that("get_countries returns expected objects", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   expect_s3_class(countries <- get_countries(bf, scale = "small"),
                   class = c("sf", "data.frame"))
   expect_s3_class(countries$geometry, c("sfc_GEOMETRY", "sfc"))
@@ -46,7 +46,7 @@ test_that("get_countries returns expected objects", {
 })
 
 test_that("get_states returns expected objects", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   # States requires rnaturalearthhires which is a large download
   # Use  devtools::install_github("ropensci/rnaturalearthhires")
@@ -55,7 +55,7 @@ test_that("get_states returns expected objects", {
   skip_on_cran()
   skip_on_ci()
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   expect_s3_class(states <-
                     get_states(bf, country = "United States of America"),
                   class = c("sf", "data.frame"))
@@ -70,7 +70,7 @@ test_that("get_states returns expected objects", {
 })
 
 test_that("get_naturalearth downloads and returns expected objects", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   # This downloads data and writes it to disk so skip everywhere but local
   # machine
@@ -78,7 +78,7 @@ test_that("get_naturalearth downloads and returns expected objects", {
   skip_on_covr()
   skip_on_cran()
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   suppressMessages(
   expect_s3_class(grat <- get_naturalearth(bf, type = "graticules_30",

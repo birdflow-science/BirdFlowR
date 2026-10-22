@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' lookup_date(1:5, bf)
 #' }
 lookup_date <- function(x, bf, timestep = NULL) {

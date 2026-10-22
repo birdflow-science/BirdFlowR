@@ -47,7 +47,7 @@ checking for those.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 validate_BirdFlow(bf)
 }
 }

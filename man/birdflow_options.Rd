@@ -71,7 +71,7 @@ To access the original 4 models set \code{collection_url} to
 \examples{
 birdflow_options() # print current settings
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 original_format <- birdflow_options("time_format")
 birdflow_options(time_format = "date")
 head(get_distr(bf, 1:3))

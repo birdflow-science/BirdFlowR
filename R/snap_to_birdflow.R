@@ -98,8 +98,8 @@
 #' @importFrom stats median
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::rewbla |> add_dynamic_mask()
-#' obs <- BirdFlowModels::rewbla_observations
+#' bf <- BirdFlowExamples::rewbla |> add_dynamic_mask()
+#' obs <- BirdFlowExamples::rewbla_observations
 #' a <- snap_to_birdflow(obs, bf, id_cols = "bird_id")
 #' }
 # nolint end

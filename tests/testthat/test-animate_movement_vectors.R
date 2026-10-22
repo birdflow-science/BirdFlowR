@@ -1,11 +1,11 @@
 
 test_that("animate_movement_vectors runs cleanly", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   skip_on_cran()
 
   local_quiet()
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   expect_no_error(a <- animate_movement_vectors(bf, start = 1, end = 4))
 
   # Setup and promise to delete temporary directory

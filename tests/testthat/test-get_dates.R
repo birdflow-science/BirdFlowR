@@ -1,6 +1,6 @@
 test_that("get_dates() works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
   d <- get_dates(bf)
   expect_equal(names(d), c("timestep", "date", "label", "julian", "week"))
   expect_equal(nrow(d), n_timesteps(bf))

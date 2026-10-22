@@ -35,7 +35,7 @@ already have one.
 }
 \examples{
 \donttest{
-bf <- upgrade_birdflow(BirdFlowModels::amewoo)
+bf <- upgrade_birdflow(BirdFlowExamples::amewoo)
 }
 }
 \seealso{

@@ -1,8 +1,8 @@
 test_that("truncation works accross year boundary", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   # Truncation across year boundary
-  bf <- BirdFlowModels::amewoo # need circular
+  bf <- BirdFlowExamples::amewoo # need circular
   expect_no_error(tbf <- truncate_birdflow(bf, start = 40, end = 10))
 
   if (interactive()) {
@@ -13,9 +13,9 @@ test_that("truncation works accross year boundary", {
 
 
 test_that("truncation works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   dates1 <- get_dates(bf)
   expect_no_error(tbf <- truncate_birdflow(bf, start = 5, end = 10))
   dates2 <- get_dates(tbf)

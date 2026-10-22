@@ -40,7 +40,7 @@ by dividing each column by its sum, without transposing.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 get_transition(bf, "T_01-02")
 }
 }

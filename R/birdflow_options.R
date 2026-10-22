@@ -83,7 +83,7 @@
 #' @examples
 #' birdflow_options() # print current settings
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' original_format <- birdflow_options("time_format")
 #' birdflow_options(time_format = "date")
 #' head(get_distr(bf, 1:3))

@@ -25,7 +25,7 @@ is no way to recover this information from older HDF5 / RDS files. Use
 }
 \examples{
 \donttest{
-library(BirdFlowModels)
+library(BirdFlowExamples)
 is_clipped(amewoo) # NA — fixture predates clip metadata
 }
 }

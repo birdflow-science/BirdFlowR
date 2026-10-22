@@ -41,7 +41,7 @@ object has.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 has_marginals(bf)
 has_transitions(bf)
 has_distr(bf)

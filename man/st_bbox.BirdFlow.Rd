@@ -22,7 +22,7 @@ model's coordinate reference system attached.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 sf::st_bbox(bf)
 }
 }

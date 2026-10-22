@@ -1,6 +1,6 @@
 test_that("get_marginal() works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_no_condition(m <- get_marginal(bf, "M_52-01"))
   expect_true(is.matrix(m))
 

@@ -56,7 +56,7 @@ Animate migration traffic rates produced by \code{\link[=calc_bmtr]{calc_bmtr()}
 \examples{
 
 \dontrun{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 
 # Binary detection along shortest path
 bmtr <- calc_bmtr(bf)

@@ -121,7 +121,7 @@ correlated, and are first, first, and second in argument order.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 i <- 1 # first active cell
 
 # From state vector index (i) to row, column, x, y, and back

@@ -21,7 +21,7 @@ Convert a sequence of timesteps into a sequence of transition names
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 as_transitions(1:3, bf)
 }
 }

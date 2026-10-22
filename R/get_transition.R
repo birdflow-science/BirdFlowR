@@ -34,7 +34,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' get_transition(bf, "T_01-02")
 #' }
 get_transition <- function(x, transition) {

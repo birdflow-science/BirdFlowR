@@ -45,7 +45,7 @@
 #'  model, some of which overlap `get_metadata()`.
 #' @examples
 #' \donttest{
-#' library(BirdFlowModels)
+#' library(BirdFlowExamples)
 #' get_metadata(amewoo)
 #' get_metadata(amewoo, "is_sparse")
 #' }

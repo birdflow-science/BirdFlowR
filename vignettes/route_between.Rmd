@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-has_models <- requireNamespace("BirdFlowModels", quietly = TRUE)
+has_models <- requireNamespace("BirdFlowExamples", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(BirdFlowR)
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 ```
 
 `route_between()` samples synthetic migration routes conditioned on observed

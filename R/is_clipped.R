@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(BirdFlowModels)
+#' library(BirdFlowExamples)
 #' is_clipped(amewoo) # NA — fixture predates clip metadata
 #' }
 is_clipped <- function(x) {

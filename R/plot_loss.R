@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' get_loss(bf)
 #' }
 #' @seealso [plot_loss()]
@@ -53,7 +53,7 @@ get_loss <- function(bf) {
 #' @export
 #' @examples
 #' \donttest{
-#'  bf <- BirdFlowModels::amewoo
+#'  bf <- BirdFlowExamples::amewoo
 #'  plot_loss(bf)
 #' }
 plot_loss <- function(bf, transform = "log10") {

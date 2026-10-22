@@ -37,7 +37,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' validate_BirdFlow(bf)
 #' }
 validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {

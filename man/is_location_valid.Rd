@@ -68,7 +68,7 @@ locations that have non-zero values.
 \examples{
 
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 timestep  <- 3
 
 # Sample two valid locations from a distribution

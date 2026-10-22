@@ -1,6 +1,6 @@
 test_that("lookup dates works with timesteps", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   first_ten <-  as.Date(get_dates(bf)$date[1:10])
   expect_equal(lookup_date(1:10, bf), first_ten)
@@ -19,8 +19,8 @@ test_that("lookup dates works with timesteps", {
 
 
 test_that("lookup dates works with transitions and marginals", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   trans <- lookup_transitions(bf, start = 51, end = 3, direction = "forward")
   d <- lookup_date(trans, bf)

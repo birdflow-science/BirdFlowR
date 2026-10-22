@@ -62,7 +62,7 @@
 #'
 #' @examples
 #' \donttest{
-#'  bf <- BirdFlowModels::amewoo
+#'  bf <- BirdFlowExamples::amewoo
 #'
 #' \dontrun{
 #' # full model - skipping because it's slow

@@ -60,7 +60,7 @@
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::rewbla
+#' bf <- BirdFlowExamples::rewbla
 #'
 #' # 1. Dates - order of dates determines direction
 #' lookup_timestep_sequence(bf, start = "2023-12-1", end = "2024-01-20")
@@ -263,7 +263,7 @@ lookup_timestep_sequence <- function(x,
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::rewbla
+#' bf <- BirdFlowExamples::rewbla
 #' lookup_season_timesteps(bf, "breeding", season_buffer = 0)
 #' }
 #'

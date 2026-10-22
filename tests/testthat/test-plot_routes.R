@@ -1,6 +1,6 @@
 test_that("plot_routes() works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   n_spring <- n_fall <- 4
   points <- route(bf, n_spring, season = "spring")
 
@@ -19,8 +19,8 @@ test_that("plot_routes() works", {
 })
 
 test_that("plot_routes() works over year boundary", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
   start <- 40
   end  <- 15
   sd <- get_distr(bf, start)
@@ -38,8 +38,8 @@ test_that("plot_routes() works over year boundary", {
 })
 
 test_that("plot_routes() works without bf", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
   start <- 40
   end  <- 15
   sd <- get_distr(bf, start)
@@ -57,8 +57,8 @@ test_that("plot_routes() works without bf", {
 })
 
 test_that("plot_routes() works with backwards routes", {
- skip_if_not_installed("BirdFlowModels")
- bf <- BirdFlowModels::amewoo
+ skip_if_not_installed("BirdFlowExamples")
+ bf <- BirdFlowExamples::amewoo
  set.seed(1)
  rts <- route(bf, n = 3, start = 15, end = 49, direction = "backward")
  expect_no_error(print(plot(rts)))
@@ -66,9 +66,9 @@ test_that("plot_routes() works with backwards routes", {
 })
 
 test_that("plot_routes() works with data derived from tracks", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   set.seed(1)
   tracks <- make_fake_tracking_data(bf, 12, season = "prebreeding")
 

@@ -72,7 +72,7 @@ in the HDF5 file hierarchy.
 
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, n = 3)
 
 route_path <- tempfile(fileext = ".hdf5")

@@ -31,7 +31,7 @@ if (!"remotes" %in% installed)
   install.packages("remotes")
 if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
+remotes::install_github("birdflow-science/BirdFlowExamples")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
@@ -51,7 +51,7 @@ to create synthetic routes for a species.
 
 ``` r
 library(BirdFlowR)
-library(BirdFlowModels)
+library(BirdFlowExamples)
 
 bf <- amewoo 
 

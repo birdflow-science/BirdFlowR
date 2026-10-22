@@ -29,7 +29,7 @@ a smaller extent as long as it is also larger than the original extent.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 
 # Define extended extent for example
 e <-  ext(bf)

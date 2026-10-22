@@ -33,7 +33,7 @@
 #'     route_type = c("tracking", "tracking", "banding")
 #' )
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' birdflow_intervals <- as_birdflow_intervals(interval_df,
 #'     species = bf$species,
 #'     metadata = bf$metadata[c("n_active", "ebird_version_year")],

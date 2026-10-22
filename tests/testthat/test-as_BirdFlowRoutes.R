@@ -1,5 +1,5 @@
 test_that("as_routes() -> as_birdflow_routes() with different aggregations works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   # Helper - snaps x, y, and date to bf
   snap <- function(df, bf) {
@@ -17,7 +17,7 @@ test_that("as_routes() -> as_birdflow_routes() with different aggregations works
 
 
   set.seed(42)
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   fake_tracks <- make_fake_tracking_data(bf, 5,
     start = 10,

@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' xy <- i_to_xy(c(1, 2), bf)
 #'
 #' # data.frame method: one "one hot" distribution per point

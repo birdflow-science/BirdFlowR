@@ -33,7 +33,7 @@ data, since those depend on the full sequence of points in a route.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 bfr <- route(bf, n = 3)
 bfr[1:5] # BirdFlowRoutes
 

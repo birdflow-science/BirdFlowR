@@ -44,7 +44,7 @@ generates probability distributions for each timestep.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 distr <- get_distr(bf, 1)
 pred <- predict(bf, distr, start = 1, end = 3)
 dim(pred)

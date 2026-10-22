@@ -1,6 +1,6 @@
 test_that("n_parameters() works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_no_error(np <- n_parameters(bf))
 
   # Calculate n_param from marginals
@@ -16,7 +16,7 @@ test_that("n_parameters() works", {
   expect_equal(full_np, full_np2)
 
   # Truncated Model
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   tbf <- truncate_birdflow(bf, start = 10, end = 15)
   expect_no_error(tnp <- n_parameters(bf))
   tnp2 <-    sum(sapply(mar, function(x) prod(dim(x))), get_dynamic_mask(bf, 1))

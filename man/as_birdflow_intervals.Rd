@@ -102,7 +102,7 @@ route_df <- data.frame(
 )
 routes_obj <- as_routes(route_df, species = "amewoo")
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 birdflow_routes <- routes_obj |> as_birdflow_routes(bf = bf)
 birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
 }

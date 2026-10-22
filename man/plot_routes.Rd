@@ -87,7 +87,7 @@ stayed at that location.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 n <- 10
 rts <- route(bf, n, season = "prebreeding")
 

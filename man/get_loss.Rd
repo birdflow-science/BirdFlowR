@@ -22,7 +22,7 @@ a step in the fitting process.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 get_loss(bf)
 }
 }

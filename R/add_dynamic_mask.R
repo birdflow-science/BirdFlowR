@@ -20,7 +20,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- add_dynamic_mask(BirdFlowModels::amewoo)
+#' bf <- add_dynamic_mask(BirdFlowExamples::amewoo)
 #' }
 #'
 add_dynamic_mask <- function(bf, dummy_mask = FALSE) {

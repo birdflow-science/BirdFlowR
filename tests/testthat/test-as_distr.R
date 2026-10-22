@@ -1,7 +1,7 @@
 test_that("as_distr() works with data frames", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   df <- i_to_xy(1:5, bf)
   df$i <- 1:5
 
@@ -37,9 +37,9 @@ test_that("as_distr() works with data frames", {
 
 
 test_that("as_distr works with raster objects", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Get extent of bf in WGS84
   e <- sf::st_bbox(bf) |>
@@ -73,9 +73,9 @@ test_that("as_distr works with raster objects", {
 
 
 test_that("as_distr() works with sf points", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   df <- i_to_xy(1:5, bf)
   df$i <- 1:5
 

@@ -28,7 +28,7 @@ prefer a \link[terra:SpatVector-class]{terra::SpatVector}.
 }
 \examples{
 \donttest{
-library(BirdFlowModels)
+library(BirdFlowExamples)
 get_clip(amewoo) # NULL — fixture predates clip metadata
 }
 }

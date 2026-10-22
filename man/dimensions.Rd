@@ -123,7 +123,7 @@ Functions to return BirdFlow model dimensions and other basic information
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 nrow(bf)
 ncol(bf)
 dim(bf)

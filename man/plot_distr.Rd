@@ -137,7 +137,7 @@ distribution use \verb{d <- matrix(d, ncol = 1);  colnames(d) <- "new label"}
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 p <- plot_distr(get_distr(bf, c(1,11, 21)), bf, show_dynamic_mask = TRUE)
 }
 }

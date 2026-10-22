@@ -95,7 +95,7 @@ into R with model fits the hyperparameters are saved to
 
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 hdf5_path <- tempfile(fileext = ".hdf5")
 export_birdflow(bf, hdf5_path)
 bf2 <- import_birdflow(hdf5_path)

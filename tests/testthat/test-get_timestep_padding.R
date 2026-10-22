@@ -1,7 +1,7 @@
 test_that("Timestep padding works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # 2. From marginals
   expect_equal(get_timestep_padding(bf), 2)

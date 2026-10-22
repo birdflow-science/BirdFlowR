@@ -79,7 +79,7 @@ default is to return all timesteps in the model, equivalent to
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::rewbla
+bf <- BirdFlowExamples::rewbla
 
 # 1. Dates - order of dates determines direction
 lookup_timestep_sequence(bf, start = "2023-12-1", end = "2024-01-20")

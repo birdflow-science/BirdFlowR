@@ -1,10 +1,10 @@
 test_that("Interval validation works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   # Setup
   fake_routes <- make_fake_routes()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
   source1 <- "Testing"
 

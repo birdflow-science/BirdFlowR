@@ -20,11 +20,11 @@ test_that("import_birdflow() works with preprocessed species", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with sparse models", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   skip_on_cran()
 
-  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 10, end = 15)
+  bf <- BirdFlowExamples::amewoo |> truncate_birdflow(start = 10, end = 15)
   sbf <- sparsify(bf, method = "conditional", p = 0.99)
 
   file <- withr::local_tempfile(fileext = ".hdf5")
@@ -46,7 +46,7 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   #   https://github.com/birdflow-science/BirdFlowR/issues/168
   dir <- local_test_dir("na_metadata")
@@ -63,7 +63,7 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
 
   f <- file.path(dir, "amewoo.hdf5")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 3) # faster read/write in test
   bf$species[na_items] <- NA # Overwrite some species info with NA
 
@@ -72,7 +72,7 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
   bf2 <- import_birdflow(f)
 
 
-  # Metadata in BirdFlowModels::amewoo isn't always the same as the
+  # Metadata in BirdFlowExamples::amewoo isn't always the same as the
   # current metadata, so I'm deleting both before comparison
   bf$metadata <- NULL
   bf2$metadata <- NULL
@@ -166,11 +166,11 @@ test_that("preprocess -> fit -> import preserves ebird_coverage", {
 
 
 test_that("import_birdflow() does not leak rhdf5 handles across calls", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   skip_on_cran()
 
-  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 1, end = 3)
+  bf <- BirdFlowExamples::amewoo |> truncate_birdflow(start = 1, end = 3)
   f <- withr::local_tempfile(fileext = ".hdf5")
   export_birdflow(bf, f)
 

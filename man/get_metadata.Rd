@@ -40,7 +40,7 @@ been sparsified,  etc.
 }
 \examples{
 \donttest{
-library(BirdFlowModels)
+library(BirdFlowExamples)
 get_metadata(amewoo)
 get_metadata(amewoo, "is_sparse")
 }

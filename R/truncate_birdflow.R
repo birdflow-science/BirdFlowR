@@ -26,7 +26,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' n_timesteps(bf)
 #' bf2 <- truncate_birdflow(bf, start = 5, end = 10)
 #' n_timesteps(bf2)

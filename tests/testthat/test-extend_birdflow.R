@@ -1,6 +1,6 @@
 test_that("extend_birdflow() works with BirdFlow object in memory", {
-  skip_if_not_installed("BirdFlowModels")
-  bf1 <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf1 <- BirdFlowExamples::amewoo
   # Define expanded extent for example
   cell_buffer <- 3
   buffer <- xres(bf1) * cell_buffer # 3 cells converted to map units (m)
@@ -14,7 +14,7 @@ test_that("extend_birdflow() works with BirdFlow object in memory", {
 })
 
 test_that("extend_birdflow() works with hdf5", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   skip_on_cran()
   skip_on_ci()
@@ -23,7 +23,7 @@ test_that("extend_birdflow() works with hdf5", {
 
   dir <- withr::local_tempdir("extend_hdf5")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Make new extent to extend to
   buffer <- xres(bf) * 3 # 3 cells converted to map units (m)
@@ -67,13 +67,13 @@ test_that("extend_birdflow() works with hdf5", {
 })
 
 test_that("extend_birdflow() works with .rds", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   skip_on_cran()
   skip_on_ci()
 
   dir <- withr::local_tempdir("extend_hdf5")
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Make new extent to extend to
   buffer <- xres(bf) * 3 # 3 cells converted to map units (m)

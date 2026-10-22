@@ -30,7 +30,7 @@
 #' @importFrom grDevices rgb
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' plot_movement_vectors(bf, start = 7)
 #' }
 #'

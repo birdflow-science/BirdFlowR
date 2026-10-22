@@ -52,7 +52,7 @@
 #' @keywords internal
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' rts <- route(bf, n = 3)
 #'
 #' route_path <- tempfile(fileext = ".hdf5")

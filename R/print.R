@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' print(bf)
 #' }
 print.BirdFlow <- function(x, ...) {

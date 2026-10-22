@@ -46,7 +46,7 @@ if (!"remotes" %in% installed)
   install.packages("remotes")
 if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
+remotes::install_github("birdflow-science/BirdFlowExamples")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
 ```
 See the 
@@ -64,7 +64,7 @@ the start and end dates to route for the migration window. We can use it to
 create synthetic routes for a species.
 ```{r examples}
 library(BirdFlowR)
-library(BirdFlowModels)
+library(BirdFlowExamples)
 
 bf <- amewoo 
 

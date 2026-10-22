@@ -1,6 +1,6 @@
 test_that("distr_is_valid() returns true for distributions from model", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Several
   distr <- get_distr(bf, 1:2, type = "marginal")
@@ -14,8 +14,8 @@ test_that("distr_is_valid() returns true for distributions from model", {
 })
 
 test_that("distr_is_valid() returns FALSE when it should", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Several
   distr <- get_distr(bf, 1:2, type = "marginal")
@@ -33,8 +33,8 @@ test_that("distr_is_valid() returns FALSE when it should", {
 })
 
 test_that("distr_is_valid() returns appropriate mask", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Several
   distr <- get_distr(bf, 5:7, type = "marginal")
@@ -55,8 +55,8 @@ test_that("distr_is_valid() returns appropriate mask", {
 })
 
 test_that("is_location_valid() returns TRUE for valid inputs", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Several
   timestep <- 12
@@ -94,8 +94,8 @@ test_that("is_location_valid() returns TRUE for valid inputs", {
 })
 
 test_that("is_location_valid() returns FALSE when it should", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Several
   timestep <- 12

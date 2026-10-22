@@ -10,7 +10,7 @@ rasterize_bmtr(bmtr, bf)
 \item{bmtr}{A dataframe returned by \code{calc_bmtr}, containing
 columns \code{x}, \code{y}, \code{transition}, \code{bmtr}, and \code{date}.}
 
-\item{bf}{A BirdFlow model. For example: \code{BirdFlowModels::amewoo}}
+\item{bf}{A BirdFlow model. For example: \code{BirdFlowExamples::amewoo}}
 }
 \value{
 A \code{SpatRaster} object (from \code{terra}) with
@@ -26,7 +26,7 @@ The \code{x} and \code{y} coordinates are mapped to raster columns and rows.
 }
 \examples{
 \dontrun{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 bmtr <- calc_bmtr(bf)
 raster <- rasterize_bmtr(bmtr, bf)
 plot(raster)

@@ -14,7 +14,7 @@
 #' @name subset_routes
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' bfr <- route(bf, n = 3)
 #' bfr[1:5] # BirdFlowRoutes
 #'

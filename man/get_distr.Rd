@@ -63,7 +63,7 @@ after any trimming.}
 
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 get_distr(bf, which = 1) # first timestep, as a vector
 get_distr(bf, which = c(1, 2)) # first two timesteps, as a matrix
 get_distr(bf, which = 1, type = "marginal") # calculated from marginals

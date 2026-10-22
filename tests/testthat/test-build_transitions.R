@@ -1,8 +1,8 @@
 test_that("build_transitions(0) and drop_transitions() work", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   # Add and drop transitions and see if you end up with an identical object
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   tbf <- build_transitions(bf)
   bf2 <- drop_transitions(tbf)
   expect_equal(bf, bf2)

@@ -1,9 +1,9 @@
 
 test_that("distribution_performance works", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   bf <- truncate_birdflow(bf, start = 5, end = 7)
 
 
@@ -15,7 +15,7 @@ test_that("distribution_performance works", {
   expect_equal(stats$mean_distr_cor, stats2$mean_distr_cor)
 
   # subset while running
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   expect_no_error(
     stats3 <- distribution_performance(bf, start = 5, end = 7)
   )
@@ -28,7 +28,7 @@ test_that("distribution_performance works", {
 })
 
 test_that("distribution_performance reproduces end_traverse_cor metric", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   # Modified version of evaluate_performance used by @slager
   evaluate_performance_route <- function(x, season = "all") {
@@ -55,7 +55,7 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
   }
 
 
-  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 10, end = 13)
+  bf <- BirdFlowExamples::amewoo |> truncate_birdflow(start = 10, end = 13)
 
   # On truncated model
   a <- evaluate_performance_route(bf, season = "all")
@@ -66,15 +66,15 @@ test_that("distribution_performance reproduces end_traverse_cor metric", {
 })
 
 test_that("distribution_performance works accross year boundary", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
   expect_no_error(a <- distribution_performance(bf, start = 51, end = 2))
 })
 
 
 test_that("distribution_performance works with individual metrics", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   all <- distribution_performance(bf, metrics = "md_traverse_cor",
                                    start = 1, end = 2)
   for (metric in names(all)) {

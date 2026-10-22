@@ -51,7 +51,7 @@ if (FALSE) {
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #' d <- get_distr(bf, 1)
 #' m <- rasterize_distr(d, bf, format = "numeric")
 #' f <- flatten_raster(m, bf)

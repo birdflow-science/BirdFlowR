@@ -1,6 +1,6 @@
 test_that("lookup_timestep_sequence() throws useful error if start = season", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_error(lookup_timestep_sequence(bf, start = "prebreeding"),
                "It looks like you are supplying a season name to start.")
 
@@ -16,8 +16,8 @@ test_that("lookup_timestep_sequence() throws useful error if start = season", {
 })
 
 test_that("lookup_timestep_sequence() works with timestep input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Not over boundary
   expect_equal(lookup_timestep_sequence(bf, start = 1, end = 5), 1:5) # Forward
@@ -54,8 +54,8 @@ test_that("lookup_timestep_sequence() works with timestep input", {
 
 
 test_that("lookup_timestep_sequence() works with date input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   ###  Not over boundary
   d1 <- as.Date("2023-04-11")
@@ -152,8 +152,8 @@ test_that("lookup_timestep_sequence() works with date input", {
 })
 
 test_that("lookup_timestep_sequence() works with POSIX date input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   ###  Not over boundary
   d1 <- as.POSIXct(as.Date("2023-04-11"))
@@ -249,8 +249,8 @@ test_that("lookup_timestep_sequence() works with POSIX date input", {
 
 
 test_that("lookup_timestep_sequence() works with character date input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   ###  Not over boundary
   d1 <- "2023-04-11"
@@ -346,9 +346,9 @@ test_that("lookup_timestep_sequence() works with character date input", {
 
 
 test_that("lookup_timestep_sequence() works with 'all'", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Forward
   s <- lookup_timestep_sequence(bf, "all")
@@ -375,9 +375,9 @@ test_that("lookup_timestep_sequence() works with 'all'", {
 
 
 test_that("lookup_timestep_sequence() works with season input", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Four seasons buffer = 0  cover entire year with no overlap
   spring  <- lookup_timestep_sequence(bf, "spring", season_buffer = 0)
@@ -498,8 +498,8 @@ test_that("lookup_timestep_sequence() works with season input", {
 
 
 test_that("lookup_timestep() works with start and n input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   # Forward over year boundary
   expect_no_error(a <- lookup_timestep_sequence(bf, start = 50, n_steps = 10))
@@ -534,8 +534,8 @@ test_that("lookup_timestep() works with start and n input", {
 })
 
 test_that("lookup_timestep() throws expected errors with non-cyclical models", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf <- truncate_birdflow(bf, start = 11, end = 21)
 
   expect_false(is_cyclical(bf))
@@ -563,7 +563,7 @@ test_that("lookup_timestep() throws expected errors with non-cyclical models", {
 })
 
 test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
     #   https://github.com/birdflow-science/BirdFlowR/issues/168
 
@@ -573,7 +573,7 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
                 "prebreeding_migration_start",
                 "prebreeding_migration_end")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   bf$species[na_items] <- NA
   expect_error(lookup_timestep_sequence(bf, season = "prebreeding"),
                regexp = "season has NA .* season lookup is impossible")
@@ -587,11 +587,11 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
 })
 
 test_that("lookup_season_timesteps() works with single timestep season", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   # See https://github.com/birdflow-science/BirdFlowR/issues/191
   # The Northerth Saw-whet Owl  "nswowl
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Hack species info to artificially recreate problem with standard test model
   # same date for start and end of prebreeding migration

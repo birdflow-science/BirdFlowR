@@ -38,7 +38,7 @@ cell and birds passing through it from other starting locations.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 plot_movement_vectors(bf, start = 7)
 }
 

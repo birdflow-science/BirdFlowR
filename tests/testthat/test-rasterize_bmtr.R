@@ -1,9 +1,9 @@
 test_that("rasterize_bmtr() returns a valid, plottable raster with the same extent and number of timesteps as the original model", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
 
   # Amewoo BirdFlow model
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Unweighted BMTR object
   bmtr_uw <- calc_bmtr(bf, method = "binary")
@@ -18,13 +18,13 @@ test_that("rasterize_bmtr() returns a valid, plottable raster with the same exte
 })
 
 test_that("rasterization works for weighted BMTR calculation", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   testthat::skip("Slow test. Always skipped")
 
   local_quiet()
 
   # Amewoo BirdFlow model
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # Weighted, non-Euclidean BMTR object
   bmtr_sph <- calc_bmtr(bf, method = "continuous-spherical")

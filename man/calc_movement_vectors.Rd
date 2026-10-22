@@ -47,7 +47,7 @@ in the cell.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 mv <- calc_movement_vectors(bf, 7)
 }
 

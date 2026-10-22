@@ -23,7 +23,7 @@
 
 library(hexSticker)
 library(shadowtext)
-library(BirdFlowModels)
+library(BirdFlowExamples)
 library(BirdFlowR)
 library(svglite)  # unstated dependency of hexSticker?
 library(ggplot2)
@@ -37,7 +37,7 @@ transparent_png_file <- "man/figures/BirdFlow_transparent.png"  # transparent ba
 make_transparent_copy <- FALSE
 
 # Make some routes - set a seed to keep the figure constant
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 set.seed(1)
 rts <- route_migration(bf, n = 10)$points
 

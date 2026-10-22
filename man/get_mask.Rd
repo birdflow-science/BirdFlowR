@@ -37,7 +37,7 @@ that correspond with distribution values, and location indices.
 }
 \examples{
 \donttest{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 m <- get_mask(bf)
 }
 

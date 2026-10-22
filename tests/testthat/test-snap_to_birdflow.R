@@ -1,6 +1,6 @@
 test_that("snap_to_birdflow works", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   d <- make_fake_move_data(bf)
 
@@ -53,7 +53,7 @@ test_that("snap_to_birdflow works", {
 })
 
 test_that("snap_to_birdflow() works with preprocessed models", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
   local_quiet()  # to suppress preprocess chatter
 
@@ -62,7 +62,7 @@ test_that("snap_to_birdflow() works with preprocessed models", {
   skip_on_covr()
   skip_on_ci()
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   # And it requires and ebirdst access key
   err <- tryCatch(bf <- preprocess_species("amewoo", res = 150, hdf5 = FALSE),
@@ -80,9 +80,9 @@ test_that("snap_to_birdflow() works with preprocessed models", {
 })
 
 test_that("snap_to_birdflow() works with non standard column names", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   d <- make_fake_move_data(bf) |>
     dplyr::rename(Dates = "date", X = "x", Y = "y")
   expect_no_error(
@@ -97,8 +97,8 @@ test_that("snap_to_birdflow() works with non standard column names", {
 })
 
 test_that("snap_to_birdflow()  behaves with odd input", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   d <- make_fake_move_data(bf)
 
 

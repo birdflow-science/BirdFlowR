@@ -81,9 +81,9 @@ test_that("preprocess_species runs on test dataset", {
 
 # Legacy fixture that predates clip metadata
 test_that("is_clipped() and get_clip() handle legacy models", {
-  skip_if_not_installed("BirdFlowModels")
-  expect_true(is.na(is_clipped(BirdFlowModels::amewoo)))
-  expect_null(get_clip(BirdFlowModels::amewoo))
+  skip_if_not_installed("BirdFlowExamples")
+  expect_true(is.na(is_clipped(BirdFlowExamples::amewoo)))
+  expect_null(get_clip(BirdFlowExamples::amewoo))
 })
 
 #3

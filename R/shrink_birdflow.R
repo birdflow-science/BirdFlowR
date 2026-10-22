@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \donttest{
-#' bf <- BirdFlowModels::amewoo
+#' bf <- BirdFlowExamples::amewoo
 #'
 #' # Define extended extent for example
 #' e <-  ext(bf)

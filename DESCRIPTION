@@ -11,8 +11,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: 
-    BirdFlowModels (>= 0.0.2.9003),
+Suggests:
+    BirdFlowExamples (>= 0.0.1.9001),
     covr,
     ebirdst,
     knitr,
@@ -49,7 +49,7 @@ Imports:
     viridisLite
 VignetteBuilder: knitr
 Remotes:
-  birdflow-science/BirdFlowModels
+  birdflow-science/BirdFlowExamples
 URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
 BugReports: https://github.com/birdflow-science/BirdFlowR/issues
 Language: en-US

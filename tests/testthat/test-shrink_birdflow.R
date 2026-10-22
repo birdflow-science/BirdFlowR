@@ -1,13 +1,13 @@
 test_that("shrink birdflow doesn't change original models", {
-  skip_if_not_installed("BirdFlowModels")
-  bf1 <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf1 <- BirdFlowExamples::amewoo
   expect_no_error(bf2 <-  shrink_birdflow(bf1))
   expect_equal(bf1,  bf2)
 })
 
 test_that("shrink birdflow reverts extended BirdFlow to original", {
-  skip_if_not_installed("BirdFlowModels")
-  bf1 <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf1 <- BirdFlowExamples::amewoo
   cell_buffer <- 2
   buffer <- xres(bf1) * cell_buffer # converted to map units (m)
   e <-  ext(bf1) |> buffer_extent(buffer = buffer)
@@ -18,8 +18,8 @@ test_that("shrink birdflow reverts extended BirdFlow to original", {
 
 
 test_that("shrink birdflow doesn't drop internal columns or rows", {
-  skip_if_not_installed("BirdFlowModels")
-  bf1 <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf1 <- BirdFlowExamples::amewoo
   bf1$geom$mask[, 3] <- FALSE  # hacked and broken bf but will work for test
   bf1$geom$mask[2, ] <- FALSE  # hacked and broken bf but will work for test
   bf2 <- shrink_birdflow(bf1)

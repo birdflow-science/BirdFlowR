@@ -1,8 +1,8 @@
 test_that("lookup_species_metadata() has consistent output", {
-  skip_if_not_installed("BirdFlowModels")
+  skip_if_not_installed("BirdFlowExamples")
   skip_if_unsupported_ebirdst_version(use = "lookup_species_metadata")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   expect_equal(names(lookup_species_metadata("amewoo")),
                names(new_BirdFlow()$species))
 
