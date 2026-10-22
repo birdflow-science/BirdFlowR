@@ -3,12 +3,12 @@
     Code
       sum(between[[1]])
     Output
-      [1] 8684.696
+      [1] 3599.392
 
 # calc_spherical_detection_rate() works with kernel = 'bb'
 
     Code
       sum(between[[1]])
     Output
-      [1] 8931.652
+      [1] 3741.994
 
