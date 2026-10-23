@@ -19,6 +19,7 @@
 ^CLAUDE\.md$
 ^\.claude$
 ^\.positai$
+^cran-comments\.md$
 \.DS_Store$
 \.Rhistory$
 ^vignettes/.*\.html$

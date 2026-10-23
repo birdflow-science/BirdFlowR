@@ -6,7 +6,12 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4405-2251")),
       person("BirdFlow-Science", role = "cph"),
       person("National Science Foundation", role = "fnd"))
-Description: BirdFlowR predicts bird movement and distribution from previously fitted models.
+Description: Predict and visualize where and when birds move using models derived 
+    from observations submitted by birders to eBird.
+    Core functions allow generating synthetic migration routes, and projecting bird 
+    distributions forward or backwards in time.
+    Additional functions allow estimating migratory traffic, routing birds between specific locations,
+    and importing and exporting data from and to various spatial formats. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
