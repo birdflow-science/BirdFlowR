@@ -27,11 +27,11 @@ make_coverage_bf <- function() {
   bf
 }
 
-test_that("get_ebird_coverage warns and returns NA for models without coverage", {
+test_that("get_ebird_coverage returns a coverage SpatRaster", {
   skip_if_not_installed("BirdFlowExamples")
   bf <- BirdFlowExamples::amewoo
-  expect_warning(result <- get_ebird_coverage(bf), "does not have")
-  expect_true(is.na(result))
+  expect_no_error(result <- get_ebird_coverage(bf))
+  expect_s4_class(result, "SpatRaster")
 })
 
 test_that("get_ebird_coverage returns SpatRaster by default", {

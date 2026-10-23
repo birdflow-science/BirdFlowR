@@ -9,13 +9,13 @@ test_that("predicting preserves distribution over 5 weeks", {
   pred_d5 <- p[, 5]
   d5 <- get_distr(bf, 5)
 
-  expect_gt(cor(d5, pred_d5), expected = .97)
+  # Note thresholds lowered in Oct 2026 when switching to
+  # heavily sparsified example models
+  expect_gt(cor(d5, pred_d5), expected = .95)
 
   p <- predict(bf, d5, start = 5, end = 1, direction = "backward")
   pred_d1 <- p[, 5]
-
-  expect_gt(cor(d1, pred_d1), expected = .97)
-
+  expect_gt(cor(d1, pred_d1), expected = .95)
 })
 
 

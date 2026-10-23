@@ -17,11 +17,11 @@ test_that("lookup_transitions works with timesteps", {
   expect_equal(a, c("T_02-01", "T_01-52", "T_52-51"))
 
   # Forward dates across year boundary
-  a <- lookup_transitions(bf, start = "2022-12-10", end = "2023-01-13")
+  a <- lookup_transitions(bf, start = "2022-12-09", end = "2023-01-13")
   expect_equal(a, c("T_49-50", "T_50-51", "T_51-52", "T_52-01", "T_01-02"))
 
   # Backward dates across year boundary
-  a <- lookup_transitions(bf,  start = "2023-01-13", end = "2022-12-10")
+  a <- lookup_transitions(bf,  start = "2023-01-13", end = "2022-12-09")
   expect_equal(a, c("T_02-01", "T_01-52", "T_52-51", "T_51-50", "T_50-49"))
   expect_equal(lookup_timestep("2023-01-13", bf), 2)
 

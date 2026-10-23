@@ -37,6 +37,7 @@ test_that("interval_log_likelihood returns expected values", {
     sf::st_coordinates()
   wgs <- wgs[, 1:2]
   colnames(wgs) <- c("lon", "lat")
+
   observations <- cbind(observations, wgs)
   observations$i <- xy_to_i(x = observations$x, y = observations$y, bf)
   intervals <- data.frame(from = 1:(nrow(observations) - 1),
@@ -45,14 +46,18 @@ test_that("interval_log_likelihood returns expected values", {
   # Calculate log likelihood for observation table
   expect_warning(ll <- interval_log_likelihood(intervals, observations, bf))
 
-  # Pull single step log likelihood directly from the transition matrices
+  # Pull single step log likelihood directly from the transition matrices.
+  # Transition matrices are indexed to each timestep's dynamic mask subset,
+  # not to the full set of active cells, so state indices (i) must be
+  # converted to dynamic-mask indices (dmi) before indexing into them.
   expected_ll <- rep(NA_real_, nsteps)
   for (j in 1:nsteps) {
-    t_id <- lookup_transitions(bf, start = start + j - 1,
-                               end =  start + j, direction =  "forward")
+    t1 <- start + j - 1
+    t2 <- start + j
+    t_id <- lookup_transitions(bf, start = t1, end = t2, direction = "forward")
     t <- get_transition(bf, t_id)
-    i1 <- observations$i[j]  # start location index
-    i2 <- observations$i[j + 1] # end location index
+    i1 <- i_to_dmi(observations$i[j], t1, bf)  # start location index
+    i2 <- i_to_dmi(observations$i[j + 1], t2, bf)  # end location index
     expected_ll[j] <- log(t[i2, i1])
   }
 

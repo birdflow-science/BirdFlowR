@@ -49,7 +49,7 @@ test_that("forward and backwards transitions are consistent", {
   # step to generate a new timestep 1 distribution (d1b).  We expect
   #  the two, timestep 1, distributions to be highly correlated.
   bf <- BirdFlowExamples::amewoo
-  d1a <- get_distr(bf, 1)
+  d1a <- get_distr(bf, 1, type = "marginal")
   d2 <- predict(bf, distr = d1a, start = 1, end = 2)[, 2]
   d1b <- predict(bf, distr = d2, start = 2, end = 1)[, 2]
   expect_true(cor(d1a, d1b) > 0.95)

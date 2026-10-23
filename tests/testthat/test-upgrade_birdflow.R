@@ -133,21 +133,16 @@ test_that("upgrade_birdflow() only backfills what's actually missing on ambduc",
   expect_true(length(new_fields) > 0)
 })
 
-# Transitional: today's real amewoo/rewbla objects predate the ambduc-level
-# format (see dev/cran_prep.md Task 3 -- both are slated for a refit to the
-# current format before this branch merges to main). Once that refit lands
-# these assertions will likely collapse into no-ops, same as the ambduc test
-# above, and can be simplified or removed then.
-test_that("upgrade_birdflow() upgrades today's real amewoo/rewbla", {
+test_that("upgrade_birdflow() is no-op on real amewoo/rewbla", {
   skip_if_not_installed("BirdFlowExamples")
 
   bf <- BirdFlowExamples::amewoo
   ubf <- upgrade_birdflow(bf)
   expect_no_error(validate_BirdFlow(ubf))
+  expect_equal(bf, ubf)
 
   bf <- BirdFlowExamples::rewbla
-  expect_false(has_dynamic_mask(bf))
-  ubf <- upgrade_birdflow(bf)
-  expect_true(has_dynamic_mask(ubf))
+  expect_no_error(ubf <- upgrade_birdflow(bf))
   expect_no_error(validate_BirdFlow(ubf))
+  expect_equal(bf, ubf)
 })
