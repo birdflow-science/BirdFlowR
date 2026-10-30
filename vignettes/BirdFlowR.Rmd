@@ -96,11 +96,11 @@ plot(rts, bf)
 `predict()` propagates a starting distribution forward through time. Here we sample a single winter location and project it forward to the breeding season.
 
 ```{r quick demo forecast}
-set.seed(0)
+set.seed(1)
 initial_distribution <- get_distr(bf, 1)
 location <- sample_distr(initial_distribution)
-forcast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
-plot_distr(forcast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
+forecast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forecast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 ## Time
