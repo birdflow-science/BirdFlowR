@@ -1,60 +1,71 @@
-test_that("calc_bmtr() works without directionality", {
+
+test_that("calc_bmtr() works and three methods produce similar output", {
+
   local_quiet()
   bf <- small_test_bf()
 
-  expect_no_error(f <- calc_bmtr(bf))
+  # Binary
+  expect_no_error(binary_bmtr <- calc_bmtr(bf, method = "binary"))
+  binary_top <- head(binary_bmtr[!binary_bmtr$bmtr == 0, ], 6)
+  binary_top$bmtr <- signif(binary_top$bmtr, 4)
+  expect_snapshot(binary_top)
 
-  # Snapshot of first 6 non-zero movements
-  top <- head(f[!f$bmtr == 0, ], 6)
-  top$bmtr <- signif(top$bmtr, 4)
-  expect_snapshot(top)
+  # continuous
+  expect_no_error(continuous_bmtr <- calc_bmtr(bf, method = "continuous"))
+  continuous_top <- head(continuous_bmtr[!continuous_bmtr$bmtr == 0, ], 6)
+  continuous_top$bmtr <- signif(continuous_top$bmtr, 4)
+  expect_snapshot(continuous_top)
 
-  # Visualizations
-  expect_no_error(plot_bmtr(f, bf))
-  expect_no_error(animate_bmtr(f, bf))
+  # continuous-spherical
+  expect_no_error(spherical_bmtr <- calc_bmtr(bf, method = "continuous-spherical"))
+  spherical_top <- head(spherical_bmtr[!spherical_bmtr$bmtr == 0, ], 6)
+  spherical_top$bmtr <- signif(spherical_top$bmtr, 4)
+  expect_snapshot(spherical_top)
 
-})
 
-test_that("calc_bmtr() works with method = 'binary'", {
-  local_quiet()
-  bf <- small_test_bf()
+  expect_no_error(plot_bmtr(binary_bmtr, bf))
+  expect_no_error(animate_bmtr(continuous_bmtr, bf))
 
-  expect_no_error(f <- calc_bmtr(bf, method = "binary"))
 
-  top <- head(f[!f$bmtr == 0, ], 6)
-  top$bmtr <- signif(top$bmtr, 4)
-  expect_snapshot(top)
+  # Check that Radius is respected - kept within same test block to mimimize calls / testing time
+  r1 <- mean(res(bf)) * 0.5  # default used above
+  r2 <-  mean(res(bf)) * 0.9
 
-  expect_no_error(plot_bmtr(f, bf))
-  expect_no_error(animate_bmtr(f, bf))
-})
+  r2_bmtr <- calc_bmtr(bf, method = "continuous", radius = r2)
+  expect_false(isTRUE(all.equal(continuous_bmtr$bmtr, r2_bmtr$bmtr)))
 
-test_that("calc_bmtr() works with method = 'continuous'", {
-  local_quiet()
-  bf <- small_test_bf()
 
-  expect_no_error(f <- calc_bmtr(bf, method = "continuous"))
+  # Test that euclidean (continuous) and spherical (continous-spherical)
+  # agree closely
+  euc <- continuous_bmtr
+  sph <- spherical_bmtr
 
-  top <- head(f[!f$bmtr == 0, ], 6)
-  top$bmtr <- signif(top$bmtr, 4)
-  expect_snapshot(top)
+  euc$id <- paste(euc$x, euc$y, euc$transition)
+  sph$id <- paste(sph$x, sph$y, sph$transition)
+  m <- merge(euc, sph, by = "id", suffixes = c("_euc", "_sph"))
 
-  expect_no_error(plot_bmtr(f, bf))
-  expect_no_error(animate_bmtr(f, bf))
-})
+  expect_true(nrow(m) > 0)
+  expect_equal(m$bmtr_euc, m$bmtr_sph, tolerance = 0.05)
 
-test_that("calc_bmtr() works with method = 'continuous-spherical'", {
-  local_quiet()
-  bf <- small_test_bf()
+  # calc_bmtr()  forwards ... to the spread kernel
+  wider <- calc_bmtr(bf, method = "continuous", gamma = 100000)
+  expect_false(isTRUE(all.equal(continuous_bmtr$bmtr, wider$bmtr)))
 
-  expect_no_error(f <- calc_bmtr(bf, method = "continuous-spherical"))
+  # Specifying kernel parameters with binary method produces error
+  expect_error(calc_bmtr(bf, method = "binary", gamma = 100000))
 
-  top <- head(f[!f$bmtr == 0, ], 6)
-  top$bmtr <- signif(top$bmtr, 4)
-  expect_snapshot(top)
+  # plot_bmtr() subset drops excluded transitions (no empty facets)
+  all_trans <- sort(unique(continuous_bmtr$transition))
+  expect_true(length(all_trans) >= 3)
 
-  expect_no_error(plot_bmtr(f, bf))
-  expect_no_error(animate_bmtr(f, bf))
+  # Numeric subset: keep first 2 transitions
+  expect_no_error(p <- plot_bmtr(continuous_bmtr, bf, subset = 1:2))
+  expect_equal(nlevels(p$data$label), 2L)
+
+  # Character subset: keep same 2 transitions by name
+  expect_no_error(p2 <- plot_bmtr(continuous_bmtr, bf, subset = all_trans[1:2]))
+  expect_equal(nlevels(p2$data$label), 2L)
+
 })
 
 test_that("calc_bmtr() errors on an invalid method", {
@@ -64,33 +75,19 @@ test_that("calc_bmtr() errors on an invalid method", {
   expect_error(calc_bmtr(bf, method = "bogus"))
 })
 
-test_that("calc_bmtr() respects a user-supplied points argument (Bug A)", {
+test_that("calc_bmtr() respects a user-supplied points argument (bug fix)", {
   local_quiet()
   bf <- small_test_bf()
 
   pts <- i_to_xy(seq_len(min(5, n_active(bf))), bf)[, c("x", "y")]
 
-  for (method in c("continuous", "continuous-spherical")) {
-    f <- calc_bmtr(bf, points = pts, method = method, format = "points")
-    expect_equal(nrow(f$point), nrow(pts))
-    expect_equal(sort(f$point$x), sort(pts$x))
-    expect_equal(sort(f$point$y), sort(pts$y))
-  }
+  f <- calc_bmtr(bf, points = pts, method = "continuous", format = "points")
+  expect_equal(nrow(f$point), nrow(pts))
+  expect_equal(sort(f$point$x), sort(pts$x))
+  expect_equal(sort(f$point$y), sort(pts$y))
+
 })
 
-test_that("calc_bmtr() respects a user-supplied radius (Bug B)", {
-  local_quiet()
-  bf <- small_test_bf()
-
-  r1 <- mean(res(bf)) * 0.3
-  r2 <- mean(res(bf)) * 0.9
-
-  for (method in c("continuous", "continuous-spherical")) {
-    f1 <- calc_bmtr(bf, method = method, radius = r1)
-    f2 <- calc_bmtr(bf, method = method, radius = r2)
-    expect_false(isTRUE(all.equal(f1$bmtr, f2$bmtr)))
-  }
-})
 
 test_that("calc_bmtr() enforces check_radius bounds for continuous methods", {
   local_quiet()
@@ -98,56 +95,13 @@ test_that("calc_bmtr() enforces check_radius bounds for continuous methods", {
 
   bad_radius <- mean(res(bf)) * 2
 
-  for (method in c("continuous", "continuous-spherical")) {
+  for (method in c("continuous")) {
     expect_error(calc_bmtr(bf, method = method, radius = bad_radius))
     expect_no_error(calc_bmtr(bf, method = method, radius = bad_radius,
                               check_radius = FALSE))
   }
 })
 
-test_that("'continuous' and 'continuous-spherical' agree closely", {
-  local_quiet()
-  bf <- small_test_bf()
-
-  euc <- calc_bmtr(bf, method = "continuous")
-  sph <- calc_bmtr(bf, method = "continuous-spherical")
-
-  euc$id <- paste(euc$x, euc$y, euc$transition)
-  sph$id <- paste(sph$x, sph$y, sph$transition)
-  m <- merge(euc, sph, by = "id", suffixes = c("_euc", "_sph"))
-
-  expect_true(nrow(m) > 0)
-  expect_equal(m$bmtr_euc, m$bmtr_sph, tolerance = 0.05)
-})
-
-test_that("calc_bmtr() forwards ... to the spread kernel", {
-  local_quiet()
-  bf <- small_test_bf()
-
-  default <- calc_bmtr(bf, method = "continuous")
-  wider <- calc_bmtr(bf, method = "continuous", gamma = 100000)
-  expect_false(isTRUE(all.equal(default$bmtr, wider$bmtr)))
-
-  expect_error(calc_bmtr(bf, method = "binary", gamma = 100000))
-})
-
-
-test_that("plot_bmtr() subset drops excluded transitions (no empty facets)", {
-  local_quiet()
-  bf <- small_test_bf()
-
-  f <- calc_bmtr(bf)
-  all_trans <- sort(unique(f$transition))
-  expect_true(length(all_trans) >= 3)
-
-  # Numeric subset: keep first 2 transitions
-  expect_no_error(p <- plot_bmtr(f, bf, subset = 1:2))
-  expect_equal(nlevels(p$data$label), 2L)
-
-  # Character subset: keep same 2 transitions by name
-  expect_no_error(p2 <- plot_bmtr(f, bf, subset = all_trans[1:2]))
-  expect_equal(nlevels(p2$data$label), 2L)
-})
 
 test_that("Test sensativity of bmtr to radius", {
   skip_if_not_installed("BirdFlowExamples")

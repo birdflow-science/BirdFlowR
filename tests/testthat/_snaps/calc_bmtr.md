@@ -1,7 +1,7 @@
-# calc_bmtr() works without directionality
+# calc_bmtr() works and three methods produce similar output
 
     Code
-      top
+      binary_top
     Output
                x       y transition      bmtr       date
       60 5025000 9675000    T_04-05 6.238e-11 2023-01-28
@@ -11,23 +11,10 @@
       64 5025000 9525000    T_04-05 8.577e-09 2023-01-28
       65 5025000 9375000    T_01-02 8.040e-08 2023-01-07
 
-# calc_bmtr() works with method = 'binary'
+---
 
     Code
-      top
-    Output
-               x       y transition      bmtr       date
-      60 5025000 9675000    T_04-05 6.238e-11 2023-01-28
-      61 5025000 9525000    T_01-02 9.209e-09 2023-01-07
-      62 5025000 9525000    T_02-03 1.768e-09 2023-01-14
-      63 5025000 9525000    T_03-04 2.653e-09 2023-01-21
-      64 5025000 9525000    T_04-05 8.577e-09 2023-01-28
-      65 5025000 9375000    T_01-02 8.040e-08 2023-01-07
-
-# calc_bmtr() works with method = 'continuous'
-
-    Code
-      top
+      continuous_top
     Output
                x        y transition      bmtr       date
       56 5025000 10125000    T_04-05 4.758e-12 2023-01-28
@@ -37,10 +24,10 @@
       65 5025000  9675000    T_01-02 6.293e-10 2023-01-07
       66 5025000  9675000    T_02-03 6.204e-11 2023-01-14
 
-# calc_bmtr() works with method = 'continuous-spherical'
+---
 
     Code
-      top
+      spherical_top
     Output
                x        y transition      bmtr       date
       52 5025000 10125000    T_04-05 4.906e-12 2023-01-28
