@@ -183,6 +183,7 @@ reference:
   - extend_birdflow
   - validate_BirdFlow
   - pad_timestep
+  - upgrade_birdflow
 
 - title: Deprecated
   contents:
