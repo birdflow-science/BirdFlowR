@@ -7,11 +7,11 @@ Authors@R:
       person("BirdFlow-Science", role = "cph"),
       person("National Science Foundation", role = "fnd"))
 Description: Predict and visualize where and when birds move using models derived 
-    from observations submitted by birders to eBird.
-    Core functions allow generating synthetic migration routes, and projecting bird 
-    distributions forward or backwards in time.
-    Additional functions allow estimating migratory traffic, routing birds between specific locations,
-    and importing and exporting data from and to various spatial formats. 
+    from eBird Status and Trends weekly distributions.
+    Core functions create synthetic migration routes, and project bird 
+    distributions forward and backward in time.
+    Additional functions estimate migratory traffic, route birds between specific locations,
+    and import and export data from and to various spatial formats. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
