@@ -13,8 +13,10 @@
 #' @export
 #'
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' get_loss(bf)
+#' }
 #' @seealso [plot_loss()]
 get_loss <- function(bf) {
   if (!"loss_values" %in% names(bf$metadata))
@@ -28,7 +30,9 @@ get_loss <- function(bf) {
 
 #' Plot changes in component and total loss during model fitting
 #'
-#' Model fitting  - in [BirdFlowPy]() - attempts to minimize the total weighted
+#' Model fitting  - in
+#' [BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy) - attempts
+#' to minimize the total weighted
 #' loss.  This plot shows four lines:
 #' *  **Total loss** is the weighted sum of the three loss components. The
 #' weighting may cause it to be lower than some of the components.
@@ -48,8 +52,10 @@ get_loss <- function(bf) {
 #' @return a **ggplot2** plot object.
 #' @export
 #' @examples
-#'  bf <- BirdFlowModels::amewoo
+#' \donttest{
+#'  bf <- BirdFlowExamples::amewoo
 #'  plot_loss(bf)
+#' }
 plot_loss <- function(bf, transform = "log10") {
 
   if (!all(c("loss_values", "hyperparameters") %in% names(bf$metadata)))

@@ -61,7 +61,8 @@
 #' movement data from real birds.
 #'
 #' @examples
-#'  bf <- BirdFlowModels::amewoo
+#' \donttest{
+#'  bf <- BirdFlowExamples::amewoo
 #'
 #' \dontrun{
 #' # full model - skipping because it's slow
@@ -69,6 +70,7 @@
 #' }
 #' # Just for prebreeding_migration
 #' distribution_performance(bf, season = "prebreeding_migration")
+#' }
 #'
 #' @export
 distribution_performance <- function(x, metrics = NULL, ...) {
@@ -76,9 +78,8 @@ distribution_performance <- function(x, metrics = NULL, ...) {
   stopifnot(inherits(x, "BirdFlow"))
 
 
-  ### Transition code
-  if (!has_dynamic_mask(x))
-    x <- add_dynamic_mask(x)
+  ### Back compatibility to support old models
+  x <- upgrade_birdflow(x)
 
   all_metrics <- c("min_step_cor",
                    "mean_step_cor",

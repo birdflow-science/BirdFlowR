@@ -2,7 +2,8 @@
 #'
 #' `lookup_species_metadata()` uses \pkg{ebirdst} to generate
 #' a list  identical to the `species` component of a BirdFlow model.
-#' It is an internal function used by [preprocess_species()] and [Routes()].
+#' It is an internal function used by [preprocess_species()] and
+#' [as_routes()].
 #' See [species_info()] for a description of the list items.
 #'
 #' @param species An eBird species code, common name, or scientific name. It

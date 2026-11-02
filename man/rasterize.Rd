@@ -55,7 +55,7 @@ The object is suitable for plotting with [\link[ggplot2:geom_tile]{ggplot2::geom
 \description{
 \code{rast()} converts a BirdFlow object directly
 to a \link[terra:SpatRaster-class]{SpatRaster}.
-\code{rasterize_distr()} converts a \href{as_distr}{distribution} into a
+\code{rasterize_distr()} converts a \href{as_distr()}{distribution} into a
 \link[terra:SpatRaster-class]{SpatRaster}, numeric matrix or array, or a raster data
 frame.
 }

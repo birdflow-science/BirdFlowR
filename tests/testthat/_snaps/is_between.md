@@ -3,5 +3,5 @@
     Code
       sum(between[[1]])
     Output
-      [1] 14278
+      [1] 6968
 

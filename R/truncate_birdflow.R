@@ -24,19 +24,17 @@
 #' @return A BirdFlow model that only contains information about transitions
 #' for a subset of the year as specified by `...`.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' n_timesteps(bf)
+#' bf2 <- truncate_birdflow(bf, start = 5, end = 10)
+#' n_timesteps(bf2)
+#' }
 truncate_birdflow <- function(bf, ...) {
 
-  # Add timestep_padding metadata if it doesn't exist
-  ### back compatibility
-  if (is.null(bf$metadata$timestep_padding)) {
-    ts_padding <- get_timestep_padding(bf)
-    bf$metadata$timestep_padding <- ts_padding
-  }
-  # Add dates$weeks if it doesn't exist
-  ### back compatibility code
-  if (is.null(bf$dates$week) && nrow(bf$dates) == 52) {
-    bf$dates$week <- 1:52
-  }
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   # Handle special case of circular preprocessed model
   # The last date and distribution in these models is a duplicate of the

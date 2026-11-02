@@ -35,6 +35,11 @@
 #' Otherwise, if there are no problems a similar data.frame with no rows is
 #' returned invisibly.
 #' @export
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' validate_BirdFlow(bf)
+#' }
 validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
   # problem types:
   #   error: BirdFlow object is malformed
@@ -409,6 +414,7 @@ validate_BirdFlow <- function(x, error = TRUE, allow_incomplete = FALSE) {
 #' `validate_BirdFlow`
 #'
 #' @returns a problem data frame
+#' @keywords internal
 validate_geom <- function(geom, n_active, throw_error = TRUE) {
 
   # Setup for tracking problems

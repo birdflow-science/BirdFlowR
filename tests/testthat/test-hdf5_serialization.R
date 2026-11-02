@@ -1,8 +1,9 @@
 test_that("Reading and writing routes and intervals works", {
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
   source1 <- "BirdFlow"
 
@@ -14,7 +15,7 @@ test_that("Reading and writing routes and intervals works", {
 
   expect_no_error({
     # Routes
-    my_routes1 <- Routes(fake_routes,
+    my_routes1 <- as_routes(fake_routes,
                         species = species1,
                         source = source1
     )
@@ -25,7 +26,7 @@ test_that("Reading and writing routes and intervals works", {
 
   expect_no_error({
     # BirdFlowRoutes
-    my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
+    my_bfroutes1 <- as_birdflow_routes(my_routes1, bf = bf)
     write_routes(my_bfroutes1, bf_routes_file)
     my_bfroutes2 <- read_routes(bf_routes_file)
     expect_true(identical(my_bfroutes1, my_bfroutes2))
@@ -33,7 +34,7 @@ test_that("Reading and writing routes and intervals works", {
 
   expect_no_error({
     # BirdFlowIntervals
-    my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
+    my_intervals1 <- as_birdflow_intervals(my_bfroutes1)
     write_intervals(my_intervals1, intervals_file)
     my_intervals2 <- read_intervals(intervals_file)
     expect_true(identical(my_intervals1, my_intervals2))
@@ -42,10 +43,11 @@ test_that("Reading and writing routes and intervals works", {
 
 
 test_that("Reading and writing routes and intervals works with NA", {
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
   source1 <- "BirdFlow"
 
@@ -56,7 +58,7 @@ test_that("Reading and writing routes and intervals works with NA", {
 
   expect_no_error({
     # Routes
-    my_routes1 <- Routes(fake_routes,
+    my_routes1 <- as_routes(fake_routes,
                          species = species1,
                          source = source1
     )
@@ -66,14 +68,14 @@ test_that("Reading and writing routes and intervals works with NA", {
     expect_true(identical(my_routes1, my_routes2))
 
     # BirdFlowRoutes
-    my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
+    my_bfroutes1 <- as_birdflow_routes(my_routes1, bf = bf)
     my_bfroutes1$species$prebreeding_migration_end <- NA
     write_routes(my_bfroutes1, bf_routes_file)
     my_bfroutes2 <- read_routes(bf_routes_file)
     expect_true(identical(my_bfroutes1, my_bfroutes2))
 
     # BirdFlowIntervals
-    my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
+    my_intervals1 <- as_birdflow_intervals(my_bfroutes1)
     my_intervals1$species$prebreeding_migration_end <- NA
     write_intervals(my_intervals1, intervals_file)
     my_intervals2 <- read_intervals(intervals_file)
@@ -83,6 +85,7 @@ test_that("Reading and writing routes and intervals works with NA", {
 
 
 test_that("Reading and writing routes and intervals works with NULL", {
+  skip_if_not_installed("BirdFlowExamples")
 
     skip("Always skipped. Writing NULL values is not supported.")
 
@@ -96,13 +99,13 @@ test_that("Reading and writing routes and intervals works with NULL", {
 
 
     fake_routes <- make_fake_routes()
-    bf <- BirdFlowModels::amewoo
+    bf <- BirdFlowExamples::amewoo
     species1 <- bf$species
     source1 <- "BirdFlow"
 
     expect_no_error({
       # Routes
-      my_routes1 <- Routes(fake_routes,
+      my_routes1 <- as_routes(fake_routes,
                            species = species1,
                            source = source1
       )
@@ -114,14 +117,14 @@ test_that("Reading and writing routes and intervals works with NULL", {
       expect_true(identical(my_routes1, my_routes2))
 
       # BirdFlowRoutes
-      my_bfroutes1 <- as_BirdFlowRoutes(my_routes1, bf = bf)
+      my_bfroutes1 <- as_birdflow_routes(my_routes1, bf = bf)
       my_bfroutes1$species['prebreeding_migration_end'] <- list(NULL)
       write_routes(my_bfroutes1, bf_routes_file)
       my_bfroutes2 <- read_routes(bf_routes_file)
       expect_true(identical(my_bfroutes1, my_bfroutes2))
 
       # BirdFlowIntervals
-      my_intervals1 <- as_BirdFlowIntervals(my_bfroutes1)
+      my_intervals1 <- as_birdflow_intervals(my_bfroutes1)
       my_intervals1$species['prebreeding_migration_end'] <- list(NULL)
       write_intervals(my_intervals1, intervals_file)
       my_intervals2 <- read_intervals(intervals_file)

@@ -26,10 +26,11 @@ plot_routes(
 }
 \arguments{
 \item{routes, x}{An object of class \code{Routes} or  \code{BirdFlowRoutes}.  Likely the
-the output of  \code{\link[=route]{route()}}, \link{as_BirdFlowRoutes}, or \code{\link[=Routes]{Routes()}}.}
+the output of  \code{\link[=route]{route()}}, \code{\link[=as_birdflow_routes]{as_birdflow_routes()}}, or \code{\link[=as_routes]{as_routes()}}.}
 
 \item{bf}{A BirdFlow object. Only used if \code{x} is a \code{Routes} object, in
-which case it provides the CRS and}
+which case it provides the CRS and, optionally, the static mask shown
+via \code{show_mask}.}
 
 \item{facet}{If \code{TRUE} then use \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to show each route
 out into a separate subplot.}
@@ -85,7 +86,8 @@ stayed at that location.
 \code{plot.BirdFlowRoutes()} calls \code{plot_routes()}.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 n <- 10
 rts <- route(bf, n, season = "prebreeding")
 
@@ -106,6 +108,7 @@ p <- plot_routes(rts, bf) +
   geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
   coord_sf(expand = FALSE)
 p
+}
 \dontrun{
 # Use alternate color palettes
 plot_routes(rts, bf, use_seasonal_colors = FALSE)

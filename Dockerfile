@@ -6,5 +6,5 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     ebirdst \
     && rm -rf /tmp/downloaded_packages \
     && strip /usr/local/lib/R/site-library/*/libs/*.so \
-    && R -q -e 'remotes::install_github("birdflow-science/BirdFlowModels")' \
+    && R -q -e 'remotes::install_github("birdflow-science/BirdFlowExamples")' \
     && R -q -e 'remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, upgrade = "never")'

@@ -22,7 +22,7 @@ object containing values to be treated as a distribution.}
 
 \item{bf}{A reference BirdFlow object.}
 
-\item{...}{Arguments used by other methods:}
+\item{...}{Arguments used by other methods.}
 
 \item{crs}{The coordinate reference system that the x and y coordinates are
 in.  If NULL the function will assume coordinates are in the same CRS as
@@ -58,4 +58,22 @@ cells in \code{bf} with \code{\link[terra:project]{terra::project()}} using \cod
 cropped and/or extended to match the extent of \code{bf}.  Warnings will be throw
 if some of the value in \code{x} is lost due to cropping or due to masking out the
 inactive cells.
+}
+\examples{
+\donttest{
+bf <- BirdFlowExamples::amewoo
+xy <- i_to_xy(c(1, 2), bf)
+
+# data.frame method: one "one hot" distribution per point
+pts <- data.frame(x = xy$x, y = xy$y)
+as_distr(pts, bf)
+
+# sf method
+sf_pts <- sf::st_as_sf(pts, coords = c("x", "y"), crs = crs(bf))
+as_distr(sf_pts, bf)
+
+# SpatRaster method
+r <- rast(bf, which = 1)
+as_distr(r, bf)
+}
 }

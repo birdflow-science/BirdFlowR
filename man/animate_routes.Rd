@@ -8,7 +8,7 @@ animate_routes(routes, bf, ...)
 }
 \arguments{
 \item{routes}{An object of class \code{Routes} or  \code{BirdFlowRoutes}.  Likely the
-the output of  \code{\link[=route]{route()}}, \link{as_BirdFlowRoutes}, or \code{\link[=Routes]{Routes()}}.}
+the output of  \code{\link[=route]{route()}}, \code{\link[=as_birdflow_routes]{as_birdflow_routes()}}, or \code{\link[=as_routes]{as_routes()}}.}
 
 \item{bf}{A BirdFlow object}
 
@@ -56,7 +56,7 @@ producing a dynamic version of \code{\link[=plot_routes]{plot_routes()}}.
 Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
 "geom_path(): Each group consists of only one observation.
-ℹ Do you need to adjust the group aesthetic?"
+Do you need to adjust the group aesthetic?"
 This will possibly be repeated while individuals remain in one location.
 It can be safely ignored. The error is thrown while rendering and not
 from within \code{animate_routes()} so cannot be suppressed by code in
@@ -65,9 +65,11 @@ from within \code{animate_routes()} so cannot be suppressed by code in
 \examples{
 
 
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, 10,  season = "prebreeding")
 anim <- animate_routes(rts, bf)
+}
 
 \dontrun{
   # example render

@@ -28,7 +28,8 @@ have already been extended it is possible to "extend" them again to
 a smaller extent as long as it is also larger than the original extent.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 
 # Define extended extent for example
 e <-  ext(bf)
@@ -47,6 +48,7 @@ data.frame(item = names(as.vector(ext(bf))),
             initial = as.vector(ext(bf)),
             extended = as.vector(ext(bf2)),
             shrunk = as.vector(ext(bf3)))
+}
 
 \dontrun{
 # Plot

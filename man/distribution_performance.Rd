@@ -86,7 +86,8 @@ in which case all metrics will be calculated only on that subset. The
 default is to use all timesteps.
 }
 \examples{
- bf <- BirdFlowModels::amewoo
+\donttest{
+ bf <- BirdFlowExamples::amewoo
 
 \dontrun{
 # full model - skipping because it's slow
@@ -94,6 +95,7 @@ distribution_performance(bf)
 }
 # Just for prebreeding_migration
 distribution_performance(bf, season = "prebreeding_migration")
+}
 
 }
 \seealso{

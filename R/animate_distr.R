@@ -22,7 +22,8 @@
 #' # Animate distributions from BirdFlow object - derived from
 #' # eBird Status and Trends:
 #'
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' ts <- lookup_timestep_sequence(bf, season = "prebreeding")
 #' distr <- get_distr(bf, ts)
 #' anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
@@ -65,6 +66,7 @@
 #'   gif_file <- tempfile("animation", fileext = ".gif")
 #'   gganimate::save_animation(gif, gif_file)
 #'   file.remove(gif_file) # cleanup
+#' }
 #' }
 animate_distr <- function(distr, bf, title = species(bf), ...) {
 

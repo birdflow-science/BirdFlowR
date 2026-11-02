@@ -23,13 +23,16 @@
 #'   route_type = c("tracking", "tracking", "tracking", "tracking",
 #'   "tracking", "motus", "motus", "motus", "motus")
 #' )
-#' routes <- Routes(route_df, species = list(common_name = "American Woodcock"))
+#' routes <- as_routes(route_df,
+#'   species = list(common_name = "American Woodcock"))
 #'
 #' print(routes)
 #'
 #' # BirdFlowRoutes
-#' bf <- BirdFlowModels::amewoo
-#' bf_routes <- as_BirdFlowRoutes(routes, bf)
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' bf_routes <- as_birdflow_routes(routes, bf)
+#' }
 #'
 print.Routes <- function(x, ...) {
   stopifnot(inherits(x, "Routes")) # TRUE for BirdFlowRoutes

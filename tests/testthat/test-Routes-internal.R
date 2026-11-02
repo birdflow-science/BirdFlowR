@@ -1,20 +1,22 @@
 
 test_that("Reset index in converting Routes to BirdFlowRoutes works", {
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
   fake_routes <- make_fake_routes_one_point_per_route()
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   species <- bf$species
 
-  expect_no_error(my_routes <- Routes(fake_routes, species = species,
+  expect_no_error(my_routes <- as_routes(fake_routes, species = species,
                                       source = "test"))
-  expect_no_error(my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf,
+  expect_no_error(my_bfroutes <- as_birdflow_routes(my_routes, bf = bf,
                                                    reset_index = TRUE))
 })
 
 test_that("Reset index in BirdFlowRoutes works", {
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
 
   birdflow_route_df <- data.frame(
     route_id = c("001", "001", "001", "001", "001", "003", "003",
@@ -51,7 +53,7 @@ test_that("Reset index in BirdFlowRoutes works", {
   metadata <- bf$metadata[c("n_active", "ebird_version_year")]
 
   expect_no_error(
-    birdflowroutes_object <- BirdFlowRoutes(
+    birdflowroutes_object <- new_birdflow_routes(
       birdflow_route_df,
       species = species,
       metadata = metadata,
@@ -65,23 +67,24 @@ test_that("Reset index in BirdFlowRoutes works", {
 })
 
 test_that("Extra columns are retained and don't cause problems", {
+  skip_if_not_installed("BirdFlowExamples")
   set.seed(42)
 
   fake_routes <- make_fake_routes()
   fake_routes$info <- "AABB some info"
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   species1 <- bf$species
 
   source1 <- c("eBird", "BirdFlowR")
 
   expect_no_error(
-    my_routes <- Routes(fake_routes, species = species1, source = source1))
+    my_routes <- as_routes(fake_routes, species = species1, source = source1))
 
   expect_no_error(
-    my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf))
+    my_bfroutes <- as_birdflow_routes(my_routes, bf = bf))
 
   expect_no_error(
-    my_intervals <- as_BirdFlowIntervals(my_bfroutes))
+    my_intervals <- as_birdflow_intervals(my_bfroutes))
 
   my_intervals$data$info <- "Some random info for the intervals"
 

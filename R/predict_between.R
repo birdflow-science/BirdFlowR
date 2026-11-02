@@ -17,12 +17,14 @@
 #'  [route_between()] for creating routes from the same inputs
 #'   as `predict_between()`.
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 #' distr <- predict_between(bf,
 #'                          x_coord = xy$x, y_coord = xy$y,
 #'                          date = c("2023-02-15", "2023-05-01"))
 #' plot_distr(distr, bf, dynamic_scale = TRUE)
+#' }
 #' @export
 #' @importFrom Matrix Matrix t
 #' @importMethodsFrom Matrix t %*%
@@ -32,8 +34,8 @@ predict_between <- function(bf,
                             potentials = NULL,
                             ...) {
 
-  ### BACK COMPATIBILITY CODE
-  bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   dyn_mask <- bf$geom$dynamic_mask
 

@@ -36,17 +36,18 @@
 #' @seealso [plot_movement_vectors()] and [animate_movement_vectors()] call
 #' this function and visualize the results.
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' mv <- calc_movement_vectors(bf, 7)
+#' }
 #'
 calc_movement_vectors <- function(bf, start, direction = "forward") {
 
   direction <- tolower(direction)
   stopifnot(direction %in% c("forward", "backward"))
 
-  ### Back compatibility code - delete after BirdFlowModels is updated
-  if (!has_dynamic_mask(bf))
-    bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   start <- lookup_timestep(start, bf)
   if (direction == "forward") {

@@ -1,5 +1,6 @@
 test_that("predicting preserves distribution over 5 weeks", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   if (!has_dynamic_mask(bf))
     bf <- BirdFlowR:::add_dynamic_mask(bf)
 
@@ -8,20 +9,21 @@ test_that("predicting preserves distribution over 5 weeks", {
   pred_d5 <- p[, 5]
   d5 <- get_distr(bf, 5)
 
-  expect_gt(cor(d5, pred_d5), expected = .97)
+  # Note thresholds lowered in Oct 2026 when switching to
+  # heavily sparsified example models
+  expect_gt(cor(d5, pred_d5), expected = .95)
 
   p <- predict(bf, d5, start = 5, end = 1, direction = "backward")
   pred_d1 <- p[, 5]
-
-  expect_gt(cor(d1, pred_d1), expected = .97)
-
+  expect_gt(cor(d1, pred_d1), expected = .95)
 })
 
 
 
 test_that("predict() is consistent with full and sparse marginals", {
+  skip_if_not_installed("BirdFlowExamples")
   # This refers to the format of the objects not the content.
-  sparse_bf <- BirdFlowModels::amewoo
+  sparse_bf <- BirdFlowExamples::amewoo
   if (!has_dynamic_mask(sparse_bf))
     sparse_bf <- add_dynamic_mask(sparse_bf)
   full_bf <- sparse_bf
@@ -36,7 +38,8 @@ test_that("predict() is consistent with full and sparse marginals", {
 })
 
 test_that("predict() is consistent with marginals and transitions", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   if (!has_dynamic_mask(bf))
     bf <- add_dynamic_mask(bf)
   t_bf <- build_transitions(bf)
@@ -47,7 +50,8 @@ test_that("predict() is consistent with marginals and transitions", {
 })
 
 test_that("predict() warns on starting distributions with unrepresentable mass", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   if (!has_dynamic_mask(bf))
     bf <- add_dynamic_mask(bf)
 

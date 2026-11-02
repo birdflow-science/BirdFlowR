@@ -1,5 +1,6 @@
 test_that("animate_distr() works with default args", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   expect_no_error(a1 <- animate_distr(get_distr(bf, c(1, 10, 20)), bf))
   suppressMessages(
@@ -9,7 +10,8 @@ test_that("animate_distr() works with default args", {
 })
 
 test_that("animate_distr() works with dynamic masking", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   expect_no_error(a2 <- animate_distr(get_distr(bf, c(1, 10, 20)), bf,
                                       show_dynamic_mask = TRUE))

@@ -21,8 +21,10 @@ A data frame with columns:
 a step in the fitting process.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 get_loss(bf)
+}
 }
 \seealso{
 \code{\link[=plot_loss]{plot_loss()}}

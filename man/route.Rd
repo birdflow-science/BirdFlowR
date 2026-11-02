@@ -64,8 +64,10 @@ with one additional item \code{route_type = "synthetic"}.}
 embedded in a BirdFlow model. The output is linear, stochastic routes.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, 10, season = "prebreeding")
+}
 
 \dontrun{
 plot_routes(rts)

@@ -64,18 +64,19 @@ The returned table rows will have a 1:1 correspondence with the input
 \code{intervals} table.
 }
 \description{
-\code{interval_log_likelihood()} calculates the log likelihoods of inferred bird
-movement based on two observation points (in time and space).
-The second point must have a different timestep (week) than the first,
-but the location can remain the same.
-Note \code{interval_log_likelihood()} predates the \code{BirdFlowIntervals}
-class and so is now deprecated.
-If you are thinking of using this function in new code please consider
-\code{\link[=Routes]{Routes()}}, \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}}, \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}, and
+DEPRECATED FUNCTION. \code{interval_log_likelihood()} predates the
+\code{BirdFlowIntervals} class and so is now deprecated. If you are thinking
+of using this function in new code please consider \code{\link[=as_routes]{as_routes()}},
+\code{\link[=as_birdflow_routes]{as_birdflow_routes()}}, \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}}, and
 \code{\link[=calc_interval_metrics]{calc_interval_metrics()}} to make \code{BirdFlowIntervals} and then calculate
 a full suite of metrics including log likelihood.
 }
 \details{
+\code{interval_log_likelihood()} calculates the log likelihoods of inferred bird
+movement based on two observation points (in time and space).
+The second point must have a different timestep (week) than the first,
+but the location can remain the same.
+
 The core of this function is calling \code{predict()} on a distribution that has
 the starting location hot (value of 1) and all other locations zero and then
 extracting the probability of the ending week and location. The
@@ -91,13 +92,16 @@ there are a lot of choices to be made and this function leaves those
 decisions to the user.
 }
 \examples{
-bf <- BirdFlowModels::rewbla
-observations <- BirdFlowModels::rewbla_observations
-intervals <- BirdFlowModels::rewbla_intervals
+\donttest{
+bf <- BirdFlowExamples::rewbla
+observations <- BirdFlowExamples::rewbla_observations
+intervals <- BirdFlowExamples::rewbla_intervals
 intervals <- intervals[1:20, ] # toy example
 intervals <- interval_log_likelihood(intervals, observations, bf)
 head(intervals, 3)
 }
+}
 \seealso{
 \code{\link[=calc_interval_metrics]{calc_interval_metrics()}}
 }
+\keyword{internal}

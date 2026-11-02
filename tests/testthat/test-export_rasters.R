@@ -1,5 +1,6 @@
 test_that("export_rasters() works with GeoTIFFs", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf <- add_dynamic_mask(bf) # Backwards compatibility
   dir <- withr::local_tempdir("export_geotiff_test")
 
@@ -28,7 +29,8 @@ test_that("export_rasters() works with GeoTIFFs", {
 })
 
 test_that("export_rasters() works with PNG and reprojection", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   bf <- add_dynamic_mask(bf) # Backwards compatibility
   dir <- file.path(tempdir(), "export_png_test")
   crs <- "EPSG:4326"

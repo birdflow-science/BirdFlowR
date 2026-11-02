@@ -1,5 +1,11 @@
 #' Plot BirdFlow Migration Traffic Rate (BMTR)
 #'
+#' @description
+#' Plot BMTR as a raster map, with one facet per transition (or a single
+#' map, with the transition in the subtitle, if `bmtr` covers only one
+#' transition). Colors represent BMTR intensity; see [calc_bmtr()] for how
+#' BMTR itself is calculated.
+#'
 #' @param bmtr A data frame created by
 #'   [calc_bmtr(format = "dataframe")][calc_bmtr]
 #' @param bf A BirdFlow object

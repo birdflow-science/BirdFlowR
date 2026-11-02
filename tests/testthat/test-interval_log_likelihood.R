@@ -1,12 +1,15 @@
 test_that(paste0("interval_log_likelihood produces identical results with ",
                  "one_at_a_time = TRUE"), {
-  intervals <- BirdFlowModels::rewbla_intervals
-  observations <- BirdFlowModels::rewbla_observations
+  skip_if_not_installed("BirdFlowExamples")
+  intervals <- BirdFlowExamples::rewbla_intervals
+  observations <- BirdFlowExamples::rewbla_observations
   intervals <- intervals[1:60, ]
-  bf <- BirdFlowModels::rewbla
-  a <- interval_log_likelihood(intervals, observations, bf)
-  b <- interval_log_likelihood(intervals, observations, bf,
-                               one_at_a_time = TRUE)
+  bf <- BirdFlowExamples::rewbla
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(
+    b <- interval_log_likelihood(intervals, observations, bf,
+                                 one_at_a_time = TRUE)
+  )
   expect_equal(a, b)
 
   ll <- a[1:4, c("log_likelihood", "null_ll", "lag")]
@@ -16,8 +19,9 @@ test_that(paste0("interval_log_likelihood produces identical results with ",
 
 
 test_that("interval_log_likelihood returns expected values", {
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf  <- BirdFlowModels::rewbla
+  bf  <- BirdFlowExamples::rewbla
   nsteps <- 3
 
   # Use route() to make a fake observation table
@@ -33,22 +37,27 @@ test_that("interval_log_likelihood returns expected values", {
     sf::st_coordinates()
   wgs <- wgs[, 1:2]
   colnames(wgs) <- c("lon", "lat")
+
   observations <- cbind(observations, wgs)
   observations$i <- xy_to_i(x = observations$x, y = observations$y, bf)
   intervals <- data.frame(from = 1:(nrow(observations) - 1),
                           to = 2:nrow(observations))
 
   # Calculate log likelihood for observation table
-  ll <- interval_log_likelihood(intervals, observations, bf)
+  expect_warning(ll <- interval_log_likelihood(intervals, observations, bf))
 
-  # Pull single step log likelihood directly from the transition matrices
+  # Pull single step log likelihood directly from the transition matrices.
+  # Transition matrices are indexed to each timestep's dynamic mask subset,
+  # not to the full set of active cells, so state indices (i) must be
+  # converted to dynamic-mask indices (dmi) before indexing into them.
   expected_ll <- rep(NA_real_, nsteps)
   for (j in 1:nsteps) {
-    t_id <- lookup_transitions(bf, start = start + j - 1,
-                               end =  start + j, direction =  "forward")
+    t1 <- start + j - 1
+    t2 <- start + j
+    t_id <- lookup_transitions(bf, start = t1, end = t2, direction = "forward")
     t <- get_transition(bf, t_id)
-    i1 <- observations$i[j]  # start location index
-    i2 <- observations$i[j + 1] # end location index
+    i1 <- i_to_dmi(observations$i[j], t1, bf)  # start location index
+    i2 <- i_to_dmi(observations$i[j + 1], t2, bf)  # end location index
     expected_ll[j] <- log(t[i2, i1])
   }
 
@@ -59,10 +68,11 @@ test_that("interval_log_likelihood returns expected values", {
 
 test_that(
   "interval_log_likelihood() sets right flags for problematic locations", {
+  skip_if_not_installed("BirdFlowExamples")
 
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:4, ]
-  observations <- BirdFlowModels::rewbla_observations
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:4, ]
+  observations <- BirdFlowExamples::rewbla_observations
 
   # I'm going to alter locations in observations such that the first four
   # intervals correspond with (a first observation) that is:
@@ -124,7 +134,7 @@ test_that(
   observations$lon[obs_row] <- pt$lon
   observations$lat[obs_row] <- pt$lat
 
-  expect_no_error(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
 
   expect_equal(a$exclude, c(FALSE, TRUE, TRUE, TRUE))
   expect_equal(a$not_active, c(FALSE, FALSE, TRUE, TRUE))
@@ -135,18 +145,22 @@ test_that(
 
 
 test_that("interval_log_likelihood() throws warning if overwriting columns", {
+  skip_if_not_installed("BirdFlowExamples")
 
   # Also test that it works fine with verbose = FALSE
   # Temporarily suppress BirdFlowR chatter
   local_quiet()
 
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
-  observations <- BirdFlowModels::rewbla_observations
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:10, ]
+  observations <- BirdFlowExamples::rewbla_observations
 
-  a <- interval_log_likelihood(intervals, observations, bf)
-  expect_warning(b <- interval_log_likelihood(a, observations, bf),
-                 "These columns will be replaced in the output:")
+  expect_warning(a <- interval_log_likelihood(intervals, observations, bf))
+  expect_warning(
+    expect_warning(b <- interval_log_likelihood(a, observations, bf),
+                   "These columns will be replaced in the output:"),
+    "interval_log_likelihood\\(\\) is deprecated"
+  )
 
   expect_equal(a, b)
 
@@ -154,18 +168,19 @@ test_that("interval_log_likelihood() throws warning if overwriting columns", {
 
 
 test_that("Interval log likelihood handles empty input gracefully", {
+  skip_if_not_installed("BirdFlowExamples")
   #  Checks issue 95  https://github.com/birdflow-science/BirdFlowR/issues/95
-  bf <- BirdFlowModels::rewbla
-  intervals <- BirdFlowModels::rewbla_intervals[1:10, ]
+  bf <- BirdFlowExamples::rewbla
+  intervals <- BirdFlowExamples::rewbla_intervals[1:10, ]
   intervals_empty <- intervals[rep(FALSE, nrow(intervals)), , drop = FALSE]
-  observations <- BirdFlowModels::rewbla_observations
+  observations <- BirdFlowExamples::rewbla_observations
 
-  expect_no_error(
+  expect_warning(
     ll <- interval_log_likelihood(intervals_empty, observations, bf)
   )
   expect_equal(nrow(ll), 0)
 
-  ll2 <- interval_log_likelihood(intervals, observations, bf)
+  expect_warning(ll2 <- interval_log_likelihood(intervals, observations, bf))
 
   # Check that column names and classes are identical with or without data
   expect_equal(colnames(ll), colnames(ll2))

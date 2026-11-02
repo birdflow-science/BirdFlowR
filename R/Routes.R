@@ -1,6 +1,8 @@
 # Public functions for creating Routes and BirdFlowRoutes
 
-#' `Routes()` is used to convert data frames containing bird movement
+#' Convert a data frame into a `Routes` object
+#'
+#' `as_routes()` converts data frames containing bird movement
 #' data into a formal `Routes` object with the same data.
 #'
 #' @param data A data frame with data on bird movement. Likely
@@ -29,7 +31,7 @@
 #' codes and names. Scalar input is preferred unless the species does not
 #' conform to eBird's taxonomy.
 #' @param source Optional text describing the source of the data.
-#' `source()` must be of class `character` can have one or more elements.
+#' `source` must be of class `character` can have one or more elements.
 #' @returns An object of class `Routes` which has the following components
 #' \item{data}{A data frame with the input `data`}
 #' \item{species}{A list with, at a minimum items
@@ -38,43 +40,36 @@
 #' [lookup_species_metadata()]}
 #' \item{source}{Same as the input `source`}
 #'
+#' @seealso [as_birdflow_routes()] for converting `Routes` to
+#' `BirdFlowRoutes`.
 #' @export
+#' @examples
+#' \donttest{
+#' df <- data.frame(
+#'   route_id = c(1, 1, 2, 2),
+#'   date = as.Date(c("2021-01-04", "2021-01-11",
+#'                     "2021-01-04", "2021-01-11")),
+#'   lon = c(-87.6, -87.2, -85.0, -84.6),
+#'   lat = c(35.8, 36.0, 33.5, 33.8),
+#'   route_type = "tracking"
+#' )
+#' rts <- as_routes(df, species = "amewoo")
+#' rts
+#' }
+as_routes <- function(data, species = NULL, source = NULL) {
+  new_routes(data, species = species, source = source)
+}
+
+#' Deprecated function to convert a data frame into a `Routes` object
+#'
+#' This function is deprecated. Please use [as_routes()] instead.
+#'
+#' @inheritParams as_routes
+#' @inherit as_routes return
+#' @seealso [as_routes()] should be used instead of this function.
+#' @export
+#' @keywords internal
 Routes <- function(data, species = NULL, source = NULL) {
-  # Check input
-  stopifnot(is.data.frame(data))
-  validate_Routes_route_df(data)
-
-  # Resolve species
-  if (!is.list(species) && !is.null(species) && !is.na(species) &&
-     length(species == 1)) {
-    species <- lookup_species_metadata(species, quiet = TRUE, skip_checks = TRUE, min_season_quality = 0)
-  } else {
-    if (!is.list(species) || !"common_name" %in% names(species)) {
-      stop("Routes() requires a species either as valid input to ",
-           "ebirdst::get_species() or a list with at a minimum a ",
-           "\"common_name\" element.")
-    }
-    # Back fill required names with NA if missing and then
-    # drop all species list items that aren't standard
-    required_names <- c("species_code", "scientific_name", "common_name")
-    missing_names <- setdiff(required_names, names(species))
-    for (name in missing_names)
-      species[[name]] <- NA
-    allowed_names <- names(new_BirdFlow()$species)
-    final_names <- allowed_names[allowed_names %in% names(species)]
-    species <- species[final_names]
-  }
-
-  if (is.null(source)) {
-    source <- NA_character_
-  } else {
-    if (!is.character(source)) {
-      stop("source should be a character, or character vector")
-    }
-  }
-
-  validate_BirdFlowRoutes_species(species)
-  # Make new Routes object
-  obj <- new_Routes(data, species, source)
-  return(obj)
+  warning("Routes() is deprecated. Please use as_routes() instead.")
+  as_routes(data, species = species, source = source)
 }

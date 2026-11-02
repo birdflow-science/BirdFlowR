@@ -1,5 +1,6 @@
 test_that("lookup_transitions works with timesteps", {
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
 
   # Forward
   a <- lookup_transitions(bf, start = 1,  end = 4)
@@ -16,11 +17,11 @@ test_that("lookup_transitions works with timesteps", {
   expect_equal(a, c("T_02-01", "T_01-52", "T_52-51"))
 
   # Forward dates across year boundary
-  a <- lookup_transitions(bf, start = "2022-12-10", end = "2023-01-13")
+  a <- lookup_transitions(bf, start = "2022-12-09", end = "2023-01-13")
   expect_equal(a, c("T_49-50", "T_50-51", "T_51-52", "T_52-01", "T_01-02"))
 
   # Backward dates across year boundary
-  a <- lookup_transitions(bf,  start = "2023-01-13", end = "2022-12-10")
+  a <- lookup_transitions(bf,  start = "2023-01-13", end = "2022-12-09")
   expect_equal(a, c("T_02-01", "T_01-52", "T_52-51", "T_51-50", "T_50-49"))
   expect_equal(lookup_timestep("2023-01-13", bf), 2)
 
@@ -43,7 +44,8 @@ test_that("lookup_transitions works with timesteps", {
 })
 
 test_that("lookup_transition() works with example from github issue #66", {
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
   a <- lookup_transitions(bf, start = "2021-12-15", end = "2022-01-15",
                           direction = "forward")
   expect_equal(a, c("T_50-51", "T_51-52", "T_52-01", "T_01-02", "T_02-03"))
@@ -53,7 +55,8 @@ test_that("lookup_transition() works with example from github issue #66", {
 
 
 test_that("lookup_transitions() behaves on edge cases and errors conditions", {
-  bf <- BirdFlowModels::rewbla
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::rewbla
 
   # This is here to close gaps in code coverage
 

@@ -4,7 +4,7 @@
 #' @description
 #' `dmi_to_i()` and `i_to_dmi()` are for internal and advanced use;
 #' they are not likely to be helpful to most users.
-#' See [index conversions](i_to_x) for, likely, more useful conversions.
+#' See [index conversions](i_to_x()) for, likely, more useful conversions.
 #' These two functions convert between indices along the cells that are
 #' included in the dynamic mask (`dmi`) and standard location
 #' indices (`i`) along the cells that are included by the static mask.
@@ -26,7 +26,8 @@
 #' vice versa.
 #' @export
 #' @examples
-#'  bf <- BirdFlowModels::amewoo
+#' \donttest{
+#'  bf <- BirdFlowExamples::amewoo
 #'  dmi <- c(11:20)
 #'  timesteps <- c(1, 1, 1, 1, 3, 3, 5,7:9 )
 #'
@@ -34,6 +35,7 @@
 #'  dmi2 <- i_to_dmi(i, timesteps, bf)
 #'
 #'  isTRUE(all.equal(dmi, dmi2))
+#' }
 dmi_to_i <- function(dmi, timestep, bf) {
 
   # Expand timestep out to have one element for each input dmi

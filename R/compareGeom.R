@@ -19,9 +19,21 @@ methods::setOldClass("BirdFlow")
 #' @param x  A BirdFlow or SpatRaster object
 #' @param y  A BirdFlow or SpatRaster object
 #' @inheritDotParams terra::compareGeom
+#' @return As with [terra::compareGeom()]: a logical scalar, `TRUE` if the
+#' geometries match. If they don't match, and `stopOnError` (passed via
+#' `...`) is `TRUE` (the default), execution stops with an error instead
+#' of returning `FALSE`.
 #' @importMethodsFrom terra compareGeom
 #' @export
 #' @rdname compareGeom-BirdFlow
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' r <- rast(bf, which = 1)
+#' terra::compareGeom(bf, bf)
+#' terra::compareGeom(r, bf)
+#' terra::compareGeom(bf, r)
+#' }
 setMethod("compareGeom", signature(x = "BirdFlow", y = "BirdFlow"),
           function(x, y, ...) {
             x <- rast(x)

@@ -4,10 +4,6 @@
 \alias{Read and write routes and intervals}
 \alias{write_r_object_h5}
 \alias{read_r_object_h5}
-\alias{read_Routes}
-\alias{write_Routes}
-\alias{read_BirdFlowRoutes}
-\alias{write_BirdFlowRoutes}
 \alias{read_intervals}
 \alias{write_intervals}
 \alias{write_routes}
@@ -33,13 +29,13 @@ write_intervals(obj, path)
 }
 \arguments{
 \item{obj}{For \code{write_routes()} a \code{Routes}, or \code{BirdFlowRoutes} object.
-For \code{write_intevals()} a \code{BirdFlowIntervals} object.}
+For \code{write_intervals()} a \code{BirdFlowIntervals} object.}
 
 \item{path}{Path to write or read from, should end in \code{.hdf5}}
 }
 \value{
 \itemize{
-\item \code{write_routes()} ans \code{write_invervals()} invisibly return their
+\item \code{write_routes()} and \code{write_intervals()} invisibly return their
 input object (after writing to disk).
 \item \code{read_routes()} returns the written object - either \code{Routes} or
 \code{BirdFlowRoutes}.
@@ -57,12 +53,12 @@ be written and read from R and Python among other languages so make a
 good cross-language format for routes and intervals.
 
 \code{read_routes()} and \code{write_routes()} work on both \code{Routes} and
-\code{BirdFlowRoutes}.  See \code{\link[=Routes]{Routes()}} and \code{\link[=as_BirdFlowRoutes]{as_BirdFlowRoutes()}} to create
+\code{BirdFlowRoutes}.  See \code{\link[=as_routes]{as_routes()}} and \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} to create
 objects of these classes.
 
 \code{read_intervals()} and \code{write_intervals()} work on \code{BirdFlowIntervals}
 which are a collection of movements each with a single start and end
-derived from \code{BirdFlowRoutes()}. See \code{\link[=as_BirdFlowIntervals]{as_BirdFlowIntervals()}}.
+derived from \code{BirdFlowRoutes}. See \code{\link[=as_birdflow_intervals]{as_birdflow_intervals()}}.
 }
 \section{Internal functions}{
 
@@ -74,6 +70,23 @@ in the HDF5 file hierarchy.
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowExamples::amewoo
+rts <- route(bf, n = 3)
+
+route_path <- tempfile(fileext = ".hdf5")
+write_routes(rts, route_path)
+rts2 <- read_routes(route_path)
+identical(class(rts), class(rts2))
+
+ivl <- as_birdflow_intervals(rts)
+interval_path <- tempfile(fileext = ".hdf5")
+write_intervals(ivl, interval_path)
+ivl2 <- read_intervals(interval_path)
+identical(class(ivl), class(ivl2))
+}
+}
 \seealso{
 \itemize{
 \item \link[rhdf5:h5_createFile]{rhdf5::h5createFile}, \link[rhdf5:h5_write]{rhdf5::h5write}, \link[rhdf5:h5_read]{rhdf5::h5read}

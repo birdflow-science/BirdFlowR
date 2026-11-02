@@ -11,7 +11,8 @@
 #' @export
 #'
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #'
 #' # Define extended extent for example
 #' e <-  ext(bf)
@@ -30,6 +31,7 @@
 #'             initial = as.vector(ext(bf)),
 #'             extended = as.vector(ext(bf2)),
 #'             shrunk = as.vector(ext(bf3)))
+#' }
 #'
 #'\dontrun{
 #'# Plot

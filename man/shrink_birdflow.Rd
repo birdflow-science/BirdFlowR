@@ -21,7 +21,8 @@ same length is returned with TRUE for success.
 Shrink BirdFlow extent
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 
 # Define extended extent for example
 e <-  ext(bf)
@@ -40,6 +41,7 @@ data.frame(item = names(as.vector(ext(bf))),
             initial = as.vector(ext(bf)),
             extended = as.vector(ext(bf2)),
             shrunk = as.vector(ext(bf3)))
+}
 
 \dontrun{
 # Plot

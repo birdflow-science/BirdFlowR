@@ -32,8 +32,10 @@
 #'   with one additional item `route_type = "synthetic"`.}
 #' }
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' rts <- route(bf, 10, season = "prebreeding")
+#' }
 #'
 #' \dontrun{
 #' plot_routes(rts)
@@ -48,8 +50,8 @@
 route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
                   from_marginals = FALSE, ...) {
 
-  ### BACK COMPATABILITY CODE
-  bf <- add_dynamic_mask(bf)  # To ease transition pain
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   dyn_mask <- bf$geom$dynamic_mask
 
@@ -165,10 +167,10 @@ route <- function(bf,  n = 1, x_coord = NULL, y_coord = NULL,
   rts$timestep <- as.integer(rts$timestep)
   rts$route_type <- "synthetic"
   rts$date <- as.Date(rts$date)
-  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = metadata,
-                        geom = bf$geom, dates = get_dates(bf),
-                        source = "Synthesized from a BirdFlow model",
-                        sort_id_and_dates = FALSE)
+  rts <- new_birdflow_routes(rts, species = bf$species, metadata = metadata,
+                             geom = bf$geom, dates = get_dates(bf),
+                             source = "Synthesized from a BirdFlow model",
+                             sort_id_and_dates = FALSE)
 
   return(rts)
 }

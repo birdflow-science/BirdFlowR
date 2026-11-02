@@ -15,3 +15,10 @@ A sorted data frame.
 \description{
 Sorts a \code{Routes} or data frame object by route ID and date.
 }
+\examples{
+routes <- data.frame(list(
+  route_id = c(2, 2, 1, 1),
+  date = as.Date(c("2024-01-05", "2024-01-01", "2024-01-06", "2024-01-02"))
+))
+sort_by_id_and_dates(routes)
+}

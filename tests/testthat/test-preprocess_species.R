@@ -22,6 +22,7 @@ test_that("preprocess_species runs on test dataset", {
   df <- data.frame(i = seq_along(d), density = d)
   df <- df[!df$density == 0, ]
   df <- df[1:12, ]
+  df$density <- signif(df$density, digits = 4) # avoid floating point differences
   rownames(df) <- NULL
 
   skip_if_wrong_ebirdst_for_snapshot()
@@ -79,11 +80,12 @@ test_that("preprocess_species runs on test dataset", {
 })
 
 
-# Legacy fixture that predates clip metadata
-test_that("is_clipped() and get_clip() handle legacy models", {
-  skip_if_not_installed("BirdFlowModels")
-  expect_true(is.na(is_clipped(BirdFlowModels::amewoo)))
-  expect_null(get_clip(BirdFlowModels::amewoo))
+
+test_that("is_clipped() and get_clip() work", {
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+  expect_true(is_clipped(BirdFlowExamples::amewoo))
+  expect_s3_class(clip <- get_clip(BirdFlowExamples::amewoo), "sf")
 })
 
 #3

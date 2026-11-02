@@ -1,8 +1,6 @@
 #' @name Read and write routes and intervals
 #' @rdname hdf5_serialization
 #' @aliases write_r_object_h5 read_r_object_h5
-#' @aliases read_Routes write_Routes
-#' @aliases read_BirdFlowRoutes write_BirdFlowRoutes
 #' @aliases read_intervals write_intervals
 #'
 #' @title Read and write routes and intervals
@@ -18,12 +16,12 @@
 #'   good cross-language format for routes and intervals.
 #'
 #'   `read_routes()` and `write_routes()` work on both `Routes` and
-#'   `BirdFlowRoutes`.  See [Routes()] and [as_BirdFlowRoutes()] to create
+#'   `BirdFlowRoutes`.  See [as_routes()] and [as_birdflow_routes()] to create
 #'   objects of these classes.
 #'
 #'   `read_intervals()` and `write_intervals()` work on `BirdFlowIntervals`
 #'   which are a collection of movements each with a single start and end
-#'   derived from `BirdFlowRoutes()`. See [as_BirdFlowIntervals()].
+#'   derived from `BirdFlowRoutes`. See [as_birdflow_intervals()].
 #' @section Internal functions:
 #' - `write_r_object_h5()` and `read_r_object_h5()` are internal workhorses:
 #'   they handle the recursive traversal of R lists (including data.frames,
@@ -32,14 +30,14 @@
 #'
 #' @param obj
 #'   For `write_routes()` a `Routes`, or `BirdFlowRoutes` object.
-#'   For `write_intevals()` a `BirdFlowIntervals` object.
+#'   For `write_intervals()` a `BirdFlowIntervals` object.
 #' @param path
 #'   Path to write or read from, should end in `.hdf5`
 #' @importFrom rhdf5 h5createFile h5createGroup h5write h5writeAttribute
 #' H5Fopen H5Fclose H5Lexists h5ls h5read h5readAttributes h5closeAll H5Fis_hdf5
 #' @importFrom stats setNames
 #' @return
-#' - `write_routes()` ans `write_invervals()` invisibly return their
+#' - `write_routes()` and `write_intervals()` invisibly return their
 #'   input object (after writing to disk).
 #' - `read_routes()` returns the written object - either `Routes` or
 #'    `BirdFlowRoutes`.
@@ -52,6 +50,22 @@
 #' alters the object if it has not previously been imported into R.
 #'
 #' @keywords internal
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' rts <- route(bf, n = 3)
+#'
+#' route_path <- tempfile(fileext = ".hdf5")
+#' write_routes(rts, route_path)
+#' rts2 <- read_routes(route_path)
+#' identical(class(rts), class(rts2))
+#'
+#' ivl <- as_birdflow_intervals(rts)
+#' interval_path <- tempfile(fileext = ".hdf5")
+#' write_intervals(ivl, interval_path)
+#' ivl2 <- read_intervals(interval_path)
+#' identical(class(ivl), class(ivl2))
+#' }
 NULL
 
 
@@ -309,7 +323,7 @@ write_routes <- function(obj, path) {
 #' @method write_routes Routes
 #' @export
 write_routes.Routes <- function(obj, path) {
-  validate_Routes(obj)
+  validate_routes(obj)
   suppressWarnings(write_r_object_h5(obj, path))
   invisible(obj)
 }
@@ -318,7 +332,7 @@ write_routes.Routes <- function(obj, path) {
 #' @method write_routes BirdFlowRoutes
 #' @export
 write_routes.BirdFlowRoutes <- function(obj, path) {
-  validate_BirdFlowRoutes(obj)
+  validate_birdflow_routes(obj)
   suppressWarnings(write_r_object_h5(obj, path))
   invisible(obj)
 }
@@ -344,9 +358,9 @@ read_routes <- function(path) {
   )
   obj$data$date <- as.Date(obj$data$date)
   if ("BirdFlowRoutes" %in% class(obj)) {
-    validate_BirdFlowRoutes(obj)
+    validate_birdflow_routes(obj)
   } else if ('Routes' %in% class(obj)) {
-    validate_Routes(obj)
+    validate_routes(obj)
   } else {
     stop("The loaded object is neither Routes nor BirdFlowRoutes.
          If you are reading BirdFlowIntervals object, please use
@@ -364,14 +378,14 @@ read_intervals <- function(path) {
   )
   obj$data$date1 <- as.Date(obj$data$date1)
   obj$data$date2 <- as.Date(obj$data$date2)
-  validate_BirdFlowIntervals(obj)
+  validate_birdflow_intervals(obj)
   return(obj)
 }
 
 #' @rdname hdf5_serialization
 #' @export
 write_intervals <- function(obj, path) {
-  validate_BirdFlowIntervals(obj)
+  validate_birdflow_intervals(obj)
   suppressWarnings(
     obj <- write_r_object_h5(obj, path)
   )

@@ -59,7 +59,8 @@
 #'  `season = "all".`
 #'
 #' @examples
-#' bf <- BirdFlowModels::rewbla
+#' \donttest{
+#' bf <- BirdFlowExamples::rewbla
 #'
 #' # 1. Dates - order of dates determines direction
 #' lookup_timestep_sequence(bf, start = "2023-12-1", end = "2024-01-20")
@@ -81,6 +82,7 @@
 #' # 5.  No time arguments, equivalent to season = "all"
 #' lookup_timestep_sequence(bf)
 #' lookup_timestep_sequence(bf, season = "all", direction = "backward")
+#' }
 #'
 lookup_timestep_sequence <- function(x,
                                      season = NULL,
@@ -260,8 +262,10 @@ lookup_timestep_sequence <- function(x,
 #'
 #' @export
 #' @examples
-#' bf <- BirdFlowModels::rewbla
+#' \donttest{
+#' bf <- BirdFlowExamples::rewbla
 #' lookup_season_timesteps(bf, "breeding", season_buffer = 0)
+#' }
 #'
 lookup_season_timesteps <- function(x, season, season_buffer = 1) {
   stopifnot("x must be a BirdFlow object" = inherits(x, "BirdFlow"))

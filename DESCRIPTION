@@ -1,18 +1,23 @@
 Package: BirdFlowR
 Title: Predict and Visualize Bird Movement
-Version: 0.1.0.9084
+Version: 1.0.0.9000
 Authors@R: 
     c(person("Ethan", "Plunkett",  email = "plunkett@umass.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4405-2251")),
       person("BirdFlow-Science", role = "cph"),
       person("National Science Foundation", role = "fnd"))
-Description: BirdFlowR predicts bird movement and distribution from previously fitted models.
+Description: Predict and visualize where and when birds move using models derived 
+    from eBird Status and Trends weekly distributions.
+    Core functions create synthetic migration routes, and project bird 
+    distributions forward and backward in time.
+    Additional functions estimate migratory traffic, route birds between specific locations,
+    and import and export data from and to various spatial formats. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: 
-    BirdFlowModels (>= 0.0.2.9003),
+Suggests:
+    BirdFlowExamples (>= 0.0.1.9001),
     covr,
     ebirdst,
     knitr,
@@ -22,7 +27,6 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
-biocViews:
 Imports:
     gganimate,
     digest,
@@ -50,7 +54,7 @@ Imports:
     viridisLite
 VignetteBuilder: knitr
 Remotes:
-  birdflow-science/BirdFlowModels
+  birdflow-science/BirdFlowExamples
 URL: https://birdflow-science.github.io/BirdFlowR/, https://github.com/birdflow-science/BirdFlowR
 BugReports: https://github.com/birdflow-science/BirdFlowR/issues
 Language: en-US

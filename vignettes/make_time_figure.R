@@ -1,12 +1,12 @@
 # Generate vignettes/TimeStructure.png
 # A circular diagram showing BirdFlow's cyclical 52-timestep year.
 # Colors match the seasonal gradient used by plot_routes().
-# Season label positions are derived from BirdFlowModels::amewoo metadata.
+# Season label positions are derived from BirdFlowExamples::amewoo metadata.
 # Run with: Rscript vignettes/make_time_figure.R
 
 library(ggplot2)
 library(BirdFlowR)
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 
 n_ts <- 52
 

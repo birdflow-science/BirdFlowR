@@ -9,9 +9,10 @@
 #'
 #'
 #' @param routes,x An object of class `Routes` or  `BirdFlowRoutes`.  Likely the
-#' the output of  [route()], [as_BirdFlowRoutes], or [Routes()].
+#' the output of  [route()], [as_birdflow_routes()], or [as_routes()].
 #' @param bf A BirdFlow object. Only used if `x` is a `Routes` object, in
-#' which case it provides the CRS and
+#' which case it provides the CRS and, optionally, the static mask shown
+#' via `show_mask`.
 #' @param facet If `TRUE` then use [ggplot2::facet_wrap()] to show each route
 #' out into a separate subplot.
 #' @param max_stay_len Used to scale the stay length dots. If `NULL`
@@ -44,7 +45,8 @@
 #' @export
 #' @importFrom rlang .data
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' n <- 10
 #' rts <- route(bf, n, season = "prebreeding")
 #'
@@ -65,6 +67,7 @@
 #'   geom_sf(data = get_countries(bf), inherit.aes = FALSE, fill = NA) +
 #'   coord_sf(expand = FALSE)
 #' p
+#' }
 #' \dontrun{
 #' # Use alternate color palettes
 #' plot_routes(rts, bf, use_seasonal_colors = FALSE)

@@ -5,7 +5,7 @@
 #' downloaded with \pkg{ebirdst}. The object is complete except for marginals
 #' and transitions.  Use `...` to truncate the model to part of the year.
 #'
-#' @section {Maximum number of parameters}:
+#' @section Maximum number of parameters:
 #'
 #' The maximum number of parameters that can be fit is machine dependent.
 #' 2023-02-10 we tested under different resolutions with "amewoo" and

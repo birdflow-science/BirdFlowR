@@ -15,7 +15,8 @@
 #' @examples
 #' # Calculate great circle distance matrix
 #' library(terra)
-#' bf <- BirdFlowModels::rewbla
+#' \donttest{
+#' bf <- BirdFlowExamples::rewbla
 #' gs <- great_circle_distances(bf)
 #'
 #' # The above is all you need to use the function.
@@ -46,6 +47,7 @@
 #'   "lines connect cells to the cell which have greatest",
 #'   " proportional error in distance"
 #' ), line = 0, cex = 0.7)
+#' }
 great_circle_distances <- function(bf) {
   i <- seq_len(n_active(bf))
   xy <- as.data.frame(i_to_xy(i, bf))
@@ -77,6 +79,7 @@ great_circle_distances <- function(bf) {
 #' @param lat2 latitude of point 2
 #' @param lon2 longitude of point 2
 #' @return the great circle distance
+#' @keywords internal
 great_circle_distance_lonlat_input <- function(lat1, lon1, lat2, lon2) {
   rad <- pi / 180 # Conversion factor for degrees to radians
   lat1 <- lat1 * rad

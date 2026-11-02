@@ -134,7 +134,8 @@ test_that("xy_to_i works", {
 
 
 test_that("latlon_to_xy works", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   i <- sample(1:n_active(bf), 10)
   xy <- i_to_xy(i, bf) |> as.data.frame()
   pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
@@ -163,7 +164,8 @@ test_that("latlon_to_xy works", {
 
 
 test_that("latlon_to_xy and xy_to_latlon are consistant", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   i <- sample(1:n_active(bf), 10)
   xy <- i_to_xy(i, bf) |> as.data.frame()
   pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
@@ -186,7 +188,8 @@ test_that("latlon_to_xy and xy_to_latlon are consistant", {
 
 
 test_that("latlon_to_xy returns NA for out of range and NA input values", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   i <- sample(1:n_active(bf), 5)
   xy <- i_to_xy(i, bf) |> as.data.frame()
   pts <- sf::st_as_sf(xy, coords = c("x", "y"), crs = sf::st_crs(crs(bf))) |>
@@ -215,7 +218,8 @@ test_that("latlon_to_xy returns NA for out of range and NA input values", {
 
 test_that(
   "functions with x and y as inputs return NA if input out of range or NA", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   n <- 7
   set.seed(1)
@@ -255,7 +259,8 @@ test_that(
 
 
 test_that("rc_to_i()  returns NA if input out of range or NA", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   n <- 9
   set.seed(1)

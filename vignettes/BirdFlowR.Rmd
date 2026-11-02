@@ -10,12 +10,14 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+has_models <- requireNamespace("BirdFlowExamples", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   out.width = "65%",
   fig.width = 6,
-  fig.height = 5
+  fig.height = 5,
+  eval = has_models
 )
   # Set to FALSE for efficient maintenance, testing, and deployment of the package, or
   # TRUE to use full model suitable for inference.
@@ -33,7 +35,7 @@ if (!"remotes" %in% installed)
   install.packages("remotes")
 if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
+remotes::install_github("birdflow-science/BirdFlowExamples")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 
 ```
@@ -41,7 +43,7 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 ### Load libraries
 
 ```{r setup}
-library(BirdFlowModels)
+library(BirdFlowExamples)
 library(BirdFlowR)
 library(terra)
 library(sf)
@@ -64,15 +66,15 @@ head(index[, c("model", "species_code", "common_name")])
 
 And we can load a model from the collection based on the `model` or `species` columns from the index. **Note:** in the vignette this block isn't executed.
 
-```{r load model, eval = use_real_model}
+```{r load model, eval = use_real_model && has_models}
 # Load a specific model
 bf <- load_model("amewoo") # caches locally and loads from cache
 ```
 
 This loads the smaller example model instead for efficiency of package building and testing, but do not use this one for science!
 
-```{r load example model, eval = !use_real_model}
-bf <- BirdFlowModels::amewoo # example and test dataset
+```{r load example model, eval = !use_real_model && has_models}
+bf <- BirdFlowExamples::amewoo # example and test dataset
 ```
 
 ## Quick demo
@@ -94,11 +96,11 @@ plot(rts, bf)
 `predict()` propagates a starting distribution forward through time. Here we sample a single winter location and project it forward to the breeding season.
 
 ```{r quick demo forecast}
-set.seed(0)
+set.seed(1)
 initial_distribution <- get_distr(bf, 1)
 location <- sample_distr(initial_distribution)
-forcast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
-plot_distr(forcast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
+forecast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forecast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 ## Time

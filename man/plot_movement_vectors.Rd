@@ -37,8 +37,10 @@ given point in time, which would involve both the birds starting at that
 cell and birds passing through it from other starting locations.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 plot_movement_vectors(bf, start = 7)
+}
 
 
 }

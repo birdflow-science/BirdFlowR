@@ -57,7 +57,7 @@ transitions and \code{n_steps + 1}  timesteps.}
   }}
 }
 \value{
-A \link{BirdFlowRoutes} object. Same format as \code{\link[=route]{route()}}.
+A \code{BirdFlowRoutes} object. Same format as \code{\link[=route]{route()}}.
 }
 \description{
 \code{route_between()} generates synthetic migration routes conditioned on
@@ -68,12 +68,14 @@ at two or more points in time and want to produce routes that
 pass through those locations.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 rts <- route_between(bf, n = 5,
                      x_coord = xy$x, y_coord = xy$y,
                      date = c("2023-02-15", "2023-05-01"))
 plot_routes(rts)
+}
 }
 \seealso{
 \code{\link[=route]{route()}} generates routes that rely only on the location at

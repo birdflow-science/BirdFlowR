@@ -1,6 +1,6 @@
 
 if (FALSE) {
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   points <- NULL
   radius <- NULL
   between <- is_between(bf)

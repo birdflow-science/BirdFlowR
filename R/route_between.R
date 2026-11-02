@@ -25,18 +25,20 @@
 #'   column names or the `date` argument (exactly one required). Cannot be used
 #'   together with `x_coord`/`y_coord`.
 #' @inheritDotParams lookup_timestep_sequence -x
-#' @return A [BirdFlowRoutes] object. Same format as [route()].
+#' @return A `BirdFlowRoutes` object. Same format as [route()].
 #' @seealso [route()] generates routes that rely only on the location at
 #' the start of the route. [predict_between()] has the same inputs as
 #' `route_between()` but returns distributions at the intermediate times
 #' instead of sampled routes.
 #' @examples
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 #' rts <- route_between(bf, n = 5,
 #'                      x_coord = xy$x, y_coord = xy$y,
 #'                      date = c("2023-02-15", "2023-05-01"))
 #' plot_routes(rts)
+#' }
 #' @export
 #' @importFrom Matrix Matrix
 #' @importMethodsFrom Matrix t %*%
@@ -46,8 +48,8 @@ route_between <- function(bf, n,
                           potentials = NULL,
                           ...) {
 
-  ### BACK COMPATIBILITY CODE
-  bf <- add_dynamic_mask(bf)
+  ### Back compatibility to support old models
+  bf <- upgrade_birdflow(bf)
 
   # --- Input validation ---
   using_hard_obs <- !is.null(x_coord) || !is.null(y_coord)
@@ -140,10 +142,10 @@ route_between <- function(bf, n,
   rts$timestep <- as.integer(rts$timestep)
   rts$route_type <- "synthetic"
   rts$date <- as.Date(rts$date)
-  rts <- BirdFlowRoutes(rts, species = bf$species, metadata = metadata,
-                        geom = bf$geom, dates = get_dates(bf),
-                        source = "Synthesized from a BirdFlow model",
-                        sort_id_and_dates = FALSE)
+  rts <- new_birdflow_routes(rts, species = bf$species, metadata = metadata,
+                             geom = bf$geom, dates = get_dates(bf),
+                             source = "Synthesized from a BirdFlow model",
+                             sort_id_and_dates = FALSE)
   return(rts)
 }
 

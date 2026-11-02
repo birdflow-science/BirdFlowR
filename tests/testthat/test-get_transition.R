@@ -1,5 +1,6 @@
 test_that("get_transition() is consistent for forward transitions", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_no_error(f1 <- get_transition(bf, "T_01-02"))
   h <- hist(as.numeric(f1), plot = FALSE,
             breaks = c(seq(0, 0.0001, 0.0001),
@@ -12,7 +13,8 @@ test_that("get_transition() is consistent for forward transitions", {
 })
 
 test_that("get_transition() is consistent for backwards transitions", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_no_error(b1 <- get_transition(bf, "T_02-01"))
   h <- hist(as.numeric(b1), plot = FALSE,
             breaks = c(seq(0, 0.0001, 0.0001),
@@ -26,7 +28,8 @@ test_that("get_transition() is consistent for backwards transitions", {
 
 
 test_that("get_transition() produces error with missing transition", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_error(t <- get_transition(bf, "T_52-53"),
                "There is no marginal for transition T_52-53")
 })
@@ -40,27 +43,30 @@ test_that("get_transition() throws error when there are no transitions", {
 })
 
 test_that("forward and backwards transitions are consistent", {
+  skip_if_not_installed("BirdFlowExamples")
   # Here we project the first timestep's distribution (d1a) forward one step
   # to generate a timestep 2 distribution (d2); and then project that back one
   # step to generate a new timestep 1 distribution (d1b).  We expect
   #  the two, timestep 1, distributions to be highly correlated.
-  bf <- BirdFlowModels::amewoo
-  d1a <- get_distr(bf, 1)
+  bf <- BirdFlowExamples::amewoo
+  d1a <- get_distr(bf, 1, type = "marginal")
   d2 <- predict(bf, distr = d1a, start = 1, end = 2)[, 2]
   d1b <- predict(bf, distr = d2, start = 2, end = 1)[, 2]
   expect_true(cor(d1a, d1b) > 0.95)
 })
 
 test_that("transition_from_marginal throws errors with bogus direction", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   expect_error(transition_from_marginal(bf$marginals[["M_01-02"]],
                                         direction = "Bleh"),
                "Direction must be forward or backward")
 })
 
 test_that("get_transition is consistent with sparse and standard marginals", {
+    skip_if_not_installed("BirdFlowExamples")
     # As of 0.0.0.9044 we use different calculations on sparse vs standard marg.
-    sparse_bf <- BirdFlowModels::amewoo
+    sparse_bf <- BirdFlowExamples::amewoo
     full_bf <- sparse_bf
     # Convert first three marginals to standard matricies
     for (marg in c("M_01-02", "M_02-03", "M_03-04")){

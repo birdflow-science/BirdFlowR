@@ -76,15 +76,16 @@ route_type = c("tracking", "tracking", "tracking", "tracking",
                "tracking", "motus", "motus", "motus", "motus")
 )
 
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 species1 <- bf$species
 source1 <- "Testing"
 
-my_routes <- Routes(route_df,
+my_routes <- as_routes(route_df,
                     species = species1,
                     source = source1
 )
-my_bfroutes <- as_BirdFlowRoutes(my_routes, bf = bf)
+my_bfroutes <- as_birdflow_routes(my_routes, bf = bf)
 
 # Constraints
 min_day <- 7
@@ -92,7 +93,7 @@ max_day <- 180
 min_km <- 200
 max_km <- 8000
 
-my_intervals <- as_BirdFlowIntervals(my_bfroutes,
+my_intervals <- as_birdflow_intervals(my_bfroutes,
                                      max_n = 1000,
                                      min_day_interval = min_day,
                                      max_day_interval = max_day,
@@ -103,4 +104,5 @@ my_intervals <- as_BirdFlowIntervals(my_bfroutes,
 eval_res <- calc_interval_metrics(my_intervals, bf)
 single_value_outputs <- eval_res[[1]]
 transition_level_outputs <- eval_res[[2]]
+}
 }

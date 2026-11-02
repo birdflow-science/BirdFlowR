@@ -1,3 +1,72 @@
+# BirdFlowR 1.0.0.9000
+
+## Switch example-data dependency from BirdFlowModels to BirdFlowExamples
+
+* Renamed companion data package from **BirdFlowModels**
+  to **BirdFlowExamples**.
+* Refit `amewoo`/`rewbla` example models.
+  Both now have dynamic masks, and `rewbla` is now a sparse model.
+* Updated all `BirdFlowModels` references to `BirdFlowExamples (>= 0.0.1.9001)`.
+* Updated tests to account for changes in the example models.
+
+## Routes / BirdFlowRoutes / BirdFlowIntervals API simplification
+
+**This is an API change.
+  Most existing code should run with warnings about deprecated
+  functions.**
+
+* Renamed the public constructors to a consistent lowercase,
+  snake_case `as_*()` naming convention:
+  * `Routes()` -> `as_routes()`
+  * `as_BirdFlowRoutes()` -> `as_birdflow_routes()`
+  * `BirdFlowIntervals()` / `as_BirdFlowIntervals()` -> `as_birdflow_intervals()`
+    (now an S3 generic with `BirdFlowRoutes` and `data.frame` methods)
+
+  The old names are kept as deprecated wrappers that issue a runtime
+  warning and forward to the new functions.
+
+* Renamed the public validators to match:
+  * `validate_Routes()` -> `validate_routes()`
+  * `validate_BirdFlowRoutes()` -> `validate_birdflow_routes()`
+  * `validate_BirdFlowIntervals()` -> `validate_birdflow_intervals()`
+
+  Old names are deprecated wrappers.
+
+* Added `[` row-subsetting methods for `Routes`, `BirdFlowRoutes`, and
+  `BirdFlowIntervals` objects. See `?subset_routes`.
+
+* Fixed a bug in `validate_BirdFlowRoutes_species()`'s handling of `NA`
+  species fields, and a bug where `geom` validation wasn't passed the
+  correct `n_active` for `BirdFlowRoutes` and `BirdFlowIntervals` objects.
+
+* `interval_log_likelihood()` now issues a formal deprecation warning
+  (it was already documented as deprecated but previously silent).
+  Use `calc_interval_metrics()` with a `BirdFlowIntervals` object instead.
+
+## Documentation review
+
+* Updated stale documentation.
+* Filled gaps in documentation:
+  * Documented the previously-undocumented `sf` methods.
+  * Added a lot of missing `@examples`.
+* Added a curated `reference:` index to `_pkgdown.yml`
+  with sections for core functions, working with distributions,
+  retrieving information (temporal / spatial / metadata / other),
+  routes and interval data,
+  evaluating models against tracking data,
+  coordinate conversions,
+  visualization,
+  utilities, and deprecated functions.
+
+## Consolidate back compatibility into `upgrade_birdflow()`
+
+* `upgrade_birdflow()` consolidates back compatibility
+  into one function: fixing the old `birdFlowr_version` metadata
+  name typo, backfilling `metadata$timestep_padding` and `dates$week`
+  when missing, backfilling metadata fields added in later package
+  versions with `new_BirdFlow()`'s schema defaults, and adding a dynamic
+  mask via `add_dynamic_mask()` if one is missing. Running it on an
+  already current object is a no-op.
 
 # BirdFlowR 0.1.0.9084
 2026-07-27

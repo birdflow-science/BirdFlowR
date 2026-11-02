@@ -46,8 +46,10 @@ represented the expected average destination of all birds that start
 in the cell.
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 mv <- calc_movement_vectors(bf, 7)
+}
 
 }
 \seealso{

@@ -20,30 +20,24 @@ test_that("import_birdflow() works with preprocessed species", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with sparse models", {
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   skip_on_cran()
 
-  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 10, end = 15)
+  bf <- BirdFlowExamples::amewoo |> truncate_birdflow(start = 10, end = 15)
   sbf <- sparsify(bf, method = "conditional", p = 0.99)
-
-  ### Back compatability, Needed for BirdFlowModels 0.0.2.9002
-  names(sbf$metadata)[names(sbf$metadata) == "birdFlowr_version"] <-
-    "birdflowr_version"
-
 
   file <- withr::local_tempfile(fileext = ".hdf5")
   expect_no_error(export_birdflow(sbf, file = file))
 
   expect_no_error(sbf2 <- import_birdflow(file))
 
-  ### back compatibility these will have to be deleted when we update the
-  ### BirdFlowModels::amewoo model, Needed for BirdFlowModels 0.0.2.9002
-  sbf2$metadata$ebirdst_version <- NULL
-  sbf2$metadata$birdflowr_preprocess_version <- NULL
-  for (m in c("trim_quantile", "clip", "ebird_coverage",
-              "abundance")) {
-    sbf2$metadata[[m]] <- NULL
-  }
+  # Metadata field order isn't semantically meaningful, and
+  # upgrade_birdflow() (called internally by truncate_birdflow()) appends
+  # backfilled fields in a different order than import_birdflow()
+  # reconstructs them, so sort both before comparing.
+  sbf$metadata <- sbf$metadata[sort(names(sbf$metadata))]
+  sbf2$metadata <- sbf2$metadata[sort(names(sbf2$metadata))]
 
 
   expect_equal(sbf, sbf2)
@@ -52,6 +46,7 @@ test_that("export_birdflow() and import_birdflow() work with sparse models", {
 })
 
 test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
+  skip_if_not_installed("BirdFlowExamples")
 
   #   https://github.com/birdflow-science/BirdFlowR/issues/168
   dir <- local_test_dir("na_metadata")
@@ -68,7 +63,7 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
 
   f <- file.path(dir, "amewoo.hdf5")
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   bf <- truncate_birdflow(bf, start = 1, end = 3) # faster read/write in test
   bf$species[na_items] <- NA # Overwrite some species info with NA
 
@@ -77,7 +72,7 @@ test_that("export_birdflow() and import_birdflow() work with NA in metadata", {
   bf2 <- import_birdflow(f)
 
 
-  # Metadata in BirdFlowModels::amewoo isn't always the same as the
+  # Metadata in BirdFlowExamples::amewoo isn't always the same as the
   # current metadata, so I'm deleting both before comparison
   bf$metadata <- NULL
   bf2$metadata <- NULL
@@ -171,10 +166,11 @@ test_that("preprocess -> fit -> import preserves ebird_coverage", {
 
 
 test_that("import_birdflow() does not leak rhdf5 handles across calls", {
+  skip_if_not_installed("BirdFlowExamples")
   local_quiet()
   skip_on_cran()
 
-  bf <- BirdFlowModels::amewoo |> truncate_birdflow(start = 1, end = 3)
+  bf <- BirdFlowExamples::amewoo |> truncate_birdflow(start = 1, end = 3)
   f <- withr::local_tempfile(fileext = ".hdf5")
   export_birdflow(bf, f)
 

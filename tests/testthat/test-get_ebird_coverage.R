@@ -2,7 +2,7 @@
 ### Back compatibility
 ### `make_coverage_bf()` constructs a synthetic BirdFlow fixture because the
 ### amewoo reference model predates ebird_coverage metadata. Remove this
-### helper and replace fixture usage with `BirdFlowModels::amewoo` once amewoo
+### helper and replace fixture usage with `BirdFlowExamples::amewoo` once amewoo
 ### is updated to include ebird_coverage.
 make_coverage_bf <- function() {
   bf <- new_BirdFlow()
@@ -27,11 +27,11 @@ make_coverage_bf <- function() {
   bf
 }
 
-test_that("get_ebird_coverage warns and returns NA for models without coverage", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
-  expect_warning(result <- get_ebird_coverage(bf), "does not have")
-  expect_true(is.na(result))
+test_that("get_ebird_coverage returns a coverage SpatRaster", {
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+  expect_no_error(result <- get_ebird_coverage(bf))
+  expect_s4_class(result, "SpatRaster")
 })
 
 test_that("get_ebird_coverage returns SpatRaster by default", {
@@ -84,8 +84,8 @@ test_that("get_ebird_coverage returns correct dataframe", {
 })
 
 test_that("get_mask still works after refactor", {
-  skip_if_not_installed("BirdFlowModels")
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
 
   r <- get_mask(bf)
   expect_s4_class(r, "SpatRaster")

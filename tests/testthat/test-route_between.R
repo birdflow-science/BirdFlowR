@@ -1,5 +1,6 @@
 test_that("route_between() returns BirdFlowRoutes with correct dimensions", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   set.seed(1)
 
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
@@ -20,7 +21,8 @@ test_that("route_between() returns BirdFlowRoutes with correct dimensions", {
 
 
 test_that("route_between() pins routes to hard observations", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   set.seed(2)
 
   # Two known locations as lat/lon
@@ -45,7 +47,8 @@ test_that("route_between() pins routes to hard observations", {
 
 
 test_that("route_between() works with soft potentials via column names", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   set.seed(3)
 
   ts <- lookup_timestep(c("2023-02-15", "2023-05-01"), bf)
@@ -61,7 +64,8 @@ test_that("route_between() works with soft potentials via column names", {
 
 
 test_that("route_between() works with soft potentials via date argument", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   set.seed(4)
 
   obs_matrix <- matrix(runif(n_active(bf) * 2), nrow = n_active(bf))
@@ -76,7 +80,8 @@ test_that("route_between() works with soft potentials via date argument", {
 
 
 test_that("route_between() errors on bad input", {
-  bf <- BirdFlowModels::amewoo
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
   xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 
   # Both hard and soft obs provided
@@ -120,13 +125,14 @@ test_that("route_between() errors on bad input", {
 
 
 test_that("route_between() marginal matches predict() with binary-mask start potential", {
+  skip_if_not_installed("BirdFlowExamples")
   # Statistical correctness test:
   # A binary mask over the start distribution defines a constrained initial
   # distribution. route_between() should sample routes whose final positions
   # are distributed according to predict() propagated from that same initial
   # distribution. We compare empirical mean x and y to the theoretical values.
 
-  bf <- BirdFlowModels::amewoo
+  bf <- BirdFlowExamples::amewoo
   set.seed(42)
 
   start_ts <- 9   # early March

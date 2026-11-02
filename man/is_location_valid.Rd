@@ -16,7 +16,7 @@ is_distr_valid(bf, distr, timestep, date, return_mask = FALSE)
 
 \item{x}{X coordinates in the \code{bf}'s CRS (\link[terra:crs]{crs(bf)}).}
 
-\item{y}{T coordinate.}
+\item{y}{Y coordinate.}
 
 \item{timestep}{The timestep.}
 
@@ -67,7 +67,8 @@ locations that have non-zero values.
 }
 \examples{
 
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 timestep  <- 3
 
 # Sample two valid locations from a distribution
@@ -79,5 +80,6 @@ is_location_valid(bf, i, timestep = timestep)
 # Sample a few invalid locations
 i <- sample(which(distr == 0), 2)
 is_location_valid(bf, i, timestep = timestep)
+}
 
 }

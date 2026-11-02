@@ -23,7 +23,7 @@ offset}
 center}
 \item{week}{The \pkg{ebirdst} week number associated with the date. For full
 year models this is identical to \code{timestep} but after
-\href{truncate_birdflow}{truncation} they will differ.}
+\href{truncate_birdflow()}{truncation} they will differ.}
 
 Prior to \pkg{BirdFlowR} v. 0.1.0.9040 it returned columns:
 \item{interval}{The interval or timestep associated with each date.
@@ -90,3 +90,9 @@ use\code{get_dates()} which will always return the same (newer) column names.
 }
 }
 
+\examples{
+\donttest{
+bf <- BirdFlowExamples::amewoo
+get_dates(bf)
+}
+}

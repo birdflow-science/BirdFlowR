@@ -20,7 +20,7 @@ E.g. "T_01-02".
 \item{bf}{A BirdFlow object}
 
 \item{timestep}{Deprecated alternative to \code{x}.  Previous versions of
-\code{lookup_dates()} only supported timestep input and used \code{timestep} as
+\code{lookup_date()} only supported timestep input and used \code{timestep} as
 the first argument.}
 }
 \value{
@@ -30,8 +30,10 @@ A Date object
 Retrieve date associated with timesteps, transitions, or marginals
 }
 \examples{
-bf <- BirdFlowModels::amewoo
+\donttest{
+bf <- BirdFlowExamples::amewoo
 lookup_date(1:5, bf)
+}
 }
 \seealso{
 \code{\link[=get_dates]{get_dates()}}, \code{\link[=lookup_timestep]{lookup_timestep()}}, \code{\link[=lookup_timestep_sequence]{lookup_timestep_sequence()}}

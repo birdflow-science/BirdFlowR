@@ -22,11 +22,18 @@
 #'   (`start`, `end`, `direction`, and `season_buffer`)
 #' * [route()] and [route_migration()] are similar to `predict()` but
 #'    generate routes instead of distributions.
+#' @examples
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
+#' distr <- get_distr(bf, 1)
+#' pred <- predict(bf, distr, start = 1, end = 3)
+#' dim(pred)
+#' }
 predict.BirdFlow <- function(object, distr, ...) {
 
 
-  ### BACK COMPATABILITY CODE
-  object <- add_dynamic_mask(object)  # To ease transition pain
+  ### Back compatibility to support old models
+  object <- upgrade_birdflow(object)
 
   dyn_mask <- object$geom$dynamic_mask
 
@@ -101,8 +108,4 @@ predict.BirdFlow <- function(object, distr, ...) {
     }
     return(reformat_distr_labels(pred, object))
   }
-}
-
-forecast <- function(x, ...) {
-  stop("forecast() is deprecated. Please use predict() instead.")
 }

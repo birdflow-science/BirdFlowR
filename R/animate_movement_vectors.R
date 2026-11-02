@@ -32,8 +32,10 @@
 #'
 #' @examples
 #'
-#' bf <- BirdFlowModels::amewoo
+#' \donttest{
+#' bf <- BirdFlowExamples::amewoo
 #' a <- animate_movement_vectors(bf)
+#' }
 #'
 #' \dontrun{
 #'
