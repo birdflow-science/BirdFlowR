@@ -51,7 +51,9 @@ below.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::rewbla
+# \donttest{
+bf <- BirdFlowExamples::rewbla
 lookup_season_timesteps(bf, "breeding", season_buffer = 0)
-#>  [1] 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+#>  [1] 18 19 20 21 22 23 24 25 26 27 28
+# }
 ```

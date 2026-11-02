@@ -41,9 +41,18 @@ The collection will default to the main BirdFlow model collection and
 most users will not need to set it.
 
 The local cache directory (for all collections) defaults to
-[birdflow_options("cache")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_otions())
+[birdflow_options("cache")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options())
 the cache directory for the current collection will be in a
 subdirectory. Both of the above options can be changed for the duration
 of the session with
 [`birdflow_options()`](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md),
 but the defaults should be suitable for most users.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+index <- load_collection_index()
+head(index)
+} # }
+```

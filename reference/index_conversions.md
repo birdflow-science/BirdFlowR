@@ -150,3 +150,51 @@ correlated, and are first, first, and second in argument order.
   convert between location indices (`i`) along cells included by the
   static mask and dynamic mask indices (`dmi`) along the cells included
   in the dynamic mask for a given timestep.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+i <- 1 # first active cell
+
+# From state vector index (i) to row, column, x, y, and back
+rc <- i_to_rc(i, bf)
+rc
+#>   row col
+#> 1   1  16
+i_to_row(i, bf)
+#> [1] 1
+i_to_col(i, bf)
+#> [1] 16
+xy <- i_to_xy(i, bf)
+xy
+#>         x        y
+#> 1 7275000 12075000
+i_to_x(i, bf)
+#> [1] 7275000
+i_to_y(i, bf)
+#> [1] 12075000
+rc_to_i(rc$row, rc$col, bf)
+#> [1] 1
+xy_to_i(xy$x, xy$y, bf)
+#> [1] 1
+
+# Row/column to x/y coordinates and back
+x <- col_to_x(rc$col, bf)
+y <- row_to_y(rc$row, bf)
+x_to_col(x, bf)
+#> [1] 16
+y_to_row(y, bf)
+#> [1] 1
+
+# Latitude/longitude (WGS84) to and from the model's CRS
+latlon <- xy_to_latlon(xy$x, xy$y, bf)
+latlon
+#>        lat      lon
+#> 1 51.22313 -69.5512
+latlon_to_xy(latlon$lat, latlon$lon, bf)
+#>         x        y
+#> 1 7275000 12075000
+# }
+```

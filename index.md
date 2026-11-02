@@ -9,22 +9,15 @@ Install just the package:
 
 ``` r
 
-if (!require("remotes"))
-  install.packages("remotes")
-remotes::install_github("birdflow-science/BirdFlowR")
+# install.packages("pak")
+pak::pak("birdflow-science/BirdFlowR")
 ```
 
-Or to install with example data and vignette:
+Or install with example data and optional additional packages:
 
 ``` r
 
-installed <- rownames(installed.packages())
-if (!"remotes" %in% installed)
-  install.packages("remotes")
-if (!"rnaturalearthdata" %in% installed)
-  install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
-remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
+pak::pak("birdflow-science/BirdFlowR", dependencies = TRUE)
 ```
 
 See the [Installation
@@ -34,47 +27,51 @@ for more information and help troubleshooting.
 ## Usage
 
 The two primary functions are
+[`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
+to generate synthetic routes, and
 [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
-to project distributions and
-[`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
-to generate synthetic routes.
+to project distributions.
 
-[`route_migration()`](https://birdflow-science.github.io/BirdFlowR/reference/route_migration.md)
-is a wrapper to
+### `route()`
+
 [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md)
-which automates sampling locations from a distribution for the start of
-the migration and setting the start and end dates to route for the
-migration window. We can use it to create synthetic routes for a
-species.
+generates synthetic migration routes from user specified starting
+locations. If unspecified, locations are sampled from the initial
+species distribution.
 
 ``` r
 
 library(BirdFlowR)
-library(BirdFlowModels)
+library(BirdFlowExamples) 
 
 bf <- amewoo 
-
 species(bf)
 #> [1] "American Woodcock"
 
-# Generate routes for the prebreeding migration 
+# Generate and plot routes for the prebreeding migration 
 rts <- route(bf, n = 10, season = "prebreeding")
-
-# Plot routes
 plot_routes(rts, bf)
 ```
 
-![](reference/figures/README-examples-1.png)
+![](reference/figures/README-route-1.png)
 
-Visualize the movement in the BirdFlow model for a timestep.
+### `predict()`
+
+[`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
+propagates an input distribution forward or backward in time. In this
+example we predict where birds from a randomly selected location in the
+winter will be in the summer.
 
 ``` r
 
-
-plot_movement_vectors(bf, start = 12)
+set.seed(1)
+initial_distribution <- get_distr(bf, 1)
+location <- sample_distr(initial_distribution)
+forecast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forecast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
-![](reference/figures/README-movement_vectors-1.png)
+![](reference/figures/README-predict-1.png)
 
 ## Learn more
 

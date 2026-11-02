@@ -53,7 +53,7 @@ depending on whether the context is for input or output processing:
 ## See also
 
 - [Object
-  Validators](https://birdflow-science.github.io/BirdFlowR/reference/?object_validators)
+  Validators](https://birdflow-science.github.io/BirdFlowR/reference/object_validators)
 
 - [Attribute
-  Validators](https://birdflow-science.github.io/BirdFlowR/reference/?attribute_validators)
+  Validators](https://birdflow-science.github.io/BirdFlowR/reference/attribute_validators)

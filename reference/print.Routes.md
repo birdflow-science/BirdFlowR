@@ -39,7 +39,8 @@ route_df <- data.frame(
   route_type = c("tracking", "tracking", "tracking", "tracking",
   "tracking", "motus", "motus", "motus", "motus")
 )
-routes <- Routes(route_df, species = list(common_name = "American Woodcock"))
+routes <- as_routes(route_df,
+  species = list(common_name = "American Woodcock"))
 
 print(routes)
 #> --------------------------------------------- 
@@ -66,6 +67,8 @@ print(routes)
 #> (4 lines omitted)
 
 # BirdFlowRoutes
-bf <- BirdFlowModels::amewoo
-bf_routes <- as_BirdFlowRoutes(routes, bf)
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+bf_routes <- as_birdflow_routes(routes, bf)
+# }
 ```

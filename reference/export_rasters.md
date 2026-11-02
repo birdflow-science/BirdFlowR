@@ -141,8 +141,9 @@ if (FALSE) { # \dontrun{
   bf <- load_model("amewoo")
   dir <- tempdir()
   crs <-"EPSG:4326"
-  export_tifs(bf, dir = dir, singleband = TRUE, crs = crs)
-  export_tifs(bf, dir = dir, singleband = TRUE, crs = crs, filetype = "PNG")
+  export_rasters(bf, dir = dir, singleband = TRUE, crs = crs)
+  export_rasters(bf, dir = dir, singleband = TRUE, crs = crs,
+                  filetype = "PNG")
 
 } # }
 ```

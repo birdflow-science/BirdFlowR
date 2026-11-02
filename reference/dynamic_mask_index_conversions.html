@@ -23,7 +23,7 @@ as the mapping between the two is different for each timestep."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ as the mapping between the two is different for each timestep."><meta property="
     <div class="ref-description section level2">
     <p><code>dmi_to_i()</code> and <code>i_to_dmi()</code> are for internal and advanced use;
 they are not likely to be helpful to most users.
-See <a href="i_to_x">index conversions</a> for, likely, more useful conversions.
+See <a href="i_to_x()">index conversions</a> for, likely, more useful conversions.
 These two functions convert between indices along the cells that are
 included in the dynamic mask (<code>dmi</code>) and standard location
 indices (<code>i</code>) along the cells that are included by the static mask.
@@ -110,7 +110,8 @@ vice versa.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span> <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span> <span class="va">dmi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">5</span>,<span class="fl">7</span><span class="op">:</span><span class="fl">9</span> <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -119,6 +120,7 @@ vice versa.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">dmi</span>, <span class="va">dmi2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

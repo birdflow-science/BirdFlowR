@@ -49,8 +49,9 @@ generic so the code will work with any set of polygons.
 
 ## Load model and set parameters
 
-This example uses the American Woodcock dataset from **BirdFlowModels**
-which is small and runs fast but isn’t fully vetted for scientific use.
+This example uses the American Woodcock dataset from
+**BirdFlowExamples** which is small and runs fast but isn’t fully vetted
+for scientific use.
 
 Use
 [`load_model()`](https://birdflow-science.github.io/BirdFlowR/reference/load_model.md)
@@ -58,7 +59,7 @@ for real work.
 
 ``` r
 
-bf <- BirdFlowModels::amewoo  # you will likely use load_model() instead
+bf <- BirdFlowExamples::amewoo  # you will likely use load_model() instead
 start <- BirdFlowR::lookup_timestep("2024-01-15", bf)
 end <- BirdFlowR::lookup_timestep("2024-03-20", bf)
 population <- 3500000

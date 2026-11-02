@@ -13,7 +13,7 @@ be treated as a "one hot" distribution containing mostly 0 and a single
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@ object containing values to be treated as a distribution.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Arguments used by other methods:</p></dd>
+<dd><p>Arguments used by other methods.</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
@@ -122,6 +122,653 @@ if some of the value in <code>x</code> is lost due to cropping or due to masking
 inactive cells.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># data.frame method: one "one hot" distribution per point</span></span></span>
+<span class="r-in"><span><span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xy</span><span class="op">$</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">xy</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_distr</span><span class="op">(</span><span class="va">pts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        [,1] [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1,]    1    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2,]    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [4,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [10,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [12,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [14,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [18,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [20,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [23,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [24,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [27,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [28,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [30,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [32,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [34,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [35,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [39,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [40,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [42,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [44,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [45,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [47,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [48,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [52,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [53,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [54,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [58,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [59,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [60,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [62,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [63,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [68,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [69,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [70,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [72,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [74,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [77,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [80,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [82,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [83,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [84,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [87,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [88,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [90,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [93,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [94,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [95,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [98,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [100,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [102,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [103,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [104,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [107,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [108,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [109,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [110,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [112,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [114,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [115,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [116,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [117,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [118,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [119,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [122,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [123,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [124,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [125,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [126,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [128,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [129,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [130,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [132,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [133,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [135,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [136,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [137,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [138,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [139,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [140,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [142,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [143,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [144,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [145,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [146,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [147,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [150,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [152,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [153,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [154,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [156,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [157,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [158,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [159,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [160,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [163,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [164,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [165,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [166,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [167,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [168,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [170,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [172,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [173,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [174,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [175,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [177,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [178,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [179,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [180,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [182,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [184,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [185,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [186,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [187,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [188,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [189,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [190,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [191,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [192,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [193,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [194,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [195,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [196,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [198,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [199,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [200,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [201,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [202,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [203,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [204,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [205,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [206,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [207,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [208,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [209,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [210,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [211,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [212,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [213,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [214,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [215,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [216,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [217,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [218,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [219,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [220,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [221,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [222,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [223,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [224,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [225,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [226,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [227,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [228,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [229,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [230,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [231,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [232,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [233,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [234,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [235,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [236,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [237,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [238,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [239,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [240,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [241,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [242,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [243,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [244,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [245,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [246,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [247,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [248,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [249,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [250,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [251,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [252,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [253,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [254,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [255,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [256,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [257,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [258,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [259,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [260,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [261,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [262,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [263,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [264,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [265,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [266,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [267,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [268,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [269,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [270,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [271,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [272,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [273,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [274,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [275,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [276,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [277,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [278,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [279,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [280,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [281,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [282,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [283,]    0    0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sf method</span></span></span>
+<span class="r-in"><span><span class="va">sf_pts</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">pts</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fu">crs</span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_distr</span><span class="op">(</span><span class="va">sf_pts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        [,1] [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1,]    1    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2,]    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [4,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [7,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [10,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [12,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [13,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [14,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [17,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [18,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [19,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [20,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [23,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [24,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [25,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [27,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [28,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [30,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [32,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [33,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [34,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [35,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [37,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [39,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [40,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [42,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [44,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [45,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [47,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [48,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [49,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [52,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [53,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [54,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [55,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [58,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [59,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [60,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [62,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [63,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [65,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [67,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [68,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [69,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [70,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [72,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [73,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [74,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [77,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [79,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [80,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [82,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [83,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [84,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [87,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [88,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [89,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [90,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [93,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [94,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [95,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [97,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [98,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [100,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [102,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [103,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [104,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [105,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [107,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [108,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [109,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [110,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [112,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [114,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [115,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [116,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [117,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [118,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [119,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [122,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [123,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [124,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [125,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [126,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [128,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [129,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [130,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [132,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [133,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [135,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [136,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [137,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [138,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [139,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [140,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [142,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [143,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [144,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [145,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [146,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [147,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [150,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [152,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [153,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [154,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [156,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [157,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [158,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [159,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [160,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [163,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [164,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [165,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [166,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [167,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [168,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [170,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [172,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [173,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [174,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [175,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [177,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [178,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [179,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [180,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [182,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [184,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [185,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [186,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [187,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [188,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [189,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [190,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [191,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [192,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [193,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [194,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [195,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [196,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [198,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [199,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [200,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [201,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [202,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [203,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [204,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [205,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [206,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [207,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [208,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [209,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [210,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [211,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [212,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [213,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [214,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [215,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [216,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [217,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [218,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [219,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [220,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [221,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [222,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [223,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [224,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [225,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [226,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [227,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [228,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [229,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [230,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [231,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [232,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [233,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [234,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [235,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [236,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [237,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [238,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [239,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [240,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [241,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [242,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [243,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [244,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [245,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [246,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [247,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [248,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [249,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [250,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [251,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [252,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [253,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [254,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [255,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [256,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [257,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [258,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [259,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [260,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [261,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [262,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [263,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [264,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [265,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [266,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [267,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [268,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [269,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [270,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [271,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [272,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [273,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [274,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [275,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [276,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [277,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [278,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [279,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [280,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [281,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [282,]    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [283,]    0    0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># SpatRaster method</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">rast</span><span class="op">(</span><span class="va">bf</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_distr</span><span class="op">(</span><span class="va">r</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [11] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [16] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [21] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [26] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [31] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [41] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [46] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [51] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [56] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [61] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [66] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [76] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [81] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [86] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [91] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [96] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [101] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [111] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [116] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [121] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [126] 0.000000e+00 2.654108e-06 9.882774e-04 3.971355e-03 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [131] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [136] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141] 0.000000e+00 0.000000e+00 5.919668e-07 4.710217e-04 4.330653e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [146] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [151] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [156] 0.000000e+00 0.000000e+00 3.464510e-06 1.961725e-03 6.931312e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [161] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [166] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [171] 7.508743e-06 2.957621e-03 8.718165e-03 4.529720e-03 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [181] 2.482801e-05 2.028553e-04 9.213331e-07 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [186] 2.838783e-03 4.215964e-02 4.163246e-02 6.921357e-03 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [191] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [196] 3.273664e-03 8.458369e-03 6.163124e-03 1.959965e-03 4.947349e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [201] 3.204921e-02 4.898101e-02 4.168029e-02 1.578872e-02 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [206] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 3.752682e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [211] 1.400020e-02 1.569149e-02 2.634848e-02 1.136832e-02 2.790600e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [216] 5.111686e-02 3.304982e-02 1.808712e-02 2.444598e-03 6.770740e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [221] 1.619776e-05 8.352012e-05 1.513218e-03 4.433005e-04 2.247404e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [226] 1.239867e-02 1.664490e-02 4.570713e-02 2.850836e-02 2.633825e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [231] 3.541156e-02 1.931686e-02 5.252171e-04 5.706915e-04 4.045021e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [236] 1.625290e-02 6.044832e-03 1.712079e-04 5.228329e-03 1.918284e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [241] 5.111686e-02 1.977860e-02 1.168555e-02 1.966511e-02 4.374494e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [246] 0.000000e+00 3.067777e-04 9.318547e-04 9.440010e-03 1.819547e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [251] 7.850784e-03 1.659561e-03 1.632366e-03 7.892153e-03 1.439658e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [256] 5.863142e-03 2.924571e-03 1.240335e-03 3.411255e-06 6.777501e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [261] 4.919647e-03 7.542769e-03 9.197147e-03 9.636015e-03 3.672142e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [266] 7.859617e-04 1.457520e-04 1.932125e-03 6.706695e-03 1.859059e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [271] 1.894553e-03 1.634350e-07 8.295965e-05 1.789877e-03 3.678946e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [276] 1.492053e-04 3.081023e-04 4.024127e-05 6.266951e-04 1.115313e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [281] 2.556100e-04 2.410929e-06 9.835884e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"time")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "January 4"</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

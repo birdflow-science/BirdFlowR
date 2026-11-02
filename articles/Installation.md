@@ -7,7 +7,7 @@ both of those installed, skip to step 3.
 
 1.  [Install R from CRAN](https://cran.r-project.org/) - follow links
     for your system in the upper right. I’m currently using R version
-    4.6.1 (2026-06-24) but I think any 4.2.x and above should work.
+    4.6.2 (2026-10-29) but I think any 4.2.x and above should work.
 
 2.  [Install RStudio IDE](https://posit.co/download/rstudio-desktop/)
     This isn’t strictly necessary, but RStudio is a significant upgrade
@@ -18,29 +18,15 @@ both of those installed, skip to step 3.
 
     ``` r
 
-    installed <- rownames(installed.packages())
-    if (!"remotes" %in% installed)
-      install.packages("remotes")
-    if (!"rnaturalearthdata" %in% installed)
-      install.packages("rnaturalearthdata")
-    remotes::install_github("birdflow-science/BirdFlowModels")
-    remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, dependencies = TRUE)
+    # install.packages("pak")
+    pak::pak("birdflow-science/BirdFlowR")
     ```
 
-    Package dependencies can be a pain. If the above doesn’t work you
-    can also try the alternative method below, also executed in the
-    RStudio console.
+    Or install with example data and optional additional packages:
 
     ``` r
 
-    installed <- rownames(installed.packages())
-    if (!"pak" %in% installed)
-      install.packages("pak")
-
-    pak::pkg_install("rnaturalearthdata", ask = FALSE)
-    pak::pkg_install("birdflow-science/BirdFlowModels", ask = FALSE)
-    pak::pkg_install("birdflow-science/BirdFlowR", ask = FALSE,
-                     dependencies = TRUE)
+    pak::pak("birdflow-science/BirdFlowR", dependencies = TRUE)
     ```
 
     If you are having issues installing the **rhdf5** package
@@ -153,10 +139,10 @@ their dependencies.
 
 ``` r
 
-library(BirdFlowModels)
+library(BirdFlowExamples)
 library(BirdFlowR)
 library(terra)
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 print(bf)
 plot(rast(bf, 1))
 ```
@@ -164,7 +150,7 @@ plot(rast(bf, 1))
 ![](Installation_files/figure-html/test-1.png)
 
     #> American Woodcock BirdFlow model
-    #>   dimensions   : 22, 31, 52  (nrow, ncol, ntimesteps)
+    #>   dimensions   : 20, 22, 52  (nrow, ncol, ntimesteps)
     #>   resolution   : 150000, 150000  (x, y)
-    #>   active cells : 342
-    #>   size         : 12.5 Mb
+    #>   active cells : 283
+    #>   size         : 8.8 Mb

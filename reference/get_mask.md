@@ -27,7 +27,7 @@ get_mask(bf, format = "SpatRaster")
 
 ## Value
 
-The return type of `get_mask()`depends on the `format` argument:
+The return type of `get_mask()` depends on the `format` argument:
 
 - `"SpatRaster"` (the default) returns a
   [terra::SpatRaster](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
@@ -51,8 +51,10 @@ The return type of `get_mask()`depends on the `format` argument:
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 m <- get_mask(bf)
+# }
 
 if (FALSE) { # \dontrun{
 library(terra)

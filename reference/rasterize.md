@@ -4,7 +4,7 @@
 converts a BirdFlow object directly to a
 [SpatRaster](https://rspatial.github.io/terra/reference/SpatRaster-class.html).
 `rasterize_distr()` converts a
-[distribution](https://birdflow-science.github.io/BirdFlowR/reference/as_distr)
+[distribution](https://birdflow-science.github.io/BirdFlowR/reference/as_distr())
 into a
 [SpatRaster](https://rspatial.github.io/terra/reference/SpatRaster-class.html),
 numeric matrix or array, or a raster data frame.

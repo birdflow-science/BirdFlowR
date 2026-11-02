@@ -29,7 +29,7 @@ write_intervals(obj, path)
 - obj:
 
   For `write_routes()` a `Routes`, or `BirdFlowRoutes` object. For
-  `write_intevals()` a `BirdFlowIntervals` object.
+  `write_intervals()` a `BirdFlowIntervals` object.
 
 - path:
 
@@ -37,7 +37,7 @@ write_intervals(obj, path)
 
 ## Value
 
-- `write_routes()` ans `write_invervals()` invisibly return their input
+- `write_routes()` and `write_intervals()` invisibly return their input
   object (after writing to disk).
 
 - `read_routes()` returns the written object - either `Routes` or
@@ -54,17 +54,15 @@ cross-language format for routes and intervals.
 
 `read_routes()` and `write_routes()` work on both `Routes` and
 `BirdFlowRoutes`. See
-[`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
+[`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md)
 and
-[`as_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md)
+[`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md)
 to create objects of these classes.
 
 `read_intervals()` and `write_intervals()` work on `BirdFlowIntervals`
 which are a collection of movements each with a single start and end
-derived from
-[`BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md).
-See
-[`as_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowIntervals.md).
+derived from `BirdFlowRoutes`. See
+[`as_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_intervals.md).
 
 ## Internal functions
 
@@ -87,3 +85,25 @@ See
   [`import_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/export_import_birdflow.md)
   also substantially alters the object if it has not previously been
   imported into R.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+rts <- route(bf, n = 3)
+
+route_path <- tempfile(fileext = ".hdf5")
+write_routes(rts, route_path)
+rts2 <- read_routes(route_path)
+identical(class(rts), class(rts2))
+#> [1] TRUE
+
+ivl <- as_birdflow_intervals(rts)
+interval_path <- tempfile(fileext = ".hdf5")
+write_intervals(ivl, interval_path)
+ivl2 <- read_intervals(interval_path)
+identical(class(ivl), class(ivl2))
+#> [1] TRUE
+# }
+```

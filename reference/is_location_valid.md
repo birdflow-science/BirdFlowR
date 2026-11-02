@@ -31,7 +31,7 @@ is_distr_valid(bf, distr, timestep, date, return_mask = FALSE)
 
 - y:
 
-  T coordinate.
+  Y coordinate.
 
 - timestep:
 
@@ -94,7 +94,8 @@ locations that have non-zero values.
 
 ``` r
 
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 timestep  <- 3
 
 # Sample two valid locations from a distribution
@@ -108,4 +109,5 @@ is_location_valid(bf, i, timestep = timestep)
 i <- sample(which(distr == 0), 2)
 is_location_valid(bf, i, timestep = timestep)
 #> [1] FALSE FALSE
+# }
 ```

@@ -3,7 +3,7 @@
 ``` r
 
 library(BirdFlowR)
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 ```
 
 [`route_between()`](https://birdflow-science.github.io/BirdFlowR/reference/route_between.md)
@@ -144,9 +144,9 @@ distr <- predict_between(bf,
                          date    = c("2023-02-15", "2023-05-01"))
 
 cat("Dimensions:", dim(distr), "\n")
-#> Dimensions: 342 12
+#> Dimensions: 283 12
 cat("Log-likelihood of observations:", round(attr(distr, "log_z"), 2), "\n")
-#> Log-likelihood of observations: -7.36
+#> Log-likelihood of observations: -6.43
 
 plot_distr(distr, bf, dynamic_scale = TRUE)
 ```

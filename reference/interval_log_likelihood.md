@@ -1,14 +1,11 @@
 # Calculate log likelihoods of observed bird movements
 
-`interval_log_likelihood()` calculates the log likelihoods of inferred
-bird movement based on two observation points (in time and space). The
-second point must have a different timestep (week) than the first, but
-the location can remain the same. Note `interval_log_likelihood()`
-predates the `BirdFlowIntervals` class and so is now deprecated. If you
-are thinking of using this function in new code please consider
-[`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md),
-[`as_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md),
-[`as_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowIntervals.md),
+DEPRECATED FUNCTION. `interval_log_likelihood()` predates the
+`BirdFlowIntervals` class and so is now deprecated. If you are thinking
+of using this function in new code please consider
+[`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md),
+[`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md),
+[`as_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_intervals.md),
 and
 [`calc_interval_metrics()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.md)
 to make `BirdFlowIntervals` and then calculate a full suite of metrics
@@ -131,6 +128,11 @@ The returned table rows will have a 1:1 correspondence with the input
 
 ## Details
 
+`interval_log_likelihood()` calculates the log likelihoods of inferred
+bird movement based on two observation points (in time and space). The
+second point must have a different timestep (week) than the first, but
+the location can remain the same.
+
 The core of this function is calling
 [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow.md)
 on a distribution that has the starting location hot (value of 1) and
@@ -154,18 +156,21 @@ those decisions to the user.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::rewbla
-observations <- BirdFlowModels::rewbla_observations
-intervals <- BirdFlowModels::rewbla_intervals
+# \donttest{
+bf <- BirdFlowExamples::rewbla
+observations <- BirdFlowExamples::rewbla_observations
+intervals <- BirdFlowExamples::rewbla_intervals
 intervals <- intervals[1:20, ] # toy example
 intervals <- interval_log_likelihood(intervals, observations, bf)
+#> Warning: interval_log_likelihood() is deprecated. Please use calc_interval_metrics() with a BirdFlowIntervals object instead.
 head(intervals, 3)
 #>           bird_id  from    to interval_id log_likelihood   null_ll lag exclude
-#> 1017 B19221769152  2223  2224        1017      -3.157935 -4.453952  47   FALSE
-#> 4775 B77724064244 10149 10150        4775      -3.429942 -4.870969  50   FALSE
-#> 2177 B29252852992  4625  4626        2177      -5.135462 -5.816720  21   FALSE
+#> 1017 B19221769152  2223  2224        1017      -2.942000 -3.743159  48   FALSE
+#> 4775 B77724064244 10149 10150        4775      -2.044764 -3.905215  50   FALSE
+#> 2177 B29252852992  4625  4626        2177      -4.825912 -4.541446  21   FALSE
 #>      not_active dynamic_mask sparse same_timestep bad_date
 #> 1017      FALSE        FALSE  FALSE         FALSE    FALSE
 #> 4775      FALSE        FALSE  FALSE         FALSE    FALSE
 #> 2177      FALSE        FALSE  FALSE         FALSE    FALSE
+# }
 ```

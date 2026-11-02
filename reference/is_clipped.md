@@ -37,7 +37,9 @@ to retrieve the polygon itself.
 ## Examples
 
 ``` r
-  library(BirdFlowModels)
-  is_clipped(amewoo) # NA — fixture predates clip metadata
-#> [1] NA
+# \donttest{
+library(BirdFlowExamples)
+is_clipped(amewoo) # NA — fixture predates clip metadata
+#> [1] TRUE
+# }
 ```

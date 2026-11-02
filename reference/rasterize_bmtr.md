@@ -19,7 +19,7 @@ rasterize_bmtr(bmtr, bf)
 - bf:
 
   A BirdFlow model. For example:
-  [`BirdFlowModels::amewoo`](https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html)
+  [`BirdFlowExamples::amewoo`](https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html)
 
 ## Value
 
@@ -34,6 +34,8 @@ The `x` and `y` coordinates are mapped to raster columns and rows.
 
 ``` r
 if (FALSE) { # \dontrun{
+bf <- BirdFlowExamples::amewoo
+bmtr <- calc_bmtr(bf)
 raster <- rasterize_bmtr(bmtr, bf)
 plot(raster)
 } # }

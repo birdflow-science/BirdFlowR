@@ -29,7 +29,8 @@ active cell in the BirdFlow object.
 ``` r
 # Calculate great circle distance matrix
 library(terra)
-bf <- BirdFlowModels::rewbla
+# \donttest{
+bf <- BirdFlowExamples::rewbla
 gs <- great_circle_distances(bf)
 
 # The above is all you need to use the function.
@@ -60,4 +61,6 @@ mtext(paste0(
   "lines connect cells to the cell which have greatest",
   " proportional error in distance"
 ), line = 0, cex = 0.7)
+
+# }
 ```

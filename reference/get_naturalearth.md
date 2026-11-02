@@ -183,8 +183,10 @@ functions. There are two distinct calculation methods.
 ## Examples
 
 ``` r
- bf <- BirdFlowModels::amewoo
+# \donttest{
+ bf <- BirdFlowExamples::amewoo
  coast <- get_coastline(bf)
+# }
 
  if (FALSE) { # \dontrun{
  library(terra)

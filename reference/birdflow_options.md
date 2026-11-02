@@ -88,7 +88,6 @@ returned.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
 birdflow_options() # print current settings
 #> $cache
 #> [1] "/home/runner/.local/share/R/BirdFlowR"
@@ -105,11 +104,13 @@ birdflow_options() # print current settings
 #> $verbose
 #> [1] TRUE
 #> 
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 original_format <- birdflow_options("time_format")
 birdflow_options(time_format = "date")
 head(get_distr(bf, 1:3))
 #>       time
-#> i      2021-01-04 2021-01-11 2021-01-18
+#> i      2023-01-04 2023-01-11 2023-01-18
 #>   [1,]          0          0          0
 #>   [2,]          0          0          0
 #>   [3,]          0          0          0
@@ -117,4 +118,5 @@ head(get_distr(bf, 1:3))
 #>   [5,]          0          0          0
 #>   [6,]          0          0          0
 birdflow_options(time_format = original_format)
+# }
 ```

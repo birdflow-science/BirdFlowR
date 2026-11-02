@@ -11,7 +11,7 @@ object."><meta property="og:image" content="https://birdflow-science.github.io/B
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,15 +175,16 @@ energy improvement</p></dd>
 <span class="r-in"><span>               <span class="st">"tracking"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="va">species1</span> <span class="op">&lt;-</span> <span class="va">bf</span><span class="op">$</span><span class="va">species</span></span></span>
 <span class="r-in"><span><span class="va">source1</span> <span class="op">&lt;-</span> <span class="st">"Testing"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">my_routes</span> <span class="op">&lt;-</span> <span class="fu"><a href="Routes.html">Routes</a></span><span class="op">(</span><span class="va">route_df</span>,</span></span>
+<span class="r-in"><span><span class="va">my_routes</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_routes.html">as_routes</a></span><span class="op">(</span><span class="va">route_df</span>,</span></span>
 <span class="r-in"><span>                    species <span class="op">=</span> <span class="va">species1</span>,</span></span>
 <span class="r-in"><span>                    source <span class="op">=</span> <span class="va">source1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">my_bfroutes</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_BirdFlowRoutes.html">as_BirdFlowRoutes</a></span><span class="op">(</span><span class="va">my_routes</span>, bf <span class="op">=</span> <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my_bfroutes</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_birdflow_routes.html">as_birdflow_routes</a></span><span class="op">(</span><span class="va">my_routes</span>, bf <span class="op">=</span> <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Constraints</span></span></span>
 <span class="r-in"><span><span class="va">min_day</span> <span class="op">&lt;-</span> <span class="fl">7</span></span></span>
@@ -191,7 +192,7 @@ energy improvement</p></dd>
 <span class="r-in"><span><span class="va">min_km</span> <span class="op">&lt;-</span> <span class="fl">200</span></span></span>
 <span class="r-in"><span><span class="va">max_km</span> <span class="op">&lt;-</span> <span class="fl">8000</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">my_intervals</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_BirdFlowIntervals.html">as_BirdFlowIntervals</a></span><span class="op">(</span><span class="va">my_bfroutes</span>,</span></span>
+<span class="r-in"><span><span class="va">my_intervals</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_birdflow_intervals.html">as_birdflow_intervals</a></span><span class="op">(</span><span class="va">my_bfroutes</span>,</span></span>
 <span class="r-in"><span>                                     max_n <span class="op">=</span> <span class="fl">1000</span>,</span></span>
 <span class="r-in"><span>                                     min_day_interval <span class="op">=</span> <span class="va">min_day</span>,</span></span>
 <span class="r-in"><span>                                     max_day_interval <span class="op">=</span> <span class="va">max_day</span>,</span></span>
@@ -202,6 +203,7 @@ energy improvement</p></dd>
 <span class="r-in"><span><span class="va">eval_res</span> <span class="op">&lt;-</span> <span class="fu">calc_interval_metrics</span><span class="op">(</span><span class="va">my_intervals</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">single_value_outputs</span> <span class="op">&lt;-</span> <span class="va">eval_res</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">transition_level_outputs</span> <span class="op">&lt;-</span> <span class="va">eval_res</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

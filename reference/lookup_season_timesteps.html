@@ -13,7 +13,7 @@ with species_info()."><meta property="og:image" content="https://birdflow-scienc
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,9 +93,11 @@ alias listed below.</p><table class="table table"><tr><td><strong>season</strong
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">rewbla</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">rewbla</a></span></span></span>
 <span class="r-in"><span><span class="fu">lookup_season_timesteps</span><span class="op">(</span><span class="va">bf</span>, <span class="st">"breeding"</span>, season_buffer <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 18 19 20 21 22 23 24 25 26 27 28 29 30 31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 18 19 20 21 22 23 24 25 26 27 28</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

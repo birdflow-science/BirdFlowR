@@ -86,10 +86,12 @@ code.
 
 ``` r
 
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 a <- animate_movement_vectors(bf)
 #> Creating vector fields
 #>  ....................................................
+# }
 
 if (FALSE) { # \dontrun{
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,63 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0.9000" id="birdflowr-1009000">BirdFlowR 1.0.0.9000<a class="anchor" aria-label="anchor" href="#birdflowr-1009000"></a></h2>
+<div class="section level3">
+<h3 id="switch-example-data-dependency-from-birdflowmodels-to-birdflowexamples-1-0-0-9000">Switch example-data dependency from BirdFlowModels to BirdFlowExamples<a class="anchor" aria-label="anchor" href="#switch-example-data-dependency-from-birdflowmodels-to-birdflowexamples-1-0-0-9000"></a></h3>
+<ul><li>Renamed companion data package from <strong>BirdFlowModels</strong> to <strong>BirdFlowExamples</strong>.</li>
+<li>Refit <code>amewoo</code>/<code>rewbla</code> example models. Both now have dynamic masks, and <code>rewbla</code> is now a sparse model.</li>
+<li>Updated all <code>BirdFlowModels</code> references to <code>BirdFlowExamples (&gt;= 0.0.1.9001)</code>.</li>
+<li>Updated tests to account for changes in the example models.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="routes--birdflowroutes--birdflowintervals-api-simplification-1-0-0-9000">Routes / BirdFlowRoutes / BirdFlowIntervals API simplification<a class="anchor" aria-label="anchor" href="#routes--birdflowroutes--birdflowintervals-api-simplification-1-0-0-9000"></a></h3>
+<p><strong>This is an API change. Most existing code should run with warnings about deprecated functions.</strong></p>
+<ul><li>
+<p>Renamed the public constructors to a consistent lowercase, snake_case <code>as_*()</code> naming convention:</p>
+<ul><li>
+<code><a href="../reference/Routes.html">Routes()</a></code> -&gt; <code><a href="../reference/as_routes.html">as_routes()</a></code>
+</li>
+<li>
+<code><a href="../reference/as_BirdFlowRoutes.html">as_BirdFlowRoutes()</a></code> -&gt; <code><a href="../reference/as_birdflow_routes.html">as_birdflow_routes()</a></code>
+</li>
+<li>
+<code><a href="../reference/BirdFlowIntervals.html">BirdFlowIntervals()</a></code> / <code><a href="../reference/as_BirdFlowIntervals.html">as_BirdFlowIntervals()</a></code> -&gt; <code><a href="../reference/as_birdflow_intervals.html">as_birdflow_intervals()</a></code> (now an S3 generic with <code>BirdFlowRoutes</code> and <code>data.frame</code> methods)</li>
+</ul><p>The old names are kept as deprecated wrappers that issue a runtime warning and forward to the new functions.</p>
+</li>
+<li>
+<p>Renamed the public validators to match:</p>
+<ul><li>
+<code><a href="../reference/object_validators.html">validate_Routes()</a></code> -&gt; <code><a href="../reference/object_validators.html">validate_routes()</a></code>
+</li>
+<li>
+<code><a href="../reference/object_validators.html">validate_BirdFlowRoutes()</a></code> -&gt; <code><a href="../reference/object_validators.html">validate_birdflow_routes()</a></code>
+</li>
+<li>
+<code><a href="../reference/object_validators.html">validate_BirdFlowIntervals()</a></code> -&gt; <code><a href="../reference/object_validators.html">validate_birdflow_intervals()</a></code>
+</li>
+</ul><p>Old names are deprecated wrappers.</p>
+</li>
+<li><p>Added <code>[</code> row-subsetting methods for <code>Routes</code>, <code>BirdFlowRoutes</code>, and <code>BirdFlowIntervals</code> objects. See <code><a href="../reference/subset_routes.html">?subset_routes</a></code>.</p></li>
+<li><p>Fixed a bug in <code><a href="../reference/attribute_validators.html">validate_BirdFlowRoutes_species()</a></code>’s handling of <code>NA</code> species fields, and a bug where <code>geom</code> validation wasn’t passed the correct <code>n_active</code> for <code>BirdFlowRoutes</code> and <code>BirdFlowIntervals</code> objects.</p></li>
+<li><p><code><a href="../reference/interval_log_likelihood.html">interval_log_likelihood()</a></code> now issues a formal deprecation warning (it was already documented as deprecated but previously silent). Use <code><a href="../reference/calc_interval_metrics.html">calc_interval_metrics()</a></code> with a <code>BirdFlowIntervals</code> object instead.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-review-1-0-0-9000">Documentation review<a class="anchor" aria-label="anchor" href="#documentation-review-1-0-0-9000"></a></h3>
+<ul><li>Updated stale documentation.</li>
+<li>Filled gaps in documentation:
+<ul><li>Documented the previously-undocumented <code>sf</code> methods.</li>
+<li>Added a lot of missing <code>@examples</code>.</li>
+</ul></li>
+<li>Added a curated <code>reference:</code> index to <code>_pkgdown.yml</code> with sections for core functions, working with distributions, retrieving information (temporal / spatial / metadata / other), routes and interval data, evaluating models against tracking data, coordinate conversions, visualization, utilities, and deprecated functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="consolidate-back-compatibility-into-upgrade_birdflow-1-0-0-9000">Consolidate back compatibility into <code>upgrade_birdflow()</code>
+<a class="anchor" aria-label="anchor" href="#consolidate-back-compatibility-into-upgrade_birdflow-1-0-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/upgrade_birdflow.html">upgrade_birdflow()</a></code> consolidates back compatibility into one function: fixing the old <code>birdFlowr_version</code> metadata name typo, backfilling <code>metadata$timestep_padding</code> and <code>dates$week</code> when missing, backfilling metadata fields added in later package versions with <code><a href="../reference/new_BirdFlow.html">new_BirdFlow()</a></code>’s schema defaults, and adding a dynamic mask via <code><a href="../reference/add_dynamic_mask.html">add_dynamic_mask()</a></code> if one is missing. Running it on an already current object is a no-op.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9084" id="birdflowr-0109084">BirdFlowR 0.1.0.9084<a class="anchor" aria-label="anchor" href="#birdflowr-0109084"></a></h2>
 <p>2026-07-27</p>
@@ -126,7 +183,7 @@
 <code><a href="../reference/export_import_birdflow.html">import_birdflow()</a></code> no longer leaks rhdf5 file handles across calls — the “An open HDF5 file handle exists …” nag is gone.</li>
 <li>Suppress the rhdf5 “chunk size is equal to the dataset dimensions” warning emitted by <code><a href="../reference/export_import_birdflow.html">export_birdflow()</a></code> under R &gt;= 4.5; chunk-size tuning is left as a follow-up if read performance becomes a concern.</li>
 <li>
-<code><a href="../reference/Routes.html">Routes()</a></code> / <code><a href="../reference/Routes-internal.html">BirdFlowRoutes()</a></code> / <code><a href="../reference/Routes-internal.html">BirdFlowIntervals()</a></code> no longer reject non-standard <code>route_type</code> values such as <code>"genoscape"</code>. The validator now warns instead of erroring.</li>
+<code><a href="../reference/Routes.html">Routes()</a></code> / <code>BirdFlowRoutes()</code> / <code><a href="../reference/BirdFlowIntervals.html">BirdFlowIntervals()</a></code> no longer reject non-standard <code>route_type</code> values such as <code>"genoscape"</code>. The validator now warns instead of erroring.</li>
 </ul><p>Most of these won’t affect users but note: * New warnings may appear with <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> if some of the weight is outside the dynamic mask. * <code><a href="../reference/route.html">route()</a></code> will now throw an error if the route starts are outside of the dynamic mask.<br>
 Use <code><a href="../reference/is_location_valid.html">is_distr_valid()</a></code> and is <code><a href="../reference/is_location_valid.html">is_location_valid()</a></code> to get more information on the problematic inputs.</p>
 </div>

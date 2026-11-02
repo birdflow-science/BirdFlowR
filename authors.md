@@ -15,13 +15,13 @@ Source:
 [`DESCRIPTION`](https://github.com/birdflow-science/BirdFlowR/blob/main/DESCRIPTION)
 
 Plunkett E (2026). *BirdFlowR: Predict and Visualize Bird Movement*. R
-package version 0.1.0.9084,
+package version 1.0.0.9000,
 <https://birdflow-science.github.io/BirdFlowR/>.
 
     @Manual{,
       title = {BirdFlowR: Predict and Visualize Bird Movement},
       author = {Ethan Plunkett},
       year = {2026},
-      note = {R package version 0.1.0.9084},
+      note = {R package version 1.0.0.9000},
       url = {https://birdflow-science.github.io/BirdFlowR/},
     }

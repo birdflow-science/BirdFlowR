@@ -15,7 +15,7 @@ probability is in cells for which movement is modeled."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@ probability is in cells for which movement is modeled.</p>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>T coordinate.</p></dd>
+<dd><p>Y coordinate.</p></dd>
 
 
 <dt id="arg-timestep">timestep<a class="anchor" aria-label="anchor" href="#arg-timestep"></a></dt>
@@ -131,7 +131,8 @@ locations that have non-zero values.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="va">timestep</span>  <span class="op">&lt;-</span> <span class="fl">3</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Sample two valid locations from a distribution</span></span></span>
@@ -145,6 +146,7 @@ locations that have non-zero values.</p>
 <span class="r-in"><span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">distr</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">is_location_valid</span><span class="op">(</span><span class="va">bf</span>, <span class="va">i</span>, timestep <span class="op">=</span> <span class="va">timestep</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

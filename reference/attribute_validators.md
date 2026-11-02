@@ -19,8 +19,6 @@ validate_Routes_lat(lat_vector)
 
 validate_Routes_route_type(route_type_vector)
 
-validate_BirdFlowRoutes_route_type(route_type_vector)
-
 validate_BirdFlowRoutes_x(x_vector)
 
 validate_BirdFlowRoutes_y(y_vector)
@@ -31,10 +29,6 @@ validate_BirdFlowRoutes_timestep(timestep_vector)
 
 validate_BirdFlowRoutes_date(route_id_vector, date_vector)
 
-validate_BirdFlowRoutes_stay_id(stay_id_vector)
-
-validate_BirdFlowRoutes_stay_len(stay_len_vector)
-
 validate_BirdFlowRoutes_species(species)
 
 validate_BirdFlowRoutes_metadata(metadata)
@@ -42,8 +36,6 @@ validate_BirdFlowRoutes_metadata(metadata)
 validate_BirdFlowRoutes_dates(dates)
 
 validate_BirdFlowIntervals_interval_id(interval_id)
-
-validate_BirdFlowIntervals_metadata(metadata)
 ```
 
 ## Arguments
@@ -82,15 +74,6 @@ validate_BirdFlowIntervals_metadata(metadata)
 - timestep_vector:
 
   An integer vector for timesteps, paired with `route_id_vector`.
-
-- stay_id_vector:
-
-  A numeric or character vector for stay IDs. Must not contain missing
-  values.
-
-- stay_len_vector:
-
-  An integer vector for stay lengths. Must not contain missing values.
 
 - species:
 
@@ -135,8 +118,6 @@ frames. They check:
 
   - `timestep`: Ensures unique timesteps per `route_id`.
 
-  - `stay_id` and `stay_len`: Ensure valid stay identifiers and lengths.
-
 - **Additional Attributes**:
 
   - `species`: Ensures species data contains required components.
@@ -169,9 +150,6 @@ user-facing functionality.
 
   - `validate_BirdFlowRoutes_date()`,
 
-  - `validate_BirdFlowRoutes_stay_id()`,
-    `validate_BirdFlowRoutes_stay_len()`
-
   - `validate_BirdFlowRoutes_species()`
 
 - `BirdFlowIntervals` Validators:
@@ -187,7 +165,7 @@ user-facing functionality.
 ## See also
 
 - [Object
-  Validators](https://birdflow-science.github.io/BirdFlowR/reference/?object_validators)
+  Validators](https://birdflow-science.github.io/BirdFlowR/reference/object_validators)
 
 - [Column Targeting
-  Functions](https://birdflow-science.github.io/BirdFlowR/reference/?target_columns)
+  Functions](https://birdflow-science.github.io/BirdFlowR/reference/target_columns)

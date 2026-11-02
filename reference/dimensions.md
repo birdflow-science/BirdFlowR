@@ -133,3 +133,45 @@ xres(), and yres()
 
 [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
 returns distributions from a `BirdFlow` object.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+nrow(bf)
+#> [1] 20
+ncol(bf)
+#> [1] 22
+dim(bf)
+#> [1] 20 22
+n_timesteps(bf)
+#> [1] 52
+n_distr(bf)
+#> [1] 52
+n_transitions(bf)
+#> [1] 52
+n_active(bf)
+#> [1] 283
+is_cyclical(bf)
+#> [1] TRUE
+crs(bf)
+#> [1] "PROJCRS[\"Custom_Lambert_Azimuthal\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n                LENGTHUNIT[\"metre\",1]],\n            ID[\"EPSG\",6326]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"Degree\",0.0174532925199433]]],\n    CONVERSION[\"unnamed\",\n        METHOD[\"Lambert Azimuthal Equal Area\",\n            ID[\"EPSG\",9820]],\n        PARAMETER[\"Latitude of natural origin\",30,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-95,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",5500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",9500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
+ext(bf)
+#> SpatExtent : 4950000, 8250000, 9150000, 12150000 (xmin, xmax, ymin, ymax)
+res(bf)
+#> [1] 150000 150000
+xres(bf)
+#> [1] 150000
+yres(bf)
+#> [1] 150000
+xmin(bf)
+#> [1] 4950000
+xmax(bf)
+#> [1] 8250000
+ymin(bf)
+#> [1] 9150000
+ymax(bf)
+#> [1] 12150000
+# }
+```

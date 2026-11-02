@@ -28,3 +28,14 @@ timesteps. It will have a column for every unmasked cell at the starting
 timestep and a row for every unmasked cell in the last timestep, with
 cell values being the probably of transitioning from that row to that
 column between the start and end of the time sequence described by `...`
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+m <- combine_transitions(bf, start = 1, end = 3)
+dim(m)
+#> [1] 104 102
+# }
+```

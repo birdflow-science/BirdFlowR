@@ -36,14 +36,15 @@ plot(x, ...)
   An object of class `Routes` or `BirdFlowRoutes`. Likely the the output
   of
   [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md),
-  [as_BirdFlowRoutes](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md),
+  [`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md),
   or
-  [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md).
+  [`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md).
 
 - bf:
 
   A BirdFlow object. Only used if `x` is a `Routes` object, in which
-  case it provides the CRS and
+  case it provides the CRS and, optionally, the static mask shown via
+  `show_mask`.
 
 - facet:
 
@@ -131,7 +132,8 @@ display it.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 n <- 10
 rts <- route(bf, n, season = "prebreeding")
 
@@ -157,6 +159,7 @@ p <- plot_routes(rts, bf) +
 #> ℹ Adding new coordinate system, which will replace the existing one.
 p
 
+# }
 if (FALSE) { # \dontrun{
 # Use alternate color palettes
 plot_routes(rts, bf, use_seasonal_colors = FALSE)

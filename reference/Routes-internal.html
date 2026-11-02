@@ -13,7 +13,7 @@ for use within BirdFlow models."><meta property="og:image" content="https://bird
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,9 +56,9 @@ for use within BirdFlow models.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_Routes</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, <span class="va">source</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_routes</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, <span class="va">source</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">BirdFlowRoutes</span><span class="op">(</span></span>
+<span><span class="fu">new_birdflow_routes</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">species</span>,</span>
 <span>  <span class="va">metadata</span>,</span>
@@ -70,20 +70,7 @@ for use within BirdFlow models.</p>
 <span>  stay_calculate_col <span class="op">=</span> <span class="st">"date"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">new_BirdFlowRoutes</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">species</span>,</span>
-<span>  <span class="va">metadata</span>,</span>
-<span>  <span class="va">geom</span>,</span>
-<span>  <span class="va">dates</span>,</span>
-<span>  <span class="va">source</span>,</span>
-<span>  stay_calculate_col <span class="op">=</span> <span class="st">"date"</span>,</span>
-<span>  sort_id_and_dates <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">BirdFlowIntervals</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, <span class="va">metadata</span>, <span class="va">geom</span>, <span class="va">dates</span>, source <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">new_BirdFlowIntervals</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, <span class="va">metadata</span>, <span class="va">geom</span>, <span class="va">dates</span>, <span class="va">source</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">new_birdflow_intervals</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, <span class="va">metadata</span>, <span class="va">geom</span>, <span class="va">dates</span>, source <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -145,138 +132,27 @@ after sorting?</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<ul><li><p><strong><code><a href="Routes.html">Routes()</a></code></strong>: Creates a <code>Routes</code> object from a data frame.</p></li>
-<li><p><strong><code>BirdFlowRoutes()</code></strong>: Creates a <code>BirdFlowRoutes</code> object,
+<ul><li><p><strong><code>new_routes()</code></strong>: Creates a <code>Routes</code> object from a data frame.</p></li>
+<li><p><strong><code>new_birdflow_routes()</code></strong>: Creates a <code>BirdFlowRoutes</code> object,
 extending <code>Routes</code> with additional BirdFlow-specific spatial and
 temporal information.</p></li>
-<li><p><strong><code>BirdFlowIntervals()</code></strong>: Creates a <code>BirdFlowIntervals</code> object,
+<li><p><strong><code>new_birdflow_intervals()</code></strong>: Creates a <code>BirdFlowIntervals</code> object,
 representing intervals between timesteps in BirdFlow data.</p></li>
 </ul><p>All objects are internally validated during creation, ensuring required
-columns, valid data types, and proper formats. Non-exported <code>new_*</code>
-functions handle the final assembly of the object after validation.</p>
+columns, valid data types, and proper formats.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><code><a href="Routes.html">Routes()</a></code> Create a <code>Routes</code> object</p></li>
-<li><p><code><a href="as_BirdFlowRoutes.html">as_BirdFlowRoutes()</a></code> Convert <code>Routes</code> to <code>BirdFlowRoutes</code></p></li>
-<li><p><code><a href="as_BirdFlowIntervals.html">as_BirdFlowIntervals()</a></code> Extract movement between pairs of locations
-from BirdFlowRoutes for use with model evaluation.</p></li>
+<ul><li><p><code><a href="as_routes.html">as_routes()</a></code> Create a <code>Routes</code> object</p></li>
+<li><p><code><a href="as_birdflow_routes.html">as_birdflow_routes()</a></code> Convert <code>Routes</code> to <code>BirdFlowRoutes</code></p></li>
+<li><p><code><a href="as_birdflow_intervals.html">as_birdflow_intervals()</a></code> Extract movement between pairs of locations
+from <code>BirdFlowRoutes</code> for use with model evaluation.</p></li>
 <li><p><a href="?object_validators">Object Validators</a> Private functions for validating
 routes and intervals.</p></li>
 </ul></div>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Examples here use private functions so can't be run except after</span></span></span>
-<span class="r-in"><span><span class="co"># devtools::load_all() during package development.</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Create a Routes object</span></span></span>
-<span class="r-in"><span><span class="va">route_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  route_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"003"</span>, <span class="st">"003"</span>, <span class="st">"003"</span>, <span class="st">"004"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2025-01-01"</span>, <span class="st">"2025-01-08"</span>, <span class="st">"2025-01-15"</span>, <span class="st">"2025-01-21"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"2025-02-10"</span>, <span class="st">"2025-03-01"</span>, <span class="st">"2025-05-01"</span>, <span class="st">"2025-06-01"</span>, <span class="st">"2025-05-01"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">75.0060</span>, <span class="op">-</span><span class="fl">75.0060</span>, <span class="op">-</span><span class="fl">74.0060</span>, <span class="op">-</span><span class="fl">87.6298</span>, <span class="op">-</span><span class="fl">87.6298</span>, <span class="op">-</span><span class="fl">87.6298</span>,</span></span>
-<span class="r-in"><span>  <span class="op">-</span><span class="fl">89.6298</span>, <span class="op">-</span><span class="fl">85.6298</span>, <span class="op">-</span><span class="fl">95.3698</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">39.7128</span>, <span class="fl">39.7128</span>, <span class="fl">40.7128</span>, <span class="fl">41.8781</span>, <span class="fl">41.8781</span>, <span class="fl">41.8781</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">42.8781</span>, <span class="fl">40.8781</span>, <span class="fl">29.7604</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  route_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tracking"</span>, <span class="st">"tracking"</span>, <span class="st">"tracking"</span>, <span class="st">"tracking"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"tracking"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  species_code <span class="op">=</span> <span class="st">"amewoo"</span>,</span></span>
-<span class="r-in"><span>  scientific_name <span class="op">=</span> <span class="st">"Scolopax minor"</span>,</span></span>
-<span class="r-in"><span>  common_name <span class="op">=</span> <span class="st">"American Woodcock"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sources</span> <span class="op">&lt;-</span> <span class="st">"Unknown sources"</span></span></span>
-<span class="r-in"><span><span class="va">routes_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="Routes.html">Routes</a></span><span class="op">(</span><span class="va">route_df</span>, species <span class="op">=</span> <span class="va">species</span>, source <span class="op">=</span> <span class="va">sources</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Create a BirdFlowRoutes object</span></span></span>
-<span class="r-in"><span><span class="co">## 1. convert from `Routes`</span></span></span>
-<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
-<span class="r-in"><span><span class="va">birdflow_route_df</span> <span class="op">&lt;-</span> <span class="va">routes_obj</span> <span class="op">|&gt;</span> <span class="fu"><a href="as_BirdFlowRoutes.html">as_BirdFlowRoutes</a></span><span class="op">(</span>bf <span class="op">=</span> <span class="va">bf</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># the species, metadata, and sources will be inherited from the bf object.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## 2. Directly from dataframe</span></span></span>
-<span class="r-in"><span><span class="va">birdflow_route_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  route_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"001"</span>, <span class="st">"003"</span>, <span class="st">"003"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"003"</span>, <span class="st">"004"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="st">"2025-01-01"</span>, <span class="st">"2025-01-08"</span>, <span class="st">"2025-01-15"</span>, <span class="st">"2025-01-21"</span>, <span class="st">"2025-02-10"</span>,</span></span>
-<span class="r-in"><span>    <span class="st">"2025-03-01"</span>, <span class="st">"2025-05-01"</span>, <span class="st">"2025-06-01"</span>, <span class="st">"2025-05-01"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">75.0060</span>, <span class="op">-</span><span class="fl">75.0060</span>, <span class="op">-</span><span class="fl">74.0060</span>, <span class="op">-</span><span class="fl">87.6298</span>, <span class="op">-</span><span class="fl">87.6298</span>, <span class="op">-</span><span class="fl">87.6298</span>,</span></span>
-<span class="r-in"><span>  <span class="op">-</span><span class="fl">89.6298</span>, <span class="op">-</span><span class="fl">85.6298</span>, <span class="op">-</span><span class="fl">95.3698</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">39.7128</span>, <span class="fl">39.7128</span>, <span class="fl">40.7128</span>, <span class="fl">41.8781</span>, <span class="fl">41.8781</span>, <span class="fl">41.8781</span>, <span class="fl">42.8781</span>,</span></span>
-<span class="r-in"><span>  <span class="fl">40.8781</span>, <span class="fl">29.7604</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">1000</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  timestep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  route_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="st">"tracking"</span>, <span class="st">"tracking"</span>, <span class="st">"tracking"</span>, <span class="st">"tracking"</span>,</span></span>
-<span class="r-in"><span>    <span class="st">"tracking"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span>, <span class="st">"motus"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">100</span>, ncol <span class="op">=</span> <span class="fl">200</span>, res <span class="op">=</span> <span class="fl">1</span>, ext <span class="op">=</span> <span class="cn">NULL</span>, crs <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>  mask <span class="op">=</span> <span class="cn">NULL</span>, dynamic_mask <span class="op">=</span> <span class="cn">NULL</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  timestep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2022-01-04"</span>, <span class="st">"2022-01-11"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"January 4"</span>, <span class="st">"January 11"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  julian <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">11</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  week <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">birdflowroutes_object</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowRoutes</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">birdflow_route_df</span>,</span></span>
-<span class="r-in"><span>  species <span class="op">=</span> <span class="va">species</span>,</span></span>
-<span class="r-in"><span>  metadata <span class="op">=</span> <span class="va">metadata</span>,</span></span>
-<span class="r-in"><span>  geom <span class="op">=</span> <span class="va">geom</span>,</span></span>
-<span class="r-in"><span>  dates <span class="op">=</span> <span class="va">dates</span>,</span></span>
-<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"example_source"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Create a BirdFlowIntervals object</span></span></span>
-<span class="r-in"><span><span class="co">## 1. convert from `BirdFlowRoutes`</span></span></span>
-<span class="r-in"><span><span class="va">birdflow_intervals_obj</span> <span class="op">&lt;-</span> <span class="va">birdflowroutes_object</span> <span class="op">|&gt;</span> <span class="fu"><a href="as_BirdFlowIntervals.html">as_BirdFlowIntervals</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## 2. Directly from dataframe</span></span></span>
-<span class="r-in"><span><span class="va">birdflow_intervals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  interval_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span></span>
-<span class="r-in"><span>  route_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"route1"</span>, <span class="st">"route1"</span>, <span class="st">"route2"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lon1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="op">-</span><span class="fl">89</span>, <span class="op">-</span><span class="fl">88</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lon2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">89</span>, <span class="op">-</span><span class="fl">88</span>, <span class="op">-</span><span class="fl">87</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lat1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">41</span>, <span class="fl">42</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  lat2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">41</span>, <span class="fl">42</span>, <span class="fl">43</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1100</span>, <span class="fl">1200</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1100</span>, <span class="fl">1200</span>, <span class="fl">1300</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">600</span>, <span class="fl">700</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">600</span>, <span class="fl">700</span>, <span class="fl">800</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  i1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  i2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  date1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-01-01"</span>, <span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  date2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span>, <span class="st">"2024-01-04"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  timestep1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  timestep2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  route_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tracking"</span>, <span class="st">"tracking"</span>, <span class="st">"banding"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">birdflow_intervals_obj</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowIntervals</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">birdflow_intervals</span>,</span></span>
-<span class="r-in"><span>  species <span class="op">=</span> <span class="va">species</span>,</span></span>
-<span class="r-in"><span>  metadata <span class="op">=</span> <span class="va">metadata</span>,</span></span>
-<span class="r-in"><span>  geom <span class="op">=</span> <span class="va">geom</span>,</span></span>
-<span class="r-in"><span>  dates <span class="op">=</span> <span class="va">dates</span>,</span></span>
-<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"example_source"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

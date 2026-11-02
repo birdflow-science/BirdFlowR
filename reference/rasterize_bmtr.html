@@ -9,7 +9,7 @@ with each unique transition as a separate layer."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ columns <code>x</code>, <code>y</code>, <code>transition</code>, <code>bmtr</cod
 
 
 <dt id="arg-bf">bf<a class="anchor" aria-label="anchor" href="#arg-bf"></a></dt>
-<dd><p>A BirdFlow model. For example: <code><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">BirdFlowModels::amewoo</a></code></p></dd>
+<dd><p>A BirdFlow model. For example: <code><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">BirdFlowExamples::amewoo</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,6 +80,8 @@ Missing values in <code>bmtr</code> are represented as <code>NA</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">bmtr</span> <span class="op">&lt;-</span> <span class="fu"><a href="calc_bmtr.html">calc_bmtr</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">raster</span> <span class="op">&lt;-</span> <span class="fu">rasterize_bmtr</span><span class="op">(</span><span class="va">bmtr</span>, <span class="va">bf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">raster</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>

@@ -13,7 +13,7 @@ plot subtitle."><meta property="og:image" content="https://birdflow-science.gith
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@ cells are active in the model at any timestep will be shown.</p></dd>
 dynamic mask. This is achieved by overwriting cells that are dynamically
 masked with NA. For <code>show_dynamic_mask = TRUE</code> to work the column names in
 <code>distr</code> should all be in <code>colnames(get_distr(bf))</code>.  This is
-true for distributions returned by <a href="predict.BirdFlowR"><code>predict()</code></a>
+true for distributions returned by <a href="predict.BirdFlow()"><code>predict()</code></a>
 and <code><a href="get_distr.html">get_distr()</a></code>.</p></dd>
 
     <dt><code>limits</code></dt>
@@ -102,7 +102,7 @@ you want to standardize the range across multiple models of a single
 species you might want to set to <code>c(0, max)</code> where <code>max</code> is the maximum
 observed value across all models. Alternatively if the range is highly
 variable among the columns in <code>distr</code> as when density spreads out from a
-single point in the results of <a href="predict.BirdFlowR"><code>predict(bf)</code></a> you may
+single point in the results of <a href="predict.BirdFlow()"><code>predict(bf)</code></a> you may
 want to set this smaller than the full range in which case the values will
 be truncated to the limits (see examples).</p></dd>
 
@@ -164,7 +164,8 @@ or <code><a href="https://gganimate.com/reference/animate.html" class="external-
 <span class="r-in"><span><span class="co"># Animate distributions from BirdFlow object - derived from</span></span></span>
 <span class="r-in"><span><span class="co"># eBird Status and Trends:</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="va">ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="va">ts</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">anim</span> <span class="op">&lt;-</span> <span class="fu">animate_distr</span><span class="op">(</span><span class="va">distr</span>, <span class="va">bf</span>,  show_dynamic_mask <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -208,6 +209,7 @@ or <code><a href="https://gganimate.com/reference/animate.html" class="external-
 <span class="r-in"><span>  <span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/save_animation.html" class="external-link">save_animation</a></span><span class="op">(</span><span class="va">gif</span>, <span class="va">gif_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">gif_file</span><span class="op">)</span> <span class="co"># cleanup</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -2,7 +2,7 @@
 
 Given a BirdFlow object with marginals and without transitions
 `build_transitions()` return a BirdFlow object with both marginals and
-transitions, `drop_tansitions()` will reverse the process.
+transitions, `drop_transitions()` will reverse the process.
 
 ## Usage
 
@@ -34,7 +34,7 @@ BirdFlow object with transition matrices
 
 ``` r
 if (FALSE) { # \dontrun{
-bf1 <- BirdFlowModels::amewoo
+bf1 <- BirdFlowExamples::amewoo
 bf2 <- build_transitions(bf)
 bf2
 

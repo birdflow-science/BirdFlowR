@@ -142,7 +142,7 @@ A data frame with columns
     [`lubridate::as_date()`](https://lubridate.tidyverse.org/reference/as_date.html)
 
   - "err_truncated" - `bf` is
-    [truncated](https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow)
+    [truncated](https://birdflow-science.github.io/BirdFlowR/reference/truncate_birdflow())
     and the date falls outside of portion of the year the model covers.
 
   - `"err_coords"` - The coordinates could not be transformed into
@@ -156,7 +156,7 @@ A data frame with columns
 
   - `"err_sparse"` - the location falls within the dynamic mask but that
     location and date combination has been eliminated by
-    [sparsification](https://birdflow-science.github.io/BirdFlowR/reference/sparsify).
+    [sparsification](https://birdflow-science.github.io/BirdFlowR/reference/sparsify()).
 
   The function will always return the error message that appears first
   on this list, even though in some cases multiple errors can be
@@ -181,7 +181,9 @@ for the model on the associated date.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::rewbla |> add_dynamic_mask()
-obs <- BirdFlowModels::rewbla_observations
+# \donttest{
+bf <- BirdFlowExamples::rewbla |> add_dynamic_mask()
+obs <- BirdFlowExamples::rewbla_observations
 a <- snap_to_birdflow(obs, bf, id_cols = "bird_id")
+# }
 ```

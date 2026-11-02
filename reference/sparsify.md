@@ -113,6 +113,6 @@ if (FALSE) { # \dontrun{
 # Full models are huge so we don't distribute them.
 # Assuming you have an hdf5 file with a full model you could run:
 bf <- import_birdflow(hdf5_path)
-sbf <- sparsify(bf, method = "marginal+state", p = 0.99)
+sbf <- sparsify(bf, method = "conditional", p = 0.99)
 } # }
 ```

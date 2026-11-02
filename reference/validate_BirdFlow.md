@@ -61,3 +61,12 @@ completeness.
 Currently dead end transitions are permitted. See
 [`find_dead_ends()`](https://birdflow-science.github.io/BirdFlowR/reference/fix_dead_ends.md)
 for checking for those.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+validate_BirdFlow(bf)
+# }
+```

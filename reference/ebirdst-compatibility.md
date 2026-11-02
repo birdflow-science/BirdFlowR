@@ -25,7 +25,7 @@ ebirdst_example_species()
   all package functions are supported fully. `preprocess_species` checks
   that function which has stricter requirements than most functions.
   `lookup_species_metadata` checks that function which is called by
-  [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md).
+  [`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md).
 
 - throw_error:
 

@@ -5,7 +5,7 @@ the `species` component of a BirdFlow model. It is an internal function
 used by
 [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
 and
-[`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md).
+[`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md).
 See
 [`species_info()`](https://birdflow-science.github.io/BirdFlowR/reference/species_info.md)
 for a description of the list items.

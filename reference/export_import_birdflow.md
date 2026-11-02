@@ -126,3 +126,18 @@ version is retained in the imported object.
 - [`export_rasters()`](https://birdflow-science.github.io/BirdFlowR/reference/export_rasters.md)
   to save the distributions and mask from a BirdFlow model to raster
   files.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+hdf5_path <- tempfile(fileext = ".hdf5")
+export_birdflow(bf, hdf5_path)
+#> Exporting BirdFlow model for American Woodcock to:
+#>  /tmp/Rtmp1nJ8AN/file3e737e4c0ceb.hdf5
+bf2 <- import_birdflow(hdf5_path)
+identical(class(bf), class(bf2))
+#> [1] TRUE
+# }
+```

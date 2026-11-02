@@ -1,7 +1,8 @@
-# `Routes()` is used to convert data frames containing bird movement data into a formal `Routes` object with the same data.
+# Deprecated function to convert a data frame into a `Routes` object
 
-`Routes()` is used to convert data frames containing bird movement data
-into a formal `Routes` object with the same data.
+This function is deprecated. Please use
+[`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md)
+instead.
 
 ## Usage
 
@@ -49,9 +50,8 @@ Routes(data, species = NULL, source = NULL)
 
 - source:
 
-  Optional text describing the source of the data.
-  [`source()`](https://rdrr.io/r/base/source.html) must be of class
-  `character` can have one or more elements.
+  Optional text describing the source of the data. `source` must be of
+  class `character` can have one or more elements.
 
 ## Value
 
@@ -71,3 +71,8 @@ An object of class `Routes` which has the following components
 - source:
 
   Same as the input `source`
+
+## See also
+
+[`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md)
+should be used instead of this function.

@@ -27,12 +27,12 @@ dir <- tempdir()
 
 You could optionally set to a directory of your choice that is somewhere
 more permanent and accessible. The code below should add a
-BirdFlowModels directory to your home directory, to use for model
+BirdFlowExamples directory to your home directory, to use for model
 output. This block is not run when building the vignette.
 
 ``` r
 
-dir <- "~/BirdFlowModels"
+dir <- "~/BirdFlowExamples"
 dir.create(dir, showWarnings = FALSE)
 ```
 
@@ -78,7 +78,7 @@ The state method eliminates all transitions into and out of model states
 zero. Those states are thus removed from the model.
 
 You can read more about sparsification methods in the help for
-`sparasify()`.
+[`sparsify()`](https://birdflow-science.github.io/BirdFlowR/reference/sparsify.md).
 
 ``` r
 

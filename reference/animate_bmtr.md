@@ -99,7 +99,7 @@ object
 ``` r
 
 if (FALSE) { # \dontrun{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 
 # Binary detection along shortest path
 bmtr <- calc_bmtr(bf)

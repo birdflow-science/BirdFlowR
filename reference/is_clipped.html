@@ -9,7 +9,7 @@ preprocess_species() when the model was built."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,9 +80,11 @@ is no way to recover this information from older HDF5 / RDS files. Use
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">is_clipped</span><span class="op">(</span><span class="va">amewoo</span><span class="op">)</span> <span class="co"># NA — fixture predates clip metadata</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowExamples</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">is_clipped</span><span class="op">(</span><span class="va">amewoo</span><span class="op">)</span> <span class="co"># NA — fixture predates clip metadata</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

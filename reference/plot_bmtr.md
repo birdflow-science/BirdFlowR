@@ -1,6 +1,10 @@
 # Plot BirdFlow Migration Traffic Rate (BMTR)
 
-Plot BirdFlow Migration Traffic Rate (BMTR)
+Plot BMTR as a raster map, with one facet per transition (or a single
+map, with the transition in the subtitle, if `bmtr` covers only one
+transition). Colors represent BMTR intensity; see
+[`calc_bmtr()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_bmtr.md)
+for how BMTR itself is calculated.
 
 ## Usage
 
@@ -101,7 +105,7 @@ plot_bmtr(
 ``` r
 
 if (FALSE) { # \dontrun{
-bf <- BirdFlowModels::amewoo
+bf <- BirdFlowExamples::amewoo
 
 # Binary detection along shortest path
 bmtr <- calc_bmtr(bf)

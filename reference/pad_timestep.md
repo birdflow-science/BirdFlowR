@@ -33,7 +33,9 @@ a string with padded versions of x; `1` becomes `"01"`.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 pad_timestep(1:5, bf)
 #> [1] "01" "02" "03" "04" "05"
+# }
 ```

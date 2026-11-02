@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,14 +81,14 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"rnaturalearthdata"</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="va">installed</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rnaturalearthdata"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowModels"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowExamples"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"birdflow-science/BirdFlowR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="load-libraries">Load libraries<a class="anchor" aria-label="anchor" href="#load-libraries"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowModels</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BirdFlowExamples</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://birdflow-science.github.io/BirdFlowR/">BirdFlowR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; terra 1.9.50</span></span>
@@ -130,7 +130,7 @@ HPAI spread risk analysis.</p>
 <p>This loads the smaller example model instead for efficiency of
 package building and testing, but do not use this one for science!</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span> <span class="co"># example and test dataset</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span> <span class="co"># example and test dataset</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -159,11 +159,11 @@ set the time span.</p>
 through time. Here we sample a single winter location and project it
 forward to the breeding season.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">initial_distribution</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">location</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_distr.html">sample_distr</a></span><span class="op">(</span><span class="va">initial_distribution</span><span class="op">)</span></span>
-<span><span class="va">forcast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict.BirdFlow.html">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">26</span>, direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_distr.html">plot_distr</a></span><span class="op">(</span><span class="va">forcast</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span>, dynamic_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict.BirdFlow.html">predict</a></span><span class="op">(</span><span class="va">bf</span>, distr <span class="op">=</span> <span class="va">location</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">26</span>, direction <span class="op">=</span> <span class="st">"forward"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_distr.html">plot_distr</a></span><span class="op">(</span><span class="va">forecast</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">14</span>, <span class="fl">19</span><span class="op">)</span><span class="op">]</span>, <span class="va">bf</span>, dynamic_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BirdFlowR_files/figure-html/quick%20demo%20forecast-1.png" class="r-plt" alt="" width="65%"></p>
 </div>
 </div>
@@ -204,7 +204,7 @@ and <code><a href="../reference/lookup_date.html">lookup_date()</a></code> does 
 <span></span>
 <span><span class="co"># Convert a timestep back to a date</span></span>
 <span><span class="fu"><a href="../reference/lookup_date.html">lookup_date</a></span><span class="op">(</span><span class="fl">25</span>, <span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2021-06-21"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2023-06-21"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="sequences-through-time">Sequences through time<a class="anchor" aria-label="anchor" href="#sequences-through-time"></a>
@@ -248,11 +248,11 @@ with <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and
 <span><span class="co"># By season name (uses species-specific dates from species_info())</span></span>
 <span><span class="co"># and by default adds a one week buffer around the season.</span></span>
 <span><span class="fu"><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20</span></span>
+<span><span class="co">#&gt;  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17</span></span>
 <span></span>
 <span><span class="co"># without the buffer</span></span>
 <span><span class="fu"><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span>, season_buffer <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1]  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19</span></span>
+<span><span class="co">#&gt;  [1]  3  4  5  6  7  8  9 10 11 12 13 14 15 16</span></span>
 <span></span>
 <span><span class="co"># By start + number of steps</span></span>
 <span><span class="fu"><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, start <span class="op">=</span> <span class="fl">1</span>, n_steps <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
@@ -260,7 +260,7 @@ with <code><a href="../reference/predict.BirdFlow.html">predict()</a></code> and
 <span></span>
 <span><span class="co"># All but the date inputs can also be switched to a backward sequence</span></span>
 <span><span class="fu"><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding"</span>, direction <span class="op">=</span> <span class="st">"backward"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2</span></span>
+<span><span class="co">#&gt;  [1] 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2</span></span>
 <span></span>
 <span><span class="co"># Sequence wraps from week 52 to week 1</span></span>
 <span><span class="fu"><a href="../reference/lookup_timestep_sequence.html">lookup_timestep_sequence</a></span><span class="op">(</span><span class="va">bf</span>, start <span class="op">=</span> <span class="fl">50</span>, end <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -317,8 +317,8 @@ the model CRS, useful for bringing in locations from outside data.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coordinates of the first active cell</span></span>
 <span><span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          x       y</span></span>
-<span><span class="co">#&gt; 1 -1125000 1575000</span></span>
+<span><span class="co">#&gt;         x        y</span></span>
+<span><span class="co">#&gt; 1 7275000 12075000</span></span>
 <span></span>
 <span><span class="co"># Round-trip: i → xy → i</span></span>
 <span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fl">100</span>, <span class="va">bf</span><span class="op">)</span></span>
@@ -328,11 +328,11 @@ the model CRS, useful for bringing in locations from outside data.</p>
 <span><span class="co"># Convert a WGS84 lat/lon to model CRS (Amherst, MA approx.)</span></span>
 <span><span class="fu"><a href="../reference/index_conversions.html">latlon_to_xy</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fl">42.4</span>, lon <span class="op">=</span> <span class="op">-</span><span class="fl">72.5</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         x        y</span></span>
-<span><span class="co">#&gt; 1 1032587 432547.1</span></span>
+<span><span class="co">#&gt; 1 7339042 11072391</span></span>
 <span></span>
 <span><span class="co"># Or to i index on the distribution</span></span>
 <span><span class="fu"><a href="../reference/index_conversions.html">latlon_to_xy</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fl">42.4</span>, lon <span class="op">=</span> <span class="op">-</span><span class="fl">72.5</span>, <span class="va">bf</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/index_conversions.html">xy_to_i</a></span><span class="op">(</span>bf <span class="op">=</span> <span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 171</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 127</span></span></code></pre></div>
 <p>Not shown above are conversions to row and column indices. See help
 for <code><a href="../reference/index_conversions.html">i_to_rc()</a></code> or any of the above functions for a complete
 list of spatial conversions.</p>
@@ -348,21 +348,21 @@ of active cells.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># get first timestep distribution</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>  <span class="co"># 1 distribution so d is a vector</span></span>
-<span><span class="co">#&gt; [1] 342</span></span>
+<span><span class="co">#&gt; [1] 283</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># its length is the number of active cells in the model</span></span>
-<span><span class="co">#&gt; [1] 342</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 283</span></span></code></pre></div>
 <p>Get 5 distributions. The result is a matrix in which each column is a
 distribution with a row for each active cell.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_distr.html">get_distr</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">26</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 342   5</span></span>
+<span><span class="co">#&gt; [1] 283   5</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       time</span></span>
-<span><span class="co">#&gt; i      June 28       July 6      July 13 July 20      July 27</span></span>
-<span><span class="co">#&gt;   [1,]       0 0.000000e+00 0.000000e+00       0 0.000000e+00</span></span>
-<span><span class="co">#&gt;   [2,]       0 9.342922e-06 8.769396e-05       0 1.607396e-06</span></span>
-<span><span class="co">#&gt;   [3,]       0 1.499294e-05 4.842432e-05       0 1.748452e-06</span></span></code></pre></div>
+<span><span class="co">#&gt; i           June 28       July 5      July 12     July 19      July 26</span></span>
+<span><span class="co">#&gt;   [1,] 0.0000000000 0.0000000000 0.0000000000 0.000000000 0.000000e+00</span></span>
+<span><span class="co">#&gt;   [2,] 0.0007092715 0.0014706372 0.0014090509 0.000816018 3.292047e-04</span></span>
+<span><span class="co">#&gt;   [3,] 0.0003941799 0.0006960876 0.0004211518 0.000180823 9.072657e-05</span></span></code></pre></div>
 <p>We can also specify distributions with dates, or use
 <code>"all"</code> to retrieve all the distributions.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -434,8 +434,8 @@ zero elsewhere.</p>
 <span></span>
 <span><span class="va">location_xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_conversions.html">i_to_xy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">location</span><span class="op">)</span><span class="op">)</span>, <span class="va">bf</span><span class="op">)</span>  <span class="co"># starting coordinates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">location_xy</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         x       y</span></span>
-<span><span class="co">#&gt; 1 -225000 -525000</span></span></code></pre></div>
+<span><span class="co">#&gt;         x        y</span></span>
+<span><span class="co">#&gt; 1 7275000 10425000</span></span></code></pre></div>
 <p>See <code><a href="../reference/as_distr.html">as_distr()</a></code> for additional ways to create the
 starting distribution.</p>
 </div>
@@ -529,16 +529,16 @@ object.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, x_coord <span class="op">=</span> <span class="va">x</span>, y_coord <span class="op">=</span> <span class="va">y</span>, start <span class="op">=</span> <span class="va">start</span>, end <span class="op">=</span> <span class="va">end</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rts</span><span class="op">$</span><span class="va">data</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   route_id      x       y   i      lon      lat timestep       date route_type</span></span>
-<span><span class="co">#&gt; 1        1 675000 -525000 271 -77.7671 34.19035        1 2021-01-04  synthetic</span></span>
-<span><span class="co">#&gt; 2        1 675000 -525000 271 -77.7671 34.19035        2 2021-01-11  synthetic</span></span>
-<span><span class="co">#&gt; 3        1 675000 -525000 271 -77.7671 34.19035        3 2021-01-18  synthetic</span></span>
-<span><span class="co">#&gt; 4        1 675000 -525000 271 -77.7671 34.19035        4 2021-01-25  synthetic</span></span>
-<span><span class="co">#&gt;   stay_id stay_len</span></span>
-<span><span class="co">#&gt; 1       1        3</span></span>
-<span><span class="co">#&gt; 2       1        3</span></span>
-<span><span class="co">#&gt; 3       1        3</span></span>
-<span><span class="co">#&gt; 4       1        3</span></span></code></pre></div>
+<span><span class="co">#&gt;   route_id       x        y   i       lon     lat timestep       date</span></span>
+<span><span class="co">#&gt; 1        1 6975000 10425000 187 -78.28131 37.3187        1 2023-01-04</span></span>
+<span><span class="co">#&gt; 2        1 6975000 10425000 187 -78.28131 37.3187        2 2023-01-11</span></span>
+<span><span class="co">#&gt; 3        1 6975000 10425000 187 -78.28131 37.3187        3 2023-01-18</span></span>
+<span><span class="co">#&gt; 4        1 6975000 10425000 187 -78.28131 37.3187        4 2023-01-25</span></span>
+<span><span class="co">#&gt;   route_type stay_id stay_len</span></span>
+<span><span class="co">#&gt; 1  synthetic       1        4</span></span>
+<span><span class="co">#&gt; 2  synthetic       1        4</span></span>
+<span><span class="co">#&gt; 3  synthetic       1        4</span></span>
+<span><span class="co">#&gt; 4  synthetic       1        4</span></span></code></pre></div>
 <p>If locations are not provided, <code><a href="../reference/route.html">route()</a></code> will sample
 starting locations from the starting distribution, so the following is
 equivalent to the preceding two sections.</p>
@@ -582,19 +582,19 @@ be equal.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Methods for base R functions:</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">dim</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 22 31</span></span>
+<span><span class="co">#&gt; [1] 20 22</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="../reference/dimensions.html">ncol</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 22 31</span></span>
+<span><span class="co">#&gt; [1] 20 22</span></span>
 <span><span class="va">bf</span> <span class="co"># same as print(bf)</span></span>
 <span><span class="co">#&gt; American Woodcock BirdFlow model</span></span>
-<span><span class="co">#&gt;   dimensions   : 22, 31, 52  (nrow, ncol, ntimesteps)</span></span>
+<span><span class="co">#&gt;   dimensions   : 20, 22, 52  (nrow, ncol, ntimesteps)</span></span>
 <span><span class="co">#&gt;   resolution   : 150000, 150000  (x, y)</span></span>
-<span><span class="co">#&gt;   active cells : 342</span></span>
-<span><span class="co">#&gt;   size         : 12.5 Mb</span></span>
+<span><span class="co">#&gt;   active cells : 283</span></span>
+<span><span class="co">#&gt;   size         : 8.8 Mb</span></span>
 <span></span>
 <span><span class="co"># BirdFlowR functions</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_active</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 342</span></span>
+<span><span class="co">#&gt; [1] 283</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_transitions</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 52</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">n_timesteps</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
@@ -628,7 +628,7 @@ seasons are likely to be useful.</p>
 <span><span class="fu"><a href="../reference/species_info.html">species</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"scientific"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Scolopax minor"</span></span>
 <span><span class="fu"><a href="../reference/species_info.html">species_info</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"prebreeding_migration_start"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2021-01-18"</span></span>
+<span><span class="co">#&gt; [1] "2023-01-18"</span></span>
 <span><span class="va">si</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/species_info.html">species_info</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co"># list with all species information</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -651,15 +651,15 @@ static mask.</p>
 <code class="sourceCode R"><span><span class="co"># Methods for terra functions:</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co"># well known text (long)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">bf</span>, proj <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># proj4 string</span></span>
-<span><span class="co">#&gt; [1] "+proj=laea +lat_0=39.161 +lon_0=-85.094 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
+<span><span class="co">#&gt; [1] "+proj=laea +lat_0=30 +lon_0=-95 +x_0=5500000 +y_0=9500000 +datum=WGS84 +units=m +no_defs"</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">res</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 150000 150000</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">xres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">yres</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as res(bf)</span></span>
 <span><span class="co">#&gt; [1] 150000 150000</span></span>
 <span><span class="fu"><a href="../reference/dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; SpatExtent : -2550000, 2100000, -1650000, 1650000 (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; SpatExtent : 4950000, 8250000, 9150000, 12150000 (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/xmin.html" class="external-link">xmin</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/xmin.html" class="external-link">xmax</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/xmin.html" class="external-link">ymin</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/xmin.html" class="external-link">ymax</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as ext(bf)</span></span>
-<span><span class="co">#&gt; [1] -2550000  2100000 -1650000  1650000</span></span>
+<span><span class="co">#&gt; [1]  4950000  8250000  9150000 12150000</span></span>
 <span></span>
 <span><span class="co"># Compare geometries - do they have the same CRS, extent, and cell size</span></span>
 <span><span class="fu"><a href="../reference/compareGeom-BirdFlow.html">compareGeom</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span>
@@ -678,9 +678,9 @@ was fitted, and arguments used while creating the BirdFlow model.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span>  <span class="co"># list with all metadata</span></span>
 <span><span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"birdflow_model_date"</span><span class="op">)</span> <span class="co"># date and time the BirdFlow model was fit</span></span>
-<span><span class="co">#&gt; [1] "2023-11-21 17:19:27.009766"</span></span>
+<span><span class="co">#&gt; [1] "2026-10-21 20:03:21.922757"</span></span>
 <span><span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">bf</span>, <span class="st">"ebird_version_year"</span><span class="op">)</span>  <span class="co"># eBird version year - generally a few years before the data is released</span></span>
-<span><span class="co">#&gt; [1] 2021</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 2023</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

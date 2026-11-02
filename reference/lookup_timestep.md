@@ -57,7 +57,9 @@ and
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 lookup_timestep(c("2001-3-23", "2022-12-05"), bf)
 #> [1] 12 49
+# }
 ```

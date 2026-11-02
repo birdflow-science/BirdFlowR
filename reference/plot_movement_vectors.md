@@ -59,8 +59,10 @@ that cell and birds passing through it from other starting locations.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 plot_movement_vectors(bf, start = 7)
 
+# }
 
 ```

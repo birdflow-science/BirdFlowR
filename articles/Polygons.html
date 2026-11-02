@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,11 +122,11 @@ cases.</li>
 <h2 id="load-model-and-set-parameters">Load model and set parameters<a class="anchor" aria-label="anchor" href="#load-model-and-set-parameters"></a>
 </h2>
 <p>This example uses the American Woodcock dataset from
-<strong>BirdFlowModels</strong> which is small and runs fast but isn’t
+<strong>BirdFlowExamples</strong> which is small and runs fast but isn’t
 fully vetted for scientific use.</p>
 <p>Use <code><a href="../reference/load_model.html">load_model()</a></code> for real work.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span>  <span class="co"># you will likely use load_model() instead</span></span>
+<code class="sourceCode R"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span>  <span class="co"># you will likely use load_model() instead</span></span>
 <span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowR</span><span class="fu">::</span><span class="fu"><a href="../reference/lookup_timestep.html">lookup_timestep</a></span><span class="op">(</span><span class="st">"2024-01-15"</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowR</span><span class="fu">::</span><span class="fu"><a href="../reference/lookup_timestep.html">lookup_timestep</a></span><span class="op">(</span><span class="st">"2024-03-20"</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">3500000</span></span></code></pre></div>

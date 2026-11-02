@@ -92,6 +92,8 @@ call this function and visualize the results.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 mv <- calc_movement_vectors(bf, 7)
+# }
 ```

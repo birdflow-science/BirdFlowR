@@ -47,3 +47,16 @@ distribution per column.
 - [index_conversions](https://birdflow-science.github.io/BirdFlowR/reference/index_conversions.md)
   for ways to convert among indexes of the data in raster row and
   column, index along the flattened vector, and Cartesian space.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+d <- get_distr(bf, 1)
+m <- rasterize_distr(d, bf, format = "numeric")
+f <- flatten_raster(m, bf)
+all.equal(as.numeric(d), as.numeric(f))
+#> [1] TRUE
+# }
+```

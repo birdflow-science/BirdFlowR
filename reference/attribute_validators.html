@@ -15,7 +15,7 @@ consistency, and validity of attributes used in BirdFlow data structures."><meta
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,8 +69,6 @@ consistency, and validity of attributes used in BirdFlow data structures.</p>
 <span></span>
 <span><span class="fu">validate_Routes_route_type</span><span class="op">(</span><span class="va">route_type_vector</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">validate_BirdFlowRoutes_route_type</span><span class="op">(</span><span class="va">route_type_vector</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">validate_BirdFlowRoutes_x</span><span class="op">(</span><span class="va">x_vector</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_BirdFlowRoutes_y</span><span class="op">(</span><span class="va">y_vector</span><span class="op">)</span></span>
@@ -81,19 +79,13 @@ consistency, and validity of attributes used in BirdFlow data structures.</p>
 <span></span>
 <span><span class="fu">validate_BirdFlowRoutes_date</span><span class="op">(</span><span class="va">route_id_vector</span>, <span class="va">date_vector</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">validate_BirdFlowRoutes_stay_id</span><span class="op">(</span><span class="va">stay_id_vector</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">validate_BirdFlowRoutes_stay_len</span><span class="op">(</span><span class="va">stay_len_vector</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">validate_BirdFlowRoutes_species</span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_BirdFlowRoutes_metadata</span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_BirdFlowRoutes_dates</span><span class="op">(</span><span class="va">dates</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">validate_BirdFlowIntervals_interval_id</span><span class="op">(</span><span class="va">interval_id</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">validate_BirdFlowIntervals_metadata</span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">validate_BirdFlowIntervals_interval_id</span><span class="op">(</span><span class="va">interval_id</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -137,16 +129,6 @@ missing values.</p></dd>
 <code>route_id_vector</code>.</p></dd>
 
 
-<dt id="arg-stay-id-vector">stay_id_vector<a class="anchor" aria-label="anchor" href="#arg-stay-id-vector"></a></dt>
-<dd><p>A numeric or character vector for stay IDs. Must not
-contain missing values.</p></dd>
-
-
-<dt id="arg-stay-len-vector">stay_len_vector<a class="anchor" aria-label="anchor" href="#arg-stay-len-vector"></a></dt>
-<dd><p>An integer vector for stay lengths. Must not contain
-missing values.</p></dd>
-
-
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>A list with species information. Must include <code>species_code</code>,
 <code>scientific_name</code>, and <code>common_name</code>.</p></dd>
@@ -178,7 +160,6 @@ valid ranges.</p></li>
 <li><p><strong>Spatial Attributes</strong> (for <code>BirdFlowRoutes</code>):</p><ul><li><p><code>x</code> and <code>y</code>: Ensure numeric spatial coordinates.</p></li>
 <li><p><code>i</code>: Ensures valid spatial indices as integers.</p></li>
 <li><p><code>timestep</code>: Ensures unique timesteps per <code>route_id</code>.</p></li>
-<li><p><code>stay_id</code> and <code>stay_len</code>: Ensure valid stay identifiers and lengths.</p></li>
 </ul></li>
 <li><p><strong>Additional Attributes</strong>:</p><ul><li><p><code>species</code>: Ensures species data contains required components.</p></li>
 <li><p><code>geom</code>: Ensures geometry data includes all required fields.</p></li>
@@ -196,7 +177,6 @@ user-facing functionality.</p><div class="section">
 <li><p><code>BirdFlowRoutes</code> Validators:</p><ul><li><p><code>validate_BirdFlowRoutes_x()</code>, <code>validate_BirdFlowRoutes_y()</code></p></li>
 <li><p><code>validate_BirdFlowRoutes_i()</code>, <code>validate_BirdFlowRoutes_timestep()</code>,</p></li>
 <li><p><code>validate_BirdFlowRoutes_date()</code>,</p></li>
-<li><p><code>validate_BirdFlowRoutes_stay_id()</code>, <code>validate_BirdFlowRoutes_stay_len()</code></p></li>
 <li><p><code>validate_BirdFlowRoutes_species()</code></p></li>
 </ul></li>
 <li><p><code>BirdFlowIntervals</code> Validators:</p><ul><li><p><code>validate_BirdFlowIntervals_interval_id()</code></p></li>
@@ -210,8 +190,8 @@ user-facing functionality.</p><div class="section">
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><a href="?object_validators">Object Validators</a></p></li>
-<li><p><a href="?target_columns">Column Targeting Functions</a></p></li>
+<ul><li><p><a href="object_validators">Object Validators</a></p></li>
+<li><p><a href="target_columns">Column Targeting Functions</a></p></li>
 </ul></div>
     </div>
 

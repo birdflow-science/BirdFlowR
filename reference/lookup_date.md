@@ -30,7 +30,7 @@ lookup_date(x, bf, timestep = NULL)
 
 - timestep:
 
-  Deprecated alternative to `x`. Previous versions of `lookup_dates()`
+  Deprecated alternative to `x`. Previous versions of `lookup_date()`
   only supported timestep input and used `timestep` as the first
   argument.
 
@@ -47,7 +47,9 @@ A Date object
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 lookup_date(1:5, bf)
-#> [1] "2021-01-04" "2021-01-11" "2021-01-18" "2021-01-25" "2021-02-01"
+#> [1] "2023-01-04" "2023-01-11" "2023-01-18" "2023-01-25" "2023-02-01"
+# }
 ```

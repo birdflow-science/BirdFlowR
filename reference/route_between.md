@@ -97,9 +97,7 @@ route_between(
 
 ## Value
 
-A
-[BirdFlowRoutes](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md)
-object. Same format as
+A `BirdFlowRoutes` object. Same format as
 [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md).
 
 ## See also
@@ -114,10 +112,13 @@ the intermediate times instead of sampled routes.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 xy <- latlon_to_xy(lat = c(30.5, 45.5), lon = c(-91.5, -68.5), bf)
 rts <- route_between(bf, n = 5,
                      x_coord = xy$x, y_coord = xy$y,
                      date = c("2023-02-15", "2023-05-01"))
 plot_routes(rts)
+
+# }
 ```

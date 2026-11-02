@@ -9,7 +9,7 @@ producing a dynamic version of plot_routes()."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@ producing a dynamic version of <code><a href="plot_routes.html">plot_routes()</a
 
 <dl><dt id="arg-routes">routes<a class="anchor" aria-label="anchor" href="#arg-routes"></a></dt>
 <dd><p>An object of class <code>Routes</code> or  <code>BirdFlowRoutes</code>.  Likely the
-the output of  <code><a href="route.html">route()</a></code>, <a href="as_BirdFlowRoutes.html">as_BirdFlowRoutes</a>, or <code><a href="Routes.html">Routes()</a></code>.</p></dd>
+the output of  <code><a href="route.html">route()</a></code>, <code><a href="as_birdflow_routes.html">as_birdflow_routes()</a></code>, or <code><a href="as_routes.html">as_routes()</a></code>.</p></dd>
 
 
 <dt id="arg-bf">bf<a class="anchor" aria-label="anchor" href="#arg-bf"></a></dt>
@@ -132,7 +132,7 @@ recommended settings.</p>
     <p>Note when rendering early frames (at a minimum the first) there will only
 one point per route, resulting in a message:
 "geom_path(): Each group consists of only one observation.
-ℹ Do you need to adjust the group aesthetic?"
+Do you need to adjust the group aesthetic?"
 This will possibly be repeated while individuals remain in one location.
 It can be safely ignored. The error is thrown while rendering and not
 from within <code>animate_routes()</code> so cannot be suppressed by code in
@@ -143,9 +143,11 @@ from within <code>animate_routes()</code> so cannot be suppressed by code in
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, <span class="fl">10</span>,  season <span class="op">=</span> <span class="st">"prebreeding"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">anim</span> <span class="op">&lt;-</span> <span class="fu">animate_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span>  <span class="co"># example render</span></span></span>

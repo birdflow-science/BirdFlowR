@@ -78,3 +78,15 @@ and time.
   [`route_migration()`](https://birdflow-science.github.io/BirdFlowR/reference/route_migration.md)
   are similar to `predict()` but generate routes instead of
   distributions.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+distr <- get_distr(bf, 1)
+pred <- predict(bf, distr, start = 1, end = 3)
+dim(pred)
+#> [1] 283   3
+# }
+```

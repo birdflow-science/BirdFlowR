@@ -2,7 +2,7 @@
 
 `dmi_to_i()` and `i_to_dmi()` are for internal and advanced use; they
 are not likely to be helpful to most users. See [index
-conversions](https://birdflow-science.github.io/BirdFlowR/reference/i_to_x)
+conversions](https://birdflow-science.github.io/BirdFlowR/reference/i_to_x())
 for, likely, more useful conversions. These two functions convert
 between indices along the cells that are included in the dynamic mask
 (`dmi`) and standard location indices (`i`) along the cells that are
@@ -50,7 +50,8 @@ versa.
 ## Examples
 
 ``` r
- bf <- BirdFlowModels::amewoo
+# \donttest{
+ bf <- BirdFlowExamples::amewoo
  dmi <- c(11:20)
  timesteps <- c(1, 1, 1, 1, 3, 3, 5,7:9 )
 
@@ -59,4 +60,5 @@ versa.
 
  isTRUE(all.equal(dmi, dmi2))
 #> [1] TRUE
+# }
 ```

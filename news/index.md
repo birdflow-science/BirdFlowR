@@ -1,5 +1,95 @@
 # Changelog
 
+## BirdFlowR 1.0.0.9000
+
+### Switch example-data dependency from BirdFlowModels to BirdFlowExamples
+
+- Renamed companion data package from **BirdFlowModels** to
+  **BirdFlowExamples**.
+- Refit `amewoo`/`rewbla` example models. Both now have dynamic masks,
+  and `rewbla` is now a sparse model.
+- Updated all `BirdFlowModels` references to
+  `BirdFlowExamples (>= 0.0.1.9001)`.
+- Updated tests to account for changes in the example models.
+
+### Routes / BirdFlowRoutes / BirdFlowIntervals API simplification
+
+**This is an API change. Most existing code should run with warnings
+about deprecated functions.**
+
+- Renamed the public constructors to a consistent lowercase, snake_case
+  `as_*()` naming convention:
+
+  - [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
+    -\>
+    [`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md)
+  - [`as_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md)
+    -\>
+    [`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md)
+  - [`BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/BirdFlowIntervals.md)
+    /
+    [`as_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowIntervals.md)
+    -\>
+    [`as_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_intervals.md)
+    (now an S3 generic with `BirdFlowRoutes` and `data.frame` methods)
+
+  The old names are kept as deprecated wrappers that issue a runtime
+  warning and forward to the new functions.
+
+- Renamed the public validators to match:
+
+  - [`validate_Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+    -\>
+    [`validate_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  - [`validate_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+    -\>
+    [`validate_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+  - [`validate_BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+    -\>
+    [`validate_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/object_validators.md)
+
+  Old names are deprecated wrappers.
+
+- Added `[` row-subsetting methods for `Routes`, `BirdFlowRoutes`, and
+  `BirdFlowIntervals` objects. See
+  [`?subset_routes`](https://birdflow-science.github.io/BirdFlowR/reference/subset_routes.md).
+
+- Fixed a bug in
+  [`validate_BirdFlowRoutes_species()`](https://birdflow-science.github.io/BirdFlowR/reference/attribute_validators.md)’s
+  handling of `NA` species fields, and a bug where `geom` validation
+  wasn’t passed the correct `n_active` for `BirdFlowRoutes` and
+  `BirdFlowIntervals` objects.
+
+- [`interval_log_likelihood()`](https://birdflow-science.github.io/BirdFlowR/reference/interval_log_likelihood.md)
+  now issues a formal deprecation warning (it was already documented as
+  deprecated but previously silent). Use
+  [`calc_interval_metrics()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.md)
+  with a `BirdFlowIntervals` object instead.
+
+### Documentation review
+
+- Updated stale documentation.
+- Filled gaps in documentation:
+  - Documented the previously-undocumented `sf` methods.
+  - Added a lot of missing `@examples`.
+- Added a curated `reference:` index to `_pkgdown.yml` with sections for
+  core functions, working with distributions, retrieving information
+  (temporal / spatial / metadata / other), routes and interval data,
+  evaluating models against tracking data, coordinate conversions,
+  visualization, utilities, and deprecated functions.
+
+### Consolidate back compatibility into `upgrade_birdflow()`
+
+- [`upgrade_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/upgrade_birdflow.md)
+  consolidates back compatibility into one function: fixing the old
+  `birdFlowr_version` metadata name typo, backfilling
+  `metadata$timestep_padding` and `dates$week` when missing, backfilling
+  metadata fields added in later package versions with
+  [`new_BirdFlow()`](https://birdflow-science.github.io/BirdFlowR/reference/new_BirdFlow.md)’s
+  schema defaults, and adding a dynamic mask via
+  [`add_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/add_dynamic_mask.md)
+  if one is missing. Running it on an already current object is a no-op.
+
 ## BirdFlowR 0.1.0.9084
 
 2026-07-27
@@ -248,10 +338,8 @@ Round-up of small fixes (closes
   under R \>= 4.5; chunk-size tuning is left as a follow-up if read
   performance becomes a concern.
 - [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md)
-  /
-  [`BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md)
-  /
-  [`BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes-internal.md)
+  / `BirdFlowRoutes()` /
+  [`BirdFlowIntervals()`](https://birdflow-science.github.io/BirdFlowR/reference/BirdFlowIntervals.md)
   no longer reject non-standard `route_type` values such as
   `"genoscape"`. The validator now warns instead of erroring.
 

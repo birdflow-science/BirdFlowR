@@ -47,10 +47,12 @@ interval_df <- data.frame(
     timestep2 = as.integer(c(2, 3, 4)),
     route_type = c("tracking", "tracking", "banding")
 )
-bf <- BirdFlowModels::amewoo
-birdflow_intervals <- BirdFlowIntervals(interval_df,
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+birdflow_intervals <- as_birdflow_intervals(interval_df,
     species = bf$species,
-    metadata = NULL, geom = bf$geom, dates = get_dates(bf)
+    metadata = bf$metadata[c("n_active", "ebird_version_year")],
+    geom = bf$geom, dates = get_dates(bf)
 )
 
 print(birdflow_intervals)
@@ -80,4 +82,5 @@ print(birdflow_intervals)
 #> 2 2024-01-03         2         3   tracking
 #> 3 2024-01-04         3         4    banding
 #> --------------------------------------------- 
+# }
 ```

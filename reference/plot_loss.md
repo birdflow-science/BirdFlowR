@@ -1,9 +1,8 @@
 # Plot changes in component and total loss during model fitting
 
 Model fitting - in
-[BirdFlowPy](https://birdflow-science.github.io/BirdFlowR/reference/BirdFlowPy) -
-attempts to minimize the total weighted loss. This plot shows four
-lines:
+[BirdFlowPy](https://github.com/birdflow-science/BirdFlowPy) - attempts
+to minimize the total weighted loss. This plot shows four lines:
 
 - **Total loss** is the weighted sum of the three loss components. The
   weighting may cause it to be lower than some of the components.
@@ -44,6 +43,9 @@ a **ggplot2** plot object.
 ## Examples
 
 ``` r
- bf <- BirdFlowModels::amewoo
+# \donttest{
+ bf <- BirdFlowExamples::amewoo
  plot_loss(bf)
+
+# }
 ```

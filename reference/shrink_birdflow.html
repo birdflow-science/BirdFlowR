@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,8 @@ same length is returned with TRUE for success.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Define extended extent for example</span></span></span>
 <span class="r-in"><span><span class="va">e</span> <span class="op">&lt;-</span>  <span class="fu"><a href="dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span></span></span>
@@ -89,10 +90,11 @@ same length is returned with TRUE for success.</p>
 <span class="r-in"><span>            extended <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf2</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>            shrunk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="dimensions.html">ext</a></span><span class="op">(</span><span class="va">bf3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      item  initial extended   shrunk</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> xmin xmin -2550000 -3000000 -2550000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> xmax xmax  2100000  2550000  2100000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ymin ymin -1650000 -2100000 -1650000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ymax ymax  1650000  2100000  1650000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> xmin xmin  4950000  4500000  4950000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> xmax xmax  8250000  8700000  8250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ymin ymin  9150000  8700000  9150000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ymax ymax 12150000 12600000 12150000</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Plot</span></span></span>

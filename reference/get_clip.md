@@ -45,7 +45,15 @@ if you'd prefer a
 ## Examples
 
 ``` r
-  library(BirdFlowModels)
-  get_clip(amewoo) # NULL — fixture predates clip metadata
-#> NULL
+# \donttest{
+library(BirdFlowExamples)
+get_clip(amewoo) # NULL — fixture predates clip metadata
+#> Simple feature collection with 1 feature and 0 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 491379.6 ymin: 596053.8 xmax: 12447280 ymax: 16025860
+#> Projected CRS: Custom_Lambert_Azimuthal
+#>                         geometry
+#> 1 MULTIPOLYGON (((505777.3 14...
+# }
 ```

@@ -17,7 +17,7 @@ in a BirdFlow object's coordinate reference system (CRS)."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -199,6 +199,53 @@ along the cells included in the dynamic mask for a given timestep.</p></li>
 </ul></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># first active cell</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># From state vector index (i) to row, column, x, y, and back</span></span></span>
+<span class="r-in"><span><span class="va">rc</span> <span class="op">&lt;-</span> <span class="fu">i_to_rc</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rc</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row col</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1  16</span>
+<span class="r-in"><span><span class="fu">i_to_row</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span><span class="fu">i_to_col</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16</span>
+<span class="r-in"><span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">i_to_xy</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xy</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7275000 12075000</span>
+<span class="r-in"><span><span class="fu">i_to_x</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7275000</span>
+<span class="r-in"><span><span class="fu">i_to_y</span><span class="op">(</span><span class="va">i</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 12075000</span>
+<span class="r-in"><span><span class="fu">rc_to_i</span><span class="op">(</span><span class="va">rc</span><span class="op">$</span><span class="va">row</span>, <span class="va">rc</span><span class="op">$</span><span class="va">col</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span><span class="fu">xy_to_i</span><span class="op">(</span><span class="va">xy</span><span class="op">$</span><span class="va">x</span>, <span class="va">xy</span><span class="op">$</span><span class="va">y</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Row/column to x/y coordinates and back</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">col_to_x</span><span class="op">(</span><span class="va">rc</span><span class="op">$</span><span class="va">col</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">row_to_y</span><span class="op">(</span><span class="va">rc</span><span class="op">$</span><span class="va">row</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">x_to_col</span><span class="op">(</span><span class="va">x</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16</span>
+<span class="r-in"><span><span class="fu">y_to_row</span><span class="op">(</span><span class="va">y</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Latitude/longitude (WGS84) to and from the model's CRS</span></span></span>
+<span class="r-in"><span><span class="va">latlon</span> <span class="op">&lt;-</span> <span class="fu">xy_to_latlon</span><span class="op">(</span><span class="va">xy</span><span class="op">$</span><span class="va">x</span>, <span class="va">xy</span><span class="op">$</span><span class="va">y</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">latlon</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        lat      lon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 51.22313 -69.5512</span>
+<span class="r-in"><span><span class="fu">latlon_to_xy</span><span class="op">(</span><span class="va">latlon</span><span class="op">$</span><span class="va">lat</span>, <span class="va">latlon</span><span class="op">$</span><span class="va">lon</span>, <span class="va">bf</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7275000 12075000</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

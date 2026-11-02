@@ -17,7 +17,7 @@ specific to each object class."><meta property="og:image" content="https://birdf
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,15 +62,19 @@ specific to each object class.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_Routes_route_df</span><span class="op">(</span><span class="va">route_df</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_route_df</span><span class="op">(</span><span class="va">df</span>, class <span class="op">=</span> <span class="st">"Routes"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">validate_BirdFlowRoutes_birdflow_route_df</span><span class="op">(</span><span class="va">birdflow_route_df</span><span class="op">)</span></span>
+<span><span class="fu">validate_interval_df</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">validate_BirdFlowIntervals_birdflow_intervals</span><span class="op">(</span><span class="va">birdflow_interval_df</span><span class="op">)</span></span>
+<span><span class="fu">validate_routes</span><span class="op">(</span><span class="va">routes</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_Routes</span><span class="op">(</span><span class="va">routes</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">validate_birdflow_routes</span><span class="op">(</span><span class="va">birdflow_routes</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">validate_BirdFlowRoutes</span><span class="op">(</span><span class="va">birdflow_routes</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">validate_birdflow_intervals</span><span class="op">(</span><span class="va">birdflow_intervals</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_BirdFlowIntervals</span><span class="op">(</span><span class="va">birdflow_intervals</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -79,22 +83,15 @@ specific to each object class.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-route-df">route_df<a class="anchor" aria-label="anchor" href="#arg-route-df"></a></dt>
-<dd><p>A data frame containing data for the <code>Routes</code> class.
-It must include columns like <code>route_id</code>, <code>date</code>, <code>lon</code>, <code>lat</code>,
-and <code>route_type</code>.</p></dd>
+<dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
+<dd><p>A data frame containing data for the <code>Routes</code> or <code>BirdFlowRoutes</code>
+class (<code>validate_route_df()</code>) or the <code>BirdFlowIntervals</code> class
+(<code>validate_interval_df()</code>).</p></dd>
 
 
-<dt id="arg-birdflow-route-df">birdflow_route_df<a class="anchor" aria-label="anchor" href="#arg-birdflow-route-df"></a></dt>
-<dd><p>A data frame containing data for the
-<code>BirdFlowRoutes</code> class. It must include additional columns such as
-<code>x</code>, <code>y</code>, <code>i</code>, and <code>timestep</code>.</p></dd>
-
-
-<dt id="arg-birdflow-interval-df">birdflow_interval_df<a class="anchor" aria-label="anchor" href="#arg-birdflow-interval-df"></a></dt>
-<dd><p>A data frame containing data for the
-<code>BirdFlowIntervals</code> class. It must include columns such as <code>lon1</code>, <code>lon2</code>,
-<code>y1</code>, <code>y2</code>, <code>i1</code>, <code>i2</code>, <code>timestep1</code>, <code>timestep2</code>.</p></dd>
+<dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
+<dd><p>Either <code>"Routes"</code> or <code>"BirdFlowRoutes"</code>; selects which set of
+columns and checks <code>validate_route_df()</code> applies.</p></dd>
 
 
 <dt id="arg-routes">routes<a class="anchor" aria-label="anchor" href="#arg-routes"></a></dt>
@@ -125,23 +122,35 @@ for routes, are satisfied.</p></li>
 </ul><div class="section">
 <h3 id="functions-included-">Functions Included:<a class="anchor" aria-label="anchor" href="#functions-included-"></a></h3>
 
-<ul><li><p><code>validate_Routes_route_df()</code>: Validates the input data frame for the
-<code>Routes</code> class.</p></li>
-<li><p><code>validate_BirdFlowRoutes_birdflow_route_df()</code>: Validates the input data
-frame for the <code>BirdFlowRoutes</code> class.</p></li>
-<li><p><code>validate_BirdFlowIntervals_birdflow_intervals()</code>: Validates the input
-data frame for the <code>BirdFlowIntervals</code> class.</p></li>
+<ul><li><p><code>validate_route_df()</code>: Validates the input data frame for the <code>Routes</code>
+or <code>BirdFlowRoutes</code> classes, depending on <code>class</code>.</p></li>
+<li><p><code>validate_interval_df()</code>: Validates the input data frame for the
+<code>BirdFlowIntervals</code> class.</p></li>
 </ul></div>
 
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><a href="?attribute_validators">Attribute Validators</a></p></li>
-<li><p><a href="?target_columns">Column Targeting Functions</a></p></li>
+<ul><li><p><a href="attribute_validators">Attribute Validators</a></p></li>
+<li><p><a href="target_columns">Column Targeting Functions</a></p></li>
 </ul></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">bfr</span> <span class="op">&lt;-</span> <span class="fu"><a href="route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_routes.html">as_routes</a></span><span class="op">(</span><span class="va">bfr</span><span class="op">$</span><span class="va">data</span>, species <span class="op">=</span> <span class="va">bfr</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">validate_routes</span><span class="op">(</span><span class="va">rts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">validate_birdflow_routes</span><span class="op">(</span><span class="va">bfr</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ivl</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_birdflow_intervals.html">as_birdflow_intervals</a></span><span class="op">(</span><span class="va">bfr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">validate_birdflow_intervals</span><span class="op">(</span><span class="va">ivl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

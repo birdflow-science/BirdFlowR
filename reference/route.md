@@ -127,8 +127,10 @@ It also has **experimental** attributes:
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, 10, season = "prebreeding")
+# }
 
 if (FALSE) { # \dontrun{
 plot_routes(rts)

@@ -41,7 +41,8 @@ returns a model to it's original extent.
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 
 # Define extended extent for example
 e <-  ext(bf)
@@ -61,10 +62,11 @@ data.frame(item = names(as.vector(ext(bf))),
             extended = as.vector(ext(bf2)),
             shrunk = as.vector(ext(bf3)))
 #>      item  initial extended   shrunk
-#> xmin xmin -2550000 -3000000 -2550000
-#> xmax xmax  2100000  2550000  2100000
-#> ymin ymin -1650000 -2100000 -1650000
-#> ymax ymax  1650000  2100000  1650000
+#> xmin xmin  4950000  4500000  4950000
+#> xmax xmax  8250000  8700000  8250000
+#> ymin ymin  9150000  8700000  9150000
+#> ymax ymax 12150000 12600000 12150000
+# }
 
 if (FALSE) { # \dontrun{
 # Plot

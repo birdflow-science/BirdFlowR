@@ -9,7 +9,7 @@ Status and Trend distributions used to train the BirdFlow model."><meta property
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -166,7 +166,8 @@ movement data from real birds.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowModels</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowModels/man/BirdFlowModels.html" class="external-link">amewoo</a></span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span> <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># full model - skipping because it's slow</span></span></span>
@@ -175,26 +176,27 @@ movement data from real birds.</p></div>
 <span class="r-in"><span><span class="co"># Just for prebreeding_migration</span></span></span>
 <span class="r-in"><span><span class="fu">distribution_performance</span><span class="op">(</span><span class="va">bf</span>, season <span class="op">=</span> <span class="st">"prebreeding_migration"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $min_step_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9830113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9657604</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mean_step_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9935296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9827696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $min_distr_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9804372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9558124</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mean_distr_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9920057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9788716</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $st_traverse_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9845607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.983244</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $md_traverse_cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9907496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9851599</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $n_states</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2175</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

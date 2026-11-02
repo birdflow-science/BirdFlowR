@@ -34,5 +34,7 @@ dynamically masked.
 ## Examples
 
 ``` r
-bf <- add_dynamic_mask(BirdFlowModels::amewoo)
+# \donttest{
+bf <- add_dynamic_mask(BirdFlowExamples::amewoo)
+# }
 ```

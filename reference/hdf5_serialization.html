@@ -9,7 +9,7 @@ from and to HDF5 files while preserving class names and attributes."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.1.0.9084</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ from and to HDF5 files while preserving class names and attributes.</p>
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
 <dd><p>For <code>write_routes()</code> a <code>Routes</code>, or <code>BirdFlowRoutes</code> object.
-For <code>write_intevals()</code> a <code>BirdFlowIntervals</code> object.</p></dd>
+For <code>write_intervals()</code> a <code>BirdFlowIntervals</code> object.</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
@@ -84,7 +84,7 @@ For <code>write_intevals()</code> a <code>BirdFlowIntervals</code> object.</p></
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
 
-<ul><li><p><code>write_routes()</code> ans <code>write_invervals()</code> invisibly return their
+<ul><li><p><code>write_routes()</code> and <code>write_intervals()</code> invisibly return their
 input object (after writing to disk).</p></li>
 <li><p><code>read_routes()</code> returns the written object - either <code>Routes</code> or
 <code>BirdFlowRoutes</code>.</p></li>
@@ -97,11 +97,11 @@ efficiently store large, heterogeneous data sets. HDF5 files can
 be written and read from R and Python among other languages so make a
 good cross-language format for routes and intervals.</p>
 <p><code>read_routes()</code> and <code>write_routes()</code> work on both <code>Routes</code> and
-<code>BirdFlowRoutes</code>.  See <code><a href="Routes.html">Routes()</a></code> and <code><a href="as_BirdFlowRoutes.html">as_BirdFlowRoutes()</a></code> to create
+<code>BirdFlowRoutes</code>.  See <code><a href="as_routes.html">as_routes()</a></code> and <code><a href="as_birdflow_routes.html">as_birdflow_routes()</a></code> to create
 objects of these classes.</p>
 <p><code>read_intervals()</code> and <code>write_intervals()</code> work on <code>BirdFlowIntervals</code>
 which are a collection of movements each with a single start and end
-derived from <code><a href="Routes-internal.html">BirdFlowRoutes()</a></code>. See <code><a href="as_BirdFlowIntervals.html">as_BirdFlowIntervals()</a></code>.</p>
+derived from <code>BirdFlowRoutes</code>. See <code><a href="as_birdflow_intervals.html">as_birdflow_intervals()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="internal-functions">Internal functions<a class="anchor" aria-label="anchor" href="#internal-functions"></a></h2>
@@ -123,6 +123,27 @@ alters the object if it has not previously been imported into R.</p></li>
 </ul></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BirdFlowExamples</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BirdFlowExamples/man/BirdFlowExamples.html" class="external-link">amewoo</a></span></span></span>
+<span class="r-in"><span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="route.html">route</a></span><span class="op">(</span><span class="va">bf</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">route_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".hdf5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">write_routes</span><span class="op">(</span><span class="va">rts</span>, <span class="va">route_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rts2</span> <span class="op">&lt;-</span> <span class="fu">read_routes</span><span class="op">(</span><span class="va">route_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">rts</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">rts2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ivl</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_birdflow_intervals.html">as_birdflow_intervals</a></span><span class="op">(</span><span class="va">rts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">interval_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".hdf5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">write_intervals</span><span class="op">(</span><span class="va">ivl</span>, <span class="va">interval_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ivl2</span> <span class="op">&lt;-</span> <span class="fu">read_intervals</span><span class="op">(</span><span class="va">interval_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">ivl</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">ivl2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -23,3 +23,13 @@ as_transitions(timesteps, bf)
 ## Value
 
 A directional sequence of transitions that connect `timesteps`.
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+as_transitions(1:3, bf)
+#> [1] "T_01-02" "T_02-03"
+# }
+```

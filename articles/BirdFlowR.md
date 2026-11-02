@@ -11,7 +11,7 @@ if (!"remotes" %in% installed)
   install.packages("remotes")
 if (!"rnaturalearthdata" %in% installed)
   install.packages("rnaturalearthdata")
-remotes::install_github("birdflow-science/BirdFlowModels")
+remotes::install_github("birdflow-science/BirdFlowExamples")
 remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 ```
 
@@ -19,7 +19,7 @@ remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE)
 
 ``` r
 
-library(BirdFlowModels)
+library(BirdFlowExamples)
 library(BirdFlowR)
 library(terra)
 #> terra 1.9.50
@@ -74,7 +74,7 @@ building and testing, but do not use this one for science!
 
 ``` r
 
-bf <- BirdFlowModels::amewoo # example and test dataset
+bf <- BirdFlowExamples::amewoo # example and test dataset
 ```
 
 ## Quick demo
@@ -109,11 +109,11 @@ a single winter location and project it forward to the breeding season.
 
 ``` r
 
-set.seed(0)
+set.seed(1)
 initial_distribution <- get_distr(bf, 1)
 location <- sample_distr(initial_distribution)
-forcast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
-plot_distr(forcast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
+forecast <- predict(bf, distr = location, start = 1, end = 26, direction = "forward")
+plot_distr(forecast[, c(1, 7, 14, 19)], bf, dynamic_scale = TRUE)
 ```
 
 ![](BirdFlowR_files/figure-html/quick%20demo%20forecast-1.png)
@@ -161,7 +161,7 @@ lookup_timestep("2022-06-20", bf)
 
 # Convert a timestep back to a date
 lookup_date(25, bf)
-#> [1] "2021-06-21"
+#> [1] "2023-06-21"
 ```
 
 ### Sequences through time
@@ -209,11 +209,11 @@ lookup_timestep_sequence(bf, start = "2022-01-07", end = "2022-03-11")
 # By season name (uses species-specific dates from species_info())
 # and by default adds a one week buffer around the season.
 lookup_timestep_sequence(bf, season = "prebreeding")
-#>  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+#>  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 
 # without the buffer
 lookup_timestep_sequence(bf, season = "prebreeding", season_buffer = 0)
-#>  [1]  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+#>  [1]  3  4  5  6  7  8  9 10 11 12 13 14 15 16
 
 # By start + number of steps
 lookup_timestep_sequence(bf, start = 1, n_steps = 9)
@@ -221,7 +221,7 @@ lookup_timestep_sequence(bf, start = 1, n_steps = 9)
 
 # All but the date inputs can also be switched to a backward sequence
 lookup_timestep_sequence(bf, season = "prebreeding", direction = "backward")
-#>  [1] 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2
+#>  [1] 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2
 
 # Sequence wraps from week 52 to week 1
 lookup_timestep_sequence(bf, start = 50, end = 3)
@@ -283,8 +283,8 @@ bringing in locations from outside data.
 
 # Coordinates of the first active cell
 i_to_xy(1, bf)
-#>          x       y
-#> 1 -1125000 1575000
+#>         x        y
+#> 1 7275000 12075000
 
 # Round-trip: i → xy → i
 xy <- i_to_xy(100, bf)
@@ -294,11 +294,11 @@ xy_to_i(xy$x, xy$y, bf)  # should return 100
 # Convert a WGS84 lat/lon to model CRS (Amherst, MA approx.)
 latlon_to_xy(lat = 42.4, lon = -72.5, bf)
 #>         x        y
-#> 1 1032587 432547.1
+#> 1 7339042 11072391
 
 # Or to i index on the distribution
 latlon_to_xy(lat = 42.4, lon = -72.5, bf) |> xy_to_i(bf = bf)
-#> [1] 171
+#> [1] 127
 ```
 
 Not shown above are conversions to row and column indices. See help for
@@ -320,9 +320,9 @@ active cells.
 
 d <- get_distr(bf, 1) # get first timestep distribution
 length(d)  # 1 distribution so d is a vector
-#> [1] 342
+#> [1] 283
 n_active(bf)  # its length is the number of active cells in the model
-#> [1] 342
+#> [1] 283
 ```
 
 Get 5 distributions. The result is a matrix in which each column is a
@@ -332,13 +332,13 @@ distribution with a row for each active cell.
 
 d <- get_distr(bf, 26:30)
 dim(d)
-#> [1] 342   5
+#> [1] 283   5
 head(d, 3)
 #>       time
-#> i      June 28       July 6      July 13 July 20      July 27
-#>   [1,]       0 0.000000e+00 0.000000e+00       0 0.000000e+00
-#>   [2,]       0 9.342922e-06 8.769396e-05       0 1.607396e-06
-#>   [3,]       0 1.499294e-05 4.842432e-05       0 1.748452e-06
+#> i           June 28       July 5      July 12     July 19      July 26
+#>   [1,] 0.0000000000 0.0000000000 0.0000000000 0.000000000 0.000000e+00
+#>   [2,] 0.0007092715 0.0014706372 0.0014090509 0.000816018 3.292047e-04
+#>   [3,] 0.0003941799 0.0006960876 0.0004211518 0.000180823 9.072657e-05
 ```
 
 We can also specify distributions with dates, or use `"all"` to retrieve
@@ -440,8 +440,8 @@ location <- sample_distr(d)
 
 location_xy <- i_to_xy(which(as.logical(location)), bf)  # starting coordinates
 print(location_xy)
-#>         x       y
-#> 1 -225000 -525000
+#>         x        y
+#> 1 7275000 10425000
 ```
 
 See
@@ -568,16 +568,16 @@ spatial, temporal, and species information from the `BirdFlow` object.
 
 rts <- route(bf, x_coord = x, y_coord = y, start = start, end = end)
 head(rts$data, 4)
-#>   route_id      x       y   i      lon      lat timestep       date route_type
-#> 1        1 675000 -525000 271 -77.7671 34.19035        1 2021-01-04  synthetic
-#> 2        1 675000 -525000 271 -77.7671 34.19035        2 2021-01-11  synthetic
-#> 3        1 675000 -525000 271 -77.7671 34.19035        3 2021-01-18  synthetic
-#> 4        1 675000 -525000 271 -77.7671 34.19035        4 2021-01-25  synthetic
-#>   stay_id stay_len
-#> 1       1        3
-#> 2       1        3
-#> 3       1        3
-#> 4       1        3
+#>   route_id       x        y   i       lon     lat timestep       date
+#> 1        1 6975000 10425000 187 -78.28131 37.3187        1 2023-01-04
+#> 2        1 6975000 10425000 187 -78.28131 37.3187        2 2023-01-11
+#> 3        1 6975000 10425000 187 -78.28131 37.3187        3 2023-01-18
+#> 4        1 6975000 10425000 187 -78.28131 37.3187        4 2023-01-25
+#>   route_type stay_id stay_len
+#> 1  synthetic       1        4
+#> 2  synthetic       1        4
+#> 3  synthetic       1        4
+#> 4  synthetic       1        4
 ```
 
 If locations are not provided,
@@ -646,19 +646,19 @@ they will be equal.
 
 # Methods for base R functions:
 dim(bf)
-#> [1] 22 31
+#> [1] 20 22
 c(nrow(bf), ncol(bf))
-#> [1] 22 31
+#> [1] 20 22
 bf # same as print(bf)
 #> American Woodcock BirdFlow model
-#>   dimensions   : 22, 31, 52  (nrow, ncol, ntimesteps)
+#>   dimensions   : 20, 22, 52  (nrow, ncol, ntimesteps)
 #>   resolution   : 150000, 150000  (x, y)
-#>   active cells : 342
-#>   size         : 12.5 Mb
+#>   active cells : 283
+#>   size         : 8.8 Mb
 
 # BirdFlowR functions
 n_active(bf)
-#> [1] 342
+#> [1] 283
 n_transitions(bf)
 #> [1] 52
 n_timesteps(bf)
@@ -695,7 +695,7 @@ species(bf)
 species(bf, "scientific")
 #> [1] "Scolopax minor"
 species_info(bf, "prebreeding_migration_start")
-#> [1] "2021-01-18"
+#> [1] "2023-01-18"
 si <-  species_info(bf) # list with all species information
 ```
 
@@ -727,15 +727,15 @@ does not check for a comparable static mask.
 # Methods for terra functions:
 a <- crs(bf) # well known text (long)
 crs(bf, proj = TRUE)  # proj4 string
-#> [1] "+proj=laea +lat_0=39.161 +lon_0=-85.094 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+#> [1] "+proj=laea +lat_0=30 +lon_0=-95 +x_0=5500000 +y_0=9500000 +datum=WGS84 +units=m +no_defs"
 res(bf)
 #> [1] 150000 150000
 c(xres(bf), yres(bf)) # same as res(bf)
 #> [1] 150000 150000
 ext(bf)
-#> SpatExtent : -2550000, 2100000, -1650000, 1650000 (xmin, xmax, ymin, ymax)
+#> SpatExtent : 4950000, 8250000, 9150000, 12150000 (xmin, xmax, ymin, ymax)
 c(xmin(bf), xmax(bf), ymin(bf), ymax(bf)) # same as ext(bf)
-#> [1] -2550000  2100000 -1650000  1650000
+#> [1]  4950000  8250000  9150000 12150000
 
 # Compare geometries - do they have the same CRS, extent, and cell size
 compareGeom(bf, rast(bf))
@@ -760,7 +760,7 @@ was fitted, and arguments used while creating the BirdFlow model.
 
 md <- get_metadata(bf)  # list with all metadata
 get_metadata(bf, "birdflow_model_date") # date and time the BirdFlow model was fit
-#> [1] "2023-11-21 17:19:27.009766"
+#> [1] "2026-10-21 20:03:21.922757"
 get_metadata(bf, "ebird_version_year")  # eBird version year - generally a few years before the data is released
-#> [1] 2021
+#> [1] 2023
 ```

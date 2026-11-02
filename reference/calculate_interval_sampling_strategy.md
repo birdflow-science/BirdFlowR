@@ -1,7 +1,7 @@
 # Calculate Interval Sampling Strategy
 
 Internal function used by
-[`as_BirdFlowRoutes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md)
+[`as_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_intervals.md)
 to determine how many intervals to sample from each route based on the
 total number of intervals requested. Ensures an even distribution across
 routes when possible.

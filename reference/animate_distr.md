@@ -53,7 +53,7 @@ animate_distr(distr, bf, title = species(bf), ...)
       with NA. For `show_dynamic_mask = TRUE` to work the column names
       in `distr` should all be in `colnames(get_distr(bf))`. This is
       true for distributions returned by
-      [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+      [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow())
       and
       [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
 
@@ -67,7 +67,7 @@ animate_distr(distr, bf, title = species(bf), ...)
       Alternatively if the range is highly variable among the columns in
       `distr` as when density spreads out from a single point in the
       results of
-      [`predict(bf)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+      [`predict(bf)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow())
       you may want to set this smaller than the full range in which case
       the values will be truncated to the limits (see examples).
 
@@ -136,7 +136,8 @@ See example for how to export to a file.
 # Animate distributions from BirdFlow object - derived from
 # eBird Status and Trends:
 
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 ts <- lookup_timestep_sequence(bf, season = "prebreeding")
 distr <- get_distr(bf, ts)
 anim <- animate_distr(distr, bf,  show_dynamic_mask = TRUE)
@@ -180,4 +181,5 @@ if (FALSE) { # \dontrun{
   gganimate::save_animation(gif, gif_file)
   file.remove(gif_file) # cleanup
 } # }
+# }
 ```

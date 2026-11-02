@@ -9,36 +9,35 @@ class.
 ## Usage
 
 ``` r
-validate_Routes_route_df(route_df)
+validate_route_df(df, class = "Routes")
 
-validate_BirdFlowRoutes_birdflow_route_df(birdflow_route_df)
+validate_interval_df(df)
 
-validate_BirdFlowIntervals_birdflow_intervals(birdflow_interval_df)
+validate_routes(routes)
 
 validate_Routes(routes)
 
+validate_birdflow_routes(birdflow_routes)
+
 validate_BirdFlowRoutes(birdflow_routes)
+
+validate_birdflow_intervals(birdflow_intervals)
 
 validate_BirdFlowIntervals(birdflow_intervals)
 ```
 
 ## Arguments
 
-- route_df:
+- df:
 
-  A data frame containing data for the `Routes` class. It must include
-  columns like `route_id`, `date`, `lon`, `lat`, and `route_type`.
+  A data frame containing data for the `Routes` or `BirdFlowRoutes`
+  class (`validate_route_df()`) or the `BirdFlowIntervals` class
+  (`validate_interval_df()`).
 
-- birdflow_route_df:
+- class:
 
-  A data frame containing data for the `BirdFlowRoutes` class. It must
-  include additional columns such as `x`, `y`, `i`, and `timestep`.
-
-- birdflow_interval_df:
-
-  A data frame containing data for the `BirdFlowIntervals` class. It
-  must include columns such as `lon1`, `lon2`, `y1`, `y2`, `i1`, `i2`,
-  `timestep1`, `timestep2`.
+  Either `"Routes"` or `"BirdFlowRoutes"`; selects which set of columns
+  and checks `validate_route_df()` applies.
 
 - routes:
 
@@ -73,19 +72,31 @@ They verify that:
 
 ### Functions Included:
 
-- `validate_Routes_route_df()`: Validates the input data frame for the
-  `Routes` class.
+- `validate_route_df()`: Validates the input data frame for the `Routes`
+  or `BirdFlowRoutes` classes, depending on `class`.
 
-- `validate_BirdFlowRoutes_birdflow_route_df()`: Validates the input
-  data frame for the `BirdFlowRoutes` class.
-
-- `validate_BirdFlowIntervals_birdflow_intervals()`: Validates the input
-  data frame for the `BirdFlowIntervals` class.
+- `validate_interval_df()`: Validates the input data frame for the
+  `BirdFlowIntervals` class.
 
 ## See also
 
 - [Attribute
-  Validators](https://birdflow-science.github.io/BirdFlowR/reference/?attribute_validators)
+  Validators](https://birdflow-science.github.io/BirdFlowR/reference/attribute_validators)
 
 - [Column Targeting
-  Functions](https://birdflow-science.github.io/BirdFlowR/reference/?target_columns)
+  Functions](https://birdflow-science.github.io/BirdFlowR/reference/target_columns)
+
+## Examples
+
+``` r
+# \donttest{
+bf <- BirdFlowExamples::amewoo
+bfr <- route(bf, n = 3)
+rts <- as_routes(bfr$data, species = bfr$species)
+validate_routes(rts)
+validate_birdflow_routes(bfr)
+
+ivl <- as_birdflow_intervals(bfr)
+validate_birdflow_intervals(ivl)
+# }
+```

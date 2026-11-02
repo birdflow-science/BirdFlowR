@@ -131,7 +131,8 @@ to evaluate a BirdFlow model using movement data from real birds.
 ## Examples
 
 ``` r
- bf <- BirdFlowModels::amewoo
+# \donttest{
+ bf <- BirdFlowExamples::amewoo
 
 if (FALSE) { # \dontrun{
 # full model - skipping because it's slow
@@ -140,24 +141,25 @@ distribution_performance(bf)
 # Just for prebreeding_migration
 distribution_performance(bf, season = "prebreeding_migration")
 #> $min_step_cor
-#> [1] 0.9830113
+#> [1] 0.9657604
 #> 
 #> $mean_step_cor
-#> [1] 0.9935296
+#> [1] 0.9827696
 #> 
 #> $min_distr_cor
-#> [1] 0.9804372
+#> [1] 0.9558124
 #> 
 #> $mean_distr_cor
-#> [1] 0.9920057
+#> [1] 0.9788716
 #> 
 #> $st_traverse_cor
-#> [1] 0.9845607
+#> [1] 0.983244
 #> 
 #> $md_traverse_cor
-#> [1] 0.9907496
+#> [1] 0.9851599
 #> 
 #> $n_states
-#> [1] 3138
+#> [1] 2175
 #> 
+# }
 ```

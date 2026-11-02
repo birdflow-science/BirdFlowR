@@ -54,7 +54,7 @@ plot_distr(
   For `show_dynamic_mask = TRUE` to work the column names in `distr`
   should all be in `colnames(get_distr(bf))`. This is true for
   distributions returned by
-  [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+  [`predict()`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow())
   and
   [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
 
@@ -67,7 +67,7 @@ plot_distr(
   maximum observed value across all models. Alternatively if the range
   is highly variable among the columns in `distr` as when density
   spreads out from a single point in the results of
-  [`predict(bf)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlowR)
+  [`predict(bf)`](https://birdflow-science.github.io/BirdFlowR/reference/predict.BirdFlow())
   you may want to set this smaller than the full range in which case the
   values will be truncated to the limits (see examples).
 
@@ -193,6 +193,8 @@ distribution use `d <- matrix(d, ncol = 1); colnames(d) <- "new label"`
 ## Examples
 
 ``` r
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 p <- plot_distr(get_distr(bf, c(1,11, 21)), bf, show_dynamic_mask = TRUE)
+# }
 ```

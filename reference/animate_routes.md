@@ -20,9 +20,9 @@ animate_routes(routes, bf, ...)
   An object of class `Routes` or `BirdFlowRoutes`. Likely the the output
   of
   [`route()`](https://birdflow-science.github.io/BirdFlowR/reference/route.md),
-  [as_BirdFlowRoutes](https://birdflow-science.github.io/BirdFlowR/reference/as_BirdFlowRoutes.md),
+  [`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md),
   or
-  [`Routes()`](https://birdflow-science.github.io/BirdFlowR/reference/Routes.md).
+  [`as_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_routes.md).
 
 - bf:
 
@@ -114,20 +114,22 @@ to set the options. See the example for recommended settings.
 
 Note when rendering early frames (at a minimum the first) there will
 only one point per route, resulting in a message: "geom_path(): Each
-group consists of only one observation. ℹ Do you need to adjust the
-group aesthetic?" This will possibly be repeated while individuals
-remain in one location. It can be safely ignored. The error is thrown
-while rendering and not from within `animate_routes()` so cannot be
-suppressed by code in BirdFlowR.
+group consists of only one observation. Do you need to adjust the group
+aesthetic?" This will possibly be repeated while individuals remain in
+one location. It can be safely ignored. The error is thrown while
+rendering and not from within `animate_routes()` so cannot be suppressed
+by code in BirdFlowR.
 
 ## Examples
 
 ``` r
 
 
-bf <- BirdFlowModels::amewoo
+# \donttest{
+bf <- BirdFlowExamples::amewoo
 rts <- route(bf, 10,  season = "prebreeding")
 anim <- animate_routes(rts, bf)
+# }
 
 if (FALSE) { # \dontrun{
   # example render
