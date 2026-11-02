@@ -135,7 +135,7 @@ bf <- BirdFlowExamples::amewoo
 hdf5_path <- tempfile(fileext = ".hdf5")
 export_birdflow(bf, hdf5_path)
 #> Exporting BirdFlow model for American Woodcock to:
-#>  /tmp/RtmpAdcleH/file1cab31f86f3f.hdf5
+#>  /tmp/RtmpNqNsHS/file1d774d7f4be6.hdf5
 bf2 <- import_birdflow(hdf5_path)
 identical(class(bf), class(bf2))
 #> [1] TRUE

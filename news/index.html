@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,15 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0.9001" id="birdflowr-1009001">BirdFlowR 1.0.0.9001<a class="anchor" aria-label="anchor" href="#birdflowr-1009001"></a></h2>
+<div class="section level3">
+<h3 id="fix-dropped-routes-in-as_birdflow_intervals-1-0-0-9001">Fix dropped routes in <code>as_birdflow_intervals()</code>
+<a class="anchor" aria-label="anchor" href="#fix-dropped-routes-in-as_birdflow_intervals-1-0-0-9001"></a></h3>
+<ul><li>Fixed a bug in <code><a href="../reference/calculate_interval_sampling_strategy.html">calculate_interval_sampling_strategy()</a></code> where routes with exactly one valid interval pair (e.g. two-point tracks) were silently excluded from sampling instead of receiving their guaranteed sample, biasing <code><a href="../reference/as_birdflow_intervals.html">as_birdflow_intervals()</a></code>’s output toward longer routes. (<a href="https://github.com/birdflow-science/BirdFlowR/issues/254" class="external-link">#254</a>)</li>
+<li>Fixed the roxygen default documented for <code>max_km_interval</code> (was <code>2000</code>, actual default is <code>8000</code>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0.9000" id="birdflowr-1009000">BirdFlowR 1.0.0.9000<a class="anchor" aria-label="anchor" href="#birdflowr-1009000"></a></h2>
 <div class="section level3">

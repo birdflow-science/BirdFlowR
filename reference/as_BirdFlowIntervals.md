@@ -45,7 +45,7 @@ as_BirdFlowIntervals(
 
 - max_km_interval:
 
-  The maximum distance required for an interval. Defaults to 2000. Only
+  The maximum distance required for an interval. Defaults to 8000. Only
   used by the `BirdFlowRoutes` method.
 
 ## Value

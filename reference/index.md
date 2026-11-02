@@ -186,7 +186,7 @@ Constructors, I/O, and validators for tracked and synthetic route data
 - [`as_birdflow_intervals()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_intervals.md)
   :
 
-  Make or convert to a `BirdFlowIntervals` object
+  Create `BirdFlowIntervals` objects
 
 - [`snap_to_birdflow()`](https://birdflow-science.github.io/BirdFlowR/reference/snap_to_birdflow.md)
   : Assign cells and timesteps to coordinates and dates

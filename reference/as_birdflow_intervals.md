@@ -1,23 +1,24 @@
-# Make or convert to a `BirdFlowIntervals` object
+# Create `BirdFlowIntervals` objects
 
-`as_birdflow_intervals()` is a generic function with two methods:
+`as_birdflow_intervals()` creates `BirdFlowIntervals` objects from
+either `BirdFlowRoutes` or a `data.frame`. An interval is a pair of
+observations of a single bird at two different dates, each of which has
+an associated location. The dates must be different; the location does
+not need to change.
 
-- The `BirdFlowRoutes` method converts a `BirdFlowRoutes` object into a
-  `BirdFlowIntervals` object, sampling interval pairs between time
-  points. `BirdFlowIntervals` define specific movements between states
-  in a `BirdFlow` model. The two points in each interval will always
-  differ in time (week / timestep). They can occupy the same location
-  (raster cell) in the model or represent a movement between two
-  locations.
+The most common use is to sample intervals from `BirdFlowRoutes` to use
+for evaluating a `BirdFlow` model with the full chain being:
 
-- The `data.frame` method builds a `BirdFlowIntervals` object directly
-  from an already-assembled interval data frame plus the associated
-  `species`, `metadata`, `geom`, `dates`, and `source` components,
-  without any sampling.
+    rts <- as_routes(observations, species = "amewoo")
+    bf_rts <- as_birdflow_routes(rts, bf)
+    bf_intv <- as_birdflow_intervals(bf_rts)
+    metrics <- calc_interval_metrics(bf_intv, bf)
 
-`BirdFlowIntervals` are primarily used to evaluate model performance
-with
-[`calc_interval_metrics()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.md).
+The `data.frame` method is for advanced programmatic use. It builds a
+`BirdFlowIntervals` object directly from an already-assembled interval
+data frame plus the associated `species`, `metadata`, `geom`, `dates`,
+and `source` components, without any sampling, allowing users full
+control over how intervals are constructed.
 
 ## Usage
 
@@ -74,7 +75,7 @@ as_birdflow_intervals(x, species, metadata, geom, dates, source = NULL, ...)
 
 - max_km_interval:
 
-  The maximum distance required for an interval. Defaults to 2000. Only
+  The maximum distance required for an interval. Defaults to 8000. Only
   used by the `BirdFlowRoutes` method.
 
 - species:
@@ -112,10 +113,14 @@ A `BirdFlowIntervals` object.
 - [`as_birdflow_routes()`](https://birdflow-science.github.io/BirdFlowR/reference/as_birdflow_routes.md)
   for converting `Routes` to `BirdFlowRoutes`.
 
+- [`calc_interval_metrics()`](https://birdflow-science.github.io/BirdFlowR/reference/calc_interval_metrics.md)
+  for calculating performance metrics from intervals and a `BirdFlow`
+  object.
+
 ## Examples
 
 ``` r
-route_df <- data.frame(
+observations <- data.frame(
   route_id = c("001", "001", "001", "001", "001", "003",
   "003", "003", "004"),
   date = as.Date(c(
@@ -136,10 +141,10 @@ route_df <- data.frame(
     "motus", "motus", "motus", "motus"
   )
 )
-routes_obj <- as_routes(route_df, species = "amewoo")
+rts <- as_routes(observations, species = "amewoo")
 # \donttest{
 bf <- BirdFlowExamples::amewoo
-birdflow_routes <- routes_obj |> as_birdflow_routes(bf = bf)
-birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
+bf_rts <- rts |> as_birdflow_routes(bf = bf)
+bf_intv <- as_birdflow_intervals(bf_rts, max_n = 1000)
 # }
 ```
