@@ -1,3 +1,16 @@
+# BirdFlowR 1.0.0.9002
+
+## Fix `season_buffer` wrap-around bug in `lookup_season_timesteps()`
+
+* Fixed a sign error that caused a `season_buffer` crossing the year
+  start to wrap to the wrong (nonexistent) timestep, e.g. timestep 53
+  instead of 51 on a 52-timestep model. This caused `route()` and
+  `predict()` to fail downstream with errors like
+  `Date lookup failed for x = 53`. (#252)
+* Fixed a misplaced parenthesis in `lookup_season_timesteps()`'s
+  internal validation that meant it never actually checked whether
+  the computed timesteps existed. (#252)
+
 # BirdFlowR 1.0.0.9001
 
 ## Fix dropped routes in `as_birdflow_intervals()`

@@ -330,7 +330,7 @@ lookup_season_timesteps <- function(x, season, season_buffer = 1) {
     # Add season buffer to start and end
     start <-  start - season_buffer
     if (start <= 0) {
-      start <- n_timesteps(x) - start
+      start <- n_timesteps(x) + start
     }
     end <- end + season_buffer
     if (end > n_timesteps(x)) {
@@ -349,7 +349,7 @@ lookup_season_timesteps <- function(x, season, season_buffer = 1) {
   } else {
     s <- c(start:n_timesteps(x), 1:end)
   }
-  stopifnot(all(s) %in% get_dates(x)$timestep)
+  stopifnot(all(s %in% get_dates(x)$timestep))
 
   return(s)
 }

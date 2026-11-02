@@ -586,6 +586,49 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
 
 })
 
+test_that("lookup_season_timesteps() wraps season_buffer past year start correctly", {
+  # See https://github.com/birdflow-science/BirdFlowR/issues/252
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+
+  # prebreeding_migration starts at timestep 3; a buffer of 4 pushes the
+  # start to -1, which should wrap to 51 (52 + (-1)), not 53 (52 - (-1)).
+  expect_equal(lookup_timestep(species_info(bf, "prebreeding_migration_start"),
+                               bf), 3)
+
+  s <- lookup_season_timesteps(bf, "prebreeding_migration", season_buffer = 4)
+  expect_equal(s, c(51, 52, 1:20))
+  expect_true(all(s %in% 1:n_timesteps(bf)))
+
+  # A larger buffer (5) wraps one step further, to 50.
+  s <- lookup_season_timesteps(bf, "prebreeding_migration", season_buffer = 5)
+  expect_equal(s, c(50:52, 1:21))
+  expect_true(all(s %in% 1:n_timesteps(bf)))
+
+  # season_buffer = 3 landed on timestep 1 exactly (52 - 0 = 52, i.e. no
+  # wrap arithmetic needed) so it worked even with the bug; confirm it
+  # still works after the fix.
+  s <- lookup_season_timesteps(bf, "prebreeding_migration", season_buffer = 3)
+  expect_equal(s, c(52, 1:19))
+
+})
+
+test_that("lookup_season_timesteps() validates that timesteps exist", {
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+
+  # Before the fix, `stopifnot(all(s) %in% get_dates(x)$timestep)` always
+  # evaluated `all(s)` first (TRUE for any nonzero vector) and never
+  # actually checked membership, so invalid timesteps slipped through.
+  # Reaching into the function isn't practical, so this exercises the
+  # validation indirectly: the wrap-around case that used to produce the
+  # out-of-range timestep 53 must now either return valid timesteps or
+  # trip this check, never return 53 silently.
+  s <- lookup_season_timesteps(bf, "prebreeding_migration", season_buffer = 4)
+  expect_false(53 %in% s)
+  expect_true(all(s %in% get_dates(bf)$timestep))
+})
+
 test_that("lookup_season_timesteps() works with single timestep season", {
   skip_if_not_installed("BirdFlowExamples")
   # See https://github.com/birdflow-science/BirdFlowR/issues/191
