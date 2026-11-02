@@ -95,3 +95,24 @@ test_that("If no intervals can be sampled, return NULL", {
   expect_no_error(my_intervals <- as_birdflow_intervals(my_bfroutes))
   expect_null(my_intervals)
 })
+
+
+test_that("Routes with one valid pair are not silently dropped.  #254") {
+  bf <- BirdFlowExamples::amewoo
+  set.seed(42)
+  mk <- function(id, n, lon0, lat0) data.frame(
+    route_id = id,
+    date = as.Date("2025-01-01") + seq(0, by = 21, length.out = n),
+    lon = lon0 + seq(0, by = 4, length.out = n),
+    lat = lat0 + seq(0, by = 4, length.out = n),
+    route_type = "tracking")
+  # 4 two-point routes (1 valid pair each) + 1 five-point route (10 pairs)
+  df <- rbind(mk("A",2,-90,35), mk("B",2,-88,33), mk("C",2,-86,34),
+              mk("D",2,-84,32), mk("E",5,-92,30))
+  rts <- as_routes(df, species = "amewoo") |> as_birdflow_routes(bf = bf)
+  iv <- as_birdflow_intervals(rts, max_n = 7)
+
+  routes_sampled <- iv$data$route_id |> unique() |> length()
+  expect_equal(routes_sampled, 5)
+
+}
