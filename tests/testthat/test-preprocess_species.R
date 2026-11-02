@@ -22,6 +22,7 @@ test_that("preprocess_species runs on test dataset", {
   df <- data.frame(i = seq_along(d), density = d)
   df <- df[!df$density == 0, ]
   df <- df[1:12, ]
+  df$density <- signif(df$density) # avoid floating point differences
   rownames(df) <- NULL
 
   skip_if_wrong_ebirdst_for_snapshot()
