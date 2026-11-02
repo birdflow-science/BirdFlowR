@@ -1,10 +1,5 @@
-FROM rocker/geospatial:4.6.0
-RUN install2.r --error --skipinstalled --ncpus -1 \
-    remotes \
-    rnaturalearth \
-    rnaturalearthdata \
-    ebirdst \
-    && rm -rf /tmp/downloaded_packages \
-    && strip /usr/local/lib/R/site-library/*/libs/*.so \
-    && R -q -e 'remotes::install_github("birdflow-science/BirdFlowExamples")' \
-    && R -q -e 'remotes::install_github("birdflow-science/BirdFlowR", build_vignettes = TRUE, upgrade = "never")'
+FROM rocker/geospatial:4.6.1
+ENV PKG_BUILD_VIGNETTES=true
+RUN R -q -e 'pak::pak("birdflow-science/BirdFlowR", ask = FALSE, dependencies = TRUE)' \
+    && R -q -e 'pak::cache_clean()' \
+    && strip /usr/local/lib/R/site-library/*/libs/*.so
