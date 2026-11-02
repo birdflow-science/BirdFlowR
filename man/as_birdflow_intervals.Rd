@@ -4,7 +4,7 @@
 \alias{as_birdflow_intervals}
 \alias{as_birdflow_intervals.BirdFlowRoutes}
 \alias{as_birdflow_intervals.data.frame}
-\title{Make or convert to a \code{BirdFlowIntervals} object}
+\title{Create \code{BirdFlowIntervals} objects}
 \usage{
 as_birdflow_intervals(x, ...)
 
@@ -39,7 +39,7 @@ Defaults to 180. Only used by the \code{BirdFlowRoutes} method.}
 Defaults to 200. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{max_km_interval}{The maximum distance required for an interval.
-Defaults to 2000. Only used by the \code{BirdFlowRoutes} method.}
+Defaults to 8000. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{species}{A list with species information. Only used by the
 \code{data.frame} method.}
@@ -60,26 +60,30 @@ used by the \code{data.frame} method.}
 A \code{BirdFlowIntervals} object.
 }
 \description{
-\code{as_birdflow_intervals()} is a generic function with two
-methods:
-\itemize{
-\item The \code{BirdFlowRoutes} method converts a \code{BirdFlowRoutes} object into a
-\code{BirdFlowIntervals} object, sampling interval pairs between time points.
-\code{BirdFlowIntervals} define specific movements between states in a
-\code{BirdFlow} model. The two points in each interval will always differ in
-time (week / timestep). They can occupy the same location (raster cell)
-in the model or represent a movement between two locations.
-\item The \code{data.frame} method builds a \code{BirdFlowIntervals} object directly
-from an already-assembled interval data frame plus the associated
-\code{species}, \code{metadata}, \code{geom}, \code{dates}, and \code{source} components, without
-any sampling.
-}
+\code{as_birdflow_intervals()} creates
+\code{BirdFlowIntervals} objects from either \code{BirdFlowRoutes} or a
+\code{data.frame}. An interval is a pair of observations of a single bird at
+two different dates, each of which has an associated location. The
+dates must be different; the location does not need to change.
 
-\code{BirdFlowIntervals} are primarily used to evaluate model performance with
-\code{calc_interval_metrics()}.
+The most common use is to sample intervals from \code{BirdFlowRoutes}
+to use for evaluating a \code{BirdFlow} model with the full chain being:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{rts <- as_routes(observations, species = "amewoo")
+bf_rts <- as_birdflow_routes(rts, bf)
+bf_intv <- as_birdflow_intervals(bf_rts)
+metrics <- calc_interval_metrics(bf_intv, bf)
+}\if{html}{\out{</div>}}
+
+The \code{data.frame} method is for advanced programmatic use.
+It builds a \code{BirdFlowIntervals} object directly
+from an already-assembled interval data frame plus the associated
+\code{species}, \code{metadata}, \code{geom}, \code{dates}, and \code{source} components,
+without any sampling, allowing users full control over
+how intervals are constructed.
 }
 \examples{
-route_df <- data.frame(
+observations <- data.frame(
   route_id = c("001", "001", "001", "001", "001", "003",
   "003", "003", "004"),
   date = as.Date(c(
@@ -100,11 +104,11 @@ route_df <- data.frame(
     "motus", "motus", "motus", "motus"
   )
 )
-routes_obj <- as_routes(route_df, species = "amewoo")
+rts <- as_routes(observations, species = "amewoo")
 \donttest{
 bf <- BirdFlowExamples::amewoo
-birdflow_routes <- routes_obj |> as_birdflow_routes(bf = bf)
-birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
+bf_rts <- rts |> as_birdflow_routes(bf = bf)
+bf_intv <- as_birdflow_intervals(bf_rts, max_n = 1000)
 }
 }
 \seealso{
@@ -112,5 +116,7 @@ birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
 \item \code{\link[=as_routes]{as_routes()}} for converting observational data into a formal \code{Routes}
 object
 \item \code{\link[=as_birdflow_routes]{as_birdflow_routes()}} for converting \code{Routes} to \code{BirdFlowRoutes}.
+\item \code{\link[=calc_interval_metrics]{calc_interval_metrics()}} for calculating performance metrics from
+intervals and a \code{BirdFlow} object.
 }
 }

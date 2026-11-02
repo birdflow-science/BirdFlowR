@@ -1,3 +1,15 @@
+# BirdFlowR 1.0.0.9001
+
+## Fix dropped routes in `as_birdflow_intervals()`
+
+* Fixed a bug in `calculate_interval_sampling_strategy()` where routes
+  with exactly one valid interval pair (e.g. two-point tracks) were
+  silently excluded from sampling instead of receiving their
+  guaranteed sample, biasing `as_birdflow_intervals()`'s output toward
+  longer routes. (#254)
+* Fixed the roxygen default documented for `max_km_interval`
+  (was `2000`, actual default is `8000`).
+
 # BirdFlowR 1.0.0.9000
 
 ## Switch example-data dependency from BirdFlowModels to BirdFlowExamples

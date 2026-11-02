@@ -95,3 +95,43 @@ test_that("If no intervals can be sampled, return NULL", {
   expect_no_error(my_intervals <- as_birdflow_intervals(my_bfroutes))
   expect_null(my_intervals)
 })
+
+
+test_that("Routes with one valid pair are not silently dropped.  #254", {
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+  set.seed(42)
+
+  # Build routes from route() output (guaranteed to snap validly to the
+  # model grid), keeping only two far-apart timesteps for four routes
+  # (one valid interval pair each) and five timesteps for a fifth route
+  # (multiple valid pairs).
+  synthetic <- route(bf = bf, n = 5)$data
+  pick <- function(route, timesteps) {
+    route <- route[route$route_id == route$route_id[1], ]
+    route <- route[!duplicated(route$timestep), ]
+    route <- route[route$timestep %in% timesteps, ]
+    route <- route[order(route$timestep), ]
+    data.frame(
+      route_id = route$route_id,
+      date = route$date,
+      lon = route$lon,
+      lat = route$lat,
+      route_type = "tracking"
+    )
+  }
+  df <- rbind(
+    pick(synthetic[synthetic$route_id == 1, ], c(1, 15)),
+    pick(synthetic[synthetic$route_id == 2, ], c(1, 15)),
+    pick(synthetic[synthetic$route_id == 3, ], c(1, 15)),
+    pick(synthetic[synthetic$route_id == 4, ], c(1, 15)),
+    pick(synthetic[synthetic$route_id == 5, ], c(1, 8, 15, 22, 29))
+  )
+  df$route_id <- as.character(df$route_id)
+
+  rts <- as_routes(df, species = "amewoo") |> as_birdflow_routes(bf = bf)
+  iv <- as_birdflow_intervals(rts, max_n = 7)
+
+  routes_sampled <- iv$data$route_id |> unique() |> length()
+  expect_equal(routes_sampled, 5)
+})

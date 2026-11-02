@@ -92,56 +92,66 @@ calculate_interval_sampling_strategy <- function(
     sampled_route_counts$intervals_to_sample <-
       sampled_route_counts$interval_pairs
   } else {
-    # Calculate how many intervals to sample for each route
-    ## Fist, we should have one sample per route, to give an even sampling
-    part1 <- nrow(route_counts)
-    rest <- n - part1
+    # Calculate how many intervals to sample for each route.
+    # Every route gets a guaranteed base sample of 1 (to give an even
+    # sampling), and the remaining budget ("rest") is distributed on top
+    # of that, proportionally to each route's remaining capacity
+    # (interval_pairs - 1). The guaranteed base sample is tracked
+    # separately from the proportional "extra" so that routes with only
+    # one valid pair (no remaining capacity) still get their base sample
+    # instead of being rounded down to zero.
+    n_routes <- nrow(route_counts)
+    rest <- n - n_routes
 
-    rest_samplable_route_counts <- route_counts
-    rest_samplable_route_counts$sampable_amount <-
-      rest_samplable_route_counts$interval_pairs - 1
-    rest_samplable_route_counts$proportion <-
-      rest_samplable_route_counts$sampable_amount /
-        sum(rest_samplable_route_counts$sampable_amount)
-    rest_samplable_route_counts$to_sample <-
-      pmin(
-        ceiling(rest_samplable_route_counts$proportion * rest) + 1,
-        rest_samplable_route_counts$sampable_amount
-      )
+    route_counts$sampable_amount <- route_counts$interval_pairs - 1
+    route_counts$proportion <-
+      route_counts$sampable_amount / sum(route_counts$sampable_amount)
+    route_counts$extra_to_sample <- pmin(
+      ceiling(route_counts$proportion * rest),
+      route_counts$sampable_amount
+    )
 
-    if (sum(rest_samplable_route_counts$to_sample) > rest) {
+    total_extra <- sum(route_counts$extra_to_sample)
+
+    if (total_extra > rest) {
       # Because of the ceiling rounding,
-      # the total sampling planned might exceed the `rest`,
+      # the total sampling planned might exceed `rest`,
       # In that case, reduce the amount based on proportion, step by step
-      to_reduce <- sum(rest_samplable_route_counts$to_sample) - n
-
+      to_reduce <- total_extra - rest
       while (to_reduce > 0) {
-        # Apply proportional reduction, constrained by `to_reduce`
+        candidates <- which(route_counts$extra_to_sample > 0)
         sampled_index <- sample(
-          seq_len(nrow(rest_samplable_route_counts)),
+          candidates,
           size = 1,
-          prob = rest_samplable_route_counts$proportion
+          prob = route_counts$proportion[candidates]
         )
-
-        if (rest_samplable_route_counts[sampled_index, "to_sample"] <= 1) {
-          # Should leave at least one sample for that route
-          bf_msg("Skipping reduction for sampled_index ", sampled_index,
-                 " (to_sample = ",
-                 rest_samplable_route_counts[sampled_index, "to_sample"],
-                 ")\n")
-          next
-        }
-        rest_samplable_route_counts[sampled_index, "to_sample"] <-
-          rest_samplable_route_counts[sampled_index, "to_sample"] - 1
+        route_counts$extra_to_sample[sampled_index] <-
+          route_counts$extra_to_sample[sampled_index] - 1
         to_reduce <- to_reduce - 1
       }
-
-      sampled_route_counts <- route_counts
-      sampled_route_counts$intervals_to_sample <-
-        rest_samplable_route_counts$to_sample
-    } else if (sum(rest_samplable_route_counts$to_sample) < rest) {
-      stop("Not possible error. The sampling has problems.")
+    } else if (total_extra < rest) {
+      # Capping extras at each route's `sampable_amount` can leave the
+      # total under `rest`; hand out the remainder, step by step, to
+      # routes that still have capacity.
+      to_add <- rest - total_extra
+      while (to_add > 0) {
+        candidates <- which(
+          route_counts$extra_to_sample < route_counts$sampable_amount
+        )
+        sampled_index <- sample(
+          candidates,
+          size = 1,
+          prob = route_counts$proportion[candidates]
+        )
+        route_counts$extra_to_sample[sampled_index] <-
+          route_counts$extra_to_sample[sampled_index] + 1
+        to_add <- to_add - 1
+      }
     }
+
+    sampled_route_counts <- route_counts
+    sampled_route_counts$intervals_to_sample <-
+      1 + sampled_route_counts$extra_to_sample
   }
   return(sampled_route_counts)
 }
