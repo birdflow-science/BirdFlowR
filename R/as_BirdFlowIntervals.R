@@ -1,22 +1,28 @@
 ## as_birdflow_intervals ---------------------------------------------------
 
-#' Make or convert to a `BirdFlowIntervals` object
+#' Create `BirdFlowIntervals` objects
 #'
-#' @description `as_birdflow_intervals()` is a generic function with two
-#' methods:
-#' * The `BirdFlowRoutes` method converts a `BirdFlowRoutes` object into a
-#' `BirdFlowIntervals` object, sampling interval pairs between time points.
-#' `BirdFlowIntervals` define specific movements between states in a
-#' `BirdFlow` model. The two points in each interval will always differ in
-#' time (week / timestep). They can occupy the same location (raster cell)
-#' in the model or represent a movement between two locations.
-#' * The `data.frame` method builds a `BirdFlowIntervals` object directly
+#' @description `as_birdflow_intervals()` creates
+#'  `BirdFlowIntervals` objects from either `BirdFlowRoutes` or a
+#'  `data.frame`. An interval is a pair of observations of a single bird at
+#'  two different dates, each of which has an associated location. The
+#'  dates must be different; the location does not need to change.
+#'
+#'  The most common use is to sample intervals from `BirdFlowRoutes`
+#'  to use for evaluating a `BirdFlow` model with the full chain being:
+#'  ```r
+#'  rts <- as_routes(observations, species = "amewoo")
+#'  bf_rts <- as_birdflow_routes(rts, bf)
+#'  bf_intv <- as_birdflow_intervals(bf_rts)
+#'  metrics <- calc_interval_metrics(bf_intv, bf)
+#'  ```
+#'
+#'  The `data.frame` method is for advanced programmatic use.
+#'  It builds a `BirdFlowIntervals` object directly
 #' from an already-assembled interval data frame plus the associated
-#' `species`, `metadata`, `geom`, `dates`, and `source` components, without
-#' any sampling.
-#'
-#' `BirdFlowIntervals` are primarily used to evaluate model performance with
-#'  `calc_interval_metrics()`.
+#' `species`, `metadata`, `geom`, `dates`, and `source` components,
+#' without any sampling, allowing users full control over
+#' how intervals are constructed.
 #'
 #' @param x Either a `BirdFlowRoutes` object or a data frame with interval
 #' data (see [Routes-internal] for the required columns).
@@ -29,7 +35,7 @@
 #' @param min_km_interval The minimum distance required for an interval.
 #' Defaults to 200. Only used by the `BirdFlowRoutes` method.
 #' @param max_km_interval The maximum distance required for an interval.
-#' Defaults to 2000. Only used by the `BirdFlowRoutes` method.
+#' Defaults to 8000. Only used by the `BirdFlowRoutes` method.
 #' @param species A list with species information. Only used by the
 #' `data.frame` method.
 #' @param metadata A list with additional metadata. Only used by the
@@ -46,12 +52,14 @@
 #' * [as_routes()] for converting observational data into a formal `Routes`
 #' object
 #' * [as_birdflow_routes()] for converting `Routes` to `BirdFlowRoutes`.
+#' * [calc_interval_metrics()] for calculating performance metrics from
+#' intervals and a `BirdFlow` object.
 #'
 #'
 #' @export
 #'
 #' @examples
-#' route_df <- data.frame(
+#' observations <- data.frame(
 #'   route_id = c("001", "001", "001", "001", "001", "003",
 #'   "003", "003", "004"),
 #'   date = as.Date(c(
@@ -72,11 +80,11 @@
 #'     "motus", "motus", "motus", "motus"
 #'   )
 #' )
-#' routes_obj <- as_routes(route_df, species = "amewoo")
+#' rts <- as_routes(observations, species = "amewoo")
 #' \donttest{
 #' bf <- BirdFlowExamples::amewoo
-#' birdflow_routes <- routes_obj |> as_birdflow_routes(bf = bf)
-#' birdflow_intervals <- as_birdflow_intervals(birdflow_routes, max_n = 1000)
+#' bf_rts <- rts |> as_birdflow_routes(bf = bf)
+#' bf_intv <- as_birdflow_intervals(bf_rts, max_n = 1000)
 #' }
 as_birdflow_intervals <- function(x, ...) {
   UseMethod("as_birdflow_intervals")

@@ -29,7 +29,7 @@ Defaults to 180. Only used by the \code{BirdFlowRoutes} method.}
 Defaults to 200. Only used by the \code{BirdFlowRoutes} method.}
 
 \item{max_km_interval}{The maximum distance required for an interval.
-Defaults to 2000. Only used by the \code{BirdFlowRoutes} method.}
+Defaults to 8000. Only used by the \code{BirdFlowRoutes} method.}
 }
 \value{
 A \code{BirdFlowIntervals} object.
