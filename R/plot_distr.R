@@ -33,6 +33,20 @@
 #' matching the columns names of the distribution to timesteps in the model so
 #' requires that the column names match the column names in `get_distr()`.
 #'
+#' ## eBird coverage
+#'
+#' Models fit from `BirdFlowR 0.1.0.9081` onward retain per-timestep eBird
+#' model coverage metadata (see [get_ebird_coverage()]) — whether each cell
+#' fell within eBird's modeled extent at a given timestep. Set
+#' `show_ebird_coverage` to `TRUE` to overlay a translucent color on active
+#' cells that lack coverage (inactive cells are already distinguished by
+#' `show_mask`, so they're excluded from this overlay to avoid double
+#' marking). Like `show_dynamic_mask`, this relies on matching the
+#' column names of `distr` to timestep labels from `get_ebird_coverage()`,
+#' so requires that the column names match those returned by `get_distr()`.
+#' Models that predate coverage metadata will raise an error if
+#' `show_ebird_coverage = TRUE`.
+#'
 #' ## Subtitles
 #' Plot subtitles will be derived from the column names in `distr`. It may be
 #' useful to define single distributions as a one column matrix so that the
@@ -54,6 +68,12 @@
 #'   `distr` should all be in `colnames(get_distr(bf))`.  This is
 #'   true for distributions returned by [`predict()`](predict.BirdFlow())
 #'   and [get_distr()].
+#' @param show_ebird_coverage Defaults to `FALSE`. Set to `TRUE` to overlay
+#'   `no_coverage_color` on cells that lacked eBird model coverage at the
+#'   relevant timestep (see [get_ebird_coverage()]). Like
+#'   `show_dynamic_mask` this requires that the column names in `distr`
+#'   match `colnames(get_distr(bf))`, and errors if `bf` lacks coverage
+#'   metadata.
 #' @param limits The range of density values to map `gradient_colors` to. The
 #'   default is the range of the values in `distr` after applying `subset`. If
 #'   you want to standardize the range across multiple models of a single
@@ -82,6 +102,9 @@
 #' @param inactive_cell_color The color to use for inactive cells in the
 #'   landscape. These are cells that are always masked. Only relevant when
 #'   `show_mask = TRUE`.
+#' @param no_coverage_color The (typically translucent) color to overlay on
+#'   cells that lack eBird model coverage. Only used if `show_ebird_coverage`
+#'   is `TRUE`.
 #' @param title The title for the plot. It defaults to the common name of the
 #'   species (`species(bf)`).
 #' @param value_label The label used for the values in the distribution.
@@ -109,6 +132,7 @@ plot_distr <- function(distr,
                        subset = NULL,
                        show_mask = TRUE,
                        show_dynamic_mask = FALSE,
+                       show_ebird_coverage = FALSE,
                        limits = NULL,
                        dynamic_scale = FALSE,
                        coast_linewidth =  .25,
@@ -116,6 +140,7 @@ plot_distr <- function(distr,
                        gradient_colors = NULL,
                        active_cell_color = rgb(1, 1, 1, .3),
                        inactive_cell_color = rgb(0, 0, 0, .2),
+                       no_coverage_color = rgb(1, 0, 0, .25),
                        title = species(bf),
                        value_label = "Density",
                        transform = "identity") {
@@ -190,6 +215,36 @@ plot_distr <- function(distr,
     }
   }
 
+  no_coverage <- NULL
+  if (show_ebird_coverage) {
+    cov_df <- suppressWarnings(get_ebird_coverage(bf, format = "dataframe"))
+    if (length(cov_df) == 1 && is.na(cov_df))
+      stop("Cannot show eBird coverage. 'bf' does not have ebird_coverage ",
+           "metadata (added in BirdFlowR 0.1.0.9081). ",
+           "See get_ebird_coverage().")
+
+    multiple <- is.matrix(distr) || is.array(distr)
+    if (multiple) {
+      if (!all(colnames(distr) %in% cov_df$timestep))
+        stop(" Cannot apply eBird coverage overlay. ",
+             "Not all column labels in distr match time labels from bf.")
+      order_lookup <- data.frame(order = seq_len(ncol(distr)),
+                                 timestep = colnames(distr))
+    } else {
+      label <- attr(distr, "time")
+      if (is.null(label) || !label %in% cov_df$timestep)
+        stop(" Cannot apply eBird coverage overlay. ",
+             "distr label is missing or not a time label from bf")
+      order_lookup <- data.frame(order = 1, timestep = label)
+    }
+
+    # Restrict to active cells; inactive cells are already distinguished by
+    # show_mask / inactive_cell_color and would otherwise double up here.
+    no_cov <- !cov_df$coverage & !is.na(cov_df$i)
+    no_coverage <- merge(cov_df[no_cov, c("x", "y", "timestep")],
+                         order_lookup, by = "timestep")
+  }
+
   r <- rasterize_distr(distr, bf, format = "dataframe")
   multiple <- length(unique(r$order)) > 1
 
@@ -242,6 +297,22 @@ plot_distr <- function(distr,
                                            na.value = active_cell_color,
                                            limits = limits,
                                            transform = transform)
+  }
+
+  if (!is.null(no_coverage)) {
+    # A second layer with a constant (not scale-mapped) fill, faceted the
+    # same way as the main layer via the shared "order" column.
+    # geom_tile() (with explicit width/height) is used instead of
+    # geom_raster() because the no-coverage cells are typically a sparse
+    # subset of the grid; geom_raster() infers cell size from gaps between
+    # present x/y values and misplaces cells when the data is sparse.
+    p <- p + ggplot2::geom_tile(data = no_coverage,
+                                mapping = ggplot2::aes(x = .data$x,
+                                                      y = .data$y),
+                                width = xres(bf),
+                                height = yres(bf),
+                                fill = no_coverage_color,
+                                inherit.aes = FALSE)
   }
 
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {

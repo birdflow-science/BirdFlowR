@@ -72,3 +72,71 @@ test_that(
   expect_no_error(print(p7))
 
 })
+
+test_that("plot_distr() works with eBird coverage overlay", {
+  bf <- small_test_bf()
+
+  # 8. single plot
+  expect_no_error(p8 <- plot_distr(get_distr(bf, 1), bf,
+                                   show_ebird_coverage = TRUE))
+  expect_no_error(print(p8))
+
+  # 9. facet
+  expect_no_error(p9 <- plot_distr(get_distr(bf, 1:3), bf,
+                                   show_ebird_coverage = TRUE))
+  expect_no_error(print(p9))
+
+  # 10. combined with dynamic mask
+  expect_no_error(p10 <- plot_distr(get_distr(bf, 1:3), bf,
+                                    show_ebird_coverage = TRUE,
+                                    show_dynamic_mask = TRUE))
+  expect_no_error(print(p10))
+
+  # 11. custom no_coverage_color
+  expect_no_error(p11 <- plot_distr(get_distr(bf, 1), bf,
+                                    show_ebird_coverage = TRUE,
+                                    no_coverage_color = "orange"))
+  expect_no_error(print(p11))
+})
+
+test_that("plot_distr() eBird coverage overlay errors informatively", {
+  bf <- small_test_bf()
+
+  # Model without coverage metadata
+  bf_no_cov <- bf
+  bf_no_cov$metadata$ebird_coverage <- NA
+  expect_error(plot_distr(get_distr(bf_no_cov, 1), bf_no_cov,
+                          show_ebird_coverage = TRUE),
+              "does not have ebird_coverage metadata")
+
+  # Column labels that don't match model timesteps (matrix form)
+  d <- get_distr(bf, 1)
+  d <- matrix(d, ncol = 1)
+  colnames(d) <- "not a real timestep"
+  expect_error(plot_distr(d, bf, show_ebird_coverage = TRUE),
+              "Not all column labels")
+
+  # Missing time label (vector form)
+  d_novec <- as.vector(get_distr(bf, 1))
+  expect_error(plot_distr(d_novec, bf, show_ebird_coverage = TRUE),
+              "distr label is missing")
+})
+
+test_that("plot_distr() eBird coverage overlay excludes inactive cells", {
+  bf <- small_test_bf()
+  d1 <- get_distr(bf, 1)
+  p <- plot_distr(d1, bf, show_ebird_coverage = TRUE)
+
+  tile_layer <- Filter(function(l) inherits(l$geom, "GeomTile"), p$layers)
+  expect_length(tile_layer, 1)
+  overlay_data <- tile_layer[[1]]$data
+
+  cov_df <- get_ebird_coverage(bf, format = "dataframe")
+  t1 <- cov_df[cov_df$timestep == attr(d1, "time"), ]
+  expected <- t1[!t1$coverage & !is.na(t1$i), c("x", "y")]
+
+  # Overlay should match exactly the active, uncovered cells - and only those
+  expect_equal(nrow(overlay_data), nrow(expected))
+  expect_setequal(paste(overlay_data$x, overlay_data$y),
+                  paste(expected$x, expected$y))
+})

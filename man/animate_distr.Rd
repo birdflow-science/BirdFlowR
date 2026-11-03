@@ -29,6 +29,12 @@ masked with NA. For \code{show_dynamic_mask = TRUE} to work the column names in
 \code{distr} should all be in \code{colnames(get_distr(bf))}.  This is
 true for distributions returned by \href{predict.BirdFlow()}{\code{predict()}}
 and \code{\link[=get_distr]{get_distr()}}.}
+    \item{\code{show_ebird_coverage}}{Defaults to \code{FALSE}. Set to \code{TRUE} to overlay
+\code{no_coverage_color} on cells that lacked eBird model coverage at the
+relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}). Like
+\code{show_dynamic_mask} this requires that the column names in \code{distr}
+match \code{colnames(get_distr(bf))}, and errors if \code{bf} lacks coverage
+metadata.}
     \item{\code{limits}}{The range of density values to map \code{gradient_colors} to. The
 default is the range of the values in \code{distr} after applying \code{subset}. If
 you want to standardize the range across multiple models of a single
@@ -57,6 +63,9 @@ is \code{TRUE}.}
     \item{\code{inactive_cell_color}}{The color to use for inactive cells in the
 landscape. These are cells that are always masked. Only relevant when
 \code{show_mask = TRUE}.}
+    \item{\code{no_coverage_color}}{The (typically translucent) color to overlay on
+cells that lack eBird model coverage. Only used if \code{show_ebird_coverage}
+is \code{TRUE}.}
     \item{\code{value_label}}{The label used for the values in the distribution.
 Defaults to "Density"}
     \item{\code{transform}}{A transformation to apply to the color scaling. Recommended
