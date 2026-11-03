@@ -161,8 +161,12 @@ snap_to_birdflow <- function(d, bf,
   # Standardize date column name, date format, and add timesteps
   # BUT allow date-time objects to stay in their original format
   # so that aggregation works on date + time
+  if (date_col != "date") {
+    names(d)[names(d) == "date"] <- "original_date"
+  }
+  d$date <- d[[date_col]]
   if (!inherits(d$date, c("Date", "POSIXct", "POSIXlt"))) {
-    d$date <- suppressWarnings(lubridate::as_date(d[[date_col]]))
+    d$date <- suppressWarnings(lubridate::as_date(d$date))
   }
   errors$err_date[is.na(d$date)]  <- TRUE
   errors <- update_errors(errors)

@@ -1,3 +1,14 @@
+# BirdFlowR 1.0.0.9003
+
+## Fix `snap_to_birdflow()` ignoring `date_col`
+
+* Fixed a bug where `snap_to_birdflow()` checked the hard-coded `date`
+  column instead of the column named by `date_col`. If the input data
+  frame happened to already have a `Date`/`POSIXt` column literally
+  named `date` (or one `$` partial-matched, e.g. `date_time`), the
+  function silently used that column instead of `date_col`, giving
+  wrong timesteps and location indices with no warning. (#253)
+
 # BirdFlowR 1.0.0.9002
 
 ## Fix `season_buffer` wrap-around bug in `lookup_season_timesteps()`

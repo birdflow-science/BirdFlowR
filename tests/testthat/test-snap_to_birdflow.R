@@ -96,6 +96,36 @@ test_that("snap_to_birdflow() works with non standard column names", {
 
 })
 
+test_that("snap_to_birdflow() uses date_col even when a different column
+          named \"date\" is also present (#253)", {
+  skip_if_not_installed("BirdFlowExamples")
+  bf <- BirdFlowExamples::amewoo
+  d <- make_fake_move_data(bf)
+
+  # Real dates moved to obs_date; "date" now holds an unrelated
+  # constant date that should be ignored.
+  a <- d
+  a$obs_date <- a$date
+  a$date <- as.Date("2021-06-15")
+
+  res <- snap_to_birdflow(a, bf, x_col = "x", y_col = "y", crs = crs(bf),
+                          id_cols = c("bird_id", "track_id"),
+                          date_col = "obs_date")
+  expect_equal(res$timestep, lookup_timestep(a$obs_date, bf))
+
+  # Only a POSIXct date_time column (no "date" column at all);
+  # "date" partial-matches "date_time" via `$` and previously broke this.
+  b <- d
+  b$date_time <- as.POSIXct(b$date, tz = "UTC")
+  b$date <- NULL
+  expect_no_error(
+    res2 <- snap_to_birdflow(b, bf, x_col = "x", y_col = "y", crs = crs(bf),
+                             id_cols = c("bird_id", "track_id"),
+                             date_col = "date_time")
+  )
+  expect_equal(res2$timestep, lookup_timestep(as.Date(b$date_time), bf))
+})
+
 test_that("snap_to_birdflow()  behaves with odd input", {
   skip_if_not_installed("BirdFlowExamples")
   bf <- BirdFlowExamples::amewoo
