@@ -130,6 +130,8 @@ lookup_date(25, bf)
 
 ```
 
+Each timestep (week) is labeled with its midpoint date, e.g. week 1 runs from January 1 to 7 and is labeled January 4. Each transition or marginal spans from the midpoint of its first timestep to the midpoint of its second, and is labeled with the midpoint of *that* span. So transition `T_01-02`, which stretches from January 4 (the label of week 1) to January 11 (the label of week 2), is labeled January 7 - the midpoint between the two.
+
 ### Sequences through time
 
 `predict()`, `route()`, and other functions that involve an arc through time have a common set of time arguments that are handled by the `lookup_timestep_sequence()` helper.

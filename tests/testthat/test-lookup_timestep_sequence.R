@@ -586,7 +586,7 @@ test_that("lookup_timestep() throws meaningful error for NA's in bf$species", {
 
 })
 
-test_that("lookup_season_timesteps() wraps season_buffer past year start correctly", {
+test_that("lookup_season_timesteps() wraps season_buffer past year start", {
   # See https://github.com/birdflow-science/BirdFlowR/issues/252
   skip_if_not_installed("BirdFlowExamples")
   bf <- BirdFlowExamples::amewoo

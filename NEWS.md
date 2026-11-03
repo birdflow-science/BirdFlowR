@@ -1,3 +1,12 @@
+# BirdFlowR 1.0.0.9004
+
+## Clarify timestep/transition date labeling in docs
+
+* Documented in `lookup_date()` and the BirdFlowR vignette that each
+  timestep (week) is labeled with its midpoint date, and each
+  transition or marginal is labeled with the midpoint between its two
+  timesteps' labels. No code changes. (#255)
+
 # BirdFlowR 1.0.0.9003
 
 ## Fix `snap_to_birdflow()` ignoring `date_col`
