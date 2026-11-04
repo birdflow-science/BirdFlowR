@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,19 @@
       <small>Source: <a href="https://github.com/birdflow-science/BirdFlowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0.9003" id="birdflowr-1009003">BirdFlowR 1.0.0.9003<a class="anchor" aria-label="anchor" href="#birdflowr-1009003"></a></h2>
+<div class="section level3">
+<h3 id="add-ebird-coverage-overlay-to-plot_distr-1-0-0-9003">Add eBird coverage overlay to <code>plot_distr()</code>
+<a class="anchor" aria-label="anchor" href="#add-ebird-coverage-overlay-to-plot_distr-1-0-0-9003"></a></h3>
+<ul><li>
+<code><a href="../reference/plot_distr.html">plot_distr()</a></code> (and <code><a href="../reference/animate_distr.html">animate_distr()</a></code>, which inherits its arguments) gained <code>show_ebird_coverage</code> and <code>no_coverage_color</code> arguments to overlay a translucent color on active cells that lacked eBird model coverage at a given timestep. Requires a model with coverage metadata (added in <code>BirdFlowR 0.1.0.9081</code>); see <code><a href="../reference/get_ebird_coverage.html">get_ebird_coverage()</a></code>. (<a href="https://github.com/birdflow-science/BirdFlowR/issues/241" class="external-link">#241</a>)</li>
+<li>
+<code><a href="../reference/get_ebird_coverage.html">get_ebird_coverage()</a></code>’s timestep labels now follow <code>birdflow_options("time_format")</code>, matching <code><a href="../reference/get_distr.html">get_distr()</a></code> and <code><a href="../reference/get_dynamic_mask.html">get_dynamic_mask()</a></code>’s existing behavior.</li>
+<li>
+<code>get_ebird_coverage(format = "dataframe")</code>’s <code>timestep</code> column is now always the canonical label (e.g. <code>"t1"</code>); a new <code>label</code> column holds the <code>time_format</code>-formatted version. <code><a href="../reference/plot_distr.html">plot_distr()</a></code>’s coverage overlay now matches on <code>label</code> instead of <code>timestep</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0.9002" id="birdflowr-1009002">BirdFlowR 1.0.0.9002<a class="anchor" aria-label="anchor" href="#birdflowr-1009002"></a></h2>
 <div class="section level3">

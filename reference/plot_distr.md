@@ -22,7 +22,9 @@ plot_distr(
   inactive_cell_color = rgb(0, 0, 0, 0.2),
   title = species(bf),
   value_label = "Density",
-  transform = "identity"
+  transform = "identity",
+  show_ebird_coverage = FALSE,
+  no_coverage_color = rgb(0.22, 1, 0.08, 0.45)
 )
 ```
 
@@ -126,6 +128,20 @@ plot_distr(
   Passed to
   [`ggplot2::scale_color_gradientn()`](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
 
+- show_ebird_coverage:
+
+  Defaults to `FALSE`. Set to `TRUE` to overlay `no_coverage_color` on
+  cells that lacked eBird model coverage at the relevant timestep (see
+  [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md)).
+  See "eBird coverage" section.
+
+- no_coverage_color:
+
+  The (typically translucent) color to overlay on cells that lack eBird
+  model coverage. Only used if `show_ebird_coverage` is `TRUE`. Default
+  is a translucent neon green, chosen to contrast with the default
+  `gradient_colors`.
+
 ## Value
 
 [`ggplot2::ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
@@ -165,6 +181,18 @@ To display both masks set `show_dynamic_mask` to `TRUE` and leave
 matching the columns names of the distribution to timesteps in the model
 so requires that the column names match the column names in
 [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md).
+
+### eBird coverage
+
+Models fit from `BirdFlowR 0.1.0.9081` onward retain per-timestep eBird
+model coverage metadata (see
+[`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md))
+— whether each cell fell within eBird's modeled extent at a given
+timestep. Set `show_ebird_coverage` to `TRUE` to overlay a translucent
+color on cells that lack coverage, whether or not they're active in the
+model — this helps distinguish "predicted zero" from "not modeled here".
+Models that predate coverage metadata will raise an error if
+`show_ebird_coverage = TRUE`.
 
 ### Subtitles
 

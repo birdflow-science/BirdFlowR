@@ -122,6 +122,21 @@ animate_distr(distr, bf, title = species(bf), ...)
       reflect the original values. Passed to
       [`ggplot2::scale_color_gradientn()`](https://ggplot2.tidyverse.org/reference/scale_gradient.html).
 
+  `show_ebird_coverage`
+
+  :   Defaults to `FALSE`. Set to `TRUE` to overlay `no_coverage_color`
+      on cells that lacked eBird model coverage at the relevant timestep
+      (see
+      [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md)).
+      See "eBird coverage" section.
+
+  `no_coverage_color`
+
+  :   The (typically translucent) color to overlay on cells that lack
+      eBird model coverage. Only used if `show_ebird_coverage` is
+      `TRUE`. Default is a translucent neon green, chosen to contrast
+      with the default `gradient_colors`.
+
 ## Value
 
 A gganimate object that can be displayed with

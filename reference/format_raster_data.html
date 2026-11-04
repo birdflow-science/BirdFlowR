@@ -11,7 +11,7 @@ output formats."><meta property="og:image" content="https://birdflow-science.git
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,11 @@ output formats.</p>
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A 2-D logical matrix (e.g. the model mask) or 3-D logical
 array (e.g. <code>ebird_coverage</code>) aligned to the BirdFlow model grid.
-For 3-D arrays the third dimension is time; its <code>dimnames$time</code> element
-is used to name raster layers and the <code>timestep</code> column.</p></dd>
+For 3-D arrays the third dimension is time; its <code>dimnames$time</code>
+element supplies the canonical (<code>"t1"</code>, <code>"t2"</code>, ...) timestep labels,
+which are reformatted per
+<a href="birdflow_options.html">birdflow_options("time_format")</a> to name raster
+layers and populate the <code>label</code> column of <code>"dataframe"</code> output.</p></dd>
 
 
 <dt id="arg-bf">bf<a class="anchor" aria-label="anchor" href="#arg-bf"></a></dt>
@@ -88,12 +91,18 @@ and layer name for single-layer <code>"SpatRaster"</code> output.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Depends on <code>format</code>:</p><ul><li><p><code>"spatraster"</code> — a <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a>; one layer per time slice for
-3-D input, a single named layer for 2-D input.</p></li>
-<li><p><code>"numeric"</code> — <code>data</code> returned as-is.</p></li>
+3-D input, a single named layer for 2-D input. For 3-D input layer
+names follow <a href="birdflow_options.html">birdflow_options("time_format")</a>.</p></li>
+<li><p><code>"numeric"</code> — <code>data</code> returned as-is, except that for 3-D input the
+<code>"time"</code> dimnames are reformatted per
+<a href="birdflow_options.html">birdflow_options("time_format")</a>.</p></li>
 <li><p><code>"dataframe"</code> — a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> with columns <code>row</code>, <code>col</code>, <code>x</code>, <code>y</code>,
 <code>i</code> (NA outside the mask), and <code>&lt;value_name&gt;</code>. For 3-D input the
-frame is in long form (one row per cell × timestep) with an
-additional <code>timestep</code> column preceding <code>&lt;value_name&gt;</code>.</p></li>
+frame is in long form (one row per cell × timestep) with two
+additional columns preceding <code>&lt;value_name&gt;</code>: <code>timestep</code>, the
+canonical label (e.g. <code>"t1"</code>), and <code>label</code>, the
+<a href="birdflow_options.html">birdflow_options("time_format")</a>-formatted
+version (e.g. <code>"January 4"</code>).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

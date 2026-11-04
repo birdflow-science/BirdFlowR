@@ -11,7 +11,7 @@ that cell fell within eBird's modeled extent at that timestep."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,15 +76,17 @@ matched case-insensitively; common aliases are accepted
     <p><code>NA</code> (with a warning) if the model lacks coverage metadata.
 Otherwise the return type depends on <code>format</code>:</p><ul><li><p><code>"SpatRaster"</code> returns a multi-layer <a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a> with one
 logical layer per timestep. Layer names match the timestep labels
-(e.g. <code>"t1"</code>, <code>"t2"</code>, ...).</p></li>
-<li><p><code>"array"</code> returns the raw 3-D logical array
-<code>[row, col, time]</code> as stored in <code>metadata$ebird_coverage</code>.</p></li>
+(e.g. <code>"January 4"</code> with the default <code>time_format</code>).</p></li>
+<li><p><code>"array"</code> returns the 3-D logical array <code>[row, col, time]</code>, with
+timestep labels applied to the <code>"time"</code> dimension.</p></li>
 <li><p><code>"dataframe"</code> returns a long <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> suitable for plotting with
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">ggplot2::geom_raster()</a></code>, with one row per cell × timestep and
 columns:</p><ul><li><p><code>row</code>, <code>col</code> — raster row and column indices.</p></li>
 <li><p><code>x</code>, <code>y</code> — cell-center coordinates in the model CRS.</p></li>
 <li><p><code>i</code> — location index in <code>bf</code>; <code>NA</code> for cells outside the mask.</p></li>
-<li><p><code>timestep</code> — timestep label (e.g. <code>"t1"</code>).</p></li>
+<li><p><code>timestep</code> — canonical timestep label (e.g. <code>"t1"</code>).</p></li>
+<li><p><code>label</code> — <code>time_format</code>-formatted timestep label
+(e.g. <code>"January 4"</code>).</p></li>
 <li><p><code>coverage</code> — logical coverage value.</p></li>
 </ul></li>
 </ul></div>
@@ -93,11 +95,20 @@ columns:</p><ul><li><p><code>row</code>, <code>col</code> — raster row and col
     <p>Coverage metadata is captured by <code><a href="preprocess_species.html">preprocess_species()</a></code> and is absent from
 models preprocessed before <code>BirdFlowR 0.1.0.9081</code>. For such models
 <code>get_ebird_coverage()</code> returns <code>NA</code> with a warning.</p>
+<p>Timestep labels in the <code>"time"</code> dimension of <code>"array"</code> output and layer
+names of <code>"SpatRaster"</code> output follow
+<a href="birdflow_options.html">birdflow_options("time_format")</a>, the same as
+<code><a href="get_distr.html">get_distr()</a></code> and <code><a href="get_dynamic_mask.html">get_dynamic_mask()</a></code>. In <code>"dataframe"</code> output the
+canonical labels (<code>"t1"</code>, <code>"t2"</code>, ...) are always in the <code>timestep</code>
+column, with the <code>time_format</code>-formatted version in <code>label</code>. The
+internal, canonical labels are always used in <code>metadata$ebird_coverage</code>
+itself; only the labels returned here change.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="preprocess_species.html">preprocess_species()</a></code> which captures this metadata,
-<code><a href="get_mask.html">get_mask()</a></code> for the static model mask.</p></div>
+<code><a href="get_mask.html">get_mask()</a></code> for the static model mask,
+<code><a href="birdflow_options.html">birdflow_options()</a></code> for <code>time_format</code>.</p></div>
     </div>
 
     <div class="section level2">

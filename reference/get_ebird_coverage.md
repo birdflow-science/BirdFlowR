@@ -31,10 +31,10 @@ the return type depends on `format`:
 - `"SpatRaster"` returns a multi-layer
   [terra::SpatRaster](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
   with one logical layer per timestep. Layer names match the timestep
-  labels (e.g. `"t1"`, `"t2"`, ...).
+  labels (e.g. `"January 4"` with the default `time_format`).
 
-- `"array"` returns the raw 3-D logical array `[row, col, time]` as
-  stored in `metadata$ebird_coverage`.
+- `"array"` returns the 3-D logical array `[row, col, time]`, with
+  timestep labels applied to the `"time"` dimension.
 
 - `"dataframe"` returns a long
   [data.frame](https://rdrr.io/r/base/data.frame.html) suitable for
@@ -48,7 +48,10 @@ the return type depends on `format`:
 
   - `i` — location index in `bf`; `NA` for cells outside the mask.
 
-  - `timestep` — timestep label (e.g. `"t1"`).
+  - `timestep` — canonical timestep label (e.g. `"t1"`).
+
+  - `label` — `time_format`-formatted timestep label (e.g.
+    `"January 4"`).
 
   - `coverage` — logical coverage value.
 
@@ -59,12 +62,26 @@ Coverage metadata is captured by
 and is absent from models preprocessed before `BirdFlowR 0.1.0.9081`.
 For such models `get_ebird_coverage()` returns `NA` with a warning.
 
+Timestep labels in the `"time"` dimension of `"array"` output and layer
+names of `"SpatRaster"` output follow
+[birdflow_options("time_format")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md),
+the same as
+[`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+and
+[`get_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.md).
+In `"dataframe"` output the canonical labels (`"t1"`, `"t2"`, ...) are
+always in the `timestep` column, with the `time_format`-formatted
+version in `label`. The internal, canonical labels are always used in
+`metadata$ebird_coverage` itself; only the labels returned here change.
+
 ## See also
 
 [`preprocess_species()`](https://birdflow-science.github.io/BirdFlowR/reference/preprocess_species.md)
 which captures this metadata,
 [`get_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_mask.md)
-for the static model mask.
+for the static model mask,
+[`birdflow_options()`](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md)
+for `time_format`.
 
 ## Examples
 

@@ -1,5 +1,30 @@
 # Changelog
 
+## BirdFlowR 1.0.0.9003
+
+### Add eBird coverage overlay to `plot_distr()`
+
+- [`plot_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.md)
+  (and
+  [`animate_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/animate_distr.md),
+  which inherits its arguments) gained `show_ebird_coverage` and
+  `no_coverage_color` arguments to overlay a translucent color on active
+  cells that lacked eBird model coverage at a given timestep. Requires a
+  model with coverage metadata (added in `BirdFlowR 0.1.0.9081`); see
+  [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md).
+  ([\#241](https://github.com/birdflow-science/BirdFlowR/issues/241))
+- [`get_ebird_coverage()`](https://birdflow-science.github.io/BirdFlowR/reference/get_ebird_coverage.md)’s
+  timestep labels now follow `birdflow_options("time_format")`, matching
+  [`get_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/get_distr.md)
+  and
+  [`get_dynamic_mask()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dynamic_mask.md)’s
+  existing behavior.
+- `get_ebird_coverage(format = "dataframe")`’s `timestep` column is now
+  always the canonical label (e.g. `"t1"`); a new `label` column holds
+  the `time_format`-formatted version.
+  [`plot_distr()`](https://birdflow-science.github.io/BirdFlowR/reference/plot_distr.md)’s
+  coverage overlay now matches on `label` instead of `timestep`.
+
 ## BirdFlowR 1.0.0.9002
 
 ### Fix `season_buffer` wrap-around bug in `lookup_season_timesteps()`

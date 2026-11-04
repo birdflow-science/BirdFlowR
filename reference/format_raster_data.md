@@ -19,8 +19,12 @@ format_raster_data(data, bf, format, value_name)
 
   A 2-D logical matrix (e.g. the model mask) or 3-D logical array (e.g.
   `ebird_coverage`) aligned to the BirdFlow model grid. For 3-D arrays
-  the third dimension is time; its `dimnames$time` element is used to
-  name raster layers and the `timestep` column.
+  the third dimension is time; its `dimnames$time` element supplies the
+  canonical (`"t1"`, `"t2"`, ...) timestep labels, which are reformatted
+  per
+  [birdflow_options("time_format")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md)
+  to name raster layers and populate the `label` column of `"dataframe"`
+  output.
 
 - bf:
 
@@ -51,15 +55,20 @@ Depends on `format`:
 - `"spatraster"` — a
   [terra::SpatRaster](https://rspatial.github.io/terra/reference/SpatRaster-class.html);
   one layer per time slice for 3-D input, a single named layer for 2-D
-  input.
+  input. For 3-D input layer names follow
+  [birdflow_options("time_format")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md).
 
-- `"numeric"` — `data` returned as-is.
+- `"numeric"` — `data` returned as-is, except that for 3-D input the
+  `"time"` dimnames are reformatted per
+  [birdflow_options("time_format")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md).
 
 - `"dataframe"` — a [data.frame](https://rdrr.io/r/base/data.frame.html)
   with columns `row`, `col`, `x`, `y`, `i` (NA outside the mask), and
   `<value_name>`. For 3-D input the frame is in long form (one row per
-  cell × timestep) with an additional `timestep` column preceding
-  `<value_name>`.
+  cell × timestep) with two additional columns preceding `<value_name>`:
+  `timestep`, the canonical label (e.g. `"t1"`), and `label`, the
+  [birdflow_options("time_format")](https://birdflow-science.github.io/BirdFlowR/reference/birdflow_options.md)-formatted
+  version (e.g. `"January 4"`).
 
 ## See also
 

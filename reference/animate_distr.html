@@ -13,7 +13,7 @@ plot subtitle."><meta property="og:image" content="https://birdflow-science.gith
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,6 +147,18 @@ Defaults to "Density"</p></dd>
 1/2 the smallest non-zero value prior to transforming.
 mapping to the color gradient. Legend will still reflect the original values.
 Passed to <code><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">ggplot2::scale_color_gradientn()</a></code>.</p></dd>
+
+    <dt><code>show_ebird_coverage</code></dt>
+<dd><p>Defaults to <code>FALSE</code>. Set to <code>TRUE</code> to overlay
+<code>no_coverage_color</code> on cells that lacked eBird model coverage at the
+relevant timestep (see <code><a href="get_ebird_coverage.html">get_ebird_coverage()</a></code>).
+See "eBird coverage" section.</p></dd>
+
+    <dt><code>no_coverage_color</code></dt>
+<dd><p>The (typically translucent) color to overlay on
+cells that lack eBird model coverage. Only used if <code>show_ebird_coverage</code>
+is <code>TRUE</code>. Default is a translucent neon green, chosen to contrast
+with the default <code>gradient_colors</code>.</p></dd>
 
 
 </dl></dd>
