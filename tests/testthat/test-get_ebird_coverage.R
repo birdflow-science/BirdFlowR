@@ -41,13 +41,45 @@ test_that("get_ebird_coverage returns correct dataframe", {
   bf <- small_test_bf()
   df <- get_ebird_coverage(bf, format = "dataframe")
   expect_s3_class(df, "data.frame")
-  expect_named(df, c("row", "col", "x", "y", "i", "timestep", "coverage"))
+  expect_named(df, c("row", "col", "x", "y", "i", "timestep", "label",
+                     "coverage"))
   n_timesteps <- dim(bf$metadata$ebird_coverage)[3]
   expect_equal(nrow(df), nrow(bf) * ncol(bf) * n_timesteps)
+  # timestep is always canonical ("t1", "t2", ...) regardless of time_format
+  expect_setequal(unique(df$timestep), paste0("t", seq_len(n_timesteps)))
   # Inactive cells have NA i
   n_inactive <- sum(!bf$geom$mask)
   expect_true(any(is.na(df$i)))
   expect_equal(sum(is.na(df$i)), n_inactive * n_timesteps)
+})
+
+test_that("get_ebird_coverage dataframe label respects time_format", {
+  bf <- small_test_bf()
+
+  o_time_format <- birdflow_options("time_format")
+  on.exit(birdflow_options(time_format = o_time_format))
+
+  birdflow_options(time_format = "timestep")
+  df_t <- get_ebird_coverage(bf, format = "dataframe")
+  expect_equal(df_t$label, df_t$timestep)
+
+  birdflow_options(time_format = "month_day")
+  df_md <- get_ebird_coverage(bf, format = "dataframe")
+  dates <- get_dates(bf)
+  expect_equal(df_md$label,
+               dates$label[match(df_md$timestep, paste0("t", dates$timestep))])
+
+  birdflow_options(time_format = "date")
+  df_date <- get_ebird_coverage(bf, format = "dataframe")
+  expect_equal(df_date$label,
+              as.character(dates$date[match(df_date$timestep,
+                                            paste0("t", dates$timestep))]))
+
+  # timestep and underlying values are unaffected by time_format
+  expect_equal(df_t$timestep, df_md$timestep)
+  expect_equal(df_t$coverage, df_md$coverage)
+  expect_equal(df_t$timestep, df_date$timestep)
+  expect_equal(df_t$coverage, df_date$coverage)
 })
 
 test_that("get_ebird_coverage respects time_format", {

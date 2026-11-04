@@ -132,7 +132,7 @@ test_that("plot_distr() eBird coverage overlay includes inactive cells", {
   overlay_data <- tile_layer[[1]]$data
 
   cov_df <- get_ebird_coverage(bf, format = "dataframe")
-  t1 <- cov_df[cov_df$timestep == attr(d1, "time"), ]
+  t1 <- cov_df[cov_df$label == attr(d1, "time"), ]
   expected <- t1[!t1$coverage, c("x", "y")]
 
   # Overlay should match exactly the uncovered cells, active or not, since

@@ -30,7 +30,9 @@ columns:
 \item \code{row}, \code{col} — raster row and column indices.
 \item \code{x}, \code{y} — cell-center coordinates in the model CRS.
 \item \code{i} — location index in \code{bf}; \code{NA} for cells outside the mask.
-\item \code{timestep} — timestep label (e.g. \code{"January 4"}).
+\item \code{timestep} — canonical timestep label (e.g. \code{"t1"}).
+\item \code{label} — \code{time_format}-formatted timestep label
+(e.g. \code{"January 4"}).
 \item \code{coverage} — logical coverage value.
 }
 }
@@ -45,12 +47,14 @@ Coverage metadata is captured by \code{\link[=preprocess_species]{preprocess_spe
 models preprocessed before \verb{BirdFlowR 0.1.0.9081}. For such models
 \code{get_ebird_coverage()} returns \code{NA} with a warning.
 
-Timestep labels (the \code{"time"} dimension of \code{"array"} output, layer names
-of \code{"SpatRaster"} output, and the \code{timestep} column of \code{"dataframe"}
-output) follow \link[=birdflow_options]{birdflow_options("time_format")},
-the same as \code{\link[=get_distr]{get_distr()}} and \code{\link[=get_dynamic_mask]{get_dynamic_mask()}}. The internal,
-canonical labels (\code{"t1"}, \code{"t2"}, ...) are always used in
-\code{metadata$ebird_coverage} itself; only the labels returned here change.
+Timestep labels in the \code{"time"} dimension of \code{"array"} output and layer
+names of \code{"SpatRaster"} output follow
+\link[=birdflow_options]{birdflow_options("time_format")}, the same as
+\code{\link[=get_distr]{get_distr()}} and \code{\link[=get_dynamic_mask]{get_dynamic_mask()}}. In \code{"dataframe"} output the
+canonical labels (\code{"t1"}, \code{"t2"}, ...) are always in the \code{timestep}
+column, with the \code{time_format}-formatted version in \code{label}. The
+internal, canonical labels are always used in \code{metadata$ebird_coverage}
+itself; only the labels returned here change.
 }
 \examples{
 \dontrun{

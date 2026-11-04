@@ -9,8 +9,11 @@ format_raster_data(data, bf, format, value_name)
 \arguments{
 \item{data}{A 2-D logical matrix (e.g. the model mask) or 3-D logical
 array (e.g. \code{ebird_coverage}) aligned to the BirdFlow model grid.
-For 3-D arrays the third dimension is time; its \code{dimnames$time} element
-is used to name raster layers and the \code{timestep} column.}
+For 3-D arrays the third dimension is time; its \code{dimnames$time}
+element supplies the canonical (\code{"t1"}, \code{"t2"}, ...) timestep labels,
+which are reformatted per
+\link[=birdflow_options]{birdflow_options("time_format")} to name raster
+layers and populate the \code{label} column of \code{"dataframe"} output.}
 
 \item{bf}{A BirdFlow model (supplies grid geometry).}
 
@@ -30,12 +33,18 @@ and layer name for single-layer \code{"SpatRaster"} output.}
 Depends on \code{format}:
 \itemize{
 \item \code{"spatraster"} — a \link[terra:SpatRaster-class]{terra::SpatRaster}; one layer per time slice for
-3-D input, a single named layer for 2-D input.
-\item \code{"numeric"} — \code{data} returned as-is.
+3-D input, a single named layer for 2-D input. For 3-D input layer
+names follow \link[=birdflow_options]{birdflow_options("time_format")}.
+\item \code{"numeric"} — \code{data} returned as-is, except that for 3-D input the
+\code{"time"} dimnames are reformatted per
+\link[=birdflow_options]{birdflow_options("time_format")}.
 \item \code{"dataframe"} — a \link{data.frame} with columns \code{row}, \code{col}, \code{x}, \code{y},
 \code{i} (NA outside the mask), and \verb{<value_name>}. For 3-D input the
-frame is in long form (one row per cell × timestep) with an
-additional \code{timestep} column preceding \verb{<value_name>}.
+frame is in long form (one row per cell × timestep) with two
+additional columns preceding \verb{<value_name>}: \code{timestep}, the
+canonical label (e.g. \code{"t1"}), and \code{label}, the
+\link[=birdflow_options]{birdflow_options("time_format")}-formatted
+version (e.g. \code{"January 4"}).
 }
 }
 \description{

@@ -8,12 +8,14 @@
 #' models preprocessed before `BirdFlowR 0.1.0.9081`. For such models
 #' `get_ebird_coverage()` returns `NA` with a warning.
 #'
-#' Timestep labels (the `"time"` dimension of `"array"` output, layer names
-#' of `"SpatRaster"` output, and the `timestep` column of `"dataframe"`
-#' output) follow [birdflow_options("time_format")][birdflow_options()],
-#' the same as [get_distr()] and [get_dynamic_mask()]. The internal,
-#' canonical labels (`"t1"`, `"t2"`, ...) are always used in
-#' `metadata$ebird_coverage` itself; only the labels returned here change.
+#' Timestep labels in the `"time"` dimension of `"array"` output and layer
+#' names of `"SpatRaster"` output follow
+#' [birdflow_options("time_format")][birdflow_options()], the same as
+#' [get_distr()] and [get_dynamic_mask()]. In `"dataframe"` output the
+#' canonical labels (`"t1"`, `"t2"`, ...) are always in the `timestep`
+#' column, with the `time_format`-formatted version in `label`. The
+#' internal, canonical labels are always used in `metadata$ebird_coverage`
+#' itself; only the labels returned here change.
 #'
 #' @param bf A BirdFlow model.
 #' @param format One of `"SpatRaster"` (default), `"array"`, or
@@ -33,7 +35,9 @@
 #'     * `row`, `col` — raster row and column indices.
 #'     * `x`, `y` — cell-center coordinates in the model CRS.
 #'     * `i` — location index in `bf`; `NA` for cells outside the mask.
-#'     * `timestep` — timestep label (e.g. `"January 4"`).
+#'     * `timestep` — canonical timestep label (e.g. `"t1"`).
+#'     * `label` — `time_format`-formatted timestep label
+#'       (e.g. `"January 4"`).
 #'     * `coverage` — logical coverage value.
 #' @seealso [preprocess_species()] which captures this metadata,
 #'   [get_mask()] for the static model mask,
@@ -52,6 +56,5 @@ get_ebird_coverage <- function(bf, format = "SpatRaster") {
     warning("This BirdFlow model does not have ebird_coverage metadata.")
     return(NA)
   }
-  cov <- reformat_distr_labels(cov, bf)
   format_raster_data(cov, bf, format, "coverage")
 }

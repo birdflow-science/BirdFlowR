@@ -222,21 +222,21 @@ plot_distr <- function(distr,
 
     multiple <- is.matrix(distr) || is.array(distr)
     if (multiple) {
-      if (!all(colnames(distr) %in% cov_df$timestep))
+      if (!all(colnames(distr) %in% cov_df$label))
         stop(" Cannot apply eBird coverage overlay. ",
              "Not all column labels in distr match time labels from bf.")
       order_lookup <- data.frame(order = seq_len(ncol(distr)),
-                                 timestep = colnames(distr))
+                                 label = colnames(distr))
     } else {
       label <- attr(distr, "time")
-      if (is.null(label) || !label %in% cov_df$timestep)
+      if (is.null(label) || !label %in% cov_df$label)
         stop(" Cannot apply eBird coverage overlay. ",
              "distr label is missing or not a time label from bf")
-      order_lookup <- data.frame(order = 1, timestep = label)
+      order_lookup <- data.frame(order = 1, label = label)
     }
 
-    no_coverage <- merge(cov_df[!cov_df$coverage, c("x", "y", "timestep")],
-                         order_lookup, by = "timestep")
+    no_coverage <- merge(cov_df[!cov_df$coverage, c("x", "y", "label")],
+                         order_lookup, by = "label")
   }
 
   r <- rasterize_distr(distr, bf, format = "dataframe")
