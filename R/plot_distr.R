@@ -33,6 +33,17 @@
 #' matching the columns names of the distribution to timesteps in the model so
 #' requires that the column names match the column names in `get_distr()`.
 #'
+#' ## eBird coverage
+#'
+#' Models fit from `BirdFlowR 0.1.0.9081` onward retain per-timestep eBird
+#' model coverage metadata (see [get_ebird_coverage()]) — whether each cell
+#' fell within eBird's modeled extent at a given timestep. Set
+#' `show_ebird_coverage` to `TRUE` to overlay a translucent color on cells
+#' that lack coverage, whether or not they're active in the model — this
+#' helps distinguish "predicted zero" from "not modeled here".
+#' Models that predate coverage metadata will raise an error
+#' if `show_ebird_coverage = TRUE`.
+#'
 #' ## Subtitles
 #' Plot subtitles will be derived from the column names in `distr`. It may be
 #' useful to define single distributions as a one column matrix so that the
@@ -91,6 +102,14 @@
 #' 1/2 the smallest non-zero value prior to transforming.
 #' mapping to the color gradient. Legend will still reflect the original values.
 #' Passed to [ggplot2::scale_color_gradientn()].
+#' @param show_ebird_coverage Defaults to `FALSE`. Set to `TRUE` to overlay
+#'   `no_coverage_color` on cells that lacked eBird model coverage at the
+#'   relevant timestep (see [get_ebird_coverage()]).
+#'   See "eBird coverage" section.
+#' @param no_coverage_color The (typically translucent) color to overlay on
+#'   cells that lack eBird model coverage. Only used if `show_ebird_coverage`
+#'   is `TRUE`. Default is a translucent neon green, chosen to contrast
+#'   with the default `gradient_colors`.
 #' @return [ggplot2::ggplot()] object.  Use `print()` to render it.
 #' @export
 #' @importFrom grDevices gray grey
@@ -118,7 +137,9 @@ plot_distr <- function(distr,
                        inactive_cell_color = rgb(0, 0, 0, .2),
                        title = species(bf),
                        value_label = "Density",
-                       transform = "identity") {
+                       transform = "identity",
+                       show_ebird_coverage = FALSE,
+                       no_coverage_color = rgb(0.22, 1, 0.08, .45)) {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
@@ -190,6 +211,33 @@ plot_distr <- function(distr,
     }
   }
 
+  no_coverage <- NULL
+  if (show_ebird_coverage) {
+    cov_df <- suppressWarnings(get_ebird_coverage(bf, format = "dataframe"))
+    if (length(cov_df) == 1 && is.na(cov_df))
+      stop("Cannot show eBird coverage. 'bf' does not have ebird_coverage ",
+           "metadata (added in BirdFlowR 0.1.0.9081). ",
+           "See get_ebird_coverage().")
+
+    multiple <- is.matrix(distr) || is.array(distr)
+    if (multiple) {
+      if (!all(colnames(distr) %in% cov_df$label))
+        stop(" Cannot apply eBird coverage overlay. ",
+             "Not all column labels in distr match time labels from bf.")
+      order_lookup <- data.frame(order = seq_len(ncol(distr)),
+                                 label = colnames(distr))
+    } else {
+      label <- attr(distr, "time")
+      if (is.null(label) || !label %in% cov_df$label)
+        stop(" Cannot apply eBird coverage overlay. ",
+             "distr label is missing or not a time label from bf")
+      order_lookup <- data.frame(order = 1, label = label)
+    }
+
+    no_coverage <- merge(cov_df[!cov_df$coverage, c("x", "y", "label")],
+                         order_lookup, by = "label")
+  }
+
   r <- rasterize_distr(distr, bf, format = "dataframe")
   multiple <- length(unique(r$order)) > 1
 
@@ -242,6 +290,22 @@ plot_distr <- function(distr,
                                            na.value = active_cell_color,
                                            limits = limits,
                                            transform = transform)
+  }
+
+  if (!is.null(no_coverage)) {
+    # A second layer with a constant (not scale-mapped) fill, faceted the
+    # same way as the main layer via the shared "order" column.
+    # geom_tile() (with explicit width/height) is used instead of
+    # geom_raster() because the no-coverage cells are typically a sparse
+    # subset of the grid; geom_raster() infers cell size from gaps between
+    # present x/y values and misplaces cells when the data is sparse.
+    p <- p + ggplot2::geom_tile(data = no_coverage,
+                                mapping = ggplot2::aes(x = .data$x,
+                                                      y = .data$y),
+                                width = xres(bf),
+                                height = yres(bf),
+                                fill = no_coverage_color,
+                                inherit.aes = FALSE)
   }
 
   if (!is.null(coast_color) && !is.null(coast_linewidth)) {

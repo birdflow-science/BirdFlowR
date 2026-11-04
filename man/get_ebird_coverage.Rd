@@ -20,9 +20,9 @@ Otherwise the return type depends on \code{format}:
 \itemize{
 \item \code{"SpatRaster"} returns a multi-layer \link[terra:SpatRaster-class]{terra::SpatRaster} with one
 logical layer per timestep. Layer names match the timestep labels
-(e.g. \code{"t1"}, \code{"t2"}, ...).
-\item \code{"array"} returns the raw 3-D logical array
-\verb{[row, col, time]} as stored in \code{metadata$ebird_coverage}.
+(e.g. \code{"January 4"} with the default \code{time_format}).
+\item \code{"array"} returns the 3-D logical array \verb{[row, col, time]}, with
+timestep labels applied to the \code{"time"} dimension.
 \item \code{"dataframe"} returns a long \link{data.frame} suitable for plotting with
 \code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}, with one row per cell × timestep and
 columns:
@@ -30,7 +30,9 @@ columns:
 \item \code{row}, \code{col} — raster row and column indices.
 \item \code{x}, \code{y} — cell-center coordinates in the model CRS.
 \item \code{i} — location index in \code{bf}; \code{NA} for cells outside the mask.
-\item \code{timestep} — timestep label (e.g. \code{"t1"}).
+\item \code{timestep} — canonical timestep label (e.g. \code{"t1"}).
+\item \code{label} — \code{time_format}-formatted timestep label
+(e.g. \code{"January 4"}).
 \item \code{coverage} — logical coverage value.
 }
 }
@@ -44,6 +46,15 @@ that cell fell within eBird's modeled extent at that timestep.
 Coverage metadata is captured by \code{\link[=preprocess_species]{preprocess_species()}} and is absent from
 models preprocessed before \verb{BirdFlowR 0.1.0.9081}. For such models
 \code{get_ebird_coverage()} returns \code{NA} with a warning.
+
+Timestep labels in the \code{"time"} dimension of \code{"array"} output and layer
+names of \code{"SpatRaster"} output follow
+\link[=birdflow_options]{birdflow_options("time_format")}, the same as
+\code{\link[=get_distr]{get_distr()}} and \code{\link[=get_dynamic_mask]{get_dynamic_mask()}}. In \code{"dataframe"} output the
+canonical labels (\code{"t1"}, \code{"t2"}, ...) are always in the \code{timestep}
+column, with the \code{time_format}-formatted version in \code{label}. The
+internal, canonical labels are always used in \code{metadata$ebird_coverage}
+itself; only the labels returned here change.
 }
 \examples{
 \dontrun{
@@ -55,5 +66,6 @@ df  <- get_ebird_coverage(bf, "dataframe")  # long data frame for ggplot2
 }
 \seealso{
 \code{\link[=preprocess_species]{preprocess_species()}} which captures this metadata,
-\code{\link[=get_mask]{get_mask()}} for the static model mask.
+\code{\link[=get_mask]{get_mask()}} for the static model mask,
+\code{\link[=birdflow_options]{birdflow_options()}} for \code{time_format}.
 }

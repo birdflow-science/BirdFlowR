@@ -1,32 +1,3 @@
-
-### Back compatibility
-### `make_coverage_bf()` constructs a synthetic BirdFlow fixture because the
-### amewoo reference model predates ebird_coverage metadata. Remove this
-### helper and replace fixture usage with `BirdFlowExamples::amewoo` once amewoo
-### is updated to include ebird_coverage.
-make_coverage_bf <- function() {
-  bf <- new_BirdFlow()
-  nr <- 3L; nc <- 4L; nt <- 2L
-  mask <- matrix(TRUE, nrow = nr, ncol = nc)
-  mask[1, 1] <- FALSE  # top-left inactive
-  mask[3, 4] <- FALSE  # bottom-right inactive
-  bf$geom$nrow <- nr
-  bf$geom$ncol <- nc
-  bf$geom$mask <- mask
-  bf$geom$ext <- c(0, nc, 0, nr)  # xmin, xmax, ymin, ymax
-  bf$geom$res <- c(1, 1)
-  bf$geom$crs <- ""
-  bf$metadata$n_active <- sum(mask)
-
-  cov <- array(TRUE, dim = c(nr, nc, nt),
-               dimnames = list(row = NULL, col = NULL,
-                               time = paste0("t", seq_len(nt))))
-  cov[2, 2, 1] <- FALSE  # one FALSE in t1
-  cov[1, 3, 2] <- FALSE  # one FALSE in t2
-  bf$metadata$ebird_coverage <- cov
-  bf
-}
-
 test_that("get_ebird_coverage returns a coverage SpatRaster", {
   skip_if_not_installed("BirdFlowExamples")
   bf <- BirdFlowExamples::amewoo
@@ -35,17 +6,16 @@ test_that("get_ebird_coverage returns a coverage SpatRaster", {
 })
 
 test_that("get_ebird_coverage returns SpatRaster by default", {
-  bf <- make_coverage_bf()
+  bf <- small_test_bf()
   cov <- get_ebird_coverage(bf)
   expect_s4_class(cov, "SpatRaster")
-  expect_equal(terra::nlyr(cov), 2L)
-  expect_equal(names(cov), c("t1", "t2"))
-  expect_equal(terra::nrow(cov), 3L)
-  expect_equal(terra::ncol(cov), 4L)
+  expect_equal(terra::nlyr(cov), ncol(bf$distr))
+  expect_equal(terra::nrow(cov), nrow(bf))
+  expect_equal(terra::ncol(cov), ncol(bf))
 })
 
 test_that("get_ebird_coverage SpatRaster values match array", {
-  bf <- make_coverage_bf()
+  bf <- small_test_bf()
   arr <- bf$metadata$ebird_coverage
   r <- get_ebird_coverage(bf)
   # terra::values() returns layers column-by-column; the mask matrix is
@@ -57,30 +27,84 @@ test_that("get_ebird_coverage SpatRaster values match array", {
 })
 
 test_that("get_ebird_coverage returns array for format='array'", {
-  bf <- make_coverage_bf()
+  bf <- small_test_bf()
+  raw <- bf$metadata$ebird_coverage
   arr <- get_ebird_coverage(bf, format = "array")
   expect_true(is.array(arr))
-  expect_equal(dim(arr), c(3L, 4L, 2L))
+  expect_equal(dim(arr), dim(raw))
   expect_type(arr, "logical")
-  expect_equal(dimnames(arr)$time, c("t1", "t2"))
-  # Spot-check planted FALSE values
-  expect_false(arr[2, 2, 1])
-  expect_false(arr[1, 3, 2])
+  # Values are unchanged by reformatting, only the "time" dimnames change
+  expect_equal(arr, raw, ignore_attr = "dimnames")
 })
 
 test_that("get_ebird_coverage returns correct dataframe", {
-  bf <- make_coverage_bf()
+  bf <- small_test_bf()
   df <- get_ebird_coverage(bf, format = "dataframe")
   expect_s3_class(df, "data.frame")
-  expect_named(df, c("row", "col", "x", "y", "i", "timestep", "coverage"))
-  expect_equal(nrow(df), 3L * 4L * 2L)  # all cells × timesteps
-  expect_setequal(df$timestep, c("t1", "t2"))
+  expect_named(df, c("row", "col", "x", "y", "i", "timestep", "label",
+                     "coverage"))
+  n_timesteps <- dim(bf$metadata$ebird_coverage)[3]
+  expect_equal(nrow(df), nrow(bf) * ncol(bf) * n_timesteps)
+  # timestep is always canonical ("t1", "t2", ...) regardless of time_format
+  expect_setequal(unique(df$timestep), paste0("t", seq_len(n_timesteps)))
   # Inactive cells have NA i
+  n_inactive <- sum(!bf$geom$mask)
   expect_true(any(is.na(df$i)))
-  expect_equal(sum(is.na(df$i)), 2L * 2L)  # 2 inactive cells × 2 timesteps
-  # Planted FALSE values are present in the dataframe
-  expect_false(df$coverage[df$row == 2 & df$col == 2 & df$timestep == "t1"])
-  expect_false(df$coverage[df$row == 1 & df$col == 3 & df$timestep == "t2"])
+  expect_equal(sum(is.na(df$i)), n_inactive * n_timesteps)
+})
+
+test_that("get_ebird_coverage dataframe label respects time_format", {
+  bf <- small_test_bf()
+
+  o_time_format <- birdflow_options("time_format")
+  on.exit(birdflow_options(time_format = o_time_format))
+
+  birdflow_options(time_format = "timestep")
+  df_t <- get_ebird_coverage(bf, format = "dataframe")
+  expect_equal(df_t$label, df_t$timestep)
+
+  birdflow_options(time_format = "month_day")
+  df_md <- get_ebird_coverage(bf, format = "dataframe")
+  dates <- get_dates(bf)
+  expect_equal(df_md$label,
+               dates$label[match(df_md$timestep, paste0("t", dates$timestep))])
+
+  birdflow_options(time_format = "date")
+  df_date <- get_ebird_coverage(bf, format = "dataframe")
+  expect_equal(df_date$label,
+              as.character(dates$date[match(df_date$timestep,
+                                            paste0("t", dates$timestep))]))
+
+  # timestep and underlying values are unaffected by time_format
+  expect_equal(df_t$timestep, df_md$timestep)
+  expect_equal(df_t$coverage, df_md$coverage)
+  expect_equal(df_t$timestep, df_date$timestep)
+  expect_equal(df_t$coverage, df_date$coverage)
+})
+
+test_that("get_ebird_coverage respects time_format", {
+  bf <- small_test_bf()
+
+  o_time_format <- birdflow_options("time_format")
+  on.exit(birdflow_options(time_format = o_time_format))
+
+  birdflow_options(time_format = "timestep")
+  cov_t <- get_ebird_coverage(bf)
+  expect_equal(names(cov_t), paste0("t", seq_len(ncol(bf$distr))))
+
+  birdflow_options(time_format = "month_day")
+  cov_md <- get_ebird_coverage(bf)
+  expect_equal(names(cov_md), get_dates(bf)$label)
+
+  birdflow_options(time_format = "date")
+  cov_date <- get_ebird_coverage(bf)
+  expect_equal(names(cov_date), as.character(get_dates(bf)$date))
+
+  # Reformatting only changes labels, not the underlying values
+  expect_equal(terra::values(cov_t), terra::values(cov_md),
+               ignore_attr = "dimnames")
+  expect_equal(terra::values(cov_t), terra::values(cov_date),
+               ignore_attr = "dimnames")
 })
 
 test_that("get_mask still works after refactor", {
