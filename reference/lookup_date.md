@@ -38,6 +38,17 @@ lookup_date(x, bf, timestep = NULL)
 
 A Date object
 
+## Label dates
+
+Each timestep (week) is labeled with its midpoint date. For example week
+1 runs from January 1 to 7 and is labeled January 4, its midpoint.
+
+Each transition or marginal spans from the midpoint of its first
+timestep to the midpoint of its second, and is labeled with the midpoint
+of *that* span. So transition `T_01-02`, which stretches from January 4
+(midpoint and label for week 1) to January 11 (midpoint and label of
+week 2), is labeled January 7 - the midpoint between the two.
+
 ## See also
 
 [`get_dates()`](https://birdflow-science.github.io/BirdFlowR/reference/get_dates.md),

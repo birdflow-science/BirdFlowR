@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BirdFlowR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.0.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -205,6 +205,13 @@ and <code><a href="../reference/lookup_date.html">lookup_date()</a></code> does 
 <span><span class="co"># Convert a timestep back to a date</span></span>
 <span><span class="fu"><a href="../reference/lookup_date.html">lookup_date</a></span><span class="op">(</span><span class="fl">25</span>, <span class="va">bf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2023-06-21"</span></span></code></pre></div>
+<p>Each timestep (week) is labeled with its midpoint date, e.g. week 1
+runs from January 1 to 7 and is labeled January 4. Each transition or
+marginal spans from the midpoint of its first timestep to the midpoint
+of its second, and is labeled with the midpoint of <em>that</em> span.
+So transition <code>T_01-02</code>, which stretches from January 4 (the
+label of week 1) to January 11 (the label of week 2), is labeled January
+7 - the midpoint between the two.</p>
 </div>
 <div class="section level3">
 <h3 id="sequences-through-time">Sequences through time<a class="anchor" aria-label="anchor" href="#sequences-through-time"></a>
