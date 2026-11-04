@@ -21,7 +21,7 @@ plot_distr(
   value_label = "Density",
   transform = "identity",
   show_ebird_coverage = FALSE,
-  no_coverage_color = rgb(1, 0, 0, 0.25)
+  no_coverage_color = rgb(0.22, 1, 0.08, 0.45)
 )
 }
 \arguments{
@@ -92,11 +92,13 @@ Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}
 
 \item{show_ebird_coverage}{Defaults to \code{FALSE}. Set to \code{TRUE} to overlay
 \code{no_coverage_color} on cells that lacked eBird model coverage at the
-relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}).}
+relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}).
+See "eBird coverage" section.}
 
 \item{no_coverage_color}{The (typically translucent) color to overlay on
 cells that lack eBird model coverage. Only used if \code{show_ebird_coverage}
-is \code{TRUE}.}
+is \code{TRUE}. Default is a translucent neon green, chosen to contrast
+with the default \code{gradient_colors}.}
 }
 \value{
 \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object.  Use \code{print()} to render it.
@@ -142,12 +144,9 @@ model coverage metadata (see \code{\link[=get_ebird_coverage]{get_ebird_coverage
 fell within eBird's modeled extent at a given timestep. Set
 \code{show_ebird_coverage} to \code{TRUE} to overlay a translucent color on cells
 that lack coverage, whether or not they're active in the model — this
-helps distinguish "predicted zero" from "not modeled here" for cells at
-the edge of a species' range. Like \code{show_dynamic_mask}, this relies on
-matching the column names of \code{distr} to timestep labels from
-\code{get_ebird_coverage()}, so requires that the column names match those
-returned by \code{get_distr()}. Models that predate coverage metadata will
-raise an error if \code{show_ebird_coverage = TRUE}.
+helps distinguish "predicted zero" from "not modeled here".
+Models that predate coverage metadata will raise an error
+if \code{show_ebird_coverage = TRUE}.
 }
 
 \subsection{Subtitles}{

@@ -40,12 +40,9 @@
 #' fell within eBird's modeled extent at a given timestep. Set
 #' `show_ebird_coverage` to `TRUE` to overlay a translucent color on cells
 #' that lack coverage, whether or not they're active in the model — this
-#' helps distinguish "predicted zero" from "not modeled here" for cells at
-#' the edge of a species' range. Like `show_dynamic_mask`, this relies on
-#' matching the column names of `distr` to timestep labels from
-#' `get_ebird_coverage()`, so requires that the column names match those
-#' returned by `get_distr()`. Models that predate coverage metadata will
-#' raise an error if `show_ebird_coverage = TRUE`.
+#' helps distinguish "predicted zero" from "not modeled here".
+#' Models that predate coverage metadata will raise an error
+#' if `show_ebird_coverage = TRUE`.
 #'
 #' ## Subtitles
 #' Plot subtitles will be derived from the column names in `distr`. It may be
@@ -108,9 +105,11 @@
 #' @param show_ebird_coverage Defaults to `FALSE`. Set to `TRUE` to overlay
 #'   `no_coverage_color` on cells that lacked eBird model coverage at the
 #'   relevant timestep (see [get_ebird_coverage()]).
+#'   See "eBird coverage" section.
 #' @param no_coverage_color The (typically translucent) color to overlay on
 #'   cells that lack eBird model coverage. Only used if `show_ebird_coverage`
-#'   is `TRUE`.
+#'   is `TRUE`. Default is a translucent neon green, chosen to contrast
+#'   with the default `gradient_colors`.
 #' @return [ggplot2::ggplot()] object.  Use `print()` to render it.
 #' @export
 #' @importFrom grDevices gray grey
@@ -140,7 +139,7 @@ plot_distr <- function(distr,
                        value_label = "Density",
                        transform = "identity",
                        show_ebird_coverage = FALSE,
-                       no_coverage_color = rgb(1, 0, 0, .25)) {
+                       no_coverage_color = rgb(0.22, 1, 0.08, .45)) {
 
   if (!is.null(limits) && dynamic_scale) {
     stop("Do not set dynamic_scale to TRUE while also setting limits.")
