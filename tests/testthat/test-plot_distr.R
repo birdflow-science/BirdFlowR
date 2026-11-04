@@ -122,7 +122,7 @@ test_that("plot_distr() eBird coverage overlay errors informatively", {
               "distr label is missing")
 })
 
-test_that("plot_distr() eBird coverage overlay excludes inactive cells", {
+test_that("plot_distr() eBird coverage overlay includes inactive cells", {
   bf <- small_test_bf()
   d1 <- get_distr(bf, 1)
   p <- plot_distr(d1, bf, show_ebird_coverage = TRUE)
@@ -133,10 +133,12 @@ test_that("plot_distr() eBird coverage overlay excludes inactive cells", {
 
   cov_df <- get_ebird_coverage(bf, format = "dataframe")
   t1 <- cov_df[cov_df$timestep == attr(d1, "time"), ]
-  expected <- t1[!t1$coverage & !is.na(t1$i), c("x", "y")]
+  expected <- t1[!t1$coverage, c("x", "y")]
 
-  # Overlay should match exactly the active, uncovered cells - and only those
+  # Overlay should match exactly the uncovered cells, active or not, since
+  # the overlay is meant to distinguish "predicted zero" from "not modeled"
   expect_equal(nrow(overlay_data), nrow(expected))
   expect_setequal(paste(overlay_data$x, overlay_data$y),
                   paste(expected$x, expected$y))
+  expect_true(any(is.na(t1$i[!t1$coverage])))  # sanity: some are inactive
 })

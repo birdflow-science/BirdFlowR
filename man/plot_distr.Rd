@@ -10,7 +10,6 @@ plot_distr(
   subset = NULL,
   show_mask = TRUE,
   show_dynamic_mask = FALSE,
-  show_ebird_coverage = FALSE,
   limits = NULL,
   dynamic_scale = FALSE,
   coast_linewidth = 0.25,
@@ -18,10 +17,11 @@ plot_distr(
   gradient_colors = NULL,
   active_cell_color = rgb(1, 1, 1, 0.3),
   inactive_cell_color = rgb(0, 0, 0, 0.2),
-  no_coverage_color = rgb(1, 0, 0, 0.25),
   title = species(bf),
   value_label = "Density",
-  transform = "identity"
+  transform = "identity",
+  show_ebird_coverage = FALSE,
+  no_coverage_color = rgb(1, 0, 0, 0.25)
 )
 }
 \arguments{
@@ -42,13 +42,6 @@ masked with NA. For \code{show_dynamic_mask = TRUE} to work the column names in
 \code{distr} should all be in \code{colnames(get_distr(bf))}.  This is
 true for distributions returned by \href{predict.BirdFlow()}{\code{predict()}}
 and \code{\link[=get_distr]{get_distr()}}.}
-
-\item{show_ebird_coverage}{Defaults to \code{FALSE}. Set to \code{TRUE} to overlay
-\code{no_coverage_color} on cells that lacked eBird model coverage at the
-relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}). Like
-\code{show_dynamic_mask} this requires that the column names in \code{distr}
-match \code{colnames(get_distr(bf))}, and errors if \code{bf} lacks coverage
-metadata.}
 
 \item{limits}{The range of density values to map \code{gradient_colors} to. The
 default is the range of the values in \code{distr} after applying \code{subset}. If
@@ -85,10 +78,6 @@ is \code{TRUE}.}
 landscape. These are cells that are always masked. Only relevant when
 \code{show_mask = TRUE}.}
 
-\item{no_coverage_color}{The (typically translucent) color to overlay on
-cells that lack eBird model coverage. Only used if \code{show_ebird_coverage}
-is \code{TRUE}.}
-
 \item{title}{The title for the plot. It defaults to the common name of the
 species (\code{species(bf)}).}
 
@@ -100,6 +89,17 @@ Defaults to "Density"}
 1/2 the smallest non-zero value prior to transforming.
 mapping to the color gradient. Legend will still reflect the original values.
 Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
+
+\item{show_ebird_coverage}{Defaults to \code{FALSE}. Set to \code{TRUE} to overlay
+\code{no_coverage_color} on cells that lacked eBird model coverage at the
+relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}). Like
+\code{show_dynamic_mask} this requires that the column names in \code{distr}
+match \code{colnames(get_distr(bf))}, and errors if \code{bf} lacks coverage
+metadata.}
+
+\item{no_coverage_color}{The (typically translucent) color to overlay on
+cells that lack eBird model coverage. Only used if \code{show_ebird_coverage}
+is \code{TRUE}.}
 }
 \value{
 \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object.  Use \code{print()} to render it.
@@ -143,14 +143,14 @@ requires that the column names match the column names in \code{get_distr()}.
 Models fit from \verb{BirdFlowR 0.1.0.9081} onward retain per-timestep eBird
 model coverage metadata (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}) — whether each cell
 fell within eBird's modeled extent at a given timestep. Set
-\code{show_ebird_coverage} to \code{TRUE} to overlay a translucent color on active
-cells that lack coverage (inactive cells are already distinguished by
-\code{show_mask}, so they're excluded from this overlay to avoid double
-marking). Like \code{show_dynamic_mask}, this relies on matching the
-column names of \code{distr} to timestep labels from \code{get_ebird_coverage()},
-so requires that the column names match those returned by \code{get_distr()}.
-Models that predate coverage metadata will raise an error if
-\code{show_ebird_coverage = TRUE}.
+\code{show_ebird_coverage} to \code{TRUE} to overlay a translucent color on cells
+that lack coverage, whether or not they're active in the model — this
+helps distinguish "predicted zero" from "not modeled here" for cells at
+the edge of a species' range. Like \code{show_dynamic_mask}, this relies on
+matching the column names of \code{distr} to timestep labels from
+\code{get_ebird_coverage()}, so requires that the column names match those
+returned by \code{get_distr()}. Models that predate coverage metadata will
+raise an error if \code{show_ebird_coverage = TRUE}.
 }
 
 \subsection{Subtitles}{
