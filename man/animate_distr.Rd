@@ -66,10 +66,7 @@ mapping to the color gradient. Legend will still reflect the original values.
 Passed to \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
     \item{\code{show_ebird_coverage}}{Defaults to \code{FALSE}. Set to \code{TRUE} to overlay
 \code{no_coverage_color} on cells that lacked eBird model coverage at the
-relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}). Like
-\code{show_dynamic_mask} this requires that the column names in \code{distr}
-match \code{colnames(get_distr(bf))}, and errors if \code{bf} lacks coverage
-metadata.}
+relevant timestep (see \code{\link[=get_ebird_coverage]{get_ebird_coverage()}}).}
     \item{\code{no_coverage_color}}{The (typically translucent) color to overlay on
 cells that lack eBird model coverage. Only used if \code{show_ebird_coverage}
 is \code{TRUE}.}

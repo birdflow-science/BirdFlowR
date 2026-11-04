@@ -107,10 +107,7 @@
 #' Passed to [ggplot2::scale_color_gradientn()].
 #' @param show_ebird_coverage Defaults to `FALSE`. Set to `TRUE` to overlay
 #'   `no_coverage_color` on cells that lacked eBird model coverage at the
-#'   relevant timestep (see [get_ebird_coverage()]). Like
-#'   `show_dynamic_mask` this requires that the column names in `distr`
-#'   match `colnames(get_distr(bf))`, and errors if `bf` lacks coverage
-#'   metadata.
+#'   relevant timestep (see [get_ebird_coverage()]).
 #' @param no_coverage_color The (typically translucent) color to overlay on
 #'   cells that lack eBird model coverage. Only used if `show_ebird_coverage`
 #'   is `TRUE`.
